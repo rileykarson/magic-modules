@@ -523,6 +523,7 @@ objects:
     # - createSnapshot
     # - setLabels
     kind: 'compute#disk'
+    input: true
     base_url: projects/{{project}}/zones/{{zone}}/disks
     exports:
       - 'name'
@@ -676,6 +677,14 @@ objects:
         name: 'lastDetachTimestamp'
         description: 'Last dettach timestamp in RFC3339 text format.'
         output: true
+      - !ruby/object:Api::Type::NameValues
+        name: 'labels'
+        description: |
+          Labels to apply to this disk.  A list of key->value pairs.
+        key_type: Api::Type::String
+        value_type: Api::Type::String
+        update_verb: :POST
+        update_url: 'projects/{{project}}/zones/{{zone}}/disks/{{name}}/setLabels'
       - !ruby/object:Api::Type::Array
         name: 'licenses'
         description: 'Any applicable publicly visible licenses.'
@@ -705,6 +714,8 @@ objects:
           If you specify this field along with sourceImage or sourceSnapshot,
           the value of sizeGb must not be less than the size of the sourceImage
           or the size of the snapshot.
+        update_verb: :POST
+        update_url: 'projects/{{project}}/zones/{{zone}}/disks/{{name}}/resize'
       - !ruby/object:Api::Type::String
         name: 'sourceImage'
         description: |
@@ -739,7 +750,6 @@ objects:
         description: |
           URL of the disk type resource describing which disk type to use to
           create the disk. Provide this when creating the disk.
-        output: true
       - !ruby/object:Api::Type::Array
         name: 'users'
         description: |
@@ -3137,7 +3147,20 @@ objects:
           name: 'sslCertificate'
           resource: 'SslCertificate'
           imports: 'selfLink'
-          description: 'The SSL certificates used by this TargetHttpsProxy'
+          description: 'The SSL certificates used by this TargetSslProxy'
+      - !ruby/object:Api::Type::ResourceRef
+        name: 'sslPolicy'
+        # TODO(https://github.com/GoogleCloudPlatform/magic-modules/issues/173): Enable
+        exclude: true
+        resource: 'SslPolicy'
+        imports: 'selfLink'
+        description: |
+          A reference to the SslPolicy resource that will be associated with
+          the TargetSslProxy resource. If not set, the TargetSslProxy
+          resource will not have any SSL policy configured.
+        update_verb: :POST
+        update_url:
+          'projects/{{project}}/global/targetSslProxies/{{name}}/setSslPolicy'
   - !ruby/object:Api::Resource
     name: 'TargetTcpProxy'
     kind: 'compute#targetTcpProxy'

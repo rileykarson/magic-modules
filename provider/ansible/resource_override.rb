@@ -25,6 +25,7 @@ module Provider
       attr_reader :hidden
       attr_reader :imports
       attr_reader :provider_helpers
+      attr_reader :return_if_object
       attr_reader :update
       attr_reader :version_added
     end
@@ -32,8 +33,6 @@ module Provider
     # Product specific overriden properties for Ansible
     class ResourceOverride < Provider::ResourceOverride
       include OverrideProperties
-
-      # rubocop:disable Metrics/MethodLength
       def validate
         super
 
@@ -51,6 +50,7 @@ module Provider
         check_optional_property :hidden, ::Array
         check_property :imports, ::Array
         check_property :provider_helpers, ::Array
+        check_optional_property :return_if_object, ::String
         check_optional_property :update, ::String
         check_optional_property :version_added, ::String
       end
