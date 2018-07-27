@@ -150,8 +150,13 @@ def main():
                 changed = True
         else:
 <%
+  if object.delete_url.nil?
+    delete_url = 'self_link(module)'
+  else
+    delete_url = 'delete_link(module)'
+  end
   method = method_call('delete', [
-                                   'module', 'self_link(module)',
+                                   'module', delete_url,
                                    ('kind' if object.kind?),
                                    ('fetch' if object.access_api_results)
                                  ])
@@ -167,6 +172,10 @@ def main():
   elsif object.create_verb == :PUT
     create_link = 'self_link(module)'
   end
+  unless object.create_url.nil?
+    create_link = 'create_link(module)'
+  end
+
   create_verb = ".#{object.create_verb.to_s.downcase}"
   method = method_call('create', ['module', create_link,
                                   ('kind' if object.kind?)])
@@ -255,10 +264,15 @@ def main():
 <% if object.delete.nil? -%>
     auth = GcpSession(module, <%= quote_string(prod_name) -%>)
 <%
+  delete_verb = 'delete'
+  unless object.delete_verb.nil?
+    delete_verb = object.delete_verb.to_s.downcase
+  end
+
   method = method_call(
     object.async ? 'wait_for_operation' : 'return_if_object',
     ['module',
-     method_call("auth.delete", ['link']),
+     method_call("auth.#{delete_verb}", ['link']),
      ('kind' if !object.async && object.kind?)
    ]
   )
@@ -327,6 +341,12 @@ def unwrap_resource(result, module):
 <%= lines(compile('templates/ansible/transport.erb'), 2) -%>
 <%= lines(emit_link('self_link', self_link_url(object), object), 2) -%>
 <%= lines(emit_link('collection', collection_url(object), object), 2) -%>
+<%- unless object.create_url.nil? -%>
+<%=lines(emit_link('create_link', create_url(object), object), 2)-%>
+<% end -%>
+<% unless object.delete_url.nil? -%>
+<%= lines(emit_link('delete_link', delete_url(object), object), 2) -%>
+<% end -%>
 <%=
   lines(method_decl('return_if_object', ['module', 'response',
                                          ('kind' if object.kind?)]))

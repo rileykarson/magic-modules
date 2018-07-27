@@ -23,6 +23,7 @@ require 'google/golang_utils'
 module Provider
   # Code generator for Terraform Resources that manage Google Cloud Platform
   # resources.
+  # rubocop:disable Metrics/ClassLength
   class Terraform < Provider::AbstractCore
     include Provider::Terraform::Import
     include Provider::Terraform::SubTemplate
@@ -67,15 +68,25 @@ module Provider
                              force_new?(property.parent, resource))))
     end
 
-    # Puts together the links to use to make API calls for a given resource type
-    def self_link_url(resource)
-      (product_url, resource_url) = self_link_raw_url(resource)
-      [product_url, resource_url].flatten.join
+    def async_operation_url(resource)
+      async_operation_raw_url(resource).flatten.join
+    end
+
+    def create_url(resource)
+      create_raw_url(resource).flatten.join
+    end
+
+    def delete_url(resource)
+      delete_raw_url(resource).flatten.join
     end
 
     def collection_url(resource)
-      base_url = resource.base_url.split("\n").map(&:strip).compact
-      [resource.__product.base_url, base_url].flatten.join
+      collection_raw_url(resource).flatten.join
+    end
+
+    # Puts together the links to use to make API calls for a given resource type
+    def self_link_url(resource)
+      self_link_raw_url(resource).flatten.join
     end
 
     def update_url(resource, url_part)
@@ -160,5 +171,6 @@ module Provider
         out_file: filepath
       )
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

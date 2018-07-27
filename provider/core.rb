@@ -403,15 +403,45 @@ module Provider
        ')'].join("\n")
     end
 
-    def async_operation_url(resource)
-      build_url(resource.__product.base_url,
-                resource.async.operation.base_url,
-                true)
+    def async_operation_raw_url(resource)
+      [resource.__product.base_url, resource.async.operation.base_url]
     end
 
-    def collection_url(resource)
+    def create_raw_url(resource)
+      if resource.create_url.nil?
+        inferred_create_raw_url(resource)
+      else
+        product_url = resource.__product.base_url.split("\n").map(&:strip).compact
+        create_url = resource.create_url.split("\n").map(&:strip).compact
+        [product_url, create_url]
+      end
+    end
+
+    def inferred_create_raw_url(resource)
+      # Based on create verb, choose either collection or self_link
+      # for URL to create the resource.
+      if resource.create_verb.nil? || resource.create_verb == :POST
+        collection_raw_url(resource)
+      elsif resource.create_verb == :PUT
+        self_link_raw_url(resource)
+      else
+        raise "create_verb #{resource.create_verb} not supported"
+      end
+    end
+
+    def collection_raw_url(resource)
       base_url = resource.base_url.split("\n").map(&:strip).compact
-      build_url(resource.__product.base_url, base_url)
+      [resource.__product.base_url, base_url]
+    end
+
+    def delete_raw_url(resource)
+      if resource.delete_url.nil?
+        self_link_raw_url(resource)
+      else
+        base_url = resource.__product.base_url.split("\n").map(&:strip).compact
+        delete_url = resource.delete_url.split("\n").map(&:strip).compact
+        [base_url, delete_url]
+      end
     end
 
     def self_link_raw_url(resource)
@@ -424,9 +454,34 @@ module Provider
       end
     end
 
+    def async_operation_url(resource)
+      # Uses default Ruby URI builder.
+      # Override and use raw_url for non-Ruby providers.
+      build_url(*async_operation_raw_url(resource), true)
+    end
+
+    def create_url(resource)
+      # Uses default Ruby URI builder.
+      # Override and use raw_url for non-Ruby providers.
+      build_url(*create_raw_url(resource))
+    end
+
+    def delete_url(resource)
+      # Uses default Ruby URI builder.
+      # Override and use raw_url for non-Ruby providers.
+      build_url(*delete_raw_url(resource))
+    end
+
+    def collection_url(resource)
+      # Uses default Ruby URI builder.
+      # Override and use raw_url for non-Ruby providers.
+      build_url(*collection_raw_url(resource))
+    end
+
     def self_link_url(resource)
-      (product_url, resource_url) = self_link_raw_url(resource)
-      build_url(product_url, resource_url)
+      # Uses default Ruby URI builder.
+      # Override and use raw_url for non-Ruby providers.
+      build_url(*self_link_raw_url(resource))
     end
 
     def extract_variables(template)
