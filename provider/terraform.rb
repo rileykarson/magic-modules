@@ -144,5 +144,21 @@ module Provider
         out_file: filepath
       )
     end
+
+    # This function currently only generates Terraform configurations
+    # that accompany manually defined test files.
+    # def generate_resource_tests(data)
+    #  target_folder = data[:output_folder]
+    #  target_folder = File.join(target_folder, 'google')
+    #  FileUtils.mkpath target_folder
+    #  name = data[:object].name.underscore
+    #  product_name = data[:product_name].underscore
+    #  filepath =
+    #    File.join(
+    #      target_folder,
+    #      "resource_#{product_name}_#{name}_test_definitions.go"
+    #    )
+
+    # end
   end
 end

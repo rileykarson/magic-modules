@@ -15,32 +15,31 @@
 overrides: !ruby/object:Provider::ResourceOverrides
   Address: !ruby/object:Provider::Terraform::ResourceOverride
     id_format: "{{project}}/{{region}}/{{name}}"
-    examples: |
-      ```hcl
-      resource "google_compute_address" "default" {
-        name = "my-address"
-      }
-      ```
-      ```hcl
-      resource "google_compute_network" "default" {
-        name = "my-network"
-      }
-
-      resource "google_compute_subnetwork" "default" {
-        name          = "my-subnet"
-        ip_cidr_range = "10.0.0.0/16"
-        region        = "us-central1"
-        network       = "${google_compute_network.default.self_link}"
-      }
-
-      resource "google_compute_address" "internal_with_subnet_and_address" {
-        name         = "my-internal-address"
-        subnetwork   = "${google_compute_subnetwork.default.self_link}"
-        address_type = "INTERNAL"
-        address      = "10.0.42.42"
-        region       = "us-central1"
-      }
-      ```
+    example:
+     - !ruby/object:Provider::Terraform::Examples
+      name: "address-basic"
+      template_path: "templates/terraform/examples/address_basic.tf.erb"
+      vars_documentation:
+        address_name: "my-address"
+      vars_cloud_shell:
+       - address-name: "${locals.name-prefix}-address"
+      vars_test:
+       - address-name: "%s-address"
+     - !ruby/object:Provider::Terraform::Examples
+      name: "address-with-subnetwork"
+      template_path: "templates/terraform/examples/address_with_subnetwork.tf.erb"
+      vars_documentation:
+        address_name: "my-internal-address"
+        network_name: "my-network"
+        subnetwork_name: "my-subnet"
+      vars_cloud_shell:
+        address-name: "${locals.name-prefix}-address"
+        network_name: "${locals.name-prefix}-network"
+        subnetwork_name: "${locals.name-prefix}-subnetwork"
+      vars_test:
+        address-name: "%s-address"
+        network_name: "%s-network"
+        subnetwork_name: "%s-subnetwork"
     properties:
       address: !ruby/object:Provider::Terraform::PropertyOverride
         default_from_api: true

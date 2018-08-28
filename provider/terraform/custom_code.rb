@@ -12,6 +12,7 @@
 # limitations under the License.
 
 require 'api/object'
+require 'compile/core'
 require 'provider/abstract_core'
 require 'provider/property_override'
 
@@ -39,6 +40,57 @@ module Provider
         check_optional_property :required_properties, String
         check_optional_property :optional_properties, String
         check_optional_property :attributes, String
+      end
+    end
+
+    # Generates configs to be shown as examples, used in tests, and used
+    # for Terraform in Cloud Shell.
+    class Examples < Api::Object
+      include Compile::Core
+
+      # The name of the test - used in the test as the test name and in
+      # Cloud Shell as the sample name.
+      attr_reader :name
+
+      # Path to the template {{RESOURCE}}.tf.erb file in "templates/terraform/examples".
+      attr_reader :template_path
+
+      # vars_ variables are a Hash from template variable names to output variable names
+      attr_reader :vars_cloud_shell
+      attr_reader :vars_documentation
+      attr_reader :vars_test
+
+      def config_cloud_shell
+        body = lines(compile_file(vars_cloud_shell, template_path))
+        lines(compile_file(
+                { content: body },
+                'templates/terraform/examples/base_configs/cloud_shell.tf.erb'
+        ))
+      end
+
+      def config_documentation
+        body = lines(compile_file(vars_documentation, template_path))
+        lines(compile_file(
+                { content: body },
+                'templates/terraform/examples/base_configs/documentation.tf.erb'
+        ))
+      end
+
+      def config_test
+        body = lines(compile_file(vars_test, template_path))
+        lines(compile_file(
+                { content: body },
+                'templates/terraform/examples/base_configs/test.tf.erb'
+        ))
+      end
+
+      def validate
+        super
+        check_property :name, String
+        check_property :template_path, String
+        check_property :vars_cloud_shell, Hash
+        check_property :vars_documentation, Hash
+        check_property :vars_test, Hash
       end
     end
 
