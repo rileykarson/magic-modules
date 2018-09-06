@@ -34,6 +34,8 @@ require 'provider/example'
 require 'provider/puppet'
 require 'provider/puppet/bundle'
 require 'provider/terraform'
+require 'provider/terraform_cloudshell'
+require 'provider/terraform/config_cloudshell'
 require 'pp' if ENV['COMPILER_DEBUG']
 
 catalog = nil
@@ -89,8 +91,9 @@ api = Api::Compiler.new(File.join(catalog, 'api.yaml')).run
 api.validate
 pp api if ENV['COMPILER_DEBUG']
 
-config = Provider::Config.parse(File.join(catalog, provider), api, version)
+config = Provider::TerraformCloudShell::Config.parse(File.join(catalog, provider), api, version)
 pp config if ENV['COMPILER_DEBUG']
 
-provider = config.provider.new(config, api)
+#provider = config.provider.new(config, api)
+provider = Provider::TerraformCloudShell.new(config, api)
 provider.generate output, types_to_generate, version
