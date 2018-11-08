@@ -26,7 +26,7 @@ func TestAccComputeSnapshot_basic(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckComputeSnapshotDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccComputeSnapshot_basic(snapshotName, diskName, "my-value"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeSnapshotExists(
@@ -49,14 +49,14 @@ func TestAccComputeSnapshot_update(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckComputeSnapshotDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccComputeSnapshot_basic(snapshotName, diskName, "my-value"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeSnapshotExists(
 						"google_compute_snapshot.foobar", &snapshot),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccComputeSnapshot_basic(snapshotName, diskName, "my-updated-value"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeSnapshotExists(
@@ -79,7 +79,7 @@ func TestAccComputeSnapshot_encryption(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckComputeSnapshotDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccComputeSnapshot_encryption(snapshotName, diskName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeSnapshotExists(

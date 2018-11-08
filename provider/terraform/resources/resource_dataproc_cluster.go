@@ -177,7 +177,7 @@ func resourceDataprocCluster() *schema.Resource {
 										Default:  false,
 									},
 
-									"metadata": &schema.Schema{
+									"metadata": {
 										Type:     schema.TypeMap,
 										Optional: true,
 										Elem:     &schema.Schema{Type: schema.TypeString},
@@ -385,9 +385,9 @@ func acceleratorsSchema() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"accelerator_type": {
-				Type:      schema.TypeString,
-				Required:  true,
-				ForceNew:  true,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
 			},
 
 			"accelerator_count": {

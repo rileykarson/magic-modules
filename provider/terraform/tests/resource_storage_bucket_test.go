@@ -25,7 +25,7 @@ func TestAccStorageBucket_basic(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_basic(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -38,7 +38,7 @@ func TestAccStorageBucket_basic(t *testing.T) {
 						"google_storage_bucket.bucket", "project", getTestProjectFromEnv()),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -58,7 +58,7 @@ func TestAccStorageBucket_lowercaseLocation(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_lowercaseLocation(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -80,7 +80,7 @@ func TestAccStorageBucket_customAttributes(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -114,7 +114,7 @@ func TestAccStorageBucket_lifecycleRules(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_lifecycleRules(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -143,7 +143,7 @@ func TestAccStorageBucket_lifecycleRules(t *testing.T) {
 						"google_storage_bucket.bucket", fmt.Sprintf("lifecycle_rule.1.condition.%d.age", hash_step0_lc1_condition), "10"),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -227,7 +227,7 @@ func TestAccStorageBucket_update(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_basic(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -240,7 +240,7 @@ func TestAccStorageBucket_update(t *testing.T) {
 						"google_storage_bucket.bucket", "force_destroy", "false"),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -253,7 +253,7 @@ func TestAccStorageBucket_update(t *testing.T) {
 						"google_storage_bucket.bucket", "force_destroy", "true"),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes_withLifecycle1(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -276,7 +276,7 @@ func TestAccStorageBucket_update(t *testing.T) {
 						"google_storage_bucket.bucket", fmt.Sprintf("lifecycle_rule.0.condition.%d.age", hash_step2_lc0_condition), "10"),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes_withLifecycle2(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -309,7 +309,7 @@ func TestAccStorageBucket_update(t *testing.T) {
 						"google_storage_bucket.bucket", fmt.Sprintf("lifecycle_rule.1.condition.%d.num_newer_versions", hash_step3_lc1_condition), "2"),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -337,20 +337,20 @@ func TestAccStorageBucket_forceDestroy(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
 						"google_storage_bucket.bucket", bucketName, &bucket),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketPutItem(bucketName),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_customAttributes(acctest.RandomWithPrefix("tf-test-acl-bucket")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketMissing(bucketName),
@@ -371,20 +371,20 @@ func TestAccStorageBucket_forceDestroyWithVersioning(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_forceDestroyWithVersioning(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
 						"google_storage_bucket.bucket", bucketName, &bucket),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_forceDestroyWithVersioning(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketPutItem(bucketName),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_forceDestroyWithVersioning(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketPutItem(bucketName),
@@ -405,7 +405,7 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_versioning(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -416,7 +416,7 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 						"google_storage_bucket.bucket", "versioning.0.enabled", "true"),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -436,7 +436,7 @@ func TestAccStorageBucket_logging(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_logging(bucketName, "log-bucket"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -449,7 +449,7 @@ func TestAccStorageBucket_logging(t *testing.T) {
 						"google_storage_bucket.bucket", "logging.0.log_object_prefix", bucketName),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_loggingWithPrefix(bucketName, "another-log-bucket", "object-prefix"),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -462,7 +462,7 @@ func TestAccStorageBucket_logging(t *testing.T) {
 						"google_storage_bucket.bucket", "logging.0.log_object_prefix", "object-prefix"),
 				),
 			},
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_basic(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -486,7 +486,7 @@ func TestAccStorageBucket_cors(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testGoogleStorageBucketsCors(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -562,7 +562,7 @@ func TestAccStorageBucket_encryption(t *testing.T) {
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_encryption(projectId, projectOrg, projectBillingAccount, keyRingName, cryptoKeyName, bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -585,7 +585,7 @@ func TestAccStorageBucket_labels(t *testing.T) {
 		CheckDestroy: testAccStorageBucketDestroy,
 		Steps: []resource.TestStep{
 			// Going from two labels
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_updateLabels(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -594,13 +594,13 @@ func TestAccStorageBucket_labels(t *testing.T) {
 					testAccCheckStorageBucketHasLabel(&bucket, "a-new-label", "a-new-label-value"),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			// Down to only one label (test single label deletion)
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_labels(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -608,13 +608,13 @@ func TestAccStorageBucket_labels(t *testing.T) {
 					testAccCheckStorageBucketHasLabel(&bucket, "my-label", "my-label-value"),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			// And make sure deleting all labels work
-			resource.TestStep{
+			{
 				Config: testAccStorageBucket_basic(bucketName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckStorageBucketExists(
@@ -622,7 +622,7 @@ func TestAccStorageBucket_labels(t *testing.T) {
 					testAccCheckStorageBucketHasNoLabels(&bucket),
 				),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_storage_bucket.bucket",
 				ImportState:       true,
 				ImportStateVerify: true,

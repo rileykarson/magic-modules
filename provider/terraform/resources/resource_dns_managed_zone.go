@@ -18,25 +18,25 @@ func resourceDnsManagedZone() *schema.Resource {
 			State: resourceDnsManagedZoneImport,
 		},
 		Schema: map[string]*schema.Schema{
-			"dns_name": &schema.Schema{
+			"dns_name": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "Managed by Terraform",
 			},
 
-			"name_servers": &schema.Schema{
+			"name_servers": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Schema{
@@ -46,14 +46,14 @@ func resourceDnsManagedZone() *schema.Resource {
 
 			// Google Cloud DNS ManagedZone resources do not have a SelfLink attribute.
 
-			"project": &schema.Schema{
+			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
 			},
 
-			"labels": &schema.Schema{
+			"labels": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},

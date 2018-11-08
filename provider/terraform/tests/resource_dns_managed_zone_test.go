@@ -19,10 +19,10 @@ func TestAccDnsManagedZone_basic(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckDnsManagedZoneDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccDnsManagedZone_basic(zoneSuffix, "description1"),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -41,18 +41,18 @@ func TestAccDnsManagedZone_update(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckDnsManagedZoneDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccDnsManagedZone_basic(zoneSuffix, "description1"),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
-			resource.TestStep{
+			{
 				Config: testAccDnsManagedZone_basic(zoneSuffix, "description2"),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -179,10 +179,10 @@ func TestAccDnsManagedZone_importWithProject(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckDnsManagedZoneDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccDnsManagedZone_basicWithProject(zoneSuffix, "description1", project),
 			},
-			resource.TestStep{
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,

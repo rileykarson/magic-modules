@@ -30,13 +30,13 @@ func resourceCloudBuildTrigger() *schema.Resource {
 		SchemaVersion: 1,
 
 		Schema: map[string]*schema.Schema{
-			"project": &schema.Schema{
+			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
 			},
-			"filename": &schema.Schema{
+			"filename": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ForceNew:      true,
@@ -50,24 +50,24 @@ func resourceCloudBuildTrigger() *schema.Resource {
 				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"images": &schema.Schema{
+						"images": {
 							Type:     schema.TypeList,
 							Optional: true,
 							ForceNew: true,
 							Elem:     &schema.Schema{Type: schema.TypeString},
 						},
-						"step": &schema.Schema{
+						"step": {
 							Type:     schema.TypeList,
 							Optional: true,
 							ForceNew: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"name": &schema.Schema{
+									"name": {
 										Type:     schema.TypeString,
 										Optional: true,
 										ForceNew: true,
 									},
-									"args": &schema.Schema{
+									"args": {
 										Type:     schema.TypeString,
 										Optional: true,
 										ForceNew: true,
@@ -75,7 +75,7 @@ func resourceCloudBuildTrigger() *schema.Resource {
 								},
 							},
 						},
-						"tags": &schema.Schema{
+						"tags": {
 							Type:     schema.TypeList,
 							Optional: true,
 							ForceNew: true,
@@ -84,50 +84,50 @@ func resourceCloudBuildTrigger() *schema.Resource {
 					},
 				},
 			},
-			"description": &schema.Schema{
+			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
 			},
-			"substitutions": &schema.Schema{
+			"substitutions": {
 				Optional: true,
 				Type:     schema.TypeMap,
 				ForceNew: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"trigger_template": &schema.Schema{
+			"trigger_template": {
 				Optional: true,
 				Type:     schema.TypeList,
 				MaxItems: 1,
 				ForceNew: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"branch_name": &schema.Schema{
+						"branch_name": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"commit_sha": &schema.Schema{
+						"commit_sha": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"dir": &schema.Schema{
+						"dir": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"project": &schema.Schema{
+						"project": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"repo_name": &schema.Schema{
+						"repo_name": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
 						},
-						"tag_name": &schema.Schema{
+						"tag_name": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,

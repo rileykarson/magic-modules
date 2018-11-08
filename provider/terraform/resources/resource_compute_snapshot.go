@@ -18,74 +18,74 @@ func resourceComputeSnapshot() *schema.Resource {
 		Update: resourceComputeSnapshotUpdate,
 
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"zone": &schema.Schema{
+			"zone": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
 			},
 
-			"snapshot_encryption_key_raw": &schema.Schema{
+			"snapshot_encryption_key_raw": {
 				Type:      schema.TypeString,
 				Optional:  true,
 				ForceNew:  true,
 				Sensitive: true,
 			},
 
-			"snapshot_encryption_key_sha256": &schema.Schema{
+			"snapshot_encryption_key_sha256": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 
-			"source_disk_encryption_key_raw": &schema.Schema{
+			"source_disk_encryption_key_raw": {
 				Type:      schema.TypeString,
 				Optional:  true,
 				ForceNew:  true,
 				Sensitive: true,
 			},
 
-			"source_disk_encryption_key_sha256": &schema.Schema{
+			"source_disk_encryption_key_sha256": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 
-			"source_disk": &schema.Schema{
+			"source_disk": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"source_disk_link": &schema.Schema{
+			"source_disk_link": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 
-			"project": &schema.Schema{
+			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
 			},
 
-			"self_link": &schema.Schema{
+			"self_link": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
 
-			"labels": &schema.Schema{
+			"labels": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Set:      schema.HashString,
 			},
 
-			"label_fingerprint": &schema.Schema{
+			"label_fingerprint": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
