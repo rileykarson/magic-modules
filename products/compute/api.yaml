@@ -646,6 +646,7 @@ objects:
                 Provide this property when you create the resource.
             - !ruby/object:Api::Type::String
               name: 'group'
+              required: true
               description: |
                 The fully-qualified URL of an Instance Group or Network Endpoint
                 Group resource. In case of instance group this defines the list
