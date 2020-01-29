@@ -20,6 +20,8 @@ TPGB_SCRATCH_PATH=https://modular-magician:$GITHUB_TOKEN@github.com/modular-magi
 TPGB_LOCAL_PATH=$PWD/../tpgb
 TFC_SCRATCH_PATH=https://modular-magician:$GITHUB_TOKEN@github.com/modular-magician/terraform-google-conversion
 TFC_LOCAL_PATH=$PWD/../tfc
+TFOICS_SCRATCH_PATH=https://modular-magician:$GITHUB_TOKEN@github.com/modular-magician/docs-examples
+TFOICS_LOCAL_PATH=$PWD/../tfoics
 ANSIBLE_SCRATCH_PATH=https://modular-magician:$GITHUB_TOKEN@github.com/modular-magician/ansible_collections_google
 ANSIBLE_LOCAL_PATH=$PWD/../ansible
 INSPEC_SCRATCH_PATH=https://modular-magician:$GITHUB_TOKEN@github.com/modular-magician/inspec-gcp
@@ -65,6 +67,16 @@ pushd $TFC_LOCAL_PATH
 git fetch origin $OLD_BRANCH
 if ! git diff --exit-code origin/$NEW_BRANCH origin/$OLD_BRANCH; then
     DIFFS="${DIFFS}${NEWLINE}TF Conversion: [Diff](https://github.com/modular-magician/terraform-google-conversion/compare/$OLD_BRANCH..$NEW_BRANCH)"
+fi
+popd
+
+# TF OICS
+mkdir -p $TFOICS_LOCAL_PATH
+git clone -b $NEW_BRANCH $TFOICS_SCRATCH_PATH $TFOICS_LOCAL_PATH
+pushd $TFOICS_LOCAL_PATH
+git fetch origin $OLD_BRANCH
+if ! git diff --exit-code origin/$NEW_BRANCH origin/$OLD_BRANCH; then
+    DIFFS="${DIFFS}${NEWLINE}TF OiCS: [Diff](https://github.com/modular-magician/docs-examples/compare/$OLD_BRANCH..$NEW_BRANCH)"
 fi
 popd
 
