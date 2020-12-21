@@ -1,4 +1,3 @@
-<% autogen_exception -%>
 // Utils for modifying IAM policies for resources across GCP
 package google
 
@@ -7,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 
@@ -178,7 +178,7 @@ func (k conditionKey) Empty() bool {
 }
 
 func (k conditionKey) String() string {
-	return fmt.Sprintf("%s/%s/%s",  k.Title, k.Description, k.Expression)
+	return fmt.Sprintf("%s/%s/%s", k.Title, k.Description, k.Expression)
 }
 
 type iamBindingKey struct {
@@ -232,23 +232,27 @@ func createIamBindingsMap(bindings []*cloudresourcemanager.Binding) map[iamBindi
 		for _, m := range b.Members {
 			// members are in <type>:<value> format
 			// <type> is case sensitive
-			// <value> isn't
-			// so let's lowercase the value and leave the type alone
-			// since Dec '19 members can be prefixed with "deleted:" to indicate the principal
+			// <value> historically wasn't (so we always lowered it), but later became case sensitive be in some circumstances.
+			// so far, we can detect the only known case sensitive case by looking for a slash.
+			// since Dec 2019 members can be prefixed with "deleted:" to indicate the principal
 			// has been deleted
 			var pieces []string
 			if strings.HasPrefix(m, "deleted:") {
 				pieces = strings.SplitN(m, ":", 3)
 				if len(pieces) > 2 {
-					pieces[2] = strings.ToLower(pieces[2])
+					if !strings.Contains(pieces[2], "/") {
+						pieces[2] = strings.ToLower(pieces[2])
+					}
 				}
 			} else {
 				pieces = strings.SplitN(m, ":", 2)
 				if len(pieces) > 1 {
-					pieces[1] = strings.ToLower(pieces[1])
+					if !strings.Contains(pieces[1], "/") {
+						pieces[1] = strings.ToLower(pieces[1])
+					}
 				}
 			}
-			
+
 			m = strings.Join(pieces, ":")
 
 			// Add the member
