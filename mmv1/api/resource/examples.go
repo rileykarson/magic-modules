@@ -16,7 +16,6 @@ package resource
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"net/url"
 	"path/filepath"
 	"regexp"
@@ -31,6 +30,11 @@ import (
 // Generates configs to be shown as examples in docs and outputted as tests
 // from a shared template
 type Examples struct {
+	// A copy of the raw unmarshalled example, before any transformations.
+	// Used internally for validation of the original user input not covered by
+	// the UnmarshalYAML function.
+	rawExample *Examples
+
 	// The name of the example in lower snake_case.
 	// Generally takes the form of the resource name followed by some detail
 	// about the specific test. For example, "address_with_subnetwork".
@@ -163,11 +167,19 @@ type Examples struct {
 func (e *Examples) UnmarshalYAML(unmarshal func(any) error) error {
 	type exampleAlias Examples
 	aliasObj := (*exampleAlias)(e)
+	aliasObj2 := &exampleAlias{}
 
 	err := unmarshal(aliasObj)
 	if err != nil {
 		return err
 	}
+
+	err = unmarshal(aliasObj2)
+	if err != nil {
+		return err
+	}
+
+	e.rawExample = (*Examples)(aliasObj2)
 
 	if e.ConfigPath == "" {
 		e.ConfigPath = fmt.Sprintf("templates/terraform/examples/%s.tf.tmpl", e.Name)
@@ -177,14 +189,34 @@ func (e *Examples) UnmarshalYAML(unmarshal func(any) error) error {
 	return nil
 }
 
-func (e *Examples) Validate(rName string) {
+// Validate returns a list of errors, to be actioned by the caller.
+func (e *Examples) Validate(rName string) []error {
+	var errs []error
+
 	if e.Name == "" {
-		log.Fatalf("Missing `name` for one example in resource %s", rName)
+		errs = append(errs, fmt.Errorf("missing `name` for one example in resource %s", rName))
 	}
-	e.ValidateExternalProviders()
+
+	if err := e.ValidateExternalProviders(); err != nil {
+		errs = append(errs, err)
+	}
+
+	// validate overrides
+	for key, vOverride := range e.rawExample.TestVarsOverrides {
+		vVars, ok := e.rawExample.Vars[key]
+		if !ok {
+			errs = append(errs, fmt.Errorf("setting override for unset var %s in %s", key, e.Name))
+		}
+
+		if vVars == vOverride {
+			errs = append(errs, fmt.Errorf("applying superfluous override for var %s in %s", key, e.Name))
+		}
+	}
+
+	return errs
 }
 
-func (e *Examples) ValidateExternalProviders() {
+func (e *Examples) ValidateExternalProviders() error {
 	// Official providers supported by HashiCorp
 	// https://registry.terraform.io/search/providers?namespace=hashicorp&tier=official
 	HASHICORP_PROVIDERS := []string{"aws", "random", "null", "template", "azurerm", "kubernetes", "local",
@@ -200,8 +232,10 @@ func (e *Examples) ValidateExternalProviders() {
 	}
 
 	if len(unallowedProviders) > 0 {
-		log.Fatalf("Providers %#v are not allowed. Only providers published by HashiCorp are allowed.", unallowedProviders)
+		return fmt.Errorf("providers %#v are not allowed. Only providers published by HashiCorp are allowed", unallowedProviders)
 	}
+
+	return nil
 }
 
 // Executes example templates for documentation and tests

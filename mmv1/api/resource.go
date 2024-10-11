@@ -13,6 +13,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"maps"
@@ -450,7 +451,10 @@ func (r *Resource) Validate() {
 	}
 
 	for _, example := range r.Examples {
-		example.Validate(r.Name)
+		errs := example.Validate(r.Name)
+		if errs != nil {
+			log.Fatal(errors.Join(errs...))
+		}
 	}
 
 	if r.Async != nil {
