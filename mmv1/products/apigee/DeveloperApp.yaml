@@ -20,8 +20,8 @@ description: |
   inside that API product.
 references:
   guides:
-    "Creating a developer": "https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api"
-  api: "https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.developers.apps"
+    "Creating a developer": "https://docs.cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api"
+  api: "https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.developers.apps"
 docs:
 base_url: "{{org_id}}/developers/{{developer_email}}/apps"
 self_link: "{{org_id}}/developers/{{developer_email}}/apps/{{name}}"

@@ -19,8 +19,8 @@ description: |
   forwarding rules to route incoming HTTP requests to a URL map.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/load-balancing/http/target-proxies'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionTargetHttpProxies'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/load-balancing/http/target-proxies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionTargetHttpProxies'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/targetHttpProxies'
 has_self_link: true

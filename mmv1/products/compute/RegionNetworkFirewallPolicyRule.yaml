@@ -20,7 +20,7 @@ description: |
   Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionNetworkFirewallPolicies/addRule'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionNetworkFirewallPolicies/addRule'
 docs:
 id_format: 'projects/{{project}}/regions/{{region}}/firewallPolicies/{{firewall_policy}}/{{priority}}'
 base_url: 'projects/{{project}}/regions/{{region}}/firewallPolicies/{{firewall_policy}}'

@@ -20,8 +20,8 @@ description:
   \nMultiple connectors can be authorised for a single AppConnection.\n"
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
-  api: 'https://cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appconnections'
+    'Official Documentation': 'https://docs.cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
+  api: 'https://docs.cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appconnections'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/appConnections'
 self_link: 'projects/{{project}}/locations/{{region}}/appConnections/{{name}}'
@@ -91,7 +91,7 @@ properties:
     type: String
     description: |
       The type of network connectivity used by the AppConnection. Refer
-      to https://cloud.google.com/beyondcorp/docs/reference/rest/v1/projects.locations.appConnections#type
+      to https://docs.cloud.google.com/beyondcorp/docs/reference/rest/v1/projects.locations.appConnections#type
       for a list of possible values.
     immutable: true
   - name: 'applicationEndpoint'
@@ -131,7 +131,7 @@ properties:
         type: String
         description: |
           The type of hosting used by the gateway. Refer to
-          https://cloud.google.com/beyondcorp/docs/reference/rest/v1/projects.locations.appConnections#Type_1
+          https://docs.cloud.google.com/beyondcorp/docs/reference/rest/v1/projects.locations.appConnections#Type_1
           for a list of possible values.
       - name: 'uri'
         type: String

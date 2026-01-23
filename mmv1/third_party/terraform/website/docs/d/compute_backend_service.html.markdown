@@ -7,8 +7,8 @@ description: |-
 # google_compute_backend_service
 
 Provide access to a Backend Service's attribute. For more information
-see [the official documentation](https://cloud.google.com/compute/docs/load-balancing/http/backend-service)
-and the [API](https://cloud.google.com/compute/docs/reference/latest/backendServices).
+see [the official documentation](https://docs.cloud.google.com/compute/docs/load-balancing/http/backend-service)
+and the [API](https://docs.cloud.google.com/compute/docs/reference/latest/backendServices).
 
 ## Example Usage
 

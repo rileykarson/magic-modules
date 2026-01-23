@@ -575,7 +575,7 @@ func (c *Config) LoadAndValidate(ctx context.Context) error {
 	}
 
 	// Ensure $userProject is set for all HTTP requests using the client if specified by the provider config
-	// See https://cloud.google.com/apis/docs/system-parameters
+	// See https://docs.cloud.google.com/apis/docs/system-parameters
 	// option.WithQuotaProject automatically sets the quota project in the client.
 	// However, this setting won't appear in our request logs since our logging
 	// transport sits above the Google client's internal transport. To ensure

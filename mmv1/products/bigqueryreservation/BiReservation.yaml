@@ -17,8 +17,8 @@ description: |
   Represents a BI Reservation.
 references:
   guides:
-    'Introduction to Reservations': 'https://cloud.google.com/bigquery/docs/reservations-intro'
-  api: 'https://cloud.google.com/bigquery/docs/reference/reservations/rest/v1/BiReservation'
+    'Introduction to Reservations': 'https://docs.cloud.google.com/bigquery/docs/reservations-intro'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/reservations/rest/v1/BiReservation'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/biReservation'
 self_link: 'projects/{{project}}/locations/{{location}}/biReservation'

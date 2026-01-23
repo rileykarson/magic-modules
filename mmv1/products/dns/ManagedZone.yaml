@@ -20,8 +20,8 @@ description: |
   hosted by the Cloud DNS service.
 references:
   guides:
-    'Managing Zones': 'https://cloud.google.com/dns/zones/'
-  api: 'https://cloud.google.com/dns/api/v1/managedZones'
+    'Managing Zones': 'https://docs.cloud.google.com/dns/zones/'
+  api: 'https://docs.cloud.google.com/dns/api/v1/managedZones'
 docs:
 id_format: 'projects/{{project}}/managedZones/{{name}}'
 base_url: 'projects/{{project}}/managedZones'

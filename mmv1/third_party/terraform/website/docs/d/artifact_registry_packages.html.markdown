@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_packages
 
 Get information about Artifact Registry packages.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs/overview)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.packages/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs/overview)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.packages/list).
 
 ## Example Usage
 
@@ -27,7 +27,7 @@ The following arguments are supported:
 
 * `repository_id` - (Required) The last part of the repository name to fetch from.
 
-* `filter` - (Optional) An expression for filtering the results of the request. Filter rules are case insensitive. The fields eligible for filtering are `name` and `annotations`. Further information can be found in the [REST API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.packages/list#query-parameters).
+* `filter` - (Optional) An expression for filtering the results of the request. Filter rules are case insensitive. The fields eligible for filtering are `name` and `annotations`. Further information can be found in the [REST API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.packages/list#query-parameters).
 
 * `project` - (Optional) The project ID in which the resource belongs. If it is not provided, the provider project is used.
 

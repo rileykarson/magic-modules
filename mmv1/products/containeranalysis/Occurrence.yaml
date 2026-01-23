@@ -18,8 +18,8 @@ description: |
   can be done for a resource.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/container-analysis/'
-  api: 'https://cloud.google.com/container-analysis/api/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/container-analysis/'
+  api: 'https://docs.cloud.google.com/container-analysis/api/reference/rest/'
 docs:
 id_format: 'projects/{{project}}/occurrences/{{name}}'
 base_url: 'projects/{{project}}/occurrences'

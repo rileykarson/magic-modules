@@ -8,8 +8,8 @@ description: |-
 # google_storage_buckets
 
 Gets a list of existing GCS buckets.
-See [the official documentation](https://cloud.google.com/storage/docs/introduction)
-and [API](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
+See [the official documentation](https://docs.cloud.google.com/storage/docs/introduction)
+and [API](https://docs.cloud.google.com/storage/docs/json_api/v1/buckets/list).
 
 ## Example Usage
 
@@ -41,4 +41,4 @@ The following attributes are exported:
 * `location` - The location of the bucket. 
 * `name` - The name of the bucket.
 * `self_link` - A url reference to the bucket.
-* `storage_class` - The [StorageClass](https://cloud.google.com/storage/docs/storage-classes) of the bucket.
+* `storage_class` - The [StorageClass](https://docs.cloud.google.com/storage/docs/storage-classes) of the bucket.

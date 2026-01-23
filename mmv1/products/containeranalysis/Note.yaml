@@ -18,9 +18,9 @@ description: |
   describes a type of analysis that can be done for a resource.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/container-analysis/'
-    'Creating Attestations (Occurrences)': 'https://cloud.google.com/binary-authorization/docs/making-attestations'
-  api: 'https://cloud.google.com/container-analysis/api/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/container-analysis/'
+    'Creating Attestations (Occurrences)': 'https://docs.cloud.google.com/binary-authorization/docs/making-attestations'
+  api: 'https://docs.cloud.google.com/container-analysis/api/reference/rest/'
 docs:
 id_format: 'projects/{{project}}/notes/{{name}}'
 base_url: 'projects/{{project}}/notes?noteId={{name}}'

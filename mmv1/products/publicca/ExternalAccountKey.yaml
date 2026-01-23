@@ -17,10 +17,10 @@ description: |
   A representation of an ExternalAccountKey used for external account binding within ACME.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/certificate-manager/docs/public-ca'
-    'Request EAB key ID and HMAC': 'https://cloud.google.com/certificate-manager/docs/public-ca-tutorial#request-key-hmac'
-    'Request Certificate Using Public CA': 'https://cloud.google.com/certificate-manager/docs/public-ca-tutorial'
-  api: 'https://cloud.google.com/certificate-manager/docs/reference/public-ca/rest/v1/projects.locations.externalAccountKeys/create'
+    'Official Documentation': 'https://docs.cloud.google.com/certificate-manager/docs/public-ca'
+    'Request EAB key ID and HMAC': 'https://docs.cloud.google.com/certificate-manager/docs/public-ca-tutorial#request-key-hmac'
+    'Request Certificate Using Public CA': 'https://docs.cloud.google.com/certificate-manager/docs/public-ca-tutorial'
+  api: 'https://docs.cloud.google.com/certificate-manager/docs/reference/public-ca/rest/v1/projects.locations.externalAccountKeys/create'
 docs:
   warning: |
     This resource is create-only and could not be read from the API.

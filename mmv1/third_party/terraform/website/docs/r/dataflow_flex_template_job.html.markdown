@@ -6,10 +6,10 @@ description: |-
 
 # google_dataflow_flex_template_job
 
-Creates a [Flex Template](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates)
+Creates a [Flex Template](https://docs.cloud.google.com/dataflow/docs/guides/templates/using-flex-templates)
 job on Dataflow, which is an implementation of Apache Beam running on Google
 Compute Engine. For more information see the official documentation for [Beam](https://beam.apache.org)
-and [Dataflow](https://cloud.google.com/dataflow/).
+and [Dataflow](https://docs.cloud.google.com/dataflow/).
 
 ~> **Warning:** This resource is in beta, and should be used with the terraform-provider-google-beta provider.
 See [Provider Versions](https://terraform.io/docs/providers/google/guides/provider_versions.html) for more details on beta resources.
@@ -108,7 +108,7 @@ Template.
 * `kms_key_name` - (Optional) The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`
 
 * `labels` - (Optional) User labels to be specified for the job. Keys and values
-should follow the restrictions specified in the [labeling restrictions](https://cloud.google.com/compute/docs/labeling-resources#restrictions)
+should follow the restrictions specified in the [labeling restrictions](https://docs.cloud.google.com/compute/docs/labeling-resources#restrictions)
 page. 
 **Note**: This field is non-authoritative, and will only manage the labels present in your configuration. Please refer to the field `effective_labels` for all of the labels present on the resource.
 
@@ -157,7 +157,7 @@ In addition to the arguments listed above, the following computed attributes are
 
 * `job_id` - The unique ID of this job.
 
-* `state` - The current state of the resource, selected from the [JobState enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)
+* `state` - The current state of the resource, selected from the [JobState enum](https://docs.cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)
 
 ## Import
 

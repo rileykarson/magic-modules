@@ -19,8 +19,8 @@ description: |
   Schema defines the structure and layout of a type of document data.
 references:
   guides:
-    'Provide a schema for your data store': 'https://cloud.google.com/generative-ai-app-builder/docs/provide-schema'
-  api: 'https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.dataStores.schemas'
+    'Provide a schema for your data store': 'https://docs.cloud.google.com/generative-ai-app-builder/docs/provide-schema'
+  api: 'https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.dataStores.schemas'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/collections/default_collection/dataStores/{{data_store_id}}/schemas'
 self_link: 'projects/{{project}}/locations/{{location}}/collections/default_collection/dataStores/{{data_store_id}}/schemas/{{schema_id}}'

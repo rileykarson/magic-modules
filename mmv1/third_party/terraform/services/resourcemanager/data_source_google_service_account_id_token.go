@@ -81,7 +81,7 @@ func dataSourceGoogleServiceAccountIdTokenRead(d *schema.ResourceData, meta inte
 	// If a target service account is provided, use the API to generate the idToken
 	if targetServiceAccount != "" {
 		// Use
-		// https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateIdToken
+		// https://docs.cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateIdToken
 		service := config.NewIamCredentialsClient(userAgent)
 		name := fmt.Sprintf("projects/-/serviceAccounts/%s", targetServiceAccount)
 		tokenRequest := &iamcredentials.GenerateIdTokenRequest{

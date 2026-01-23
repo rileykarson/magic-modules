@@ -17,8 +17,8 @@ description: |
   A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages'
 docs:
 id_format: '{{parent}}/pages/{{name}}'
 base_url: '{{parent}}/pages'
@@ -250,7 +250,7 @@ properties:
               type: String
               description: |
                 A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
               state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
               custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
               custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -458,7 +458,7 @@ properties:
                             type: String
                             description: |
                               A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                              See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                              See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                             state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                             custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                             custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -657,7 +657,7 @@ properties:
                                   type: String
                                   description: |
                                     A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                                    See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                                    See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                                   state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                                   custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                                   custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -920,7 +920,7 @@ properties:
                     type: String
                     description: |
                       A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                      See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                      See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                     custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                     custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -1115,7 +1115,7 @@ properties:
                     type: String
                     description: |
                       A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                      See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                      See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                     custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                     custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -1352,7 +1352,7 @@ properties:
                   send_empty_value: true
                   properties: []  # Meant to be an empty object with no properties.
                 # Although ResponseMessage has a field named "toolCall", we can't include it here because it references the Tool resource, which hasn't been available on Terraform.
-                # See https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3beta1/ResponseMessage
+                # See https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3beta1/ResponseMessage
           - name: 'webhook'
             type: String
             description: |
@@ -1396,7 +1396,7 @@ properties:
                   type: String
                   description: |
                     A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                    See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                    See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                   state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                   custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                   custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -1447,7 +1447,7 @@ properties:
                   - name: 'models'
                     type: KeyValuePairs
                     description: |
-                      Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://cloud.google.com/dialogflow/cx/docs/concept/speech-models).
+                      Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://docs.cloud.google.com/dialogflow/cx/docs/concept/speech-models).
                       An object containing a list of **"key": value** pairs. Example: **{ "name": "wrench", "mass": "1.3kg", "count": "3" }**.
               - name: 'dtmfSettings'
                 type: NestedObject

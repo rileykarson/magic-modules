@@ -9,7 +9,7 @@ description: |-
 Use this data source to get details about a cluster resource.
 
 To get more information about private cloud cluster, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds.clusters)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds.clusters)
 
 ## Example Usage
 

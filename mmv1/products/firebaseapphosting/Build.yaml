@@ -147,16 +147,16 @@ properties:
     description: |-
       The Artifact Registry
       [container
-      image](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages)
+      image](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages)
       URI, used by the Cloud Run
-      [`revision`](https://cloud.google.com/run/docs/reference/rest/v2/projects.locations.services.revisions)
+      [`revision`](https://docs.cloud.google.com/run/docs/reference/rest/v2/projects.locations.services.revisions)
       for this build.
     output: true
   - name: buildLogsUri
     type: String
     description: |-
       The location of the [Cloud Build
-      logs](https://cloud.google.com/build/docs/view-build-results) for the build
+      logs](https://docs.cloud.google.com/build/docs/view-build-results) for the build
       process.
     output: true
   - name: state
@@ -195,7 +195,7 @@ properties:
         description: |-
           The URI of an Artifact Registry
           [container
-          image](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages)
+          image](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages)
           to use as the build source.
         properties:
           - name: image
@@ -273,7 +273,7 @@ properties:
       three pieces of data: error code, error message, and error details.
 
       You can find out more about this error model and how to work with it in the
-      [API Design Guide](https://cloud.google.com/apis/design/errors).
+      [API Design Guide](https://docs.cloud.google.com/apis/design/errors).
     properties:
       - name: code
         type: Integer

@@ -7,8 +7,8 @@ description: |-
 # google_compute_instance_group
 
 Creates a group of dissimilar Compute Engine virtual machine instances.
-For more information, see [the official documentation](https://cloud.google.com/compute/docs/instance-groups/#unmanaged_instance_groups)
-and [API](https://cloud.google.com/compute/docs/reference/latest/instanceGroups)
+For more information, see [the official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/#unmanaged_instance_groups)
+and [API](https://docs.cloud.google.com/compute/docs/reference/latest/instanceGroups)
 
 -> Recreating an instance group that's in use by another resource will give a
 `resourceInUseByAnotherResource` error. You can avoid this error with a

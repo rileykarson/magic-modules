@@ -17,8 +17,8 @@ description: |
   EdgeCacheKeyset represents a collection of public keys used for validating signed requests.
 references:
   guides:
-    'Create keysets': 'https://cloud.google.com/media-cdn/docs/create-keyset'
-  api: 'https://cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheKeysets'
+    'Create keysets': 'https://docs.cloud.google.com/media-cdn/docs/create-keyset'
+  api: 'https://docs.cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheKeysets'
 docs:
 base_url: 'projects/{{project}}/locations/global/edgeCacheKeysets'
 self_link: 'projects/{{project}}/locations/global/edgeCacheKeysets/{{name}}'

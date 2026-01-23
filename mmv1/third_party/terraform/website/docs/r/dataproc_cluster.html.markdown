@@ -8,9 +8,9 @@ description: |-
 
 Manages a Cloud Dataproc cluster resource within GCP.
 
-* [API documentation](https://cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.clusters)
+* [API documentation](https://docs.cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.clusters)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/dataproc/docs)
+    * [Official Documentation](https://docs.cloud.google.com/dataproc/docs)
 
 
 !> **Warning:** Due to limitations of the API, all arguments except
@@ -155,7 +155,7 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
       Default timeout is 0 (for forceful decommission), and the maximum allowed timeout is 1 day. (see JSON representation of
       [Duration](https://developers.google.com/protocol-buffers/docs/proto3#json)).
       Only supported on Dataproc image versions 1.2 and higher.
-      For more context see the [docs](https://cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.clusters/patch#query-parameters)
+      For more context see the [docs](https://docs.cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.clusters/patch#query-parameters)
 - - -
 
 <a name="nested_virtual_cluster_config"></a>The `virtual_cluster_config` block supports:
@@ -357,7 +357,7 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
 * `preemptible_worker_config` (Optional) The Google Compute Engine config settings for the additional
    instances in a cluster. Structure [defined below](#nested_preemptible_worker_config).
   * **NOTE** : `preemptible_worker_config` is
-   an alias for the api's [secondaryWorkerConfig](https://cloud.google.com/dataproc/docs/reference/rest/v1/ClusterConfig#InstanceGroupConfig). The name doesn't necessarily mean it is preemptible and is named as
+   an alias for the api's [secondaryWorkerConfig](https://docs.cloud.google.com/dataproc/docs/reference/rest/v1/ClusterConfig#InstanceGroupConfig). The name doesn't necessarily mean it is preemptible and is named as
    such for legacy/compatibility reasons.
 
 * `software_config` (Optional) The config settings for software inside the cluster.
@@ -410,7 +410,7 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
 
 * `zone` - (Optional, Computed) The GCP zone where your data is stored and used (i.e. where
 	the master and the worker nodes will be created in). If `region` is set to 'global' (default)
-	then `zone` is mandatory, otherwise GCP is able to make use of [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/auto-zone)
+	then `zone` is mandatory, otherwise GCP is able to make use of [Auto Zone Placement](https://docs.cloud.google.com/dataproc/docs/concepts/auto-zone)
 	to determine this automatically for you.
 	Note: This setting additionally determines and restricts
 	which computing resources are available for use with other configs such as
@@ -430,7 +430,7 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
     to be made available on all of the node VMs under the `service_account`
     specified. Both OAuth2 URLs and gcloud
     short names are supported. To allow full access to all Cloud APIs, use the
-    `cloud-platform` scope. See a complete list of scopes [here](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
+    `cloud-platform` scope. See a complete list of scopes [here](https://docs.cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
 
 * `tags` - (Optional) The list of instance tags applied to instances in the cluster.
    Tags are used to identify valid sources or targets for network firewalls.
@@ -442,11 +442,11 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
    will be launched in.
 
 * `metadata` - (Optional) A map of the Compute Engine metadata entries to add to all instances
-   (see [Project and instance metadata](https://cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata)).
+   (see [Project and instance metadata](https://docs.cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata)).
 
 * `resource_manager_tags` - (Optional) A map of resource manager tags to add to all instances.
    Keys must be in the format `tagKeys/{tag_key_id}` and values in the format `tagValues/{tag_value_id}`
-   (see [Secure tags](https://cloud.google.com/dataproc/docs/guides/use-secure-tags)).
+   (see [Secure tags](https://docs.cloud.google.com/dataproc/docs/guides/use-secure-tags)).
 
 * `reservation_affinity` - (Optional) Reservation Affinity for consuming zonal reservation.
     * `consume_reservation_type` - (Optional) Corresponds to the type of reservation consumption.
@@ -456,10 +456,10 @@ resource "google_dataproc_cluster" "accelerated_cluster" {
 * `node_group_affinity` - (Optional) Node Group Affinity for sole-tenant clusters.
     * `node_group_uri` - (Required) The URI of a sole-tenant node group resource that the cluster will be created on.
 
-* `confidential_instance_config` - (Optional) Confidential Instance Config for clusters using [Confidential VMs](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/confidential-compute)
+* `confidential_instance_config` - (Optional) Confidential Instance Config for clusters using [Confidential VMs](https://docs.cloud.google.com/dataproc/docs/concepts/configuring-clusters/confidential-compute)
     * `enable_confidential_compute` - (Optional) Defines whether the instance should have confidential compute enabled.
 
-* `shielded_instance_config` (Optional) Shielded Instance Config for clusters using [Compute Engine Shielded VMs](https://cloud.google.com/security/shielded-cloud/shielded-vm).
+* `shielded_instance_config` (Optional) Shielded Instance Config for clusters using [Compute Engine Shielded VMs](https://docs.cloud.google.com/security/shielded-cloud/shielded-vm).
 
 - - -
 
@@ -480,7 +480,7 @@ cluster_config{
 
 * `enable_secure_boot` - (Optional) Defines whether instances have Secure Boot enabled.
 
-* `enable_vtpm` - (Optional) Defines whether instances have the [vTPM](https://cloud.google.com/security/shielded-cloud/shielded-vm#vtpm) enabled.
+* `enable_vtpm` - (Optional) Defines whether instances have the [vTPM](https://docs.cloud.google.com/security/shielded-cloud/shielded-vm#vtpm) enabled.
 
 * `enable_integrity_monitoring` - (Optional) Defines whether instances have integrity monitoring enabled.
 
@@ -513,10 +513,10 @@ cluster_config {
 
 * `min_cpu_platform` - (Optional, Computed) The name of a minimum generation of CPU family
    for the master. If not specified, GCP will default to a predetermined computed value
-   for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+   for each zone. See [the guide](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
    for details about which CPU families are available (and defaulted) for each zone.
 
-* `image_uri` (Optional) The URI for the image to use for this worker.  See [the guide](https://cloud.google.com/dataproc/docs/guides/dataproc-images)
+* `image_uri` (Optional) The URI for the image to use for this worker.  See [the guide](https://docs.cloud.google.com/dataproc/docs/guides/dataproc-images)
     for more information.
 
 * `disk_config` (Optional) Disk Config
@@ -536,7 +536,7 @@ cluster_config {
 	* `local_ssd_interface` - Optional. Interface type of local SSDs (default is "scsi").
 	Valid values: "scsi" (Small Computer System Interface), "nvme" (Non-Volatile
 	Memory Express). See
-	[local SSD performance](https://cloud.google.com/compute/docs/disks/local-ssd#performance).
+	[local SSD performance](https://docs.cloud.google.com/compute/docs/disks/local-ssd#performance).
 
 * `accelerators` (Optional) The Compute Engine accelerator (GPU) configuration for these instances. Can be specified multiple times.
 
@@ -545,7 +545,7 @@ cluster_config {
     * `accelerator_count` - (Required) The number of the accelerator cards of this type exposed to this instance. Often restricted to one of `1`, `2`, `4`, or `8`.
 
 ~> The Cloud Dataproc API can return unintuitive error messages when using accelerators; even when you have defined an accelerator, Auto Zone Placement does not exclusively select
-zones that have that accelerator available. If you get a 400 error that the accelerator can't be found, this is a likely cause. Make sure you check [accelerator availability by zone](https://cloud.google.com/compute/docs/reference/rest/v1/acceleratorTypes/list)
+zones that have that accelerator available. If you get a 400 error that the accelerator can't be found, this is a likely cause. Make sure you check [accelerator availability by zone](https://docs.cloud.google.com/compute/docs/reference/rest/v1/acceleratorTypes/list)
 if you are trying to use accelerators in a given zone.
 
 - - -
@@ -571,7 +571,7 @@ cluster_config {
 * `num_instances`- (Optional, Computed) Specifies the number of worker nodes to create.
    If not specified, GCP will default to a predetermined computed value (currently 2).
    There is currently a beta feature which allows you to run a
-   [Single Node Cluster](https://cloud.google.com/dataproc/docs/concepts/single-node-clusters).
+   [Single Node Cluster](https://docs.cloud.google.com/dataproc/docs/concepts/single-node-clusters).
    In order to take advantage of this you need to set
    `"dataproc:dataproc.allow.zero.workers" = "true"` in
    `cluster_config.software_config.properties`
@@ -582,7 +582,7 @@ cluster_config {
 
 * `min_cpu_platform` - (Optional, Computed) The name of a minimum generation of CPU family
    for the master. If not specified, GCP will default to a predetermined computed value
-   for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+   for each zone. See [the guide](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
    for details about which CPU families are available (and defaulted) for each zone.
 
 * `disk_config` (Optional) Disk Config
@@ -598,7 +598,7 @@ cluster_config {
     * `num_local_ssds` - (Optional) The amount of local SSD disks that will be
 	attached to each worker cluster node. Defaults to 0.
 
-* `image_uri` (Optional) The URI for the image to use for this worker.  See [the guide](https://cloud.google.com/dataproc/docs/guides/dataproc-images)
+* `image_uri` (Optional) The URI for the image to use for this worker.  See [the guide](https://docs.cloud.google.com/dataproc/docs/guides/dataproc-images)
     for more information.
 
 * `min_num_instances` (Optional) The minimum number of primary worker instances to create.  If `min_num_instances` is set, cluster creation will succeed if the number of primary workers created is at least equal to the `min_num_instances` number.
@@ -610,7 +610,7 @@ cluster_config {
     * `accelerator_count` - (Required) The number of the accelerator cards of this type exposed to this instance. Often restricted to one of `1`, `2`, `4`, or `8`.
 
 ~> The Cloud Dataproc API can return unintuitive error messages when using accelerators; even when you have defined an accelerator, Auto Zone Placement does not exclusively select
-zones that have that accelerator available. If you get a 400 error that the accelerator can't be found, this is a likely cause. Make sure you check [accelerator availability by zone](https://cloud.google.com/compute/docs/reference/rest/v1/acceleratorTypes/list)
+zones that have that accelerator available. If you get a 400 error that the accelerator can't be found, this is a likely cause. Make sure you check [accelerator availability by zone](https://docs.cloud.google.com/compute/docs/reference/rest/v1/acceleratorTypes/list)
 if you are trying to use accelerators in a given zone.
 
 - - -
@@ -703,14 +703,14 @@ cluster_config {
    for the cluster - this controls the sets of software versions
    installed onto the nodes when you create clusters. If not specified, defaults to the
    latest version. For a list of valid versions see
-   [Cloud Dataproc versions](https://cloud.google.com/dataproc/docs/concepts/dataproc-versions)
+   [Cloud Dataproc versions](https://docs.cloud.google.com/dataproc/docs/concepts/dataproc-versions)
 
 * `override_properties` - (Optional) A list of override and additional properties (key/value pairs)
    used to modify various aspects of the common configuration files used when creating
    a cluster. For a list of valid properties please see
-  [Cluster properties](https://cloud.google.com/dataproc/docs/concepts/cluster-properties)
+  [Cluster properties](https://docs.cloud.google.com/dataproc/docs/concepts/cluster-properties)
 
-* `optional_components` - (Optional) The set of optional components to activate on the cluster. See [Available Optional Components](https://cloud.google.com/dataproc/docs/concepts/components/overview#available_optional_components).
+* `optional_components` - (Optional) The set of optional components to activate on the cluster. See [Available Optional Components](https://docs.cloud.google.com/dataproc/docs/concepts/components/overview#available_optional_components).
 
 - - -
 
@@ -861,9 +861,9 @@ dataproc_metric_config {
 
 * `metrics` - (Required) Metrics sources to enable.
 
-  * `metric_source` - (Required) A source for the collection of Dataproc OSS metrics (see [available OSS metrics](https://cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).
+  * `metric_source` - (Required) A source for the collection of Dataproc OSS metrics (see [available OSS metrics](https://docs.cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).
 
-  * `metric_overrides` - (Optional) One or more [available OSS metrics] (https://cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect for the metric course.
+  * `metric_overrides` - (Optional) One or more [available OSS metrics] (https://docs.cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect for the metric course.
 
 - - -
 
@@ -910,7 +910,7 @@ auxiliary_node_groups{
        
     * `min_cpu_platform` - (Optional, Computed) The name of a minimum generation of CPU family
        for the node group. If not specified, GCP will default to a predetermined computed value
-       for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+       for each zone. See [the guide](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
        for details about which CPU families are available (and defaulted) for each zone.
        
     * `disk_config` (Optional) Disk Config

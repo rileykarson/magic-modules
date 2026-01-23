@@ -22,12 +22,12 @@ description: |
   to a BigQuery instance.
 
   -> **Note:** In order to use Cloud SCC resources, your organization must be enrolled
-  in [SCC Standard/Premium](https://cloud.google.com/security-command-center/docs/quickstart-security-command-center).
+  in [SCC Standard/Premium](https://docs.cloud.google.com/security-command-center/docs/quickstart-security-command-center).
   Without doing so, you may run into errors during resource creation.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/security-command-center/docs/how-to-analyze-findings-in-big-query'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/rest/v1/folders.bigQueryExports'
+    'Official Documentation': 'https://docs.cloud.google.com/security-command-center/docs/how-to-analyze-findings-in-big-query'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/rest/v1/folders.bigQueryExports'
 docs:
 base_url: 'folders/{{folder}}/bigQueryExports'
 self_link: 'folders/{{folder}}/bigQueryExports/{{big_query_export_id}}'
@@ -142,7 +142,7 @@ properties:
       * boolean literals true and false without quotes.
 
       See
-      [Filtering notifications](https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)
+      [Filtering notifications](https://docs.cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)
       for information on how to write a filter.
     required: true
     send_empty_value: true

@@ -11,7 +11,7 @@ import (
 )
 
 // To run tests locally please replace the `oauth_token_secret_version` with your secret manager version.
-// More details: https://cloud.google.com/developer-connect/docs/connect-github-repo#before_you_begin
+// More details: https://docs.cloud.google.com/developer-connect/docs/connect-github-repo#before_you_begin
 
 func TestAccGeminiRepositoryGroupIamBinding(t *testing.T) {
 	location := "us-central1"

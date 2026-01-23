@@ -17,8 +17,8 @@ description: A Google Cloud Memorystore instance.
 docs:
 references:
   guides:
-    'Official Documentation': https://cloud.google.com/memorystore/docs/valkey/create-instances
-  api: 'https://cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances'
+    'Official Documentation': https://docs.cloud.google.com/memorystore/docs/valkey/create-instances
+  api: 'https://docs.cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances'
 id_format: 'projects/{{project}}/locations/{{location}}/instances/{{instance_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/instances'
 self_link: 'projects/{{project}}/locations/{{location}}/instances/{{instance_id}}'

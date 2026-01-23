@@ -16,8 +16,8 @@ name: 'FeatureOnlineStore'
 description: Vertex AI Feature Online Store provides a centralized repository for serving ML features and embedding indexes at low latency. The Feature Online Store is a top-level container.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/featureOnlineStores'
 self_link: 'projects/{{project}}/locations/{{region}}/featureOnlineStores/{{name}}'
@@ -110,7 +110,7 @@ properties:
     description: The labels with user-defined metadata to organize your feature online stores.
   - name: 'state'
     type: String
-    description: The state of the Feature Online Store. See the possible states in [this link](https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores#state).
+    description: The state of the Feature Online Store. See the possible states in [this link](https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores#state).
     output: true
   - name: 'bigtable'
     type: NestedObject
@@ -159,7 +159,7 @@ properties:
       - 'bigtable'
       - 'optimized'
     properties:
-  # Meant to be an empty object with no properties - see here : https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureOnlineStores#Optimized
+  # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureOnlineStores#Optimized
       []
   - name: 'dedicatedServingEndpoint'
     type: NestedObject

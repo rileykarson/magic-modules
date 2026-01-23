@@ -8,7 +8,7 @@ description: |-
 
 The Google Cloud storage signed URL data source generates a signed URL for a given storage object. Signed URLs provide a way to give time-limited read or write access to anyone in possession of the URL, regardless of whether they have a Google account.
 
-For more info about signed URL's is available [here](https://cloud.google.com/storage/docs/access-control/signed-urls).
+For more info about signed URL's is available [here](https://docs.cloud.google.com/storage/docs/access-control/signed-urls).
 
 ## Example Usage
 
@@ -63,11 +63,11 @@ The following arguments are supported:
     > **NOTE** the default google credentials configured by `gcloud` sdk or the service account associated with a compute instance cannot be used, because these do not include the private key required to sign the URL. A valid `json` service account credentials key file must be used, as generated via Google cloud console.
 
 * `content_type` - (Optional) If you specify this in the datasource, the client must provide the `Content-Type` HTTP header with the same value in its request.
-* `content_md5` - (Optional) The [MD5 digest](https://cloud.google.com/storage/docs/hashes-etags#_MD5) value in Base64.
+* `content_md5` - (Optional) The [MD5 digest](https://docs.cloud.google.com/storage/docs/hashes-etags#_MD5) value in Base64.
      Typically retrieved from `google_storage_bucket_object.object.md5hash` attribute.
      If you provide this in the datasource, the client (e.g. browser, curl) must provide the `Content-MD5` HTTP header with this same value in its request.
 * `extension_headers` - (Optional) As needed. The server checks to make sure that the client provides matching values in requests using the signed URL.
-     Any header starting with `x-goog-` is accepted but see the [Google Docs](https://cloud.google.com/storage/docs/xml-api/reference-headers) for list of headers that are supported by Google.
+     Any header starting with `x-goog-` is accepted but see the [Google Docs](https://docs.cloud.google.com/storage/docs/xml-api/reference-headers) for list of headers that are supported by Google.
 
 
 ## Attributes Reference

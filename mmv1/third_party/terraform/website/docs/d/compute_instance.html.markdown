@@ -7,9 +7,9 @@ description: |-
 # google_compute_instance
 
 Get information about a VM instance resource within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/instances)
+[the official documentation](https://docs.cloud.google.com/compute/docs/instances)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/instances).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/instances).
 
 
 ## Example Usage
@@ -89,7 +89,7 @@ The following arguments are supported:
 
 * `enable_display` - Whether the instance has virtual displays enabled.
 
-* `current_status` - The current status of the instance. This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED. For more information about the status of the instance, see [Instance life cycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle).
+* `current_status` - The current status of the instance. This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED. For more information about the status of the instance, see [Instance life cycle](https://docs.cloud.google.com/compute/docs/instances/instance-life-cycle).
 
 * `network_interface.0.network_ip` - The internal ip address of the instance, either manually or dynamically assigned.
 
@@ -99,15 +99,15 @@ The following arguments are supported:
 
 * `attached_disk.0.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `boot_disk.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `disk.0.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `key_revocation_action_type` - Action to be taken when a customer's encryption key is revoked.
 
@@ -198,14 +198,14 @@ The following arguments are supported:
 
 * `on_host_maintenance` - Describes maintenance behavior for the
     instance. One of `MIGRATE` or `TERMINATE`, for more info, read
-    [here](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options)
+    [here](https://docs.cloud.google.com/compute/docs/instances/setting-instance-scheduling-options)
 
 * `automatic_restart` - Specifies if the instance should be
     restarted if it was terminated by Compute Engine (not a user).
     
 * `provisioning_model` - Describe the type of preemptible VM.
 
-* `instance_termination_action` - Describe the type of termination action for `SPOT` VM. Can be `STOP` or `DELETE`.  Read more on [here](https://cloud.google.com/compute/docs/instances/create-use-spot) 
+* `instance_termination_action` - Describe the type of termination action for `SPOT` VM. Can be `STOP` or `DELETE`.  Read more on [here](https://docs.cloud.google.com/compute/docs/instances/create-use-spot) 
 
 <a name="nested_guest_accelerator"></a>The `guest_accelerator` block supports:
 
@@ -213,7 +213,7 @@ The following arguments are supported:
 
 * `count` - The number of the guest accelerator cards exposed to this instance.
 
-[network-tier]: https://cloud.google.com/network-tiers/docs/overview
+[network-tier]: https://docs.cloud.google.com/network-tiers/docs/overview
 
 <a name="nested_shielded_instance_config"></a>The `shielded_instance_config` block supports:
 

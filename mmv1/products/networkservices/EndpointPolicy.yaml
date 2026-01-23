@@ -17,7 +17,7 @@ description: |
   EndpointPolicy is a resource that helps apply desired configuration on the endpoints that match specific criteria.
 references:
   guides:
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.endpointPolicies'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.endpointPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/global/endpointPolicies'
 self_link: 'projects/{{project}}/locations/global/endpointPolicies/{{name}}'

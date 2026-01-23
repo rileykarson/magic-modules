@@ -17,8 +17,8 @@ description: |
   A domain serving an App Engine application.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/appengine/docs/standard/python/mapping-custom-domains'
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.domainMappings'
+    'Official Documentation': 'https://docs.cloud.google.com/appengine/docs/standard/python/mapping-custom-domains'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.domainMappings'
 docs:
 id_format: 'apps/{{project}}/domainMappings/{{domain_name}}'
 base_url: 'apps/{{project}}/domainMappings'

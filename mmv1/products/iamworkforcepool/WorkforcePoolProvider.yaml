@@ -17,8 +17,8 @@ description: |
   A configuration for an external identity provider.
 references:
   guides:
-    'Configure a provider within the workforce pool': 'https://cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#configure_a_provider_within_the_workforce_pool'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers'
+    'Configure a provider within the workforce pool': 'https://docs.cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#configure_a_provider_within_the_workforce_pool'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers'
 docs:
   note: |
     Ask your Google Cloud account team to request access to workforce identity federation for your
@@ -187,7 +187,7 @@ properties:
       * ACTIVE: The provider is active and may be used to validate authentication credentials.
       * DELETED: The provider is soft-deleted. Soft-deleted providers are permanently
         deleted after approximately 30 days. You can restore a soft-deleted provider using
-        [providers.undelete](https://cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers/undelete#google.iam.admin.v1.WorkforcePools.UndeleteWorkforcePoolProvider).
+        [providers.undelete](https://docs.cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers/undelete#google.iam.admin.v1.WorkforcePools.UndeleteWorkforcePoolProvider).
     output: true
     enum_values:
       - 'STATE_UNSPECIFIED'

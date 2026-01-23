@@ -7,7 +7,7 @@ description: |-
 # google_compute_storage_pool
 
 Provides access to available Google Compute Storage Pool resources for a given project and zone.
-See more about [Hyperdisk Storage Pools](https://cloud.google.com/compute/docs/disks/storage-pools) in the upstream docs.
+See more about [Hyperdisk Storage Pools](https://docs.cloud.google.com/compute/docs/disks/storage-pools) in the upstream docs.
 
 ## Example Usage
 

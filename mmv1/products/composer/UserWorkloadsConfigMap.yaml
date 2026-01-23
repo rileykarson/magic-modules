@@ -18,7 +18,7 @@ description: |
   Intended for Composer 3 Environments.
 references:
   guides:
-  api: 'https://cloud.google.com/composer/docs/reference/rest/v1/projects.locations.environments.userWorkloadsConfigMaps'
+  api: 'https://docs.cloud.google.com/composer/docs/reference/rest/v1/projects.locations.environments.userWorkloadsConfigMaps'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/environments/{{environment}}/userWorkloadsConfigMaps'
 self_link: 'projects/{{project}}/locations/{{region}}/environments/{{environment}}/userWorkloadsConfigMaps/{{name}}'

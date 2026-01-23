@@ -9,7 +9,7 @@ description: |-
 Use this data source to get details about a network policy resource.
 
 To get more information about network policy, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies)
 
 ## Example Usage
 

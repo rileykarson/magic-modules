@@ -18,8 +18,8 @@ description: |-
   A Cloud Run service has a unique endpoint and autoscales containers.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/run/docs/'
-  api: 'https://cloud.google.com/run/docs/reference/rest/v1/namespaces.services'
+    'Official Documentation': 'https://docs.cloud.google.com/run/docs/'
+  api: 'https://docs.cloud.google.com/run/docs/reference/rest/v1/namespaces.services'
 docs:
   warning: |
     We recommend using the `google_cloud_run_v2_service` resource which offers a better
@@ -311,39 +311,39 @@ properties:
                   keys to configure features on a Revision template:
 
                   - `autoscaling.knative.dev/maxScale` sets the [maximum number of container
-                    instances](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--max-instances) of the Revision to run.
+                    instances](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--max-instances) of the Revision to run.
                   - `autoscaling.knative.dev/minScale` sets the [minimum number of container
-                    instances](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--min-instances) of the Revision to run.
+                    instances](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--min-instances) of the Revision to run.
                   - `run.googleapis.com/client-name` sets the client name calling the Cloud Run API.
                   - `run.googleapis.com/cloudsql-instances` sets the [Cloud SQL
-                    instances](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--add-cloudsql-instances) the Revision connects to.
+                    instances](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--add-cloudsql-instances) the Revision connects to.
                   - `run.googleapis.com/cpu-throttling` sets whether to throttle the CPU when the container is not actively serving
-                    requests. See https://cloud.google.com/sdk/gcloud/reference/run/deploy#--[no-]cpu-throttling.
+                    requests. See https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--[no-]cpu-throttling.
                   - `run.googleapis.com/encryption-key-shutdown-hours` sets the number of hours to wait before an automatic shutdown
                     server after CMEK key revocation is detected.
-                  - `run.googleapis.com/encryption-key` sets the [CMEK key](https://cloud.google.com/run/docs/securing/using-cmek)
+                  - `run.googleapis.com/encryption-key` sets the [CMEK key](https://docs.cloud.google.com/run/docs/securing/using-cmek)
                     reference to encrypt the container with.
                   - `run.googleapis.com/execution-environment` sets the [execution
-                    environment](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--execution-environment)
+                    environment](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--execution-environment)
                     where the application will run.
                   - `run.googleapis.com/post-key-revocation-action-type` sets the
-                    [action type](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--post-key-revocation-action-type)
+                    [action type](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--post-key-revocation-action-type)
                     after CMEK key revocation.
                   - `run.googleapis.com/secrets` sets a list of key-value pairs to set as
-                    [secrets](https://cloud.google.com/run/docs/configuring/secrets#yaml).
+                    [secrets](https://docs.cloud.google.com/run/docs/configuring/secrets#yaml).
                   - `run.googleapis.com/sessionAffinity` sets whether to enable
-                    [session affinity](https://cloud.google.com/sdk/gcloud/reference/beta/run/deploy#--[no-]session-affinity)
+                    [session affinity](https://docs.cloud.google.com/sdk/gcloud/reference/beta/run/deploy#--[no-]session-affinity)
                     for connections to the Revision.
                   - `run.googleapis.com/startup-cpu-boost` sets whether to allocate extra CPU to containers on startup.
-                    See https://cloud.google.com/sdk/gcloud/reference/run/deploy#--[no-]cpu-boost.
-                  - `run.googleapis.com/network-interfaces` sets [Direct VPC egress](https://cloud.google.com/run/docs/configuring/vpc-direct-vpc#yaml)
+                    See https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--[no-]cpu-boost.
+                  - `run.googleapis.com/network-interfaces` sets [Direct VPC egress](https://docs.cloud.google.com/run/docs/configuring/vpc-direct-vpc#yaml)
                     for the Revision.
-                  - `run.googleapis.com/vpc-access-connector` sets a [VPC connector](https://cloud.google.com/run/docs/configuring/connecting-vpc#terraform_1)
+                  - `run.googleapis.com/vpc-access-connector` sets a [VPC connector](https://docs.cloud.google.com/run/docs/configuring/connecting-vpc#terraform_1)
                     for the Revision.
                   - `run.googleapis.com/vpc-access-egress` sets the outbound traffic to send through the VPC connector for this resource.
-                    See https://cloud.google.com/sdk/gcloud/reference/run/deploy#--vpc-egress.
+                    See https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--vpc-egress.
                   - `run.googleapis.com/gpu-zonal-redundancy-disabled` sets
-                    [GPU zonal redundancy](https://cloud.google.com/run/docs/configuring/services/gpu-zonal-redundancy) for the Revision.
+                    [GPU zonal redundancy](https://docs.cloud.google.com/run/docs/configuring/services/gpu-zonal-redundancy) for the Revision.
                   - `run.googleapis.com/health-check-disabled` disabled health checking containers during deployment.
                 default_from_api: true
                 diff_suppress_func: 'cloudrunTemplateAnnotationDiffSuppress'
@@ -542,7 +542,7 @@ properties:
                             CPU Limit details:
                             - For fractional CPU values (e.g. `0.5`, `0.75`, min `0.08`) are also supported.
                             - CPU allocation must comply with memory limits and concurrency rules described in:
-                              https://cloud.google.com/run/docs/configuring/services/cpu
+                              https://docs.cloud.google.com/run/docs/configuring/services/cpu
                             The values of the map is string form of the 'quantity' k8s type:
                             https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apimachinery/pkg/api/resource/quantity.go
                           default_from_api: true
@@ -860,7 +860,7 @@ properties:
                 description: |-
                   Node Selector describes the hardware requirements of the resources.
                   Use the following node selector keys to configure features on a Revision:
-                    - `run.googleapis.com/accelerator` sets the [type of GPU](https://cloud.google.com/run/docs/configuring/services/gpu) required by the Revision to run.
+                    - `run.googleapis.com/accelerator` sets the [type of GPU](https://docs.cloud.google.com/run/docs/configuring/services/gpu) required by the Revision to run.
               - name: 'containerConcurrency'
                 type: Integer
                 description: |-
@@ -1184,16 +1184,16 @@ properties:
           Annotations with `run.googleapis.com/` and `autoscaling.knative.dev` are restricted. Use the following annotation
           keys to configure features on a Service:
 
-          - `run.googleapis.com/binary-authorization-breakglass` sets the [Binary Authorization breakglass](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--breakglass).
-          - `run.googleapis.com/binary-authorization` sets the [Binary Authorization](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--binary-authorization).
+          - `run.googleapis.com/binary-authorization-breakglass` sets the [Binary Authorization breakglass](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--breakglass).
+          - `run.googleapis.com/binary-authorization` sets the [Binary Authorization](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--binary-authorization).
           - `run.googleapis.com/client-name` sets the client name calling the Cloud Run API.
-          - `run.googleapis.com/custom-audiences` sets the [custom audiences](https://cloud.google.com/sdk/gcloud/reference/alpha/run/deploy#--add-custom-audiences)
+          - `run.googleapis.com/custom-audiences` sets the [custom audiences](https://docs.cloud.google.com/sdk/gcloud/reference/alpha/run/deploy#--add-custom-audiences)
             that can be used in the audience field of ID token for authenticated requests.
           - `run.googleapis.com/description` sets a user defined description for the Service.
-          - `run.googleapis.com/ingress` sets the [ingress settings](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--ingress)
+          - `run.googleapis.com/ingress` sets the [ingress settings](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--ingress)
             for the Service. For example, `"run.googleapis.com/ingress" = "all"`.
-          - `run.googleapis.com/launch-stage` sets the [launch stage](https://cloud.google.com/run/docs/troubleshooting#launch-stage-validation)
+          - `run.googleapis.com/launch-stage` sets the [launch stage](https://docs.cloud.google.com/run/docs/troubleshooting#launch-stage-validation)
             when a preview feature is used. For example, `"run.googleapis.com/launch-stage": "BETA"`
-          - `run.googleapis.com/minScale` sets the [minimum number of container instances](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--min) of the Service.
+          - `run.googleapis.com/minScale` sets the [minimum number of container instances](https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy#--min) of the Service.
           - `run.googleapis.com/scalingMode` sets the type of scaling mode for the service. The supported values for scaling mode are "manual" and "automatic". If not provided, it defaults to "automatic".
           - `run.googleapis.com/manualInstanceCount` sets the total instance count for the service in manual scaling mode. This number of instances is divided among all revisions with specified traffic based on the percent of traffic they are receiving.

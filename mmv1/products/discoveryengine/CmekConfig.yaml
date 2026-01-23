@@ -18,7 +18,7 @@ description: |
   Cloud KMS keys.
 references:
   guides:
-  api: 'https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.cmekConfigs'
+  api: 'https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.cmekConfigs'
 base_url: 'projects/{{project}}/locations/{{location}}/cmekConfigs'
 self_link: 'projects/{{project}}/locations/{{location}}/cmekConfigs/{{cmek_config_id}}'
 # Update API is also used as create API.

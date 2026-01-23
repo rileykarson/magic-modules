@@ -20,7 +20,7 @@ description: |
   The Compute NetworkFirewallPolicyAssociation resource
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionNetworkFirewallPolicies/addAssociation'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionNetworkFirewallPolicies/addAssociation'
 docs:
 id_format: 'projects/{{project}}/regions/{{region}}/firewallPolicies/{{firewall_policy}}/associations/{{name}}'
 base_url: 'projects/{{project}}/regions/{{region}}/firewallPolicies/{{firewall_policy}}'

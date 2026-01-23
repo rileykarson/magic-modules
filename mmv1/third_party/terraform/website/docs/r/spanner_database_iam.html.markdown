@@ -154,7 +154,7 @@ The following arguments are supported:
 * `project` - (Optional) The ID of the project in which the resource belongs. If it
     is not provided, the provider project is used.
 
-* `condition` - (Optional) An [IAM Condition](https://cloud.google.com/iam/docs/conditions-overview) for a given binding.
+* `condition` - (Optional) An [IAM Condition](https://docs.cloud.google.com/iam/docs/conditions-overview) for a given binding.
   Structure is [documented below](#nested_condition).
 
 ---

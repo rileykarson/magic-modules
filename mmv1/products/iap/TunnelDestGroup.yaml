@@ -17,8 +17,8 @@ description: |
   Tunnel destination groups represent resources that have the same tunnel access restrictions.
 references:
   guides:
-    'Set up IAP TCP forwarding with an IP address or hostname in a Google Cloud or non-Google Cloud environment': 'https://cloud.google.com/iap/docs/tcp-by-host'
-  api: 'https://cloud.google.com/iap/docs/reference/rest/v1/projects.iap_tunnel.locations.destGroups'
+    'Set up IAP TCP forwarding with an IP address or hostname in a Google Cloud or non-Google Cloud environment': 'https://docs.cloud.google.com/iap/docs/tcp-by-host'
+  api: 'https://docs.cloud.google.com/iap/docs/reference/rest/v1/projects.iap_tunnel.locations.destGroups'
 docs:
 base_url: 'projects/{{project}}/iap_tunnel/locations/{{region}}/destGroups'
 self_link: 'projects/{{project}}/iap_tunnel/locations/{{region}}/destGroups/{{group_name}}'

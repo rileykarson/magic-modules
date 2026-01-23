@@ -7,8 +7,8 @@ description: |-
 # google_compute_subnetworks
 
 Get subnetworks within GCE.
-See [the official documentation](https://cloud.google.com/vpc/docs/subnets)
-and [API](https://cloud.google.com/compute/docs/reference/rest/v1/subnetworks/list).
+See [the official documentation](https://docs.cloud.google.com/vpc/docs/subnets)
+and [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/subnetworks/list).
 
 ## Example Usage
 
@@ -24,7 +24,7 @@ data "google_compute_subnetworks" "my-subnetworks" {
 
 The following arguments are supported:
 
-* `filter` - (Optional) - A string filter as defined in the [REST API](https://cloud.google.com/compute/docs/reference/rest/v1/subnetworks/list#query-parameters).
+* `filter` - (Optional) - A string filter as defined in the [REST API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/subnetworks/list#query-parameters).
 
 * `project` - (Optional) The ID of the project in which the resource belongs. If it
     is not provided, the provider project is used.

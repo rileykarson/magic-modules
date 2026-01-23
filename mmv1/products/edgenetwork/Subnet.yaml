@@ -17,8 +17,8 @@ description: |
   A Distributed Cloud Edge subnet, which provides L2 isolation within a network.
 references:
   guides:
-    'Create and manage subnetworks': 'https://cloud.google.com/distributed-cloud/edge/latest/docs/subnetworks#api'
-  api: 'https://cloud.google.com/distributed-cloud/edge/latest/docs/reference/network/rest/v1/projects.locations.zones.subnets'
+    'Create and manage subnetworks': 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/subnetworks#api'
+  api: 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/reference/network/rest/v1/projects.locations.zones.subnets'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/zones/{{zone}}/subnets'
 self_link: 'projects/{{project}}/locations/{{location}}/zones/{{zone}}/subnets/{{subnet_id}}'

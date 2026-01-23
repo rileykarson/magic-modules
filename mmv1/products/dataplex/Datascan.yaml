@@ -20,8 +20,8 @@ description: |
 exclude_attribution_label: true
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataplex/docs'
-  api: 'https://cloud.google.com/dataplex/docs/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/dataplex/docs'
+  api: 'https://docs.cloud.google.com/dataplex/docs/reference/rest'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/dataScans'
 self_link: 'projects/{{project}}/locations/{{location}}/dataScans/{{data_scan_id}}'

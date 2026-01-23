@@ -26,8 +26,8 @@ description: |
   but the data on the disk has been lost or corrupted
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/disks/instant-snapshots'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/instantSnapshots'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/disks/instant-snapshots'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instantSnapshots'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/instantSnapshots'
 has_self_link: true

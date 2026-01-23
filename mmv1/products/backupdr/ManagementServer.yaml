@@ -16,8 +16,8 @@ name: 'ManagementServer'
 description: A Backup and DR Management Server (Also referred as Management Console)
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/backup-disaster-recovery/docs'
-  api: 'https://cloud.google.com/backup-disaster-recovery/docs/deployment/deployment-plan'
+    'Official Documentation': 'https://docs.cloud.google.com/backup-disaster-recovery/docs'
+  api: 'https://docs.cloud.google.com/backup-disaster-recovery/docs/deployment/deployment-plan'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/managementServers'
 self_link: 'projects/{{project}}/locations/{{location}}/managementServers/{{name}}'

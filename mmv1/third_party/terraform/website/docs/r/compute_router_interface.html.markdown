@@ -7,9 +7,9 @@ description: |-
 # google_compute_router_interface
 
 Manages a Cloud Router interface. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/cloudrouter)
+[the official documentation](https://docs.cloud.google.com/compute/docs/cloudrouter)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/routers).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/routers).
 
 ## Example Usage
 

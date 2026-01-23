@@ -21,8 +21,8 @@ update_verb: PATCH
 update_mask: true
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/standard/docs/overview#eventarc-triggers'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.triggers
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/standard/docs/overview#eventarc-triggers'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.triggers
 async:
   actions: ['create', 'update', 'delete']
   type: OpAsync
@@ -141,7 +141,7 @@ properties:
           immutable: true
         - name: value
           type: String
-          description: Required. The value for the attribute. See https://cloud.google.com/eventarc/docs/creating-triggers#trigger-gcloud for available values.
+          description: Required. The value for the attribute. See https://docs.cloud.google.com/eventarc/docs/creating-triggers#trigger-gcloud for available values.
           required: true
           immutable: true
         - name: operator
@@ -150,7 +150,7 @@ properties:
   - name: serviceAccount
     type: String
     diff_suppress_func: tpgresource.CompareSelfLinkOrResourceName
-    description: Optional. The IAM service account email associated with the trigger. The service account represents the identity of the trigger. The principal who calls this API must have `iam.serviceAccounts.actAs` permission in the service account. See https://cloud.google.com/iam/docs/understanding-service-accounts#sa_common for more information. For Cloud Run destinations, this service account is used to generate identity tokens when invoking the service. See https://cloud.google.com/run/docs/triggering/pubsub-push#create-service-account for information on how to invoke authenticated Cloud Run services. In order to create Audit Log triggers, the service account should also have `roles/eventarc.eventReceiver` IAM role.
+    description: Optional. The IAM service account email associated with the trigger. The service account represents the identity of the trigger. The principal who calls this API must have `iam.serviceAccounts.actAs` permission in the service account. See https://docs.cloud.google.com/iam/docs/understanding-service-accounts#sa_common for more information. For Cloud Run destinations, this service account is used to generate identity tokens when invoking the service. See https://docs.cloud.google.com/run/docs/triggering/pubsub-push#create-service-account for information on how to invoke authenticated Cloud Run services. In order to create Audit Log triggers, the service account should also have `roles/eventarc.eventReceiver` IAM role.
   - name: destination
     type: NestedObject
     description: Required. Destination specifies where the events should be sent to.
@@ -164,7 +164,7 @@ properties:
           - name: service
             type: String
             diff_suppress_func: tpgresource.CompareSelfLinkOrResourceName
-            description: Required. The name of the Cloud Run service being addressed. See https://cloud.google.com/run/docs/reference/rest/v1/namespaces.services. Only services located in the same project of the trigger object can be addressed.
+            description: Required. The name of the Cloud Run service being addressed. See https://docs.cloud.google.com/run/docs/reference/rest/v1/namespaces.services. Only services located in the same project of the trigger object can be addressed.
             required: true
           - name: path
             type: String

@@ -115,9 +115,9 @@ Several default scopes are removed from the provider:
 * "https://www.googleapis.com/auth/cloud-identity"
 
 They are redundant with the "https://www.googleapis.com/auth/cloud-platform"
-scope per [Access scopes](https://cloud.google.com/compute/docs/access/service-accounts#accesscopesiam).
+scope per [Access scopes](https://docs.cloud.google.com/compute/docs/access/service-accounts#accesscopesiam).
 After this change the following scopes are enabled, in line with `gcloud`'s
-[list of scopes](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login):
+[list of scopes](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login):
 
 * "https://www.googleapis.com/auth/cloud-platform"
 * "https://www.googleapis.com/auth/userinfo.email"
@@ -167,7 +167,7 @@ resource "google_runtimeconfig_config" "my-runtime-config" {
 ### Service account scopes no longer accept `trace-append` or `trace-ro`, use `trace` instead
 
 Previously users could specify `trace-append` or `trace-ro` as scopes for a given service account.
-However, to better align with [Google documentation](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes), `trace` will now be the only valid scope, as it's an alias for `trace.append` and
+However, to better align with [Google documentation](https://docs.cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes), `trace` will now be the only valid scope, as it's an alias for `trace.append` and
 `trace-ro` is no longer a documented option.
 
 ## Datasources

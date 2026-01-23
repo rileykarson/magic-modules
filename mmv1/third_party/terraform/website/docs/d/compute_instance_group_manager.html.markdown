@@ -7,8 +7,8 @@ description: |-
 # google_compute_instance_group_manager
 
 Get a Compute Instance Group Manager within GCE.
-For more information, see [the official documentation](https://cloud.google.com/compute/docs/instance-groups#managed_instance_groups)
-and [API](https://cloud.google.com/compute/docs/reference/latest/instanceGroupManagers)
+For more information, see [the official documentation](https://docs.cloud.google.com/compute/docs/instance-groups#managed_instance_groups)
+and [API](https://docs.cloud.google.com/compute/docs/reference/latest/instanceGroupManagers)
 
 ## Example Usage
 

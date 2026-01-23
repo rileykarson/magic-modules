@@ -12,13 +12,13 @@ policy is used to define the desired state configuration for a Compute Engine VM
 instance through a set of configuration resources that provide capabilities such
 as installing or removing software packages, or executing a script. For more
 information about the OS policy resource definitions and examples, see
-[OS policy and OS policy assignment](https://cloud.google.com/compute/docs/os-configuration-management/working-with-os-policies).
+[OS policy and OS policy assignment](https://docs.cloud.google.com/compute/docs/os-configuration-management/working-with-os-policies).
 
 To get more information about OSPolicyAssignment, see:
 
-*   [API documentation](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments)
+*   [API documentation](https://docs.cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments)
 *   How-to Guides
-    *   [Official Documentation](https://cloud.google.com/compute/docs/os-configuration-management/create-os-policy-assignment)
+    *   [Official Documentation](https://docs.cloud.google.com/compute/docs/os-configuration-management/create-os-policy-assignment)
 
 ## Example Usage - Os Config Os Policy Assignment Basic
 

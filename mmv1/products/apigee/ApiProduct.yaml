@@ -17,8 +17,8 @@ description: |
   An `ApiProduct` in Apigee.
 references:
   guides:
-    "Creating an API product": "https://cloud.google.com/apigee/docs/api-platform/publish/what-api-product"
-  api: "https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct"
+    "Creating an API product": "https://docs.cloud.google.com/apigee/docs/api-platform/publish/what-api-product"
+  api: "https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apiproducts#ApiProduct"
 docs:
 base_url: "{{org_id}}/apiproducts"
 self_link: "{{org_id}}/apiproducts/{{name}}"

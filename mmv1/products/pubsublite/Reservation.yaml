@@ -17,15 +17,15 @@ description: |
   A named resource representing a shared pool of capacity.
 references:
   guides:
-    'Managing Reservations': 'https://cloud.google.com/pubsub/lite/docs/reservations'
-  api: 'https://cloud.google.com/pubsub/lite/docs/reference/rest/v1/admin.projects.locations.reservations'
+    'Managing Reservations': 'https://docs.cloud.google.com/pubsub/lite/docs/reservations'
+  api: 'https://docs.cloud.google.com/pubsub/lite/docs/reference/rest/v1/admin.projects.locations.reservations'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/reservations'
 create_url: 'projects/{{project}}/locations/{{region}}/reservations?reservationId={{name}}'
 update_url: 'projects/{{project}}/locations/{{region}}/reservations/{{name}}'
 update_verb: 'PATCH'
 update_mask: true
-deprecation_message: '[Pubsub Lite is deprecated and will be turned down effective March 18, 2026](https://cloud.google.com/pubsub/lite/docs/release-notes#June_17_2024). The resource will be removed in a future major release, please use `google_pubsub_reservation` instead.'
+deprecation_message: '[Pubsub Lite is deprecated and will be turned down effective March 18, 2026](https://docs.cloud.google.com/pubsub/lite/docs/release-notes#June_17_2024). The resource will be removed in a future major release, please use `google_pubsub_reservation` instead.'
 timeouts:
   insert_minutes: 20
   update_minutes: 20

@@ -6,7 +6,7 @@ description: |-
 
 # google_memorystore_instance
 
-Use this data source to get information about the available instance. For more details refer the [API docs](https://cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances).
+Use this data source to get information about the available instance. For more details refer the [API docs](https://docs.cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances).
 
 ## Example Usage
 

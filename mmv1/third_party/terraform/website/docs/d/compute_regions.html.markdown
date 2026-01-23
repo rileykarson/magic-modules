@@ -7,7 +7,7 @@ description: |-
 # google_compute_regions
 
 Provides access to available Google Compute regions for a given project.
-See more about [regions and zones](https://cloud.google.com/compute/docs/regions-zones/) in the upstream docs.
+See more about [regions and zones](https://docs.cloud.google.com/compute/docs/regions-zones/) in the upstream docs.
 
 ```hcl
 data "google_compute_regions" "available" {

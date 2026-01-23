@@ -16,7 +16,7 @@ name: 'Assistant'
 description: |
   Assistant
 references:
-  api: 'https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1#assistantservice'
+  api: 'https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1#assistantservice'
 base_url: 'projects/{{project}}/locations/{{location}}/collections/{{collection_id}}/engines/{{engine_id}}/assistants'
 self_link: 'projects/{{project}}/locations/{{location}}/collections/{{collection_id}}/engines/{{engine_id}}/assistants/{{assistant_id}}'
 create_url: 'projects/{{project}}/locations/{{location}}/collections/{{collection_id}}/engines/{{engine_id}}/assistants?assistantId={{assistant_id}}'
@@ -97,7 +97,7 @@ properties:
         type: NestedObject
         description: |
           System instruction, also known as the prompt preamble for LLM calls.
-          See also https://cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/system-instructions
+          See also https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/system-instructions
         properties:
           - name: 'additionalSystemInstruction'
             type: String

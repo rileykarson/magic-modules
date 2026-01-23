@@ -6,7 +6,7 @@ description: |-
 
 # google_service_account_key
 
-Get an ephemeral service account public key. For more information, see [the official documentation](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) and [API](https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys/get).
+Get an ephemeral service account public key. For more information, see [the official documentation](https://docs.cloud.google.com/iam/docs/creating-managing-service-account-keys) and [API](https://docs.cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys/get).
 
 ## Example Usage
 

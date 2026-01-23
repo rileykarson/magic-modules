@@ -17,8 +17,8 @@ description: |
     Represents a Storage Insights DatasetConfig.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/insights/datasets'
-  api: 'https://cloud.google.com/storage/docs/insights/reference/rest/v1/projects.locations.datasetConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/insights/datasets'
+  api: 'https://docs.cloud.google.com/storage/docs/insights/reference/rest/v1/projects.locations.datasetConfigs'
 
 
 base_url: 'projects/{{project}}/locations/{{location}}/datasetConfigs'

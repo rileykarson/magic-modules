@@ -9,9 +9,9 @@ description: |-
 Get a Cloud Router's status within GCE from its name and region. This data source exposes the
 routes learned by a Cloud Router via BGP peers.
 
-For more information see [the official documentation](https://cloud.google.com/network-connectivity/docs/router/how-to/viewing-router-details)
+For more information see [the official documentation](https://docs.cloud.google.com/network-connectivity/docs/router/how-to/viewing-router-details)
 and
-[API](https://cloud.google.com/compute/docs/reference/rest/v1/routers/getRouterStatus).
+[API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers/getRouterStatus).
 
 ## Example Usage
 

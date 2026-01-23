@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_python_packages
 
 Get information about Artifact Registry Python packages.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs/python)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.pythonPackages/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs/python)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.pythonPackages/list).
 
 ## Example Usage
 

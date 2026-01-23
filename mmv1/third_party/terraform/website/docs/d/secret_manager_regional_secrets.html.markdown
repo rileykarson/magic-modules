@@ -22,7 +22,7 @@ The following arguments are supported:
 
 * `project` - (optional) The ID of the project.
 
-* `filter` - (optional) Filter string, adhering to the rules in [List-operation filtering](https://cloud.google.com/secret-manager/docs/filtering). List only secrets matching the filter. If filter is empty, all regional secrets are listed from the specified location.
+* `filter` - (optional) Filter string, adhering to the rules in [List-operation filtering](https://docs.cloud.google.com/secret-manager/docs/filtering). List only secrets matching the filter. If filter is empty, all regional secrets are listed from the specified location.
 
 * `location` - (Required) The location of the regional secret.
 

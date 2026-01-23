@@ -7,12 +7,12 @@ description: |-
 # google_compute_machine_types
 
 Provides access to available Google Compute machine types in a zone for a given project.
-See more about [machine type availability](https://cloud.google.com/compute/docs/regions-zones#available) in the upstream docs.
+See more about [machine type availability](https://docs.cloud.google.com/compute/docs/regions-zones#available) in the upstream docs.
 
 To get more information about machine types, see:
 
-* [API Documentation](https://cloud.google.com/compute/docs/reference/rest/v1/machineTypes/list)
-* [Comparison Guide](https://cloud.google.com/compute/docs/machine-resource)
+* [API Documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/machineTypes/list)
+* [Comparison Guide](https://docs.cloud.google.com/compute/docs/machine-resource)
 
 ## Example Usage - Machine Type properties
 

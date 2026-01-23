@@ -17,7 +17,7 @@ description: |
   TlsRoute defines how traffic should be routed based on SNI and other matching L3 attributes.
 references:
   guides:
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.tlsRoutes'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.tlsRoutes'
 docs:
 base_url: 'projects/{{project}}/locations/global/tlsRoutes'
 self_link: 'projects/{{project}}/locations/global/tlsRoutes/{{name}}'

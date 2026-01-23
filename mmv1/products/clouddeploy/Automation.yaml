@@ -17,8 +17,8 @@ description: |
   An `Automation` enables the automation of manually driven actions for a Delivery Pipeline, which includes Release promotion amongst Targets, Rollout repair and Rollout deployment strategy advancement.
 references:
   guides:
-    'Automate your deployment': 'https://cloud.google.com/deploy/docs/automation'
-  api: 'https://cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deliveryPipelines.automations'
+    'Automate your deployment': 'https://docs.cloud.google.com/deploy/docs/automation'
+  api: 'https://docs.cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deliveryPipelines.automations'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/deliveryPipelines/{{delivery_pipeline}}/automations/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/deliveryPipelines/{{delivery_pipeline}}/automations'

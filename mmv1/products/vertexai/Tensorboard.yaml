@@ -17,8 +17,8 @@ description: |-
   Tensorboard is a physical database that stores users' training metrics. A default Tensorboard is provided in each region of a GCP project. If needed users can also create extra Tensorboards in their projects.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.tensorboards'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.tensorboards'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/tensorboards'
 self_link: '{{name}}'

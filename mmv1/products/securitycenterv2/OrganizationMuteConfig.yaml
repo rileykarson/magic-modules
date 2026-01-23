@@ -23,7 +23,7 @@ description: |
   findings based on criteria you specify.
 references:
   guides:
-  api: 'https://cloud.google.com/security-command-center/docs/reference/rest/v2/organizations.muteConfigs'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/rest/v2/organizations.muteConfigs'
 docs:
 base_url: 'organizations/{{organization}}/locations/{{location}}/muteConfigs'
 self_link: 'organizations/{{organization}}/locations/{{location}}/muteConfigs/{{mute_config_id}}'

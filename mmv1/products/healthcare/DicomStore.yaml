@@ -19,8 +19,8 @@ description: |
   (https://www.dicomstandard.org/about/) standard for Healthcare information exchange
 references:
   guides:
-    'Creating a DICOM store': 'https://cloud.google.com/healthcare/docs/how-tos/dicom'
-  api: 'https://cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.dicomStores'
+    'Creating a DICOM store': 'https://docs.cloud.google.com/healthcare/docs/how-tos/dicom'
+  api: 'https://docs.cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.dicomStores'
 docs:
 id_format: '{{dataset}}/dicomStores/{{name}}'
 base_url: '{{dataset}}/dicomStores?dicomStoreId={{name}}'

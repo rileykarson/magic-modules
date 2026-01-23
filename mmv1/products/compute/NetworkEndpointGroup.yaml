@@ -31,8 +31,8 @@ description: |
   to avoid this type of error.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/networkEndpointGroups'
 has_self_link: true
@@ -101,7 +101,7 @@ properties:
     description: |
       Type of network endpoints in this network endpoint group.
       NON_GCP_PRIVATE_IP_PORT is used for hybrid connectivity network
-      endpoint groups (see https://cloud.google.com/load-balancing/docs/hybrid).
+      endpoint groups (see https://docs.cloud.google.com/load-balancing/docs/hybrid).
       Note that NON_GCP_PRIVATE_IP_PORT can only be used with Backend Services
       that 1) have the following load balancing schemes: EXTERNAL, EXTERNAL_MANAGED,
       INTERNAL_MANAGED, and INTERNAL_SELF_MANAGED and 2) support the RATE or

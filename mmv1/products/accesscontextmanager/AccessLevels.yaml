@@ -21,8 +21,8 @@ description: |
   thus causing a permadiff if used alongside `google_access_context_manager_access_level` on the same parent.
 references:
   guides:
-    'Access Policy Quickstart': 'https://cloud.google.com/access-context-manager/docs/quickstart'
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.accessLevels'
+    'Access Policy Quickstart': 'https://docs.cloud.google.com/access-context-manager/docs/quickstart'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.accessLevels'
 docs:
   warning: |
     This resource is authoritative over the access levels under an access policy. Due to a limitation in Terraform,
@@ -293,7 +293,7 @@ properties:
               description: |
                 Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language.
                 This page details the objects and attributes that are used to the build the CEL expressions for
-                custom access levels - https://cloud.google.com/access-context-manager/docs/custom-access-level-spec.
+                custom access levels - https://docs.cloud.google.com/access-context-manager/docs/custom-access-level-spec.
               required: true
               properties:
                 - name: 'expression'

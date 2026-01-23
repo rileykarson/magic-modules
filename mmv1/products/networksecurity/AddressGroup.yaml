@@ -18,8 +18,8 @@ description: |
  # TODO: change the url to GA once it is available.
 references:
   guides:
-    'Use AddressGroups': 'https://cloud.google.com/vpc/docs/use-address-groups-firewall-policies'
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/organizations.locations.addressGroups'
+    'Use AddressGroups': 'https://docs.cloud.google.com/vpc/docs/use-address-groups-firewall-policies'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/organizations.locations.addressGroups'
 docs:
 base_url: '{{parent}}/locations/{{location}}/addressGroups'
 self_link: '{{parent}}/locations/{{location}}/addressGroups/{{name}}'

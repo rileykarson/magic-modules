@@ -21,8 +21,8 @@ description: |
   HTTP(S) load balancing.
 references:
   guides:
-    'Reserving a Static External IP Address': 'https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/globalAddresses'
+    'Reserving a Static External IP Address': 'https://docs.cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/globalAddresses'
 docs:
 base_url: 'projects/{{project}}/global/addresses'
 has_self_link: true

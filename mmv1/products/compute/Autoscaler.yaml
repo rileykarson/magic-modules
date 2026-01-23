@@ -24,8 +24,8 @@ description: |
   define.
 references:
   guides:
-    'Autoscaling Groups of Instances': 'https://cloud.google.com/compute/docs/autoscaler/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/autoscalers'
+    'Autoscaling Groups of Instances': 'https://docs.cloud.google.com/compute/docs/autoscaler/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/autoscalers'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/autoscalers'
 has_self_link: true

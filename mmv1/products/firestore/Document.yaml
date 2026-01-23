@@ -18,8 +18,8 @@ description: |
   that contains fields, which map to values. Each document is identified by a name.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/firestore/docs/manage-data/add-data'
-  api: 'https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents'
+    'Official Documentation': 'https://docs.cloud.google.com/firestore/docs/manage-data/add-data'
+  api: 'https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents'
 docs:
   warning: |
     This resource creates a Firestore Document on a project that already has
@@ -99,7 +99,7 @@ properties:
   - name: 'fields'
     type: String
     description: |
-      The document's [fields](https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents) formated as a json string.
+      The document's [fields](https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents) formated as a json string.
     required: true
     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
     custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'

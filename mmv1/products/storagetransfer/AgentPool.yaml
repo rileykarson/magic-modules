@@ -18,8 +18,8 @@ collection_url_key: agentPools
 description: 'Represents an On-Premises Agent pool.'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage-transfer/docs/on-prem-agent-pools'
-  api: 'https://cloud.google.com/storage-transfer/docs/reference/rest/v1/projects.agentPools'
+    'Official Documentation': 'https://docs.cloud.google.com/storage-transfer/docs/on-prem-agent-pools'
+  api: 'https://docs.cloud.google.com/storage-transfer/docs/reference/rest/v1/projects.agentPools'
 docs:
 base_url: 'projects/{{project}}/agentPools'
 self_link: 'projects/{{project}}/agentPools/{{name}}'

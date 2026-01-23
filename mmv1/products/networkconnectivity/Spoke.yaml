@@ -16,8 +16,8 @@ name: 'Spoke'
 description: "The NetworkConnectivity Spoke resource"
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/overview'
-  api: 'https://cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.spokes'
+    'Official Documentation': 'https://docs.cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/overview'
+  api: 'https://docs.cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.spokes'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/spokes'
 self_link: 'projects/{{project}}/locations/{{location}}/spokes/{{name}}'

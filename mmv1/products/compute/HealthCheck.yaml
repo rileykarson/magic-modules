@@ -30,12 +30,12 @@ description: |
   healthy again and can receive new connections.
 
   ~>**NOTE**: Legacy HTTP(S) health checks must be used for target pool-based network
-  load balancers. See the [official guide](https://cloud.google.com/load-balancing/docs/health-check-concepts#selecting_hc)
+  load balancers. See the [official guide](https://docs.cloud.google.com/load-balancing/docs/health-check-concepts#selecting_hc)
   for choosing a type of health check.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/health-checks'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/healthChecks'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/health-checks'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/healthChecks'
 docs:
 base_url: 'projects/{{project}}/global/healthChecks'
 has_self_link: true

@@ -18,8 +18,8 @@ description: |
   Represents a collection of denial policies to apply to a given resource.
 references:
   guides:
-    'Permissions supported in deny policies': 'https://cloud.google.com/iam/docs/deny-permissions-support'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v2/policies'
+    'Permissions supported in deny policies': 'https://docs.cloud.google.com/iam/docs/deny-permissions-support'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v2/policies'
 docs:
 id_format: '{{parent}}/{{name}}'
 base_url: 'policies/{{parent}}/denypolicies'

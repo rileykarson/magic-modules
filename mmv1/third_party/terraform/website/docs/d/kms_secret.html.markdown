@@ -10,7 +10,7 @@ This data source allows you to use data encrypted with Google Cloud KMS
 within your resource definitions.
 
 For more information see
-[the official documentation](https://cloud.google.com/kms/docs/encrypt-decrypt).
+[the official documentation](https://docs.cloud.google.com/kms/docs/encrypt-decrypt).
 
 ~> **NOTE:** Using this data provider will allow you to conceal secret data within your
 resource definitions, but it does not take care of protecting that data in the
@@ -34,7 +34,7 @@ resource "google_kms_crypto_key" "my_crypto_key" {
 }
 ```
 
-Next, use the [Cloud SDK](https://cloud.google.com/sdk/gcloud/reference/kms/encrypt) to encrypt some
+Next, use the [Cloud SDK](https://docs.cloud.google.com/sdk/gcloud/reference/kms/encrypt) to encrypt some
 sensitive information:
 
 ```bash
@@ -88,7 +88,7 @@ The following arguments are supported:
 * `crypto_key` (Required) - The id of the CryptoKey that will be used to
   decrypt the provided ciphertext. This is represented by the format
   `{projectId}/{location}/{keyRingName}/{cryptoKeyName}`.
-* `additional_authenticated_data` (Optional) - The [additional authenticated data](https://cloud.google.com/kms/docs/additional-authenticated-data) used for integrity checks during encryption and decryption.
+* `additional_authenticated_data` (Optional) - The [additional authenticated data](https://docs.cloud.google.com/kms/docs/additional-authenticated-data) used for integrity checks during encryption and decryption.
 
 ## Attributes Reference
 

@@ -7,8 +7,8 @@ description: |-
 # google_cloud_run_v2_service
 
 Get information about a Google Cloud Run v2 Service. For more information see
-the [official documentation](https://cloud.google.com/run/docs/)
-and [API](https://cloud.google.com/run/docs/apis).
+the [official documentation](https://docs.cloud.google.com/run/docs/)
+and [API](https://docs.cloud.google.com/run/docs/apis).
 
 ## Example Usage
 

@@ -22,8 +22,8 @@ description: |
   Use `lifecycle.create_before_destroy` on this address resource to avoid this type of error as shown in the Manual Ips example.
 references:
   guides:
-    'Google Cloud Router': 'https://cloud.google.com/router/docs/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/routers'
+    'Google Cloud Router': 'https://docs.cloud.google.com/router/docs/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers'
 docs:
 id_format: '{{project}}/{{region}}/{{router}}/{{name}}'
 base_url: 'projects/{{project}}/regions/{{region}}/routers/{{router}}'

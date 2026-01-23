@@ -17,8 +17,8 @@ description: |
   Represents a Restore Plan instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke'
-  api: 'https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/projects.locations.restorePlans'
+    'Official Documentation': 'https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke'
+  api: 'https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/projects.locations.restorePlans'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/restorePlans'
 create_url: 'projects/{{project}}/locations/{{location}}/restorePlans?restorePlanId={{name}}'
@@ -330,7 +330,7 @@ properties:
           being restored already exist in the target cluster.
           This MUST be set to a value other than `NAMESPACED_RESOURCE_RESTORE_MODE_UNSPECIFIED`
           if the `namespacedResourceRestoreScope` is anything other than `noNamespaces`.
-          See https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#namespacedresourcerestoremode
+          See https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#namespacedresourcerestoremode
           for more information on each mode.
         enum_values:
           - 'DELETE_AND_RESTORE'
@@ -345,7 +345,7 @@ properties:
           This should be set to a value other than `NAMESPACED_RESOURCE_RESTORE_MODE_UNSPECIFIED`
           if the `namespacedResourceRestoreScope` is anything other than `noNamespaces`.
           If not specified, it will be treated as `NO_VOLUME_DATA_RESTORATION`.
-          See https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#VolumeDataRestorePolicy
+          See https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#VolumeDataRestorePolicy
           for more information on each policy option.
         enum_values:
           - 'RESTORE_VOLUME_DATA_FROM_BACKUP'
@@ -434,7 +434,7 @@ properties:
           being restored already exist in the target cluster.
           This MUST be set to a value other than `CLUSTER_RESOURCE_CONFLICT_POLICY_UNSPECIFIED`
           if `clusterResourceRestoreScope` is anyting other than `noGroupKinds`.
-          See https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#clusterresourceconflictpolicy
+          See https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#clusterresourceconflictpolicy
           for more information on each policy option.
         enum_values:
           - 'USE_EXISTING_VERSION'
@@ -563,7 +563,7 @@ properties:
               type: Enum
               description: |
                 Specifies the mechanism to be used to restore this volume data.
-                See https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#VolumeDataRestorePolicy
+                See https://docs.cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/reference/rest/v1/RestoreConfig#VolumeDataRestorePolicy
                 for more information on each policy option.
               required: true
               enum_values:

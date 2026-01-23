@@ -18,8 +18,8 @@ description: |
   Datasets allow you to organize and control access to your tables.
 references:
   guides:
-    'Datasets Intro': 'https://cloud.google.com/bigquery/docs/datasets-intro'
-  api: 'https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets'
+    'Datasets Intro': 'https://docs.cloud.google.com/bigquery/docs/datasets-intro'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets'
 docs:
   warning: |
     You must specify the role field using the legacy format `OWNER` instead of `roles/bigquery.dataOwner`.
@@ -151,7 +151,7 @@ properties:
             member of the access object. Basic, predefined, and custom roles
             are supported. Predefined roles that have equivalent basic roles
             are swapped by the API to their basic counterparts. See
-            [official docs](https://cloud.google.com/bigquery/docs/access-control).
+            [official docs](https://docs.cloud.google.com/bigquery/docs/access-control).
         - name: 'specialGroup'
           type: String
           description: |
@@ -374,7 +374,7 @@ properties:
     type: String
     description: |
       The geographic location where the dataset should reside.
-      See [official docs](https://cloud.google.com/bigquery/docs/dataset-locations).
+      See [official docs](https://docs.cloud.google.com/bigquery/docs/dataset-locations).
       There are two types of locations, regional or multi-regional. A regional
       location is a specific geographic place, such as Tokyo, and a multi-regional
       location is a large geographic area, such as the United States, that
@@ -440,7 +440,7 @@ properties:
       The tags attached to this table. Tag keys are globally unique. Tag key is expected to be
       in the namespaced format, for example "123456789012/environment" where 123456789012 is the
       ID of the parent organization or project resource for this tag key. Tag value is expected
-      to be the short name, for example "Production". See [Tag definitions](https://cloud.google.com/iam/docs/tags-access-control#definitions)
+      to be the short name, for example "Production". See [Tag definitions](https://docs.cloud.google.com/iam/docs/tags-access-control#definitions)
       for more details.
   - name: 'externalCatalogDatasetOptions'
     type: NestedObject

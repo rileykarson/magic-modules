@@ -18,8 +18,8 @@ description: |
   Represents a Region Cloud Armor Security Policy resource.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/armor/docs/security-policy-concepts'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionSecurityPolicies'
+    'Official Documentation': 'https://docs.cloud.google.com/armor/docs/security-policy-concepts'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionSecurityPolicies'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/securityPolicies'
 self_link: 'projects/{{project}}/regions/{{region}}/securityPolicies/{{name}}'
@@ -272,7 +272,7 @@ properties:
             - name: 'expr'
               type: NestedObject
               description: |
-                User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. See [Sample expressions](https://cloud.google.com/armor/docs/configure-security-policies#sample-expressions) for examples.
+                User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. See [Sample expressions](https://docs.cloud.google.com/armor/docs/configure-security-policies#sample-expressions) for examples.
               properties:
                 - name: 'expression'
                   type: String

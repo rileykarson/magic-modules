@@ -17,8 +17,8 @@ description: |
   LbTrafficExtension is a resource that lets the extension service modify the headers and payloads of both requests and responses without impacting the choice of backend services or any other security policies associated with the backend service.
 references:
   guides:
-    'Configure a traffic extension': 'https://cloud.google.com/service-extensions/docs/configure-callout#configure_a_traffic_extension'
-  api: 'https://cloud.google.com/service-extensions/docs/reference/rest/v1beta1/projects.locations.lbTrafficExtensions'
+    'Configure a traffic extension': 'https://docs.cloud.google.com/service-extensions/docs/configure-callout#configure_a_traffic_extension'
+  api: 'https://docs.cloud.google.com/service-extensions/docs/reference/rest/v1beta1/projects.locations.lbTrafficExtensions'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/lbTrafficExtensions'
 self_link: 'projects/{{project}}/locations/{{location}}/lbTrafficExtensions/{{name}}'
@@ -102,7 +102,7 @@ properties:
       Match conditions for each extension chain are evaluated in sequence for a given request.
       The first extension chain that has a condition that matches the request is executed.
       Any subsequent extension chains do not execute. Limited to 5 extension chains per resource.
-      Further information can be found at https://cloud.google.com/service-extensions/docs/reference/rest/v1/ExtensionChain
+      Further information can be found at https://docs.cloud.google.com/service-extensions/docs/reference/rest/v1/ExtensionChain
     required: true
     item_type:
       type: NestedObject
@@ -132,7 +132,7 @@ properties:
             A set of extensions to execute for the matching request.
             At least one extension is required. Up to 3 extensions can be defined for each extension chain for
             LbTrafficExtension resource. LbRouteExtension chains are limited to 1 extension per extension chain.
-            Further documentation to be found at https://cloud.google.com/service-extensions/docs/reference/rest/v1/ExtensionChain#Extension
+            Further documentation to be found at https://docs.cloud.google.com/service-extensions/docs/reference/rest/v1/ExtensionChain#Extension
           required: true
           item_type:
             type: NestedObject
@@ -201,8 +201,8 @@ properties:
     type: Enum
     description: |
       All backend services and forwarding rules referenced by this extension must share the same load balancing scheme.
-      For more information, refer to [Choosing a load balancer](https://cloud.google.com/load-balancing/docs/backend-service) and
-      [Supported application load balancers](https://cloud.google.com/service-extensions/docs/callouts-overview#supported-lbs).
+      For more information, refer to [Choosing a load balancer](https://docs.cloud.google.com/load-balancing/docs/backend-service) and
+      [Supported application load balancers](https://docs.cloud.google.com/service-extensions/docs/callouts-overview#supported-lbs).
     immutable: true
     required: true
     enum_values:

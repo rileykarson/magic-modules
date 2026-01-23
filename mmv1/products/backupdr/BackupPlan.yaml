@@ -22,8 +22,8 @@ import_format:
   - 'projects/{{project}}/locations/{{location}}/backupPlans/{{backup_plan_id}}'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/backup-disaster-recovery/docs'
-  api: 'https://cloud.google.com/backup-disaster-recovery/docs/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/backup-disaster-recovery/docs'
+  api: 'https://docs.cloud.google.com/backup-disaster-recovery/docs/reference/rest'
 autogen_async: true
 timeouts:
   insert_minutes: 60

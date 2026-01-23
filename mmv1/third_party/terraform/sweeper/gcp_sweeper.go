@@ -18,7 +18,7 @@ var testResourcePrefixes = []string{
 	"tf_test",
 	// Resource-specific prefixes that should be moved to the corresponding resource sweeper as part of https://github.com/hashicorp/terraform-provider-google/issues/20638
 	"tfgen",
-	"gke-us-central1-tf",  // composer-created disks which are abandoned by design (https://cloud.google.com/composer/pricing)
+	"gke-us-central1-tf",  // composer-created disks which are abandoned by design (https://docs.cloud.google.com/composer/pricing)
 	"gcs-bucket-tf-test-", // https://github.com/hashicorp/terraform-provider-google/issues/8909
 	"df-",                 // https://github.com/hashicorp/terraform-provider-google/issues/8909
 	"resourcegroup-",      // https://github.com/hashicorp/terraform-provider-google/issues/8924

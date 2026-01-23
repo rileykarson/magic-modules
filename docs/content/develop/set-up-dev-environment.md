@@ -10,7 +10,7 @@ Before you start adding or updating a Terraform resource using
 installing the necessary tools. This page explains the steps for setting up your
 development environment.
 
-1. [Install the gcloud CLI.](https://cloud.google.com/sdk/docs/install)
+1. [Install the gcloud CLI.](https://docs.cloud.google.com/sdk/docs/install)
 1. In the Google Cloud console, on the project selector page, select or
    [create a Google Cloud project](https://docs.cloud.google.com/resource-manager/docs/creating-managing-projects).
 
@@ -22,7 +22,7 @@ development environment.
 
    {{< button href="https://console.cloud.google.com/projectselector2/home/dashboard" >}}Go to project selector{{< /button >}}
 1. Make sure that billing is enabled for your Google Cloud project. Learn how to
-   [check if billing is enabled on a project](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled).
+   [check if billing is enabled on a project](https://docs.cloud.google.com/billing/docs/how-to/verify-billing-enabled).
 
 
 1. [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)

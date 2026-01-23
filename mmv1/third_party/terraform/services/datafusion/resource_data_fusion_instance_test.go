@@ -46,7 +46,7 @@ resource "google_data_fusion_instance" "foobar" {
   name   = "%s"
   region = "us-central1"
   type   = "BASIC"
-  # See supported versions here https://cloud.google.com/data-fusion/docs/support/version-support-policy
+  # See supported versions here https://docs.cloud.google.com/data-fusion/docs/support/version-support-policy
   version = "6.10.0"
   # Mark for testing to avoid service networking connection usage that is not cleaned up
   options = {

@@ -17,8 +17,8 @@ description: |
   Agents are best described as Natural Language Understanding (NLU) modules that transform user requests into actionable data. You can include agents in your app, product, or service to determine user intent and respond to the user in a natural way.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/agents/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/agents'
@@ -31,7 +31,7 @@ timeouts:
   update_minutes: 40
   delete_minutes: 20
 custom_code:
-  # An engine resource https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.engines
+  # An engine resource https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.engines
   # will be automatically created when we specify dataStoreConnections in Flow, Page, or Tool resources associated with the Agent.
   # When delete_chat_engine_on_destroy is set to true, we must
   # 1. extract the engine ID from the agent in pre_delete.
@@ -66,10 +66,10 @@ virtual_fields:
       using it. This setting ensures that the entire dependency chain can be properly torn down.
       See `mmv1/templates/terraform/examples/dialogflowcx_tool_data_store.tf.tmpl` as an example.
 
-      Data store can be linked to an agent through the `knowledgeConnectorSettings` field of a [flow](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows#resource:-flow)
-      or a [page](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#resource:-page)
-      or the `dataStoreSpec` field of a [tool](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.tools#resource:-tool).
-      The ID of the implicitly created engine is stored in the `genAppBuilderSettings` field of the [agent](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents#resource:-agent).
+      Data store can be linked to an agent through the `knowledgeConnectorSettings` field of a [flow](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows#resource:-flow)
+      or a [page](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#resource:-page)
+      or the `dataStoreSpec` field of a [tool](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.tools#resource:-tool).
+      The ID of the implicitly created engine is stored in the `genAppBuilderSettings` field of the [agent](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents#resource:-agent).
     type: Boolean
     default_value: false
 parameters:
@@ -86,7 +86,7 @@ properties:
       The name of the location this agent is located in.
 
       ~> **Note:** The first time you are deploying an Agent in your project you must configure location settings.
-       This is a one time step but at the moment you can only [configure location settings](https://cloud.google.com/dialogflow/cx/docs/concept/region#location-settings) via the Dialogflow CX console.
+       This is a one time step but at the moment you can only [configure location settings](https://docs.cloud.google.com/dialogflow/cx/docs/concept/region#location-settings) via the Dialogflow CX console.
        Another options is to use global location so you don't need to manually configure location settings.
     url_param_only: true
     required: true
@@ -99,7 +99,7 @@ properties:
   - name: 'defaultLanguageCode'
     type: String
     description: |
-      The default language of the agent as a language tag. [See Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language)
+      The default language of the agent as a language tag. [See Language Support](https://docs.cloud.google.com/dialogflow/cx/docs/reference/language)
       for a list of the currently supported language codes. This field cannot be updated after creation.
     required: true
     immutable: true
@@ -198,7 +198,7 @@ properties:
           - name: 'models'
             type: KeyValuePairs
             description: |
-              Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://cloud.google.com/dialogflow/cx/docs/concept/speech-models).
+              Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://docs.cloud.google.com/dialogflow/cx/docs/concept/speech-models).
               An object containing a list of **"key": value** pairs. Example: **{ "name": "wrench", "mass": "1.3kg", "count": "3" }**.
       - name: 'dtmfSettings'
         type: NestedObject
@@ -288,7 +288,7 @@ properties:
       - name: 'synthesizeSpeechConfigs'
         type: String
         description: |
-          Configuration of how speech should be synthesized, mapping from [language](https://cloud.google.com/dialogflow/cx/docs/reference/language) to [SynthesizeSpeechConfig](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents#synthesizespeechconfig).
+          Configuration of how speech should be synthesized, mapping from [language](https://docs.cloud.google.com/dialogflow/cx/docs/reference/language) to [SynthesizeSpeechConfig](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents#synthesizespeechconfig).
           These settings affect:
           * The phone gateway synthesize configuration set via Agent.text_to_speech_settings.
           * How speech is synthesized when invoking session APIs. `Agent.text_to_speech_settings` only applies if `OutputAudioConfig.synthesize_speech_config` is not specified.
@@ -343,7 +343,7 @@ properties:
       - name: 'enableAnswerFeedback'
         type: Boolean
         description: |
-          If enabled, end users will be able to provide [answer feedback](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/submitAnswerFeedback#body.AnswerFeedback)
+          If enabled, end users will be able to provide [answer feedback](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/submitAnswerFeedback#body.AnswerFeedback)
           to Dialogflow responses. Feature works only if interaction logging is enabled in the Dialogflow agent.
   - name: 'personalizationSettings'
     type: NestedObject
@@ -354,8 +354,8 @@ properties:
         type: String
         description: |
           Default end user metadata, used when processing DetectIntent requests. Recommended to be filled as a template instead of hard-coded value, for example { "age": "$session.params.age" }.
-          The data will be merged with the [QueryParameters.end_user_metadata](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/QueryParameters#FIELDS.end_user_metadata)
-          in [DetectIntentRequest.query_params](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/detectIntent#body.request_body.FIELDS.query_params) during query processing.
+          The data will be merged with the [QueryParameters.end_user_metadata](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/QueryParameters#FIELDS.end_user_metadata)
+          in [DetectIntentRequest.query_params](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/detectIntent#body.request_body.FIELDS.query_params) during query processing.
 
           This field uses JSON data as a string. The value provided must be a valid JSON representation documented in [Struct](https://protobuf.dev/reference/protobuf/google.protobuf/#struct).
         state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'

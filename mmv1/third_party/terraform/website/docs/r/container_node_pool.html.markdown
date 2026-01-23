@@ -10,8 +10,8 @@ description: |-
 guide for more information about using GKE with Terraform.
 
 Manages a node pool in a Google Kubernetes Engine (GKE) cluster separately from
-the cluster control plane. For more information see [the official documentation](https://cloud.google.com/container-engine/docs/node-pools)
-and [the API reference](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters.nodePools).
+the cluster control plane. For more information see [the official documentation](https://docs.cloud.google.com/container-engine/docs/node-pools)
+and [the API reference](https://docs.cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters.nodePools).
 
 ### Example Usage - using a separately managed node pool (recommended)
 
@@ -125,7 +125,7 @@ resource "google_container_cluster" "primary" {
 * `max_pods_per_node` - (Optional) The maximum number of pods per node in this node pool.
     Note that this does not work on node pools which are "route-based" - that is, node
     pools belonging to clusters that do not have IP Aliasing enabled.
-    See the [official documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/flexible-pod-cidr)
+    See the [official documentation](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/flexible-pod-cidr)
     for more information.
 
 * `node_locations` - (Optional)
@@ -148,7 +148,7 @@ cluster.
     [google_container_cluster](container_cluster.html#nested_node_config) for schema.
 
 * `network_config` - (Optional) The network configuration of the pool. Such as
-    configuration for [Adding Pod IP address ranges](https://cloud.google.com/kubernetes-engine/docs/how-to/multi-pod-cidr)) to the node pool. Or enabling private nodes. Structure is
+    configuration for [Adding Pod IP address ranges](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/multi-pod-cidr)) to the node pool. Or enabling private nodes. Structure is
     [documented below](#nested_network_config)
 
 * `node_count` - (Optional) The number of nodes per instance group. This field can be used to
@@ -243,7 +243,7 @@ cluster.
 
 <a name="network_performance_config"></a>The `network_performance_config` block supports:
 
-* `total_egress_bandwidth_tier` (Required) - Specifies the total network bandwidth tier for the NodePool. [Valid values](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters.nodePools#NodePool.Tier) include: "TIER_1" and "TIER_UNSPECIFIED".
+* `total_egress_bandwidth_tier` (Required) - Specifies the total network bandwidth tier for the NodePool. [Valid values](https://docs.cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters.nodePools#NodePool.Tier) include: "TIER_1" and "TIER_UNSPECIFIED".
 
 <a name="pod_cidr_overprovision_config"></a>The `pod_cidr_overprovision_config` block supports:
 
@@ -267,7 +267,7 @@ cluster.
 
 * `strategy` - (Default `SURGE`) The upgrade strategy to be used for upgrading the nodes.
 
-* `blue_green_settings` - (Optional) The settings to adjust [blue green upgrades](https://cloud.google.com/kubernetes-engine/docs/concepts/node-pool-upgrade-strategies#blue-green-upgrade-strategy).
+* `blue_green_settings` - (Optional) The settings to adjust [blue green upgrades](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/node-pool-upgrade-strategies#blue-green-upgrade-strategy).
     Structure is [documented below](#nested_blue_green_settings)
 
 <a name="nested_blue_green_settings"></a>The `blue_green_settings` block supports:
@@ -295,11 +295,11 @@ cluster.
   The resource policy must be in the same project and region as the node pool.
   If not found, InvalidArgument error is returned.
 
-* `tpu_topology` - (Optional) The [TPU topology](https://cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#topology) like `"2x4"` or `"2x2x2"`.
+* `tpu_topology` - (Optional) The [TPU topology](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#topology) like `"2x4"` or `"2x2x2"`.
 
 <a name="nested_queued_provisioning"></a> The `queued_provisioning` block supports:
 
-* `enabled` (Required) - Makes nodes obtainable through the [ProvisioningRequest API](https://cloud.google.com/kubernetes-engine/docs/how-to/provisioningrequest) exclusively.
+* `enabled` (Required) - Makes nodes obtainable through the [ProvisioningRequest API](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/provisioningrequest) exclusively.
 
 <a name="nested_reservation_affinity"></a>The `reservation_affinity` block supports:
 

@@ -7,8 +7,8 @@ description: |-
 # google_compute_instance_group
 
 Get a Compute Instance Group within GCE.
-For more information, see [the official documentation](https://cloud.google.com/compute/docs/instance-groups/#unmanaged_instance_groups)
-and [API](https://cloud.google.com/compute/docs/reference/latest/instanceGroups)
+For more information, see [the official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/#unmanaged_instance_groups)
+and [API](https://docs.cloud.google.com/compute/docs/reference/latest/instanceGroups)
 
 ```hcl
 data "google_compute_instance_group" "all" {

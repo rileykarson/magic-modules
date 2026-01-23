@@ -28,7 +28,7 @@ const (
 	// ${PROJECT_ID}-compute@developer.gserviceaccount.com where PROJECT_ID is an int64 (max 20 digits)
 	ComputeServiceAccountNameRegex = "[0-9]{1,20}-compute@developer.gserviceaccount.com"
 
-	// https://cloud.google.com/iam/docs/understanding-custom-roles#naming_the_role
+	// https://docs.cloud.google.com/iam/docs/understanding-custom-roles#naming_the_role
 	IAMCustomRoleIDRegex = "^[a-zA-Z0-9_\\.]{3,64}$"
 )
 

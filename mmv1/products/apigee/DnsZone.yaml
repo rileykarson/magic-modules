@@ -17,8 +17,8 @@ description: |
   Apigee Dns Zone.
 references:
   guides:
-    'Creating a DnsZone': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-dns'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.dnsZones/create'
+    'Creating a DnsZone': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-dns'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.dnsZones/create'
 docs:
 base_url: 'dnsZones'
 self_link: '{{org_id}}/dnsZones/{{dns_zone_id}}'

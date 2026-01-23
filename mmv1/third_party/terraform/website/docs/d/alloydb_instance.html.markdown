@@ -6,7 +6,7 @@ description: |-
 
 # google_alloydb_instance
 
-Use this data source to get information about the available instance. For more details refer the [API docs](https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances).
+Use this data source to get information about the available instance. For more details refer the [API docs](https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances).
 
 ## Example Usage
 

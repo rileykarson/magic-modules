@@ -17,8 +17,8 @@ api_resource_type_kind: AddonsConfig
 description: Enable/Disable add-ons for an Apigee environment.
 references:
   guides:
-    'Enable Analytics Add-On': 'https://cloud.google.com/apigee/docs/api-platform/reference/manage-analytics-add-on'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.addonsConfig/setAddonEnablement'
+    'Enable Analytics Add-On': 'https://docs.cloud.google.com/apigee/docs/api-platform/reference/manage-analytics-add-on'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.addonsConfig/setAddonEnablement'
 docs:
 base_url: '{{env_id}}'
 self_link: '{{env_id}}/addonsConfig'

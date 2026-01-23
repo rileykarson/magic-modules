@@ -16,8 +16,8 @@ name: 'Cluster'
 description: 'A managed alloydb cluster.'
 references:
   guides:
-    'AlloyDB': 'https://cloud.google.com/alloydb/docs/'
-  api: 'https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters/create'
+    'AlloyDB': 'https://docs.cloud.google.com/alloydb/docs/'
+  api: 'https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters/create'
 docs:
   note: |
     Users can promote a secondary cluster to a primary cluster with the help of `cluster_type`.

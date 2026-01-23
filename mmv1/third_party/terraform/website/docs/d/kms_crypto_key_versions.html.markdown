@@ -7,9 +7,9 @@ description: |-
 # google_kms_crypto_key_versions
 
 Provides access to Google Cloud Platform KMS CryptoKeyVersions. For more information see
-[the official documentation](https://cloud.google.com/kms/docs/object-hierarchy#key_version)
+[the official documentation](https://docs.cloud.google.com/kms/docs/object-hierarchy#key_version)
 and
-[API](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions).
+[API](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions).
 
 
 ## Example Usage
@@ -44,7 +44,7 @@ Example filter values if filtering on name. Note: names take the form projects/{
 * `"name:my-key-"` will retrieve cryptoKeyVersions that contain "my-key-" anywhere in their name.
 * `"name=projects/my-project/locations/global/keyRings/my-key-ring/cryptoKeys/my-key-1/cryptoKeyVersions/my-version-1"` will only retrieve a key with that exact name.
 
-[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
+[See the documentation about using filters](https://docs.cloud.google.com/kms/docs/sorting-and-filtering)
 
 ## Attributes Reference
 

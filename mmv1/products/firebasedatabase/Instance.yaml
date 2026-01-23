@@ -112,7 +112,7 @@ properties:
       The database type.
       Each project can create one default Firebase Realtime Database, which cannot be deleted once created.
       Creating user Databases is only available for projects on the Blaze plan.
-      Projects can be upgraded using the Cloud Billing API https://cloud.google.com/billing/reference/rest/v1/projects/updateBillingInfo.
+      Projects can be upgraded using the Cloud Billing API https://docs.cloud.google.com/billing/reference/rest/v1/projects/updateBillingInfo.
     min_version: 'beta'
     immutable: true
     default_value: "USER_DATABASE"

@@ -17,8 +17,8 @@ description: |
   A policy for container image binary authorization.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/binary-authorization/'
-  api: 'https://cloud.google.com/binary-authorization/docs/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/binary-authorization/'
+  api: 'https://docs.cloud.google.com/binary-authorization/docs/reference/rest/'
 docs:
 id_format: 'projects/{{project}}'
 base_url: 'projects/{{project}}/policy'

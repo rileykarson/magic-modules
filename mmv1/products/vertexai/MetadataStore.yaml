@@ -18,8 +18,8 @@ description: |-
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.metadataStores'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.metadataStores'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/metadataStores'

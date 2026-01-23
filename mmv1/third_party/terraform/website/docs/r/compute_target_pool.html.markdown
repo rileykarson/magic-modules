@@ -9,8 +9,8 @@ description: |-
 Manages a Target Pool within GCE. This is a collection of instances used as
 target of a network load balancer (Forwarding Rule). For more information see
 [the official
-documentation](https://cloud.google.com/compute/docs/load-balancing/network/target-pools)
-and [API](https://cloud.google.com/compute/docs/reference/latest/targetPools).
+documentation](https://docs.cloud.google.com/compute/docs/load-balancing/network/target-pools)
+and [API](https://docs.cloud.google.com/compute/docs/reference/latest/targetPools).
 
 
 ## Example Usage

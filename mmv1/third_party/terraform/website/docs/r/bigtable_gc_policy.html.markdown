@@ -7,8 +7,8 @@ description: |-
 # google_bigtable_gc_policy
 
 Creates a Google Cloud Bigtable GC Policy inside a family. For more information see
-[the official documentation](https://cloud.google.com/bigtable/) and
-[API](https://cloud.google.com/bigtable/docs/go/reference).
+[the official documentation](https://docs.cloud.google.com/bigtable/) and
+[API](https://docs.cloud.google.com/bigtable/docs/go/reference).
 
 -> **Warning**: We don't recommend having multiple GC policies for the same column
 family as it may result in unexpected behavior.
@@ -168,7 +168,7 @@ The following arguments are supported:
 
 * `ignore_warnings` - (Optional) Boolean for whether to allow ignoring warnings when updating the gc policy.
     Setting this to `true` allows relaxing the gc policy for replicated clusters by up to 90 days, but keep in mind this may increase how long clusters are inconsistent. Make sure
-    you understand the risks listed at https://cloud.google.com/bigtable/docs/garbage-collection#increasing before setting this option.
+    you understand the risks listed at https://docs.cloud.google.com/bigtable/docs/garbage-collection#increasing before setting this option.
 
 -----
 

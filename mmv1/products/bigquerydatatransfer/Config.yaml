@@ -19,8 +19,8 @@ description: |
   contains all metadata needed to perform a data transfer.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/reference/datatransfer/rest/'
-  api: 'https://cloud.google.com/bigquery/docs/reference/datatransfer/rest/v1/projects.locations.transferConfigs/create'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/reference/datatransfer/rest/'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/datatransfer/rest/v1/projects.locations.transferConfigs/create'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/transferConfigs?serviceAccountName={{service_account_name}}'
@@ -119,7 +119,7 @@ properties:
       of valid format: 1st,3rd monday of month 15:30, every wed,fri of jan,
       jun 13:15, and first sunday of quarter 00:00. See more explanation
       about the format here:
-      https://cloud.google.com/appengine/docs/flexible/python/scheduling-jobs-with-cron-yaml#the_schedule_format
+      https://docs.cloud.google.com/appengine/docs/flexible/python/scheduling-jobs-with-cron-yaml#the_schedule_format
       NOTE: The minimum interval time between recurring transfers depends
       on the data source; refer to the documentation for your data source.
   - name: 'scheduleOptions'
@@ -205,7 +205,7 @@ properties:
     description: |
       Parameters specific to each data source. For more information see the bq tab in the 'Setting up a data transfer'
       section for each data source. For example the parameters for Cloud Storage transfers are listed here:
-      https://cloud.google.com/bigquery-transfer/docs/cloud-storage-transfer#bq
+      https://docs.cloud.google.com/bigquery-transfer/docs/cloud-storage-transfer#bq
 
       **NOTE** : If you are attempting to update a parameter that cannot be updated (due to api limitations) [please force recreation of the resource](https://www.terraform.io/cli/state/taint#forcing-re-creation-of-resources).
     required: true

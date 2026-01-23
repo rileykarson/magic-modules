@@ -6,9 +6,9 @@ description: |-
 
 # google_cloud_identity_group_lookup
 
-Use this data source to look up the resource name of a Cloud Identity Group by its [EntityKey](https://cloud.google.com/identity/docs/reference/rest/v1/EntityKey), i.e. the group's email.
+Use this data source to look up the resource name of a Cloud Identity Group by its [EntityKey](https://docs.cloud.google.com/identity/docs/reference/rest/v1/EntityKey), i.e. the group's email.
 
-https://cloud.google.com/identity/docs/concepts/overview#groups
+https://docs.cloud.google.com/identity/docs/concepts/overview#groups
 
 ## Example Usage
 

@@ -20,8 +20,8 @@ description:
   This is a continuous export that exports findings to a Pub/Sub topic.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/security-command-center/docs'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/rest/v2/organizations.locations.notificationConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/security-command-center/docs'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/rest/v2/organizations.locations.notificationConfigs'
 docs:
 base_url: 'organizations/{{organization}}/locations/{{location}}/notificationConfigs'
 self_link: '{{name}}'
@@ -128,7 +128,7 @@ properties:
           * boolean literals true and false without quotes.
 
           See
-          [Filtering notifications](https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)
+          [Filtering notifications](https://docs.cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)
           for information on how to write a filter.
         required: true
         send_empty_value: true

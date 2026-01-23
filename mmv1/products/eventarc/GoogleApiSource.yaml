@@ -23,8 +23,8 @@ import_format:
   - projects/{{project}}/locations/{{location}}/googleApiSources/{{google_api_source_id}}
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/advanced/docs/publish-events/publish-events-google-sources'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.googleApiSources
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/advanced/docs/publish-events/publish-events-google-sources'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.googleApiSources
 description: |
   The Eventarc GoogleApiSource resource
 async:

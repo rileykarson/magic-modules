@@ -29,8 +29,8 @@ description: |
   you need.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vpc/docs/firewalls'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/firewalls'
+    'Official Documentation': 'https://docs.cloud.google.com/vpc/docs/firewalls'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/firewalls'
 docs:
   optional_properties: |
     * `enable_logging` - (Optional, Deprecated) This field denotes whether to enable logging for a particular firewall rule.

@@ -19,8 +19,8 @@ description: |
   An association for the OrganizationSecurityPolicy.
 references:
   guides:
-    'Associating a policy with the organization or folder': 'https://cloud.google.com/vpc/docs/using-firewall-policies#associate'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/organizationSecurityPolicies/addAssociation'
+    'Associating a policy with the organization or folder': 'https://docs.cloud.google.com/vpc/docs/using-firewall-policies#associate'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/organizationSecurityPolicies/addAssociation'
 docs:
 id_format: '{{policy_id}}/association/{{name}}'
 base_url: '{{policy_id}}'

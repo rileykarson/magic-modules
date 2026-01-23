@@ -30,9 +30,9 @@ description: |
   static.
 references:
   guides:
-    'Reserving a Static External IP Address': 'https://cloud.google.com/compute/docs/instances-and-network'
-    'Reserving a Static Internal IP Address': 'https://cloud.google.com/compute/docs/ip-addresses/reserve-static-internal-ip-address'
-  api: 'https://cloud.google.com/compute/docs/reference/beta/addresses'
+    'Reserving a Static External IP Address': 'https://docs.cloud.google.com/compute/docs/instances-and-network'
+    'Reserving a Static Internal IP Address': 'https://docs.cloud.google.com/compute/docs/ip-addresses/reserve-static-internal-ip-address'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/beta/addresses'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/addresses'
 has_self_link: true
@@ -180,7 +180,7 @@ properties:
     description: |
       The networking tier used for configuring this address. If this field is not
       specified, it is assumed to be PREMIUM.
-      This argument should not be used when configuring Internal addresses, because [network tier cannot be set for internal traffic; it's always Premium](https://cloud.google.com/network-tiers/docs/overview).
+      This argument should not be used when configuring Internal addresses, because [network tier cannot be set for internal traffic; it's always Premium](https://docs.cloud.google.com/network-tiers/docs/overview).
     default_from_api: true
     enum_values:
       - 'PREMIUM'

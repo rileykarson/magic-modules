@@ -6,8 +6,8 @@ description: |-
 
 # google_compute_images
 
-Get information about Google Compute Images. Check that your service account has the `compute.imageUser` role if you want to share [custom images](https://cloud.google.com/compute/docs/images/sharing-images-across-projects) from another project. If you want to use [public images][pubimg], do not forget to specify the dedicated project. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/images) and its [API](https://cloud.google.com/compute/docs/reference/latest/images).
+Get information about Google Compute Images. Check that your service account has the `compute.imageUser` role if you want to share [custom images](https://docs.cloud.google.com/compute/docs/images/sharing-images-across-projects) from another project. If you want to use [public images][pubimg], do not forget to specify the dedicated project. For more information see
+[the official documentation](https://docs.cloud.google.com/compute/docs/images) and its [API](https://docs.cloud.google.com/compute/docs/reference/latest/images).
 
 ## Example Usage
 
@@ -37,7 +37,7 @@ resource "google_compute_instance" "default" {
 
 The following arguments are supported:
 
-* `filter` -Filter for the images to be returned by the data source. Syntax can be found [here](https://cloud.google.com/compute/docs/reference/rest/v1/images/list) in the filter section.
+* `filter` -Filter for the images to be returned by the data source. Syntax can be found [here](https://docs.cloud.google.com/compute/docs/reference/rest/v1/images/list) in the filter section.
 
 - - -
 
@@ -62,4 +62,4 @@ exported:
 * `description` - An optional description of this image.
 * `labels` - All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.
 
-[pubimg]: https://cloud.google.com/compute/docs/images#os-compute-support "Google Cloud Public Base Images"
+[pubimg]: https://docs.cloud.google.com/compute/docs/images#os-compute-support "Google Cloud Public Base Images"

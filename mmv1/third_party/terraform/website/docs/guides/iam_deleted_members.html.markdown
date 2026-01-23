@@ -16,7 +16,7 @@ Validation will occur in the API preventing granting permissions on an IAM polic
 
 Prior to version 3.3.0 and 2.20.1 of the provider there was a bug with `deleted:` service accounts. It is strongly recommended to upgrade to 3.3.0+ to avoid issues.
 
-For more information on deleted accounts, see the [official documentation](https://cloud.google.com/iam/docs/creating-managing-service-accounts) on service accounts.
+For more information on deleted accounts, see the [official documentation](https://docs.cloud.google.com/iam/docs/creating-managing-service-accounts) on service accounts.
 
 ## Intermediate phase
 

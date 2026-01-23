@@ -17,10 +17,10 @@ Istio Canonical Services.
 
 To get more information about Service, see:
 
-* [API documentation](https://cloud.google.com/monitoring/api/ref_v3/rest/v3/services)
+* [API documentation](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/services)
 * How-to Guides
-    * [Service Monitoring](https://cloud.google.com/monitoring/service-monitoring)
-    * [Monitoring API Documentation](https://cloud.google.com/monitoring/api/v3/)
+    * [Service Monitoring](https://docs.cloud.google.com/monitoring/service-monitoring)
+    * [Monitoring API Documentation](https://docs.cloud.google.com/monitoring/api/v3/)
 
 ## Example Usage - Monitoring Istio Canonical Service
 
@@ -78,4 +78,4 @@ The `telemetry` block includes:
   (Optional)
   The full name of the resource that defines this service.
   Formatted as described in
-  https://cloud.google.com/apis/design/resource_names.
+  https://docs.cloud.google.com/apis/design/resource_names.

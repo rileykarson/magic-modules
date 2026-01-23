@@ -23,8 +23,8 @@ description: |
   corresponding forwarding rules.
 references:
   guides:
-    'Using Protocol Forwarding': 'https://cloud.google.com/compute/docs/protocol-forwarding'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/targetInstances'
+    'Using Protocol Forwarding': 'https://docs.cloud.google.com/compute/docs/protocol-forwarding'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/targetInstances'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/targetInstances'
 has_self_link: true

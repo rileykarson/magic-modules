@@ -18,8 +18,8 @@ description: |
   Cloud Deploy `Target` in order to facilitate deploying to other systems besides the supported runtimes.
 references:
   guides:
-    'Define and use a custom target type': 'https://cloud.google.com/deploy/docs/deploy-app-custom-target'
-  api: 'https://cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.customTargetTypes'
+    'Define and use a custom target type': 'https://docs.cloud.google.com/deploy/docs/deploy-app-custom-target'
+  api: 'https://docs.cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.customTargetTypes'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/customTargetTypes/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/customTargetTypes'

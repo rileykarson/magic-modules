@@ -16,7 +16,7 @@ name: Hook
 description: Hook is a user-defined HTTP callback triggered by an event.
 references:
   guides:
-    Official Documentation: https://cloud.google.com/secure-source-manager/docs/overview
+    Official Documentation: https://docs.cloud.google.com/secure-source-manager/docs/overview
 docs: null
 id_format: projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/hooks/{{hook_id}}
 base_url: projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/hooks?hook_id={{hook_id}}

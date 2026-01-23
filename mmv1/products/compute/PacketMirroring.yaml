@@ -19,8 +19,8 @@ description: |
   and monitor application performance.
 references:
   guides:
-    'Using Packet Mirroring': 'https://cloud.google.com/vpc/docs/using-packet-mirroring#creating'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/packetMirrorings'
+    'Using Packet Mirroring': 'https://docs.cloud.google.com/vpc/docs/using-packet-mirroring#creating'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/packetMirrorings'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/packetMirrorings'
 self_link: 'projects/{{project}}/regions/{{region}}/packetMirrorings/{{name}}'

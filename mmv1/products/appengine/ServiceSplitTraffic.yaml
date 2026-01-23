@@ -18,7 +18,7 @@ description: |
   Traffic routing configuration for versions within a single service. Traffic splits define how traffic directed to the service is assigned to versions.
 references:
   guides:
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
 docs:
 id_format: 'apps/{{project}}/services/{{service}}'
 base_url: 'apps/{{project}}/services'

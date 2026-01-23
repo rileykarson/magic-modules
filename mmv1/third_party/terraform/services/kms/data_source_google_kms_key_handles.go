@@ -33,7 +33,7 @@ func DataSourceGoogleKmsKeyHandles() *schema.Resource {
 					The resource_type_selector argument is used to add a filter query parameter that limits which key handles are retrieved by the data source: ?filter=resource_type_selector="{{resource_type_selector}}".
 					Example values:
 					* resource_type_selector="{SERVICE}.googleapis.com/{TYPE}".
-					[See the documentation about using filters](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyHandles/list)
+					[See the documentation about using filters](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyHandles/list)
 				`,
 			},
 			"key_handles": {

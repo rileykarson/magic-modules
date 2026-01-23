@@ -17,8 +17,8 @@ description: |
   A `Developer` is an API consumer that can have apps registered in Apigee.
 references:
   guides:
-    "Creating a developer": "https://cloud.google.com/apigee/docs/api-platform/publish/adding-developers-your-api-product"
-  api: "https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.developers"
+    "Creating a developer": "https://docs.cloud.google.com/apigee/docs/api-platform/publish/adding-developers-your-api-product"
+  api: "https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.developers"
 docs:
 base_url: "{{org_id}}/developers"
 self_link: "{{org_id}}/developers/{{email}}"

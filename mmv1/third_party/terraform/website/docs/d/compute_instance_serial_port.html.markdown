@@ -7,7 +7,7 @@ description: |-
 # google_compute_instance_serial_port
 
 Get the serial port output from a Compute Instance. For more information see
-the official [API](https://cloud.google.com/compute/docs/instances/viewing-serial-port-output) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/instances/viewing-serial-port-output) documentation.
 
 ## Example Usage
 
@@ -23,7 +23,7 @@ output "serial_out" {
 }
 ```
 
-Using the serial port output to generate a windows password, derived from the [official guide](https://cloud.google.com/compute/docs/instances/windows/automate-pw-generation):
+Using the serial port output to generate a windows password, derived from the [official guide](https://docs.cloud.google.com/compute/docs/instances/windows/automate-pw-generation):
 
 ```hcl
 resource "google_compute_instance" "windows" {
@@ -47,7 +47,7 @@ resource "google_compute_instance" "windows" {
 
   metadata = {
     serial-port-logging-enable = "TRUE"
-    // Derived from https://cloud.google.com/compute/docs/instances/windows/automate-pw-generation
+    // Derived from https://docs.cloud.google.com/compute/docs/instances/windows/automate-pw-generation
     windows-keys = jsonencode(
       {
         email    = "example.user@example.com"

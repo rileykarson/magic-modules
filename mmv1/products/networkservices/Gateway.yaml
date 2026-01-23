@@ -20,7 +20,7 @@ description: |
   to dictate how requests should be routed by this Gateway.
 references:
   guides:
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-services/rest/v1/projects.locations.gateways'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-services/rest/v1/projects.locations.gateways'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/gateways'
 self_link: 'projects/{{project}}/locations/{{location}}/gateways/{{name}}'

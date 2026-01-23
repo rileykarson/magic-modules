@@ -17,8 +17,8 @@ description: |
   An intent represents a user's intent to interact with a conversational agent.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents'
 docs:
 id_format: '{{parent}}/intents/{{name}}'
 base_url: '{{parent}}/intents'
@@ -55,7 +55,7 @@ examples:
 virtual_fields:
   - name: 'is_default_welcome_intent'
     description: |
-      Marks this as the [Default Welcome Intent](https://cloud.google.com/dialogflow/cx/docs/concept/intent#welcome) for an agent. When you create an agent, a Default Welcome Intent is created automatically.
+      Marks this as the [Default Welcome Intent](https://docs.cloud.google.com/dialogflow/cx/docs/concept/intent#welcome) for an agent. When you create an agent, a Default Welcome Intent is created automatically.
       The Default Welcome Intent cannot be deleted; deleting the `google_dialogflow_cx_intent` resource does nothing to the underlying GCP resources.
 
       ~> Avoid having multiple `google_dialogflow_cx_intent` resources linked to the same agent with `is_default_welcome_intent = true` because they will compete to control a single Default Welcome Intent resource in GCP.
@@ -63,7 +63,7 @@ virtual_fields:
     immutable: true
   - name: 'is_default_negative_intent'
     description: |
-      Marks this as the [Default Negative Intent](https://cloud.google.com/dialogflow/cx/docs/concept/intent#negative) for an agent. When you create an agent, a Default Negative Intent is created automatically.
+      Marks this as the [Default Negative Intent](https://docs.cloud.google.com/dialogflow/cx/docs/concept/intent#negative) for an agent. When you create an agent, a Default Negative Intent is created automatically.
       The Default Negative Intent cannot be deleted; deleting the `google_dialogflow_cx_intent` resource does nothing to the underlying GCP resources.
 
       ~> Avoid having multiple `google_dialogflow_cx_intent` resources linked to the same agent with `is_default_negative_intent = true` because they will compete to control a single Default Negative Intent resource in GCP.

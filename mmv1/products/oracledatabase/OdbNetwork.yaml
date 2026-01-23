@@ -16,7 +16,7 @@ name: 'OdbNetwork'
 description: An OdbNetwork resource which represents a private network providing connectivity between OracleDatabase resources and Google Cloud VPC network.
 references:
   guides:
-    'OracleDatabase@Google Cloud': https://cloud.google.com/oracle/database/docs/overview'
+    'OracleDatabase@Google Cloud': https://docs.cloud.google.com/oracle/database/docs/overview'
 base_url: 'projects/{{project}}/locations/{{location}}/odbNetworks'
 immutable: true
 self_link: 'projects/{{project}}/locations/{{location}}/odbNetworks/{{odb_network_id}}'

@@ -16,7 +16,7 @@ name: 'UserStore'
 description: |
   Represents a user store.
 references:
-  api: 'https://cloud.google.com/gemini/enterprise/docs/reference/rest/v1/projects.locations.userStores'
+  api: 'https://docs.cloud.google.com/gemini/enterprise/docs/reference/rest/v1/projects.locations.userStores'
 base_url: 'projects/{{project}}/locations/{{location}}/userStores'
 self_link: 'projects/{{project}}/locations/{{location}}/userStores/{{user_store_id}}'
 # Update API is also used as create API.

@@ -18,8 +18,8 @@ description: |
   UrlList proto helps users to set reusable, independently manageable lists of hosts, host patterns, URLs, URL patterns.
 references:
   guides:
-    'Use UrlLists': ' https://cloud.google.com/secure-web-proxy/docs/use-url-list'
-  api: 'https://cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.urlLists'
+    'Use UrlLists': ' https://docs.cloud.google.com/secure-web-proxy/docs/use-url-list'
+  api: 'https://docs.cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.urlLists'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/urlLists'
 self_link: 'projects/{{project}}/locations/{{location}}/urlLists/{{name}}'

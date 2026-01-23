@@ -20,8 +20,8 @@ description: |
    To manage single field indexes, use the `google_firestore_field` resource instead.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/firestore/docs/query-data/indexing'
-  api: 'https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.collectionGroups.indexes'
+    'Official Documentation': 'https://docs.cloud.google.com/firestore/docs/query-data/indexing'
+  api: 'https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.collectionGroups.indexes'
 docs:
   warning: |
     This resource creates a Firestore Index on a project that already has

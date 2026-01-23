@@ -7,9 +7,9 @@ description: |-
 # google_compute_instance
 
 Manages a VM instance resource within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/instances)
+[the official documentation](https://docs.cloud.google.com/compute/docs/instances)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/instances).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/instances).
 
 ## Example Usage
 
@@ -64,7 +64,7 @@ resource "google_compute_instance" "default" {
 
 ## Example usage - Confidential Computing
 
-Example with [Confidential Mode](https://cloud.google.com/confidential-computing/confidential-vm/docs/confidential-vm-overview) activated.
+Example with [Confidential Mode](https://docs.cloud.google.com/confidential-computing/confidential-vm/docs/confidential-vm-overview) activated.
 
 ```tf
 resource "google_service_account" "default" {
@@ -124,11 +124,11 @@ The following arguments are supported:
 
     **Note:** If you want to update this value (resize the VM) after initial creation, you must set [`allow_stopping_for_update`](#allow_stopping_for_update) to `true`.
 
-    [Custom machine types](https://cloud.google.com/dataproc/docs/concepts/compute/custom-machine-types) can be formatted as `custom-NUMBER_OF_CPUS-AMOUNT_OF_MEMORY_MB`, e.g. `custom-6-20480` for 6 vCPU and 20GB of RAM. 
+    [Custom machine types](https://docs.cloud.google.com/dataproc/docs/concepts/compute/custom-machine-types) can be formatted as `custom-NUMBER_OF_CPUS-AMOUNT_OF_MEMORY_MB`, e.g. `custom-6-20480` for 6 vCPU and 20GB of RAM. 
     Because of current API limitations some custom machine types may get converted to different machine types (such as an equivalent standard type) and cause non-empty plans in your configuration. Use
     `lifecycle.ignore_changes` on `machine_type` in these cases.
 
-    There is a limit of 6.5 GB per CPU unless you add [extended memory](https://cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#extendedmemory). You must do this explicitly by adding the suffix `-ext`, e.g. `custom-2-15360-ext` for 2 vCPU and 15 GB of memory.
+    There is a limit of 6.5 GB per CPU unless you add [extended memory](https://docs.cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#extendedmemory). You must do this explicitly by adding the suffix `-ext`, e.g. `custom-2-15360-ext` for 2 vCPU and 15 GB of memory.
 
 * `name` - (Required) A unique name for the resource, required by GCE.
     Changing this forces a new resource to be created.
@@ -181,14 +181,14 @@ The following arguments are supported:
 * `metadata` - (Optional) Metadata key/value pairs to make available from
     within the instance. Ssh keys attached in the Cloud Console will be removed.
     Add them to your config in order to keep them attached to your instance.
-    A list of predefined metadata keys (e.g. ssh-keys) can be found [here](https://cloud.google.com/compute/docs/metadata/predefined-metadata-keys)
+    A list of predefined metadata keys (e.g. ssh-keys) can be found [here](https://docs.cloud.google.com/compute/docs/metadata/predefined-metadata-keys)
 
 -> Depending on the OS you choose for your instance, some metadata keys have
    special functionality.  Most linux-based images will run the content of
    `metadata.startup-script` in a shell on every boot.  At a minimum,
    Debian, CentOS, RHEL, SLES, Container-Optimized OS, and Ubuntu images
    support this key.  Windows instances require other keys depending on the format
-   of the script and the time you would like it to run - see [this table](https://cloud.google.com/compute/docs/startupscript#providing_a_startup_script_for_windows_instances).
+   of the script and the time you would like it to run - see [this table](https://docs.cloud.google.com/compute/docs/startupscript#providing_a_startup_script_for_windows_instances).
    For the convenience of the users of `metadata.startup-script`,
    we provide a special attribute, `metadata_startup_script`, which is documented below.
 
@@ -205,7 +205,7 @@ is desired, you will need to modify your state file manually using
 `terraform state` commands.
 
 * `min_cpu_platform` - (Optional) Specifies a minimum CPU platform for the VM instance. Applicable values are the friendly names of CPU platforms, such as
-`Intel Haswell` or `Intel Skylake`. See the complete list [here](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform).
+`Intel Haswell` or `Intel Skylake`. See the complete list [here](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform).
     **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.
 
 * `params` - (Optional) Additional instance parameters.
@@ -225,11 +225,11 @@ is desired, you will need to modify your state file manually using
 
 * `tags` - (Optional) A list of network tags to attach to the instance.
 
-* `shielded_instance_config` - (Optional) Enable [Shielded VM](https://cloud.google.com/security/shielded-cloud/shielded-vm) on this instance. Shielded VM provides verifiable integrity to prevent against malware and rootkits. Defaults to disabled. Structure is [documented below](#nested_shielded_instance_config).
-	**Note**: [`shielded_instance_config`](#shielded_instance_config) can only be used with boot images with shielded vm support. See the complete list [here](https://cloud.google.com/compute/docs/images#shielded-images).
+* `shielded_instance_config` - (Optional) Enable [Shielded VM](https://docs.cloud.google.com/security/shielded-cloud/shielded-vm) on this instance. Shielded VM provides verifiable integrity to prevent against malware and rootkits. Defaults to disabled. Structure is [documented below](#nested_shielded_instance_config).
+	**Note**: [`shielded_instance_config`](#shielded_instance_config) can only be used with boot images with shielded vm support. See the complete list [here](https://docs.cloud.google.com/compute/docs/images#shielded-images).
   **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.
 
-* `enable_display` - (Optional) Enable [Virtual Displays](https://cloud.google.com/compute/docs/instances/enable-instance-virtual-display#verify_display_driver) on this instance.
+* `enable_display` - (Optional) Enable [Virtual Displays](https://docs.cloud.google.com/compute/docs/instances/enable-instance-virtual-display#verify_display_driver) on this instance.
 **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.
 
 * `resource_policies` (Optional) -- A list of self_links of resource policies to attach to the instance. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.
@@ -237,14 +237,14 @@ is desired, you will need to modify your state file manually using
 * `reservation_affinity` - (Optional) Specifies the reservations that this instance can consume from.
     Structure is [documented below](#nested_reservation_affinity).
 
-* `confidential_instance_config` (Optional) - Enable [Confidential Mode](https://cloud.google.com/compute/confidential-vm/docs/about-cvm) on this VM. Structure is [documented below](#nested_confidential_instance_config)
+* `confidential_instance_config` (Optional) - Enable [Confidential Mode](https://docs.cloud.google.com/compute/confidential-vm/docs/about-cvm) on this VM. Structure is [documented below](#nested_confidential_instance_config)
 
 * `advanced_machine_features` (Optional) - Configure Nested Virtualisation and Simultaneous Hyper Threading  on this VM. Structure is [documented below](#nested_advanced_machine_features)
 
 * `network_performance_config` (Optional, [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)
     Configures network performance settings for the instance. Structure is
-    [documented below](#nested_network_performance_config). **Note**: [`machine_type`](#machine_type) must be a [supported type](https://cloud.google.com/compute/docs/networking/configure-vm-with-high-bandwidth-configuration),
-    the [`image`](#image) used must include the [`GVNIC`](https://cloud.google.com/compute/docs/networking/using-gvnic#create-instance-gvnic-image)
+    [documented below](#nested_network_performance_config). **Note**: [`machine_type`](#machine_type) must be a [supported type](https://docs.cloud.google.com/compute/docs/networking/configure-vm-with-high-bandwidth-configuration),
+    the [`image`](#image) used must include the [`GVNIC`](https://docs.cloud.google.com/compute/docs/networking/using-gvnic#create-instance-gvnic-image)
     in `guest-os-features`, and `network_interface.0.nic-type` must be `GVNIC`
     in order for this setting to take effect.
 
@@ -267,16 +267,16 @@ is desired, you will need to modify your state file manually using
 * `mode` - (Optional) The mode in which to attach this disk, either `READ_WRITE`
   or `READ_ONLY`. If not specified, the default is to attach the disk in `READ_WRITE` mode.
 
-* `guest_os_features` - (optional) A list of features to enable on the guest operating system. Applicable only for bootable images. Read [Enabling guest operating system features](https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
+* `guest_os_features` - (optional) A list of features to enable on the guest operating system. Applicable only for bootable images. Read [Enabling guest operating system features](https://docs.cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
 
 * `disk_encryption_key_raw` - (Optional) A 256-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption),
     encoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
     may be set.
 
 * `disk_encryption_key_rsa` - (Optional) Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
 
 * `kms_key_self_link` - (Optional) The self_link of the encryption key that is
     stored in Google Cloud KMS to encrypt this disk. Only one of `kms_key_self_link`,
@@ -331,7 +331,7 @@ is desired, you will need to modify your state file manually using
 
 * `provisioned_iops` - (Optional) Indicates how many IOPS to provision for the disk.
     This sets the number of I/O operations per second that the disk can handle.
-    For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+    For more details,see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).
     Note: Updating currently is only supported for hyperdisk skus via disk update
     api/gcloud without the need to delete and recreate the disk, hyperdisk allows
     for an update of IOPS every 4 hours. To update your hyperdisk more frequently,
@@ -339,7 +339,7 @@ is desired, you will need to modify your state file manually using
 
 * `provisioned_throughput` - (Optional) Indicates how much throughput to provision for the disk.
     This sets the number of throughput mb per second that the disk can handle.
-    For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+    For more details,see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).
     Note: Updating currently is only supported for hyperdisk skus via disk update
     api/gcloud without the need to delete and recreate the disk, hyperdisk allows
     for an update of throughput every 4 hours. To update your hyperdisk more
@@ -372,13 +372,13 @@ is desired, you will need to modify your state file manually using
     attach it to one or more instances in read-only mode.
 
 * `disk_encryption_key_raw` - (Optional) A 256-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption),
     encoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
     may be set.
 
 * `disk_encryption_key_rsa` - (Optional) Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`
     may be set.
 
 * `kms_key_self_link` - (Optional) The self_link of the encryption key that is
@@ -390,13 +390,13 @@ is desired, you will need to modify your state file manually using
 <a name="nested_source_image_encryption_key"></a>The `source_snapshot_encryption_key` block supports:
 
 * `raw_key` - (Optional)  A 256-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption),
     encoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
     may be set.
 
 * `rsa_encrypted_key` - (Optional) Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
     may be set.
 
 * `kms_key_self_link` - (Optional) The self_link of the encryption key that is
@@ -408,13 +408,13 @@ is desired, you will need to modify your state file manually using
 <a name="nested_source_snapshot_encryption_key"></a>The `source_snapshot_encryption_key` block supports:
 
 * `raw_key` - (Optional) A 256-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption),
     encoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     to decrypt the given snapshot. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
     may be set.
 
 * `rsa_encrypted_key` - (Optional) Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given snapshot. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given snapshot. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`
     may be set.
 
 * `kms_key_self_link` - (Optional) The self_link of the encryption key that is
@@ -442,7 +442,7 @@ is desired, you will need to modify your state file manually using
     interface to. Either `network` or `subnetwork` must be provided. If network isn't provided
     it will be inferred from the subnetwork. The subnetwork must exist in the same region this
     instance will be created in. If the network resource is in
-    [legacy](https://cloud.google.com/vpc/docs/legacy) mode, do not specify this field. If the
+    [legacy](https://docs.cloud.google.com/vpc/docs/legacy) mode, do not specify this field. If the
     network is in auto subnet mode, specifying the subnetwork is optional. If the network is
     in custom subnet mode, specifying the subnetwork is required.
 
@@ -491,10 +491,10 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 
 * `public_ptr_domain_name` - (Optional) The DNS domain name for the public PTR record.
     To set this field on an instance, you must be verified as the owner of the domain.
-    See [the docs](https://cloud.google.com/compute/docs/instances/create-ptr-record) for how
+    See [the docs](https://docs.cloud.google.com/compute/docs/instances/create-ptr-record) for how
     to become verified as a domain owner.
 
-* `network_tier` - (Optional) The [networking tier](https://cloud.google.com/network-tiers/docs/overview) used for configuring this instance.
+* `network_tier` - (Optional) The [networking tier](https://docs.cloud.google.com/network-tiers/docs/overview) used for configuring this instance.
     This field can take the following values: PREMIUM, FIXED_STANDARD or STANDARD. If this field is
     not specified, it is assumed to be PREMIUM.
 
@@ -534,7 +534,7 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 
 * `scopes` - (Required) A list of service scopes. Both OAuth2 URLs and gcloud
     short names are supported. To allow full access to all Cloud APIs, use the
-    `cloud-platform` scope. See a complete list of scopes [here](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
+    `cloud-platform` scope. See a complete list of scopes [here](https://docs.cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
     **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.
 
 <a name="nested_instance_encryption_key"></a>The `instance_encryption_key` block supports:
@@ -552,7 +552,7 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 
 * `on_host_maintenance` - (Optional) Describes maintenance behavior for the
     instance. Can be MIGRATE or TERMINATE, for more info, read
-    [here](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options).
+    [here](https://docs.cloud.google.com/compute/docs/instances/setting-instance-scheduling-options).
 
 * `automatic_restart` - (Optional) Specifies if the instance should be
     restarted if it was terminated by Compute Engine (not a user).
@@ -561,7 +561,7 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 * `node_affinities` - (Optional) Specifies node affinities or anti-affinities
    to determine which sole-tenant nodes your instances and managed instance
    groups will use as host systems. Read more on sole-tenant node creation
-   [here](https://cloud.google.com/compute/docs/nodes/create-nodes).
+   [here](https://docs.cloud.google.com/compute/docs/nodes/create-nodes).
    Structure [documented below](#nested_node_affinities).
 
 * `min_node_cpus` - (Optional) The minimum number of virtual CPUs this instance will consume when running on a sole-tenant node.
@@ -569,9 +569,9 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 * `provisioning_model` - (Optional) Describe the type of preemptible VM. This field accepts the value `STANDARD` or `SPOT`. If the value is `STANDARD`, there will be no discount. If this   is set to `SPOT`,
     `preemptible` should be `true` and `automatic_restart` should be
     `false`. For more info about
-    `SPOT`, read [here](https://cloud.google.com/compute/docs/instances/spot)
+    `SPOT`, read [here](https://docs.cloud.google.com/compute/docs/instances/spot)
 
-* `instance_termination_action` - (Optional) Describe the type of termination action for VM. Can be `STOP` or `DELETE`.  Read more on [here](https://cloud.google.com/compute/docs/instances/create-use-spot)
+* `instance_termination_action` - (Optional) Describe the type of termination action for VM. Can be `STOP` or `DELETE`.  Read more on [here](https://docs.cloud.google.com/compute/docs/instances/create-use-spot)
 
 * `termination_time` - (Optional) Specifies the timestamp, when the instance will be terminated, in RFC3339 text format. If specified, the instance termination action will be performed at the termination time.
 
@@ -674,13 +674,13 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 
 * `enable_nested_virtualization` - (Optional) Defines whether the instance should have [nested virtualization](#on_host_maintenance)  enabled. Defaults to false.
 
-* `threads_per_core` - (Optional) The number of threads per physical core. To disable [simultaneous multithreading (SMT)](https://cloud.google.com/compute/docs/instances/disabling-smt) set this to 1.
+* `threads_per_core` - (Optional) The number of threads per physical core. To disable [simultaneous multithreading (SMT)](https://docs.cloud.google.com/compute/docs/instances/disabling-smt) set this to 1.
 
 * `turbo_mode` - (Optional) Turbo frequency mode to use for the instance. Supported modes are currently either `ALL_CORE_MAX` or unset (default).
 
-* `visible_core_count` - (Optional) The number of physical cores to expose to an instance. [visible cores info (VC)](https://cloud.google.com/compute/docs/instances/customize-visible-cores).
+* `visible_core_count` - (Optional) The number of physical cores to expose to an instance. [visible cores info (VC)](https://docs.cloud.google.com/compute/docs/instances/customize-visible-cores).
 
-* `performance_monitoring_unit` - (Optional) [The PMU](https://cloud.google.com/compute/docs/pmu-overview) is a hardware component within the CPU core that monitors how the processor runs code. Valid values for the level of PMU are `STANDARD`, `ENHANCED`, and `ARCHITECTURAL`.
+* `performance_monitoring_unit` - (Optional) [The PMU](https://docs.cloud.google.com/compute/docs/pmu-overview) is a hardware component within the CPU core that monitors how the processor runs code. Valid values for the level of PMU are `STANDARD`, `ENHANCED`, and `ARCHITECTURAL`.
 
 * `enable_uefi_networking` - (Optional) Whether to enable UEFI networking for instance creation.
 
@@ -721,7 +721,7 @@ exported:
 * `ipv6_access_type` - One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet.
 This field is always inherited from its subnetwork.
 
-* `current_status` - The current status of the instance. This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED. For more information about the status of the instance, see [Instance life cycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle).
+* `current_status` - The current status of the instance. This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED. For more information about the status of the instance, see [Instance life cycle](https://docs.cloud.google.com/compute/docs/instances/instance-life-cycle).
 
 * `network_interface.0.network_ip` - The internal ip address of the instance, either manually or dynamically assigned.
 
@@ -729,23 +729,23 @@ This field is always inherited from its subnetwork.
 
 * `attached_disk.0.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `boot_disk.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `boot_disk.initialize_params.source_image_encryption_key.sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `boot_disk.initialize_params.source_snapshot_encryption_key.sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 * `disk.0.disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     encoded SHA-256 hash of the [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.
 
 ## Timeouts
 

@@ -19,7 +19,7 @@ api_variant_patterns:
 description: The resource for managing GeminiGcpEnablementSetting setting bindings for Admin Control.
 references:
   guides:
-    'Gemini Cloud Assist overview': 'https://cloud.google.com/gemini/docs/cloud-assist/overview'
+    'Gemini Cloud Assist overview': 'https://docs.cloud.google.com/gemini/docs/cloud-assist/overview'
 base_url: projects/{{project}}/locations/{{location}}/geminiGcpEnablementSettings/{{gemini_gcp_enablement_setting_id}}/settingBindings
 self_link: projects/{{project}}/locations/{{location}}/geminiGcpEnablementSettings/{{gemini_gcp_enablement_setting_id}}/settingBindings/{{setting_binding_id}}
 create_url: projects/{{project}}/locations/{{location}}/geminiGcpEnablementSettings/{{gemini_gcp_enablement_setting_id}}/settingBindings?settingBindingId={{setting_binding_id}}
@@ -84,7 +84,7 @@ properties:
   - name: product
     type: String
     description: |-
-      Product type of the setting binding. Values include GEMINI_IN_BIGQUERY, GEMINI_CLOUD_ASSIST, etc. See [product reference](https://cloud.google.com/gemini/docs/api/reference/rest/v1/projects.locations.dataSharingWithGoogleSettings.settingBindings) for a complete list.
+      Product type of the setting binding. Values include GEMINI_IN_BIGQUERY, GEMINI_CLOUD_ASSIST, etc. See [product reference](https://docs.cloud.google.com/gemini/docs/api/reference/rest/v1/projects.locations.dataSharingWithGoogleSettings.settingBindings) for a complete list.
     default_from_api: true
   - name: name
     type: String

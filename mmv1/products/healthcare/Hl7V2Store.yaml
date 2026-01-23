@@ -19,8 +19,8 @@ description: |
   standard for Healthcare information exchange
 references:
   guides:
-    'Creating a HL7v2 Store': 'https://cloud.google.com/healthcare/docs/how-tos/hl7v2'
-  api: 'https://cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.hl7V2Stores'
+    'Creating a HL7v2 Store': 'https://docs.cloud.google.com/healthcare/docs/how-tos/hl7v2'
+  api: 'https://docs.cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.hl7V2Stores'
 docs:
 id_format: '{{dataset}}/hl7V2Stores/{{name}}'
 base_url: '{{dataset}}/hl7V2Stores?hl7V2StoreId={{name}}'
@@ -177,7 +177,7 @@ properties:
           type: String
           description: |
             Restricts notifications sent for messages matching a filter. If this is empty, all messages
-            are matched. Syntax: https://cloud.google.com/appengine/docs/standard/python/search/query_strings
+            are matched. Syntax: https://docs.cloud.google.com/appengine/docs/standard/python/search/query_strings
 
             Fields/functions available for filtering are:
 

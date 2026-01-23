@@ -17,8 +17,8 @@ description: |
   A Cloud AI Platform Notebook environment.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/ai-platform-notebooks'
-  api: 'https://cloud.google.com/ai-platform/notebooks/docs/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/ai-platform-notebooks'
+  api: 'https://docs.cloud.google.com/ai-platform/notebooks/docs/reference/rest'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/environments'
 self_link: 'projects/{{project}}/locations/{{location}}/environments/{{name}}'

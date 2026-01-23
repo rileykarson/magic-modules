@@ -8,9 +8,9 @@ description: |-
 
 To get more information about Google Compute Security Policy, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/rest/beta/securityPolicies)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/beta/securityPolicies)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/armor/docs/configure-security-policies)
+    * [Official Documentation](https://docs.cloud.google.com/armor/docs/configure-security-policies)
 
 ## Example Usage
 

@@ -21,8 +21,8 @@ create_verb: 'PATCH'
 update_verb: 'PATCH'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/overview'
-  api: 'https://cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1beta/projects.locations.global.hubs.groups'
+    'Official Documentation': 'https://docs.cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/overview'
+  api: 'https://docs.cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1beta/projects.locations.global.hubs.groups'
 async:
   type: 'OpAsync'
   operation:

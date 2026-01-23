@@ -7,8 +7,8 @@ description: |-
 # `google_compute_network_attachment`
 
 Get a specific network attachment within a region. For more information see
-the [official documentation](https://cloud.google.com/vpc/docs/about-network-attachments)
-and [API](https://cloud.google.com/compute/docs/reference/rest/v1/networkAttachments/get).
+the [official documentation](https://docs.cloud.google.com/vpc/docs/about-network-attachments)
+and [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/networkAttachments/get).
 
 ## Example Usage
 

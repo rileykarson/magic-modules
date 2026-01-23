@@ -687,7 +687,7 @@ To allow much greater control over the updates happening to instance groups
 `update_strategy` has been replaced by `update_policy`. The functionality controlled by `update_strategy` is now controlled by a combination of `update_policy.type` and `update_policy.minimal_action`. `update_strategy = NONE` can be achieved with `type = OPPORTUNISTIC`. The previous values of `RESTART` and `REPLACE` were both `PROACTIVE` types implicitly previously but can now be controlled explicitly.
 
 For more details see the
-[official guide](https://cloud.google.com/compute/docs/instance-groups/rolling-out-updates-to-managed-instance-groups).
+[official guide](https://docs.cloud.google.com/compute/docs/instance-groups/rolling-out-updates-to-managed-instance-groups).
 
 ### Old Config
 

@@ -9,7 +9,7 @@ description: |-
 Use this data source to get NSX credentials for a Private Cloud.
 
 To get more information about private cloud NSX credentials, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds/showNsxCredentials)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds/showNsxCredentials)
 
 ## Example Usage
 

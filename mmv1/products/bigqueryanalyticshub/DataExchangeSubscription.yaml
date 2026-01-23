@@ -18,8 +18,8 @@ api_resource_type_kind: Subscription
 description: A Bigquery Analytics Hub Data Exchange subscription
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/analytics-hub-introduction'
-  api: 'https://cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.subscriptions'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.subscriptions'
 docs:
   note: |-
     When importing the resource with `terraform import`, provide the destination/subscriber's project and location
@@ -99,7 +99,7 @@ parameters:
     description: |
       The geographic location where the Subscription (and its linked dataset) should reside.
       This is the subscriber's desired location for the created resources.
-      See https://cloud.google.com/bigquery/docs/locations for supported locations.
+      See https://docs.cloud.google.com/bigquery/docs/locations for supported locations.
     url_param_only: true
     required: true
     custom_flatten: 'templates/terraform/custom_flatten/bigquery_dataset_location.go.tmpl'
@@ -128,7 +128,7 @@ parameters:
         immutable: true
         description: |
           The geographic location where the dataset should reside.
-          See https://cloud.google.com/bigquery/docs/locations for supported locations.
+          See https://docs.cloud.google.com/bigquery/docs/locations for supported locations.
         required: true
         custom_flatten: 'templates/terraform/custom_flatten/bigquery_dataset_location.go.tmpl'
         diff_suppress_func: 'tpgresource.CaseDiffSuppress'

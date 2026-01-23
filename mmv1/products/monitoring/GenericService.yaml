@@ -22,10 +22,10 @@ description: |
   the service are accessible
 references:
   guides:
-    'Service Monitoring': 'https://cloud.google.com/monitoring/service-monitoring'
-    'Monitoring API Documentation': 'https://cloud.google.com/monitoring/api/v3/'
+    'Service Monitoring': 'https://docs.cloud.google.com/monitoring/service-monitoring'
+    'Monitoring API Documentation': 'https://docs.cloud.google.com/monitoring/api/v3/'
     'Service-orientation on Wikipedia': 'https://en.wikipedia.org/wiki/Service-orientation'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/services'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/services'
 docs:
 id_format: 'projects/{{project}}/services/{{service_id}}'
 base_url: 'v3/projects/{{project}}/services'
@@ -90,13 +90,13 @@ properties:
         description: |
           The full name of the resource that defines this service.
           Formatted as described in
-          https://cloud.google.com/apis/design/resource_names.
+          https://docs.cloud.google.com/apis/design/resource_names.
   - name: 'basicService'
     type: NestedObject
     description: |
       A well-known service type, defined by its service type and service labels.
       Valid values of service types and services labels are described at
-      https://cloud.google.com/stackdriver/docs/solutions/slo-monitoring/api/api-structures#basic-svc-w-basic-sli
+      https://docs.cloud.google.com/stackdriver/docs/solutions/slo-monitoring/api/api-structures#basic-svc-w-basic-sli
     # BasicService info can be set on creation but is then immutable.
     immutable: true
     properties:

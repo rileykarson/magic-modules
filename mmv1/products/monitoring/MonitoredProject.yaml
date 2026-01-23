@@ -13,11 +13,11 @@
 
 ---
 name: 'MonitoredProject'
-description: "A [project being monitored](https://cloud.google.com/monitoring/settings/multiple-projects#create-multi) by a Metrics Scope."
+description: "A [project being monitored](https://docs.cloud.google.com/monitoring/settings/multiple-projects#create-multi) by a Metrics Scope."
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/monitoring/settings/manage-api'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v1/locations.global.metricsScopes.projects'
+    'Official Documentation': 'https://docs.cloud.google.com/monitoring/settings/manage-api'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v1/locations.global.metricsScopes.projects'
 docs:
 id_format: 'locations/global/metricsScopes/{{metrics_scope}}/projects/{{name}}'
 base_url: 'v1/locations/global/metricsScopes'

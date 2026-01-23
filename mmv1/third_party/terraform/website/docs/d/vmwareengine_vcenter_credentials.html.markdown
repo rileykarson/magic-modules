@@ -9,7 +9,7 @@ description: |-
 Use this data source to get Vcenter credentials for a Private Cloud.
 
 To get more information about private cloud Vcenter credentials, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds/showVcenterCredentials)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds/showVcenterCredentials)
 
 ## Example Usage
 

@@ -20,8 +20,8 @@ description: |
   requirements, node affinity labels, and region.
 references:
   guides:
-    'Sole-Tenant Nodes': 'https://cloud.google.com/compute/docs/nodes/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/nodeTemplates'
+    'Sole-Tenant Nodes': 'https://docs.cloud.google.com/compute/docs/nodes/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/nodeTemplates'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/nodeTemplates'
 has_self_link: true

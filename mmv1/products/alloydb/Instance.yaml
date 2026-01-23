@@ -16,8 +16,8 @@ name: 'Instance'
 description: 'A managed alloydb cluster instance.'
 references:
   guides:
-    'AlloyDB': 'https://cloud.google.com/alloydb/docs/'
-  api: 'https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances/create'
+    'AlloyDB': 'https://docs.cloud.google.com/alloydb/docs/'
+  api: 'https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.instances/create'
 docs:
   warning: |
     Deleting an instance with instanceType = SECONDARY does not delete the secondary instance, and abandons it instead.
@@ -176,7 +176,7 @@ properties:
   - name: 'gceZone'
     type: String
     description: |
-      The Compute Engine zone that the instance should serve from, per https://cloud.google.com/compute/docs/regions-zones This can ONLY be specified for ZONAL instances. If present for a REGIONAL instance, an error will be thrown. If this is absent for a ZONAL instance, instance is created in a random zone with available capacity.
+      The Compute Engine zone that the instance should serve from, per https://docs.cloud.google.com/compute/docs/regions-zones This can ONLY be specified for ZONAL instances. If present for a REGIONAL instance, an error will be thrown. If this is absent for a ZONAL instance, instance is created in a random zone with available capacity.
   - name: 'reconciling'
     type: Boolean
     description: |
@@ -517,7 +517,7 @@ properties:
           These flags will only be set if `connection_pool_config.enabled` is
           true.
           Please see
-          https://cloud.google.com/alloydb/docs/configure-managed-connection-pooling#configuration-options
+          https://docs.cloud.google.com/alloydb/docs/configure-managed-connection-pooling#configuration-options
           for a comprehensive list of flags that can be set. To specify the flags
           in Terraform, please remove the "connection-pooling-" prefix and use
           underscores instead of dashes in the name. For example,

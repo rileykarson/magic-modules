@@ -17,8 +17,8 @@ description: |
   DNS Armor is a fully-managed service that provides DNS-layer security for your Google Cloud workloads.
 references:
   guides:
-    "DNS Threat Detector": "https://cloud.google.com/dns/docs/threat-detection"
-  api: "https://cloud.google.com/dns/docs/create-threat-detector"
+    "DNS Threat Detector": "https://docs.cloud.google.com/dns/docs/threat-detection"
+  api: "https://docs.cloud.google.com/dns/docs/create-threat-detector"
 docs:
 id_format: "projects/{{project}}/locations/{{location}}/dnsThreatDetectors/{{name}}"
 base_url: "projects/{{project}}/locations/{{location}}/dnsThreatDetectors"

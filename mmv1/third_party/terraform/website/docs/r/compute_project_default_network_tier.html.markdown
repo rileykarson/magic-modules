@@ -7,11 +7,11 @@ description: |-
 # google_compute_project_default_network_tier
 
 Configures the Google Compute Engine
-[Default Network Tier](https://cloud.google.com/network-tiers/docs/using-network-service-tiers#setting_the_tier_for_all_resources_in_a_project)
+[Default Network Tier](https://docs.cloud.google.com/network-tiers/docs/using-network-service-tiers#setting_the_tier_for_all_resources_in_a_project)
 for a project.
 
 For more information, see,
-[the Project API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/projects/setDefaultNetworkTier).
+[the Project API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/projects/setDefaultNetworkTier).
 
 ## Example Usage
 

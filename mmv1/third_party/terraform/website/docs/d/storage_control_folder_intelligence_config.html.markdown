@@ -7,9 +7,9 @@ description: |-
 # google_storage_control_folder_intelligence_config
 
 Use this data source to get information about a Folder Storage Intelligence config resource.
-See [the official documentation](https://cloud.google.com/storage/docs/storage-intelligence/overview#resource)
+See [the official documentation](https://docs.cloud.google.com/storage/docs/storage-intelligence/overview#resource)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/intelligenceConfig).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/intelligenceConfig).
 
 
 ## Example Usage

@@ -122,7 +122,7 @@ func (c *Converter) AddResourceChanges(changes []*tfjson.ResourceChange) error {
 
 		// Skip unsupported resources
 		if _, ok := c.converters[rc.Type]; !ok {
-			c.errorLogger.Debug(fmt.Sprintf("%s: resource type cannot be converted for CAI-based policies: %s. For details, see https://cloud.google.com/docs/terraform/policy-validation/create-cai-constraints#supported_resources", rc.Address, rc.Type))
+			c.errorLogger.Debug(fmt.Sprintf("%s: resource type cannot be converted for CAI-based policies: %s. For details, see https://docs.cloud.google.com/docs/terraform/policy-validation/create-cai-constraints#supported_resources", rc.Address, rc.Type))
 			continue
 		}
 

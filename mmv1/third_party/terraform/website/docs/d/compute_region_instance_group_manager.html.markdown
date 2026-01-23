@@ -7,8 +7,8 @@ Get a Compute Region Instance Group within GCE.
 # google_compute_region_instance_group_manager
 
 Get a Compute Region Instance Group Manager within GCE.
-For more information, see [the official documentation](https://cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups)
-and [API](https://cloud.google.com/compute/docs/reference/rest/v1/regionInstanceGroupManagers)
+For more information, see [the official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups)
+and [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionInstanceGroupManagers)
 
 ## Example Usage
 

@@ -8,9 +8,9 @@ description: |-
 
 To get more information about RouterNat, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/routers)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/router/docs/)
+    * [Official Documentation](https://docs.cloud.google.com/router/docs/)
 
 ## Example Usage
 

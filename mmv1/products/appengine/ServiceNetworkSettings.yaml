@@ -18,7 +18,7 @@ description: |
   A NetworkSettings resource is a container for ingress settings for a version or service.
 references:
   guides:
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
 docs:
 id_format: 'apps/{{project}}/services/{{service}}'
 base_url: 'apps/{{project}}/services'

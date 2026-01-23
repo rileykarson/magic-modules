@@ -30,10 +30,10 @@ description: |
   with the lifecycle `replace_triggered_by` method, with the passed Instance's ID.
 references:
   guides:
-    'Add instances': 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/addInstances'
-    'Remove instances': 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/removeInstances'
-    'List instances': 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/listInstances'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroups'
+    'Add instances': 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/addInstances'
+    'Remove instances': 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/removeInstances'
+    'List instances': 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroups/listInstances'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroups'
 docs:
 id_format: '{{project}}/{{zone}}/{{instance_group}}/{{instance}}'
 base_url: 'projects/{{project}}/zones/{{zone}}/instanceGroups/{{instance_group}}'

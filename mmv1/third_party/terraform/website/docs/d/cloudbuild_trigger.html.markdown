@@ -8,9 +8,9 @@ description: |-
 
 To get more information about Cloudbuild Trigger, see:
 
-* [API documentation](https://cloud.google.com/build/docs/api/reference/rest/v1/projects.triggers)
+* [API documentation](https://docs.cloud.google.com/build/docs/api/reference/rest/v1/projects.triggers)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/build/docs/automating-builds/create-manage-triggers)
+    * [Official Documentation](https://docs.cloud.google.com/build/docs/automating-builds/create-manage-triggers)
 
 ## Example Usage
 

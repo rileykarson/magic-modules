@@ -21,12 +21,12 @@ description: |
   ~> **Note:** google_compute_https_health_check is a legacy health check.
   The newer [google_compute_health_check](/docs/providers/google/r/compute_health_check.html)
   should be preferred for all uses except
-  [Network Load Balancers](https://cloud.google.com/compute/docs/load-balancing/network/)
+  [Network Load Balancers](https://docs.cloud.google.com/compute/docs/load-balancing/network/)
   which still require the legacy version.
 references:
   guides:
-    'Adding Health Checks': 'https://cloud.google.com/compute/docs/load-balancing/health-checks#legacy_health_checks'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/httpsHealthChecks'
+    'Adding Health Checks': 'https://docs.cloud.google.com/compute/docs/load-balancing/health-checks#legacy_health_checks'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/httpsHealthChecks'
 docs:
 base_url: 'projects/{{project}}/global/httpsHealthChecks'
 has_self_link: true

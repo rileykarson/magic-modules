@@ -17,8 +17,8 @@ description: |
   Flows represents the conversation flows when you build your chatbot agent.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows'
 docs:
 id_format: '{{parent}}/flows/{{name}}'
 base_url: '{{parent}}/flows'
@@ -63,7 +63,7 @@ examples:
 virtual_fields:
   - name: 'is_default_start_flow'
     description: |
-      Marks this as the [Default Start Flow](https://cloud.google.com/dialogflow/cx/docs/concept/flow#start) for an agent. When you create an agent, the Default Start Flow is created automatically.
+      Marks this as the [Default Start Flow](https://docs.cloud.google.com/dialogflow/cx/docs/concept/flow#start) for an agent. When you create an agent, the Default Start Flow is created automatically.
       The Default Start Flow cannot be deleted; deleting the `google_dialogflow_cx_flow` resource does nothing to the underlying GCP resources.
 
       ~> Avoid having multiple `google_dialogflow_cx_flow` resources linked to the same agent with `is_default_start_flow = true` because they will compete to control a single Default Start Flow resource in GCP.
@@ -302,7 +302,7 @@ properties:
                     type: String
                     description: |
                       A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                      See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                      See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                     custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                     custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -501,7 +501,7 @@ properties:
                     type: String
                     description: |
                       A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                      See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                      See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                     custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                     custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -603,7 +603,7 @@ properties:
           - name: 'models'
             type: KeyValuePairs
             description: |
-              Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://cloud.google.com/dialogflow/cx/docs/concept/speech-models).
+              Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://docs.cloud.google.com/dialogflow/cx/docs/concept/speech-models).
               An object containing a list of **"key": value** pairs. Example: **{ "name": "wrench", "mass": "1.3kg", "count": "3" }**.
       - name: 'dtmfSettings'
         type: NestedObject
@@ -840,7 +840,7 @@ properties:
                   send_empty_value: true
                   properties: []  # Meant to be an empty object with no properties.
                 # Although ResponseMessage has a field named "toolCall", we can't include it here because it references the Tool resource, which hasn't been available on Terraform.
-                # See https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3beta1/ResponseMessage
+                # See https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3beta1/ResponseMessage
           - name: 'webhook'
             type: String
             description: |
@@ -884,7 +884,7 @@ properties:
                   type: String
                   description: |
                     A JSON encoded list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
-                    See [Case](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
+                    See [Case](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/Fulfillment#case) for the schema.
                   state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
                   custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
                   custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'
@@ -935,7 +935,7 @@ properties:
                   - name: 'models'
                     type: KeyValuePairs
                     description: |
-                      Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://cloud.google.com/dialogflow/cx/docs/concept/speech-models).
+                      Mapping from language to Speech-to-Text model. The mapped Speech-to-Text model will be selected for requests from its corresponding language. For more information, see [Speech models](https://docs.cloud.google.com/dialogflow/cx/docs/concept/speech-models).
                       An object containing a list of **"key": value** pairs. Example: **{ "name": "wrench", "mass": "1.3kg", "count": "3" }**.
               - name: 'dtmfSettings'
                 type: NestedObject

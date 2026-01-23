@@ -21,8 +21,8 @@ api_variant_patterns:
 description: 'Describes a view over log entries in a bucket.'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/logging/docs/apis'
-  api: 'https://cloud.google.com/logging/docs/reference/v2/rest/v2/projects.locations.buckets.views'
+    'Official Documentation': 'https://docs.cloud.google.com/logging/docs/apis'
+  api: 'https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/projects.locations.buckets.views'
 docs:
 base_url: '{{parent}}/locations/{{location}}/buckets/{{bucket}}/views'
 self_link: '{{parent}}/locations/{{location}}/buckets/{{bucket}}/views/{{name}}'

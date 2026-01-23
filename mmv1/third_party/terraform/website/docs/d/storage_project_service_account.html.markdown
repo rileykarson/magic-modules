@@ -6,21 +6,21 @@ description: |-
 
 # google_storage_project_service_account
 
-Get the email address of a project's unique [automatic Google Cloud Storage service account](https://cloud.google.com/storage/docs/projects#service-accounts).
+Get the email address of a project's unique [automatic Google Cloud Storage service account](https://docs.cloud.google.com/storage/docs/projects#service-accounts).
 
 For each Google Cloud project, Google maintains a unique service account which
 is used as the identity for various Google Cloud Storage operations, including
 operations involving
-[customer-managed encryption keys](https://cloud.google.com/storage/docs/encryption/customer-managed-keys)
+[customer-managed encryption keys](https://docs.cloud.google.com/storage/docs/encryption/customer-managed-keys)
 and those involving
-[storage notifications to pub/sub](https://cloud.google.com/storage/docs/gsutil/commands/notification).
+[storage notifications to pub/sub](https://docs.cloud.google.com/storage/docs/gsutil/commands/notification).
 This automatic Google service account requires access to the relevant Cloud KMS keys or pub/sub topics, respectively, in order for Cloud Storage to use
 these customer-managed resources.
 
 The service account has a well-known, documented naming format which is parameterised on the numeric Google project ID.
-However, as noted in [the docs](https://cloud.google.com/storage/docs/projects#service-accounts), it is only created when certain relevant actions occur which
+However, as noted in [the docs](https://docs.cloud.google.com/storage/docs/projects#service-accounts), it is only created when certain relevant actions occur which
 presuppose its existence.
-These actions include calling a [Cloud Storage API endpoint](https://cloud.google.com/storage/docs/json_api/v1/projects/serviceAccount/get) to yield the
+These actions include calling a [Cloud Storage API endpoint](https://docs.cloud.google.com/storage/docs/json_api/v1/projects/serviceAccount/get) to yield the
 service account's identity, or performing some operations in the UI which must use the service account's identity, such as attempting to list Cloud KMS keys
 on the bucket creation page.
 
@@ -37,7 +37,7 @@ Terraform apply errors in cases where the service account does not yet exist.
    See the examples here and in the [`google_storage_notification`](/docs/providers/google/r/storage_notification.html) resource.
 
 For more information see
-[the API reference](https://cloud.google.com/storage/docs/json_api/v1/projects/serviceAccount).
+[the API reference](https://docs.cloud.google.com/storage/docs/json_api/v1/projects/serviceAccount).
 
 ## Example Usage – pub/sub notifications
 

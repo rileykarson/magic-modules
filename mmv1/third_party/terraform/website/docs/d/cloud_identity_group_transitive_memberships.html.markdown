@@ -10,9 +10,9 @@ Use this data source to get list of the Cloud Identity Group Memberships within 
 
 To get more information about TransitiveGroupMembership, see:
 
-* [API documentation](https://cloud.google.com/identity/docs/reference/rest/v1/groups.memberships/searchTransitiveMemberships)
+* [API documentation](https://docs.cloud.google.com/identity/docs/reference/rest/v1/groups.memberships/searchTransitiveMemberships)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/identity/docs/how-to/memberships-google-groups)
+    * [Official Documentation](https://docs.cloud.google.com/identity/docs/how-to/memberships-google-groups)
 
 ## Example Usage
 

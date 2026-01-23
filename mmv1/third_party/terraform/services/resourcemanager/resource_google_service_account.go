@@ -156,7 +156,7 @@ func resourceGoogleServiceAccountCreate(d *schema.ResourceData, meta interface{}
 	populateResourceData(d, sa)
 
 	// We poll until the resource is found due to eventual consistency issue
-	// on part of the api https://cloud.google.com/iam/docs/overview#consistency.
+	// on part of the api https://docs.cloud.google.com/iam/docs/overview#consistency.
 	// Wait for at least 3 successful responses in a row to ensure result is consistent.
 	// IAM API returns 403 when the queried SA is not found, so we must ignore both 404 & 403 errors
 	transport_tpg.PollingWaitTime(

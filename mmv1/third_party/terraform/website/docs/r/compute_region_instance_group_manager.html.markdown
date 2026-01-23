@@ -12,9 +12,9 @@ template.
 
 To get more information about regionInstanceGroupManagers, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/latest/regionInstanceGroupManagers)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/latest/regionInstanceGroupManagers)
 * How-to Guides
-    * [Regional Instance Groups Guide](https://cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups)
+    * [Regional Instance Groups Guide](https://docs.cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups)
 
 ~> **Note:** Use [google_compute_instance_group_manager](/docs/providers/google/r/compute_instance_group_manager.html) to create a zonal instance group manager.
 
@@ -176,33 +176,33 @@ The following arguments are supported:
 ---
 
 * `auto_healing_policies` - (Optional) The autohealing policies for this managed instance
-group. You can specify only one value. Structure is documented below. For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances#monitoring_groups).
+group. You can specify only one value. Structure is documented below. For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances#monitoring_groups).
 
 * `all_instances_config` - (Optional)
   Properties to set on all instances in the group. After setting
   allInstancesConfig on the group, you must update the group's instances to
   apply the configuration.
 
-* `standby_policy` - (Optional) The standby policy for stopped and suspended instances. Structure is documented below. For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/suspended-and-stopped-vms-in-mig).
+* `standby_policy` - (Optional) The standby policy for stopped and suspended instances. Structure is documented below. For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/suspended-and-stopped-vms-in-mig).
 
 * `target_suspended_size` - (Optional) The target number of suspended instances for this managed instance group.
 
 * `target_stopped_size` - (Optional) The target number of stopped instances for this managed instance group.
 
-* `update_policy` - (Optional) The update policy for this managed instance group. Structure is [documented below](#nested_update_policy). For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/updating-managed-instance-groups) and [API](https://cloud.google.com/compute/docs/reference/rest/beta/regionInstanceGroupManagers/patch)
+* `update_policy` - (Optional) The update policy for this managed instance group. Structure is [documented below](#nested_update_policy). For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/updating-managed-instance-groups) and [API](https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionInstanceGroupManagers/patch)
 
 * `distribution_policy_zones` - (Optional) The distribution policy for this managed instance
-group. You can specify one or more values. For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups#selectingzones).
+group. You can specify one or more values. For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/distributing-instances-with-regional-instance-groups#selectingzones).
 
-* `distribution_policy_target_shape` - (Optional) The shape to which the group converges either proactively or on resize events (depending on the value set in update_policy.0.instance_redistribution_type). For more information see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/regional-mig-distribution-shape).
+* `distribution_policy_target_shape` - (Optional) The shape to which the group converges either proactively or on resize events (depending on the value set in update_policy.0.instance_redistribution_type). For more information see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/regional-mig-distribution-shape).
 
-* `stateful_disk` - (Optional) Disks created on the instances that will be preserved on instance delete, update, etc. Structure is [documented below](#nested_stateful_disk). For more information see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/configuring-stateful-disks-in-migs). Proactive cross zone instance redistribution must be disabled before you can update stateful disks on existing instance group managers. This can be controlled via the `update_policy`.
+* `stateful_disk` - (Optional) Disks created on the instances that will be preserved on instance delete, update, etc. Structure is [documented below](#nested_stateful_disk). For more information see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/configuring-stateful-disks-in-migs). Proactive cross zone instance redistribution must be disabled before you can update stateful disks on existing instance group managers. This can be controlled via the `update_policy`.
 
 * `stateful_internal_ip` - (Optional) Internal network IPs assigned to the instances that will be preserved on instance delete, update, etc. This map is keyed with the network interface name. Structure is [documented below](#nested_stateful_internal_ip).
 
 * `stateful_external_ip` - (Optional) External network IPs assigned to the instances that will be preserved on instance delete, update, etc. This map is keyed with the network interface name. Structure is [documented below](#nested_stateful_external_ip).
 
-* `params` - (Optional [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Input only additional params for instance group manager creation. Structure is [documented below](#nested_params). For more information, see [API](https://cloud.google.com/compute/docs/reference/rest/beta/instanceGroupManagers/insert).
+* `params` - (Optional [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Input only additional params for instance group manager creation. Structure is [documented below](#nested_params). For more information, see [API](https://docs.cloud.google.com/compute/docs/reference/rest/beta/instanceGroupManagers/insert).
 
 * `instance_flexibility_policy` - (Optional) The flexibility policy for managed instance group. Instance flexibility allows managed instance group to create VMs from multiple types of machines. Instance flexibility configuration on managed instance group overrides instance template configuration. Structure is [documented below](#nested_instance_flexibility_policy).
 - - -
@@ -365,8 +365,8 @@ disks {
 *  `architecture` - (Optional), The architecture of the image. Allowed values are ARM64 or X86_64.
 *  `disk_size_gb` - (Optional), The size of the image in gigabytes. If not specified, it will inherit the size of its base image. For SCRATCH disks, the size must be one of 375 or 3000 GB, with a default of 375 GB.
 *  `disk_type` - (Optional), The Google Compute Engine disk type. Such as "pd-ssd", "local-ssd", "pd-balanced" or "pd-standard".
-*  `provisioned_iops` - (Optional), Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle. For more details, see the [Extreme persistent disk documentation](https://cloud.google.com/compute/docs/disks/extreme-persistent-disk) or the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks) depending on the selected disk_type.
-*  `provisioned_throughput` - (Optional), Indicates how much throughput to provision for the disk, in MB/s. This sets the amount of data that can be read or written from the disk per second. Values must greater than or equal to 1. For more details, see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+*  `provisioned_iops` - (Optional), Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle. For more details, see the [Extreme persistent disk documentation](https://docs.cloud.google.com/compute/docs/disks/extreme-persistent-disk) or the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks) depending on the selected disk_type.
+*  `provisioned_throughput` - (Optional), Indicates how much throughput to provision for the disk, in MB/s. This sets the amount of data that can be read or written from the disk per second. Values must greater than or equal to 1. For more details, see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).
 *  `interface` - (Optional), Specifies the disk interface to use for attaching this disk.
 *  `mode` - (Optional), The mode in which to attach this disk, either READ_WRITE or READ_ONLY. If you are attaching or creating a boot disk, this must read-write mode.
 *  `source` - (Optional), The name (not self_link) of the disk (such as those managed by google_compute_disk) to attach. ~> Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.
@@ -502,7 +502,7 @@ all_instances_config {
 }
 ```
 
-* `metadata` - (Optional), The metadata key-value pairs that you want to patch onto the instance. For more information, see [Project and instance metadata](https://cloud.google.com/compute/docs/metadata#project_and_instance_metadata).
+* `metadata` - (Optional), The metadata key-value pairs that you want to patch onto the instance. For more information, see [Project and instance metadata](https://docs.cloud.google.com/compute/docs/metadata#project_and_instance_metadata).
 
 * `labels` - (Optional), The label key-value pairs that you want to patch onto the instance.
 
@@ -591,7 +591,7 @@ params{
 }
 ```
 
-* `resource_manager_tags` - (Optional) Resource manager tags to bind to the managed instance group. The tags are key-value pairs. Keys must be in the format tagKeys/123 and values in the format tagValues/456. For more information, see [Manage tags for resources](https://cloud.google.com/compute/docs/tag-resources)
+* `resource_manager_tags` - (Optional) Resource manager tags to bind to the managed instance group. The tags are key-value pairs. Keys must be in the format tagKeys/123 and values in the format tagValues/456. For more information, see [Manage tags for resources](https://docs.cloud.google.com/compute/docs/tag-resources)
 
 ## Attributes Reference
 

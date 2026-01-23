@@ -23,8 +23,8 @@ description: |
   tools.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/instance-groups/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroup'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/instance-groups/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroup'
 docs:
 id_format: 'projects/{{project}}/zones/{{zone}}/instanceGroups/{{group}}/{{port}}/{{name}}'
 base_url: 'projects/{{project}}/zones/{{zone}}/instanceGroups/{{group}}'

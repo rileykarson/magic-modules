@@ -7,9 +7,9 @@ description: |-
 # google_kms_key_rings
 
 Provides access to all Google Cloud Platform KMS CryptoKeyRings in a set location. For more information see
-[the official documentation](https://cloud.google.com/kms/docs/resource-hierarchy#key_rings)
+[the official documentation](https://docs.cloud.google.com/kms/docs/resource-hierarchy#key_rings)
 and
-[API](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings).
+[API](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings).
 
 A key ring organizes keys in a specific Google Cloud location and lets you manage access control on groups of keys. A key ring's name does not need to be unique across a Google Cloud project, but must be unique within a given location. After creation, a key ring cannot be deleted. Key rings don't incur any costs.
 
@@ -43,7 +43,7 @@ Example filter values if filtering on name. Note: names take the form projects/{
 * `"name:my-key-"` will retrieve key rings that contain "my-key-" anywhere in their name.
 * `"name=projects/my-project/locations/global/keyRings/my-key-ring"` will only retrieve a key with that exact name.
 
-[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
+[See the documentation about using filters](https://docs.cloud.google.com/kms/docs/sorting-and-filtering)
 
 
 

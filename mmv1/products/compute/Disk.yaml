@@ -32,8 +32,8 @@ description: |
   affordable storage with consistent performance characteristics.
 references:
   guides:
-    'Adding a persistent disk': 'https://cloud.google.com/compute/docs/disks/add-persistent-disk'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/disks'
+    'Adding a persistent disk': 'https://docs.cloud.google.com/compute/docs/disks/add-persistent-disk'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/disks'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/disks'
 has_self_link: true
@@ -138,7 +138,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
         api_name: kmsKeyName
         diff_suppress_func: 'tpgresource.CompareSelfLinkRelativePaths'
       - name: 'kmsKeyServiceAccount'
@@ -221,7 +221,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
         api_name: kmsKeyName
         diff_suppress_func: 'tpgresource.CompareSelfLinkRelativePaths'
       - name: 'kmsKeyServiceAccount'
@@ -250,7 +250,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
         api_name: kmsKeyName
         diff_suppress_func: 'tpgresource.CompareSelfLinkRelativePaths'
       - name: 'sha256'
@@ -528,7 +528,7 @@ properties:
         - name: 'type'
           type: String
           description: |
-            The type of supported feature. Read [Enabling guest operating system features](https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
+            The type of supported feature. Read [Enabling guest operating system features](https://docs.cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
           required: true
   - name: 'licenses'
     type: Array

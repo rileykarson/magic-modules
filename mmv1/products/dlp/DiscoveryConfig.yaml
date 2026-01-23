@@ -19,8 +19,8 @@ description: |
   Configuration for discovery to scan resources for profile generation. Only one discovery configuration may exist per organization, folder, or project.
 references:
   guides:
-    'Schedule inspection scan': 'https://cloud.google.com/dlp/docs/schedule-inspection-scan'
-  api: 'https://cloud.google.com/dlp/docs/reference/rest/v2/projects.locations.discoveryConfigs'
+    'Schedule inspection scan': 'https://docs.cloud.google.com/dlp/docs/schedule-inspection-scan'
+  api: 'https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.locations.discoveryConfigs'
 docs:
 id_format: '{{parent}}/discoveryConfigs/{{name}}'
 base_url: '{{parent}}/discoveryConfigs'
@@ -270,7 +270,7 @@ properties:
                   - 'PROFILE_GENERATION_UPDATE'
             - name: 'lowerDataRiskToLow'
               type: Boolean
-              description: Whether applying a tag to a resource should lower the risk of the profile for that resource. For example, in conjunction with an [IAM deny policy](https://cloud.google.com/iam/docs/deny-overview), you can deny all principals a permission if a tag value is present, mitigating the risk of the resource. This also lowers the data risk of resources at the lower levels of the resource hierarchy. For example, reducing the data risk of a table data profile also reduces the data risk of the constituent column data profiles.
+              description: Whether applying a tag to a resource should lower the risk of the profile for that resource. For example, in conjunction with an [IAM deny policy](https://docs.cloud.google.com/iam/docs/deny-overview), you can deny all principals a permission if a tag value is present, mitigating the risk of the resource. This also lowers the data risk of resources at the lower levels of the resource hierarchy. For example, reducing the data risk of a table data profile also reduces the data risk of the constituent column data profiles.
         - name: 'publishToDataplexCatalog'
           type: NestedObject
           description: Publish a portion of each profile to Dataplex Universal Catalog with the aspect type Sensitive Data Protection Profile.
@@ -323,7 +323,7 @@ properties:
                   send_empty_value: true
                   allow_empty_object: true
                   properties:
-                    # Meant to be an empty object with no properties - see here : https://cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#allotherbigquerytables
+                    # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#allotherbigquerytables
                     []
                 - name: 'tableReference'
                   type: NestedObject
@@ -440,7 +440,7 @@ properties:
               send_empty_value: true
               allow_empty_object: true
               properties:
-                # Meant to be an empty object with no properties - see here : https://cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#disabled
+                # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#disabled
                 []
         - name: 'cloudSqlTarget'
           type: NestedObject
@@ -591,7 +591,7 @@ properties:
           send_empty_value: true
           allow_empty_object: true
           properties:
-            # Meant to be an empty object with no properties - see here : https://cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#DiscoveryConfig.SecretsDiscoveryTarget
+            # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/sensitive-data-protection/docs/reference/rest/v2/organizations.locations.discoveryConfigs#DiscoveryConfig.SecretsDiscoveryTarget
             []
         - name: 'cloudStorageTarget'
           type: NestedObject

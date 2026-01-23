@@ -271,7 +271,7 @@ type UrlData struct {
 }
 
 // SigningString creates a string representation of the UrlData in a form ready for signing:
-// see https://cloud.google.com/storage/docs/access-control/create-signed-urls-program
+// see https://docs.cloud.google.com/storage/docs/access-control/create-signed-urls-program
 // Example output:
 // -------------------
 // GET
@@ -351,7 +351,7 @@ func (u *UrlData) SignedUrl(baseUrl string) (string, error) {
 	}
 
 	// build url
-	// https://cloud.google.com/storage/docs/access-control/create-signed-urls-program
+	// https://docs.cloud.google.com/storage/docs/access-control/create-signed-urls-program
 	var urlBuffer bytes.Buffer
 	urlBuffer.WriteString(baseUrl)
 	urlBuffer.WriteString(u.Path)

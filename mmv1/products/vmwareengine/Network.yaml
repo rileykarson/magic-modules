@@ -18,7 +18,7 @@ description: |
   Provides connectivity for VMware Engine private clouds.
 references:
   guides:
-  api: 'https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.vmwareEngineNetworks'
+  api: 'https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.vmwareEngineNetworks'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/vmwareEngineNetworks'
 self_link: 'projects/{{project}}/locations/{{location}}/vmwareEngineNetworks/{{name}}'

@@ -24,8 +24,8 @@ description: |
   by the child folders and projects.
 references:
   guides:
-    'Overview of custom modules for Security Health Analytics': 'https://cloud.google.com/security-command-center/docs/custom-modules-sha-overview'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/security-center-management/rest/v1/folders.locations.securityHealthAnalyticsCustomModules'
+    'Overview of custom modules for Security Health Analytics': 'https://docs.cloud.google.com/security-command-center/docs/custom-modules-sha-overview'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/security-center-management/rest/v1/folders.locations.securityHealthAnalyticsCustomModules'
 docs:
 base_url: 'folders/{{folder}}/locations/{{location}}/securityHealthAnalyticsCustomModules'
 self_link: 'folders/{{folder}}/locations/{{location}}/securityHealthAnalyticsCustomModules/{{name}}'

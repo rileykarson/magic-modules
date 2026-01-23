@@ -17,8 +17,8 @@ description: |
   An `AppGroup` in Apigee.
 references:
   guides:
-    "Organizing client app ownership": "https://cloud.google.com/apigee/docs/api-platform/publish/organizing-client-app-ownership"
-  api: "https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.appgroups"
+    "Organizing client app ownership": "https://docs.cloud.google.com/apigee/docs/api-platform/publish/organizing-client-app-ownership"
+  api: "https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.appgroups"
 docs:
 base_url: "{{org_id}}/appgroups"
 self_link: "{{org_id}}/appgroups/{{name}}"

@@ -19,8 +19,8 @@ description: |
 
 references:
   guides:
-    'Create a WireGroup': 'https://cloud.google.com/network-connectivity/docs/interconnect/how-to/cross-site/modify-network#add-wire-group'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/wireGroups'
+    'Create a WireGroup': 'https://docs.cloud.google.com/network-connectivity/docs/interconnect/how-to/cross-site/modify-network#add-wire-group'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/wireGroups'
 docs:
 id_format: 'projects/{{project}}/global/crossSiteNetworks/{{cross_site_network}}/wireGroups/{{name}}'
 base_url: 'projects/{{project}}/global/crossSiteNetworks/{{cross_site_network}}/wireGroups'

@@ -22,9 +22,9 @@ description: |
   ~> **NOTE**: Network endpoints cannot be created outside of a network endpoint group.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/'
-    'Internet NEGs Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/internet-neg-concepts'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/'
+    'Internet NEGs Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/internet-neg-concepts'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups'
 docs:
 id_format: '{{project}}/{{region}}/{{region_network_endpoint_group}}/{{ip_address}}/{{fqdn}}/{{port}}'
 base_url: 'projects/{{project}}/regions/{{region}}/networkEndpointGroups/{{region_network_endpoint_group}}'

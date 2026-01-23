@@ -17,8 +17,8 @@ description: |
   A named resource to which messages are sent by publishers.
 references:
   guides:
-    'Managing Topics': 'https://cloud.google.com/pubsub/docs/admin#managing_topics'
-  api: 'https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.topics'
+    'Managing Topics': 'https://docs.cloud.google.com/pubsub/docs/admin#managing_topics'
+  api: 'https://docs.cloud.google.com/pubsub/docs/reference/rest/v1/projects.topics'
 docs:
   note: |
     You can retrieve the email of the Google Managed Pub/Sub Service Account used for forwarding
@@ -259,7 +259,7 @@ properties:
             description: |
               Cloud Storage bucket. The bucket name must be without any
               prefix like "gs://". See the bucket naming requirements:
-              https://cloud.google.com/storage/docs/buckets#naming.
+              https://docs.cloud.google.com/storage/docs/buckets#naming.
             required: true
           - name: 'textFormat'
             type: NestedObject
@@ -298,7 +298,7 @@ properties:
             type: NestedObject
             description: |
               Configuration for reading Cloud Storage data written via Cloud Storage
-              subscriptions(See https://cloud.google.com/pubsub/docs/cloudstorage). The
+              subscriptions(See https://docs.cloud.google.com/pubsub/docs/cloudstorage). The
               data and attributes fields of the originally exported Pub/Sub message
               will be restored when publishing.
             send_empty_value: true
@@ -322,7 +322,7 @@ properties:
             description: |
               Glob pattern used to match objects that will be ingested. If unset, all
               objects will be ingested. See the supported patterns:
-              https://cloud.google.com/storage/docs/json_api/v1/objects/list#list-objects-and-prefixes-using-glob
+              https://docs.cloud.google.com/storage/docs/json_api/v1/objects/list#list-objects-and-prefixes-using-glob
             required: false
       - name: 'platformLogsSettings'
         type: NestedObject

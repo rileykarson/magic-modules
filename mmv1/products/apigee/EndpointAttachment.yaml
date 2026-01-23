@@ -17,8 +17,8 @@ description: |
   Apigee Endpoint Attachment.
 references:
   guides:
-    'Creating an environment': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.endpointAttachments/create'
+    'Creating an environment': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.endpointAttachments/create'
 docs:
 base_url: 'endpointAttachments'
 self_link: '{{org_id}}/endpointAttachments/{{endpoint_attachment_id}}'

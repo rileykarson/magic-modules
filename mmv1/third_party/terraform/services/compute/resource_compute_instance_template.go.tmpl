@@ -103,7 +103,7 @@ func ResourceComputeInstanceTemplate() *schema.Resource {
 				ForceNew:    true,
 				Description: `Creates a unique name beginning with the specified prefix. Conflicts with name. Max length is 54 characters. Prefixes with lengths longer than 37 characters will use a shortened UUID that will be more prone to collisions.`,
 				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
-					// https://cloud.google.com/compute/docs/reference/latest/instanceTemplates#resource
+					// https://docs.cloud.google.com/compute/docs/reference/latest/instanceTemplates#resource
 					// shortened uuid is 9 characters, limit the prefix to 55.
 					value := v.(string)
 					if len(value) > 54 {
@@ -191,7 +191,7 @@ func ResourceComputeInstanceTemplate() *schema.Resource {
 							Optional:    true,
 							ForceNew:    true,
 							Computed:    true,
-							Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle. For more details, see the [Extreme persistent disk documentation](https://cloud.google.com/compute/docs/disks/extreme-persistent-disk) or the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks) depending on the selected disk_type.`,
+							Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle. For more details, see the [Extreme persistent disk documentation](https://docs.cloud.google.com/compute/docs/disks/extreme-persistent-disk) or the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks) depending on the selected disk_type.`,
 						},
 
 						"provisioned_throughput": {
@@ -199,7 +199,7 @@ func ResourceComputeInstanceTemplate() *schema.Resource {
 							Optional:    true,
 							ForceNew:    true,
 							Computed:    true,
-							Description: `Indicates how much throughput to provision for the disk, in MB/s. This sets the amount of data that can be read or written from the disk per second. Values must greater than or equal to 1. For more details, see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).`,
+							Description: `Indicates how much throughput to provision for the disk, in MB/s. This sets the amount of data that can be read or written from the disk per second. Values must greater than or equal to 1. For more details, see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).`,
 						},
 
 						"resource_manager_tags": {

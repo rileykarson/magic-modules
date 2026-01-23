@@ -21,8 +21,8 @@ description:
   from users over the connection.\n"
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
-  api: 'https://cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appconnectors'
+    'Official Documentation': 'https://docs.cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
+  api: 'https://docs.cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appconnectors'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/appConnectors'
 self_link: 'projects/{{project}}/locations/{{region}}/appConnectors/{{name}}'

@@ -17,8 +17,8 @@ description: |
   A location is used to initialize a project.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/document-warehouse/docs/overview'
-  api: 'https://cloud.google.com/document-warehouse/docs/reference/rest/v1/projects.locations'
+    'Official Documentation': 'https://docs.cloud.google.com/document-warehouse/docs/overview'
+  api: 'https://docs.cloud.google.com/document-warehouse/docs/reference/rest/v1/projects.locations'
 docs:
 id_format: 'projects/{{project_number}}/locations/{{location}}'
 base_url: 'projects/{{project_number}}/locations/{{location}}:initialize'

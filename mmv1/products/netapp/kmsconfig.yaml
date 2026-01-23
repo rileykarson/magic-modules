@@ -22,10 +22,10 @@ description: |
 references:
   guides:
     # Link to quickstart in the API's Guides section. For example:
-    # 'Create and connect to a database': 'https://cloud.google.com/alloydb/docs/quickstart/create-and-connect'
-    'Documentation': 'https://cloud.google.com/netapp/volumes/docs/configure-and-use/cmek/cmek-overview'
+    # 'Create and connect to a database': 'https://docs.cloud.google.com/alloydb/docs/quickstart/create-and-connect'
+    'Documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/cmek/cmek-overview'
   # Link to the REST API reference for the resource. For example,
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.kmsConfigs'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.kmsConfigs'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/kmsConfigs/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/kmsConfigs'

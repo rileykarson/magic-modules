@@ -160,7 +160,7 @@ available (GA) products and features.
 Beta GCP features have no deprecation policy and no SLA, but are otherwise considered to be feature-complete
 with only minor outstanding issues after their Alpha period. Beta is when GCP
 features are publicly announced, and is when they generally become publicly
-available. For more information see [the official documentation on GCP launch stages](https://cloud.google.com/terms/launch-stages).
+available. For more information see [the official documentation on GCP launch stages](https://docs.cloud.google.com/terms/launch-stages).
 
 Because the API for beta features can change before their GA launch, there may
 be breaking changes in the `google-beta` provider in minor release versions.

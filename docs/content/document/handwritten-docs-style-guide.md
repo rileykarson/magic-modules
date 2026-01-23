@@ -53,9 +53,9 @@ Every resource or datasource documentation page must include the following secti
 
    To get more information about Cloud Run, see:
 
-   * [API documentation](https://cloud.google.com/run/docs/reference/rest/v1/projects.locations)
+   * [API documentation](https://docs.cloud.google.com/run/docs/reference/rest/v1/projects.locations)
    * How-to Guides
-       * [Official Documentation](https://cloud.google.com/run/docs/)
+       * [Official Documentation](https://docs.cloud.google.com/run/docs/)
    ```
 
    For beta-only resources or data sources, add the following snippet at the end of this section: 

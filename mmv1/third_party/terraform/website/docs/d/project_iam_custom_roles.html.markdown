@@ -8,8 +8,8 @@ description: |-
 
 Get information about Google Cloud IAM Custom Roles from a project.
 Note that you must have the `roles/iam.roleViewer`.
-See [the official documentation](https://cloud.google.com/iam/docs/creating-custom-roles)
-and [API](https://cloud.google.com/iam/docs/reference/rest/v1/projects.roles/list).
+See [the official documentation](https://docs.cloud.google.com/iam/docs/creating-custom-roles)
+and [API](https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.roles/list).
 
 ```hcl
 data "google_project_iam_custom_roles" "example" {
@@ -49,6 +49,6 @@ The following attributes are exported:
 
 * `role_id` - The camel case role id used for this role.
 
-* `stage` - The current launch stage of the role. List of possible stages is [here](https://cloud.google.com/iam/reference/rest/v1/organizations.roles#Role.RoleLaunchStage).
+* `stage` - The current launch stage of the role. List of possible stages is [here](https://docs.cloud.google.com/iam/reference/rest/v1/organizations.roles#Role.RoleLaunchStage).
 
 * `title` - A human-readable title for the role.

@@ -16,8 +16,8 @@ name: DataAccessScope
 description: A DataAccessScope is a boolean expression of data access labels used to restrict access to data for users.
 references:
   guides:
-    'Introduction to data RBAC': 'https://cloud.google.com/chronicle/docs/onboard/onboard-datarbac'
-  api: 'https://cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.dataAccessScopes'
+    'Introduction to data RBAC': 'https://docs.cloud.google.com/chronicle/docs/onboard/onboard-datarbac'
+  api: 'https://docs.cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.dataAccessScopes'
 base_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/dataAccessScopes
 self_link: projects/{{project}}/locations/{{location}}/instances/{{instance}}/dataAccessScopes/{{data_access_scope_id}}
 create_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/dataAccessScopes?dataAccessScopeId={{data_access_scope_id}}

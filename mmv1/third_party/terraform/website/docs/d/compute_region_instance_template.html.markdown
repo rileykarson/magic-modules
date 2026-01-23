@@ -7,9 +7,9 @@ description: |-
 # google_compute_region_instance_template
 
 Get information about a VM instance template resource within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/instance-templates)
+[the official documentation](https://docs.cloud.google.com/compute/docs/instance-templates)
 and
-[API](https://cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates).
+[API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates).
 
 ## Example Usage
 
@@ -33,7 +33,7 @@ The following arguments are supported:
 - `name` - (Optional) The name of the instance template. One of `name` or `filter` must be provided.
 
 - `filter` - (Optional) A filter to retrieve the instance templates.
-    See [API filter parameter documentation](https://cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates/list#body.QUERY_PARAMETERS.filter) for reference.
+    See [API filter parameter documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates/list#body.QUERY_PARAMETERS.filter) for reference.
     If multiple instance templates match, either adjust the filter or specify `most_recent`. One of `name` or `filter` must be provided.
 
 - `most_recent` - (Optional) If `filter` is provided, ensures the most recent template is returned when multiple instance templates match. One of `name` or `filter` must be provided.
@@ -101,15 +101,15 @@ The following arguments are supported:
 * `guest_accelerator` - List of the type and count of accelerator cards attached to the instance. Structure [documented below](#nested_guest_accelerator).
 
 * `min_cpu_platform` - Specifies a minimum CPU platform. Applicable values are the friendly names of CPU platforms, such as
-`Intel Haswell` or `Intel Skylake`. See the complete list [here](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform).
+`Intel Haswell` or `Intel Skylake`. See the complete list [here](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform).
 
-* `shielded_instance_config` - Enable [Shielded VM](https://cloud.google.com/security/shielded-cloud/shielded-vm) on this instance. Shielded VM provides verifiable integrity to prevent against malware and rootkits. Defaults to disabled. Structure is [documented below](#nested_shielded_instance_config).
-	**Note**: [`shielded_instance_config`](#shielded_instance_config) can only be used with boot images with shielded vm support. See the complete list [here](https://cloud.google.com/compute/docs/images#shielded-images).
+* `shielded_instance_config` - Enable [Shielded VM](https://docs.cloud.google.com/security/shielded-cloud/shielded-vm) on this instance. Shielded VM provides verifiable integrity to prevent against malware and rootkits. Defaults to disabled. Structure is [documented below](#nested_shielded_instance_config).
+	**Note**: [`shielded_instance_config`](#shielded_instance_config) can only be used with boot images with shielded vm support. See the complete list [here](https://docs.cloud.google.com/compute/docs/images#shielded-images).
 
-* `enable_display` - Enable [Virtual Displays](https://cloud.google.com/compute/docs/instances/enable-instance-virtual-display#verify_display_driver) on this instance.
+* `enable_display` - Enable [Virtual Displays](https://docs.cloud.google.com/compute/docs/instances/enable-instance-virtual-display#verify_display_driver) on this instance.
 **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true in order to update this field.
 
-* `confidential_instance_config` - Enable [Confidential Mode](https://cloud.google.com/compute/confidential-vm/docs/about-cvm) on this VM. Structure is [documented below](#nested_confidential_instance_config)
+* `confidential_instance_config` - Enable [Confidential Mode](https://docs.cloud.google.com/compute/confidential-vm/docs/about-cvm) on this VM. Structure is [documented below](#nested_confidential_instance_config)
 
 * `key_revocation_action_type` - Action to be taken when a customer's encryption key is revoked.
 
@@ -130,7 +130,7 @@ The following arguments are supported:
 * `provisioned_iops` - Indicates how many IOPS to provision for the disk. This
     sets the number of I/O operations per second that the disk can handle.
     Values must be between 10,000 and 120,000. For more details, see the
-    [Extreme persistent disk documentation](https://cloud.google.com/compute/docs/disks/extreme-persistent-disk).
+    [Extreme persistent disk documentation](https://docs.cloud.google.com/compute/docs/disks/extreme-persistent-disk).
 
 * `source_image` - The image from which to
     initialize this disk. This can be one of: the image's `self_link`,
@@ -138,7 +138,7 @@ The following arguments are supported:
     `projects/{project}/global/images/family/{family}`, `global/images/{image}`,
     `global/images/family/{family}`, `family/{family}`, `{project}/{family}`,
     `{project}/{image}`, `{family}`, or `{image}`.
-~> **Note:** Either `source` or `source_image` is **required** in a disk block unless the disk type is `local-ssd`. Check the API [docs](https://cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates/insert) for details.
+~> **Note:** Either `source` or `source_image` is **required** in a disk block unless the disk type is `local-ssd`. Check the API [docs](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates/insert) for details.
 
 * `interface` - Specifies the disk interface to use for attaching this disk,
     which is either SCSI or NVME. The default is SCSI. Persistent disks must always use SCSI
@@ -151,7 +151,7 @@ The following arguments are supported:
 
 * `source` - The name (**not self_link**)
     of the disk (such as those managed by `google_compute_disk`) to attach.
-~> **Note:** Either `source` or `source_image` is **required** in a disk block unless the disk type is `local-ssd`. Check the API [docs](https://cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates/insert) for details.
+~> **Note:** Either `source` or `source_image` is **required** in a disk block unless the disk type is `local-ssd`. Check the API [docs](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates/insert) for details.
 
 * `disk_type` - The GCE disk type. Such as `"pd-ssd"`, `"local-ssd"`,
     `"pd-balanced"` or `"pd-standard"`.
@@ -237,9 +237,9 @@ The `disk_encryption_key` block supports:
 
 * `scopes` - A list of service scopes. Both OAuth2 URLs and gcloud
     short names are supported. To allow full access to all Cloud APIs, use the
-    `cloud-platform` scope. See a complete list of scopes [here](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
+    `cloud-platform` scope. See a complete list of scopes [here](https://docs.cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).
 
-    The [service accounts documentation](https://cloud.google.com/compute/docs/access/service-accounts#accesscopesiam)
+    The [service accounts documentation](https://docs.cloud.google.com/compute/docs/access/service-accounts#accesscopesiam)
     explains that access scopes are the legacy method of specifying permissions for your instance.
     If you are following best practices and using IAM roles to grant permissions to service accounts,
     then you can define this field as an empty list.
@@ -255,19 +255,19 @@ The `disk_encryption_key` block supports:
 
 * `preemptible` - Allows instance to be preempted. This defaults to
     false. Read more on this
-    [here](https://cloud.google.com/compute/docs/instances/preemptible).
+    [here](https://docs.cloud.google.com/compute/docs/instances/preemptible).
 
 * `node_affinities` - Specifies node affinities or anti-affinities
    to determine which sole-tenant nodes your instances and managed instance
    groups will use as host systems. Read more on sole-tenant node creation
-   [here](https://cloud.google.com/compute/docs/nodes/create-nodes).
+   [here](https://docs.cloud.google.com/compute/docs/nodes/create-nodes).
    Structure [documented below](#nested_node_affinities).
 
 * `host_error_timeout_seconds` - [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html) Time in seconds for host error detection.
 
 * `provisioning_model` - Describe the type of preemptible VM. 
 
-* `instance_termination_action` - Describe the type of termination action for `SPOT` VM. Can be `STOP` or `DELETE`.  Read more on [here](https://cloud.google.com/compute/docs/instances/create-use-spot) 
+* `instance_termination_action` - Describe the type of termination action for `SPOT` VM. Can be `STOP` or `DELETE`.  Read more on [here](https://docs.cloud.google.com/compute/docs/instances/create-use-spot) 
 
 <a name="nested_guest_accelerator"></a>The `guest_accelerator` block supports:
 

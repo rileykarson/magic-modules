@@ -19,8 +19,8 @@ description: |
   The type of Hyperdisk Storage Pool that you create determines the type of disks that you can create in the storage pool.
 references:
   guides:
-    'Types of Hyperdisk Storage Pools': 'https://cloud.google.com/compute/docs/disks/storage-pools#sp-types'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/storagePoolTypes'
+    'Types of Hyperdisk Storage Pools': 'https://docs.cloud.google.com/compute/docs/disks/storage-pools#sp-types'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/storagePoolTypes'
 base_url: 'projects/{{project}}/zones/{{zone}}/storagePoolTypes'
 self_link: 'projects/{{project}}/zones/{{zone}}/storagePoolTypes/{{storagePoolType}}'
 immutable: true

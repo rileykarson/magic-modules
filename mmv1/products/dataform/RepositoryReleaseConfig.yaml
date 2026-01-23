@@ -19,8 +19,8 @@ description: |-
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataform/docs/release-configurations'
-  api: 'https://cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories.releaseConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/dataform/docs/release-configurations'
+  api: 'https://docs.cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories.releaseConfigs'
 docs:
 id_format: 'projects/{{project}}/locations/{{region}}/repositories/{{repository}}/releaseConfigs/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/repositories/{{repository}}/releaseConfigs'
@@ -102,7 +102,7 @@ properties:
         type: String
         description: |-
           Optional. The default BigQuery location to use. Defaults to "US".
-          See the BigQuery docs for a full list of locations: https://cloud.google.com/bigquery/docs/locations.
+          See the BigQuery docs for a full list of locations: https://docs.cloud.google.com/bigquery/docs/locations.
         min_version: 'beta'
       - name: 'assertionSchema'
         type: String

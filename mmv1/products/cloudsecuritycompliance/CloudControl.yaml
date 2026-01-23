@@ -496,7 +496,7 @@ properties:
           type: NestedObject
           description: |-
             A [CEL
-            expression](https://cloud.google.com/certificate-authority-service/docs/using-cel).
+            expression](https://docs.cloud.google.com/certificate-authority-service/docs/using-cel).
           properties:
             - name: expression
               type: String

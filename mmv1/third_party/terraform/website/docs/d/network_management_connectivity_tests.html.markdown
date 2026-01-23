@@ -15,9 +15,9 @@ you to list connectivity tests in a project.
 
 To get more information about connectivity tests, see:
 
-* [API documentation](https://cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/rerun)
+* [API documentation](https://docs.cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/rerun)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/network-intelligence-center/docs)
+    * [Official Documentation](https://docs.cloud.google.com/network-intelligence-center/docs)
 
 ## Example Usage
 
@@ -33,7 +33,7 @@ The following arguments are supported:
 
 * `project` - (Optional) The ID of the project.
 
-* `filter` - (Optional) Lists the ConnectivityTests that match the [filter expression](https://cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/list#query-parameters). A filter expression filters the resources listed in the response.
+* `filter` - (Optional) Lists the ConnectivityTests that match the [filter expression](https://docs.cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/list#query-parameters). A filter expression filters the resources listed in the response.
 
 ## Attributes Reference
 

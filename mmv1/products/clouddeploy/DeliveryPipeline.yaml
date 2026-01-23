@@ -18,10 +18,10 @@ description: |
 exclude_resource: true
 references:
   guides:
-    'Deploy an app to GKE using Cloud Deploy': 'https://cloud.google.com/deploy/docs/deploy-app-gke'
-    'Deploy an app to Cloud Run using Cloud Deploy': 'https://cloud.google.com/deploy/docs/deploy-app-run'
-    'Create a pipeline and release in the Google Cloud console': 'https://cloud.google.com/deploy/docs/deploy-app-in-console'
-  api: 'https://cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deliveryPipelines'
+    'Deploy an app to GKE using Cloud Deploy': 'https://docs.cloud.google.com/deploy/docs/deploy-app-gke'
+    'Deploy an app to Cloud Run using Cloud Deploy': 'https://docs.cloud.google.com/deploy/docs/deploy-app-run'
+    'Create a pipeline and release in the Google Cloud console': 'https://docs.cloud.google.com/deploy/docs/deploy-app-in-console'
+  api: 'https://docs.cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deliveryPipelines'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/deliveryPipelines/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/deliveryPipelines'

@@ -21,8 +21,8 @@ description: |
     - [Projects](/providers/hashicorp/google/latest/docs/resources/iam_projects_policy_binding)
 references:
   guides:
-    'Create and apply Principal Access Boundaries': 'https://cloud.google.com/iam/docs/principal-access-boundary-policies-create'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v3/organizations.locations.principalAccessBoundaryPolicies'
+    'Create and apply Principal Access Boundaries': 'https://docs.cloud.google.com/iam/docs/principal-access-boundary-policies-create'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v3/organizations.locations.principalAccessBoundaryPolicies'
 id_format: 'organizations/{{organization}}/locations/{{location}}/principalAccessBoundaryPolicies/{{principal_access_boundary_policy_id}}'
 base_url: 'organizations/{{organization}}/locations/{{location}}/principalAccessBoundaryPolicies'
 self_link: 'organizations/{{organization}}/locations/{{location}}/principalAccessBoundaryPolicies/{{principal_access_boundary_policy_id}}'

@@ -18,8 +18,8 @@ description: |
   and provides an action to take on matched requests.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/appengine/docs/standard/python/creating-firewalls#creating_firewall_rules'
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.firewall.ingressRules'
+    'Official Documentation': 'https://docs.cloud.google.com/appengine/docs/standard/python/creating-firewalls#creating_firewall_rules'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.firewall.ingressRules'
 docs:
 base_url: 'apps/{{project}}/firewall/ingressRules'
 self_link: 'apps/{{project}}/firewall/ingressRules/{{priority}}'

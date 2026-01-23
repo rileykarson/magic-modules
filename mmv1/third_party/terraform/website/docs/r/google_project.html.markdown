@@ -88,7 +88,7 @@ The following arguments are supported:
 * `billing_account` - (Optional) The alphanumeric ID of the billing account this project
     belongs to. The user or service account performing this operation with Terraform
     must have at minimum Billing Account User privileges (`roles/billing.user`) on the billing account.
-    See [Google Cloud Billing API Access Control](https://cloud.google.com/billing/docs/how-to/billing-access)
+    See [Google Cloud Billing API Access Control](https://docs.cloud.google.com/billing/docs/how-to/billing-access)
     for more details.
 
 * `labels` - (Optional) A set of key/value label pairs to assign to the project.

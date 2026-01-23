@@ -21,9 +21,9 @@ description: |
   of VPN solutions with higher availability than classic Target VPN Gateways.
 references:
   guides:
-    'Choosing a VPN': 'https://cloud.google.com/vpn/docs/how-to/choosing-a-vpn'
-    'Cloud VPN Overview': 'https://cloud.google.com/vpn/docs/concepts/overview'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/vpnGateways'
+    'Choosing a VPN': 'https://docs.cloud.google.com/vpn/docs/how-to/choosing-a-vpn'
+    'Cloud VPN Overview': 'https://docs.cloud.google.com/vpn/docs/concepts/overview'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/vpnGateways'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/vpnGateways'
 has_self_link: true

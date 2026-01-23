@@ -383,7 +383,7 @@ properties:
       Tool to retrieve from Vertex AI Search datastore or engine for grounding.
       Accepts either a datastore or an engine, but not both.
       See Vertex AI Search:
-      https://cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction.
+      https://docs.cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction.
     properties:
       - name: boostSpecs
         type: Array
@@ -570,7 +570,7 @@ properties:
                   description: |-
                     Filter specification for the DataStore.
                     See:
-                    https://cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
+                    https://docs.cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
           - name: engine
             type: String
             description: |-
@@ -584,7 +584,7 @@ properties:
               A filter applied to the search across the Engine. Not relevant and not
               used if 'data_store_sources' is provided.
               See:
-              https://cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
+              https://docs.cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
       - name: maxResults
         type: Integer
         description: |-
@@ -713,13 +713,13 @@ properties:
     description: |-
       Represents a tool to perform Google web searches for grounding.
       See
-      https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-with-google-search.
+      https://docs.cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-with-google-search.
     properties:
       - name: contextUrls
         type: Array
         description: |-
           Content will be fetched directly from these URLs for context and grounding.
-          More details: https://cloud.google.com/vertex-ai/generative-ai/docs/url-context.
+          More details: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/url-context.
           Example: "https://example.com/path.html". A maximum of 20 URLs are allowed.
         item_type:
           type: String
@@ -863,7 +863,7 @@ properties:
             type: NestedObject
             description: |-
               Configurations for authentication with [ID
-              token](https://cloud.google.com/docs/authentication/token-types#id) generated
+              token](https://docs.cloud.google.com/docs/authentication/token-types#id) generated
               from service agent.
             allow_empty_object: true
             send_empty_value: true
@@ -900,7 +900,7 @@ properties:
             type: String
             description: |-
               The name of [Service
-              Directory](https://cloud.google.com/service-directory) service.
+              Directory](https://docs.cloud.google.com/service-directory) service.
               Format:
               `projects/{project}/locations/{location}/namespaces/{namespace}/services/{service}`.
               Location of the service directory must be the same as the location of the

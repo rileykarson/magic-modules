@@ -17,9 +17,9 @@ description: |
   A Google Cloud Looker instance.
 references:
   guides:
-    'Create a Looker (Google Cloud core) instance': 'https://cloud.google.com/looker/docs/looker-core-instance-create'
-    'Configure a Looker (Google Cloud core) instance': 'https://cloud.google.com/looker/docs/looker-core-instance-setup'
-  api: 'https://cloud.google.com/looker/docs/reference/rest/v1/projects.locations.instances'
+    'Create a Looker (Google Cloud core) instance': 'https://docs.cloud.google.com/looker/docs/looker-core-instance-create'
+    'Configure a Looker (Google Cloud core) instance': 'https://docs.cloud.google.com/looker/docs/looker-core-instance-setup'
+  api: 'https://docs.cloud.google.com/looker/docs/reference/rest/v1/projects.locations.instances'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/instances'
 create_url: 'projects/{{project}}/locations/{{region}}/instances?instanceId={{name}}'

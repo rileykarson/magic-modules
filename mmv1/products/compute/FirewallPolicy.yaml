@@ -19,10 +19,10 @@ description: |
 
   This resource should be generally be used with `google_compute_firewall_policy_association` and `google_compute_firewall_policy_rule`
 
-  For more information see the [official documentation](https://cloud.google.com/vpc/docs/firewall-policies)
+  For more information see the [official documentation](https://docs.cloud.google.com/vpc/docs/firewall-policies)
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/firewallPolicies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/firewallPolicies'
 docs:
 base_url: 'locations/global/firewallPolicies'
 self_link: 'locations/global/firewallPolicies/{{name}}'

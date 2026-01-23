@@ -39,7 +39,7 @@ The following arguments are supported:
    ~>**NOTE:** GCP only accepts project ID, not project number. If you are using number,
    you may get a "Permission denied" error.
 
-* `location_id` - (Required) The [location](https://cloud.google.com/appengine/docs/locations)
+* `location_id` - (Required) The [location](https://docs.cloud.google.com/appengine/docs/locations)
    to serve the app from.
 
 * `auth_domain` - (Optional) The domain to authenticate users with when using App Engine's User API.

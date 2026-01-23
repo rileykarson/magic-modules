@@ -1083,7 +1083,7 @@ func ResourceContainerCluster() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Description: `Enable Autopilot for this cluster.`,
-				// ConflictsWith: many fields, see https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#comparison. The conflict is only set one-way, on other fields w/ this field.
+				// ConflictsWith: many fields, see https://docs.cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#comparison. The conflict is only set one-way, on other fields w/ this field.
 			},
 
 			"allow_net_admin": {
@@ -8369,7 +8369,7 @@ func containerClusterPrivateClusterConfigSuppress(k, old, new string, d *schema.
 	return false
 }
 
-// Autopilot clusters have preconfigured defaults: https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#comparison.
+// Autopilot clusters have preconfigured defaults: https://docs.cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#comparison.
 // This function modifies the diff so users can see what these will be during plan time.
 func containerClusterAutopilotCustomizeDiff(_ context.Context, d *schema.ResourceDiff, meta interface{}) error {
 	if d.HasChange("enable_autopilot") && d.Get("enable_autopilot").(bool) {

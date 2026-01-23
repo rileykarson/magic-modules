@@ -10,9 +10,9 @@ A Google Stackdriver dashboard. Dashboards define the content and layout of page
 
 To get more information about Dashboards, see:
 
-* [API documentation](https://cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards)
+* [API documentation](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/monitoring/dashboards)
+    * [Official Documentation](https://docs.cloud.google.com/monitoring/dashboards)
 
 ## Example Usage - Monitoring Dashboard Basic
 
@@ -111,8 +111,8 @@ The following arguments are supported:
 
 * `dashboard_json` -
   (Required)
-  The JSON representation of a dashboard, following the format at https://cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards.
-  The representation of an existing dashboard can be found by using the [API Explorer](https://cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards/get)
+  The JSON representation of a dashboard, following the format at https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards.
+  The representation of an existing dashboard can be found by using the [API Explorer](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards/get)
 
   ~> **Warning:** Because this is represented as a JSON string, Terraform doesn't have underlying information to know
     which fields in the string have defaults. To prevent permanent diffs from default values, Terraform will attempt to

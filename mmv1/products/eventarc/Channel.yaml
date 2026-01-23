@@ -21,8 +21,8 @@ update_verb: PATCH
 update_mask: true
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/standard/docs/third-parties/create-channels'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.channels
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/standard/docs/third-parties/create-channels'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.channels
 async:
   actions: ['create', 'update', 'delete']
   type: OpAsync

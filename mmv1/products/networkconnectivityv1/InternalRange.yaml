@@ -17,8 +17,8 @@ description:
   'The internal range resource for IPAM operations within a VPC network. Used to represent a private address range along with behavioral characterstics of that range (its usage and peering behavior). Networking resources can link to this range if they are created as belonging to it.'
 references:
   guides:
-    'Use internal ranges': 'https://cloud.google.com/vpc/docs/create-use-internal-ranges'
-  api: 'https://cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.internalRanges'
+    'Use internal ranges': 'https://docs.cloud.google.com/vpc/docs/create-use-internal-ranges'
+  api: 'https://docs.cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.internalRanges'
 docs:
 base_url: 'projects/{{project}}/locations/global/internalRanges'
 self_link: 'projects/{{project}}/locations/global/internalRanges/{{name}}'

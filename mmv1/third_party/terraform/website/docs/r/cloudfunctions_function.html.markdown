@@ -8,13 +8,13 @@ description: |-
 
 Creates a new Cloud Function. For more information see:
 
-* [API documentation](https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions)
+* [API documentation](https://docs.cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/functions/docs)
+    * [Official Documentation](https://docs.cloud.google.com/functions/docs)
 
 
 ~> **Warning:** As of November 1, 2019, newly created Functions are
-private-by-default and will require [appropriate IAM permissions](https://cloud.google.com/functions/docs/reference/iam/roles)
+private-by-default and will require [appropriate IAM permissions](https://docs.cloud.google.com/functions/docs/reference/iam/roles)
 to be invoked. See below examples for how to set up the appropriate permissions,
 or view the [Cloud Functions IAM resources](/docs/providers/google/r/cloudfunctions_cloud_function_iam.html)
 for Cloud Functions.
@@ -109,7 +109,7 @@ The following arguments are supported:
 * `name` - (Required) A user-defined name of the function. Function names must be unique globally.
 
 * `runtime` - (Required) The runtime in which the function is going to run.
-Eg. `"nodejs20"`, `"python39"`, `"dotnet3"`, `"go116"`, `"java11"`, `"ruby30"`, `"php74"`, etc. Check the [official doc](https://cloud.google.com/functions/docs/concepts/exec#runtimes) for the up-to-date list.
+Eg. `"nodejs20"`, `"python39"`, `"dotnet3"`, `"go116"`, `"java11"`, `"ruby30"`, `"php74"`, etc. Check the [official doc](https://docs.cloud.google.com/functions/docs/concepts/exec#runtimes) for the up-to-date list.
 
 - - -
 
@@ -130,7 +130,7 @@ Eg. `"nodejs20"`, `"python39"`, `"dotnet3"`, `"go116"`, `"java11"`, `"ruby30"`, 
     * `SECURE_ALWAYS` Requests for a URL that match this handler that do not use HTTPS are automatically redirected to the HTTPS URL with the same path. Query parameters are reserved for the redirect.
     * `SECURE_OPTIONAL` Both HTTP and HTTPS requests with URLs that match the handler succeed without redirects. The application can examine the request to determine which protocol was used and respond accordingly.
 
-* `ingress_settings` - (Optional) String value that controls what traffic can reach the function. Allowed values are `ALLOW_ALL`, `ALLOW_INTERNAL_AND_GCLB` and `ALLOW_INTERNAL_ONLY`. Check [ingress documentation](https://cloud.google.com/functions/docs/networking/network-settings#ingress_settings) to see the impact of each settings value. Changes to this field will recreate the cloud function.
+* `ingress_settings` - (Optional) String value that controls what traffic can reach the function. Allowed values are `ALLOW_ALL`, `ALLOW_INTERNAL_AND_GCLB` and `ALLOW_INTERNAL_ONLY`. Check [ingress documentation](https://docs.cloud.google.com/functions/docs/networking/network-settings#ingress_settings) to see the impact of each settings value. Changes to this field will recreate the cloud function.
 
 * `labels` - (Optional) A set of key/value label pairs to assign to the function. Label keys must follow the requirements at https://docs.cloud.google.com/resource-manager/docs/creating-managing-labels#requirements.
 
@@ -169,7 +169,7 @@ Please refer to the field 'effective_labels' for all of the labels present on th
 * `docker_repository` - (Optional) User-managed repository created in Artifact Registry to which the function's Docker image will be pushed after it is built by Cloud Build. May optionally be encrypted with a customer-managed encryption key (CMEK). If unspecified and `docker_registry` is not explicitly set to `CONTAINER_REGISTRY`, GCF will create and use a default Artifact Registry repository named 'gcf-artifacts' in the region.
 
 * `kms_key_name` - (Optional) Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources. It must match the pattern `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-  If specified, you must also provide an artifact registry repository using the `docker_repository` field that was created with the same KMS crypto key. Before deploying, please complete all pre-requisites described in https://cloud.google.com/functions/docs/securing/cmek#granting_service_accounts_access_to_the_key
+  If specified, you must also provide an artifact registry repository using the `docker_repository` field that was created with the same KMS crypto key. Before deploying, please complete all pre-requisites described in https://docs.cloud.google.com/functions/docs/securing/cmek#granting_service_accounts_access_to_the_key
 
 * `max_instances` - (Optional) The limit on the maximum number of function instances that may coexist at a given time.
 
@@ -186,7 +186,7 @@ Please refer to the field 'effective_labels' for all of the labels present on th
 <a name="nested_event_trigger"></a>The `event_trigger` block supports:
 
 * `event_type` - (Required) The type of event to observe. For example: `"google.storage.object.finalize"`.
-See the documentation on [calling Cloud Functions](https://cloud.google.com/functions/docs/calling/) for a
+See the documentation on [calling Cloud Functions](https://docs.cloud.google.com/functions/docs/calling/) for a
 full reference of accepted triggers.
 
 * `resource` - (Required) Required. The name or partial URI of the resource from

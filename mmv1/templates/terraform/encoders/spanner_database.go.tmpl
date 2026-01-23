@@ -5,7 +5,7 @@ if dialect, ok := obj["databaseDialect"]; ok && dialect == "POSTGRESQL" {
 
 // Extra DDL statements are removed from the create request and instead applied to the database in
 // a post-create action, to accommodate retrictions when creating PostgreSQL-enabled databases.
-// https://cloud.google.com/spanner/docs/create-manage-databases#create_a_database
+// https://docs.cloud.google.com/spanner/docs/create-manage-databases#create_a_database
 log.Printf("[DEBUG] Preparing to create new Database. Any extra DDL statements will be applied to the Database in a separate API call")
 
 delete(obj, "name")

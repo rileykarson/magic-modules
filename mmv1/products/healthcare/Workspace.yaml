@@ -18,8 +18,8 @@ description: |
   A Data Mapper workspace is used to configure Data Mapper access, permissions and data sources for mapping clinical patient data to the FHIR standard.
 references:
   guides:
-    'Create and manage Data Mapper workspaces ': 'https://cloud.google.com/healthcare-api/healthcare-data-engine/docs/manage-workspaces'
-  api: 'https://cloud.google.com/healthcare-api/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.dataMapperWorkspaces'
+    'Create and manage Data Mapper workspaces ': 'https://docs.cloud.google.com/healthcare-api/healthcare-data-engine/docs/manage-workspaces'
+  api: 'https://docs.cloud.google.com/healthcare-api/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.dataMapperWorkspaces'
 docs:
 id_format: '{{dataset}}/dataMapperWorkspaces/{{name}}'
 base_url: '{{dataset}}/dataMapperWorkspaces?workspaceId={{name}}'

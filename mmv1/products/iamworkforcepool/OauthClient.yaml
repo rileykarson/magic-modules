@@ -19,8 +19,8 @@ description: |
   token from Google Cloud.
 references:
   guides:
-    "Managing OAuth clients": "https://cloud.google.com/iam/docs/workforce-manage-oauth-app#manage-clients"
-  api: "https://cloud.google.com/iam/docs/reference/rest/v1/projects.locations.oauthClients"
+    "Managing OAuth clients": "https://docs.cloud.google.com/iam/docs/workforce-manage-oauth-app#manage-clients"
+  api: "https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.oauthClients"
 base_url: projects/{{project}}/locations/{{location}}/oauthClients
 update_mask: true
 self_link: projects/{{project}}/locations/{{location}}/oauthClients/{{oauth_client_id}}

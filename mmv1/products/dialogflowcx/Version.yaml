@@ -18,8 +18,8 @@ description: |
   When you edit a flow, you are editing a draft flow. At any point, you can save a draft flow as a flow version. A flow version is an immutable snapshot of your flow data and associated agent data like intents, entities, webhooks, pages, route groups, etc.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.versions'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.versions'
 docs:
 id_format: '{{parent}}/versions/{{name}}'
 base_url: '{{parent}}/versions'

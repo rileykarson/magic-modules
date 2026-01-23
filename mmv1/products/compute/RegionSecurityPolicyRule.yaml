@@ -19,8 +19,8 @@ description: |
   A rule for the RegionSecurityPolicy.
 references:
   guides:
-    'Creating region security policy rules': 'https://cloud.google.com/armor/docs/configure-security-policies'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/regionSecurityPolicies/addRule'
+    'Creating region security policy rules': 'https://docs.cloud.google.com/armor/docs/configure-security-policies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionSecurityPolicies/addRule'
 docs:
 id_format: 'projects/{{project}}/regions/{{region}}/securityPolicies/{{security_policy}}/priority/{{priority}}'
 base_url: 'projects/{{project}}/regions/{{region}}/securityPolicies/{{security_policy}}'

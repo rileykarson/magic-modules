@@ -17,8 +17,8 @@ description: |
   A Cloud Identity resource representing a Group.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/identity/docs/how-to/setup'
-  api: 'https://cloud.google.com/identity/docs/reference/rest/v1beta1/groups'
+    'Official Documentation': 'https://docs.cloud.google.com/identity/docs/how-to/setup'
+  api: 'https://docs.cloud.google.com/identity/docs/reference/rest/v1beta1/groups'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,
@@ -65,7 +65,7 @@ parameters:
       The initial configuration options for creating a Group.
 
       See the
-      [API reference](https://cloud.google.com/identity/docs/reference/rest/v1beta1/groups/create#initialgroupconfig)
+      [API reference](https://docs.cloud.google.com/identity/docs/reference/rest/v1beta1/groups/create#initialgroupconfig)
       for possible values.
     url_param_only: true
     immutable: true

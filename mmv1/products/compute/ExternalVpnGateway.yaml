@@ -18,7 +18,7 @@ description: |
   Represents a VPN gateway managed outside of GCP.
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/externalVpnGateways'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/externalVpnGateways'
 docs:
 base_url: 'projects/{{project}}/global/externalVpnGateways'
 has_self_link: true

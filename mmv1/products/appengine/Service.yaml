@@ -21,8 +21,8 @@ description: |
 exclude: true
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/appengine/docs/admin-api/deploying-overview'
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
+    'Official Documentation': 'https://docs.cloud.google.com/appengine/docs/admin-api/deploying-overview'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services'
 docs:
 base_url: 'apps/{{project}}/services'
 self_link: 'apps/{{project}}/services/{{id}}'

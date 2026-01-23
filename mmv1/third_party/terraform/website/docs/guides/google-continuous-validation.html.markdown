@@ -20,7 +20,7 @@ Below, this guide shows examples of how data returned by the Google provider can
 
 ## Example - Assert a VM is in a running state (`google_compute_instance`)
 
-VM instances provisioned using Compute Engine can pass through several states as part of the [VM instance lifecycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle). Once a VM is provisioned it could experience an error, or a user could suspend or stop that VM in the Google Cloud console, without that change being detected until the next Terraform plan is generated. Continuous validation can be used to assert the state of a VM and detect if there are any unexpected status changes that occur out-of-band.
+VM instances provisioned using Compute Engine can pass through several states as part of the [VM instance lifecycle](https://docs.cloud.google.com/compute/docs/instances/instance-life-cycle). Once a VM is provisioned it could experience an error, or a user could suspend or stop that VM in the Google Cloud console, without that change being detected until the next Terraform plan is generated. Continuous validation can be used to assert the state of a VM and detect if there are any unexpected status changes that occur out-of-band.
 
 The example below shows how a check block can be used to assert that a VM is in the running state.
 

@@ -17,7 +17,7 @@ description: |
   You can create multiple versions of your agent and publish them to separate environments.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/docs/'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/docs/'
   api: 'https://docs.cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.agent.versions'
 docs:
 id_format: '{{parent}}/versions/{{name}}'

@@ -17,7 +17,7 @@ description: |
   A cluster in a private cloud.
 references:
   guides:
-  api: 'https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds.clusters'
+  api: 'https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds.clusters'
 docs:
 id_format: '{{parent}}/clusters/{{name}}'
 base_url: '{{parent}}/clusters'
@@ -78,7 +78,7 @@ parameters:
     type: String
     description: |
       The resource name of the private cloud to create a new cluster in.
-      Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names.
+      Resource names are schemeless URIs that follow the conventions in https://docs.cloud.google.com/apis/design/resource_names.
       For example: projects/my-project/locations/us-west1-a/privateClouds/my-cloud
     url_param_only: true
     required: true

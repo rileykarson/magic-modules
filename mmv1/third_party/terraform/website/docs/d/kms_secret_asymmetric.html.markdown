@@ -10,7 +10,7 @@ This data source allows you to use data encrypted with a Google Cloud KMS asymme
 within your resource definitions.
 
 For more information see
-[the official documentation](https://cloud.google.com/kms/docs/encrypt-decrypt-rsa).
+[the official documentation](https://docs.cloud.google.com/kms/docs/encrypt-decrypt-rsa).
 
 ~> **NOTE:** Using this data provider will allow you to conceal secret data within your
 resource definitions, but it does not take care of protecting that data in the
@@ -45,7 +45,7 @@ data "google_kms_crypto_key_version" "my_crypto_key" {
 }
 ```
 
-Next, use the [Cloud SDK](https://cloud.google.com/kms/docs/encrypt-decrypt-rsa#kms-encrypt-asymmetric-cli) to encrypt 
+Next, use the [Cloud SDK](https://docs.cloud.google.com/kms/docs/encrypt-decrypt-rsa#kms-encrypt-asymmetric-cli) to encrypt 
 some sensitive information:
 
 ```bash

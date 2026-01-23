@@ -7,8 +7,8 @@ description: |-
 # google_bigtable_table
 
 Creates a Google Cloud Bigtable table inside an instance. For more information see
-[the official documentation](https://cloud.google.com/bigtable/) and
-[API](https://cloud.google.com/bigtable/docs/go/reference).
+[the official documentation](https://docs.cloud.google.com/bigtable/) and
+[API](https://docs.cloud.google.com/bigtable/docs/go/reference).
 
 -> **Note:** It is strongly recommended to set `lifecycle { prevent_destroy = true }`
 on tables in order to prevent accidental data loss. See

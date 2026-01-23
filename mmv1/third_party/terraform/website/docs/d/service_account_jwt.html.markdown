@@ -8,7 +8,7 @@ description: |-
 
 # google_service_account_jwt
 
-This data source provides a [self-signed JWT](https://cloud.google.com/iam/docs/create-short-lived-credentials-direct#sa-credentials-jwt).  Tokens issued from this data source are typically used to call external services that accept JWTs for authentication.
+This data source provides a [self-signed JWT](https://docs.cloud.google.com/iam/docs/create-short-lived-credentials-direct#sa-credentials-jwt).  Tokens issued from this data source are typically used to call external services that accept JWTs for authentication.
 
 ## Example Usage
 

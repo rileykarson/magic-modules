@@ -7,9 +7,9 @@ description: |-
 # google_sql_database_instance_latest_recovery_time
 
 Get Latest Recovery Time for a given instance. For more information see the
-[official documentation](https://cloud.google.com/sql/)
+[official documentation](https://docs.cloud.google.com/sql/)
 and
-[API](https://cloud.google.com/sql/docs/postgres/backup-recovery/pitr#get-the-latest-recovery-time).
+[API](https://docs.cloud.google.com/sql/docs/postgres/backup-recovery/pitr#get-the-latest-recovery-time).
 
 
 ## Example Usage

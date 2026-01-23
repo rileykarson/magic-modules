@@ -12,9 +12,9 @@ The type of Hyperdisk Storage Pool that you create determines the type of disks 
 
 To get more information about StoragePoolType, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/storagePoolTypes)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/storagePoolTypes)
 * How-to Guides
-    * [Types of Hyperdisk Storage Pools](https://cloud.google.com/compute/docs/disks/storage-pools#sp-types)
+    * [Types of Hyperdisk Storage Pools](https://docs.cloud.google.com/compute/docs/disks/storage-pools#sp-types)
 
 ## Argument Reference
 

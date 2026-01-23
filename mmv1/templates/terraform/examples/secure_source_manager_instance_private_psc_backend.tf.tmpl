@@ -55,7 +55,7 @@ resource "google_privateca_ca_pool_iam_binding" "ca_pool_binding" {
   ]
 }
 
-// See https://cloud.google.com/secure-source-manager/docs/create-private-service-connect-instance#root-ca-api
+// See https://docs.cloud.google.com/secure-source-manager/docs/create-private-service-connect-instance#root-ca-api
 resource "google_secure_source_manager_instance" "{{$.PrimaryResourceId}}" {
   instance_id = "{{index $.Vars "instance_id"}}"
   location = "us-central1"

@@ -7,9 +7,9 @@ description: |-
 # google_storage_insights_dataset_config
 
 Use this data source to get information about a Storage Insights Dataset Config resource.
-See [the official documentation](https://cloud.google.com/storage/docs/insights/datasets)
+See [the official documentation](https://docs.cloud.google.com/storage/docs/insights/datasets)
 and
-[API](https://cloud.google.com/storage/docs/insights/reference/rest/v1/projects.locations.datasetConfigs).
+[API](https://docs.cloud.google.com/storage/docs/insights/reference/rest/v1/projects.locations.datasetConfigs).
 
 
 ## Example Usage

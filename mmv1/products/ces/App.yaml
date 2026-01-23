@@ -81,7 +81,7 @@ properties:
          type: String
          description: |-
           Ambient noise as a mono-channel, 16kHz WAV file stored in [Cloud
-          Storage](https://cloud.google.com/storage).
+          Storage](https://docs.cloud.google.com/storage).
           Note: Please make sure the CES service agent
           `service-@gcp-sa-ces.iam.gserviceaccount.com` has
           `storage.objects.get` permission to the Cloud Storage object.
@@ -169,7 +169,7 @@ properties:
       output: true
       item_type:
        type: NestedObject
-       description: An engine to which the data stores are connected. See Vertex AI Search (https://cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction).
+       description: An engine to which the data stores are connected. See Vertex AI Search (https://docs.cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction).
        properties:
         - name: name
           type: String
@@ -355,7 +355,7 @@ properties:
        - name: gcsBucket
          type: String
          description: |-
-          The [Cloud Storage](https://cloud.google.com/storage) bucket to store the
+          The [Cloud Storage](https://docs.cloud.google.com/storage) bucket to store the
           session audio recordings. The URI must start with "gs://".
           Note: If the Cloud Storage bucket is in a different project from the app,
           you should grant `storage.objects.create` permission to the CES service
@@ -411,7 +411,7 @@ properties:
        - name: deidentifyTemplate
          type: String
          description: |-
-          [DLP](https://cloud.google.com/dlp/docs) deidentify template name to
+          [DLP](https://docs.cloud.google.com/dlp/docs) deidentify template name to
           instruct on how to de-identify content.
           Format:
           `projects/{project}/locations/{location}/deidentifyTemplates/{deidentify_template}`
@@ -423,7 +423,7 @@ properties:
        - name: inspectTemplate
          type: String
          description: |-
-          [DLP](https://cloud.google.com/dlp/docs) inspect template name to configure
+          [DLP](https://docs.cloud.google.com/dlp/docs) inspect template name to configure
           detection of sensitive data types.
           Format:
           `projects/{project}/locations/{location}/inspectTemplates/{inspect_template}`

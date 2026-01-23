@@ -18,9 +18,9 @@ you to trigger a rerun operation on a connectivity test and return the results.
 
 To get more information about connectivity tests, see:
 
-* [API documentation](https://cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/rerun)
+* [API documentation](https://docs.cloud.google.com/network-intelligence-center/docs/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests/rerun)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/network-intelligence-center/docs)
+    * [Official Documentation](https://docs.cloud.google.com/network-intelligence-center/docs)
 
 ## Example Usage - Network Management Connectivity Test Run Instances
 

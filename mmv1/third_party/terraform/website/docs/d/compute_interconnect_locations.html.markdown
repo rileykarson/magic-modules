@@ -6,7 +6,7 @@ description: |-
 
 # google_compute_interconnect_locations
 Get a list of interconnect locations. For more information see
-the official [API](https://cloud.google.com/compute/docs/reference/rest/v1/interconnectLocations/list) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/interconnectLocations/list) documentation.
 
 ## Example Usage
 ```tf

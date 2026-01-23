@@ -7,8 +7,8 @@ description: |-
 # google_cloudfunctions_function
 
 Get information about a Google Cloud Function. For more information see
-the [official documentation](https://cloud.google.com/functions/docs/)
-and [API](https://cloud.google.com/functions/docs/apis).
+the [official documentation](https://docs.cloud.google.com/functions/docs/)
+and [API](https://docs.cloud.google.com/functions/docs/apis).
 
 ## Example Usage
 
@@ -59,7 +59,7 @@ exported:
 <a name="nested_event_trigger"></a>The `event_trigger` block contains:
 
 * `event_type` - The type of event to observe. For example: `"google.storage.object.finalize"`.
-See the documentation on [calling Cloud Functions](https://cloud.google.com/functions/docs/calling/)
+See the documentation on [calling Cloud Functions](https://docs.cloud.google.com/functions/docs/calling/)
 for a full reference of accepted triggers.
 
 * `resource` - The name of the resource whose events are being observed, for example, `"myBucket"`

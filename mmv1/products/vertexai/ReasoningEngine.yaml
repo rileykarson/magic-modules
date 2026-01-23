@@ -17,8 +17,8 @@ description: |-
   ReasoningEngine provides a customizable runtime for models to determine which actions to take and in which order.
 references:
   guides:
-    'Develop and deploy agents on Vertex AI Agent Engine': 'https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/quickstart'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.reasoningEngines/'
+    'Develop and deploy agents on Vertex AI Agent Engine': 'https://docs.cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/quickstart'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.reasoningEngines/'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/reasoningEngines'
 self_link: 'projects/{{project}}/locations/{{region}}/reasoningEngines/{{name}}'
@@ -270,11 +270,11 @@ properties:
 
               The only supported values for CPU are '1', '2', '4', '6' and '8'.
               For more information, go to
-              https://cloud.google.com/run/docs/configuring/cpu.
+              https://docs.cloud.google.com/run/docs/configuring/cpu.
 
               The only supported values for memory are '1Gi', '2Gi', ... '32 Gi'.
               For more information, go to
-              https://cloud.google.com/run/docs/configuring/memory-limits.
+              https://docs.cloud.google.com/run/docs/configuring/memory-limits.
           - name: 'minInstances'
             type: 'Integer'
             description: |

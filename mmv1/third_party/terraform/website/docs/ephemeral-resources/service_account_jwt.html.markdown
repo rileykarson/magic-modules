@@ -6,7 +6,7 @@ description: |-
 
 # google_service_account_jwt
 
-This ephemeral resource provides a [self-signed JWT](https://cloud.google.com/iam/docs/create-short-lived-credentials-direct#sa-credentials-jwt).  Tokens issued from this ephemeral resource are typically used to call external services that accept JWTs for authentication.
+This ephemeral resource provides a [self-signed JWT](https://docs.cloud.google.com/iam/docs/create-short-lived-credentials-direct#sa-credentials-jwt).  Tokens issued from this ephemeral resource are typically used to call external services that accept JWTs for authentication.
 
 ## Example Usage
 

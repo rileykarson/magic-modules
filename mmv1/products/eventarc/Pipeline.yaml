@@ -23,8 +23,8 @@ import_format:
   - projects/{{project}}/locations/{{location}}/pipelines/{{pipeline_id}}
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/advanced/docs/receive-events/create-enrollment'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.pipelines
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/advanced/docs/receive-events/create-enrollment'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.pipelines
 description: |
   The Eventarc Pipeline resource
 async:
@@ -237,7 +237,7 @@ properties:
                     Service account email used to generate the OIDC Token.
                     The principal who calls this API must have
                     iam.serviceAccounts.actAs permission in the service account. See
-                    https://cloud.google.com/iam/docs/understanding-service-accounts
+                    https://docs.cloud.google.com/iam/docs/understanding-service-accounts
                     for more information. Eventarc service agents must have
                     roles/roles/iam.serviceAccountTokenCreator role to allow the
                     Pipeline to create OpenID tokens for authenticated requests.
@@ -263,7 +263,7 @@ properties:
                     token](https://developers.google.com/identity/protocols/OAuth2).
                     The principal who calls this API must have
                     iam.serviceAccounts.actAs permission in the service account. See
-                    https://cloud.google.com/iam/docs/understanding-service-accounts
+                    https://docs.cloud.google.com/iam/docs/understanding-service-accounts
                     for more information. Eventarc service agents must have
                     roles/roles/iam.serviceAccountTokenCreator role to allow Pipeline
                     to create OAuth2 tokens for authenticated requests.

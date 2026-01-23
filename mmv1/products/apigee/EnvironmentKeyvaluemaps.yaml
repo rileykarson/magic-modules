@@ -18,8 +18,8 @@ description: |
   Collection of key/value string pairs.
 references:
   guides:
-    'Using key value maps': 'https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keyvaluemaps/create'
+    'Using key value maps': 'https://docs.cloud.google.com/apigee/docs/api-platform/cache/key-value-maps'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keyvaluemaps/create'
 docs:
 base_url: '{{env_id}}/keyvaluemaps'
 self_link: '{{env_id}}/keyvaluemaps/{{name}}/entries'

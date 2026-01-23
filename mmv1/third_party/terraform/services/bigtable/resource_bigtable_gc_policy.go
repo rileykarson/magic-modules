@@ -223,7 +223,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 				Description: `Allows ignoring warnings when updating the GC policy. This can be used
 				to increase the gc policy on replicated clusters. Doing this may make clusters be
 				inconsistent for a longer period of time, before using this make sure you understand
-				the risks listed at https://cloud.google.com/bigtable/docs/garbage-collection#increasing`,
+				the risks listed at https://docs.cloud.google.com/bigtable/docs/garbage-collection#increasing`,
 				Default: false,
 			},
 		},

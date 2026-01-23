@@ -18,8 +18,8 @@ description:
   Certificate Authority Service and associated metadata.'
 references:
   guides:
-    'Use TlsInspectionPolicy': 'https://cloud.google.com/secure-web-proxy/docs/tls-inspection-overview'
-  api: 'https://cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.tlsInspectionPolicies'
+    'Use TlsInspectionPolicy': 'https://docs.cloud.google.com/secure-web-proxy/docs/tls-inspection-overview'
+  api: 'https://docs.cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.tlsInspectionPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/tlsInspectionPolicies'
 self_link: 'projects/{{project}}/locations/{{location}}/tlsInspectionPolicies/{{name}}'

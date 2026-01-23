@@ -6,7 +6,7 @@ description: |-
 
 # google_sql_user
 
-Creates a new Google SQL User on a Google SQL User Instance. For more information, see the [official documentation](https://cloud.google.com/sql/), or the [JSON API](https://cloud.google.com/sql/docs/admin-api/v1beta4/users).
+Creates a new Google SQL User on a Google SQL User Instance. For more information, see the [official documentation](https://docs.cloud.google.com/sql/), or the [JSON API](https://docs.cloud.google.com/sql/docs/admin-api/v1beta4/users).
 
 ~> **Note:** All arguments including the username and password will be stored in the raw state as plain-text.
 [Read more about sensitive data in state](https://developer.hashicorp.com/terraform/language/manage-sensitive-data). Passwords will not be retrieved when running
@@ -38,7 +38,7 @@ resource "google_sql_user" "users" {
 }
 ```
 
-Example using [Cloud SQL IAM database authentication](https://cloud.google.com/sql/docs/mysql/authentication).
+Example using [Cloud SQL IAM database authentication](https://docs.cloud.google.com/sql/docs/mysql/authentication).
 
 ```hcl
 resource "random_id" "db_name_suffix" {
@@ -74,7 +74,7 @@ resource "google_sql_user" "iam_service_account_user" {
 }
 ```
 
-Example using [Cloud SQL IAM Group authentication](https://cloud.google.com/sql/docs/mysql/iam-authentication#iam-group-auth).
+Example using [Cloud SQL IAM Group authentication](https://docs.cloud.google.com/sql/docs/mysql/iam-authentication#iam-group-auth).
 
 ```hcl
 resource "random_id" "db_name_suffix" {
@@ -121,8 +121,8 @@ The following arguments are supported:
     user during login. The default is the database's built-in user type. Flags
     include "BUILT_IN", "CLOUD_IAM_USER", "CLOUD_IAM_SERVICE_ACCOUNT", "CLOUD_IAM_GROUP",
     "CLOUD_IAM_GROUP_USER" and "CLOUD_IAM_GROUP_SERVICE_ACCOUNT" for
-    [Postgres](https://cloud.google.com/sql/docs/postgres/admin-api/rest/v1beta4/users#sqlusertype)
-    and [MySQL](https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/users#sqlusertype).
+    [Postgres](https://docs.cloud.google.com/sql/docs/postgres/admin-api/rest/v1beta4/users#sqlusertype)
+    and [MySQL](https://docs.cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/users#sqlusertype).
 
 * `deletion_policy` - (Optional) The deletion policy for the user.
     Setting `ABANDON` allows the resource to be abandoned rather than deleted. This is useful

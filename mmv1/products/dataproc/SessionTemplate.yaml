@@ -20,8 +20,8 @@ description: |
   creating one or more Dataproc Serverless interactive sessions.
 references:
   guides:
-    'Dataproc Serverless Session Templates': 'https://cloud.google.com/dataproc-serverless/docs/guides/create-serverless-sessions-templates#create-dataproc-serverless-session-template'
-  api: 'https://cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.sessionTemplates'
+    'Dataproc Serverless Session Templates': 'https://docs.cloud.google.com/dataproc-serverless/docs/guides/create-serverless-sessions-templates#create-dataproc-serverless-session-template'
+  api: 'https://docs.cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.sessionTemplates'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/sessionTemplates'

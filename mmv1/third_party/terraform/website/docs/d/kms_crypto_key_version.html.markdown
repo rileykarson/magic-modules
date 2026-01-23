@@ -7,9 +7,9 @@ description: |-
 # google_kms_crypto_key_version
 
 Provides access to a Google Cloud Platform KMS CryptoKeyVersion. For more information see
-[the official documentation](https://cloud.google.com/kms/docs/object-hierarchy#key_version)
+[the official documentation](https://docs.cloud.google.com/kms/docs/object-hierarchy#key_version)
 and
-[API](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions).
+[API](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions).
 
 A CryptoKeyVersion represents an individual cryptographic key, and the associated key material.
 
@@ -49,11 +49,11 @@ exported:
 
 * `name` - The resource name for this CryptoKeyVersion in the format `projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*`
 
-* `state` - The current state of the CryptoKeyVersion. See the [state reference](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions#CryptoKeyVersion.CryptoKeyVersionState) for possible outputs.
+* `state` - The current state of the CryptoKeyVersion. See the [state reference](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys.cryptoKeyVersions#CryptoKeyVersion.CryptoKeyVersionState) for possible outputs.
 
-* `protection_level` - The ProtectionLevel describing how crypto operations are performed with this CryptoKeyVersion. See the [protection_level reference](https://cloud.google.com/kms/docs/reference/rest/v1/ProtectionLevel) for possible outputs.
+* `protection_level` - The ProtectionLevel describing how crypto operations are performed with this CryptoKeyVersion. See the [protection_level reference](https://docs.cloud.google.com/kms/docs/reference/rest/v1/ProtectionLevel) for possible outputs.
 
-* `algorithm` - The CryptoKeyVersionAlgorithm that this CryptoKeyVersion supports. See the [algorithm reference](https://cloud.google.com/kms/docs/reference/rest/v1/CryptoKeyVersionAlgorithm) for possible outputs.
+* `algorithm` - The CryptoKeyVersionAlgorithm that this CryptoKeyVersion supports. See the [algorithm reference](https://docs.cloud.google.com/kms/docs/reference/rest/v1/CryptoKeyVersionAlgorithm) for possible outputs.
 
 * `public_key` -  If the enclosing CryptoKey has purpose `ASYMMETRIC_SIGN` or `ASYMMETRIC_DECRYPT`, this block contains details about the public key associated to this CryptoKeyVersion. Structure is [documented below](#nested_public_key).
 

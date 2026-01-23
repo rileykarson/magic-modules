@@ -23,8 +23,8 @@ description: |
   be created in billing-enabled projects.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/identity-platform/docs'
-  api: 'https://cloud.google.com/identity-platform/docs/reference/rest/v2/Config'
+    'Official Documentation': 'https://docs.cloud.google.com/identity-platform/docs'
+  api: 'https://docs.cloud.google.com/identity-platform/docs/reference/rest/v2/Config'
 docs:
 base_url: 'projects/{{project}}/config'
 self_link: 'projects/{{project}}/config'

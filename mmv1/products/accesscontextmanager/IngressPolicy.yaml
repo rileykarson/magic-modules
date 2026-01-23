@@ -18,7 +18,7 @@ description: |
   This resource has been deprecated, please refer to ServicePerimeterIngressPolicy.
 references:
   guides:
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.servicePerimeters#ingresspolicy'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.servicePerimeters#ingresspolicy'
 docs:
 id_format: '{{ingress_policy_name}}/{{resource}}'
 base_url: ''

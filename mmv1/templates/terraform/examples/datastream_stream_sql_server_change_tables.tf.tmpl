@@ -9,7 +9,7 @@ resource "google_sql_database_instance" "instance" {
         tier = "db-custom-2-4096"
         ip_configuration {
             // Datastream IPs will vary by region.
-            // https://cloud.google.com/datastream/docs/ip-allowlists-and-regions
+            // https://docs.cloud.google.com/datastream/docs/ip-allowlists-and-regions
             authorized_networks {
                 value = "34.71.242.81"
             }

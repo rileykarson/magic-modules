@@ -5,7 +5,7 @@ description: |-
 ---
 
 # google_secret_manager_secret_version
-This ephemeral resource provides a [Secret Manager secret version](https://cloud.google.com/secret-manager/docs/reference/rest/v1/projects.secrets.versions) that can be used to access the contents of a secret.
+This ephemeral resource provides a [Secret Manager secret version](https://docs.cloud.google.com/secret-manager/docs/reference/rest/v1/projects.secrets.versions) that can be used to access the contents of a secret.
 
 ## Example Usage
 

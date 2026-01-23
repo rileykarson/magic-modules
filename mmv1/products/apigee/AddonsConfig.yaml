@@ -17,8 +17,8 @@ description: |
   Configures the add-ons for the Apigee organization. The existing add-on configuration will be fully replaced.
 references:
   guides:
-    'Creating an API organization': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-org'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations#setaddons'
+    'Creating an API organization': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-org'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations#setaddons'
 docs:
 base_url: 'organizations'
 self_link: 'organizations/{{org}}'

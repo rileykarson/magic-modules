@@ -17,10 +17,10 @@ App Engine services.
 
 To get more information about Service, see:
 
-* [API documentation](https://cloud.google.com/monitoring/api/ref_v3/rest/v3/services)
+* [API documentation](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/services)
 * How-to Guides
-    * [Service Monitoring](https://cloud.google.com/monitoring/service-monitoring)
-    * [Monitoring API Documentation](https://cloud.google.com/monitoring/api/v3/)
+    * [Service Monitoring](https://docs.cloud.google.com/monitoring/service-monitoring)
+    * [Monitoring API Documentation](https://docs.cloud.google.com/monitoring/api/v3/)
 
 ## Example Usage - Monitoring App Engine Service
 
@@ -75,7 +75,7 @@ The given filters must match exactly one service whose data will be exported as 
 One of the following fields must be specified:
 
 * `module_id` - (Required) The ID of the App Engine module underlying this
-  service. Corresponds to the moduleId resource label in the [gae_app](https://cloud.google.com/monitoring/api/resources#tag_gae_app) monitored resource, or the service/module name.
+  service. Corresponds to the moduleId resource label in the [gae_app](https://docs.cloud.google.com/monitoring/api/resources#tag_gae_app) monitored resource, or the service/module name.
 
 - - -
 
@@ -104,4 +104,4 @@ The `telemetry` block includes:
   (Optional)
   The full name of the resource that defines this service.
   Formatted as described in
-  https://cloud.google.com/apis/design/resource_names.
+  https://docs.cloud.google.com/apis/design/resource_names.

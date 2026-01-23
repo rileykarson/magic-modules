@@ -10,10 +10,10 @@ Creates a new Transfer Job in Google Cloud Storage Transfer.
 
 To get more information about Google Cloud Storage Transfer, see:
 
-* [Overview](https://cloud.google.com/storage-transfer/docs/overview)
-* [API documentation](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/transferJobs)
+* [Overview](https://docs.cloud.google.com/storage-transfer/docs/overview)
+* [API documentation](https://docs.cloud.google.com/storage-transfer/docs/reference/rest/v1/transferJobs)
 * How-to Guides
-    * [Configuring Access to Data Sources and Sinks](https://cloud.google.com/storage-transfer/docs/configure-access)
+    * [Configuring Access to Data Sources and Sinks](https://docs.cloud.google.com/storage-transfer/docs/configure-access)
 
 ## Example Usage
 
@@ -176,7 +176,7 @@ The following arguments are supported:
 
 * `aws_s3_compatible_data_source` - (Optional) An AWS S3 Compatible data source. Structure [documented below](#nested_aws_s3_compatible_data_source).
 
-* `transfer_manifest` - (Optional) Use a manifest file to limit which object are transferred. See [Storage Transfer Service manifest file format](https://cloud.google.com/storage-transfer/docs/manifest). Structure [documented below](#nested_transfer_manifest).
+* `transfer_manifest` - (Optional) Use a manifest file to limit which object are transferred. See [Storage Transfer Service manifest file format](https://docs.cloud.google.com/storage-transfer/docs/manifest). Structure [documented below](#nested_transfer_manifest).
 
 <a name="nested_replication_spec"></a>The `replication_spec` block supports:
 
@@ -213,9 +213,9 @@ The following arguments are supported:
 * `min_time_elapsed_since_last_modification` - (Optional)
 A duration in seconds with up to nine fractional digits, terminated by 's'. Example: "3.5s".
 
-* `include_prefixes` - (Optional) If `include_prefixes` is specified, objects that satisfy the object conditions must have names that start with one of the `include_prefixes` and that do not start with any of the `exclude_prefixes`. If `include_prefixes` is not specified, all objects except those that have names starting with one of the `exclude_prefixes` must satisfy the object conditions. See [Requirements](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).
+* `include_prefixes` - (Optional) If `include_prefixes` is specified, objects that satisfy the object conditions must have names that start with one of the `include_prefixes` and that do not start with any of the `exclude_prefixes`. If `include_prefixes` is not specified, all objects except those that have names starting with one of the `exclude_prefixes` must satisfy the object conditions. See [Requirements](https://docs.cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).
 
-* `exclude_prefixes` - (Optional) `exclude_prefixes` must follow the requirements described for `include_prefixes`. See [Requirements](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).
+* `exclude_prefixes` - (Optional) `exclude_prefixes` must follow the requirements described for `include_prefixes`. See [Requirements](https://docs.cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).
 
 * `last_modified_since` - (Optional) If specified, only objects with a "last modification time" on or after this timestamp and objects that don't have a "last modification time" are transferred. A timestamp in RFC3339 UTC "Zulu" format, with nanosecond resolution and up to nine fractional digits. Examples: "2014-10-02T15:01:23Z" and "2014-10-02T15:01:23.045123456Z".
 
@@ -294,7 +294,7 @@ A duration in seconds with up to nine fractional digits, terminated by 's'. Exam
 
 * `managed_private_network` - (Optional) Egress bytes over a Google-managed private network. This network is shared between other users of Storage Transfer Service.
 
-* `cloudfront_domain` - (Optional) The CloudFront distribution domain name pointing to this bucket, to use when fetching. See [Transfer from S3 via CloudFront](https://cloud.google.com/storage-transfer/docs/s3-cloudfront) for more information. Format: `https://{id}.cloudfront.net` or any valid custom domain. Must begin with `https://`.
+* `cloudfront_domain` - (Optional) The CloudFront distribution domain name pointing to this bucket, to use when fetching. See [Transfer from S3 via CloudFront](https://docs.cloud.google.com/storage-transfer/docs/s3-cloudfront) for more information. Format: `https://{id}.cloudfront.net` or any valid custom domain. Must begin with `https://`.
 
 * `credentials_secret` - (Optional)  The Resource name of a secret in Secret Manager. AWS credentials must be stored in Secret Manager in JSON format. If credentials_secret is specified, do not specify role_arn or aws_access_key. Format: `projects/{projectNumber}/secrets/{secret_name}`.
 
@@ -320,7 +320,7 @@ The `aws_access_key` block supports:
 
 * `path` - (Required) Root path to transfer objects. Must be an empty string or full path name that ends with a '/'. This field is treated as an object prefix. As such, it should generally not begin with a '/'.
 
-* `credentials_secret` - (Optional, (https://terraform.io/docs/providers/google/guides/provider_versions.html)) Full Resource name of a secret in Secret Manager containing [SAS Credentials in JSON form](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#azureblobstoragedata:~:text=begin%20with%20a%20%27/%27.-,credentialsSecret,-string). Service Agent for Storage Transfer must have permissions to access secret. If credentials_secret is specified, do not specify azure_credentials.`,
+* `credentials_secret` - (Optional, (https://terraform.io/docs/providers/google/guides/provider_versions.html)) Full Resource name of a secret in Secret Manager containing [SAS Credentials in JSON form](https://docs.cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#azureblobstoragedata:~:text=begin%20with%20a%20%27/%27.-,credentialsSecret,-string). Service Agent for Storage Transfer must have permissions to access secret. If credentials_secret is specified, do not specify azure_credentials.`,
 
 * `azure_credentials` - (Optional, (https://terraform.io/docs/providers/google/guides/provider_versions.html)) Credentials used to authenticate API requests to Azure block.
 

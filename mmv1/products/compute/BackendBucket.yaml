@@ -24,8 +24,8 @@ description: |
   to a virtual machine instance.
 references:
   guides:
-    'Using a Cloud Storage bucket as a load balancer backend': 'https://cloud.google.com/compute/docs/load-balancing/http/backend-bucket'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/backendBuckets'
+    'Using a Cloud Storage bucket as a load balancer backend': 'https://docs.cloud.google.com/compute/docs/load-balancing/http/backend-bucket'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/backendBuckets'
 docs:
 base_url: 'projects/{{project}}/global/backendBuckets'
 has_self_link: true

@@ -6,7 +6,7 @@ description: |-
 
 # google_compute_routers
 Get a list of routers. For more information see
-the official [API](https://cloud.google.com/compute/docs/reference/rest/v1/routers/list) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers/list) documentation.
 
 ## Example Usage
 ```tf

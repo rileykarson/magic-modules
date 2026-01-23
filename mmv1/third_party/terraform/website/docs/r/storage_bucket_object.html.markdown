@@ -7,11 +7,11 @@ description: |-
 # google_storage_bucket_object
 
 Creates a new object inside an existing bucket in Google cloud storage service (GCS).
-[ACLs](https://cloud.google.com/storage/docs/access-control/lists) can be applied using the `google_storage_object_acl` resource.
+[ACLs](https://docs.cloud.google.com/storage/docs/access-control/lists) can be applied using the `google_storage_object_acl` resource.
  For more information see
-[the official documentation](https://cloud.google.com/storage/docs/key-terms#objects)
+[the official documentation](https://docs.cloud.google.com/storage/docs/key-terms#objects)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/objects).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/objects).
 
 A datasource can be used to retrieve the data of the stored object:
 
@@ -90,24 +90,24 @@ One of the following is required:
 
 * `content_type` - (Optional) [Content-Type](https://tools.ietf.org/html/rfc7231#section-3.1.1.5) of the object data. Defaults to "application/octet-stream" or "text/plain; charset=utf-8".
 
-* `customer_encryption` - (Optional) Enables object encryption with Customer-Supplied Encryption Key (CSEK). [Google [documentation about](#nested_customer_encryption) CSEK.](https://cloud.google.com/storage/docs/encryption/customer-supplied-keys)
+* `customer_encryption` - (Optional) Enables object encryption with Customer-Supplied Encryption Key (CSEK). [Google [documentation about](#nested_customer_encryption) CSEK.](https://docs.cloud.google.com/storage/docs/encryption/customer-supplied-keys)
     Structure is [documented below](#nested_customer_encryption).
 
 * `retention` - (Optional) The [object retention](http://cloud.google.com/storage/docs/object-lock) settings for the object. The retention settings allow an object to be retained until a provided date. Structure is [documented below](#nested_retention).
 
-* `event_based_hold` - (Optional) Whether an object is under [event-based hold](https://cloud.google.com/storage/docs/object-holds#hold-types). Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).
+* `event_based_hold` - (Optional) Whether an object is under [event-based hold](https://docs.cloud.google.com/storage/docs/object-holds#hold-types). Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).
 
-* `temporary_hold` - (Optional) Whether an object is under [temporary hold](https://cloud.google.com/storage/docs/object-holds#hold-types). While this flag is set to true, the object is protected against deletion and overwrites.
+* `temporary_hold` - (Optional) Whether an object is under [temporary hold](https://docs.cloud.google.com/storage/docs/object-holds#hold-types). While this flag is set to true, the object is protected against deletion and overwrites.
 
-* `detect_md5hash` - (Optional) Detect changes to local file or changes made outside of Terraform to the file stored on the server. MD5 hash of the data, encoded using [base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4). This field is not present for [composite objects](https://cloud.google.com/storage/docs/composite-objects). For more information about using the MD5 hash, see [Hashes and ETags: Best Practices](https://cloud.google.com/storage/docs/hashes-etags#json-api).
+* `detect_md5hash` - (Optional) Detect changes to local file or changes made outside of Terraform to the file stored on the server. MD5 hash of the data, encoded using [base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4). This field is not present for [composite objects](https://docs.cloud.google.com/storage/docs/composite-objects). For more information about using the MD5 hash, see [Hashes and ETags: Best Practices](https://docs.cloud.google.com/storage/docs/hashes-etags#json-api).
 
   ~> **Warning:** For dynamically populated files or objects, `detect_md5hash` cannot track or detect changes and will not trigger updates to the objects in the bucket. Please use `source_md5hash` instead.
 
-* `storage_class` - (Optional) The [StorageClass](https://cloud.google.com/storage/docs/storage-classes) of the new bucket object.
+* `storage_class` - (Optional) The [StorageClass](https://docs.cloud.google.com/storage/docs/storage-classes) of the new bucket object.
     Supported values include: `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`. If not provided, this defaults to the bucket's default
-    storage class or to a [standard](https://cloud.google.com/storage/docs/storage-classes#standard) class.
+    storage class or to a [standard](https://docs.cloud.google.com/storage/docs/storage-classes#standard) class.
 
-* `kms_key_name` - (Optional) The resource name of the Cloud KMS key that will be used to [encrypt](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) the object.
+* `kms_key_name` - (Optional) The resource name of the Cloud KMS key that will be used to [encrypt](https://docs.cloud.google.com/storage/docs/encryption/using-customer-managed-keys) the object.
 
 * `source_md5hash` - (Optional) User-provided md5hash to trigger replacement of object in storage bucket, Must be Base 64 MD5 hash of the object data. The usual way to set this is filemd5("file.zip"), where "file.zip" is the local filename
 
@@ -115,7 +115,7 @@ One of the following is required:
 
 * `deletion_policy` - (Optional) When set to ABANDON, the object won't be deleted from storage bucket. Instead, it will only be removed from terraform's state file.
 
-* `contexts` - (Optional) Contexts attached to an object, in key-value pairs. For more information about object contexts, see [Object contexts overview](https://cloud.google.com/storage/docs/object-contexts). Structure is [documented below](#nested_contexts).
+* `contexts` - (Optional) Contexts attached to an object, in key-value pairs. For more information about object contexts, see [Object contexts overview](https://docs.cloud.google.com/storage/docs/object-contexts). Structure is [documented below](#nested_contexts).
 
 ---
 
@@ -152,7 +152,7 @@ One of the following is required:
 In addition to the arguments listed above, the following computed attributes are
 exported:
 
-* `generation` - (Computed) The content generation of this object. Used for object [versioning](https://cloud.google.com/storage/docs/object-versioning) and [soft delete](https://cloud.google.com/storage/docs/soft-delete).
+* `generation` - (Computed) The content generation of this object. Used for object [versioning](https://docs.cloud.google.com/storage/docs/object-versioning) and [soft delete](https://docs.cloud.google.com/storage/docs/soft-delete).
 
 * `crc32c` - (Computed) Base 64 CRC32 hash of the uploaded data.
 

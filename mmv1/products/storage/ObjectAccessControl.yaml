@@ -29,8 +29,8 @@ description: |
   uses READER and OWNER instead of READ and FULL_CONTROL.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/access-control/create-manage-lists'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/access-control/create-manage-lists'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/objectAccessControls'
 docs:
 id_format: '{{bucket}}/{{object}}/{{entity}}'
 base_url: 'b/{{bucket}}/o/{{%object}}/acl'

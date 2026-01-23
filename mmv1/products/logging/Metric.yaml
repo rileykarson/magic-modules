@@ -20,8 +20,8 @@ description: |
   an optional histogram of the values as specified by the bucket options.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/logging/docs/apis'
-  api: 'https://cloud.google.com/logging/docs/reference/v2/rest/v2/projects.metrics/create'
+    'Official Documentation': 'https://docs.cloud.google.com/logging/docs/apis'
+  api: 'https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/projects.metrics/create'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/metrics'
@@ -92,7 +92,7 @@ properties:
   - name: 'filter'
     type: String
     description: |
-      An advanced logs filter (https://cloud.google.com/logging/docs/view/advanced-filters) which
+      An advanced logs filter (https://docs.cloud.google.com/logging/docs/view/advanced-filters) which
       is used to match log entries.
     required: true
   - name: 'metricDescriptor'

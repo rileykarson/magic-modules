@@ -17,8 +17,8 @@ description: |
   Security profile for risk assessment version 2 in Apigee.
 references:
   guides:
-    'Creating a security profile': 'https://cloud.google.com/apigee/docs/api-security/security-scores#security-profiles-v2'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.securityProfilesV2/create'
+    'Creating a security profile': 'https://docs.cloud.google.com/apigee/docs/api-security/security-scores#security-profiles-v2'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.securityProfilesV2/create'
 docs:
 base_url: '{{org_id}}/securityProfilesV2'
 self_link: '{{org_id}}/securityProfilesV2/{{profile_id}}'

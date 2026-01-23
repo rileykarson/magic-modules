@@ -11,9 +11,9 @@ Creates and manages service account keys, which allow the use of a service accou
 -> **Warning**: This resource persists a sensitive credential in plaintext in the [remote state](https://developer.hashicorp.com/terraform/language/manage-sensitive-data) used by Terraform.
 Please take appropriate measures to protect your remote state.
 
-* [API documentation](https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys)
+* [API documentation](https://docs.cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+    * [Official Documentation](https://docs.cloud.google.com/iam/docs/creating-managing-service-account-keys)
 
 
 ## Example Usage, creating a new Key
@@ -56,7 +56,7 @@ resource "google_service_account_key" "mykey" {
 
 ```hcl
 # Workload Identity is the recommended way of accessing Google Cloud APIs from pods.
-# https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+# https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
 
 resource "google_service_account" "myaccount" {
   account_id   = "myaccount"
@@ -90,7 +90,7 @@ unique id. Substituting `-` as a wildcard for the `{PROJECT_ID}` will infer the 
 
 * `key_algorithm` - (Optional) The algorithm used to generate the key. KEY_ALG_RSA_2048 is the default algorithm.
 Valid values are listed at
-[ServiceAccountPrivateKeyType](https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountKeyAlgorithm)
+[ServiceAccountPrivateKeyType](https://docs.cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountKeyAlgorithm)
 (only used on create)
 
 * `public_key_type` (Optional) The output format of the public key requested. TYPE_X509_PEM_FILE is the default output format.

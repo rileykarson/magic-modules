@@ -124,7 +124,7 @@ properties:
           For more information about the OS policy resource definitions and examples,
           see
           [OS policy and OS policy
-          assignment](https://cloud.google.com/compute/docs/os-configuration-management/working-with-os-policies).
+          assignment](https://docs.cloud.google.com/compute/docs/os-configuration-management/working-with-os-policies).
         properties:
           - name: uid
             type: String
@@ -1030,7 +1030,7 @@ properties:
               three pieces of data: error code, error message, and error details.
 
               You can find out more about this error model and how to work with it in the
-              [API Design Guide](https://cloud.google.com/apis/design/errors).
+              [API Design Guide](https://docs.cloud.google.com/apis/design/errors).
             properties:
               - name: details
                 type: Array
@@ -1122,7 +1122,7 @@ properties:
               three pieces of data: error code, error message, and error details.
 
               You can find out more about this error model and how to work with it in the
-              [API Design Guide](https://cloud.google.com/apis/design/errors).
+              [API Design Guide](https://docs.cloud.google.com/apis/design/errors).
             properties:
               - name: code
                 type: Integer

@@ -10,7 +10,7 @@ Get information about a Google Service Networking Peered DNS Domain.
 
 When using Google Cloud DNS to manage internal DNS, peered DNS domains make your DNS available to services like Google Cloud Build. Use this data source to retrieve information about an existing peered DNS domain.
 
-For more information see [the API](https://cloud.google.com/service-infrastructure/docs/service-networking/reference/rest/v1/services.projects.global.networks.peeredDnsDomains)
+For more information see [the API](https://docs.cloud.google.com/service-infrastructure/docs/service-networking/reference/rest/v1/services.projects.global.networks.peeredDnsDomains)
 
 ## Example Usage
 

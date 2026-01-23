@@ -20,8 +20,8 @@ description:
 min_version: 'beta'
 references:
   guides:
-    'Workstations': 'https://cloud.google.com/workstations/docs/'
-  api: 'https://cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs/create'
+    'Workstations': 'https://docs.cloud.google.com/workstations/docs/'
+  api: 'https://docs.cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs/create'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/workstationClusters/{{workstation_cluster_id}}/workstationConfigs'
 self_link: 'projects/{{project}}/locations/{{location}}/workstationClusters/{{workstation_cluster_id}}/workstationConfigs/{{workstation_config_id}}'
@@ -301,7 +301,7 @@ properties:
             description: |
               Whether to enable nested virtualization on the Compute Engine VMs backing the Workstations.
 
-              See https://cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs#GceInstance.FIELDS.enable_nested_virtualization
+              See https://docs.cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs#GceInstance.FIELDS.enable_nested_virtualization
             min_version: 'beta'
           - name: 'shieldedInstanceConfig'
             type: NestedObject
@@ -381,7 +381,7 @@ properties:
                 - name: 'machineType'
                   type: String
                   description: |
-                    The type of machine that boosted VM instances will use—for example, e2-standard-4. For more information about machine types that Cloud Workstations supports, see the list of available machine types https://cloud.google.com/workstations/docs/available-machine-types. Defaults to e2-standard-4.
+                    The type of machine that boosted VM instances will use—for example, e2-standard-4. For more information about machine types that Cloud Workstations supports, see the list of available machine types https://docs.cloud.google.com/workstations/docs/available-machine-types. Defaults to e2-standard-4.
                   min_version: 'beta'
                 - name: 'bootDiskSizeGb'
                   type: Integer
@@ -395,7 +395,7 @@ properties:
                   description: |
                     Whether to enable nested virtualization on the Compute Engine VMs backing boosted Workstations.
 
-                    See https://cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs#GceInstance.FIELDS.enable_nested_virtualization
+                    See https://docs.cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters.workstationConfigs#GceInstance.FIELDS.enable_nested_virtualization
                   min_version: 'beta'
                   default_from_api: true
                 - name: 'poolSize'

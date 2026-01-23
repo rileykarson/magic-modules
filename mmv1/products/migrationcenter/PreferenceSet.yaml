@@ -16,8 +16,8 @@ name: 'PreferenceSet'
 description: Manages the PreferenceSet resource.
 references:
   guides:
-    'Managing Migration Preferences': 'https://cloud.google.com/migration-center/docs/migration-preferences'
-  api: 'https://cloud.google.com/migration-center/docs/reference/rest/v1'
+    'Managing Migration Preferences': 'https://docs.cloud.google.com/migration-center/docs/migration-preferences'
+  api: 'https://docs.cloud.google.com/migration-center/docs/reference/rest/v1'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/preferenceSets/{{preference_set_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/preferenceSets'
@@ -109,7 +109,7 @@ properties:
           - name: 'preferredRegions'
             type: Array
             description: 'A list of preferred regions, ordered by the most preferred region
-              first. Set only valid Google Cloud region names. See https://cloud.google.com/compute/docs/regions-zones
+              first. Set only valid Google Cloud region names. See https://docs.cloud.google.com/compute/docs/regions-zones
               for available regions.'
             item_type:
               type: String
@@ -154,7 +154,7 @@ properties:
                     - name: 'code'
                       type: String
                       description: 'Code to identify a Compute Engine machine series. Consult
-                        https://cloud.google.com/compute/docs/machine-resource#machine_type_comparison
+                        https://docs.cloud.google.com/compute/docs/machine-resource#machine_type_comparison
                         for more details on the available series.'
           - name: 'licenseType'
             type: String
@@ -234,4 +234,4 @@ properties:
               properties:
                 - name: 'nodeName'
                   type: String
-                  description: 'Name of the Sole Tenant node. Consult https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes'
+                  description: 'Name of the Sole Tenant node. Consult https://docs.cloud.google.com/compute/docs/nodes/sole-tenant-nodes'

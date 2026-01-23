@@ -17,8 +17,8 @@ description: |
   An `Instance` is the runtime dataplane in Apigee.
 references:
   guides:
-    'Creating a runtime instance': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-instance'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances/create'
+    'Creating a runtime instance': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-instance'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances/create'
 docs:
 base_url: '{{org_id}}/instances'
 self_link: '{{org_id}}/instances/{{name}}'
@@ -146,7 +146,7 @@ properties:
     type: String
     description: |
       The size of the CIDR block range that will be reserved by the instance. For valid values,
-      see [CidrRange](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances#CidrRange) on the documentation.
+      see [CidrRange](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances#CidrRange) on the documentation.
     immutable: true
     default_from_api: true
   - name: 'ipRange'

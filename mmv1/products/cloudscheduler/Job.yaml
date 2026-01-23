@@ -19,8 +19,8 @@ description: |
 
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/scheduler/'
-  api: 'https://cloud.google.com/scheduler/docs/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/scheduler/'
+  api: 'https://docs.cloud.google.com/scheduler/docs/reference/rest/'
 docs:
 id_format: 'projects/{{project}}/locations/{{region}}/jobs/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/jobs'

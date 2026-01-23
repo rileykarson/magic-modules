@@ -17,7 +17,7 @@ api_resource_type_kind: SettingBinding
 description: The resource for managing CodeTools setting bindings for Admin Control.
 references:
   guides:
-    'Gemini Cloud Assist overview': 'https://cloud.google.com/gemini/docs/cloud-assist/overview'
+    'Gemini Cloud Assist overview': 'https://docs.cloud.google.com/gemini/docs/cloud-assist/overview'
 base_url: projects/{{project}}/locations/{{location}}/codeToolsSettings/{{code_tools_setting_id}}/settingBindings
 self_link: projects/{{project}}/locations/{{location}}/codeToolsSettings/{{code_tools_setting_id}}/settingBindings/{{setting_binding_id}}
 create_url: projects/{{project}}/locations/{{location}}/codeToolsSettings/{{code_tools_setting_id}}/settingBindings?settingBindingId={{setting_binding_id}}

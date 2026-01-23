@@ -17,8 +17,8 @@ description: |
   ClientTlsPolicy is a resource that specifies how a client should authenticate connections to backends of a service. This resource itself does not affect configuration unless it is attached to a backend service resource.
 references:
   guides:
-    'Service Security': 'https://cloud.google.com/traffic-director/docs/security-use-cases'
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/projects.locations.clientTlsPolicies'
+    'Service Security': 'https://docs.cloud.google.com/traffic-director/docs/security-use-cases'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/projects.locations.clientTlsPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/clientTlsPolicies'
 create_url: 'projects/{{project}}/locations/{{location}}/clientTlsPolicies?clientTlsPolicyId={{name}}'

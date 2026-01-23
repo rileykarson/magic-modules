@@ -10,8 +10,8 @@ Describes the settings associated with a folder.
 
 To get more information about LoggingFolderSettings, see:
 
-* [API documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/folders/getSettings)
-* [Configure default settings for organizations and folders](https://cloud.google.com/logging/docs/default-settings).
+* [API documentation](https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/folders/getSettings)
+* [Configure default settings for organizations and folders](https://docs.cloud.google.com/logging/docs/default-settings).
 
 ## Example Usage - Logging Folder Settings Basic
 
@@ -42,7 +42,7 @@ KMS key name format:
 `'projects/[PROJECT_ID]/locations/[LOCATION]/keyRings/[KEYRING]/cryptoKeys/[KEY]'`
 To enable CMEK for the bucket, set this field to a valid kmsKeyName for which the associated service account has the required cloudkms.cryptoKeyEncrypterDecrypter roles assigned for the key.
 The Cloud KMS key used by the bucket can be updated by changing the kmsKeyName to a new valid key name. Encryption operations that are in progress will be completed with the key that was in use when they started. Decryption operations will be completed using the key that was used at the time of encryption unless access to that key has been revoked.
-See [Enabling CMEK for Logging Buckets](https://cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.
+See [Enabling CMEK for Logging Buckets](https://docs.cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.
 
 * `kms_key_version_name` - The CryptoKeyVersion resource name for the configured Cloud KMS key.
 KMS key name format:
@@ -52,7 +52,7 @@ For example:
 This is a read-only field used to convey the specific configured CryptoKeyVersion of kms_key that has been configured. It will be populated in cases where the CMEK settings are bound to a single key version.
 
 * `kms_service_account_id` - The service account associated with a project for which CMEK will apply.
-Before enabling CMEK for a logging bucket, you must first assign the cloudkms.cryptoKeyEncrypterDecrypter role to the service account associated with the project for which CMEK will apply. See [Enabling CMEK for Logging Buckets](https://cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.
+Before enabling CMEK for a logging bucket, you must first assign the cloudkms.cryptoKeyEncrypterDecrypter role to the service account associated with the project for which CMEK will apply. See [Enabling CMEK for Logging Buckets](https://docs.cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.
 
 * `logging_service_account_id` - The service account for the given container. Sinks use this service account as their writerIdentity if no custom service account is provided.
 

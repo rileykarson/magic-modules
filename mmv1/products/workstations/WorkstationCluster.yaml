@@ -17,8 +17,8 @@ description: "A grouping of workstation configurations and the associated workst
 min_version: 'beta'
 references:
   guides:
-    'Workstations': 'https://cloud.google.com/workstations/docs/'
-  api: 'https://cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters/create'
+    'Workstations': 'https://docs.cloud.google.com/workstations/docs/'
+  api: 'https://docs.cloud.google.com/workstations/docs/reference/rest/v1beta/projects.locations.workstationClusters/create'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/workstationClusters'
 self_link: 'projects/{{project}}/locations/{{location}}/workstationClusters/{{workstation_cluster_id}}'
@@ -184,7 +184,7 @@ properties:
         description: |
           Service attachment URI for the workstation cluster.
           The service attachment is created when private endpoint is enabled.
-          To access workstations in the cluster, configure access to the managed service using (Private Service Connect)[https://cloud.google.com/vpc/docs/configure-private-service-connect-services].
+          To access workstations in the cluster, configure access to the managed service using (Private Service Connect)[https://docs.cloud.google.com/vpc/docs/configure-private-service-connect-services].
         min_version: 'beta'
         output: true
       - name: 'allowedProjects'

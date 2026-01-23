@@ -17,8 +17,8 @@ kind: 'securesourcemanager#instance'
 description: 'Instances are deployed to an available Google Cloud region and are accessible via their web interface.'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/secure-source-manager/docs/create-instance'
-  api: 'https://cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.instances'
+    'Official Documentation': 'https://docs.cloud.google.com/secure-source-manager/docs/create-instance'
+  api: 'https://docs.cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.instances'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/instances?instance_id={{instance_id}}'
 self_link: 'projects/{{project}}/locations/{{location}}/instances/{{instance_id}}'

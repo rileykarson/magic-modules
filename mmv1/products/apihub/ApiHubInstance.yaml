@@ -147,4 +147,4 @@ properties:
     description: |-
       Optional. Instance labels to represent user-provided metadata.
       Refer to cloud documentation on labels for more details.
-      https://cloud.google.com/compute/docs/labeling-resources
+      https://docs.cloud.google.com/compute/docs/labeling-resources

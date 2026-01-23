@@ -7,8 +7,8 @@ description: |-
 # google_compute_disk_async_replication
 
 Starts and stops asynchronous persistent disk replication. For more information
-see [the official documentation](https://cloud.google.com/compute/docs/disks/async-pd/about)
-and the [API](https://cloud.google.com/compute/docs/reference/rest/v1/disks).
+see [the official documentation](https://docs.cloud.google.com/compute/docs/disks/async-pd/about)
+and the [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/disks).
 
 ## Example Usage
 

@@ -15,10 +15,10 @@ numbers of disks using the `count` variable.
 
 To get more information about attaching disks, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/instances/attachDisk)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instances/attachDisk)
 * [Resource: google_compute_disk](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_disk)
 * How-to Guides
-    * [Adding a persistent disk](https://cloud.google.com/compute/docs/disks/add-persistent-disk)
+    * [Adding a persistent disk](https://docs.cloud.google.com/compute/docs/disks/add-persistent-disk)
 
 **Note:** When using `google_compute_attached_disk` you **must** use `lifecycle.ignore_changes = ["attached_disk"]` on the `google_compute_instance` resource that has the disks attached. Otherwise the two resources will fight for control of the attached disk block.
 

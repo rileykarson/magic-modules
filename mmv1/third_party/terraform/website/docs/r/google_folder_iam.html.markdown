@@ -179,7 +179,7 @@ The following arguments are supported:
 
 * `audit_log_config` - (Required only by google_folder_iam_audit_config) The configuration for logging of each type of permission.  This can be specified multiple times.  Structure is [documented below](#nested_audit_log_config).
 
-* `condition` - (Optional) An [IAM Condition](https://cloud.google.com/iam/docs/conditions-overview) for a given binding.
+* `condition` - (Optional) An [IAM Condition](https://docs.cloud.google.com/iam/docs/conditions-overview) for a given binding.
   Structure is [documented below](#nested_condition).
 
 ---

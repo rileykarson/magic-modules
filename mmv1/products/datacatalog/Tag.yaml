@@ -16,15 +16,15 @@ name: 'Tag'
 description: |
   Tags are used to attach custom metadata to Data Catalog resources. Tags conform to the specifications within their tag template.
 
-  See [Data Catalog IAM](https://cloud.google.com/data-catalog/docs/concepts/iam) for information on the permissions needed to create or view tags.
+  See [Data Catalog IAM](https://docs.cloud.google.com/data-catalog/docs/concepts/iam) for information on the permissions needed to create or view tags.
 deprecation_message: >-
   `google_data_catalog_tag` is deprecated and will be removed in a future major release.
   For steps to transition your Data Catalog users, workloads, and content to Dataplex Catalog, see
-  https://cloud.google.com/dataplex/docs/transition-to-dataplex-catalog.
+  https://docs.cloud.google.com/dataplex/docs/transition-to-dataplex-catalog.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/data-catalog/docs'
-  api: 'https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.entryGroups.tags'
+    'Official Documentation': 'https://docs.cloud.google.com/data-catalog/docs'
+  api: 'https://docs.cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.entryGroups.tags'
 docs:
 id_format: '{{name}}'
 base_url: '{{parent}}/tags'

@@ -27,8 +27,8 @@ description: |
   with the lifecycle `replace_triggered_by` method, with the passed Instance's ID.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
 docs:
 id_format: '{{project}}/{{zone}}/{{network_endpoint_group}}/{{instance}}/{{ip_address}}/{{port}}'
 base_url: 'projects/{{project}}/zones/{{zone}}/networkEndpointGroups/{{network_endpoint_group}}'

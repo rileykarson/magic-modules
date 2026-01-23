@@ -18,7 +18,7 @@ description: |
   A policy that can be attached to a resource to specify or schedule actions on that resource.
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/resourcePolicies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/resourcePolicies'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/resourcePolicies'
 has_self_link: true

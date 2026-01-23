@@ -21,8 +21,8 @@ description: |
   the load balancer to serve secure connections from the user.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/ssl-certificates'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionSslCertificates'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/ssl-certificates'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionSslCertificates'
 include_in_tgc_next: true
 tgc_include_handwritten_tests: true
 docs:

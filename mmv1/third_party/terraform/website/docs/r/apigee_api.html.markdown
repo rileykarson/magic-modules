@@ -15,9 +15,9 @@ description: |-
 
 To get more information about API proxies see, see:
 
-* [API documentation](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apis)
+* [API documentation](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.apis)
 * How-to Guides
-  * [API proxies](https://cloud.google.com/apigee/docs/resources)
+  * [API proxies](https://docs.cloud.google.com/apigee/docs/resources)
 
 
 ## Example Usage

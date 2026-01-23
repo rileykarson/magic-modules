@@ -10,7 +10,7 @@ description: |-
 with a GKE cluster.
 
 This page is a brief overview of GKE usage with Terraform, based on the content
-available in the [How-to guides for GKE](https://cloud.google.com/kubernetes-engine/docs/how-to).
+available in the [How-to guides for GKE](https://docs.cloud.google.com/kubernetes-engine/docs/how-to).
 It's intended as a supplement for intermediate users, covering cases that are
 unintuitive or confusing when using Terraform instead of `gcloud`/the Cloud
 Console.
@@ -24,7 +24,7 @@ If the information on this page conflicts with recommendations available on
 ## Interacting with Kubernetes
 
 After creating a `google_container_cluster` with Terraform, you can use `gcloud` to
-configure cluster access, [generating a `kubeconfig` entry](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#generate_kubeconfig_entry):
+configure cluster access, [generating a `kubeconfig` entry](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#generate_kubeconfig_entry):
 
 ```bash
 gcloud container clusters get-credentials cluster-name
@@ -59,7 +59,7 @@ provider "kubernetes" {
   )
 }
 ```
-Although the above can result in authentication errors, over time, as the token recorded in the google_client_config data resource is short lived (thus it expires) and it's stored in state.  Fortunately, the [kubernetes provider can accept valid credentials from an exec-based plugin](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#exec-plugins) to fetch a new token before each Terraform operation (so long as you have the [gke-cloud-auth-plugin for kubectl installed](https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke)), like so:
+Although the above can result in authentication errors, over time, as the token recorded in the google_client_config data resource is short lived (thus it expires) and it's stored in state.  Fortunately, the [kubernetes provider can accept valid credentials from an exec-based plugin](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#exec-plugins) to fetch a new token before each Terraform operation (so long as you have the [gke-cloud-auth-plugin for kubectl installed](https://docs.cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke)), like so:
  
 ```hcl
 # Retrieve an access token as the Terraform runner
@@ -125,10 +125,10 @@ persistent config is required, using `gcloud` is advised.
 
 ## VPC-native Clusters
 
-[VPC-native clusters](https://cloud.google.com/kubernetes-engine/docs/how-to/alias-ips)
-are GKE clusters that use [alias IP ranges](https://cloud.google.com/vpc/docs/alias-ip).
+[VPC-native clusters](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/alias-ips)
+are GKE clusters that use [alias IP ranges](https://docs.cloud.google.com/vpc/docs/alias-ip).
 VPC-native clusters route traffic between pods using a VPC network, and are able
-to route to other VPCs across network peerings along with [several other benefits](https://cloud.google.com/kubernetes-engine/docs/how-to/alias-ips).
+to route to other VPCs across network peerings along with [several other benefits](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/alias-ips).
 
 
 In both `gcloud` and the Cloud Console, VPC-native is the default for new
@@ -214,10 +214,10 @@ nodes to your cluster, GKE may cause a resizing event immediately after adding a
 node pool.
 
 The initial node pool will be created using the
-[Compute Engine default service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account)
-as the [`service_account`](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
+[Compute Engine default service account](https://docs.cloud.google.com/compute/docs/access/service-accounts#default_service_account)
+as the [`service_account`](https://docs.cloud.google.com/compute/docs/access/service-accounts#default_service_account).
 If you've disabled that service account, or want to use a
-[least privilege Google service account](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa)
+[least privilege Google service account](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#use_least_privilege_sa)
 for the temporary  node pool, you can add the following configuration to your
 `google_container_cluster` block:
 
@@ -240,7 +240,7 @@ resource "google_container_cluster" "my-gke-cluster" {
 ### Windows Node Pools
 
 You can add
-[Windows Server node pools](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster-windows)
+[Windows Server node pools](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster-windows)
 to your GKE cluster by adding `google_container_node_pool` to your Terraform
 configuration with `image_type=WINDOWS_LTSC` or `WINDOWS_SAC`.
 
@@ -296,5 +296,5 @@ resource "google_container_node_pool" "windows_pool" {
 The example above creates a cluster with a small Linux node pool and a Windows
 Server node pool. The Linux node pool is necessary since some critical pods are
 not yet supported on Windows. Please see
-[Limitations](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster-windows#limitations)
+[Limitations](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster-windows#limitations)
 for details on features that are not supported by Windows Server node pools.

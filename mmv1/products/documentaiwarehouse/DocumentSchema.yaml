@@ -19,8 +19,8 @@ description: |
   A document schema is used to define document structure.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/document-warehouse/docs/manage-document-schemas'
-  api: 'https://cloud.google.com/document-warehouse/docs/reference/rest/v1/projects.locations.documentSchemas'
+    'Official Documentation': 'https://docs.cloud.google.com/document-warehouse/docs/manage-document-schemas'
+  api: 'https://docs.cloud.google.com/document-warehouse/docs/reference/rest/v1/projects.locations.documentSchemas'
 docs:
 base_url: 'projects/{{project_number}}/locations/{{location}}/documentSchemas'
 self_link: '{{name}}'

@@ -7,7 +7,7 @@ description: |-
 # google_monitoring_uptime_check_ips
 
 Returns the list of IP addresses that checkers run from. For more information see
-the [official documentation](https://cloud.google.com/monitoring/uptime-checks#get-ips).
+the [official documentation](https://docs.cloud.google.com/monitoring/uptime-checks#get-ips).
 
 ## Example Usage
 

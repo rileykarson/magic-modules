@@ -27,7 +27,7 @@ output "gcr_location" {
 ## Argument Reference
 * `name`: (Required) The image name.
 * `project`: (Optional) The project ID that this image is attached to.  If not provider, provider project will be used instead.
-* `region`: (Optional) The GCR region to use.  As of this writing, one of `asia`, `eu`, and `us`.  See [the documentation](https://cloud.google.com/container-registry/docs/pushing-and-pulling) for additional information.
+* `region`: (Optional) The GCR region to use.  As of this writing, one of `asia`, `eu`, and `us`.  See [the documentation](https://docs.cloud.google.com/container-registry/docs/pushing-and-pulling) for additional information.
 * `tag`: (Optional) The tag to fetch, if any.
 * `digest`: (Optional) The image digest to fetch, if any.
 

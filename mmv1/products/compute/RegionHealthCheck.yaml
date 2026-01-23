@@ -31,8 +31,8 @@ description: |
   healthy again and can receive new connections.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/health-checks'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionHealthChecks'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/health-checks'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionHealthChecks'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/healthChecks'
 has_self_link: true

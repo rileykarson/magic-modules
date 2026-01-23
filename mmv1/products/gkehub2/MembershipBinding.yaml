@@ -17,8 +17,8 @@ description: |
   MembershipBinding is a subresource of a Membership, representing what Fleet Scopes (or other, future Fleet resources) a Membership is bound to.
 references:
   guides:
-    'Registering a Cluster': 'https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
-  api: 'https://cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.memberships.bindings'
+    'Registering a Cluster': 'https://docs.cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
+  api: 'https://docs.cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.memberships.bindings'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/memberships/{{membership_id}}/bindings/{{membership_binding_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/memberships/{{membership_id}}/bindings'

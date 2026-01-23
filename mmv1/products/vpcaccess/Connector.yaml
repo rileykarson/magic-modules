@@ -19,8 +19,8 @@ include_in_tgc_next: true
 tgc_include_handwritten_tests: true
 references:
   guides:
-    'Configuring Serverless VPC Access': 'https://cloud.google.com/vpc/docs/configure-serverless-vpc-access'
-  api: 'https://cloud.google.com/vpc/docs/reference/vpcaccess/rest/v1/projects.locations.connectors'
+    'Configuring Serverless VPC Access': 'https://docs.cloud.google.com/vpc/docs/configure-serverless-vpc-access'
+  api: 'https://docs.cloud.google.com/vpc/docs/reference/vpcaccess/rest/v1/projects.locations.connectors'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/connectors'
 create_url: 'projects/{{project}}/locations/{{region}}/connectors?connectorId={{name}}'

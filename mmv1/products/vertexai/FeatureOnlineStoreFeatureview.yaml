@@ -18,8 +18,8 @@ description: |-
   FeatureView is representation of values that the FeatureOnlineStore will serve based on its syncConfig.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores.featureViews'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureOnlineStores.featureViews'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/featureOnlineStores/{{feature_online_store}}/featureViews'
 self_link: 'projects/{{project}}/locations/{{region}}/featureOnlineStores/{{feature_online_store}}/featureViews/{{name}}'
@@ -214,7 +214,7 @@ properties:
         type: Enum
         description: |
           The distance measure used in nearest neighbor search.
-          For details on allowed values, see the [API documentation](https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureOnlineStores.featureViews#DistanceMeasureType).
+          For details on allowed values, see the [API documentation](https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureOnlineStores.featureViews#DistanceMeasureType).
         enum_values:
           - 'SQUARED_L2_DISTANCE'
           - 'COSINE_DISTANCE'

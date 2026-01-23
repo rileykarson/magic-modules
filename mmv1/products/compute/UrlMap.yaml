@@ -19,8 +19,8 @@ description: |
   that you define for the host and path of an incoming URL.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/url-map-concepts'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/urlMaps'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/url-map-concepts'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/urlMaps'
 docs:
 base_url: 'projects/{{project}}/global/urlMaps'
 has_self_link: true

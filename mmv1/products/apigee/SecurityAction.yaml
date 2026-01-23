@@ -20,8 +20,8 @@ description: |
   At least one condition is required to create a SecurityAction.
 references:
   guides:
-    'Creating security actions': 'https://cloud.google.com/apigee/docs/api-security/security-actions-api#create-security-actions'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.securityActions/create'
+    'Creating security actions': 'https://docs.cloud.google.com/apigee/docs/api-security/security-actions-api#create-security-actions'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.securityActions/create'
 docs:
 base_url: 'organizations/{{org_id}}/environments/{{env_id}}/securityActions'
 self_link: 'organizations/{{org_id}}/environments/{{env_id}}/securityActions/{{security_action_id}}'
@@ -185,7 +185,7 @@ properties:
       - 'allow'
       - 'deny'
       - 'flag'
-    # empty object with no properties, see: https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.securityActions#Allow
+    # empty object with no properties, see: https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.securityActions#Allow
     allow_empty_object: true
     send_empty_value: true
     properties: []

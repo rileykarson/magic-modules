@@ -18,8 +18,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/api-gateway/docs/creating-api-config'
-  api: 'https://cloud.google.com/api-gateway/docs/reference/rest/v1beta/projects.locations.apis.configs'
+    'Official Documentation': 'https://docs.cloud.google.com/api-gateway/docs/creating-api-config'
+  api: 'https://docs.cloud.google.com/api-gateway/docs/reference/rest/v1beta/projects.locations.apis.configs'
 docs:
   optional_properties: |
     * `api_config_id_prefix` - (Optional) Creates a unique name beginning with the
@@ -130,7 +130,7 @@ properties:
   - name: 'serviceConfigId'
     type: String
     description: |
-      The ID of the associated Service Config (https://cloud.google.com/service-infrastructure/docs/glossary#config).
+      The ID of the associated Service Config (https://docs.cloud.google.com/service-infrastructure/docs/glossary#config).
     min_version: 'beta'
     output: true
   - name: 'labels'
@@ -158,7 +158,7 @@ properties:
             type: String
             description: |
               Google Cloud IAM service account used to sign OIDC tokens for backends that have authentication configured
-              (https://cloud.google.com/service-infrastructure/docs/service-management/reference/rest/v1/services.configs#backend).
+              (https://docs.cloud.google.com/service-infrastructure/docs/service-management/reference/rest/v1/services.configs#backend).
             min_version: 'beta'
             required: true
             immutable: true
@@ -263,7 +263,7 @@ properties:
   - name: 'managedServiceConfigs'
     type: Array
     description: |
-      Optional. Service Configuration files. At least one must be included when using gRPC service definitions. See https://cloud.google.com/endpoints/docs/grpc/grpc-service-config#service_configuration_overview for the expected file contents.
+      Optional. Service Configuration files. At least one must be included when using gRPC service definitions. See https://docs.cloud.google.com/endpoints/docs/grpc/grpc-service-config#service_configuration_overview for the expected file contents.
       If multiple files are specified, the files are merged with the following rules: * All singular scalar fields are merged using "last one wins" semantics in the order of the files uploaded. * Repeated fields are concatenated. * Singular embedded messages are merged using these rules for nested fields.
     min_version: 'beta'
     required_with:

@@ -21,8 +21,8 @@ description: |
   for service accounts.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/authentication/managing-hmackeys'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/projects/hmacKeys'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/authentication/managing-hmackeys'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/projects/hmacKeys'
 docs:
   warning: |
     All arguments including the `secret` value will be stored in the raw

@@ -17,8 +17,8 @@ description: |
   Playbook is the basic building block to instruct the LLM how to execute a certain task.
 references:
   guides:
-    'Official CX Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.playbooks'
+    'Official CX Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.playbooks'
 
 base_url: '{{parent}}/playbooks'
 self_link: '{{parent}}/playbooks/{{name}}'
@@ -94,7 +94,7 @@ properties:
               description: |
                 Sub-processing needed to execute the current step.
 
-                This field uses JSON data as a string. The value provided must be a valid JSON representation documented in [Step](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.playbooks#step).
+                This field uses JSON data as a string. The value provided must be a valid JSON representation documented in [Step](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.playbooks#step).
               state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
               custom_flatten: 'templates/terraform/custom_flatten/json_schema.tmpl'
               custom_expand: 'templates/terraform/custom_expand/json_value.tmpl'

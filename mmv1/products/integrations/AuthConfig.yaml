@@ -19,9 +19,9 @@ description: |
   The AuthConfig resource use to hold channels and connection config data.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/application-integration/docs/overview'
-    'Manage authentication profiles': 'https://cloud.google.com/application-integration/docs/configure-authentication-profiles'
-  api: 'https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.authConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/application-integration/docs/overview'
+    'Manage authentication profiles': 'https://docs.cloud.google.com/application-integration/docs/configure-authentication-profiles'
+  api: 'https://docs.cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.authConfigs'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/authConfigs'

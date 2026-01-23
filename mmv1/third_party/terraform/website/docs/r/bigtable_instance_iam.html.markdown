@@ -79,9 +79,9 @@ For `google_bigtable_instance_iam_member` or `google_bigtable_instance_iam_bindi
 
 * `role` - (Required) The role that should be applied. Only one
     `google_bigtable_instance_iam_binding` can be used per role. Note that custom roles must be of the format
-    `[projects|organizations]/{parent-name}/roles/{role-name}`. Read more about roles [here](https://cloud.google.com/bigtable/docs/access-control#roles).
+    `[projects|organizations]/{parent-name}/roles/{role-name}`. Read more about roles [here](https://docs.cloud.google.com/bigtable/docs/access-control#roles).
 
-* `condition` - (Optional) An [IAM Condition](https://cloud.google.com/iam/docs/conditions-overview) for a given binding. Structure is [documented below](#nested_condition).
+* `condition` - (Optional) An [IAM Condition](https://docs.cloud.google.com/iam/docs/conditions-overview) for a given binding. Structure is [documented below](#nested_condition).
 
 <a name="nested_condition"></a>The `condition` block supports:
 

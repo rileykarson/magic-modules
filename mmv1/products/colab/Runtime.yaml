@@ -20,8 +20,8 @@ description: |
 
 references:
   guides:
-    'Create a runtime': 'https://cloud.google.com/colab/docs/create-runtime'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookRuntimes'
+    'Create a runtime': 'https://docs.cloud.google.com/colab/docs/create-runtime'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookRuntimes'
 base_url: 'projects/{{project}}/locations/{{location}}/notebookRuntimes'
 self_link: 'projects/{{project}}/locations/{{location}}/notebookRuntimes/{{name}}'
 create_url: 'projects/{{project}}/locations/{{location}}/notebookRuntimes:assign?notebook_runtime_id={{name}}'
@@ -76,7 +76,7 @@ parameters:
     type: String
     required: true
     url_param_only: true
-    description: 'The location for the resource: https://cloud.google.com/colab/docs/locations'
+    description: 'The location for the resource: https://docs.cloud.google.com/colab/docs/locations'
     immutable: true
   - name: 'name'
     type: String

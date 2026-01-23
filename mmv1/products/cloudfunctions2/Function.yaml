@@ -18,7 +18,7 @@ description: |
   A Cloud Function that contains user computation executed in response to an event.
 references:
   guides:
-  api: 'https://cloud.google.com/functions/docs/reference/rest/v2beta/projects.locations.functions'
+  api: 'https://docs.cloud.google.com/functions/docs/reference/rest/v2beta/projects.locations.functions'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/functions/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/functions'
@@ -751,7 +751,7 @@ properties:
                 the filter. If not specified, only events that have an exact key-value
                 pair specified in the filter are matched.
                 The only allowed value is `match-path-pattern`.
-                [See documentation on path patterns here](https://cloud.google.com/eventarc/docs/path-patterns)'
+                [See documentation on path patterns here](https://docs.cloud.google.com/eventarc/docs/path-patterns)'
       - name: 'pubsubTopic'
         type: String
         description: |

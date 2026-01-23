@@ -17,8 +17,8 @@ description: |
   Membership contains information about a member cluster.
 references:
   guides:
-    'Registering a Cluster': 'https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
-  api: 'https://cloud.google.com/anthos/multicluster-management/reference/rest/v1/projects.locations.memberships'
+    'Registering a Cluster': 'https://docs.cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
+  api: 'https://docs.cloud.google.com/anthos/multicluster-management/reference/rest/v1/projects.locations.memberships'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/memberships/{{membership_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/memberships'
@@ -154,7 +154,7 @@ properties:
     description: |
       Authority encodes how Google will recognize identities from this Membership.
       See the workload identity documentation for more details:
-      https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+      https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
     properties:
       - name: 'issuer'
         type: String

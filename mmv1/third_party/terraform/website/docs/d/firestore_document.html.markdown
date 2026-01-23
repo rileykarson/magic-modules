@@ -8,9 +8,9 @@ description: |-
 # google_firestore_document
 
 Reads a document from a Firestore database.
-See [the official documentation](https://cloud.google.com/firestore/native/docs/)
+See [the official documentation](https://docs.cloud.google.com/firestore/native/docs/)
 and
-[API](https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents/get/).
+[API](https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents/get/).
 
 
 ## Example Usage

@@ -18,7 +18,7 @@ description: |
 min_version: beta
 references:
   guides:
-    'Rollout Sequencing Overview': 'https://cloud.google.com/kubernetes-engine/docs/concepts/rollout-sequencing-custom-stages/about-rollout-sequencing'
+    'Rollout Sequencing Overview': 'https://docs.cloud.google.com/kubernetes-engine/docs/concepts/rollout-sequencing-custom-stages/about-rollout-sequencing'
   api: https://docs.cloud.google.com/kubernetes-engine/fleet-management/docs/reference/rest/v1beta/projects.locations.rolloutSequences
 id_format: 'projects/{{project}}/locations/global/rolloutSequences/{{rollout_sequence_id}}'
 base_url: 'projects/{{project}}/locations/global/rolloutSequences'

@@ -21,8 +21,8 @@ description: |
   One project can have multiple analysis rules.
 references:
   guides:
-    'Configure analysis rules using the API': 'https://cloud.google.com/contact-center/insights/docs/analysis-rule'
-  api: 'https://cloud.google.com/contact-center/insights/docs/reference/rest/v1/projects.locations.analysisRules'
+    'Configure analysis rules using the API': 'https://docs.cloud.google.com/contact-center/insights/docs/analysis-rule'
+  api: 'https://docs.cloud.google.com/contact-center/insights/docs/reference/rest/v1/projects.locations.analysisRules'
 base_url: projects/{{project}}/locations/{{location}}/analysisRules
 self_link: projects/{{project}}/locations/{{location}}/analysisRules/{{name}}
 create_url: projects/{{project}}/locations/{{location}}/analysisRules
@@ -75,7 +75,7 @@ properties:
       Filter for the conversations that should apply this analysis
       rule. An empty filter means this analysis rule applies to all
       conversations.
-      Refer to https://cloud.google.com/contact-center/insights/docs/filtering
+      Refer to https://docs.cloud.google.com/contact-center/insights/docs/filtering
       for details.
   - name: annotatorSelector
     type: NestedObject

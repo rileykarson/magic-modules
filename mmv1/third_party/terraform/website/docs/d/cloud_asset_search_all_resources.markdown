@@ -7,7 +7,7 @@ description: |-
 # google_cloud_asset_search_all_resources
 
 Searches all Google Cloud resources within the specified scope, such as a project, folder, or organization. See the
-[REST API](https://cloud.google.com/asset-inventory/docs/reference/rest/v1/TopLevel/searchAllResources)
+[REST API](https://docs.cloud.google.com/asset-inventory/docs/reference/rest/v1/TopLevel/searchAllResources)
 for more details.
 
 ## Example Usage - searching for all projects in an org
@@ -49,8 +49,8 @@ data google_cloud_asset_search_all_resources project_service_accounts {
 The following arguments are supported:
 
 * `scope` - (Required) A scope can be a project, a folder, or an organization. The search is limited to the resources within the scope. The allowed value must be: organization number (such as "organizations/123"), folder number (such as "folders/1234"), project number (such as "projects/12345") or project id (such as "projects/abc")
-* `asset_types` - (Optional) A list of asset types that this request searches for. If empty, it will search all the [supported asset types](https://cloud.google.com/asset-inventory/docs/supported-asset-types). 
-* `query` - (Optional) The query statement. See [how to construct a query](https://cloud.google.com/asset-inventory/docs/searching-resources#how_to_construct_a_query) for more information. If not specified or empty, it will search all the resources within the specified `scope` and `asset_types`.
+* `asset_types` - (Optional) A list of asset types that this request searches for. If empty, it will search all the [supported asset types](https://docs.cloud.google.com/asset-inventory/docs/supported-asset-types). 
+* `query` - (Optional) The query statement. See [how to construct a query](https://docs.cloud.google.com/asset-inventory/docs/searching-resources#how_to_construct_a_query) for more information. If not specified or empty, it will search all the resources within the specified `scope` and `asset_types`.
 
 
 ## Attributes Reference
@@ -61,7 +61,7 @@ The following attributes are exported:
 
 <a name="nested_results"></a>The `results` block supports:
 
-* `name` - The full resource name of this resource.. See [Resource Names](https://cloud.google.com/apis/design/resource_names#full_resource_name) for more information.
+* `name` - The full resource name of this resource.. See [Resource Names](https://docs.cloud.google.com/apis/design/resource_names#full_resource_name) for more information.
 * `asset_type` - The type of this resource. 
 * `project` - The project that this resource belongs to, in the form of `projects/{project_number}`.
 * `folders` - The folder(s) that this resource belongs to, in the form of `folders/{FOLDER_NUMBER}`. This field is available when the resource belongs to one or more folders.

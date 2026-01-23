@@ -21,8 +21,8 @@ description: |
   the health source resources is delivered.
 references:
   guides:
-    'Health checks overview': 'https://cloud.google.com/load-balancing/docs/health-check-concepts'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionCompositeHealthChecks'
+    'Health checks overview': 'https://docs.cloud.google.com/load-balancing/docs/health-check-concepts'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionCompositeHealthChecks'
 min_version: beta
 
 # URL for the resource's standard List method. https://google.aip.dev/132

@@ -8,9 +8,9 @@ description: |-
 
 Creates a Google Bigtable instance. For more information see:
 
-* [API documentation](https://cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.clusters)
+* [API documentation](https://docs.cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.clusters)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/bigtable/docs)
+    * [Official Documentation](https://docs.cloud.google.com/bigtable/docs)
 
 
 -> **Note**: It is strongly recommended to set `lifecycle { prevent_destroy = true }`
@@ -122,12 +122,12 @@ to default to the backend value. See [structure below](#nested_cluster).
 
 * `zone` - (Optional) The zone to create the Cloud Bigtable cluster in. If it not
 specified, the provider zone is used. Each cluster must have a different zone in the same region. Zones that support
-Bigtable instances are noted on the [Cloud Bigtable locations page](https://cloud.google.com/bigtable/docs/locations).
+Bigtable instances are noted on the [Cloud Bigtable locations page](https://docs.cloud.google.com/bigtable/docs/locations).
 
 * `num_nodes` - (Optional) The number of nodes in the cluster.
 If no value is set, Cloud Bigtable automatically allocates nodes based on your data footprint and optimized for 50% storage utilization.
 
-* `autoscaling_config` - (Optional) [Autoscaling](https://cloud.google.com/bigtable/docs/autoscaling#parameters) config for the cluster, contains the following arguments:
+* `autoscaling_config` - (Optional) [Autoscaling](https://docs.cloud.google.com/bigtable/docs/autoscaling#parameters) config for the cluster, contains the following arguments:
 
   * `min_nodes` - (Required) The minimum number of nodes for autoscaling.
   * `max_nodes` - (Required) The maximum number of nodes for autoscaling.

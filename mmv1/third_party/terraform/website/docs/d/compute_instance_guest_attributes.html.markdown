@@ -7,13 +7,13 @@ description: |-
 # google_compute_instance_guest_attributes
 
 Get information about a VM instance resource within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/instances)
+[the official documentation](https://docs.cloud.google.com/compute/docs/instances)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/instances).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/instances).
 
-Get information about VM's guest attrubutes. For more information see [the official documentation](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
+Get information about VM's guest attrubutes. For more information see [the official documentation](https://docs.cloud.google.com/compute/docs/metadata/manage-guest-attributes)
 and
-[API](https://cloud.google.com/compute/docs/reference/rest/v1/instances/getGuestAttributes).
+[API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instances/getGuestAttributes).
 
 ## Example Usage - get all attributes from a single namespace
 

@@ -20,8 +20,8 @@ description: |
   Default resource settings control whether CMEK is required for new log buckets. These settings also determine the storage location for the _Default and _Required log buckets, and whether the _Default sink is enabled or disabled.
 references:
   guides:
-    'Configure default settings for organizations and folders': 'https://cloud.google.com/logging/docs/default-settings'
-  api: 'https://cloud.google.com/logging/docs/reference/v2/rest/v2/TopLevel/getSettings'
+    'Configure default settings for organizations and folders': 'https://docs.cloud.google.com/logging/docs/default-settings'
+  api: 'https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/TopLevel/getSettings'
 docs:
 base_url: 'organizations/{{organization}}/settings'
 self_link: 'organizations/{{organization}}/settings'

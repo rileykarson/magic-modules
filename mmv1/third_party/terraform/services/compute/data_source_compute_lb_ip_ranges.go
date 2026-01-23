@@ -28,7 +28,7 @@ func DataSourceGoogleComputeLbIpRanges() *schema.Resource {
 func dataSourceGoogleComputeLbIpRangesRead(d *schema.ResourceData, meta interface{}) error {
 	d.SetId("compute-lb-ip-ranges")
 
-	// https://cloud.google.com/compute/docs/load-balancing/health-checks#health_check_source_ips_and_firewall_rules
+	// https://docs.cloud.google.com/compute/docs/load-balancing/health-checks#health_check_source_ips_and_firewall_rules
 
 	networkIpRanges := []string{
 		"209.85.152.0/22",

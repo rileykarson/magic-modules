@@ -20,8 +20,8 @@ description: |-
   global deployment group which represents a global mirroring service.
 references:
   guides:
-    'Mirroring deployment overview': 'https://cloud.google.com/network-security-integration/docs/out-of-band/deployments-overview'
-  api: 'https://cloud.google.com/network-security-integration/docs/reference/rest/v1/projects.locations.mirroringDeployments'
+    'Mirroring deployment overview': 'https://docs.cloud.google.com/network-security-integration/docs/out-of-band/deployments-overview'
+  api: 'https://docs.cloud.google.com/network-security-integration/docs/reference/rest/v1/projects.locations.mirroringDeployments'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/mirroringDeployments/{{mirroring_deployment_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/mirroringDeployments'

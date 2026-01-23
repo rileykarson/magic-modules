@@ -17,8 +17,8 @@ description: |
   Represents a Data Fusion instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/data-fusion/docs/'
-  api: 'https://cloud.google.com/data-fusion/docs/reference/rest/v1beta1/projects.locations.instances'
+    'Official Documentation': 'https://docs.cloud.google.com/data-fusion/docs/'
+  api: 'https://docs.cloud.google.com/data-fusion/docs/reference/rest/v1beta1/projects.locations.instances'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/instances'
 create_url: 'projects/{{project}}/locations/{{region}}/instances?instanceId={{name}}'

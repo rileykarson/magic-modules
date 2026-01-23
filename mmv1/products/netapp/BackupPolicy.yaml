@@ -19,8 +19,8 @@ description: |
   The policy defines how many backups to retain at daily, weekly, or monthly intervals.
 references:
   guides:
-    'Documentation': 'https://cloud.google.com/netapp/volumes/docs/protect-data/about-volume-backups#about_backup_policies'
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.backupPolicies'
+    'Documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/protect-data/about-volume-backups#about_backup_policies'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.backupPolicies'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/backupPolicies/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/backupPolicies'

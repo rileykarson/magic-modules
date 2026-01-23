@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_repositories
 
 Get information about Artifact Registry repositories.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories/list).
 
 ```hcl
 data "google_artifact_registry_repositories" "example" {
@@ -23,7 +23,7 @@ The following arguments are supported:
 
 * `location` - (Optional) The location of the artifact registry repositories. eg `us-central1`.
 
-* `name_filter` - (Optional) Optional. An expression for filtering the results by name. You can also use wildcards `*`. I.e. `my-repo`, `*-repo`, `my-*`, `*-re*`. For further information reach out to the [API docs](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories/list).
+* `name_filter` - (Optional) Optional. An expression for filtering the results by name. You can also use wildcards `*`. I.e. `my-repo`, `*-repo`, `my-*`, `*-re*`. For further information reach out to the [API docs](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories/list).
 
 * `project` - (Optional) The ID of the project. If it is not provided, the provider project is used.
 
@@ -39,7 +39,7 @@ The following attributes are exported:
 
 * `repository_id` - The last part of the repository name, for example: `"repo1"`
 
-* `format` - The format of packages that are stored in the repository. Supported formats can be found [here](https://cloud.google.com/artifact-registry/docs/supported-formats).
+* `format` - The format of packages that are stored in the repository. Supported formats can be found [here](https://docs.cloud.google.com/artifact-registry/docs/supported-formats).
 
 * `description` - The user-provided description of the repository.
 

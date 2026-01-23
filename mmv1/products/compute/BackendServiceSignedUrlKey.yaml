@@ -19,8 +19,8 @@ description: |
   A key for signing Cloud CDN signed URLs for Backend Services.
 references:
   guides:
-    'Using Signed URLs': 'https://cloud.google.com/cdn/docs/using-signed-urls/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/backendServices'
+    'Using Signed URLs': 'https://docs.cloud.google.com/cdn/docs/using-signed-urls/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/backendServices'
 docs:
 base_url: 'projects/{{project}}/global/backendServices/{{backend_service}}'
 self_link: 'projects/{{project}}/global/backendServices/{{backend_service}}'

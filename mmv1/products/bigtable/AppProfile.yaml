@@ -18,7 +18,7 @@ description: |
   App profile is a configuration object describing how Cloud Bigtable should treat traffic from a particular end user application.
 references:
   guides:
-  api: 'https://cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.appProfiles'
+  api: 'https://docs.cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.appProfiles'
 docs:
 id_format: 'projects/{{project}}/instances/{{instance}}/appProfiles/{{app_profile_id}}'
 base_url: 'projects/{{project}}/instances/{{instance}}/appProfiles?appProfileId={{app_profile_id}}'

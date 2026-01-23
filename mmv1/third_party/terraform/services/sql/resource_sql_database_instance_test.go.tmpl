@@ -461,7 +461,7 @@ func TestAccSqlDatabaseInstance_settings_checkServiceNetworking(t *testing.T) {
 			{
 				Config: fmt.Sprintf(
 					testGoogleSqlDatabaseInstance_settings_checkServiceNetworking, databaseName, databaseName),
-				ExpectError: regexp.MustCompile("Error, failed to create instance because the network doesn't have at least 1 private services connection. Please see https://cloud.google.com/sql/docs/mysql/private-ip#network_requirements for how to create this connection."),
+				ExpectError: regexp.MustCompile("Error, failed to create instance because the network doesn't have at least 1 private services connection. Please see https://docs.cloud.google.com/sql/docs/mysql/private-ip#network_requirements for how to create this connection."),
 			},
 		},
 	})

@@ -114,7 +114,7 @@
 
 	// Such custom code is necessary as the instance's certificate authority has to be retrieved via a dedicated 
 	// getCertificateAuthority API.  
-	// See https://cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances/getCertificateAuthority
+	// See https://docs.cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances/getCertificateAuthority
 	// for details about this API.
 	config := meta.(*transport_tpg.Config)
 	userAgent, err :=  tpgresource.GenerateUserAgentString(d, config.UserAgent)

@@ -17,7 +17,7 @@ description: |
   Restricts access to Cloud Console and Google Cloud APIs for a set of users using Context-Aware Access.
 references:
   guides:
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/organizations.gcpUserAccessBindings'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/organizations.gcpUserAccessBindings'
 docs:
 id_format: '{{name}}'
 base_url: 'organizations/{{organization_id}}/gcpUserAccessBindings'

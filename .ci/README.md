@@ -77,7 +77,7 @@ In the event of a failure, this will stop running.  If it succeeds, update the s
 
 ## Deploying the pipeline
 The code on the PR's branch is used to plan actions - no merge is performed.
-If you are making changes to the workflows, your changes will not trigger a workflow run, because of the risk of an untrusted contributor introducing malicious code in this way.  You will need to test locally by using the [cloud build local builder](https://cloud.google.com/cloud-build/docs/build-debug-locally).
+If you are making changes to the workflows, your changes will not trigger a workflow run, because of the risk of an untrusted contributor introducing malicious code in this way.  You will need to test locally by using the [cloud build local builder](https://docs.cloud.google.com/cloud-build/docs/build-debug-locally).
 If you are making changes to the containers, your changes will not apply until they are merged in and built - this can take up to 15 minutes.  If you need to make a breaking change, you will need to pause the pipeline while the build happens.  If you are making changes to both the containers and the workflows and those changes need to be coordinated, you will need to pause the build while the containers build and enforce every open PR be rebased on top of our PR.  It is probably better to build in backwards-compatibility into your containers.  We recommend a 14 day window - 14 days after your change goes in, you can remove the backwards-compatibility.
 
 Pausing the pipeline is done in the cloud console, by setting the downstream-builder trigger to disabled.  You can find that trigger [here](https://console.cloud.google.com/cloud-build/triggers/edit/f80a7496-b2f4-4980-a706-c5425a52045b?project=graphite-docker-images)

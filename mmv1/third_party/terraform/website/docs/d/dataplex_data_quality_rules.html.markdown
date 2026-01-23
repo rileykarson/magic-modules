@@ -8,8 +8,8 @@ description: |-
 # `google_dataplex_data_quality_rules`
 Retrieves the generated data quality rules for the creating a new data quality scan. 
 For more information see
-the [official documentation](https://cloud.google.com/dataplex/docs)
-and [API](https://cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.dataScans/generateDataQualityRules).
+the [official documentation](https://docs.cloud.google.com/dataplex/docs)
+and [API](https://docs.cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.dataScans/generateDataQualityRules).
 
 ## example
 

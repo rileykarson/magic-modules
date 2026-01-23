@@ -18,8 +18,8 @@ description: |
   A representation of a blockchain node.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/blockchain-node-engine'
-  api: 'https://cloud.google.com/blockchain-node-engine/docs/reference/rest/v1/projects.locations.blockchainNodes'
+    'Official Documentation': 'https://docs.cloud.google.com/blockchain-node-engine'
+  api: 'https://docs.cloud.google.com/blockchain-node-engine/docs/reference/rest/v1/projects.locations.blockchainNodes'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/blockchainNodes'
 self_link: 'projects/{{project}}/locations/{{location}}/blockchainNodes/{{blockchain_node_id}}'

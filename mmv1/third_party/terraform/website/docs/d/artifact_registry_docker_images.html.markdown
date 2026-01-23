@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_docker_images
 
 Get information about Artifact Registry Docker images.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs/docker)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs/docker)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/list).
 
 ## Example Usage
 

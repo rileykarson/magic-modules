@@ -21,8 +21,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Managing Service Quota': 'https://cloud.google.com/service-usage/docs/manage-quota '
-    'REST API documentation': 'https://cloud.google.com/service-usage/docs/reference/rest/v1beta1/services.consumerQuotaMetrics.limits.consumerOverrides'
+    'Managing Service Quota': 'https://docs.cloud.google.com/service-usage/docs/manage-quota '
+    'REST API documentation': 'https://docs.cloud.google.com/service-usage/docs/reference/rest/v1beta1/services.consumerQuotaMetrics.limits.consumerOverrides'
 docs:
 id_format: 'projects/{{project}}/services/{{service}}/consumerQuotaMetrics/{{metric}}/limits/{{limit}}/consumerOverrides/{{name}}'
 base_url: 'projects/{{project}}/services/{{service}}/consumerQuotaMetrics/{{metric}}/limits/{{limit}}/consumerOverrides'

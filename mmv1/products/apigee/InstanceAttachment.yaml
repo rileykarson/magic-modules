@@ -17,8 +17,8 @@ description: |
   An `Instance attachment` in Apigee.
 references:
   guides:
-    'Creating an environment': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances.attachments/create'
+    'Creating an environment': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances.attachments/create'
 docs:
 base_url: '{{instance_id}}/attachments'
 self_link: '{{instance_id}}/attachments/{{name}}'

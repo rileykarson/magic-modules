@@ -16,7 +16,7 @@ name: 'PrivateCloud'
 description: Represents a private cloud resource. Private clouds are zonal resources.
 references:
   guides:
-  api: 'https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds'
+  api: 'https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.privateClouds'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/privateClouds'
 self_link: 'projects/{{project}}/locations/{{location}}/privateClouds/{{name}}'

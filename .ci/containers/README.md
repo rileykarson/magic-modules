@@ -11,7 +11,7 @@ The images are named according to their use. We have a small number of images th
 
 ## Updating a docker image
 
-Before you begin, set up Docker (including configuring it to [authenticate with gcloud](https://cloud.google.com/container-registry/docs/advanced-authentication#gcloud-helper)).
+Before you begin, set up Docker (including configuring it to [authenticate with gcloud](https://docs.cloud.google.com/container-registry/docs/advanced-authentication#gcloud-helper)).
 
 1. Make changes to the Dockerfile
 2. Build & push the image with the `testing` tag:

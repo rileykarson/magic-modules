@@ -17,9 +17,9 @@ description: |
   A Google Cloud Filestore snapshot.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/filestore/docs/snapshots'
-    'Creating Snapshots': 'https://cloud.google.com/filestore/docs/create-snapshots'
-  api: 'https://cloud.google.com/filestore/docs/reference/rest/v1/projects.locations.instances.snapshots'
+    'Official Documentation': 'https://docs.cloud.google.com/filestore/docs/snapshots'
+    'Creating Snapshots': 'https://docs.cloud.google.com/filestore/docs/create-snapshots'
+  api: 'https://docs.cloud.google.com/filestore/docs/reference/rest/v1/projects.locations.instances.snapshots'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/instances/{{instance}}/snapshots'
 self_link: 'projects/{{project}}/locations/{{location}}/instances/{{instance}}/snapshots/{{name}}'

@@ -9,7 +9,7 @@ description: |-
 List all DbServers of a Cloud Exdata Infrastructure.
 
 For more information see the
-[API](https://cloud.google.com/oracle/database/docs/reference/rest/v1/projects.locations.cloudExadataInfrastructures.dbServers).
+[API](https://docs.cloud.google.com/oracle/database/docs/reference/rest/v1/projects.locations.cloudExadataInfrastructures.dbServers).
 
 ## Example Usage
 

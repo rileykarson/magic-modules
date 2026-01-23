@@ -17,8 +17,8 @@ description: |
   Catalogs are top-level containers for Databases and Tables.
 references:
   guides:
-    'Manage open source metadata with BigLake Metastore': 'https://cloud.google.com/bigquery/docs/manage-open-source-metadata#create_catalogs'
-  api: 'https://cloud.google.com/bigquery/docs/reference/biglake/rest/v1/projects.locations.catalogs'
+    'Manage open source metadata with BigLake Metastore': 'https://docs.cloud.google.com/bigquery/docs/manage-open-source-metadata#create_catalogs'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/biglake/rest/v1/projects.locations.catalogs'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/catalogs'
 self_link: 'projects/{{project}}/locations/{{location}}/catalogs/{{name}}'

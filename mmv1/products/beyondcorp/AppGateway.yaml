@@ -20,8 +20,8 @@ description: "A BeyondCorp AppGateway resource represents a BeyondCorp protected
   authorised for a single AppGateway.\n"
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
-  api: 'https://cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appgateways'
+    'Official Documentation': 'https://docs.cloud.google.com/beyondcorp-enterprise/docs/enable-app-connector'
+  api: 'https://docs.cloud.google.com/beyondcorp/docs/reference/rest#rest-resource:-v1.projects.locations.appgateways'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/appGateways'
 self_link: 'projects/{{project}}/locations/{{region}}/appGateways/{{name}}'

@@ -6,7 +6,7 @@ description: |-
 
 # google_redis_cluster
 
-Use this data source to get information about a Redis Cluster. For more details, see the [API documentation](https://cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters).
+Use this data source to get information about a Redis Cluster. For more details, see the [API documentation](https://docs.cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters).
 
 ## Example Usage
 

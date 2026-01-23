@@ -16,8 +16,8 @@ name: 'FeatureGroup'
 description: Vertex AI Feature Group.
 references:
   guides:
-    'Creating a Feature Group': 'https://cloud.google.com/vertex-ai/docs/featurestore/latest/create-featuregroup'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureGroups'
+    'Creating a Feature Group': 'https://docs.cloud.google.com/vertex-ai/docs/featurestore/latest/create-featuregroup'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featureGroups'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/featureGroups'
 self_link: 'projects/{{project}}/locations/{{region}}/featureGroups/{{name}}'

@@ -6,7 +6,7 @@ description: |-
 
 # google_alloydb_cluster
 
-Use this data source to get information about the available cluster. For more details refer the [API docs](https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters).
+Use this data source to get information about the available cluster. For more details refer the [API docs](https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters).
 
 ## Example Usage
 

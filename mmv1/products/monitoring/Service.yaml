@@ -21,10 +21,10 @@ description: |
   the service are accessible
 references:
   guides:
-    'Service Monitoring': 'https://cloud.google.com/monitoring/service-monitoring'
-    'Monitoring API Documentation': 'https://cloud.google.com/monitoring/api/v3/'
+    'Service Monitoring': 'https://docs.cloud.google.com/monitoring/service-monitoring'
+    'Monitoring API Documentation': 'https://docs.cloud.google.com/monitoring/api/v3/'
     'Service-orientation on Wikipedia': 'https://en.wikipedia.org/wiki/Service-orientation'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/services'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/services'
 docs:
 id_format: '{{name}}'
 base_url: 'v3/projects/{{project}}/services'
@@ -94,4 +94,4 @@ properties:
         description: |
           The full name of the resource that defines this service.
           Formatted as described in
-          https://cloud.google.com/apis/design/resource_names.
+          https://docs.cloud.google.com/apis/design/resource_names.

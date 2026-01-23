@@ -1099,7 +1099,7 @@ API (for read pools, effective_availability_type may differ from availability_ty
 				Type:        schema.TypeString,
 				Computed:    true,
 				Optional:    true,
-				Description: `The type of the instance. See https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1/instances#SqlInstanceType for supported values.`,
+				Description: `The type of the instance. See https://docs.cloud.google.com/sql/docs/mysql/admin-api/rest/v1/instances#SqlInstanceType for supported values.`,
 			},
 
 			"node_count": {
@@ -3185,7 +3185,7 @@ func flattenReplicaConfiguration(replicaConfiguration *sqladmin.ReplicaConfigura
 
 			// Don't attempt to assign anything from replicaConfiguration.MysqlReplicaConfiguration,
 			// since those fields are set on create and then not stored. See description at
-			// https://cloud.google.com/sql/docs/mysql/admin-api/v1beta4/instances.
+			// https://docs.cloud.google.com/sql/docs/mysql/admin-api/v1beta4/instances.
 			// Instead, set them to the values they previously had so we don't set them all to zero.
 			"ca_certificate":            d.Get("replica_configuration.0.ca_certificate"),
 			"client_certificate":        d.Get("replica_configuration.0.client_certificate"),
@@ -3353,7 +3353,7 @@ func sqlDatabaseInstanceServiceNetworkPrecheck(d *schema.ResourceData, config *t
 	}
 
 	if len(response.Connections) < 1 {
-		return fmt.Errorf("Error, failed to create instance because the network doesn't have at least 1 private services connection. Please see https://cloud.google.com/sql/docs/mysql/private-ip#network_requirements for how to create this connection.")
+		return fmt.Errorf("Error, failed to create instance because the network doesn't have at least 1 private services connection. Please see https://docs.cloud.google.com/sql/docs/mysql/private-ip#network_requirements for how to create this connection.")
 	}
 
 	return nil

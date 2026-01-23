@@ -17,8 +17,8 @@ description: |
   IAP settings - manage IAP settings
 references:
   guides:
-    'Customizing IAP': 'https://cloud.google.com/iap/docs/customizing'
-  api: 'https://cloud.google.com/iap/docs/reference/rest/v1/IapSettings'
+    'Customizing IAP': 'https://docs.cloud.google.com/iap/docs/customizing'
+  api: 'https://docs.cloud.google.com/iap/docs/reference/rest/v1/IapSettings'
 docs:
 id_format: '{{name}}/iapSettings'
 base_url: '{{name}}:iapSettings'

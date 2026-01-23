@@ -79,7 +79,7 @@ resource "google_compute_instance" "nat_vm" {
 
   metadata_startup_script = <<EOT
 #! /bin/bash
-# See https://cloud.google.com/datastream/docs/private-connectivity#set-up-reverse-proxy
+# See https://docs.cloud.google.com/datastream/docs/private-connectivity#set-up-reverse-proxy
 export DB_ADDR=${google_sql_database_instance.instance.public_ip_address}
 export DB_PORT=5432
 echo 1 > /proc/sys/net/ipv4/ip_forward

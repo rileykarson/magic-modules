@@ -18,9 +18,9 @@ description: |
   Google holds the corresponding private key, which it uses to decrypt encrypted tokens.
 references:
   guides:
-    'Workforce Identity Federation Overview': 'https://cloud.google.com/iam/docs/workforce-identity-federation'
-    'Configure a provider within the workforce pool': 'https://cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#configure_a_provider_within_the_workforce_pool'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers.keys'
+    'Workforce Identity Federation Overview': 'https://docs.cloud.google.com/iam/docs/workforce-identity-federation'
+    'Configure a provider within the workforce pool': 'https://docs.cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#configure_a_provider_within_the_workforce_pool'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools.providers.keys'
 base_url: 'locations/{{location}}/workforcePools/{{workforce_pool_id}}/providers/{{provider_id}}/keys'
 self_link: 'locations/{{location}}/workforcePools/{{workforce_pool_id}}/providers/{{provider_id}}/keys/{{key_id}}'
 create_url: 'locations/{{location}}/workforcePools/{{workforce_pool_id}}/providers/{{provider_id}}/keys?workforcePoolProviderKeyId={{key_id}}'

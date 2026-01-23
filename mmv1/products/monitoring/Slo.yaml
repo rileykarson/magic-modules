@@ -24,9 +24,9 @@ description: |
   month return successfully."
 references:
   guides:
-    'Service Monitoring': 'https://cloud.google.com/monitoring/service-monitoring'
-    'Monitoring API Documentation': 'https://cloud.google.com/monitoring/api/v3/'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/services.serviceLevelObjectives'
+    'Service Monitoring': 'https://docs.cloud.google.com/monitoring/service-monitoring'
+    'Monitoring API Documentation': 'https://docs.cloud.google.com/monitoring/api/v3/'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/services.serviceLevelObjectives'
 docs:
 id_format: '{{name}}'
 base_url: 'v3/projects/{{project}}/services/{{service}}/serviceLevelObjectives'
@@ -269,7 +269,7 @@ properties:
             type: NestedObject
             description: |
               A means to compute a ratio of `good_service` to `total_service`.
-              Defines computing this ratio with two TimeSeries [monitoring filters](https://cloud.google.com/monitoring/api/v3/filters)
+              Defines computing this ratio with two TimeSeries [monitoring filters](https://docs.cloud.google.com/monitoring/api/v3/filters)
               Must specify exactly two of good, bad, and total service filters.
               The relationship good_service + bad_service = total_service
               will be assumed.
@@ -282,7 +282,7 @@ properties:
               - name: 'goodServiceFilter'
                 type: String
                 description: |
-                  A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   quantifying good service provided.
                   Must have ValueType = DOUBLE or ValueType = INT64 and
                   must have MetricKind = DELTA or MetricKind = CUMULATIVE.
@@ -296,7 +296,7 @@ properties:
               - name: 'badServiceFilter'
                 type: String
                 description: |
-                  A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   quantifying bad service provided, either demanded service that
                   was not provided or demanded service that was of inadequate
                   quality.
@@ -313,7 +313,7 @@ properties:
               - name: 'totalServiceFilter'
                 type: String
                 description: |
-                  A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   quantifying total demanded service.
 
                   Must have ValueType = DOUBLE or ValueType = INT64 and
@@ -342,7 +342,7 @@ properties:
               - name: 'distributionFilter'
                 type: String
                 description: |
-                  A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   aggregating values to quantify the good service provided.
 
                   Must have ValueType = DISTRIBUTION and
@@ -419,7 +419,7 @@ properties:
           - name: 'goodBadMetricFilter'
             type: String
             description: |
-              A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+              A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
               with ValueType = BOOL. The window is good if any true values
               appear in the window. One of `good_bad_metric_filter`,
               `good_total_ratio_threshold`, `metric_mean_in_range`,
@@ -459,7 +459,7 @@ properties:
                     type: NestedObject
                     description: |
                       A means to compute a ratio of `good_service` to `total_service`.
-                      Defines computing this ratio with two TimeSeries [monitoring filters](https://cloud.google.com/monitoring/api/v3/filters)
+                      Defines computing this ratio with two TimeSeries [monitoring filters](https://docs.cloud.google.com/monitoring/api/v3/filters)
                       Must specify exactly two of good, bad, and total service filters.
                       The relationship good_service + bad_service = total_service
                       will be assumed.
@@ -470,7 +470,7 @@ properties:
                       - name: 'goodServiceFilter'
                         type: String
                         description: |
-                          A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                          A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                           quantifying good service provided. Exactly two of
                           good, bad, or total service filter must be defined (where
                           good + bad = total is assumed)
@@ -484,7 +484,7 @@ properties:
                       - name: 'badServiceFilter'
                         type: String
                         description: |
-                          A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                          A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                           quantifying bad service provided, either demanded service that
                           was not provided or demanded service that was of inadequate
                           quality. Exactly two of
@@ -500,7 +500,7 @@ properties:
                       - name: 'totalServiceFilter'
                         type: String
                         description: |
-                          A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                          A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                           quantifying total demanded service. Exactly two of
                           good, bad, or total service filter must be defined (where
                           good + bad = total is assumed)
@@ -526,7 +526,7 @@ properties:
                       - name: 'distributionFilter'
                         type: String
                         description: |
-                          A TimeSeries [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                          A TimeSeries [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                           aggregating values to quantify the good service provided.
 
                           Must have ValueType = DISTRIBUTION and
@@ -653,7 +653,7 @@ properties:
               - name: 'timeSeries'
                 type: String
                 description: |
-                  A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   specifying the TimeSeries to use for evaluating window
                   The provided TimeSeries must have ValueType = INT64 or
                   ValueType = DOUBLE and MetricKind = GAUGE. Mean value `X`
@@ -710,7 +710,7 @@ properties:
               - name: 'timeSeries'
                 type: String
                 description: |
-                  A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)
+                  A [monitoring filter](https://docs.cloud.google.com/monitoring/api/v3/filters)
                   specifying the TimeSeries to use for evaluating window
                   quality. The provided TimeSeries must have
                   ValueType = INT64 or ValueType = DOUBLE and

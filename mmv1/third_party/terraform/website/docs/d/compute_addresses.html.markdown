@@ -7,8 +7,8 @@ description: |-
 # google_compute_addresses
 
 List IP addresses in a project. For more information see
-the official API [list](https://cloud.google.com/compute/docs/reference/latest/addresses/list) and 
-[aggregated list](https://cloud.google.com/compute/docs/reference/rest/v1/addresses/aggregatedList) documentation.
+the official API [list](https://docs.cloud.google.com/compute/docs/reference/latest/addresses/list) and 
+[aggregated list](https://docs.cloud.google.com/compute/docs/reference/rest/v1/addresses/aggregatedList) documentation.
 
 ## Example Usage
 

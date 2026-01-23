@@ -17,9 +17,9 @@ description: |
   A security profile group defines a container for security profiles.
 references:
   guides:
-    'Security profile groups overview': 'https://cloud.google.com/firewall/docs/about-security-profile-groups'
-    'Create and manage security profile groups': 'https://cloud.google.com/firewall/docs/configure-security-profile-groups'
-  api: 'https://cloud.google.com/firewall/docs/reference/network-security/rest/v1/organizations.locations.securityProfileGroups'
+    'Security profile groups overview': 'https://docs.cloud.google.com/firewall/docs/about-security-profile-groups'
+    'Create and manage security profile groups': 'https://docs.cloud.google.com/firewall/docs/configure-security-profile-groups'
+  api: 'https://docs.cloud.google.com/firewall/docs/reference/network-security/rest/v1/organizations.locations.securityProfileGroups'
 docs:
 base_url: '{{parent}}/locations/{{location}}securityProfileGroups'
 self_link: '{{parent}}/locations/{{location}}/securityProfileGroups/{{name}}'

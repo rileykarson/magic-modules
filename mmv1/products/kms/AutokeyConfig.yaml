@@ -24,8 +24,8 @@ description: |
   *will not delete the resource from the project.*
 references:
   guides:
-    'Cloud KMS with Autokey': 'https://cloud.google.com/kms/docs/kms-with-autokey'
-  api: 'https://cloud.google.com/kms/docs/reference/rest/v1/AutokeyConfig'
+    'Cloud KMS with Autokey': 'https://docs.cloud.google.com/kms/docs/kms-with-autokey'
+  api: 'https://docs.cloud.google.com/kms/docs/reference/rest/v1/AutokeyConfig'
 docs:
 id_format: 'folders/{{folder}}/autokeyConfig'
 base_url: 'folders/{{folder}}/autokeyConfig'

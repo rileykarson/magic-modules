@@ -17,9 +17,9 @@ description: |
   An `Organization` is the top-level container in Apigee.
 references:
   guides:
-    'Creating an API organization': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-org'
+    'Creating an API organization': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-org'
     'Setting a custom endpoint (required for data residency)': 'https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#advanced-settings-configuration'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations'
 docs:
 base_url: 'organizations'
 self_link: 'organizations/{{name}}'
@@ -175,7 +175,7 @@ properties:
   - name: 'analyticsRegion'
     type: String
     description: |
-      Primary GCP region for analytics data storage. For valid values, see [Create an Apigee organization](https://cloud.google.com/apigee/docs/api-platform/get-started/create-org).
+      Primary GCP region for analytics data storage. For valid values, see [Create an Apigee organization](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-org).
     immutable: true
   - name: 'apiConsumerDataLocation'
     type: String
@@ -199,7 +199,7 @@ properties:
     type: String
     description: |
       Compute Engine network used for Service Networking to be peered with Apigee runtime instances.
-      See [Getting started with the Service Networking API](https://cloud.google.com/service-infrastructure/docs/service-networking/getting-started).
+      See [Getting started with the Service Networking API](https://docs.cloud.google.com/service-infrastructure/docs/service-networking/getting-started).
       Valid only when `RuntimeType` is set to CLOUD. The value can be updated only when there are no runtime instances. For example: "default".
   - name: 'disableVpcPeering'
     type: Boolean
@@ -227,7 +227,7 @@ properties:
   - name: 'billingType'
     type: String
     description: |
-      Billing type of the Apigee organization. See [Apigee pricing](https://cloud.google.com/apigee/pricing).
+      Billing type of the Apigee organization. See [Apigee pricing](https://docs.cloud.google.com/apigee/pricing).
     immutable: true
     default_from_api: true
   - name: 'caCertificate'

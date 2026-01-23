@@ -9,7 +9,7 @@ description: |-
 Use this data source to get details about a VMwareEngine network resource.
 
 To get more information about VMwareEngine Network, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.vmwareEngineNetworks)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.vmwareEngineNetworks)
 
 ## Example Usage
 

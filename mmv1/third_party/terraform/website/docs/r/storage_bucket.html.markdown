@@ -10,9 +10,9 @@ Creates a new bucket in Google cloud storage service (GCS).
 Once a bucket has been created, its location can't be changed.
 
 For more information see
-[the official documentation](https://cloud.google.com/storage/docs/overview)
+[the official documentation](https://docs.cloud.google.com/storage/docs/overview)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/buckets).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/buckets).
 
 **Note**: If the project id is not set on the resource or in the provider block it will be dynamically
 determined which will require enabling the compute api.
@@ -161,9 +161,9 @@ resource "google_storage_bucket" "hns-enabled" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the bucket. Bucket names must be in lowercase and no more than 63 characters long. You can find the complete list of bucket naming rules [here](https://cloud.google.com/storage/docs/buckets#naming).
+* `name` - (Required) The name of the bucket. Bucket names must be in lowercase and no more than 63 characters long. You can find the complete list of bucket naming rules [here](https://docs.cloud.google.com/storage/docs/buckets#naming).
 
-* `location` - (Required) The [GCS location](https://cloud.google.com/storage/docs/bucket-locations).
+* `location` - (Required) The [GCS location](https://docs.cloud.google.com/storage/docs/bucket-locations).
 
 - - -
 
@@ -172,13 +172,13 @@ The following arguments are supported:
 * `project` - (Optional) The ID of the project in which the resource belongs. If it
     is not provided, the provider project is used.
 
-* `storage_class` - (Optional, Default: 'STANDARD') The [Storage Class](https://cloud.google.com/storage/docs/storage-classes) of the new bucket. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
+* `storage_class` - (Optional, Default: 'STANDARD') The [Storage Class](https://docs.cloud.google.com/storage/docs/storage-classes) of the new bucket. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
 
-* `autoclass` - (Optional) The bucket's [Autoclass](https://cloud.google.com/storage/docs/autoclass) configuration.  Structure is [documented below](#nested_autoclass).
+* `autoclass` - (Optional) The bucket's [Autoclass](https://docs.cloud.google.com/storage/docs/autoclass) configuration.  Structure is [documented below](#nested_autoclass).
 
-* `lifecycle_rule` - (Optional) The bucket's [Lifecycle Rules](https://cloud.google.com/storage/docs/lifecycle#configuration) configuration. Multiple blocks of this type are permitted. Structure is [documented below](#nested_lifecycle_rule).
+* `lifecycle_rule` - (Optional) The bucket's [Lifecycle Rules](https://docs.cloud.google.com/storage/docs/lifecycle#configuration) configuration. Multiple blocks of this type are permitted. Structure is [documented below](#nested_lifecycle_rule).
 
-* `versioning` - (Optional) The bucket's [Versioning](https://cloud.google.com/storage/docs/object-versioning) configuration.  Structure is [documented below](#nested_versioning).
+* `versioning` - (Optional) The bucket's [Versioning](https://docs.cloud.google.com/storage/docs/object-versioning) configuration.  Structure is [documented below](#nested_versioning).
 
 * `website` - (Optional) Configuration if the bucket acts as a website. Structure is [documented below](#nested_website).
 
@@ -190,20 +190,20 @@ The following arguments are supported:
 
 * `labels` - (Optional) A map of key/value label pairs to assign to the bucket.
 
-* `logging` - (Optional) The bucket's [Access & Storage Logs](https://cloud.google.com/storage/docs/access-logs) configuration. Structure is [documented below](#nested_logging).
+* `logging` - (Optional) The bucket's [Access & Storage Logs](https://docs.cloud.google.com/storage/docs/access-logs) configuration. Structure is [documented below](#nested_logging).
 
 * `encryption` - (Optional) The bucket's encryption configuration. Structure is [documented below](#nested_encryption).
 
-* `enable_object_retention` - (Optional, Default: false) Enables [object retention](https://cloud.google.com/storage/docs/object-lock) on a storage bucket.
+* `enable_object_retention` - (Optional, Default: false) Enables [object retention](https://docs.cloud.google.com/storage/docs/object-lock) on a storage bucket.
 
 
-* `requester_pays` - (Optional, Default: false) Enables [Requester Pays](https://cloud.google.com/storage/docs/requester-pays) on a storage bucket.
+* `requester_pays` - (Optional, Default: false) Enables [Requester Pays](https://docs.cloud.google.com/storage/docs/requester-pays) on a storage bucket.
 
-* `rpo` - (Optional) The recovery point objective for cross-region replication of the bucket. Applicable only for dual and multi-region buckets. `"DEFAULT"` sets default replication. `"ASYNC_TURBO"` value enables turbo replication, valid for dual-region buckets only. See [Turbo Replication](https://cloud.google.com/storage/docs/managing-turbo-replication) for more information. If rpo is not specified at bucket creation, it defaults to `"DEFAULT"` for dual and multi-region buckets. **NOTE** If used with single-region bucket, It will throw an error.
+* `rpo` - (Optional) The recovery point objective for cross-region replication of the bucket. Applicable only for dual and multi-region buckets. `"DEFAULT"` sets default replication. `"ASYNC_TURBO"` value enables turbo replication, valid for dual-region buckets only. See [Turbo Replication](https://docs.cloud.google.com/storage/docs/managing-turbo-replication) for more information. If rpo is not specified at bucket creation, it defaults to `"DEFAULT"` for dual and multi-region buckets. **NOTE** If used with single-region bucket, It will throw an error.
 
-* `uniform_bucket_level_access` - (Optional, Default: false) Enables [Uniform bucket-level access](https://cloud.google.com/storage/docs/uniform-bucket-level-access) access to a bucket.
+* `uniform_bucket_level_access` - (Optional, Default: false) Enables [Uniform bucket-level access](https://docs.cloud.google.com/storage/docs/uniform-bucket-level-access) access to a bucket.
 
-* `public_access_prevention` - (Optional) Prevents public access to a bucket. Acceptable values are "inherited" or "enforced". If "inherited", the bucket uses [public access prevention](https://cloud.google.com/storage/docs/public-access-prevention) only if the bucket is subject to the public access prevention organization policy constraint. Defaults to "inherited".
+* `public_access_prevention` - (Optional) Prevents public access to a bucket. Acceptable values are "inherited" or "enforced". If "inherited", the bucket uses [public access prevention](https://docs.cloud.google.com/storage/docs/public-access-prevention) only if the bucket is subject to the public access prevention organization policy constraint. Defaults to "inherited".
 
 * `custom_placement_config` - (Optional) The bucket's custom location configuration, which specifies the individual regions that comprise a dual-region bucket. If the bucket is designated a single or multi-region, the parameters are empty. Structure is [documented below](#nested_custom_placement_config).
 
@@ -227,7 +227,7 @@ The following arguments are supported:
 
 * `type` - The type of the action of this Lifecycle Rule. Supported values include: `Delete`, `SetStorageClass` and `AbortIncompleteMultipartUpload`.
 
-* `storage_class` - (Required if action type is `SetStorageClass`) The target [Storage Class](https://cloud.google.com/storage/docs/storage-classes) of objects affected by this Lifecycle Rule. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
+* `storage_class` - (Required if action type is `SetStorageClass`) The target [Storage Class](https://docs.cloud.google.com/storage/docs/storage-classes) of objects affected by this Lifecycle Rule. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
 
 <a name="nested_condition"></a>The `condition` block supports the following elements, and requires at least one to be defined. If you specify multiple conditions in a rule, an object has to match all of the conditions for the action to be taken:
 
@@ -237,7 +237,7 @@ The following arguments are supported:
 
 * `with_state` - (Optional) Match to live and/or archived objects. Unversioned buckets have only live objects. Supported values include: `"LIVE"`, `"ARCHIVED"`, `"ANY"`.
 
-* `matches_storage_class` - (Optional) [Storage Class](https://cloud.google.com/storage/docs/storage-classes) of objects to satisfy this condition. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`, `DURABLE_REDUCED_AVAILABILITY`.
+* `matches_storage_class` - (Optional) [Storage Class](https://docs.cloud.google.com/storage/docs/storage-classes) of objects to satisfy this condition. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`, `DURABLE_REDUCED_AVAILABILITY`.
 
 * `matches_prefix` - (Optional) One or more matching name prefixes to satisfy this condition.
 
@@ -291,7 +291,7 @@ The following arguments are supported:
 
 <a name="nested_retention_policy"></a>The `retention_policy` block supports:
 
-* `is_locked` - (Optional) If set to `true`, the bucket will be [locked](https://cloud.google.com/storage/docs/using-bucket-lock#lock-bucket) and permanently restrict edits to the bucket's retention policy.  Caution: Locking a bucket is an irreversible action.
+* `is_locked` - (Optional) If set to `true`, the bucket will be [locked](https://docs.cloud.google.com/storage/docs/using-bucket-lock#lock-bucket) and permanently restrict edits to the bucket's retention policy.  Caution: Locking a bucket is an irreversible action.
 
 * `retention_period` - (Required) The period of time, in seconds, that objects in the bucket must be retained and cannot be deleted, overwritten, or archived. The value must be less than 3,155,760,000 seconds.
 
@@ -306,10 +306,10 @@ The following arguments are supported:
 
 * `default_kms_key_name`: The `id` of a Cloud KMS key that will be used to encrypt objects inserted into this bucket, if no encryption method is specified.
   You must pay attention to whether the crypto key is available in the location that this bucket is created in.
-  See [the docs](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for more details.
+  See [the docs](https://docs.cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for more details.
 
--> As per [the docs](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for customer-managed encryption keys, the IAM policy for the
-  specified key must permit the [automatic Google Cloud Storage service account](https://cloud.google.com/storage/docs/projects#service-accounts) for the bucket's
+-> As per [the docs](https://docs.cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for customer-managed encryption keys, the IAM policy for the
+  specified key must permit the [automatic Google Cloud Storage service account](https://docs.cloud.google.com/storage/docs/projects#service-accounts) for the bucket's
   project to use the specified key for encryption and decryption operations.
   Although the service account email address follows a well-known format, the service account is created on-demand and may not necessarily exist for your project
   until a relevant action has occurred which triggers its creation.
@@ -321,7 +321,7 @@ The following arguments are supported:
 
 <a name="nested_custom_placement_config"></a>The `custom_placement_config` block supports:
 
-* `data_locations` - (Required) The list of individual regions that comprise a dual-region bucket. See [Cloud Storage bucket locations](https://cloud.google.com/storage/docs/dual-regions#availability) for a list of acceptable regions. **Note**: If any of the data_locations changes, it will [recreate the bucket](https://cloud.google.com/storage/docs/locations#key-concepts).
+* `data_locations` - (Required) The list of individual regions that comprise a dual-region bucket. See [Cloud Storage bucket locations](https://docs.cloud.google.com/storage/docs/dual-regions#availability) for a list of acceptable regions. **Note**: If any of the data_locations changes, it will [recreate the bucket](https://docs.cloud.google.com/storage/docs/locations#key-concepts).
 
 <a name="nested_soft_delete_policy"></a>The `soft_delete_policy` block supports:
 

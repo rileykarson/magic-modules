@@ -65,7 +65,7 @@ resource "google_storage_bucket" "bucket" {
 }
 
 # The sample data comes from the following link:
-# https://cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
+# https://docs.cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
 resource "google_storage_bucket_object" "data" {
   name   = "contents/data.json"
   bucket = google_storage_bucket.bucket.name
@@ -139,7 +139,7 @@ resource "google_storage_bucket" "bucket" {
 }
 
 # The sample data comes from the following link:
-# https://cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
+# https://docs.cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
 resource "google_storage_bucket_object" "data" {
   name   = "contents/data.json"
   bucket = google_storage_bucket.bucket.name
@@ -243,7 +243,7 @@ resource "google_storage_bucket" "bucket" {
 }
 
 # The sample data comes from the following link:
-# https://cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
+# https://docs.cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
 resource "google_storage_bucket_object" "data" {
   name   = "contents/data.json"
   bucket = google_storage_bucket.bucket.name
@@ -314,7 +314,7 @@ resource "google_storage_bucket" "bucket" {
 }
 
 # The sample data comes from the following link:
-# https://cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
+# https://docs.cloud.google.com/vertex-ai/docs/matching-engine/filtering#specify-namespaces-tokens
 resource "google_storage_bucket_object" "data" {
   name   = "contents/data.json"
   bucket = google_storage_bucket.bucket.name

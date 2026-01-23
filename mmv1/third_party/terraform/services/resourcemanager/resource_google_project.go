@@ -691,7 +691,7 @@ func readGoogleProject(d *schema.ResourceData, config *transport_tpg.Config, use
 func EnableServiceUsageProjectServices(services []string, project, billingProject, userAgent string, config *transport_tpg.Config, timeout time.Duration) error {
 	// ServiceUsage does not allow more than 20 services to be enabled per
 	// batchEnable API call. See
-	// https://cloud.google.com/service-usage/docs/reference/rest/v1/services/batchEnable
+	// https://docs.cloud.google.com/service-usage/docs/reference/rest/v1/services/batchEnable
 	for i := 0; i < len(services); i += maxServiceUsageBatchSize {
 		j := i + maxServiceUsageBatchSize
 		if j > len(services) {
@@ -772,7 +772,7 @@ func doEnableServicesRequest(services []string, project, billingProject, userAge
 }
 
 // Handle errors that are retryable at call time for serviceusage
-// Specifically, errors in https://cloud.google.com/service-usage/docs/reference/rest/v1/services/batchEnable#response-body
+// Specifically, errors in https://docs.cloud.google.com/service-usage/docs/reference/rest/v1/services/batchEnable#response-body
 // Errors in operations are handled separately.
 // TODO: This should probably be turned into a retry predicate
 func handleServiceUsageRetryablePreconditionError(err error) error {

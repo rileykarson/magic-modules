@@ -17,8 +17,8 @@ description: |
   An individual service. A service contains a name and optional metadata.
 references:
   guides:
-    'Configuring a service': 'https://cloud.google.com/service-directory/docs/configuring-service-directory#configuring_a_service'
-  api: 'https://cloud.google.com/service-directory/docs/reference/rest/v1/projects.locations.namespaces.services'
+    'Configuring a service': 'https://docs.cloud.google.com/service-directory/docs/configuring-service-directory#configuring_a_service'
+  api: 'https://docs.cloud.google.com/service-directory/docs/reference/rest/v1/projects.locations.namespaces.services'
 docs:
 base_url: '{{name}}'
 self_link: '{{name}}'

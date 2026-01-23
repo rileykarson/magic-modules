@@ -8,9 +8,9 @@ description: |-
 
 Get a DNS record set within Google Cloud DNS
 For more information see
-[the official documentation](https://cloud.google.com/dns/docs/records)
+[the official documentation](https://docs.cloud.google.com/dns/docs/records)
 and
-[API](https://cloud.google.com/dns/docs/reference/v1/resourceRecordSets)
+[API](https://docs.cloud.google.com/dns/docs/reference/v1/resourceRecordSets)
 
 ## Example Usage
 
@@ -34,7 +34,7 @@ The following arguments are supported:
 
 * `name` - (Required) The DNS name for the resource.
 
-* `type` - (Required) The RRSet type. [See this table for supported types](https://cloud.google.com/dns/docs/records#record_type).
+* `type` - (Required) The RRSet type. [See this table for supported types](https://docs.cloud.google.com/dns/docs/records#record_type).
 
 * `project` - (Optional) The ID of the project for the Google Cloud.
 

@@ -26,8 +26,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Set default Key Access Justifications policy': 'https://cloud.google.com/assured-workloads/key-access-justifications/docs/set-default-policy'
-  api: 'https://cloud.google.com/kms/docs/reference/rest/v1/KeyAccessJustificationsPolicyConfig'
+    'Set default Key Access Justifications policy': 'https://docs.cloud.google.com/assured-workloads/key-access-justifications/docs/set-default-policy'
+  api: 'https://docs.cloud.google.com/kms/docs/reference/rest/v1/KeyAccessJustificationsPolicyConfig'
 docs:
 id_format: 'projects/{{project}}/kajPolicyConfig'
 base_url: 'projects/{{project}}/kajPolicyConfig'
@@ -79,7 +79,7 @@ properties:
           type: Enum
           description: |
             Describes the reason for a data access. Please refer to
-            https://cloud.google.com/assured-workloads/key-access-justifications/docs/justification-codes
+            https://docs.cloud.google.com/assured-workloads/key-access-justifications/docs/justification-codes
             for the detailed semantic meaning of justification reason codes.
           enum_values:
             - 'CUSTOMER_INITIATED_SUPPORT'

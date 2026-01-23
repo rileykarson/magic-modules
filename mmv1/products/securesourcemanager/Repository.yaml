@@ -16,8 +16,8 @@ name: 'Repository'
 description: 'Repositories store source code. It supports all Git SCM client commands and has built-in pull requests and issue tracking. Both HTTPS and SSH authentication are supported.'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/secure-source-manager/docs/overview'
-  api: 'https://cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories'
+    'Official Documentation': 'https://docs.cloud.google.com/secure-source-manager/docs/overview'
+  api: 'https://docs.cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/repositories?repository_id={{repository_id}}'
 self_link: 'projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}'
@@ -172,7 +172,7 @@ properties:
         immutable: true
         description: |
           List of gitignore template names user can choose from.
-          Valid values can be viewed at https://cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.
+          Valid values can be viewed at https://docs.cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.
         item_type:
           type: String
       - name: 'license'
@@ -180,10 +180,10 @@ properties:
         immutable: true
         description: |
           License template name user can choose from.
-          Valid values can be viewed at https://cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.
+          Valid values can be viewed at https://docs.cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.
       - name: 'readme'
         type: String
         immutable: true
         description: |
           README template name.
-          Valid values can be viewed at https://cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.
+          Valid values can be viewed at https://docs.cloud.google.com/secure-source-manager/docs/reference/rest/v1/projects.locations.repositories#initialconfig.

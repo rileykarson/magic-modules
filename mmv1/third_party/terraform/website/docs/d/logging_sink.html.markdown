@@ -9,7 +9,7 @@ description: |-
 Use this data source to get a project, folder, organization or billing account logging sink details.
 To get more information about Service, see:
 
-[API documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/sinks)
+[API documentation](https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/sinks)
 
 ## Example Usage - Retrieve Project Logging Sink Basic
 
@@ -60,7 +60,7 @@ In addition to the arguments listed above, the following computed attributes are
 
 <a name="nested_bigquery_options"></a>The `bigquery_options` block supports:
 
-* `use_partitioned_tables` - Whether [BigQuery's partition tables](https://cloud.google.com/bigquery/docs/partitioned-tables) are used.
+* `use_partitioned_tables` - Whether [BigQuery's partition tables](https://docs.cloud.google.com/bigquery/docs/partitioned-tables) are used.
 
 <a name="nested_exclusions"></a>The `exclusions` block supports:
 

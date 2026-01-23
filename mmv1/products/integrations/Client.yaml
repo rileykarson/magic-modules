@@ -17,9 +17,9 @@ description: |
   Application Integration Client.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/application-integration/docs/overview'
-    'Set up Application Integration': 'https://cloud.google.com/application-integration/docs/setup-application-integration'
-  api: 'https://cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.clients'
+    'Official Documentation': 'https://docs.cloud.google.com/application-integration/docs/overview'
+    'Set up Application Integration': 'https://docs.cloud.google.com/application-integration/docs/setup-application-integration'
+  api: 'https://docs.cloud.google.com/application-integration/docs/reference/rest/v1/projects.locations.clients'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/clients'
 self_link: 'projects/{{project}}/locations/{{location}}/clients'

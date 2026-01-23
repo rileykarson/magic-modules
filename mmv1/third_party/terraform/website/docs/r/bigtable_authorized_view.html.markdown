@@ -7,8 +7,8 @@ description: |-
 # google_bigtable_authorized_view
 
 Creates a Google Cloud Bigtable authorized view inside a table. For more information see
-[the official documentation](https://cloud.google.com/bigtable/) and
-[API](https://cloud.google.com/bigtable/docs/go/reference).
+[the official documentation](https://docs.cloud.google.com/bigtable/) and
+[API](https://docs.cloud.google.com/bigtable/docs/go/reference).
 
 -> **Note:** It is strongly recommended to set `lifecycle { prevent_destroy = true }`
 on authorized views in order to prevent accidental data loss. See

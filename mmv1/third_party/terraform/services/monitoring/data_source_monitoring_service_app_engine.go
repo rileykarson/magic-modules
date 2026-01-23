@@ -11,7 +11,7 @@ func DataSourceMonitoringServiceAppEngine() *schema.Resource {
 			Required: true,
 			Description: `The ID of the App Engine module underlying this service. 
 Corresponds to the 'moduleId' resource label for a 'gae_app'
-monitored resource(see https://cloud.google.com/monitoring/api/resources#tag_gae_app)`,
+monitored resource(see https://docs.cloud.google.com/monitoring/api/resources#tag_gae_app)`,
 		},
 	}
 	filter := `app_engine.module_id="{{module_id}}"`

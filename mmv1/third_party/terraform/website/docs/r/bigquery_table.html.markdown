@@ -7,8 +7,8 @@ description: |-
 # google_bigquery_table
 
 Creates a table resource in a dataset for Google BigQuery. For more information see
-[the official documentation](https://cloud.google.com/bigquery/docs/) and
-[API](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables).
+[the official documentation](https://docs.cloud.google.com/bigquery/docs/) and
+[API](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables).
 
 -> **Note**: On newer versions of the provider, you must explicitly set `deletion_protection=false`
 (and run `terraform apply` to write the field to state) in order to destroy an instance.
@@ -111,7 +111,7 @@ The following arguments are supported:
 * `max_staleness` - (Optional) The maximum staleness of data that could be
   returned when the table (or stale MV) is queried. Staleness encoded as a
   string encoding of [SQL IntervalValue
-  type](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#interval_type).
+  type](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/data-types#interval_type).
 
 * `encryption_configuration` - (Optional) Specifies how the table should be encrypted.
     If left blank, the table will be encrypted with a Google-managed key; that process
@@ -192,7 +192,7 @@ The following arguments are supported:
     globally unique. Tag key is expected to be in the namespaced format, for
     example "123456789012/environment" where 123456789012 is the ID of the
     parent organization or project resource for this tag key. Tag value is
-    expected to be the short name, for example "Production". See [Tag definitions](https://cloud.google.com/iam/docs/tags-access-control#definitions)
+    expected to be the short name, for example "Production". See [Tag definitions](https://docs.cloud.google.com/iam/docs/tags-access-control#definitions)
     for more details.
 
 * `external_catalog_table_options` - (Optional) Options defining open source
@@ -268,7 +268,7 @@ The following arguments are supported:
     [documented above](#schema).
 
 * `source_format` - (Optional) The data format. Please see sourceFormat under
-    [ExternalDataConfiguration](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#externaldataconfiguration)
+    [ExternalDataConfiguration](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#externaldataconfiguration)
     in Bigquery's public API documentation for supported formats. To use "GOOGLE_SHEETS"
     the `scopes` must include "https://www.googleapis.com/auth/drive.readonly".
 
@@ -452,7 +452,7 @@ The following arguments are supported:
     If set to `false`, the view will use BigQuery's standard SQL. If set to
     `true`, the view will use BigQuery's legacy SQL. If unset, the API will
     interpret it as a `true` and assumes the legacy SQL dialect for its query
-    according to the [API documentation](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#ViewDefinition).
+    according to the [API documentation](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#ViewDefinition).
     -> **Note**: Starting in provider version `7.0.0`, no default value is
     provided for this field unless explicitly set in the configuration.
 

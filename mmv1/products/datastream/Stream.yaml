@@ -17,8 +17,8 @@ description: |
   A resource representing streaming data from a source to a destination.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/datastream/docs/create-a-stream'
-  api: 'https://cloud.google.com/datastream/docs/reference/rest/v1/projects.locations.streams'
+    'Official Documentation': 'https://docs.cloud.google.com/datastream/docs/create-a-stream'
+  api: 'https://docs.cloud.google.com/datastream/docs/reference/rest/v1/projects.locations.streams'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/streams/{{stream_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/streams'
@@ -1670,7 +1670,7 @@ properties:
                     type: String
                     description: |
                       The geographic location where the dataset should reside.
-                      See https://cloud.google.com/bigquery/docs/locations for supported locations.
+                      See https://docs.cloud.google.com/bigquery/docs/locations for supported locations.
                     required: true
                   - name: 'datasetIdPrefix'
                     type: String
@@ -1683,7 +1683,7 @@ properties:
                       Describes the Cloud KMS encryption key that will be used to protect destination BigQuery
                       table. The BigQuery Service Account associated with your project requires access to this
                       encryption key. i.e. projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{cryptoKey}.
-                      See https://cloud.google.com/bigquery/docs/customer-managed-encryption for more information.
+                      See https://docs.cloud.google.com/bigquery/docs/customer-managed-encryption for more information.
                     immutable: true
               - name: 'projectId'
                 type: string

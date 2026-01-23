@@ -624,7 +624,7 @@ proposed value to configuration (below) or apply `lifecycle.ignore_changes` to t
 
 ### `networking_mode` defaults to `VPC_NATIVE` for newly created clusters
 
-New clusters will default to `VPC_NATIVE` which enables [IP aliasing](https://cloud.google.com/kubernetes-engine/docs/how-to/ip-aliases). Previously, `google_container_cluster` would default to using routes as
+New clusters will default to `VPC_NATIVE` which enables [IP aliasing](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/ip-aliases). Previously, `google_container_cluster` would default to using routes as
 the networking mode unless `ip_allocation_policy` policy was set. Now, `networking_mode` will
 default to `VPC_NATIVE` and `ip_allocation_policy` will be set by the server if unset in
 configuration. Existing clusters should not be affected.
@@ -726,7 +726,7 @@ proposed value to configuration (below) or apply `lifecycle.ignore_changes` to t
 
 ## Resource: `google_dataflow_flex_template_job`
 
-### Fields that are a part of the [environment block](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.locations.flexTemplates/launch#FlexTemplateRuntimeEnvironment) will be overridden to be sent via their fields even when supplied via parameters.
+### Fields that are a part of the [environment block](https://docs.cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.locations.flexTemplates/launch#FlexTemplateRuntimeEnvironment) will be overridden to be sent via their fields even when supplied via parameters.
 
 Several fields within the `google_dataflow_flex_template_job` resource can be supplied through either the `parameters{}` block or a field on the resource object. Support for these fields on the resource object was added in the `4.66.0` release of the Google provider. That version introduced an issue where the values were being double-sent to the API due to being recorded in Terraform state in two places. To resolve this issue, these fields will be deduplicated and sent to the API through the resource object.
 
@@ -865,7 +865,7 @@ resource "google_firebaserules_ruleset" "firestore" {
 
 ## Resource: `google_gkeonprem_bare_metal_admin_cluster`
 
-Delete operation is disabled. The command `terraform destroy` maps to no-op. Users need to delete resource manually. Please refer to the [user guide](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/how-to/reset-nodes) for the instructions of cluster deletion.
+Delete operation is disabled. The command `terraform destroy` maps to no-op. Users need to delete resource manually. Please refer to the [user guide](https://docs.cloud.google.com/anthos/clusters/docs/bare-metal/latest/how-to/reset-nodes) for the instructions of cluster deletion.
 
 
 ## Resource: `google_logging_metric`

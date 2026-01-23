@@ -17,8 +17,8 @@ kind: 'activedirectory#domain'
 description: Creates a Microsoft AD domain
 references:
   guides:
-    'Managed Microsoft Active Directory Quickstart': 'https://cloud.google.com/managed-microsoft-ad/docs/quickstarts'
-  api: 'https://cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains'
+    'Managed Microsoft Active Directory Quickstart': 'https://docs.cloud.google.com/managed-microsoft-ad/docs/quickstarts'
+  api: 'https://docs.cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/global/domains'
@@ -83,7 +83,7 @@ parameters:
     type: String
     description: |
       The fully qualified domain name. e.g. mydomain.myorganization.com, with the restrictions
-      of https://cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains.
+      of https://docs.cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains.
     url_param_only: true
     required: true
     immutable: true

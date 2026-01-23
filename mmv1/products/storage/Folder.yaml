@@ -40,8 +40,8 @@ description: |
   The Folder resource represents a folder in a Cloud Storage bucket with hierarchical namespace enabled
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/folders-overview'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/folders'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/folders-overview'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/folders'
 custom_code:
   constants: templates/terraform/constants/storage_folder.go.tmpl
   custom_import: templates/terraform/custom_import/storage_folder.go.tmpl

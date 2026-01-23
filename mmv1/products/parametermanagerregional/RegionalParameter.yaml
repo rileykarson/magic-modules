@@ -18,7 +18,7 @@ description: |
   A Regional Parameter is a logical regional parameter.
 references:
   guides:
-  api: 'https://cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters'
+  api: 'https://docs.cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/parameters'
 self_link: 'projects/{{project}}/locations/{{location}}/parameters/{{parameter_id}}'

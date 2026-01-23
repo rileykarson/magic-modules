@@ -8,7 +8,7 @@ description: |-
 
 Use this data source to get list of the Cloud Identity Groups under a customer or namespace.
 
-https://cloud.google.com/identity/docs/concepts/overview#groups
+https://docs.cloud.google.com/identity/docs/concepts/overview#groups
 
 ## Example Usage
 

@@ -18,7 +18,7 @@ description: |
   A materialized view object that can be referenced in SQL queries.
 references:
   guides:
-  api: 'https://cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.materializedViews'
+  api: 'https://docs.cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.materializedViews'
 docs:
 id_format: 'projects/{{project}}/instances/{{instance}}/materializedViews/{{materialized_view_id}}'
 base_url: 'projects/{{project}}/instances/{{instance}}/materializedViews?materializedViewId={{materialized_view_id}}'

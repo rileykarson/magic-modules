@@ -7,9 +7,9 @@ description: |-
 # google_compute_instance_from_template
 
 Manages a VM instance resource within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/instances)
+[the official documentation](https://docs.cloud.google.com/compute/docs/instances)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/instances).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/instances).
 
 This resource is specifically to create a compute instance from a given
 `source_instance_template`. To create an instance without a template, use the

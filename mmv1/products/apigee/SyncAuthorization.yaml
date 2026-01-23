@@ -18,8 +18,8 @@ description: |
   Authorize the Synchronizer to download environment data from the control plane.
 references:
   guides:
-    'Enable Synchronizer access': 'https://cloud.google.com/apigee/docs/hybrid/v1.8/synchronizer-access#enable-synchronizer-access'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations#getsyncauthorization'
+    'Enable Synchronizer access': 'https://docs.cloud.google.com/apigee/docs/hybrid/v1.8/synchronizer-access#enable-synchronizer-access'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations#getsyncauthorization'
 docs:
 id_format: 'organizations/{{name}}/syncAuthorization'
 base_url: ''
@@ -63,7 +63,7 @@ properties:
 
       You might specify multiple service accounts, for example, if you have multiple environments and wish to assign a unique service account to each one.
 
-      The service accounts must have **Apigee Synchronizer Manager** role. See also [Create service accounts](https://cloud.google.com/apigee/docs/hybrid/v1.8/sa-about#create-the-service-accounts).
+      The service accounts must have **Apigee Synchronizer Manager** role. See also [Create service accounts](https://docs.cloud.google.com/apigee/docs/hybrid/v1.8/sa-about#create-the-service-accounts).
     required: true
     send_empty_value: true
     item_type:

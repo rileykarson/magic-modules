@@ -17,13 +17,13 @@ This documentation (https://registry.terraform.io/providers/hashicorp/google/lat
 between both providers, and all generally available (GA) products and features
 are available in both versions of the provider.
 
-You may see beta features referenced as Preview since Google simplified the [product launch stages](https://cloud.google.com/blog/products/gcp/google-cloud-gets-simplified-product-launch-stages) in late 2020.
+You may see beta features referenced as Preview since Google simplified the [product launch stages](https://docs.cloud.google.com/blog/products/gcp/google-cloud-gets-simplified-product-launch-stages) in late 2020.
 
 The `google-beta` provider is distinct from the `google` provider in that it
 supports GCP products and features that are in Preview, while `google` does not.
 Fields and resources that are only present in `google-beta` are clearly marked in the provider documentation.
 
-Pre-GA products and features might have limited support, and changes to pre-GA products and features might not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages).
+Pre-GA products and features might have limited support, and changes to pre-GA products and features might not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://docs.cloud.google.com/products#product-launch-stages).
 
 The `google-beta` provider sends all requests to the beta endpoint for GCP if
 one exists for that product, regardless of whether the request contains any beta

@@ -266,7 +266,7 @@ Recommended migration from `relay_mode` to `enable_relay` depending on
 
 See exported endpoints for Dataplane V2 Observability feature to learn what
 target you might wish to expose with load balancers:
-https://cloud.google.com/kubernetes-engine/docs/concepts/about-dpv2-observability#gke-dataplane-v2-observability-endpoints
+https://docs.cloud.google.com/kubernetes-engine/docs/concepts/about-dpv2-observability#gke-dataplane-v2-observability-endpoints
 
 ### Three label-related fields are now present
 

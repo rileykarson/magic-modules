@@ -25,8 +25,8 @@ description: |
   like Cloud SQL and Dataflow.
 references:
   guides:
-    'Future Reservations Guide': 'https://cloud.google.com/compute/docs/instances/future-reservations-overview'
-  api: https://cloud.google.com/compute/docs/reference/rest/v1/futureReservations
+    'Future Reservations Guide': 'https://docs.cloud.google.com/compute/docs/instances/future-reservations-overview'
+  api: https://docs.cloud.google.com/compute/docs/reference/rest/v1/futureReservations
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/futureReservations'
 has_self_link: true

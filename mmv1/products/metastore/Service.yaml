@@ -17,8 +17,8 @@ description: |
   A managed metastore service that serves metadata queries.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataproc-metastore/docs/overview'
-  api: 'https://cloud.google.com/dataproc-metastore/docs/reference/rest/v1/projects.locations.services'
+    'Official Documentation': 'https://docs.cloud.google.com/dataproc-metastore/docs/overview'
+  api: 'https://docs.cloud.google.com/dataproc-metastore/docs/reference/rest/v1/projects.locations.services'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/services'
 self_link: 'projects/{{project}}/locations/{{location}}/services/{{service_id}}'

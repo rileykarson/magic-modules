@@ -17,8 +17,8 @@ description: |
   A connection to a SCM like GitHub, GitHub Enterprise, Bitbucket Data Center/Cloud or GitLab.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/build/docs'
-  api: 'https://cloud.google.com/build/docs/api/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/build/docs'
+  api: 'https://docs.cloud.google.com/build/docs/api/reference/rest'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/connections/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/connections'

@@ -17,7 +17,7 @@ description: |
   AuthzPolicy is a resource that allows to forward traffic to a callout backend designed to scan the traffic for security purposes.
 references:
   guides:
-  api: 'https://cloud.google.com/load-balancing/docs/reference/network-security/rest/v1beta1/projects.locations.authzPolicies'
+  api: 'https://docs.cloud.google.com/load-balancing/docs/reference/network-security/rest/v1beta1/projects.locations.authzPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/authzPolicies'
 self_link: 'projects/{{project}}/locations/{{location}}/authzPolicies/{{name}}'
@@ -111,7 +111,7 @@ properties:
         type: Enum
         description: |
           All gateways and forwarding rules referenced by this policy and extensions must share the same load balancing scheme.
-          For more information, refer to [Backend services overview](https://cloud.google.com/load-balancing/docs/backend-service).
+          For more information, refer to [Backend services overview](https://docs.cloud.google.com/load-balancing/docs/backend-service).
         required: true
         enum_values:
           - 'INTERNAL_MANAGED'
@@ -759,7 +759,7 @@ properties:
       Required if the action is CUSTOM. Allows delegating authorization decisions to Cloud IAP or to Service Extensions. One of cloudIap or authzExtension must be specified.
     properties:
       # Cloud IAP type has no fields according to the API
-      # https://cloud.google.com/load-balancing/docs/reference/network-security/rest/v1beta1/projects.locations.authzPolicies#cloudiap
+      # https://docs.cloud.google.com/load-balancing/docs/reference/network-security/rest/v1beta1/projects.locations.authzPolicies#cloudiap
       - name: 'cloudIap'
         type: NestedObject
         description: |

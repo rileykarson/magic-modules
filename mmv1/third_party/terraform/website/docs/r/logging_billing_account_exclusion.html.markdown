@@ -8,9 +8,9 @@ description: |-
 
 Manages a billing account logging exclusion. For more information see:
 
-* [API documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.exclusions)
+* [API documentation](https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.exclusions)
 * How-to Guides
-    * [Excluding Logs](https://cloud.google.com/logging/docs/exclusions)
+    * [Excluding Logs](https://docs.cloud.google.com/logging/docs/exclusions)
 
 ~> You can specify exclusions for log sinks created by terraform by using the exclusions field of `google_logging_billing_account_sink`
 
@@ -42,7 +42,7 @@ The following arguments are supported:
     false.
 
 * `filter` - (Required) The filter to apply when excluding logs. Only log entries that match the filter are excluded.
-    See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced-filters) for information on how to
+    See [Advanced Log Filters](https://docs.cloud.google.com/logging/docs/view/advanced-filters) for information on how to
     write a filter.
 
 ## Attributes Reference

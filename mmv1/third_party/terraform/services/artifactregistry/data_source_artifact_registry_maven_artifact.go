@@ -91,7 +91,7 @@ func DataSourceArtifactRegistryMavenArtifactRead(d *schema.ResourceData, meta in
 
 	if version != "" {
 		// fetch package by version
-		// https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/get
+		// https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/get
 		packageUrlSafe := url.QueryEscape(packageName)
 		urlRequest, err := tpgresource.ReplaceVars(d, config, fmt.Sprintf("{{ArtifactRegistryBasePath}}projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/mavenArtifacts/%s:%s", packageUrlSafe, version))
 		if err != nil {
@@ -111,7 +111,7 @@ func DataSourceArtifactRegistryMavenArtifactRead(d *schema.ResourceData, meta in
 		res = convertMavenArtifactResponseToStruct(resGet)
 	} else {
 		// fetch the list of packages, ordered by update time
-		// https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/list
+		// https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/list
 		urlRequest, err := tpgresource.ReplaceVars(d, config, "{{ArtifactRegistryBasePath}}projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/mavenArtifacts")
 		if err != nil {
 			return fmt.Errorf("Error setting api endpoint")

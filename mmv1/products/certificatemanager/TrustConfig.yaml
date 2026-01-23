@@ -17,8 +17,8 @@ description: |
   TrustConfig represents a resource that represents your Public Key Infrastructure (PKI) configuration in Certificate Manager for use in mutual TLS authentication scenarios.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/certificate-manager/docs'
-  api: 'https://cloud.google.com/certificate-manager/docs/reference/certificate-manager/rest/v1/projects.locations.trustConfigs/create'
+    'Official Documentation': 'https://docs.cloud.google.com/certificate-manager/docs'
+  api: 'https://docs.cloud.google.com/certificate-manager/docs/reference/certificate-manager/rest/v1/projects.locations.trustConfigs/create'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/trustConfigs/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/trustConfigs'

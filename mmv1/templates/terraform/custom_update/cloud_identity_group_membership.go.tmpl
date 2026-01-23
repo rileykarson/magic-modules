@@ -80,7 +80,7 @@
 			removeRoles = append(removeRoles, name)
 		}
 
-		// ref: https://cloud.google.com/identity/docs/reference/rest/v1/groups.memberships/modifyMembershipRoles#request-body
+		// ref: https://docs.cloud.google.com/identity/docs/reference/rest/v1/groups.memberships/modifyMembershipRoles#request-body
 		// Only single operation per request is allowed.
 		if len(removeRoles) > 0 {
 			res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{

@@ -10,7 +10,7 @@ description: |-
 
 * Create a project in the [Google Cloud Console](https://console.cloud.google.com/)
 and set up billing on that project. Any examples in this guide will be part of
-the [GCP "always free" tier](https://cloud.google.com/free/).
+the [GCP "always free" tier](https://docs.cloud.google.com/free/).
 * [Install Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/gcp-get-started)
 and read the Terraform getting started guide that follows. This guide will
 assume basic proficiency with Terraform - it is an introduction to the Google
@@ -20,7 +20,7 @@ provider.
 
 First, authenticate with GCP.  The easiest way to do this is to run
 `gcloud auth application-default login`, if you already have gcloud
-installed.  If you don't already have it, you can install it from [here](https://cloud.google.com/sdk/docs/install).
+installed.  If you don't already have it, you can install it from [here](https://docs.cloud.google.com/sdk/docs/install).
 
 Next, create a Terraform config file named `"main.tf"`. Inside, you'll
 want to include the following configuration:
@@ -36,7 +36,7 @@ provider "google" {
 * The `project` field should be your personal project id. The `project`
 indicates the default GCP project all of your resources will be created in.
 Most Terraform resources will have a `project` field.
-* The `region` and `zone` are [locations](https://cloud.google.com/compute/docs/regions-zones/global-regional-zonal-resources)
+* The `region` and `zone` are [locations](https://docs.cloud.google.com/compute/docs/regions-zones/global-regional-zonal-resources)
 for your resources to be created in.
     * The `region` will be used to choose the default location for regional
     resources. Regional resources are spread across several zones.
@@ -46,19 +46,19 @@ for your resources to be created in.
 Not all resources require a location. Some GCP resources are global and are
 automatically spread across all of GCP.
 
--> Want to try out another location? Check out the [list of available regions and zones](https://cloud.google.com/compute/docs/regions-zones/#available).
+-> Want to try out another location? Check out the [list of available regions and zones](https://docs.cloud.google.com/compute/docs/regions-zones/#available).
 Instances created in zones outside the US are not necessarily part of the always free tier
 and could incur charges.
 
 ## Creating a VM instance
-A [Google Compute Engine VM instance](https://cloud.google.com/compute/docs/instances/) is
+A [Google Compute Engine VM instance](https://docs.cloud.google.com/compute/docs/instances/) is
 named `google_compute_instance` in Terraform. The `google` part of the name
 identifies the provider for Terraform, `compute` indicates the GCP product
 family, and `instance` is the resource name.
 
 Google provider resources will generally, although not always, be named after
 the name used in `gcloud`/the REST API. For example, a VM instance is called
-[`instance` in the API](https://cloud.google.com/compute/docs/reference/rest/v1/instances).
+[`instance` in the API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instances).
 Most resource field names will also correspond 1:1 with their `gcloud`/REST API
 names.
 
@@ -245,11 +245,11 @@ Run `terraform destroy` to tear down your resources.
 Afterwards, check out the [provider reference](/docs/providers/google/guides/provider_reference.html) for more details on configuring
 the provider block (including how you can eliminate it entirely!).
 
-You can also check out the [GCP Community tutorials](https://cloud.google.com/community/tutorials/)
+You can also check out the [GCP Community tutorials](https://docs.cloud.google.com/community/tutorials/)
 such as:
 
-* [Getting started with Terraform on Google Cloud Platform](https://cloud.google.com/community/tutorials/getting-started-on-gcp-with-terraform)
+* [Getting started with Terraform on Google Cloud Platform](https://docs.cloud.google.com/community/tutorials/getting-started-on-gcp-with-terraform)
 
-* [Managing GCP Projects with Terraform](https://cloud.google.com/community/tutorials/managing-gcp-projects-with-terraform)
+* [Managing GCP Projects with Terraform](https://docs.cloud.google.com/community/tutorials/managing-gcp-projects-with-terraform)
 
-* [Modular Load Balancing with Terraform](https://cloud.google.com/community/tutorials/modular-load-balancing-with-terraform)
+* [Modular Load Balancing with Terraform](https://docs.cloud.google.com/community/tutorials/modular-load-balancing-with-terraform)

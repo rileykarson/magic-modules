@@ -17,8 +17,8 @@ description: |
   Regional Private Service Connect (PSC) endpoint resource.
 references:
   guides:
-    'Access regional Google APIs through endpoints': 'https://cloud.google.com/vpc/docs/access-regional-google-apis-endpoints'
-  api: 'https://cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.regionalEndpoints'
+    'Access regional Google APIs through endpoints': 'https://docs.cloud.google.com/vpc/docs/access-regional-google-apis-endpoints'
+  api: 'https://docs.cloud.google.com/network-connectivity/docs/reference/networkconnectivity/rest/v1/projects.locations.regionalEndpoints'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/regionalEndpoints'
 self_link: 'projects/{{project}}/locations/{{location}}/regionalEndpoints/{{name}}'

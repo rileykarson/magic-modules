@@ -6,8 +6,8 @@ description: |-
 
 # google_sql_database_instance
 
-Creates a new Google SQL Database Instance. For more information, see the [official documentation](https://cloud.google.com/sql/docs/mysql/create-instance),
-or the [JSON API](https://cloud.google.com/sql/docs/admin-api/v1beta4/instances).
+Creates a new Google SQL Database Instance. For more information, see the [official documentation](https://docs.cloud.google.com/sql/docs/mysql/create-instance),
+or the [JSON API](https://docs.cloud.google.com/sql/docs/admin-api/v1beta4/instances).
 
 ~> **NOTE on `google_sql_database_instance`:** - Second-generation instances include a
 default 'root'@'%' user with no password. This user will be deleted by Terraform on
@@ -329,13 +329,13 @@ SQL Server version to use. Supported values include `MYSQL_5_6`,
 `SQLSERVER_2017_STANDARD`, `SQLSERVER_2017_ENTERPRISE`, `SQLSERVER_2017_EXPRESS`, `SQLSERVER_2017_WEB`.
 `SQLSERVER_2019_STANDARD`, `SQLSERVER_2019_ENTERPRISE`, `SQLSERVER_2019_EXPRESS`,
 `SQLSERVER_2019_WEB`.
-[Database Version Policies](https://cloud.google.com/sql/docs/db-versions)
+[Database Version Policies](https://docs.cloud.google.com/sql/docs/db-versions)
 includes an up-to-date reference of supported versions.
 
 * `name` - (Optional, Computed) The name of the instance. If the name is left
     blank, Terraform will randomly generate one when the instance is first
     created. This is done because after a name is used, it cannot be reused for
-    up to [one week](https://cloud.google.com/sql/docs/delete-instance).
+    up to [one week](https://docs.cloud.google.com/sql/docs/delete-instance).
 
 * `maintenance_version`  - (Optional) The current software version on the instance. This attribute can not be set during creation. Refer to `available_maintenance_versions` attribute to see what `maintenance_version` are available for upgrade. When this attribute gets updated, it will cause an instance restart. Setting a `maintenance_version` value that is older than the current one on the instance will be ignored.
 
@@ -365,9 +365,9 @@ includes an up-to-date reference of supported versions.
     The provided key must be in the same region as the SQL instance.  In order
     to use this feature, a special kind of service account must be created and
     granted permission on this key.  This step can currently only be done
-    manually, please see [this step](https://cloud.google.com/sql/docs/mysql/configure-cmek#service-account).
+    manually, please see [this step](https://docs.cloud.google.com/sql/docs/mysql/configure-cmek#service-account).
     That service account needs the `Cloud KMS > Cloud KMS CryptoKey Encrypter/Decrypter` role on your
-    key - please see [this step](https://cloud.google.com/sql/docs/mysql/configure-cmek#grantkey).
+    key - please see [this step](https://docs.cloud.google.com/sql/docs/mysql/configure-cmek#grantkey).
 
 * `deletion_protection` - (Optional) Whether Terraform will be prevented from destroying the instance.
     When the field is set to true or unset in Terraform state, a `terraform apply`
@@ -399,9 +399,9 @@ includes an up-to-date reference of supported versions.
 
 The `settings` block supports:
 
-* `tier` - (Required) The machine type to use. See [tiers](https://cloud.google.com/sql/docs/admin-api/v1beta4/tiers)
+* `tier` - (Required) The machine type to use. See [tiers](https://docs.cloud.google.com/sql/docs/admin-api/v1beta4/tiers)
     for more details and supported versions. Postgres supports only shared-core machine types,
-    and custom machine types such as `db-custom-2-13312`. See the [Custom Machine Type Documentation](https://cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#create) to learn about specifying custom machine types.
+    and custom machine types such as `db-custom-2-13312`. See the [Custom Machine Type Documentation](https://docs.cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#create) to learn about specifying custom machine types.
 
 * `edition` - (Optional) The edition of the instance, can be `ENTERPRISE` or `ENTERPRISE_PLUS`.
 
@@ -423,11 +423,11 @@ The `settings` block supports:
 
 * `connector_enforcement` - (Optional) Control the enforcement of Cloud SQL Auth Proxy or Cloud SQL connectors for all the connections, can be `REQUIRED` or `NOT_REQUIRED`. If enabled, all the direct connections are rejected.
 
-* `deletion_protection_enabled` - (Optional) Enables deletion protection of an instance at the GCP level. Enabling this protection will guard against accidental deletion across all surfaces (API, gcloud, Cloud Console and Terraform) by enabling the [GCP Cloud SQL instance deletion protection](https://cloud.google.com/sql/docs/postgres/deletion-protection). Terraform provider support was introduced in version 4.48.0. Defaults to `false`.
+* `deletion_protection_enabled` - (Optional) Enables deletion protection of an instance at the GCP level. Enabling this protection will guard against accidental deletion across all surfaces (API, gcloud, Cloud Console and Terraform) by enabling the [GCP Cloud SQL instance deletion protection](https://docs.cloud.google.com/sql/docs/postgres/deletion-protection). Terraform provider support was introduced in version 4.48.0. Defaults to `false`.
 
-* `enable_google_ml_integration` - (Optional) Enables [Cloud SQL instances to connect to Vertex AI](https://cloud.google.com/sql/docs/postgres/integrate-cloud-sql-with-vertex-ai) and pass requests for real-time predictions and insights. Defaults to `false`.
+* `enable_google_ml_integration` - (Optional) Enables [Cloud SQL instances to connect to Vertex AI](https://docs.cloud.google.com/sql/docs/postgres/integrate-cloud-sql-with-vertex-ai) and pass requests for real-time predictions and insights. Defaults to `false`.
 
-* `enable_dataplex_integration` - (Optional) Enables [Cloud SQL instance integration with Dataplex](https://cloud.google.com/sql/docs/mysql/dataplex-catalog-integration). MySQL, Postgres and SQL Server instances are supported for this feature. Defaults to `false`.
+* `enable_dataplex_integration` - (Optional) Enables [Cloud SQL instance integration with Dataplex](https://docs.cloud.google.com/sql/docs/mysql/dataplex-catalog-integration). MySQL, Postgres and SQL Server instances are supported for this feature. Defaults to `false`.
 
 * `disk_autoresize` - (Optional) Enables auto-resizing of the storage size. Defaults to `true`. Note that if `disk_size` is set, future `terraform apply` calls will attempt to delete the instance in order to resize the disk to the value specified in disk_size if it has been resized. To avoid this, ensure that `lifecycle.ignore_changes` is applied to `disk_size`.
 
@@ -457,7 +457,7 @@ The optional `final_backup_config` subblock supports:
 
 The optional `settings.advanced_machine_features` subblock supports:
 
-* `threads_per_core` - (Optional) The number of threads per core. The value of this flag can be 1 or 2. To disable SMT, set this flag to 1. Only available in Cloud SQL for SQL Server instances. See [smt](https://cloud.google.com/sql/docs/sqlserver/create-instance#smt-create-instance) for more details.
+* `threads_per_core` - (Optional) The number of threads per core. The value of this flag can be 1 or 2. To disable SMT, set this flag to 1. Only available in Cloud SQL for SQL Server instances. See [smt](https://docs.cloud.google.com/sql/docs/sqlserver/create-instance#smt-create-instance) for more details.
 
 The optional `settings.database_flags` sublist supports:
 
@@ -528,7 +528,7 @@ Specifying a network enables private IP.
 At least `ipv4_enabled` must be enabled or a `private_network` must be configured.
 This setting can be updated, but it cannot be removed after it is set.
 
-* `ssl_mode` - (Optional) Specify how SSL connection should be enforced in DB connections. Supported values are `ALLOW_UNENCRYPTED_AND_ENCRYPTED`, `ENCRYPTED_ONLY`, and `TRUSTED_CLIENT_CERTIFICATE_REQUIRED` (not supported for SQL Server). See [API reference doc](https://cloud.google.com/sql/docs/postgres/admin-api/rest/v1/instances#ipconfiguration) for details.
+* `ssl_mode` - (Optional) Specify how SSL connection should be enforced in DB connections. Supported values are `ALLOW_UNENCRYPTED_AND_ENCRYPTED`, `ENCRYPTED_ONLY`, and `TRUSTED_CLIENT_CERTIFICATE_REQUIRED` (not supported for SQL Server). See [API reference doc](https://docs.cloud.google.com/sql/docs/postgres/admin-api/rest/v1/instances#ipconfiguration) for details.
 
 * `server_ca_mode` - (Optional) Specify how the server certificate's Certificate Authority is hosted. Supported values are `GOOGLE_MANAGED_INTERNAL_CA` and `GOOGLE_MANAGED_CAS_CA`.
 
@@ -593,12 +593,12 @@ The optional `settings.location_preference` subblock supports:
     in. Must be in the same region as this instance.
 
 * `zone` - (Optional) The preferred compute engine
-    [zone](https://cloud.google.com/compute/docs/zones?hl=en).
+    [zone](https://docs.cloud.google.com/compute/docs/zones?hl=en).
 
 * `secondary_zone` - (Optional) The preferred Compute Engine zone for the secondary/failover.
 
 The optional `settings.maintenance_window` subblock for instances declares a one-hour
-[maintenance window](https://cloud.google.com/sql/docs/instance-settings?hl=en#maintenance-window-2ndgen)
+[maintenance window](https://docs.cloud.google.com/sql/docs/instance-settings?hl=en#maintenance-window-2ndgen)
 when an Instance can automatically restart to apply updates. The maintenance window is specified in UTC time. It supports:
 
 * `day` - (Optional) Day of week (`1-7`), starting on Monday
@@ -607,7 +607,7 @@ when an Instance can automatically restart to apply updates. The maintenance win
 
 * `update_track` - (Optional) Receive updates after one week (`canary`) or after two weeks (`stable`) or after five weeks (`week5`) of notification.
 
-The optional `settings.insights_config` subblock for instances declares Query Insights([MySQL](https://cloud.google.com/sql/docs/mysql/using-query-insights), [PostgreSQL](https://cloud.google.com/sql/docs/postgres/using-query-insights)) configuration. It contains:
+The optional `settings.insights_config` subblock for instances declares Query Insights([MySQL](https://docs.cloud.google.com/sql/docs/mysql/using-query-insights), [PostgreSQL](https://docs.cloud.google.com/sql/docs/postgres/using-query-insights)) configuration. It contains:
 
 * `query_insights_enabled` - True if Query Insights feature is enabled.
 
@@ -619,7 +619,7 @@ The optional `settings.insights_config` subblock for instances declares Query In
 
 * `query_plans_per_minute` - Number of query execution plans captured by Insights per minute for all queries combined. Between 0 and 20. Default to 5.
 
-The optional `settings.password_validation_policy` subblock for instances declares [Password Validation Policy](https://cloud.google.com/sql/docs/postgres/built-in-authentication) configuration. It contains:
+The optional `settings.password_validation_policy` subblock for instances declares [Password Validation Policy](https://docs.cloud.google.com/sql/docs/postgres/built-in-authentication) configuration. It contains:
 
 * `min_length` - Specifies the minimum number of characters that the password must have.
 
@@ -709,7 +709,7 @@ The optional `clone` block supports:
 
     A timestamp in RFC3339 UTC "Zulu" format, with nanosecond resolution and up to nine fractional digits. Examples: "2014-10-02T15:01:23Z" and "2014-10-02T15:01:23.045123456Z".
 
-* `preferred_zone` - (Optional) (Point-in-time recovery for PostgreSQL only) Clone to an instance in the specified zone. If no zone is specified, clone to the same zone as the source instance. [clone-unavailable-instance](https://cloud.google.com/sql/docs/postgres/clone-instance#clone-unavailable-instance)
+* `preferred_zone` - (Optional) (Point-in-time recovery for PostgreSQL only) Clone to an instance in the specified zone. If no zone is specified, clone to the same zone as the source instance. [clone-unavailable-instance](https://docs.cloud.google.com/sql/docs/postgres/clone-instance#clone-unavailable-instance)
 
 * `database_names` - (Optional) (SQL Server only, use with `point_in_time`) Clone only the specified databases from the source instance. Clone all databases if empty.
 
@@ -756,9 +756,9 @@ exported:
 * `self_link` - The URI of the created resource.
 
 * `connection_name` - The connection name of the instance to be used in
-connection strings. For example, when connecting with [Cloud SQL Proxy](https://cloud.google.com/sql/docs/mysql/connect-admin-proxy).
+connection strings. For example, when connecting with [Cloud SQL Proxy](https://docs.cloud.google.com/sql/docs/mysql/connect-admin-proxy).
 
-* `dns_name` - The DNS name of the instance. See [Connect to an instance using Private Service Connect](https://cloud.google.com/sql/docs/mysql/configure-private-service-connect#view-summary-information-cloud-sql-instances-psc-enabled) for more details.
+* `dns_name` - The DNS name of the instance. See [Connect to an instance using Private Service Connect](https://docs.cloud.google.com/sql/docs/mysql/configure-private-service-connect#view-summary-information-cloud-sql-instances-psc-enabled) for more details.
 
 * `dns_names` - The list of DNS names used by this instance. Different connection types for an instance may have different DNS names. DNS names can apply to an individual instance or a cluster of instances. 
 
@@ -784,7 +784,7 @@ instance.
 
   * An `OUTGOING` address is the source address of connections originating from the instance, if supported.
 
-  * A `PRIVATE` address is an address for an instance which has been configured to use private networking see: [Private IP](https://cloud.google.com/sql/docs/mysql/private-ip).
+  * A `PRIVATE` address is an address for an instance which has been configured to use private networking see: [Private IP](https://docs.cloud.google.com/sql/docs/mysql/private-ip).
 
 * `first_ip_address` - The first IPv4 address of any type assigned. This is to
 support accessing the [first address in the list in a terraform output](https://github.com/hashicorp/terraform-provider-google/issues/912)
@@ -804,7 +804,7 @@ performing filtering in a Terraform config.
 
 * `psc_service_attachment_link` - the URI that points to the service attachment of the instance.
 
-* `instance_type` - The type of the instance. See [API reference for SqlInstanceType](https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1/instances#SqlInstanceType) for supported values.
+* `instance_type` - The type of the instance. See [API reference for SqlInstanceType](https://docs.cloud.google.com/sql/docs/mysql/admin-api/rest/v1/instances#SqlInstanceType) for supported values.
 
 ~> **NOTE:** Users can upgrade a read replica instance to a stand-alone Cloud SQL instance with the help of `instance_type`. To promote, users have to set the `instance_type` property as `CLOUD_SQL_INSTANCE` and remove/unset `master_instance_name` and `replica_configuration` from instance configuration. This operation might cause your instance to restart.
 

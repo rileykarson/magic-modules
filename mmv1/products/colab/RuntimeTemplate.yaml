@@ -22,8 +22,8 @@ description: |
 
 references:
   guides:
-    'Create a runtime template': 'https://cloud.google.com/colab/docs/create-runtime-template'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookRuntimeTemplates'
+    'Create a runtime template': 'https://docs.cloud.google.com/colab/docs/create-runtime-template'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookRuntimeTemplates'
 base_url: 'projects/{{project}}/locations/{{location}}/notebookRuntimeTemplates'
 self_link: 'projects/{{project}}/locations/{{location}}/notebookRuntimeTemplates/{{name}}'
 immutable: true
@@ -65,7 +65,7 @@ parameters:
     type: String
     required: true
     url_param_only: true
-    description: 'The location for the resource: https://cloud.google.com/colab/docs/locations'
+    description: 'The location for the resource: https://docs.cloud.google.com/colab/docs/locations'
 properties:
   - name: 'name'
     type: String

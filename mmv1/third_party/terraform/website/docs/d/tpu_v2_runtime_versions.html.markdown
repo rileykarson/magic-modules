@@ -6,7 +6,7 @@ description: |-
 
 # google_tpu_v2_runtime_versions
 
-Get runtime versions available for a project. For more information see the [official documentation](https://cloud.google.com/tpu/docs/) and [API](https://cloud.google.com/tpu/docs/reference/rest/v2/projects.locations.runtimeVersions).
+Get runtime versions available for a project. For more information see the [official documentation](https://docs.cloud.google.com/tpu/docs/) and [API](https://docs.cloud.google.com/tpu/docs/reference/rest/v2/projects.locations.runtimeVersions).
 
 ## Example Usage
 

@@ -17,7 +17,7 @@ description: |
   AuthzExtension is a resource that allows traffic forwarding to a callout backend service to make an authorization decision.
 references:
   guides:
-  api: 'https://cloud.google.com/service-extensions/docs/reference/rest/v1beta1/projects.locations.authzExtensions'
+  api: 'https://docs.cloud.google.com/service-extensions/docs/reference/rest/v1beta1/projects.locations.authzExtensions'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/authzExtensions'
 self_link: 'projects/{{project}}/locations/{{location}}/authzExtensions/{{name}}'
@@ -100,7 +100,7 @@ properties:
     type: Enum
     description: |
       All backend services and forwarding rules referenced by this extension must share the same load balancing scheme.
-      For more information, refer to [Backend services overview](https://cloud.google.com/load-balancing/docs/backend-service).
+      For more information, refer to [Backend services overview](https://docs.cloud.google.com/load-balancing/docs/backend-service).
     required: true
     enum_values:
       - 'INTERNAL_MANAGED'
@@ -114,7 +114,7 @@ properties:
     type: ResourceRef
     description: |
       The reference to the service that runs the extension.
-      To configure a callout extension, service must be a fully-qualified reference to a [backend service](https://cloud.google.com/compute/docs/reference/rest/v1/backendServices) in the format:
+      To configure a callout extension, service must be a fully-qualified reference to a [backend service](https://docs.cloud.google.com/compute/docs/reference/rest/v1/backendServices) in the format:
       https://www.googleapis.com/compute/v1/projects/{project}/regions/{region}/backendServices/{backendService} or https://www.googleapis.com/compute/v1/projects/{project}/global/backendServices/{backendService}.
     required: true
     diff_suppress_func: 'tpgresource.ProjectNumberDiffSuppress'

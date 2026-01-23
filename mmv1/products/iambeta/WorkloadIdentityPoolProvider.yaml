@@ -16,8 +16,8 @@ name: 'WorkloadIdentityPoolProvider'
 description: A configuration for an external identity provider.
 references:
   guides:
-    'Managing workload identity providers': 'https://cloud.google.com/iam/docs/manage-workload-identity-pools-providers#managing_workload_identity_providers'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools.providers'
+    'Managing workload identity providers': 'https://docs.cloud.google.com/iam/docs/manage-workload-identity-pools-providers#managing_workload_identity_providers'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools.providers'
 docs:
 base_url: 'projects/{{project}}/locations/global/workloadIdentityPools/{{workload_identity_pool_id}}/providers'
 self_link: 'projects/{{project}}/locations/global/workloadIdentityPools/{{workload_identity_pool_id}}/providers/{{workload_identity_pool_provider_id}}'

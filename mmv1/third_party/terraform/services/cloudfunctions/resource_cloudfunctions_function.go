@@ -778,7 +778,7 @@ func resourceCloudFunctionsRead(d *schema.ResourceData, meta interface{}) error 
 	}
 	if function.SourceArchiveUrl != "" {
 		// sourceArchiveUrl should always be a Google Cloud Storage URL (e.g. gs://bucket/object)
-		// https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions
+		// https://docs.cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions
 		sourceURL, err := url.Parse(function.SourceArchiveUrl)
 		if err != nil {
 			return err
@@ -1119,7 +1119,7 @@ func expandEventTrigger(configured []interface{}, project string) *cloudfunction
 			shape = "projects/%s/topics/%s"
 		case strings.HasPrefix(eventType, "providers/cloud.firestore/eventTypes/"):
 			// Firestore doesn't not yet support multiple databases, so "(default)" is assumed.
-			// https://cloud.google.com/functions/docs/calling/cloud-firestore#deploying_your_function
+			// https://docs.cloud.google.com/functions/docs/calling/cloud-firestore#deploying_your_function
 			shape = "projects/%s/databases/(default)/documents/%s"
 		}
 

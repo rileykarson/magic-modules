@@ -20,8 +20,8 @@ description: |
   provision and manage your own Dataproc cluster.
 references:
   guides:
-    'Dataproc Serverless Batches Intro': 'https://cloud.google.com/dataproc-serverless/docs/overview'
-  api: 'https://cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches'
+    'Dataproc Serverless Batches Intro': 'https://docs.cloud.google.com/dataproc-serverless/docs/overview'
+  api: 'https://docs.cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/batches/{{batch_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/batches'
@@ -184,7 +184,7 @@ properties:
       - name: 'approximateUsage'
         type: NestedObject
         description: |
-          Approximate workload resource usage, calculated when the workload completes(see [Dataproc Serverless pricing](https://cloud.google.com/dataproc-serverless/pricing))
+          Approximate workload resource usage, calculated when the workload completes(see [Dataproc Serverless pricing](https://docs.cloud.google.com/dataproc-serverless/pricing))
         output: true
         properties:
           - name: 'milliDcuSeconds'
@@ -210,7 +210,7 @@ properties:
       - name: 'currentUsage'
         type: NestedObject
         description: |
-          Snapshot of current workload resource usage(see [Dataproc Serverless pricing](https://cloud.google.com/dataproc-serverless/pricing))
+          Snapshot of current workload resource usage(see [Dataproc Serverless pricing](https://docs.cloud.google.com/dataproc-serverless/pricing))
         output: true
         properties:
           - name: 'milliDcu'
@@ -251,7 +251,7 @@ properties:
   - name: 'state'
     type: String
     description: |
-      The state of the batch. For possible values, see the [API documentation](https://cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches#State).
+      The state of the batch. For possible values, see the [API documentation](https://docs.cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches#State).
     output: true
   - name: 'stateMessage'
     type: String
@@ -431,7 +431,7 @@ properties:
         - name: 'state'
           type: String
           description: |
-            The state of the batch at this point in history. For possible values, see the [API documentation](https://cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches#State).
+            The state of the batch at this point in history. For possible values, see the [API documentation](https://docs.cloud.google.com/dataproc-serverless/docs/reference/rest/v1/projects.locations.batches#State).
           output: true
         - name: 'stateMessage'
           type: String

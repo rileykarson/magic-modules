@@ -15,8 +15,8 @@
 name: ApplicationEnvironment
 references:
   guides:
-    'Dataproc Intro': 'https://cloud.google.com/dataproc/'
-  api: 'https://cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.applicationEnvironments'
+    'Dataproc Intro': 'https://docs.cloud.google.com/dataproc/'
+  api: 'https://docs.cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.applicationEnvironments'
 description: An ApplicationEnvironment contains shared configuration that may be referenced by multiple SparkApplications.
 base_url: projects/{{project}}/locations/{{location}}/serviceInstances/{{serviceinstance}}/applicationEnvironments
 create_url: projects/{{project}}/locations/{{location}}/serviceInstances/{{serviceinstance}}/applicationEnvironments?applicationEnvironmentId={{application_environment_id}}

@@ -19,8 +19,8 @@ description: |
   standard for Healthcare information exchange
 references:
   guides:
-    'Creating a FHIR store': 'https://cloud.google.com/healthcare/docs/how-tos/fhir'
-  api: 'https://cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.fhirStores'
+    'Creating a FHIR store': 'https://docs.cloud.google.com/healthcare/docs/how-tos/fhir'
+  api: 'https://docs.cloud.google.com/healthcare/docs/reference/rest/v1/projects.locations.datasets.fhirStores'
 docs:
 id_format: '{{dataset}}/fhirStores/{{name}}'
 base_url: '{{dataset}}/fhirStores?fhirStoreId={{name}}'
@@ -349,7 +349,7 @@ properties:
             The output is organized in one table per resource type. The server reuses the existing tables (if any) that
             are named after the resource types, e.g. "Patient", "Observation". When there is no existing table for a given
             resource type, the server attempts to create one.
-            See the [streaming config reference](https://cloud.google.com/healthcare/docs/reference/rest/v1beta1/projects.locations.datasets.fhirStores#streamconfig) for more details.
+            See the [streaming config reference](https://docs.cloud.google.com/healthcare/docs/reference/rest/v1beta1/projects.locations.datasets.fhirStores#streamconfig) for more details.
           required: true
           properties:
             - name: 'datasetUri'

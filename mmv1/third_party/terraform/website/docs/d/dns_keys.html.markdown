@@ -9,8 +9,8 @@ description: |-
 Get the DNSKEY and DS records of DNSSEC-signed managed zones.
 
 For more information see the
-[official documentation](https://cloud.google.com/dns/docs/dnskeys/)
-and [API](https://cloud.google.com/dns/docs/reference/v1/dnsKeys).
+[official documentation](https://docs.cloud.google.com/dns/docs/dnskeys/)
+and [API](https://docs.cloud.google.com/dns/docs/reference/v1/dnsKeys).
 
 ~> A google_dns_managed_zone resource must have DNSSEC enabled in order
 to contain any DNSKEYs. Queries to managed zones without this setting
@@ -54,7 +54,7 @@ The following attributes are exported:
 
 * `key_signing_keys` - A list of Key-signing key (KSK) records. Structure is [documented below](#nested_key_signing_keys). Additionally, the DS record is provided:
 
-  * `ds_record` - The DS record based on the KSK record. This is used when [delegating](https://cloud.google.com/dns/docs/dnssec-advanced#subdelegation) DNSSEC-signed subdomains.
+  * `ds_record` - The DS record based on the KSK record. This is used when [delegating](https://docs.cloud.google.com/dns/docs/dnssec-advanced#subdelegation) DNSSEC-signed subdomains.
 
 * `zone_signing_keys` - A list of Zone-signing key (ZSK) records. Structure is documented below.
 

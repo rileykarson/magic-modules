@@ -18,7 +18,7 @@ description: |
 min_version: 'beta'
 references:
   guides:
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/projects.locations.authorizationPolicies'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-security/rest/v1beta1/projects.locations.authorizationPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/authorizationPolicies'
 create_url: 'projects/{{project}}/locations/{{location}}/authorizationPolicies?authorizationPolicyId={{name}}'

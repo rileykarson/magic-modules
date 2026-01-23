@@ -29,8 +29,8 @@ description: |
   created a full image of the disk.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/disks/create-snapshots'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/snapshots'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/disks/create-snapshots'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/snapshots'
 docs:
 base_url: 'projects/{{project}}/global/snapshots'
 has_self_link: true

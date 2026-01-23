@@ -30,7 +30,7 @@ func TestAccDataSourceParameterManagerRegionalRegionalParameterVersionRender_bas
 			{
 				// We've kept sleep because we need to grant the `Secret Manager Secret Accessor` role to the principal
 				// of the parameter and it can take up to 7 minutes for the role to take effect. For more information
-				// see the access change propagation documentation: https://cloud.google.com/iam/docs/access-change-propagation.
+				// see the access change propagation documentation: https://docs.cloud.google.com/iam/docs/access-change-propagation.
 				PreConfig: func() {
 					time.Sleep(7 * time.Minute)
 				},
@@ -137,7 +137,7 @@ func TestAccDataSourceParameterManagerRegionalRegionalParameterVersionRender_wit
 			{
 				// We've kept sleep because we need to grant the `Secret Manager Secret Accessor` role to the principal
 				// of the parameter and it can take up to 7 minutes for the role to take effect. For more information
-				// see the access change propagation documentation: https://cloud.google.com/iam/docs/access-change-propagation.
+				// see the access change propagation documentation: https://docs.cloud.google.com/iam/docs/access-change-propagation.
 				PreConfig: func() {
 					time.Sleep(7 * time.Minute)
 				},
@@ -245,7 +245,7 @@ func TestAccDataSourceParameterManagerRegionalRegionalParameterVersionRender_wit
 			{
 				// We've kept sleep because we need to grant the `Secret Manager Secret Accessor` role to the principal
 				// of the parameter and it can take up to 7 minutes for the role to take effect. For more information
-				// see the access change propagation documentation: https://cloud.google.com/iam/docs/access-change-propagation.
+				// see the access change propagation documentation: https://docs.cloud.google.com/iam/docs/access-change-propagation.
 				PreConfig: func() {
 					time.Sleep(7 * time.Minute)
 				},

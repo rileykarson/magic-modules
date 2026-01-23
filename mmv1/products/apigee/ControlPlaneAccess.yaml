@@ -17,8 +17,8 @@ description: |
   Authorize the Runtime components to access directly with Apigee Control Plane.
 references:
   guides:
-    'Enable ControlPlane access': 'https://cloud.google.com/apigee/docs/hybrid/v1.14/install-enable-control-plane-access'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations/updateControlPlaneAccess'
+    'Enable ControlPlane access': 'https://docs.cloud.google.com/apigee/docs/hybrid/v1.14/install-enable-control-plane-access'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations/updateControlPlaneAccess'
 docs:
 id_format: 'organizations/{{name}}/controlPlaneAccess'
 base_url: ''
@@ -69,7 +69,7 @@ properties:
 
       You might specify multiple service accounts, for example, if you have multiple environments and wish to assign a unique service account to each one.
 
-      The service accounts must have **Apigee Synchronizer Manager** role. See also [Create service accounts](https://cloud.google.com/apigee/docs/hybrid/v1.8/sa-about#create-the-service-accounts).
+      The service accounts must have **Apigee Synchronizer Manager** role. See also [Create service accounts](https://docs.cloud.google.com/apigee/docs/hybrid/v1.8/sa-about#create-the-service-accounts).
     send_empty_value: true
     item_type:
       type: String

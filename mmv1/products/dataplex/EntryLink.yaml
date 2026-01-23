@@ -17,8 +17,8 @@ description: |
   EntryLink represents a link between two Entries.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataplex/docs' # Update with specific EntryLink docs when available
-  api: 'https://cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.entryGroups.entryLinks'
+    'Official Documentation': 'https://docs.cloud.google.com/dataplex/docs' # Update with specific EntryLink docs when available
+  api: 'https://docs.cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.entryGroups.entryLinks'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/entryGroups/{{entry_group_id}}/entryLinks/{{entry_link_id}}'
 self_link: 'projects/{{project}}/locations/{{location}}/entryGroups/{{entry_group_id}}/entryLinks/{{entry_link_id}}'

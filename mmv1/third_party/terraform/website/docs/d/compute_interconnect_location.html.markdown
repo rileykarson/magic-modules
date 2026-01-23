@@ -6,7 +6,7 @@ description: |-
 
 # google_compute_interconnect_location
 Get the details of a single interconnect location. For more information see
-the official [API](https://cloud.google.com/compute/docs/reference/rest/v1/interconnectLocations/get) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/interconnectLocations/get) documentation.
 
 ## Example Usage
 ```tf

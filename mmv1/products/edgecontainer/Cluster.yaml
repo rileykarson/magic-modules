@@ -17,8 +17,8 @@ description: |
   Cluster contains information about a Google Distributed Cloud Edge Kubernetes cluster.
 references:
   guides:
-    'Create and manage clusters': 'https://cloud.google.com/distributed-cloud/edge/latest/docs/clusters'
-  api: 'https://cloud.google.com/distributed-cloud/edge/latest/docs/reference/container/rest/v1/projects.locations.clusters'
+    'Create and manage clusters': 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/clusters'
+  api: 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/reference/container/rest/v1/projects.locations.clusters'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/clusters'
 self_link: 'projects/{{project}}/locations/{{location}}/clusters/{{name}}'

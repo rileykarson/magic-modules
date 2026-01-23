@@ -16,8 +16,8 @@ name: 'Job'
 description: "Transcoding Job Resource"
 references:
   guides:
-    'Transcoder': 'https://cloud.google.com/transcoder/docs/'
-  api: 'https://cloud.google.com/transcoder/docs/reference/rest/v1/projects.locations.jobs'
+    'Transcoder': 'https://docs.cloud.google.com/transcoder/docs/'
+  api: 'https://docs.cloud.google.com/transcoder/docs/reference/rest/v1/projects.locations.jobs'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/jobs'
 self_link: '{{name}}'

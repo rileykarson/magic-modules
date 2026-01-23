@@ -76,7 +76,7 @@ func testAccDialogflowCXFlow_full(context map[string]interface{}) string {
     supported_language_codes   = ["fr", "de", "es"]
     time_zone                  = "America/New_York"
     description                = "Example description."
-    avatar_uri                 = "https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/super_cloud.png"
+    avatar_uri                 = "https://docs.cloud.google.com/_static/images/cloud/icons/favicons/onecloud/super_cloud.png"
     enable_stackdriver_logging = true
     enable_spell_correction    = true
     speech_to_text_settings {

@@ -16,8 +16,8 @@ name: 'Listing'
 description: A Bigquery Analytics Hub data exchange listing
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/analytics-hub-introduction'
-  api: 'https://cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.dataExchanges.listings'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.dataExchanges.listings'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}}/listings/{{listing_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}}/listings'
@@ -312,7 +312,7 @@ properties:
         is_set: true
         description: |-
           Region hint on where the data might be published. Data affinity regions are modifiable.
-          See https://cloud.google.com/about/locations for full listing of possible Cloud regions.
+          See https://docs.cloud.google.com/about/locations for full listing of possible Cloud regions.
         item_type:
           type: String
   - name: 'restrictedExportConfig'

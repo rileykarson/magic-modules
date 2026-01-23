@@ -32,8 +32,8 @@ import_format:
   - '{{location}}'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/docs/use-cmek#enable-cmek-google-channel'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/docs/use-cmek#enable-cmek-google-channel'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations
 description: |
  The Eventarc GoogleChannelConfig resource
 examples:

@@ -17,8 +17,8 @@ description: |
   Initializes a location-level encryption key specification.
 references:
   guides:
-    'Official ES Documentation': 'https://cloud.google.com/dialogflow/es/docs'
-    'Official CX Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
+    'Official ES Documentation': 'https://docs.cloud.google.com/dialogflow/es/docs'
+    'Official CX Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
   api: 'https://docs.cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.locations.encryptionSpec'
 
 base_url: 'projects/{{project}}/locations/{{location}}/encryptionSpec'

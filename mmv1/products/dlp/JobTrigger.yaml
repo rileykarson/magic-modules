@@ -17,8 +17,8 @@ description: |
   A job trigger configuration.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dlp/docs/creating-job-triggers'
-  api: 'https://cloud.google.com/dlp/docs/reference/rest/v2/projects.jobTriggers'
+    'Official Documentation': 'https://docs.cloud.google.com/dlp/docs/creating-job-triggers'
+  api: 'https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.jobTriggers'
 docs:
 id_format: '{{parent}}/jobTriggers/{{name}}'
 base_url: '{{parent}}/jobTriggers'
@@ -236,7 +236,7 @@ properties:
           - name: 'minLikelihood'
             type: Enum
             description: |
-              Only returns findings equal or above this threshold. See https://cloud.google.com/dlp/docs/likelihood for more info
+              Only returns findings equal or above this threshold. See https://docs.cloud.google.com/dlp/docs/likelihood for more info
             default_value: "POSSIBLE"
             enum_values:
               - 'VERY_UNLIKELY'
@@ -289,7 +289,7 @@ properties:
                           type: String
                           description: |
                             Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed
-                            at https://cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
+                            at https://docs.cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
                           required: true
                         - name: 'version'
                           type: String
@@ -316,7 +316,7 @@ properties:
             type: Array
             description: |
               Restricts what infoTypes to look for. The values must correspond to InfoType values returned by infoTypes.list
-              or listed at https://cloud.google.com/dlp/docs/infotypes-reference.
+              or listed at https://docs.cloud.google.com/dlp/docs/infotypes-reference.
 
               When no InfoTypes or CustomInfoTypes are specified in a request, the system may automatically choose what detectors to run.
               By default this may be all types, but may change over time as detectors are updated.
@@ -327,7 +327,7 @@ properties:
                   type: String
                   description: |
                     Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed
-                    at https://cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
+                    at https://docs.cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
                   required: true
                 - name: 'version'
                   type: String
@@ -366,7 +366,7 @@ properties:
                         type: String
                         description: |
                           Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed
-                          at https://cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
+                          at https://docs.cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
                         required: true
                       - name: 'version'
                         type: String
@@ -467,7 +467,7 @@ properties:
                           - name: 'matchingType'
                             type: Enum
                             description: |
-                              How the rule is applied. See the documentation for more information: https://cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#MatchingType
+                              How the rule is applied. See the documentation for more information: https://docs.cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#MatchingType
                             required: true
                             enum_values:
                               - 'MATCHING_TYPE_FULL_MATCH'
@@ -536,7 +536,7 @@ properties:
                                       type: String
                                       description: |
                                         Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed
-                                        at https://cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
+                                        at https://docs.cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
                                       required: true
                                     - name: 'version'
                                       type: String
@@ -600,7 +600,7 @@ properties:
           - name: 'customInfoTypes'
             type: Array
             description: |
-              Custom info types to be used. See https://cloud.google.com/dlp/docs/creating-custom-infotypes to learn more.
+              Custom info types to be used. See https://docs.cloud.google.com/dlp/docs/creating-custom-infotypes to learn more.
             item_type:
               type: NestedObject
               properties:
@@ -617,7 +617,7 @@ properties:
                       type: String
                       description: |
                         Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names
-                        listed at https://cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
+                        listed at https://docs.cloud.google.com/dlp/docs/infotypes-reference when specifying a built-in type.
                       required: true
                     - name: 'version'
                       type: String
@@ -736,7 +736,7 @@ properties:
                   send_empty_value: true
                   allow_empty_object: true
                   properties:
-                    # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#SurrogateType
+                    # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#SurrogateType
                     []
       - name: 'storageConfig'
         type: NestedObject

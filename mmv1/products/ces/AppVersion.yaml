@@ -330,7 +330,7 @@ properties:
               type: NestedObject
               description: |-
                 The agent which will transfer execution to an existing remote
-                [Dialogflow](https://cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents)
+                [Dialogflow](https://docs.cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents)
                 agent flow. The corresponding Dialogflow agent will process subsequent user
                 queries until the session ends or flow ends and the control is transferred
                 back to the parent CES agent.
@@ -340,7 +340,7 @@ properties:
                   type: String
                   description: |-
                     The
-                    [Dialogflow](https://cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents
+                    [Dialogflow](https://docs.cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents
                     agent resource name.
                     Format: `projects/{project}/locations/{location}/agents/{agent}`
                   output: true
@@ -426,7 +426,7 @@ properties:
                     type: String
                     description: |-
                       Ambient noise as a mono-channel, 16kHz WAV file stored in [Cloud
-                      Storage](https://cloud.google.com/storage).
+                      Storage](https://docs.cloud.google.com/storage).
                       Note: Please make sure the CES service agent
                       `service-@gcp-sa-ces.iam.gserviceaccount.com` has
                       `storage.objects.get` permission to the Cloud Storage object.
@@ -519,7 +519,7 @@ properties:
                 output: true
                 item_type:
                   type: NestedObject
-                  description: An engine to which the data stores are connected. See Vertex AI Search (https://cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction).
+                  description: An engine to which the data stores are connected. See Vertex AI Search (https://docs.cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction).
                   output: true
                   properties:
                     - name: name
@@ -734,7 +734,7 @@ properties:
                   - name: gcsBucket
                     type: String
                     description: |-
-                      The [Cloud Storage](https://cloud.google.com/storage) bucket to store the
+                      The [Cloud Storage](https://docs.cloud.google.com/storage) bucket to store the
                       session audio recordings. The URI must start with "gs://".
                       Note: If the Cloud Storage bucket is in a different project from the app,
                       you should grant `storage.objects.create` permission to the CES service
@@ -801,7 +801,7 @@ properties:
                   - name: deidentifyTemplate
                     type: String
                     description: |-
-                      [DLP](https://cloud.google.com/dlp/docs) deidentify template name to
+                      [DLP](https://docs.cloud.google.com/dlp/docs) deidentify template name to
                       instruct on how to de-identify content.
                       Format:
                       `projects/{project}/locations/{location}/deidentifyTemplates/{deidentify_template}`
@@ -815,7 +815,7 @@ properties:
                   - name: inspectTemplate
                     type: String
                     description: |-
-                      [DLP](https://cloud.google.com/dlp/docs) inspect template name to configure
+                      [DLP](https://docs.cloud.google.com/dlp/docs) inspect template name to configure
                       detection of sensitive data types.
                       Format:
                       `projects/{project}/locations/{location}/inspectTemplates/{inspect_template}`
@@ -1867,7 +1867,7 @@ properties:
                 Tool to retrieve from Vertex AI Search datastore or engine for grounding.
                 Accepts either a datastore or an engine, but not both.
                 See Vertex AI Search:
-                https://cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction.
+                https://docs.cloud.google.com/generative-ai-app-builder/docs/enterprise-search-introduction.
               output: true
               properties:
                 - name: boostSpecs
@@ -2068,7 +2068,7 @@ properties:
                             description: |-
                               Filter specification for the DataStore.
                               See:
-                              https://cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
+                              https://docs.cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
                             output: true
                     - name: engine
                       type: String
@@ -2083,7 +2083,7 @@ properties:
                         A filter applied to the search across the Engine. Not relevant and not
                         used if 'data_store_sources' is provided.
                         See:
-                        https://cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
+                        https://docs.cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata
                       output: true
                 - name: maxResults
                   type: Integer
@@ -2230,7 +2230,7 @@ properties:
               description: |-
                 Represents a tool to perform Google web searches for grounding.
                 See
-                https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-with-google-search.
+                https://docs.cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-with-google-search.
               output: true
               properties:
                 - name: description
@@ -2354,7 +2354,7 @@ properties:
                       type: NestedObject
                       description: |-
                         Configurations for authentication with [ID
-                        token](https://cloud.google.com/docs/authentication/token-types#id) generated
+                        token](https://docs.cloud.google.com/docs/authentication/token-types#id) generated
                         from service agent.
                       allow_empty_object: true
                       send_empty_value: true
@@ -2391,7 +2391,7 @@ properties:
                       type: String
                       description: |-
                         The name of [Service
-                        Directory](https://cloud.google.com/service-directory) service.
+                        Directory](https://docs.cloud.google.com/service-directory) service.
                         Format:
                         `projects/{project}/locations/{location}/namespaces/{namespace}/services/{service}`.
                         Location of the service directory must be the same as the location of the
@@ -2625,7 +2625,7 @@ properties:
                       type: NestedObject
                       description: |-
                         Configurations for authentication with [ID
-                        token](https://cloud.google.com/docs/authentication/token-types#id) generated
+                        token](https://docs.cloud.google.com/docs/authentication/token-types#id) generated
                         from service agent.
                       output: true
                       properties: []
@@ -2656,7 +2656,7 @@ properties:
                       type: String
                       description: |-
                         The name of [Service
-                        Directory](https://cloud.google.com/service-directory) service.
+                        Directory](https://docs.cloud.google.com/service-directory) service.
                         Format:
                         `projects/{project}/locations/{location}/namespaces/{namespace}/services/{service}`.
                         Location of the service directory must be the same as the location of the

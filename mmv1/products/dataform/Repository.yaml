@@ -18,8 +18,8 @@ description: |-
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataform/docs/'
-  api: 'https://cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories'
+    'Official Documentation': 'https://docs.cloud.google.com/dataform/docs/'
+  api: 'https://docs.cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories'
 docs:
 id_format: 'projects/{{project}}/locations/{{region}}/repositories/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/repositories'
@@ -155,7 +155,7 @@ properties:
       - name: 'tokenStatus'
         type: String
         description: |
-          Indicates the status of the Git access token. https://cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories#TokenStatus
+          Indicates the status of the Git access token. https://docs.cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories#TokenStatus
         min_version: 'beta'
         output: true
   - name: 'workspaceCompilationOverrides'

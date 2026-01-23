@@ -17,7 +17,7 @@ description: |
   Initializes a Project-level default Backupdr config. It creates default Backupvault and default Backup Plan in same project for customers to protect instances.
 references:
   guides:
-  api: 'https://cloud.google.com/backup-disaster-recovery/docs/reference/rest/v1/projects.locations.serviceConfig'
+  api: 'https://docs.cloud.google.com/backup-disaster-recovery/docs/reference/rest/v1/projects.locations.serviceConfig'
 
 base_url: 'projects/{{project}}/locations/{{location}}/serviceConfig'
 

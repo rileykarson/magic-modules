@@ -33,8 +33,8 @@ description: |
   to create an instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/images'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/images'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/images'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/images'
 docs:
 base_url: 'projects/{{project}}/global/images'
 has_self_link: true
@@ -98,7 +98,7 @@ properties:
     description: |
       Cloud Storage bucket storage location of the image
       (regional or multi-regional).
-      Reference link: https://cloud.google.com/compute/docs/reference/rest/v1/images
+      Reference link: https://docs.cloud.google.com/compute/docs/reference/rest/v1/images
     default_from_api: true
     item_type:
       type: String
@@ -130,7 +130,7 @@ properties:
         - name: 'type'
           type: Enum
           description: |
-            The type of supported feature. Read [Enabling guest operating system features](https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
+            The type of supported feature. Read [Enabling guest operating system features](https://docs.cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.
           required: true
           enum_values:
             - 'MULTI_IP_SUBNET'
@@ -289,7 +289,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
       - name: 'kmsKeyServiceAccount'
         type: String
         description: |
@@ -339,7 +339,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
       - name: 'kmsKeyServiceAccount'
         type: String
         description: |
@@ -462,7 +462,7 @@ properties:
           in the cloud console. Your project's Compute Engine System service account
           (`service-{{PROJECT_NUMBER}}@compute-system.iam.gserviceaccount.com`) must have
           `roles/cloudkms.cryptoKeyEncrypterDecrypter` to use this feature.
-          See https://cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
+          See https://docs.cloud.google.com/compute/docs/disks/customer-managed-encryption#encrypt_a_new_persistent_disk_with_your_own_keys
       - name: 'kmsKeyServiceAccount'
         type: String
         description: |

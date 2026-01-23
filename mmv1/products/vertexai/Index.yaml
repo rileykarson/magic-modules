@@ -17,7 +17,7 @@ description: |-
   A representation of a collection of database items organized in a way that allows for approximate nearest neighbor (a.k.a ANN) algorithms search.
 references:
   guides:
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.indexes/'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.indexes/'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/indexes'
 self_link: 'projects/{{project}}/locations/{{region}}/indexes/{{name}}'
@@ -87,8 +87,8 @@ properties:
     type: String
     description: The description of the Index.
   # Please take a look at the following links for the original definition:
-  # https://cloud.google.com/vertex-ai/docs/matching-engine/create-manage-index#create_index-drest
-  # https://cloud.google.com/vertex-ai/docs/matching-engine/configuring-indexes
+  # https://docs.cloud.google.com/vertex-ai/docs/matching-engine/create-manage-index#create_index-drest
+  # https://docs.cloud.google.com/vertex-ai/docs/matching-engine/configuring-indexes
   - name: 'metadata'
     type: NestedObject
     description: |-
@@ -105,7 +105,7 @@ properties:
           field is set when calling IndexService.UpdateIndex, then no other
           Index field can be also updated as part of the same call.
           The expected structure and format of the files this URI points to is
-          described at https://cloud.google.com/vertex-ai/docs/matching-engine/using-matching-engine#input-data-format
+          described at https://docs.cloud.google.com/vertex-ai/docs/matching-engine/using-matching-engine#input-data-format
         custom_flatten: 'templates/terraform/custom_flatten/vertex_ai_index_ignore_contents_delta_uri.go.tmpl'
       - name: 'isCompleteOverwrite'
         type: Boolean

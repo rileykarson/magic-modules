@@ -34,8 +34,8 @@ description: |
   READER, WRITER, and OWNER instead of READ, WRITE, and FULL_CONTROL.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/access-control/lists'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/access-control/lists'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/bucketAccessControls'
 docs:
 id_format: '{{bucket}}/{{entity}}'
 base_url: 'b/{{bucket}}/acl'

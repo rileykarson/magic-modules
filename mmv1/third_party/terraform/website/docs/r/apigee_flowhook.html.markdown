@@ -11,9 +11,9 @@ Represents a sharedflow attachment to a flowhook point.
 
 To get more information about Flowhook, see:
 
-* [API documentation](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.flowhooks#FlowHook)
+* [API documentation](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.flowhooks#FlowHook)
 * How-to Guides
-    * [organizations.environments.flowhooks](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.flowhooks#FlowHook)
+    * [organizations.environments.flowhooks](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.flowhooks#FlowHook)
 
 ## Argument Reference
 

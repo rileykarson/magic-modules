@@ -16,8 +16,8 @@ name: DataPolicy
 description: BigQuery Data Policy
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/column-data-masking-intro'
-  api: 'https://cloud.google.com/bigquery/docs/reference/bigquerydatapolicy/rest/v2/projects.locations.dataPolicies'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/column-data-masking-intro'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/bigquerydatapolicy/rest/v2/projects.locations.dataPolicies'
 docs: null
 id_format: 'projects/{{project}}/locations/{{location}}/dataPolicies/{{data_policy_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/dataPolicies'
@@ -130,7 +130,7 @@ properties:
       data goverened by this data policy.
 
       Uses the [IAM V2 principal
-      syntax](https://cloud.google.com/iam/docs/principal-identifiers#v2) Only
+      syntax](https://docs.cloud.google.com/iam/docs/principal-identifiers#v2) Only
       supports principal types users, groups, serviceaccounts, cloudidentity.
       This field is supported in V2 Data Policy only. In case of V1 data policies
       (i.e. verion = 1 and policy_tag is set), this field is not populated.

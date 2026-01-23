@@ -98,7 +98,7 @@ properties:
         type: String
         description: |-
           The resource name of the
-          [NCC](https://cloud.google.com/network-connectivity-center) hub.
+          [NCC](https://docs.cloud.google.com/network-connectivity-center) hub.
           Use the following format:
           `projects/{project}/locations/global/hubs/{hub}`.
         immutable: true

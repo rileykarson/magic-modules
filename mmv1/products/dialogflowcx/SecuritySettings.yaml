@@ -19,8 +19,8 @@ description: |
   Multiple security settings can be configured in each location. Each agent can specify the security settings to apply, and each setting can be applied to multiple agents in the same project and location.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.securitySettings'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.securitySettings'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/securitySettings/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/securitySettings'
@@ -65,7 +65,7 @@ properties:
     type: String
     description: |
       The location these settings are located in. Settings can only be applied to an agent in the same location.
-      See [Available Regions](https://cloud.google.com/dialogflow/cx/docs/concept/region#avail) for a list of supported locations.
+      See [Available Regions](https://docs.cloud.google.com/dialogflow/cx/docs/concept/region#avail) for a list of supported locations.
     url_param_only: true
     required: true
     immutable: true
@@ -91,13 +91,13 @@ properties:
   - name: 'inspectTemplate'
     type: String
     description: |
-      [DLP](https://cloud.google.com/dlp/docs) inspect template name. Use this template to define inspect base settings. If empty, we use the default DLP inspect config.
+      [DLP](https://docs.cloud.google.com/dlp/docs) inspect template name. Use this template to define inspect base settings. If empty, we use the default DLP inspect config.
       Note: inspectTemplate must be located in the same region as the SecuritySettings.
       Format: projects/<Project ID>/locations/<Location ID>/inspectTemplates/<Template ID> OR organizations/<Organization ID>/locations/<Location ID>/inspectTemplates/<Template ID>
   - name: 'deidentifyTemplate'
     type: String
     description: |
-      [DLP](https://cloud.google.com/dlp/docs) deidentify template name. Use this template to define de-identification configuration for the content. If empty, Dialogflow replaces sensitive info with [redacted] text.
+      [DLP](https://docs.cloud.google.com/dlp/docs) deidentify template name. Use this template to define de-identification configuration for the content. If empty, Dialogflow replaces sensitive info with [redacted] text.
       Note: deidentifyTemplate must be located in the same region as the SecuritySettings.
       Format: projects/<Project ID>/locations/<Location ID>/deidentifyTemplates/<Template ID> OR organizations/<Organization ID>/locations/<Location ID>/deidentifyTemplates/<Template ID>
   - name: 'purgeDataTypes'
@@ -117,7 +117,7 @@ properties:
       Controls audio export settings for post-conversation analytics when ingesting audio to conversations.
       If retention_strategy is set to REMOVE_AFTER_CONVERSATION or gcs_bucket is empty, audio export is disabled.
       If audio export is enabled, audio is recorded and saved to gcs_bucket, subject to retention policy of gcs_bucket.
-      This setting won't effect audio input for implicit sessions via [Sessions.DetectIntent](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/detectIntent#google.cloud.dialogflow.cx.v3.Sessions.DetectIntent).
+      This setting won't effect audio input for implicit sessions via [Sessions.DetectIntent](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.sessions/detectIntent#google.cloud.dialogflow.cx.v3.Sessions.DetectIntent).
     properties:
       - name: 'gcsBucket'
         type: String

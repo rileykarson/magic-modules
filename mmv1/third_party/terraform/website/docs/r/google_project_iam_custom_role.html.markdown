@@ -7,9 +7,9 @@ description: |-
 # google_project_iam_custom_role
 
 Allows management of a customized Cloud IAM project role. For more information see
-[the official documentation](https://cloud.google.com/iam/docs/understanding-custom-roles)
+[the official documentation](https://docs.cloud.google.com/iam/docs/understanding-custom-roles)
 and
-[API](https://cloud.google.com/iam/reference/rest/v1/projects.roles).
+[API](https://docs.cloud.google.com/iam/reference/rest/v1/projects.roles).
 
 ~> **Warning:** Note that custom roles in GCP have the concept of a soft-delete. There are two issues that may arise
  from this and how roles are propagated. 1) creating a role may involve undeleting and then updating a role with the
@@ -46,7 +46,7 @@ The following arguments are supported:
 
 * `stage` - (Optional) The current launch stage of the role.
     Defaults to `GA`.
-    List of possible stages is [here](https://cloud.google.com/iam/reference/rest/v1/organizations.roles#Role.RoleLaunchStage).
+    List of possible stages is [here](https://docs.cloud.google.com/iam/reference/rest/v1/organizations.roles#Role.RoleLaunchStage).
 
 * `description` - (Optional) A human-readable description for the role.
 

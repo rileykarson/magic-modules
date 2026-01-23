@@ -17,8 +17,8 @@ description: |
   An `Environment` in Apigee.
 references:
   guides:
-    'Creating an environment': 'https://cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments/create'
+    'Creating an environment': 'https://docs.cloud.google.com/apigee/docs/api-platform/get-started/create-environment'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments/create'
 docs:
 base_url: '{{org_id}}/environments'
 self_link: '{{org_id}}/environments/{{name}}'
@@ -225,7 +225,7 @@ properties:
   - name: 'clientIpResolutionConfig'
     type: NestedObject
     description: |
-      The algorithm to resolve IP. This will affect Analytics, API Security, and other features that use the client ip. To remove a client ip resolution config, update the field to an empty value. Example: '{ "clientIpResolutionConfig" = {} }' For more information, see: https://cloud.google.com/apigee/docs/api-platform/system-administration/client-ip-resolution
+      The algorithm to resolve IP. This will affect Analytics, API Security, and other features that use the client ip. To remove a client ip resolution config, update the field to an empty value. Example: '{ "clientIpResolutionConfig" = {} }' For more information, see: https://docs.cloud.google.com/apigee/docs/api-platform/system-administration/client-ip-resolution
     properties:
       - name: 'headerIndexAlgorithm'
         type: NestedObject

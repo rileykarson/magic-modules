@@ -20,8 +20,8 @@ description: |
   Every update to a deployed posture creates a new posture revision with an updated revision_id.
 references:
   guides:
-    'Create and deploy a posture': 'https://cloud.google.com/security-command-center/docs/how-to-use-security-posture'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/securityposture/rest/v1/Posture'
+    'Create and deploy a posture': 'https://docs.cloud.google.com/security-command-center/docs/how-to-use-security-posture'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/securityposture/rest/v1/Posture'
 docs:
 base_url: '{{parent}}/locations/{{location}}/postures'
 self_link: '{{parent}}/locations/{{location}}/postures/{{posture_id}}'
@@ -241,7 +241,7 @@ properties:
                               description: |
                                 Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language.
                                 This page details the objects and attributes that are used to the build the CEL expressions for
-                                custom access levels - https://cloud.google.com/access-context-manager/docs/custom-access-level-spec.
+                                custom access levels - https://docs.cloud.google.com/access-context-manager/docs/custom-access-level-spec.
                               properties:
                                 - name: 'expression'
                                   type: String
@@ -361,7 +361,7 @@ properties:
                               description: |
                                 Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language.
                                 This page details the objects and attributes that are used to the build the CEL expressions for
-                                custom access levels - https://cloud.google.com/access-context-manager/docs/custom-access-level-spec.
+                                custom access levels - https://docs.cloud.google.com/access-context-manager/docs/custom-access-level-spec.
                               properties:
                                 - name: 'expression'
                                   type: String

@@ -28,9 +28,9 @@ description: |
   directive can be passed onto further dependencies, creating unexpected plans.
 references:
   guides:
-    'Serverless NEGs Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/serverless-neg-concepts'
-    'Internet NEGs Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/internet-neg-concepts'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups'
+    'Serverless NEGs Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/serverless-neg-concepts'
+    'Internet NEGs Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/internet-neg-concepts'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/networkEndpointGroups'
 has_self_link: true
@@ -313,7 +313,7 @@ properties:
     properties:
       - name: 'platform'
         type: String
-        # Docs (https://cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups) say support is offered for:
+        # Docs (https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionNetworkEndpointGroups) say support is offered for:
         # API Gateway: apigateway.googleapis.com, App Engine: appengine.googleapis.com,
         # Cloud Functions: cloudfunctions.googleapis.com, Cloud Run: run.googleapis.com
         # However, only API Gateway is currently supported

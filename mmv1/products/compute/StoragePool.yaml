@@ -19,8 +19,8 @@ description: |
   You can use Hyperdisk Storage Pools to create and manage disks in pools and use the disks across multiple workloads.
 references:
   guides:
-    "Create Hyperdisk Storage Pools": "https://cloud.google.com/compute/docs/disks/create-storage-pools"
-  api: "https://cloud.google.com/compute/docs/reference/rest/v1/storagePools"
+    "Create Hyperdisk Storage Pools": "https://docs.cloud.google.com/compute/docs/disks/create-storage-pools"
+  api: "https://docs.cloud.google.com/compute/docs/reference/rest/v1/storagePools"
 base_url: "projects/{{project}}/zones/{{zone}}/storagePools"
 self_link: "projects/{{project}}/zones/{{zone}}/storagePools/{{name}}"
 immutable: false
@@ -104,7 +104,7 @@ properties:
     type: String
     description: |
       Size, in GiB, of the storage pool. For more information about the size limits,
-      see https://cloud.google.com/compute/docs/disks/storage-pools.
+      see https://docs.cloud.google.com/compute/docs/disks/storage-pools.
     required: true
   - name: "poolProvisionedIops"
     type: String
@@ -168,7 +168,7 @@ properties:
         description: |
           Sum of all the disks' provisioned IOPS, minus some amount
           that is allowed per disk that is not counted towards pool's IOPS capacity.
-          For more information, see https://cloud.google.com/compute/docs/disks/storage-pools.
+          For more information, see https://docs.cloud.google.com/compute/docs/disks/storage-pools.
         output: true
       - name: "totalProvisionedDiskIops"
         type: String
@@ -240,7 +240,7 @@ properties:
       - name: "poolUsedIops"
         type: String
         description: |
-          Sum of all the disks' provisioned IOPS, minus some amount that is allowed per disk that is not counted towards pool's IOPS capacity. For more information, see https://cloud.google.com/compute/docs/disks/storage-pools.
+          Sum of all the disks' provisioned IOPS, minus some amount that is allowed per disk that is not counted towards pool's IOPS capacity. For more information, see https://docs.cloud.google.com/compute/docs/disks/storage-pools.
         output: true
       - name: "totalProvisionedDiskIops"
         type: String

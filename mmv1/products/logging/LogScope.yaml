@@ -16,8 +16,8 @@ name: 'LogScope'
 description: 'Describes a group of resources to read log entries from'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/logging/docs/apis'
-  api: 'https://cloud.google.com/logging/docs/reference/v2/rest/v2/projects.locations.logScopes'
+    'Official Documentation': 'https://docs.cloud.google.com/logging/docs/apis'
+  api: 'https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/projects.locations.logScopes'
 docs:
 base_url: '{{parent}}/locations/{{location}}/logScopes'
 self_link: '{{parent}}/locations/{{location}}/logScopes/{{name}}'

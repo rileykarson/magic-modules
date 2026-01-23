@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_repository
 
 Get information about a Google Artifact Registry Repository. For more information see
-the [official documentation](https://cloud.google.com/artifact-registry/docs/)
-and [API](https://cloud.google.com/artifact-registry/docs/apis).
+the [official documentation](https://docs.cloud.google.com/artifact-registry/docs/)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/apis).
 
 ## Example Usage
 

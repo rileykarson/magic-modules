@@ -7,9 +7,9 @@ description: |-
 # google_storage_bucket
 
 Gets an existing bucket in Google Cloud Storage service (GCS).
-See [the official documentation](https://cloud.google.com/storage/docs/key-terms#buckets)
+See [the official documentation](https://docs.cloud.google.com/storage/docs/key-terms#buckets)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/buckets).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/buckets).
 
 
 ## Example Usage

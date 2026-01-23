@@ -17,8 +17,8 @@ description: |
   A `DeployPolicy` inhibits manual or DeployPolicy-driven actions within a Delivery Pipeline or Target.
 references:
   guides:
-    "Restrict deploy behavior using policies": "https://cloud.google.com/deploy/docs/deploy-policy"
-  api: "https://cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deployPolicies"
+    "Restrict deploy behavior using policies": "https://docs.cloud.google.com/deploy/docs/deploy-policy"
+  api: "https://docs.cloud.google.com/deploy/docs/api/reference/rest/v1/projects.locations.deployPolicies"
 docs:
 id_format: "projects/{{project}}/locations/{{location}}/deployPolicies/{{name}}"
 base_url: "projects/{{project}}/locations/{{location}}/deployPolicies"

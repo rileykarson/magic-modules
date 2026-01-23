@@ -24,7 +24,7 @@ import (
 // Information about the IAM policy for this resource
 // Several GCP resources have IAM policies that are scoped to
 // and accessed via their parent resource
-// See: https://cloud.google.com/iam/docs/overview
+// See: https://docs.cloud.google.com/iam/docs/overview
 type IamPolicy struct {
 	// boolean of if this binding should be generated
 	Exclude bool `yaml:"exclude,omitempty"`

@@ -7,9 +7,9 @@ description: |-
 # google_compute_project_metadata
 
 Authoritatively manages metadata common to all instances for a project in GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/storing-retrieving-metadata)
+[the official documentation](https://docs.cloud.google.com/compute/docs/storing-retrieving-metadata)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/projects/setCommonInstanceMetadata).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/projects/setCommonInstanceMetadata).
 
 ~> **Note:**  This resource manages all project-level metadata including project-level ssh keys.
 Keys unset in config but set on the server will be removed. If you want to manage only single

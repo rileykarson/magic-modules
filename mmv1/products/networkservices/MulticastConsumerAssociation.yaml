@@ -110,7 +110,7 @@ properties:
     type: String
     description: |-
       [Output only] A Compute Engine (placement
-      policy)[https://cloud.google.com/compute/docs/instances/placement-policies-overview]
+      policy)[https://docs.cloud.google.com/compute/docs/instances/placement-policies-overview]
       that can be used to place virtual machine (VM) instances as multicast
       consumers close to the multicast infrastructure created for this domain,
       on a best effort basis.

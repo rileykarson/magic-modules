@@ -16,8 +16,8 @@ name: 'Backup'
 description: 'An AlloyDB Backup.'
 references:
   guides:
-    'AlloyDB': 'https://cloud.google.com/alloydb/docs/'
-  api: 'https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.backups/create'
+    'AlloyDB': 'https://docs.cloud.google.com/alloydb/docs/'
+  api: 'https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.backups/create'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/backups'
 self_link: 'projects/{{project}}/locations/{{location}}/backups/{{backup_id}}'

@@ -17,8 +17,8 @@ description: |
   A connection allows BigQuery connections to external data sources..
 references:
   guides:
-    'Cloud SQL federated queries': 'https://cloud.google.com/bigquery/docs/cloud-sql-federated-queries'
-  api: 'https://cloud.google.com/bigquery/docs/reference/bigqueryconnection/rest/v1/projects.locations.connections/create'
+    'Cloud SQL federated queries': 'https://docs.cloud.google.com/bigquery/docs/cloud-sql-federated-queries'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/bigqueryconnection/rest/v1/projects.locations.connections/create'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/connections/{{connection_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/connections'
@@ -360,7 +360,7 @@ properties:
           should have provisioned the database role with appropriate permissions, such as `SELECT`
           and `INSERT`. Other users should only use roles provided by their Cloud Spanner admins.
           The database role name must start with a letter, and can only contain letters, numbers,
-          and underscores. For more details, see https://cloud.google.com/spanner/docs/fgac-about.
+          and underscores. For more details, see https://docs.cloud.google.com/spanner/docs/fgac-about.
         validation:
           regex: '^[a-zA-Z][a-zA-Z0-9_]*$'
       - name: 'useServerlessAnalytics'

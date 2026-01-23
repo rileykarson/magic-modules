@@ -9,7 +9,7 @@ description: |-
 Use this data source to get details about a external access rule resource.
 
 To get more information about external address, see:
-* [API documentation](https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies.externalAccessRules)
+* [API documentation](https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies.externalAccessRules)
 
 ## Example Usage
 

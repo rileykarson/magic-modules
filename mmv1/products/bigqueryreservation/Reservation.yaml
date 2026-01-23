@@ -17,8 +17,8 @@ description: |
   A reservation is a mechanism used to guarantee BigQuery slots to users.
 references:
   guides:
-    'Introduction to Reservations': 'https://cloud.google.com/bigquery/docs/reservations-intro'
-  api: 'https://cloud.google.com/bigquery/docs/reference/reservations/rest/v1/projects.locations.reservations/create'
+    'Introduction to Reservations': 'https://docs.cloud.google.com/bigquery/docs/reservations-intro'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/reservations/rest/v1/projects.locations.reservations/create'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/reservations'
 create_url: 'projects/{{project}}/locations/{{location}}/reservations?reservationId={{name}}'
@@ -134,7 +134,7 @@ properties:
           - name: 'code'
             type: Integer
             description: |
-              The status code, which should be an enum value of [google.rpc.Code](https://cloud.google.com/bigquery/docs/reference/reservations/rpc/google.rpc#google.rpc.Code).
+              The status code, which should be an enum value of [google.rpc.Code](https://docs.cloud.google.com/bigquery/docs/reference/reservations/rpc/google.rpc#google.rpc.Code).
             output: true
           - name: 'message'
             type: String

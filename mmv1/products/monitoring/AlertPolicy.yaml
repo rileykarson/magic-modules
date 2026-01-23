@@ -19,8 +19,8 @@ description: |
   about this state.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/monitoring/alerts/'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies'
+    'Official Documentation': 'https://docs.cloud.google.com/monitoring/alerts/'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies'
 docs:
 id_format: '{{name}}'
 base_url: 'v3/projects/{{project}}/alertPolicies'

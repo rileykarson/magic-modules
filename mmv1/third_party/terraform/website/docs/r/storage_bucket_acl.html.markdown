@@ -7,13 +7,13 @@ description: |-
 # google_storage_bucket_acl
 
 Authoritatively manages a bucket's ACLs in Google cloud storage service (GCS). For more information see
-[the official documentation](https://cloud.google.com/storage/docs/access-control/lists)
+[the official documentation](https://docs.cloud.google.com/storage/docs/access-control/lists)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/bucketAccessControls).
 
 Bucket ACLs can be managed non authoritatively using the [`storage_bucket_access_control`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_access_control) resource. Do not use these two resources in conjunction to manage the same bucket.
 
-Permissions can be granted either by ACLs or Cloud IAM policies. In general, permissions granted by Cloud IAM policies do not appear in ACLs, and permissions granted by ACLs do not appear in Cloud IAM policies. The only exception is for ACLs applied directly on a bucket and certain bucket-level Cloud IAM policies, as described in [Cloud IAM relation to ACLs](https://cloud.google.com/storage/docs/access-control/iam#acls).
+Permissions can be granted either by ACLs or Cloud IAM policies. In general, permissions granted by Cloud IAM policies do not appear in ACLs, and permissions granted by ACLs do not appear in Cloud IAM policies. The only exception is for ACLs applied directly on a bucket and certain bucket-level Cloud IAM policies, as described in [Cloud IAM relation to ACLs](https://docs.cloud.google.com/storage/docs/access-control/iam#acls).
 
 **NOTE** This resource will not remove the `project-owners-<project_id>` entity from the `OWNER` role.
 
@@ -43,9 +43,9 @@ resource "google_storage_bucket_acl" "image-store-acl" {
 
 - - -
 
-* `predefined_acl` - (Optional) The [canned GCS ACL](https://cloud.google.com/storage/docs/access-control/lists#predefined-acl) to apply. Must be set if `role_entity` is not.
+* `predefined_acl` - (Optional) The [canned GCS ACL](https://docs.cloud.google.com/storage/docs/access-control/lists#predefined-acl) to apply. Must be set if `role_entity` is not.
 
-* `role_entity` - (Optional) List of role/entity pairs in the form `ROLE:entity`. See [GCS Bucket ACL documentation](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls)  for more details. Must be set if `predefined_acl` is not.
+* `role_entity` - (Optional) List of role/entity pairs in the form `ROLE:entity`. See [GCS Bucket ACL documentation](https://docs.cloud.google.com/storage/docs/json_api/v1/bucketAccessControls)  for more details. Must be set if `predefined_acl` is not.
 
 * `default_acl` - (Optional) Configure this ACL to be the default ACL.
 

@@ -18,8 +18,8 @@ description: |
   A Membership defines a relationship between a Group and an entity belonging to that Group, referred to as a "member".
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/identity/docs/how-to/memberships-google-groups'
-  api: 'https://cloud.google.com/identity/docs/reference/rest/v1/groups.memberships'
+    'Official Documentation': 'https://docs.cloud.google.com/identity/docs/how-to/memberships-google-groups'
+  api: 'https://docs.cloud.google.com/identity/docs/reference/rest/v1/groups.memberships'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,

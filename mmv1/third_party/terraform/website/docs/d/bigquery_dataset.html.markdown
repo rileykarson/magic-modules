@@ -7,8 +7,8 @@ description: |-
 # `google_bigquery_dataset`
 
 Get information about a BigQuery dataset. For more information see
-the [official documentation](https://cloud.google.com/bigquery/docs)
-and [API](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets).
+the [official documentation](https://docs.cloud.google.com/bigquery/docs)
+and [API](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets).
 
 ## Example Usage
 

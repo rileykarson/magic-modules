@@ -8,8 +8,8 @@ description: |-
 
 Get information about a Google Compute Engine Reservation Sub-Block. Reservation sub-blocks are automatically created by Google Cloud within reservation blocks and represent a finer-grained physical grouping of resources.
 
-For more information see the [official documentation](https://cloud.google.com/compute/docs/instances/reserving-zonal-resources)
-and the [API](https://cloud.google.com/compute/docs/reference/rest/v1/reservationSubBlocks).
+For more information see the [official documentation](https://docs.cloud.google.com/compute/docs/instances/reserving-zonal-resources)
+and the [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/reservationSubBlocks).
 
 ## Example Usage
 

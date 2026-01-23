@@ -17,9 +17,9 @@ to use.
 
 To get more information about `google_project_service`, see:
 
-* [API documentation](https://cloud.google.com/service-usage/docs/reference/rest/v1/services)
+* [API documentation](https://docs.cloud.google.com/service-usage/docs/reference/rest/v1/services)
 * How-to Guides
-    * [Enabling and Disabling Services](https://cloud.google.com/service-usage/docs/enable-disable)
+    * [Enabling and Disabling Services](https://docs.cloud.google.com/service-usage/docs/enable-disable)
 
 ## Example Usage
 

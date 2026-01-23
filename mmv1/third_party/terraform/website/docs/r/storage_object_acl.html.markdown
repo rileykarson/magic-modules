@@ -8,12 +8,12 @@ description: |-
 
 Authoritatively manages the access control list (ACL) for an object in a Google
 Cloud Storage (GCS) bucket. Removing a `google_storage_object_acl` sets the
-acl to the `private` [predefined ACL](https://cloud.google.com/storage/docs/access-control#predefined-acl).
+acl to the `private` [predefined ACL](https://docs.cloud.google.com/storage/docs/access-control#predefined-acl).
 
 For more information see
-[the official documentation](https://cloud.google.com/storage/docs/access-control/lists) 
+[the official documentation](https://docs.cloud.google.com/storage/docs/access-control/lists) 
 and 
-[API](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/objectAccessControls).
 
 -> Want fine-grained control over object ACLs? Use `google_storage_object_access_control` to control individual
 role entity pairs.
@@ -53,9 +53,9 @@ resource "google_storage_object_acl" "image-store-acl" {
 
 - - -
 
-* `predefined_acl` - (Optional) The "canned" [predefined ACL](https://cloud.google.com/storage/docs/access-control#predefined-acl) to apply. Must be set if `role_entity` is not.
+* `predefined_acl` - (Optional) The "canned" [predefined ACL](https://docs.cloud.google.com/storage/docs/access-control#predefined-acl) to apply. Must be set if `role_entity` is not.
 
-* `role_entity` - (Optional) List of role/entity pairs in the form `ROLE:entity`. See [GCS Object ACL documentation](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.
+* `role_entity` - (Optional) List of role/entity pairs in the form `ROLE:entity`. See [GCS Object ACL documentation](https://docs.cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.
 Must be set if `predefined_acl` is not.
 
 -> The object's creator will always have `OWNER` permissions for their object, and any attempt to modify that permission would return an error. Instead, Terraform automatically

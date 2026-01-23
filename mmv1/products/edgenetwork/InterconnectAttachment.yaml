@@ -17,8 +17,8 @@ description: |
   A Distributed Cloud Edge interconnect attachment, which connects routers to the northbound network.
 references:
   guides:
-    'Create and manage interconnect attachments': 'https://cloud.google.com/distributed-cloud/edge/latest/docs/attachments#api'
-  api: 'https://cloud.google.com/distributed-cloud/edge/latest/docs/reference/network/rest/v1/projects.locations.zones.interconnectAttachments'
+    'Create and manage interconnect attachments': 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/attachments#api'
+  api: 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/reference/network/rest/v1/projects.locations.zones.interconnectAttachments'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/zones/{{zone}}/interconnectAttachments'
 self_link: 'projects/{{project}}/locations/{{location}}/zones/{{zone}}/interconnectAttachments/{{interconnect_attachment_id}}'

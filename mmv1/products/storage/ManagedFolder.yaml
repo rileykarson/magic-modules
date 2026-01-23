@@ -28,8 +28,8 @@ description: |
   bucket-level access enabled.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/managed-folders'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/managedFolder'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/managed-folders'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/managedFolder'
 docs:
 id_format: '{{bucket}}/{{name}}'
 base_url: 'b/{{bucket}}/managedFolders'

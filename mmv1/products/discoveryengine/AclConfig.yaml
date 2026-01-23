@@ -16,7 +16,7 @@ name: 'AclConfig'
 description: |
   Access Control Configuration.
 references:
-  api: 'https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#aclconfigservice'
+  api: 'https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#aclconfigservice'
 base_url: 'projects/{{project}}/locations/{{location}}/aclConfig'
 self_link: 'projects/{{project}}/locations/{{location}}/aclConfig'
 create_url: 'projects/{{project}}/locations/{{location}}/aclConfig'

@@ -18,8 +18,8 @@ description: |
   specific topic, to be delivered to the subscribing application.
 references:
   guides:
-    'Managing Subscriptions': 'https://cloud.google.com/pubsub/docs/admin#managing_subscriptions'
-  api: 'https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.subscriptions'
+    'Managing Subscriptions': 'https://docs.cloud.google.com/pubsub/docs/admin#managing_subscriptions'
+  api: 'https://docs.cloud.google.com/pubsub/docs/reference/rest/v1/projects.subscriptions'
 docs:
   note: |
     You can retrieve the email of the Google Managed Pub/Sub Service Account used for forwarding
@@ -210,7 +210,7 @@ properties:
         type: String
         description: |
           The service account to use to write to BigQuery. If not specified, the Pub/Sub
-          [service agent](https://cloud.google.com/iam/docs/service-agents),
+          [service agent](https://docs.cloud.google.com/iam/docs/service-agents),
           service-{project_number}@gcp-sa-pubsub.iam.gserviceaccount.com, is used.
         is_missing_in_cai: true
   - name: 'cloudStorageConfig'
@@ -288,7 +288,7 @@ properties:
         type: String
         description: |
           The service account to use to write to Cloud Storage. If not specified, the Pub/Sub
-          [service agent](https://cloud.google.com/iam/docs/service-agents),
+          [service agent](https://docs.cloud.google.com/iam/docs/service-agents),
           service-{project_number}@gcp-sa-pubsub.iam.gserviceaccount.com, is used.
   - name: 'pushConfig'
     type: NestedObject

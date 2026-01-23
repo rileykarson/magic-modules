@@ -19,8 +19,8 @@ description: |
   The SSH public key information associated with a Google account.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/oslogin'
-  api: 'https://cloud.google.com/compute/docs/oslogin/rest/v1/users.sshPublicKeys'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/oslogin'
+  api: 'https://docs.cloud.google.com/compute/docs/oslogin/rest/v1/users.sshPublicKeys'
 docs:
 id_format: 'users/{{user}}/sshPublicKeys/{{fingerprint}}'
 base_url: 'users/{{user}}/sshPublicKeys/{{fingerprint}}'

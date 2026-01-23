@@ -17,8 +17,8 @@ description: |
   Represents an inventory report configuration.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/storage/docs/insights/using-storage-insights'
-  api: 'https://cloud.google.com/storage/docs/json_api/v1/reportConfig'
+    'Official Documentation': 'https://docs.cloud.google.com/storage/docs/insights/using-storage-insights'
+  api: 'https://docs.cloud.google.com/storage/docs/json_api/v1/reportConfig'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/reportConfigs'
 self_link: 'projects/{{project}}/locations/{{location}}/reportConfigs/{{name}}'

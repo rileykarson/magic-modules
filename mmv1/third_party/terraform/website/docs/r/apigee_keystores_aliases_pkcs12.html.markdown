@@ -10,9 +10,9 @@ An alias from a pkcs12 file.
 
 To get more information about KeystoresAliasesPkcs12, see:
 
-* [API documentation](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)
+* [API documentation](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)
 * How-to Guides
-    * [Keystores Aliases](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)
+    * [Keystores Aliases](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)
 
 ## Argument Reference
 

@@ -8,7 +8,7 @@ description: |-
 
 Creates a job on Dataflow, which is an implementation of Apache Beam running on Google Compute Engine. For more information see
 the official documentation for
-[Beam](https://beam.apache.org) and [Dataflow](https://cloud.google.com/dataflow/).
+[Beam](https://beam.apache.org) and [Dataflow](https://docs.cloud.google.com/dataflow/).
 
 ## Example Usage
 
@@ -103,7 +103,7 @@ The following arguments are supported:
   case-sensitive based on the language on which the pipeline is coded, mostly Java.
   **Note**: do not configure Dataflow options here in parameters.
 * `labels` - (Optional) User labels to be specified for the job. Keys and values should follow the restrictions
-   specified in the [labeling restrictions](https://cloud.google.com/compute/docs/labeling-resources#restrictions) page.
+   specified in the [labeling restrictions](https://docs.cloud.google.com/compute/docs/labeling-resources#restrictions) page.
    **Note**: This field is non-authoritative, and will only manage the labels present in your configuration. Please refer to the field `effective_labels` for all of the labels present on the resource.
 * `terraform_labels` -
   The combination of labels configured directly on the resource and default labels configured on the provider.
@@ -118,18 +118,18 @@ The following arguments are supported:
 * `region` - (Optional) The region in which the created job should run.
 * `service_account_email` - (Optional) The Service Account email used to create the job. This should be just an email e.g. `myserviceaccount@myproject.iam.gserviceaccount.com`. Do not include any `serviceAccount:` or other prefix.
 * `network` - (Optional) The network to which VMs will be assigned. If it is not provided, "default" will be used.
-* `subnetwork` - (Optional) The subnetwork to which VMs will be assigned. Should be of the form "regions/REGION/subnetworks/SUBNETWORK". If the [subnetwork is located in a Shared VPC network](https://cloud.google.com/dataflow/docs/guides/specifying-networks#shared), you must use the complete URL. For example `"googleapis.com/compute/v1/projects/PROJECT_ID/regions/REGION/subnetworks/SUBNET_NAME"`
+* `subnetwork` - (Optional) The subnetwork to which VMs will be assigned. Should be of the form "regions/REGION/subnetworks/SUBNETWORK". If the [subnetwork is located in a Shared VPC network](https://docs.cloud.google.com/dataflow/docs/guides/specifying-networks#shared), you must use the complete URL. For example `"googleapis.com/compute/v1/projects/PROJECT_ID/regions/REGION/subnetworks/SUBNET_NAME"`
 * `machine_type` - (Optional) The machine type to use for the job.
 * `kms_key_name` - (Optional) The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`
 * `ip_configuration` - (Optional) The configuration for VM IPs.  Options are `"WORKER_IP_PUBLIC"` or `"WORKER_IP_PRIVATE"`.
 * `additional_experiments` - (Optional) List of experiments that should be used by the job. An example value is `["enable_stackdriver_agent_metrics"]`.
-* `enable_streaming_engine` - (Optional) Enable/disable the use of [Streaming Engine](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine) for the job. Note that Streaming Engine is enabled by default for pipelines developed against the Beam SDK for Python v2.21.0 or later when using Python 3.
+* `enable_streaming_engine` - (Optional) Enable/disable the use of [Streaming Engine](https://docs.cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine) for the job. Note that Streaming Engine is enabled by default for pipelines developed against the Beam SDK for Python v2.21.0 or later when using Python 3.
 
 ## Attributes Reference
 
 * `job_id` - The unique ID of this job.
-* `type` - The type of this job, selected from the [JobType enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobType)
-* `state` - The current state of the resource, selected from the [JobState enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)
+* `type` - The type of this job, selected from the [JobType enum](https://docs.cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobType)
+* `state` - The current state of the resource, selected from the [JobState enum](https://docs.cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)
 
 ## Import
 

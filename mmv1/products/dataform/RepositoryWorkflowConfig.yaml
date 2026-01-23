@@ -19,8 +19,8 @@ description: |-
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dataform/docs/workflow-configurations'
-  api: 'https://cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories.workflowConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/dataform/docs/workflow-configurations'
+  api: 'https://docs.cloud.google.com/dataform/reference/rest/v1beta1/projects.locations.repositories.workflowConfigs'
 docs:
 id_format: 'projects/{{project}}/locations/{{region}}/repositories/{{repository}}/workflowConfigs/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/repositories/{{repository}}/workflowConfigs'

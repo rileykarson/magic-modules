@@ -10,7 +10,7 @@ import (
 )
 
 // To run tests locally please replace the `oauth_token_secret_version` with your secret manager version.
-// More details: https://cloud.google.com/developer-connect/docs/connect-github-repo#before_you_begin
+// More details: https://docs.cloud.google.com/developer-connect/docs/connect-github-repo#before_you_begin
 
 func TestAccGeminiRepositoryGroup_update(t *testing.T) {
 	codeRepositoryIndexId := acctest.BootstrapSharedCodeRepositoryIndex(t, "basic", "us-central1", "", map[string]string{"ccfe_debug_note": "terraform_e2e_do_not_delete"})

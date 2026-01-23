@@ -16,8 +16,8 @@ name: 'DataExchange'
 description: A Bigquery Analytics Hub data exchange
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/analytics-hub-introduction'
-  api: 'https://cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.dataExchanges'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.dataExchanges'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/dataExchanges/{{data_exchange_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/dataExchanges'

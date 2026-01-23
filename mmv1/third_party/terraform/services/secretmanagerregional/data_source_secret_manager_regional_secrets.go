@@ -25,7 +25,7 @@ func DataSourceSecretManagerRegionalRegionalSecrets() *schema.Resource {
 			},
 			"filter": {
 				Type: schema.TypeString,
-				Description: `Filter string, adhering to the rules in List-operation filtering (https://cloud.google.com/secret-manager/docs/filtering).
+				Description: `Filter string, adhering to the rules in List-operation filtering (https://docs.cloud.google.com/secret-manager/docs/filtering).
 List only secrets matching the filter. If filter is empty, all regional secrets are listed from the specified location.`,
 				Optional: true,
 			},

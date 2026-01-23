@@ -18,8 +18,8 @@ description: |
   Sets the Cloud Armor tier of the project.
 references:
   guides:
-    'Subscribing to Cloud Armor Enterprise': 'https://cloud.google.com/armor/docs/managed-protection-overview#subscribing_to_plus'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/projects/setCloudArmorTier'
+    'Subscribing to Cloud Armor Enterprise': 'https://docs.cloud.google.com/armor/docs/managed-protection-overview#subscribing_to_plus'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/projects/setCloudArmorTier'
 docs:
 id_format: 'projects/{{project}}'
 base_url: 'projects/{{project}}'

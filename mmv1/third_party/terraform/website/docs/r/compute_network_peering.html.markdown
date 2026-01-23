@@ -7,9 +7,9 @@ description: |-
 # google_compute_network_peering
 
 Manages a network peering within GCE. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/vpc/vpc-peering)
+[the official documentation](https://docs.cloud.google.com/compute/docs/vpc/vpc-peering)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/networks).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/networks).
 
 -> Both networks must create a peering with each other for the peering
 to be functional.

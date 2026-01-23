@@ -31,8 +31,8 @@ description: |
   but *will not delete it from Google Cloud.*
 references:
   guides:
-    'Setting up IAP Brand': 'https://cloud.google.com/iap/docs/tutorial-gce#set_up_iap'
-  api: 'https://cloud.google.com/iap/docs/reference/rest/v1/projects.brands'
+    'Setting up IAP Brand': 'https://docs.cloud.google.com/iap/docs/tutorial-gce#set_up_iap'
+  api: 'https://docs.cloud.google.com/iap/docs/reference/rest/v1/projects.brands'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/brands'

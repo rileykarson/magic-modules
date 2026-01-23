@@ -7,7 +7,7 @@ description: |-
 # google_compute_reservation
 
 Provides access to available Google Compute Reservation Resources for a given project.
-See more about [Reservations of Compute Engine resources](https://cloud.google.com/compute/docs/instances/reservations-overview) in the upstream docs.
+See more about [Reservations of Compute Engine resources](https://docs.cloud.google.com/compute/docs/instances/reservations-overview) in the upstream docs.
 
 ```hcl
 data "google_compute_reservation" "reservation" {

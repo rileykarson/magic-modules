@@ -19,8 +19,8 @@ description: |
   along with a list of requirements necessary for the label to be applied.
 references:
   guides:
-    'Access Policy Quickstart': 'https://cloud.google.com/access-context-manager/docs/quickstart'
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.accessLevels'
+    'Access Policy Quickstart': 'https://docs.cloud.google.com/access-context-manager/docs/quickstart'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.accessLevels'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,
@@ -293,7 +293,7 @@ properties:
         description: |
           Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language.
           This page details the objects and attributes that are used to the build the CEL expressions for
-          custom access levels - https://cloud.google.com/access-context-manager/docs/custom-access-level-spec.
+          custom access levels - https://docs.cloud.google.com/access-context-manager/docs/custom-access-level-spec.
         required: true
         properties:
           - name: 'expression'

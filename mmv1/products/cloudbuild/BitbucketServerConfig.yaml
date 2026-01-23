@@ -17,8 +17,8 @@ description: |
   BitbucketServerConfig represents the configuration for a Bitbucket Server.
 references:
   guides:
-    'Connect to a Bitbucket Server host': 'https://cloud.google.com/build/docs/automating-builds/bitbucket/connect-host-bitbucket-server'
-  api: 'https://cloud.google.com/build/docs/api/reference/rest/v1/projects.locations.bitbucketServerConfigs'
+    'Connect to a Bitbucket Server host': 'https://docs.cloud.google.com/build/docs/automating-builds/bitbucket/connect-host-bitbucket-server'
+  api: 'https://docs.cloud.google.com/build/docs/api/reference/rest/v1/projects.locations.bitbucketServerConfigs'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/bitbucketServerConfigs/{{config_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/bitbucketServerConfigs'

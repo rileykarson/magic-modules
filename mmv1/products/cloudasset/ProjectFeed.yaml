@@ -20,8 +20,8 @@ description: |
   Describes a Cloud Asset Inventory feed used to to listen to asset updates.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/asset-inventory/docs'
-  api: 'https://cloud.google.com/asset-inventory/docs/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/asset-inventory/docs'
+  api: 'https://docs.cloud.google.com/asset-inventory/docs/reference/rest/'
 docs:
 base_url: 'projects/{{project}}/feeds'
 self_link: '{{name}}'
@@ -79,7 +79,7 @@ properties:
       A list of the full names of the assets to receive updates. You must specify either or both of
       assetNames and assetTypes. Only asset updates matching specified assetNames and assetTypes are
       exported to the feed. For example: //compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1.
-      See https://cloud.google.com/apis/design/resourceNames#fullResourceName for more info.
+      See https://docs.cloud.google.com/apis/design/resourceNames#fullResourceName for more info.
     item_type:
       type: String
   - name: 'assetTypes'
@@ -88,7 +88,7 @@ properties:
       A list of types of the assets to receive updates. You must specify either or both of assetNames
       and assetTypes. Only asset updates matching specified assetNames and assetTypes are exported to
       the feed. For example: "compute.googleapis.com/Disk"
-      See https://cloud.google.com/asset-inventory/docs/supported-asset-types for a list of all
+      See https://docs.cloud.google.com/asset-inventory/docs/supported-asset-types for a list of all
       supported asset types.
     item_type:
       type: String

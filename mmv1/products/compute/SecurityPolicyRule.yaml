@@ -19,8 +19,8 @@ description: |
   A rule for the SecurityPolicy.
 references:
   guides:
-    'Creating global security policy rules': 'https://cloud.google.com/armor/docs/configure-security-policies'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/securityPolicies/addRule'
+    'Creating global security policy rules': 'https://docs.cloud.google.com/armor/docs/configure-security-policies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/securityPolicies/addRule'
 docs:
 id_format: 'projects/{{project}}/global/securityPolicies/{{security_policy}}/priority/{{priority}}'
 base_url: 'projects/{{project}}/global/securityPolicies/{{security_policy}}'

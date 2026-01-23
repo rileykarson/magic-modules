@@ -19,9 +19,9 @@ description: |
   in your network.
 references:
   guides:
-    'Firewall endpoint overview': 'https://cloud.google.com/firewall/docs/about-firewall-endpoints'
-    'Create and associate firewall endpoints': 'https://cloud.google.com/firewall/docs/configure-firewall-endpoints'
-  api: 'https://cloud.google.com/firewall/docs/reference/network-security/rest/v1/organizations.locations.firewallEndpoints'
+    'Firewall endpoint overview': 'https://docs.cloud.google.com/firewall/docs/about-firewall-endpoints'
+    'Create and associate firewall endpoints': 'https://docs.cloud.google.com/firewall/docs/configure-firewall-endpoints'
+  api: 'https://docs.cloud.google.com/firewall/docs/reference/network-security/rest/v1/organizations.locations.firewallEndpoints'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,

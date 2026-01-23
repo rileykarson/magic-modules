@@ -431,7 +431,7 @@ The following arguments are supported:
   Hierarchy Controller configuration for the cluster. Structure is [documented below](#nested_hierarchy_controller).
   Configuring Hierarchy Controller through the configmanagement feature is no longer recommended.
   Use open source Kubernetes [Hierarchical Namespace Controller (HNC)](https://github.com/kubernetes-sigs/hierarchical-namespaces) instead.
-  Follow the [instructions](https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/how-to/migrate-hierarchy-controller)
+  Follow the [instructions](https://docs.cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/how-to/migrate-hierarchy-controller)
   to migrate from Hierarchy Controller to HNC.
     
 * `policy_controller` -

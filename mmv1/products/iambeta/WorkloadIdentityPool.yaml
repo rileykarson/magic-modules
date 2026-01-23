@@ -18,10 +18,10 @@ description: |
   grant these identities access to Google Cloud resources.
 references:
   guides:
-    'Managing workload identity pools': 'https://cloud.google.com/iam/docs/manage-workload-identity-pools-providers#pools'
-    'Configure managed workload identity authentication for Compute Engine': 'https://cloud.google.com/iam/docs/create-managed-workload-identities'
-    'Configure managed workload identity authentication for GKE': 'https://cloud.google.com/iam/docs/create-managed-workload-identities-gke'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools'
+    'Managing workload identity pools': 'https://docs.cloud.google.com/iam/docs/manage-workload-identity-pools-providers#pools'
+    'Configure managed workload identity authentication for Compute Engine': 'https://docs.cloud.google.com/iam/docs/create-managed-workload-identities'
+    'Configure managed workload identity authentication for GKE': 'https://docs.cloud.google.com/iam/docs/create-managed-workload-identities-gke'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools'
 docs:
 base_url: 'projects/{{project}}/locations/global/workloadIdentityPools'
 self_link: 'projects/{{project}}/locations/global/workloadIdentityPools/{{workload_identity_pool_id}}'

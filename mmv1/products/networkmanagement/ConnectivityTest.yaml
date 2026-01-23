@@ -19,8 +19,8 @@ description: |
   resources in your Virtual Private Cloud (VPC) network.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/network-intelligence-center/docs'
-  api: 'https://cloud.google.com/network-intelligence-center/docs/connectivity-tests/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests'
+    'Official Documentation': 'https://docs.cloud.google.com/network-intelligence-center/docs'
+  api: 'https://docs.cloud.google.com/network-intelligence-center/docs/connectivity-tests/reference/networkmanagement/rest/v1/projects.locations.global.connectivityTests'
 docs:
 id_format: 'projects/{{project}}/locations/global/connectivityTests/{{name}}'
 base_url: 'projects/{{project}}/locations/global/connectivityTests'

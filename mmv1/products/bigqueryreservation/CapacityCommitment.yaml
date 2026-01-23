@@ -19,8 +19,8 @@ description: |
   In order to remove annual commitment, its plan needs to be changed to monthly or flex first.
 references:
   guides:
-    'Introduction to Reservations': 'https://cloud.google.com/bigquery/docs/reservations-intro'
-  api: 'https://cloud.google.com/bigquery/docs/reference/reservations/rest/v1/projects.locations.capacityCommitments'
+    'Introduction to Reservations': 'https://docs.cloud.google.com/bigquery/docs/reservations-intro'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/reservations/rest/v1/projects.locations.capacityCommitments'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/capacityCommitments'
@@ -90,7 +90,7 @@ properties:
   - name: 'plan'
     type: String
     description: |
-      Capacity commitment plan. Valid values are at https://cloud.google.com/bigquery/docs/reference/reservations/rpc/google.cloud.bigquery.reservation.v1#commitmentplan
+      Capacity commitment plan. Valid values are at https://docs.cloud.google.com/bigquery/docs/reference/reservations/rpc/google.cloud.bigquery.reservation.v1#commitmentplan
     required: true
     diff_suppress_func: 'bigqueryReservationCapacityCommitmentPlanDiffSuppressFunc'
   - name: 'state'

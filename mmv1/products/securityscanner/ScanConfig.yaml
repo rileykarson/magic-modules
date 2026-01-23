@@ -18,8 +18,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Using Cloud Security Scanner': 'https://cloud.google.com/security-scanner/docs/scanning'
-  api: 'https://cloud.google.com/security-scanner/docs/reference/rest/v1beta/projects.scanConfigs'
+    'Using Cloud Security Scanner': 'https://docs.cloud.google.com/security-scanner/docs/scanning'
+  api: 'https://docs.cloud.google.com/security-scanner/docs/reference/rest/v1beta/projects.scanConfigs'
 docs:
 base_url: 'projects/{{project}}/scanConfigs'
 self_link: '{{name}}'
@@ -150,7 +150,7 @@ properties:
     type: Array
     description: |
       The blacklist URL patterns as described in
-      https://cloud.google.com/security-scanner/docs/excluded-urls
+      https://docs.cloud.google.com/security-scanner/docs/excluded-urls
     min_version: 'beta'
     item_type:
       type: String

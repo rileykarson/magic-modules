@@ -18,8 +18,8 @@ description: |
   Billing information for a project.
 references:
   guides:
-    'Enable, disable, or change billing for a project': 'https://cloud.google.com/billing/docs/how-to/modify-project'
-  api: 'https://cloud.google.com/billing/docs/reference/rest/v1/projects'
+    'Enable, disable, or change billing for a project': 'https://docs.cloud.google.com/billing/docs/how-to/modify-project'
+  api: 'https://docs.cloud.google.com/billing/docs/reference/rest/v1/projects'
 docs:
 id_format: 'projects/{{project}}'
 base_url: 'projects/{{project}}/billingInfo'

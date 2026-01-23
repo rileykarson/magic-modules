@@ -20,8 +20,8 @@ description: |
   service.
 references:
   guides:
-    'Setting Up SSL proxy for Google Cloud Load Balancing': 'https://cloud.google.com/compute/docs/load-balancing/tcp-ssl/'
-  api: 'https://cloud.google.com/compute/docs/reference/v1/targetSslProxies'
+    'Setting Up SSL proxy for Google Cloud Load Balancing': 'https://docs.cloud.google.com/compute/docs/load-balancing/tcp-ssl/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/v1/targetSslProxies'
 docs:
 base_url: 'projects/{{project}}/global/targetSslProxies'
 has_self_link: true

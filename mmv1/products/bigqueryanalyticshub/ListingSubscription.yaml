@@ -17,8 +17,8 @@ api_resource_type_kind: Subscription
 description: A Bigquery Analytics Hub listing subscription
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/bigquery/docs/analytics-hub-introduction'
-  api: 'https://cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.subscriptions'
+    'Official Documentation': 'https://docs.cloud.google.com/bigquery/docs/analytics-hub-introduction'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/analytics-hub/rest/v1/projects.locations.subscriptions'
 docs:
   note: |-
     When importing the resource with `terraform import`, provide the destination project and location
@@ -89,7 +89,7 @@ properties:
         type: String
         description: |
           The geographic location where the dataset should reside.
-          See https://cloud.google.com/bigquery/docs/locations for supported locations.
+          See https://docs.cloud.google.com/bigquery/docs/locations for supported locations.
         required: true
         custom_flatten: 'templates/terraform/custom_flatten/bigquery_dataset_location.go.tmpl'
         diff_suppress_func: 'tpgresource.CaseDiffSuppress'

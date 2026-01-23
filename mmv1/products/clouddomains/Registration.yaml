@@ -17,13 +17,13 @@ description: |
   Registers a new domain name and creates a corresponding Registration resource.
 references:
   guides:
-    'Register a domain with Cloud Domains': 'https://cloud.google.com/domains/docs/buy-register-domain'
-  api: 'https://cloud.google.com/domains/docs/reference/rest/v1/projects.locations.registrations'
+    'Register a domain with Cloud Domains': 'https://docs.cloud.google.com/domains/docs/buy-register-domain'
+  api: 'https://docs.cloud.google.com/domains/docs/reference/rest/v1/projects.locations.registrations'
 docs:
   warning: |
     The Terraform implementation of this resource will not actually delete a Registration during
     `terraform destroy`. Instead it will "abandon" the resource and remove it from state.
-    For information on deleting a registered domain, see https://cloud.google.com/domains/docs/delete-domain
+    For information on deleting a registered domain, see https://docs.cloud.google.com/domains/docs/delete-domain
 id_format: 'projects/{{project}}/locations/{{location}}/registrations/{{domain_name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/registrations'
 self_link: 'projects/{{project}}/locations/{{location}}/registrations/{{domain_name}}'

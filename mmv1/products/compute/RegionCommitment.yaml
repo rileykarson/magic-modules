@@ -23,8 +23,8 @@ description: |
   based on vCPUs and memory usage and receive discounted rates.
 references:
   guides:
-    'Committed use discounts for Compute Engine': 'https://cloud.google.com/compute/docs/instances/committed-use-discounts-overview'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/regionCommitments'
+    'Committed use discounts for Compute Engine': 'https://docs.cloud.google.com/compute/docs/instances/committed-use-discounts-overview'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionCommitments'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/commitments'
 has_self_link: true

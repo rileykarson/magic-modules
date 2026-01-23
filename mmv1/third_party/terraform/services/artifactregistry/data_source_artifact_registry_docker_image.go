@@ -10,7 +10,7 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
-// https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages#DockerImage
+// https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages#DockerImage
 type DockerImage struct {
 	name           string
 	uri            string
@@ -106,7 +106,7 @@ func DataSourceArtifactRegistryDockerImageRead(d *schema.ResourceData, meta inte
 
 	if digest != "" {
 		// fetch image by digest
-		// https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/get
+		// https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/get
 		imageUrlSafe := url.QueryEscape(imageName)
 		urlRequest, err := tpgresource.ReplaceVars(d, config, fmt.Sprintf("{{ArtifactRegistryBasePath}}projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/dockerImages/%s@%s", imageUrlSafe, digest))
 		if err != nil {
@@ -126,7 +126,7 @@ func DataSourceArtifactRegistryDockerImageRead(d *schema.ResourceData, meta inte
 		res = convertResponseToStruct(resGet)
 	} else {
 		// fetch the list of images, ordered by update time
-		// https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/list
+		// https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.dockerImages/list
 		urlRequest, err := tpgresource.ReplaceVars(d, config, "{{ArtifactRegistryBasePath}}projects/{{project}}/locations/{{location}}/repositories/{{repository_id}}/dockerImages")
 		if err != nil {
 			return fmt.Errorf("Error setting api endpoint")

@@ -17,7 +17,7 @@ func DataSourceVmwareengineVcenterCredentials() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 				Description: `The resource name of the private cloud which contains vcenter.
-Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names.
+Resource names are schemeless URIs that follow the conventions in https://docs.cloud.google.com/apis/design/resource_names.
 For example: projects/my-project/locations/us-west1-a/privateClouds/my-cloud`,
 			},
 			"username": {

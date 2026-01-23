@@ -18,7 +18,7 @@ description: |-
   whose underlying specification consists of dedicated resources.'
 references:
   guides:
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.deploymentResourcePools'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.deploymentResourcePools'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/deploymentResourcePools'
 self_link: 'projects/{{project}}/locations/{{region}}/deploymentResourcePools/{{name}}'
@@ -68,14 +68,14 @@ properties:
         properties:
           - name: 'machineType'
             type: String
-            description: The type of the machine. See the [list of machine types supported for prediction](https://cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types).
+            description: The type of the machine. See the [list of machine types supported for prediction](https://docs.cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types).
             immutable: true
           - name: 'acceleratorType'
             type: String
             description:
               The type of accelerator(s) that may be attached to the
               machine as per accelerator_count. See possible values
-              [here](https://cloud.google.com/vertex-ai/docs/reference/rest/v1/MachineSpec#AcceleratorType).
+              [here](https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/MachineSpec#AcceleratorType).
           - name: 'acceleratorCount'
             type: Integer
             description: The number of accelerators to attach to the machine.

@@ -19,8 +19,8 @@ description: |
   Once a BigQuery job is created, it cannot be changed or deleted.
 references:
   guides:
-    'BigQuery Jobs Intro': 'https://cloud.google.com/bigquery/docs/jobs-overview'
-  api: 'https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs'
+    'BigQuery Jobs Intro': 'https://docs.cloud.google.com/bigquery/docs/jobs-overview'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs'
 docs:
 id_format: 'projects/{{project}}/jobs/{{job_id}}'
 base_url: 'projects/{{project}}/jobs'
@@ -212,7 +212,7 @@ properties:
             type: String
             description: |
               SQL query text to execute. The useLegacySql field can be used to indicate whether the query uses legacy SQL or standard SQL.
-              *NOTE*: queries containing [DML language](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language)
+              *NOTE*: queries containing [DML language](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language)
               (`DELETE`, `UPDATE`, `MERGE`, `INSERT`) must specify `create_disposition = ""` and `write_disposition = ""`.
             required: true
           - name: 'destinationTable'

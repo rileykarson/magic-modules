@@ -23,8 +23,8 @@ import_format:
   - projects/{{project}}/locations/{{location}}/messageBuses/{{message_bus_id}}
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/eventarc/advanced/docs/publish-events/create-bus'
-  api: https://cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.messageBuses
+    'Official Documentation': 'https://docs.cloud.google.com/eventarc/advanced/docs/publish-events/create-bus'
+  api: https://docs.cloud.google.com/eventarc/docs/reference/rest/v1/projects.locations.messageBuses
 description: |
   The Eventarc MessageBus resource
 async:

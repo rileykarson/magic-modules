@@ -1235,7 +1235,7 @@ be from 0 to 999,999,999 inclusive.`,
 				Description: `
 					Current status of the instance.
 					This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED.
-					For more information about the status of the instance, see [Instance life cycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle).`,
+					For more information about the status of the instance, see [Instance life cycle](https://docs.cloud.google.com/compute/docs/instances/instance-life-cycle).`,
 			},
 			"tags": {
 				Type:        schema.TypeSet,

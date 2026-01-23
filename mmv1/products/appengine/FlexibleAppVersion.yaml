@@ -18,14 +18,14 @@ description: |
   Flexible App Version resource to create a new version of flexible GAE Application. Based on Google Compute Engine,
   the App Engine flexible environment automatically scales your app up and down while also balancing the load.
   Learn about the differences between the standard environment and the flexible environment
-  at https://cloud.google.com/appengine/docs/the-appengine-environments.
+  at https://docs.cloud.google.com/appengine/docs/the-appengine-environments.
 
   ~> **Note:** The App Engine flexible environment service account uses the member ID `service-[YOUR_PROJECT_NUMBER]@gae-api-prod.google.com.iam.gserviceaccount.com`
   It should have the App Engine Flexible Environment Service Agent role, which will be applied when the `appengineflex.googleapis.com` service is enabled.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/appengine/docs/flexible'
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions'
+    'Official Documentation': 'https://docs.cloud.google.com/appengine/docs/flexible'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions'
 docs:
 id_format: 'apps/{{project}}/services/{{service}}/versions/{{version_id}}'
 base_url: 'apps/{{project}}/services/{{service}}/versions'
@@ -266,7 +266,7 @@ properties:
     type: String
     description: |
       The version of the API in the given runtime environment.
-      Please see the app.yaml reference for valid values at `https://cloud.google.com/appengine/docs/standard/<language>/config/appref`\
+      Please see the app.yaml reference for valid values at `https://docs.cloud.google.com/appengine/docs/standard/<language>/config/appref`\
       Substitute `<language>` with `python`, `java`, `php`, `ruby`, `go` or `nodejs`.
     default_from_api: true
   - name: 'handlers'

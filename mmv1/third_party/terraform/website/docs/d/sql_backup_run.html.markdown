@@ -41,4 +41,4 @@ In addition to the arguments listed above, the following attributes are exported
 * `start_time` - The time the backup operation actually started in UTC timezone in RFC 3339 format, for 
     example 2012-11-15T16:19:00.094Z.
 
-* `status` - The status of this run. Refer to [API reference](https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/backupRuns#SqlBackupRunStatus) for possible status values.
+* `status` - The status of this run. Refer to [API reference](https://docs.cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/backupRuns#SqlBackupRunStatus) for possible status values.

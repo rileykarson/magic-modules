@@ -18,8 +18,8 @@ description: |
   define the geographic placement of nodes and their replication.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/spanner/'
-  api: 'https://cloud.google.com/spanner/docs/reference/rest/v1/projects.instanceConfigs'
+    'Official Documentation': 'https://docs.cloud.google.com/spanner/'
+  api: 'https://docs.cloud.google.com/spanner/docs/reference/rest/v1/projects.instanceConfigs'
 docs:
 id_format: '{{project}}/{{name}}'
 base_url: 'projects/{{project}}/instanceConfigs'
@@ -105,7 +105,7 @@ properties:
           type: Enum
           description: |
             Indicates the type of replica.  See the [replica types
-            documentation](https://cloud.google.com/spanner/docs/replication#replica_types)
+            documentation](https://docs.cloud.google.com/spanner/docs/replication#replica_types)
             for more details.
           immutable: true
           enum_values:

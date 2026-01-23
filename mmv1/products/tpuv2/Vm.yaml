@@ -19,8 +19,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/tpu/docs/'
-  api: 'https://cloud.google.com/tpu/docs/reference/rest/v2/projects.locations.nodes'
+    'Official Documentation': 'https://docs.cloud.google.com/tpu/docs/'
+  api: 'https://docs.cloud.google.com/tpu/docs/reference/rest/v2/projects.locations.nodes'
 docs:
 base_url: 'projects/{{project}}/locations/{{zone}}/nodes'
 self_link: 'projects/{{project}}/locations/{{zone}}/nodes/{{name}}'
@@ -325,7 +325,7 @@ properties:
       - name: 'type'
         type: String
         description: |
-          Type of TPU. Please select one of the allowed types: https://cloud.google.com/tpu/docs/reference/rest/v2/AcceleratorConfig#Type
+          Type of TPU. Please select one of the allowed types: https://docs.cloud.google.com/tpu/docs/reference/rest/v2/AcceleratorConfig#Type
         min_version: 'beta'
         required: true
         immutable: true

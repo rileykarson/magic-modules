@@ -20,8 +20,8 @@ description: |
   Configuration for an automated build in response to source repository changes.
 references:
   guides:
-    'Automating builds using build triggers': 'https://cloud.google.com/cloud-build/docs/running-builds/automate-builds'
-  api: 'https://cloud.google.com/cloud-build/docs/api/reference/rest/v1/projects.triggers'
+    'Automating builds using build triggers': 'https://docs.cloud.google.com/cloud-build/docs/running-builds/automate-builds'
+  api: 'https://docs.cloud.google.com/cloud-build/docs/api/reference/rest/v1/projects.triggers'
 docs:
   note: |
     You can retrieve the email of the Cloud Build Service Account used in jobs by using the `google_project_service_identity` resource.
@@ -144,7 +144,7 @@ parameters:
   - name: 'location'
     type: String
     description: |
-      The [Cloud Build location](https://cloud.google.com/build/docs/locations) for the trigger.
+      The [Cloud Build location](https://docs.cloud.google.com/build/docs/locations) for the trigger.
       If not specified, "global" is used.
     url_param_only: true
     immutable: true

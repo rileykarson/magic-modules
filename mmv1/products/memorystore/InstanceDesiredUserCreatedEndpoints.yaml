@@ -19,13 +19,13 @@ description: |
 docs:
   note: |
     Please ensure your connections meet the requirements outlined at
-    https://cloud.google.com/memorystore/docs/valkey/about-multiple-vpc-networking#application_connection_requirements.
+    https://docs.cloud.google.com/memorystore/docs/valkey/about-multiple-vpc-networking#application_connection_requirements.
     If you remove a connections item from the resource, the corresponding forwarding rule will no longer be functioning.
     If the corresponding forwarding rule is represented in your terraform configuration it is recommended to delete that
     `google_compute_forwarding_rule` resource at the same time.
 references:
   guides:
-  api: 'https://cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances'
+  api: 'https://docs.cloud.google.com/memorystore/docs/valkey/reference/rest/v1/projects.locations.instances'
 id_format: 'projects/{{project}}/locations/{{region}}/instances/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/instances'
 self_link: 'projects/{{project}}/locations/{{region}}/instances/{{name}}'

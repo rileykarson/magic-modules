@@ -17,21 +17,21 @@ description: |
   A Google Cloud Redis Cluster instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/memorystore/docs/cluster/'
-  api: 'https://cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters'
+    'Official Documentation': 'https://docs.cloud.google.com/memorystore/docs/cluster/'
+  api: 'https://docs.cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters'
 docs:
   note: |
-    For [Multiple VPC Networking](https://cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking) if you want to use
-    [User-registered PSC Connections](https://cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking#psc_connection_types),
+    For [Multiple VPC Networking](https://docs.cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking) if you want to use
+    [User-registered PSC Connections](https://docs.cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking#psc_connection_types),
     then please use `google_redis_cluster_user_created_connections` resource.
 
-    For [Cross Region Replication](https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication), please follow the instructions below for performing certain update and failover (switchover and detach) operations
+    For [Cross Region Replication](https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication), please follow the instructions below for performing certain update and failover (switchover and detach) operations
 
     **Cross Region Replication**
 
     **Settings updated on primary and propagated to secondaries**
 
-    The settings listed [here](https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#set_on_primary)
+    The settings listed [here](https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#set_on_primary)
     are only allowed to be updated on the primary cluster and the changes are automatically propagated to the secondary clusters.
     To keep the Terraform configuration and state in sync for such settings, please follow the below steps to update them:
       1. Update the setting on the primary cluster:
@@ -46,7 +46,7 @@ docs:
 
     **Switchover**
 
-    To perform a [switchover](https://cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#perform_a_switchover), please follow the below steps:
+    To perform a [switchover](https://docs.cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#perform_a_switchover), please follow the below steps:
       1. Ensure that the Terraform configuration file for the secondary cluster that needs to become the new primary has the `cross_cluster_replication_config` field. If it is not present:
           * Add the `cross_cluster_replication_config` field to the configuration file to match the latest value in the state.
           * Execute `terraform plan`. This should not generate any diff, confirming the configuration is in sync with the infrastructure.
@@ -65,7 +65,7 @@ docs:
 
     **Detach a secondary cluster**
 
-    To [detach](https://cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#detach_secondary_clusters_option_1) a secondary cluster, please follow the below steps:
+    To [detach](https://docs.cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#detach_secondary_clusters_option_1) a secondary cluster, please follow the below steps:
       1. Ensure that the Terraform configuration file for the secondary cluster that needs to be detached has the `cross_cluster_replication_config` field. If it is not present:
           * Add the `cross_cluster_replication_config` field to the configuration file to match the latest value in the state.
           * Execute `terraform plan`. This should not generate any diff, confirming the configuration is in sync with the infrastructure.
@@ -81,7 +81,7 @@ docs:
 
     **Detach secondary cluster(s) via primary cluster**
 
-    To [detach](https://cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#detach_secondary_clusters_option_2) secondary clusters via primary, please follow the below steps:
+    To [detach](https://docs.cloud.google.com/memorystore/docs/cluster/working-with-cross-region-replication#detach_secondary_clusters_option_2) secondary clusters via primary, please follow the below steps:
       1. Ensure that the Terraform configuration file for the primary cluster from which the secondary(ies) has(ve) to be detached has the `cross_cluster_replication_config` field. If it is not present:
           * Add the `cross_cluster_replication_config` field to the configuration file to match the latest value in the state.
           * Execute `terraform plan`. This should not generate any diff, confirming the configuration is in sync with the infrastructure.
@@ -519,7 +519,7 @@ properties:
     description: |
       Configure Redis Cluster behavior using a subset of native Redis configuration parameters.
       Please check Memorystore documentation for the list of supported parameters:
-      https://cloud.google.com/memorystore/docs/cluster/supported-instance-configurations
+      https://docs.cloud.google.com/memorystore/docs/cluster/supported-instance-configurations
   - name: 'persistenceConfig'
     type: NestedObject
     description: Persistence config (RDB, AOF) for the cluster.

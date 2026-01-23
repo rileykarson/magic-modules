@@ -7,8 +7,8 @@ description: |-
 # google_logging_folder_bucket_config
 
 Manages a folder-level logging bucket config. For more information see
-[the official logging documentation](https://cloud.google.com/logging/docs/) and
-[Storing Logs](https://cloud.google.com/logging/docs/storage).
+[the official logging documentation](https://docs.cloud.google.com/logging/docs/) and
+[Storing Logs](https://docs.cloud.google.com/logging/docs/storage).
 
 ~> **Note:** Logging buckets are automatically created for a given folder, project, organization, billingAccount and cannot be deleted. Creating a resource of this type will acquire and update the resource that already exists at the desired location. These buckets cannot be removed so deleting this resource will remove the bucket config from your terraform state but will leave the logging bucket unchanged. The buckets that are currently automatically created are "_Default" and "_Required".
 
@@ -52,7 +52,7 @@ The following arguments are supported:
 <a name="nested_index_configs"></a>The `index_configs` block supports:
 
 * `field_path` - The LogEntry field path to index.
-  Note that some paths are automatically indexed, and other paths are not eligible for indexing. See [indexing documentation](https://cloud.google.com/logging/docs/analyze/custom-index) for details.
+  Note that some paths are automatically indexed, and other paths are not eligible for indexing. See [indexing documentation](https://docs.cloud.google.com/logging/docs/analyze/custom-index) for details.
 
 * `type` - The type of data in this index. Allowed types include `INDEX_TYPE_UNSPECIFIED`, `INDEX_TYPE_STRING` and `INDEX_TYPE_INTEGER`.
 
@@ -65,7 +65,7 @@ exported:
 
 * `name` -  The resource name of the bucket. For example: "folders/my-folder-id/locations/my-location/buckets/my-bucket-id"
 
-* `lifecycle_state` -  The bucket's lifecycle such as active or deleted. See [LifecycleState](https://cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.buckets#LogBucket.LifecycleState).
+* `lifecycle_state` -  The bucket's lifecycle such as active or deleted. See [LifecycleState](https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.buckets#LogBucket.LifecycleState).
 
 ## Import
 

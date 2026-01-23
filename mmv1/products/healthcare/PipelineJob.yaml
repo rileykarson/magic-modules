@@ -19,8 +19,8 @@ description: |
   incoming data into FHIR format
 references:
   guides:
-    'Creating a PipelineJob': 'https://cloud.google.com/healthcare-api/private/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.pipelineJobs#PipelineJob'
-  api: 'https://cloud.google.com/healthcare-api/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.pipelineJobs'
+    'Creating a PipelineJob': 'https://docs.cloud.google.com/healthcare-api/private/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.pipelineJobs#PipelineJob'
+  api: 'https://docs.cloud.google.com/healthcare-api/healthcare-data-engine/docs/reference/rest/v1/projects.locations.datasets.pipelineJobs'
 base_url: '{{dataset}}/pipelineJobs?pipelineJobId={{name}}'
 self_link: '{{dataset}}/pipelineJobs/{{name}}'
 delete_url: '{{dataset}}/pipelineJobs/{{name}}'

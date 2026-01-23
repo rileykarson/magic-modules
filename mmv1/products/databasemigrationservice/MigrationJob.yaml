@@ -16,8 +16,8 @@ name: 'MigrationJob'
 description: 'A migration job definition.'
 references:
   guides:
-    'Database Migration': 'https://cloud.google.com/database-migration/docs/'
-  api: 'https://cloud.google.com/database-migration/docs/reference/rest/v1/projects.locations.migrationJobs/create'
+    'Database Migration': 'https://docs.cloud.google.com/database-migration/docs/'
+  api: 'https://docs.cloud.google.com/database-migration/docs/reference/rest/v1/projects.locations.migrationJobs/create'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/migrationJobs'
 self_link: 'projects/{{project}}/locations/{{location}}/migrationJobs/{{migration_job_id}}'

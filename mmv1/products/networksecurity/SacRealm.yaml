@@ -16,8 +16,8 @@ name: 'SacRealm'
 description: "Secure Access Connect Realm resource"
 references:
   guides:
-    'QUICKSTART_TITLE': 'https://cloud.google.com/secure-access-connect/docs/overview'
-  api: 'https://cloud.google.com/secure-access-connect/docs/reference/network-security/rest/v1beta1/projects.locations.sacRealms'
+    'QUICKSTART_TITLE': 'https://docs.cloud.google.com/secure-access-connect/docs/overview'
+  api: 'https://docs.cloud.google.com/secure-access-connect/docs/reference/network-security/rest/v1beta1/projects.locations.sacRealms'
 min_version: beta
 
 base_url: 'projects/{{project}}/locations/global/sacRealms'

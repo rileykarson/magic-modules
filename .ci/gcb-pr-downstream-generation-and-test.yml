@@ -2,7 +2,7 @@
 steps:
     # The GCB / GH integration uses a shallow clone of the repo. We need to convert
     # that to a full clone in order to work with it properly.
-    # https://cloud.google.com/source-repositories/docs/integrating-with-cloud-build#unshallowing_clones
+    # https://docs.cloud.google.com/source-repositories/docs/integrating-with-cloud-build#unshallowing_clones
     - name: 'gcr.io/cloud-builders/git'
       args:
           - fetch

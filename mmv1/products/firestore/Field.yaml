@@ -19,8 +19,8 @@ description: |
   in the database with the same id.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/firestore/docs/query-data/indexing'
-  api: 'https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.collectionGroups.fields'
+    'Official Documentation': 'https://docs.cloud.google.com/firestore/docs/query-data/indexing'
+  api: 'https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.collectionGroups.fields'
 docs:
   warning: |
     This resource creates a Firestore Single Field override on a project that

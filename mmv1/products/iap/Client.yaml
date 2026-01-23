@@ -28,8 +28,8 @@ description: |
   in this tool.
 references:
   guides:
-    'Setting up IAP Client': 'https://cloud.google.com/iap/docs/authentication-howto'
-  api: 'https://cloud.google.com/iap/docs/reference/rest/v1/projects.brands.identityAwareProxyClients'
+    'Setting up IAP Client': 'https://docs.cloud.google.com/iap/docs/authentication-howto'
+  api: 'https://docs.cloud.google.com/iap/docs/reference/rest/v1/projects.brands.identityAwareProxyClients'
 docs:
 id_format: '{{brand}}/identityAwareProxyClients/{{client_id}}'
 base_url: '{{brand}}/identityAwareProxyClients'

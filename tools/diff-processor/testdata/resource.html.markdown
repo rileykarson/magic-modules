@@ -48,7 +48,7 @@ The following arguments are supported:
   or `READ_ONLY`. If not specified, the default is to attach the disk in `READ_WRITE` mode.
 
 * `disk_encryption_key_raw` - (Optional) A 256-bit [customer-supplied encryption key]
-    (https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),
+    (https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption),
     encoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
     to encrypt this disk. Only one of `kms_key_self_link` and `disk_encryption_key_raw`
     may be set.
@@ -89,7 +89,7 @@ The following arguments are supported:
 
 * `provisioned_iops` - (Optional) Indicates how many IOPS to provision for the disk.
     This sets the number of I/O operations per second that the disk can handle.
-    For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+    For more details,see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).
     Note: Updating currently is only supported for hyperdisk skus via disk update
     api/gcloud without the need to delete and recreate the disk, hyperdisk allows
     for an update of IOPS every 4 hours. To update your hyperdisk more frequently,
@@ -97,7 +97,7 @@ The following arguments are supported:
 
 * `provisioned_throughput` - (Optional) Indicates how much throughput to provision for the disk.
     This sets the number of throughput mb per second that the disk can handle.
-    For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+    For more details,see the [Hyperdisk documentation](https://docs.cloud.google.com/compute/docs/disks/hyperdisks).
     Note: Updating currently is only supported for hyperdisk skus via disk update
     api/gcloud without the need to delete and recreate the disk, hyperdisk allows
     for an update of throughput every 4 hours. To update your hyperdisk more
@@ -122,7 +122,7 @@ The following arguments are supported:
     interface to. Either `network` or `subnetwork` must be provided. If network isn't provided
     it will be inferred from the subnetwork. The subnetwork must exist in the same region this
     instance will be created in. If the network resource is in
-    [legacy](https://cloud.google.com/vpc/docs/legacy) mode, do not specify this field. If the
+    [legacy](https://docs.cloud.google.com/vpc/docs/legacy) mode, do not specify this field. If the
     network is in auto subnet mode, specifying the subnetwork is optional. If the network is
     in custom subnet mode, specifying the subnetwork is required.
 
@@ -167,10 +167,10 @@ specified, then this instance will have no external IPv6 Internet access. Struct
 
 * `public_ptr_domain_name` - (Optional) The DNS domain name for the public PTR record.
     To set this field on an instance, you must be verified as the owner of the domain.
-    See [the docs](https://cloud.google.com/compute/docs/instances/create-ptr-record) for how
+    See [the docs](https://docs.cloud.google.com/compute/docs/instances/create-ptr-record) for how
     to become verified as a domain owner.
 
-* `network_tier` - (Optional) The [networking tier](https://cloud.google.com/network-tiers/docs/overview) used for configuring this instance.
+* `network_tier` - (Optional) The [networking tier](https://docs.cloud.google.com/network-tiers/docs/overview) used for configuring this instance.
     This field can take the following values: PREMIUM, FIXED_STANDARD or STANDARD. If this field is
     not specified, it is assumed to be PREMIUM.
 

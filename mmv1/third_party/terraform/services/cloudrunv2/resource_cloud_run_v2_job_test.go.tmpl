@@ -73,7 +73,7 @@ func testAccCloudRunV2Job_cloudrunv2JobFull(context map[string]interface{}) stri
         containers {
           name = "container-1"
           image = "us-docker.pkg.dev/cloudrun/container/hello"
-          args = ["https://cloud.google.com/run", "www.google.com"]
+          args = ["https://docs.cloud.google.com/run", "www.google.com"]
           command = ["/bin/echo"]
           env {
             name = "SOURCE"
@@ -146,7 +146,7 @@ resource "google_cloud_run_v2_job" "default" {
       containers {
         name = "container-update"
         image = "us-docker.pkg.dev/cloudrun/container/hello"
-        args = ["https://cloud.google.com/run"]
+        args = ["https://docs.cloud.google.com/run"]
         command = ["printenv"]
         env {
           name = "SOURCE_UPDATE"

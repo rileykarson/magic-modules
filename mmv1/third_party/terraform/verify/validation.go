@@ -29,10 +29,10 @@ const (
 	// ${PROJECT_ID}-compute@developer.gserviceaccount.com where PROJECT_ID is an int64 (max 20 digits)
 	ComputeServiceAccountNameRegex = "[0-9]{1,20}-compute@developer.gserviceaccount.com"
 
-	// https://cloud.google.com/iam/docs/understanding-custom-roles#naming_the_role
+	// https://docs.cloud.google.com/iam/docs/understanding-custom-roles#naming_the_role
 	IAMCustomRoleIDRegex = "^[a-zA-Z0-9_\\.]{3,64}$"
 
-	// https://cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains/create#query-parameters
+	// https://docs.cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains/create#query-parameters
 	ADDomainNameRegex = "^[a-z][a-z0-9-]{0,14}\\.[a-z0-9-\\.]*[a-z]+[a-z0-9]*$"
 )
 
@@ -83,7 +83,7 @@ var Rfc1918Networks = []string{
 }
 
 // validateGCEName ensures that a field matches the requirements for Compute Engine resource names
-// https://cloud.google.com/compute/docs/naming-resources#resource-name-format
+// https://docs.cloud.google.com/compute/docs/naming-resources#resource-name-format
 func ValidateGCEName(v interface{}, k string) (ws []string, errors []error) {
 	re := `^(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)$`
 	return ValidateRegexp(re)(v, k)

@@ -10,9 +10,9 @@ Get a Serverless VPC Access connector.
 
 To get more information about Connector, see:
 
-* [API documentation](https://cloud.google.com/vpc/docs/reference/vpcaccess/rest/v1/projects.locations.connectors)
+* [API documentation](https://docs.cloud.google.com/vpc/docs/reference/vpcaccess/rest/v1/projects.locations.connectors)
 * How-to Guides
-    * [Configuring Serverless VPC Access](https://cloud.google.com/vpc/docs/configure-serverless-vpc-access)
+    * [Configuring Serverless VPC Access](https://docs.cloud.google.com/vpc/docs/configure-serverless-vpc-access)
 
 ## Example Usage
 

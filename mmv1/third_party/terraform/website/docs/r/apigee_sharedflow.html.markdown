@@ -12,9 +12,9 @@ You can combine policies and resources into a shared flow that you can consume f
 
 To get more information about SharedFlow, see:
 
-* [API documentation](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.sharedflows)
+* [API documentation](https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.sharedflows)
 * How-to Guides
-    * [Sharedflows](https://cloud.google.com/apigee/docs/resources)
+    * [Sharedflows](https://docs.cloud.google.com/apigee/docs/resources)
 
 
 ## Argument Reference

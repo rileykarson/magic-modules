@@ -20,7 +20,7 @@ data "google_storage_project_service_account" "gcs_account" {
 }
 
 # To use GCS CloudEvent triggers, the GCS service account requires the Pub/Sub Publisher(roles/pubsub.publisher) IAM role in the specified project.
-# (See https://cloud.google.com/eventarc/docs/run/quickstart-storage#before-you-begin)
+# (See https://docs.cloud.google.com/eventarc/docs/run/quickstart-storage#before-you-begin)
 resource "google_project_iam_member" "gcs-pubsub-publishing" {
   project = "{{index $.TestEnvVars "project"}}"
   role    = "roles/pubsub.publisher"

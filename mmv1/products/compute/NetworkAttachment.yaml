@@ -18,8 +18,8 @@ description: |
   A network attachment is a resource that lets a producer Virtual Private Cloud (VPC) network initiate connections to a consumer VPC network through a Private Service Connect interface.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vpc/docs/about-network-attachments'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/networkAttachments'
+    'Official Documentation': 'https://docs.cloud.google.com/vpc/docs/about-network-attachments'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/networkAttachments'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/networkAttachments'
 update_verb: 'PATCH'

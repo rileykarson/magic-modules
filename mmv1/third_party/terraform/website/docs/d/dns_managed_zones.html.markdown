@@ -8,9 +8,9 @@ description: |-
 
 Provides access to a list of zones within Google Cloud DNS.
 For more information see
-[the official documentation](https://cloud.google.com/dns/zones/)
+[the official documentation](https://docs.cloud.google.com/dns/zones/)
 and
-[API](https://cloud.google.com/dns/api/v1/managedZones).
+[API](https://docs.cloud.google.com/dns/api/v1/managedZones).
 
 ```hcl
 data "google_dns_managed_zones" "zones" {

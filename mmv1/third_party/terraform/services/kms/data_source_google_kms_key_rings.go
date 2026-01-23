@@ -33,7 +33,7 @@ func DataSourceGoogleKmsKeyRings() *schema.Resource {
 					* "name:my-key-" will retrieve key rings that contain "my-key-" anywhere in their name. Note: names take the form projects/{{project}}/locations/{{location}}/keyRings/{{keyRing}}.
 					* "name=projects/my-project/locations/global/keyRings/my-key-ring" will only retrieve a key ring with that exact name.
 					
-					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
+					[See the documentation about using filters](https://docs.cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
 			},
 			"key_rings": {

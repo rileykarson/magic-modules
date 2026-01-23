@@ -7,7 +7,7 @@ description: |-
 # google_compute_address
 
 Get the IP address from a static address. For more information see
-the official [API](https://cloud.google.com/compute/docs/reference/latest/addresses/get) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/reference/latest/addresses/get) documentation.
 
 ## Example Usage
 

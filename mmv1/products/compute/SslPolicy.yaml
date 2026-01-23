@@ -19,8 +19,8 @@ description: |
   features of SSL that your SSL proxy or HTTPS load balancer negotiates.
 references:
   guides:
-    'Using SSL Policies': 'https://cloud.google.com/compute/docs/load-balancing/ssl-policies'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/sslPolicies'
+    'Using SSL Policies': 'https://docs.cloud.google.com/compute/docs/load-balancing/ssl-policies'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/sslPolicies'
 docs:
 base_url: 'projects/{{project}}/global/sslPolicies'
 has_self_link: true
@@ -80,7 +80,7 @@ properties:
       the set of SSL features to enable must be specified in the
       `customFeatures` field.
 
-      See the [official documentation](https://cloud.google.com/compute/docs/load-balancing/ssl-policies#profilefeaturesupport)
+      See the [official documentation](https://docs.cloud.google.com/compute/docs/load-balancing/ssl-policies#profilefeaturesupport)
       for information on what cipher suites each profile provides. If
       `CUSTOM` is used, the `custom_features` attribute **must be set**.
       If set to `FIPS_202205`, `minTlsVersion` must also be set to
@@ -120,7 +120,7 @@ properties:
       the set of SSL features to enable must be specified in the
       `customFeatures` field.
 
-      See the [official documentation](https://cloud.google.com/compute/docs/load-balancing/ssl-policies#profilefeaturesupport)
+      See the [official documentation](https://docs.cloud.google.com/compute/docs/load-balancing/ssl-policies#profilefeaturesupport)
       for which ciphers are available to use. **Note**: this argument
       *must* be present when using the `CUSTOM` profile. This argument
       *must not* be present when using any other profile.

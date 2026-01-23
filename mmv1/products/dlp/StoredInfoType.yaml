@@ -17,8 +17,8 @@ description: |
   Allows creation of custom info types.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dlp/docs/creating-stored-infotypes'
-  api: 'https://cloud.google.com/dlp/docs/reference/rest/v2/projects.storedInfoTypes'
+    'Official Documentation': 'https://docs.cloud.google.com/dlp/docs/creating-stored-infotypes'
+  api: 'https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.storedInfoTypes'
 docs:
 id_format: '{{parent}}/storedInfoTypes/{{name}}'
 base_url: '{{parent}}/storedInfoTypes'

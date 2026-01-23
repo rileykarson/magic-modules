@@ -17,8 +17,8 @@ description: |
   Security monitoring condition for risk assessment version 2 in Apigee.
 references:
   guides:
-    'Creating a security monitoring condition': 'https://cloud.google.com/apigee/docs/api-security/security-scores#monitoring-conditions'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.securityMonitoringConditions/create'
+    'Creating a security monitoring condition': 'https://docs.cloud.google.com/apigee/docs/api-security/security-scores#monitoring-conditions'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.securityMonitoringConditions/create'
 docs:
 base_url: '{{org_id}}/securityMonitoringConditions'
 self_link: '{{org_id}}/securityMonitoringConditions/{{condition_id}}'

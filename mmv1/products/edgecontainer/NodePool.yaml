@@ -17,8 +17,8 @@ description: |
   "A set of Kubernetes nodes in a cluster with common configuration and specification."
 references:
   guides:
-    'Google Distributed Cloud Edge': 'https://cloud.google.com/distributed-cloud/edge/latest/docs'
-  api: 'https://cloud.google.com/distributed-cloud/edge/latest/docs/reference/container/rest/v1/projects.locations.clusters.nodePools'
+    'Google Distributed Cloud Edge': 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs'
+  api: 'https://docs.cloud.google.com/distributed-cloud/edge/latest/docs/reference/container/rest/v1/projects.locations.clusters.nodePools'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/clusters/{{cluster}}/nodePools'
 self_link: 'projects/{{project}}/locations/{{location}}/clusters/{{cluster}}/nodePools/{{name}}'

@@ -20,11 +20,11 @@ description: |
   [`google_app_engine_application`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)
   resource instead. If you were previously using the `google_app_engine_application` resource exclusively for managing a Firestore database
   and would like to use the `google_firestore_database` resource instead, please follow the instructions
-  [here](https://cloud.google.com/firestore/docs/app-engine-requirement).
+  [here](https://docs.cloud.google.com/firestore/docs/app-engine-requirement).
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/firestore/docs/'
-  api: 'https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases'
+    'Official Documentation': 'https://docs.cloud.google.com/firestore/docs/'
+  api: 'https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases'
 docs:
 id_format: 'projects/{{project}}/databases/{{name}}'
 base_url: 'projects/{{project}}/databases'
@@ -183,14 +183,14 @@ properties:
     type: String
     description: |
       The location of the database. Available locations are listed at
-      https://cloud.google.com/firestore/docs/locations.
+      https://docs.cloud.google.com/firestore/docs/locations.
     required: true
     immutable: true
   - name: 'type'
     type: Enum
     description: |
       The type of the database.
-      See https://cloud.google.com/datastore/docs/firestore-or-datastore
+      See https://docs.cloud.google.com/datastore/docs/firestore-or-datastore
       for information about how to choose.
     required: true
     enum_values:
@@ -311,19 +311,19 @@ properties:
           Only keys in the same location as this database are allowed to be used
           for encryption. For Firestore's nam5 multi-region, this corresponds to Cloud KMS
           multi-region us. For Firestore's eur3 multi-region, this corresponds to
-          Cloud KMS multi-region europe. See https://cloud.google.com/kms/docs/locations.
+          Cloud KMS multi-region europe. See https://docs.cloud.google.com/kms/docs/locations.
 
           This value should be the KMS key resource ID in the format of
           `projects/{project_id}/locations/{kms_location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
           How to retrieve this resource ID is listed at
-          https://cloud.google.com/kms/docs/getting-resource-ids#getting_the_id_for_a_key_and_version.
+          https://docs.cloud.google.com/kms/docs/getting-resource-ids#getting_the_id_for_a_key_and_version.
         required: true
         immutable: true
       - name: 'activeKeyVersion'
         type: Array
         description: |
-           Currently in-use KMS key versions (https://cloud.google.com/kms/docs/resource-hierarchy#key_versions).
-           During key rotation (https://cloud.google.com/kms/docs/key-rotation), there can be
+           Currently in-use KMS key versions (https://docs.cloud.google.com/kms/docs/resource-hierarchy#key_versions).
+           During key rotation (https://docs.cloud.google.com/kms/docs/key-rotation), there can be
            multiple in-use key versions.
 
            The expected format is

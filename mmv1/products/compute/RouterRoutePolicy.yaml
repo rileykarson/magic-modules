@@ -17,8 +17,8 @@ api_resource_type_kind: Router
 description: A route policy created in a router
 references:
   guides:
-    'Google Cloud Router': 'https://cloud.google.com/router/docs/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/routers'
+    'Google Cloud Router': 'https://docs.cloud.google.com/router/docs/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers'
 docs:
 id_format: '{{project}}/{{region}}/{{router}}/routePolicies/{{name}}'
 base_url: 'projects/{{project}}/regions/{{region}}/routers/{{router}}'

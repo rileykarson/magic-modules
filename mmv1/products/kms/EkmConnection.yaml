@@ -21,8 +21,8 @@ description: |
   ~> **Note:** Ekm Connections cannot be deleted from Google Cloud Platform.
 references:
   guides:
-    'Creating a Ekm Connection': 'https://cloud.google.com/kms/docs/create-ekm-connection'
-  api: 'https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.ekmConnections'
+    'Creating a Ekm Connection': 'https://docs.cloud.google.com/kms/docs/create-ekm-connection'
+  api: 'https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.ekmConnections'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/ekmConnections/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/ekmConnections'
@@ -150,7 +150,7 @@ properties:
         - name: 'endpointFilter'
           type: String
           description: |
-            Optional. The filter applied to the endpoints of the resolved service. If no filter is specified, all endpoints will be considered. An endpoint will be chosen arbitrarily from the filtered list for each request. For endpoint filter syntax and examples, see https://cloud.google.com/service-directory/docs/reference/rpc/google.cloud.servicedirectory.v1#resolveservicerequest.
+            Optional. The filter applied to the endpoints of the resolved service. If no filter is specified, all endpoints will be considered. An endpoint will be chosen arbitrarily from the filtered list for each request. For endpoint filter syntax and examples, see https://docs.cloud.google.com/service-directory/docs/reference/rpc/google.cloud.servicedirectory.v1#resolveservicerequest.
           required: false
           default_from_api: true
   - name: 'keyManagementMode'

@@ -25,8 +25,8 @@ description: |
   Additionally, both resource cannot be modified in the same apply.
 references:
   guides:
-    'Controlling access to datasets': 'https://cloud.google.com/bigquery/docs/dataset-access-controls'
-  api: 'https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets'
+    'Controlling access to datasets': 'https://docs.cloud.google.com/bigquery/docs/dataset-access-controls'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets'
 docs:
   warning: |
     You must specify the role field using the legacy format `OWNER` instead of `roles/bigquery.dataOwner`.
@@ -117,7 +117,7 @@ properties:
       supported. Predefined roles that have equivalent basic roles are
       swapped by the API to their basic counterparts, and will show a diff
       post-create. See
-      [official docs](https://cloud.google.com/bigquery/docs/access-control).
+      [official docs](https://docs.cloud.google.com/bigquery/docs/access-control).
     diff_suppress_func: 'resourceBigQueryDatasetAccessRoleDiffSuppress'
     custom_expand: 'templates/terraform/custom_expand/bigquery_access_role.go.tmpl'
   - name: 'userByEmail'

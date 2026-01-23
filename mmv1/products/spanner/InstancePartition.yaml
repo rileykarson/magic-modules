@@ -18,8 +18,8 @@ description: |
   that can be used to partition data and processing capacity within an instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/spanner/docs/geo-partitioning'
-  api: 'https://cloud.google.com/spanner/docs/reference/rest/v1/projects.instances.instancePartitions'
+    'Official Documentation': 'https://docs.cloud.google.com/spanner/docs/geo-partitioning'
+  api: 'https://docs.cloud.google.com/spanner/docs/reference/rest/v1/projects.instances.instancePartitions'
 
 id_format: 'projects/{{project}}/instances/{{instance}}/instancePartitions/{{name}}'
 base_url: 'projects/{{project}}/instances/{{instance}}/instancePartitions'

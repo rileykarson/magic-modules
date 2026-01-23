@@ -6,7 +6,7 @@ description: |-
 
 # google_compute_region_security_policy
 
-Use this data source to get information about a Compute Region Security Policy. For more details, see the [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/regionSecurityPolicies).
+Use this data source to get information about a Compute Region Security Policy. For more details, see the [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionSecurityPolicies).
 
 ## Example Usage
 

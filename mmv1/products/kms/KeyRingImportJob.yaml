@@ -26,8 +26,8 @@ description: |
   *will not delete the resource from the project.*
 references:
   guides:
-    'Importing a key': 'https://cloud.google.com/kms/docs/importing-a-key'
-  api: 'https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.importJobs'
+    'Importing a key': 'https://docs.cloud.google.com/kms/docs/importing-a-key'
+  api: 'https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.importJobs'
 docs:
 id_format: '{{name}}'
 base_url: '{{key_ring}}/importJobs'

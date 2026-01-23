@@ -22,8 +22,8 @@ description: |
   monitor, etc.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/security-command-center/docs'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/rest/v1/organizations.sources'
+    'Official Documentation': 'https://docs.cloud.google.com/security-command-center/docs'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/rest/v1/organizations.sources'
 docs:
 base_url: 'organizations/{{organization}}/sources'
 self_link: '{{name}}'

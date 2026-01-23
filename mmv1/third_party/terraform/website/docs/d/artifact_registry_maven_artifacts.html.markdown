@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_maven_artifacts
 
 Get information about Artifact Registry Maven artifacts.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs/java)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs/java)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.mavenArtifacts/list).
 
 ## Example Usage
 

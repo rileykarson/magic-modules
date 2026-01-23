@@ -46,7 +46,7 @@ func ResourceServiceNetworkingConnection() *schema.Resource {
 			// uses "-" as a delimiter instead of ".". To alleviate user confusion I've opted to model the gcloud
 			// CLI's approach, calling the field "service" and accepting the same format as the CLI with the "."
 			// delimiter.
-			// See: https://cloud.google.com/vpc/docs/configure-private-services-access#creating-connection
+			// See: https://docs.cloud.google.com/vpc/docs/configure-private-services-access#creating-connection
 			"service": {
 				Type:        schema.TypeString,
 				Required:    true,

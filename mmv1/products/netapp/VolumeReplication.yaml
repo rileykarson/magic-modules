@@ -30,8 +30,8 @@ description: |
   Reversing the replication direction is not supported through the provider.
 references:
   guides:
-    'Documentation': 'https://cloud.google.com/netapp/volumes/docs/protect-data/about-volume-replication'
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes.replications'
+    'Documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/protect-data/about-volume-replication'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes.replications'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/volumes/{{volume_name}}/replications/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/volumes/{{volume_name}}/replications'

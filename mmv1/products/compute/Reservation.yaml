@@ -25,8 +25,8 @@ description: |
   like Cloud SQL and Dataflow.
 references:
   guides:
-    'Reserving zonal resources': 'https://cloud.google.com/compute/docs/instances/reserving-zonal-resources'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/reservations'
+    'Reserving zonal resources': 'https://docs.cloud.google.com/compute/docs/instances/reserving-zonal-resources'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/reservations'
 docs:
 base_url: 'projects/{{project}}/zones/{{zone}}/reservations'
 has_self_link: true
@@ -239,7 +239,7 @@ properties:
             description: |
               The minimum CPU platform for the reservation. For example,
               `"Intel Skylake"`. See
-              the CPU platform availability reference](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform#availablezones)
+              the CPU platform availability reference](https://docs.cloud.google.com/compute/docs/instances/specify-min-cpu-platform#availablezones)
               for information on available CPU platforms.
             immutable: true
             default_from_api: true

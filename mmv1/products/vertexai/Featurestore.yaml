@@ -17,8 +17,8 @@ description: |-
   A collection of DataItems and Annotations on them.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featurestores'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.featurestores'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/featurestores'
 self_link: 'projects/{{project}}/locations/{{region}}/featurestores/{{name}}'

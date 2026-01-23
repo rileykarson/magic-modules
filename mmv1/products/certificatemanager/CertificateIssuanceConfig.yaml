@@ -17,8 +17,8 @@ description: |
   Certificate represents a HTTP-reachable backend for a Certificate.
 references:
   guides:
-    'Manage certificate issuance configs': 'https://cloud.google.com/certificate-manager/docs/issuance-configs'
-  api: 'https://cloud.google.com/certificate-manager/docs/reference/certificate-manager/rest/v1/projects.locations.certificateIssuanceConfigs'
+    'Manage certificate issuance configs': 'https://docs.cloud.google.com/certificate-manager/docs/issuance-configs'
+  api: 'https://docs.cloud.google.com/certificate-manager/docs/reference/certificate-manager/rest/v1/projects.locations.certificateIssuanceConfigs'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/certificateIssuanceConfigs'
 create_url: 'projects/{{project}}/locations/{{location}}/certificateIssuanceConfigs?certificateIssuanceConfigId={{name}}'

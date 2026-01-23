@@ -145,13 +145,13 @@ properties:
       If unsure, choose this option.
 
       EDGE_CACHE: Certificates with scope EDGE_CACHE are special-purposed certificates, served from Edge Points of Presence.
-      See https://cloud.google.com/vpc/docs/edge-locations.
+      See https://docs.cloud.google.com/vpc/docs/edge-locations.
 
       ALL_REGIONS: Certificates with ALL_REGIONS scope are served from all GCP regions (You can only use ALL_REGIONS with global certs).
-      See https://cloud.google.com/compute/docs/regions-zones.
+      See https://docs.cloud.google.com/compute/docs/regions-zones.
 
       CLIENT_AUTH: Certificates with CLIENT_AUTH scope are used by a load balancer (TLS client) to be presented to the backend (TLS server) when backend mTLS is configured.
-      See https://cloud.google.com/load-balancing/docs/backend-authenticated-tls-backend-mtls#client-certificate.
+      See https://docs.cloud.google.com/load-balancing/docs/backend-authenticated-tls-backend-mtls#client-certificate.
     immutable: true
     diff_suppress_func: 'certManagerDefaultScopeDiffSuppress'
     default_value: "DEFAULT"
@@ -249,7 +249,7 @@ properties:
         type: String
         description: |
           The resource name for a CertificateIssuanceConfig used to configure private PKI certificates in the format projects/*/locations/*/certificateIssuanceConfigs/*.
-          If this field is not set, the certificates will instead be publicly signed as documented at https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs#caa.
+          If this field is not set, the certificates will instead be publicly signed as documented at https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs#caa.
           Either issuanceConfig or dnsAuthorizations should be specificed, but not both.
 
         immutable: true

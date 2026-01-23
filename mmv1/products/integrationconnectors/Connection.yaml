@@ -17,8 +17,8 @@ description: |
   An Integration connectors Connection.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/integration-connectors/docs/createconnection'
-  api: 'https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections'
+    'Official Documentation': 'https://docs.cloud.google.com/integration-connectors/docs/createconnection'
+  api: 'https://docs.cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/connections'
 self_link: 'projects/{{project}}/locations/{{location}}/connections/{{name}}'

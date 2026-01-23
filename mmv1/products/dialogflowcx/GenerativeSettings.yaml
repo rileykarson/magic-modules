@@ -17,8 +17,8 @@ description: |
   Settings for Generative AI.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents/getGenerativeSettings'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents/getGenerativeSettings'
 docs:
 base_url: '{{parent}}/generativeSettings'
 self_link: '{{parent}}/generativeSettings?languageCode={{language_code}}'
@@ -103,7 +103,7 @@ properties:
         type: String
         description: |
           Optional. Default phrase match strategy for banned phrases.
-          See [PhraseMatchStrategy](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/GenerativeSettings#phrasematchstrategy) for valid values.
+          See [PhraseMatchStrategy](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/GenerativeSettings#phrasematchstrategy) for valid values.
       - name: 'bannedPhrases'
         type: Array
         description: |

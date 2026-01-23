@@ -28,13 +28,13 @@ description: |
   labels are required.
 
   A list of supported channels per project the `list` endpoint can be
-  accessed programmatically or through the api explorer at  https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannelDescriptors/list .
+  accessed programmatically or through the api explorer at  https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannelDescriptors/list .
   This provides the channel type and all of the required labels that must be passed.
 references:
   guides:
-    'Notification Options': 'https://cloud.google.com/monitoring/support/notification-options'
-    'Monitoring API Documentation': 'https://cloud.google.com/monitoring/api/v3/'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannels'
+    'Notification Options': 'https://docs.cloud.google.com/monitoring/support/notification-options'
+    'Monitoring API Documentation': 'https://docs.cloud.google.com/monitoring/api/v3/'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannels'
 docs:
 id_format: '{{name}}'
 base_url: 'v3/projects/{{project}}/notificationChannels'
@@ -163,7 +163,7 @@ properties:
     description:
       The type of the notification channel. This field matches the value of the
       NotificationChannelDescriptor.type field. See
-      https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannelDescriptors/list
+      https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannelDescriptors/list
       to get the list of valid values such as "email", "slack", etc...
     required: true
   - name: 'userLabels'

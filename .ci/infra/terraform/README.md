@@ -17,7 +17,7 @@ After applying this configuration:
 - Enable Media CDN
 - Enable Access Boundary permissions
 - Enable BigQuery Table IAM conditions
-- Deploy "Hello World" app: https://cloud.google.com/appengine/docs/flexible/go/create-app
+- Deploy "Hello World" app: https://docs.cloud.google.com/appengine/docs/flexible/go/create-app
     ```
     gcloud components install app-engine-go
     git clone https://github.com/GoogleCloudPlatform/golang-samples
@@ -25,7 +25,7 @@ After applying this configuration:
     cd helloworld
     gcloud app deploy --project=<project> --billing-project=<project>
     ```
-- Create repo for "Hello World" function: https://cloud.google.com/source-repositories/docs/deploy-cloud-functions-version-control
+- Create repo for "Hello World" function: https://docs.cloud.google.com/source-repositories/docs/deploy-cloud-functions-version-control
     ```
     gcloud source repos create cloudfunctions-test-do-not-delete --project=<project>
     gcloud source repos clone cloudfunctions-test-do-not-delete --project=<project>
@@ -51,7 +51,7 @@ After applying this configuration:
 - Upload a model with the name `tf-static-1` to the Vertex AI model registry
   - This should only be necessary until uploading new models is supported in the provider.
 - (Org only) Enroll the org in the Premium tier of Security Control Center
-- (Org only) Enable Compliance Manager https://cloud.google.com/security-command-center/docs/compliance-manager-enable
+- (Org only) Enable Compliance Manager https://docs.cloud.google.com/security-command-center/docs/compliance-manager-enable
 
 Quotas that will need to be adjusted to support all tests:
 - Project quota for the new service account

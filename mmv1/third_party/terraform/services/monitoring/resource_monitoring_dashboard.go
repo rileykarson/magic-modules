@@ -87,7 +87,7 @@ func ResourceMonitoringDashboard() *schema.Resource {
 					json, _ := structure.NormalizeJsonString(v)
 					return json
 				},
-				Description: `The JSON representation of a dashboard, following the format at https://cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards.`,
+				Description: `The JSON representation of a dashboard, following the format at https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards.`,
 			},
 			"project": {
 				Type:        schema.TypeString,

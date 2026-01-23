@@ -16,8 +16,8 @@ name: 'Repository'
 description: "A repository associated to a parent connection."
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/build/docs'
-  api: 'https://cloud.google.com/build/docs/api/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/build/docs'
+  api: 'https://docs.cloud.google.com/build/docs/api/reference/rest'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/connections/{{parent_connection}}/repositories'
 self_link: 'projects/{{project}}/locations/{{location}}/connections/{{parent_connection}}/repositories/{{name}}'

@@ -17,8 +17,8 @@ description: |
   A Google Cloud Memcache instance.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/memcache/docs/creating-instances'
-  api: 'https://cloud.google.com/memorystore/docs/memcached/reference/rest/v1/projects.locations.instances'
+    'Official Documentation': 'https://docs.cloud.google.com/memcache/docs/creating-instances'
+  api: 'https://docs.cloud.google.com/memorystore/docs/memcached/reference/rest/v1/projects.locations.instances'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/instances'
 self_link: 'projects/{{project}}/locations/{{region}}/instances/{{name}}'

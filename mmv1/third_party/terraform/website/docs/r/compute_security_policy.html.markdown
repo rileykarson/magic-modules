@@ -7,8 +7,8 @@ description: |-
 # google_compute_security_policy
 
 A Security Policy defines an IP blacklist or whitelist that protects load balanced Google Cloud services by denying or permitting traffic from specified IP ranges. For more information
-see the [official documentation](https://cloud.google.com/armor/docs/configure-security-policies)
-and the [API](https://cloud.google.com/compute/docs/reference/rest/beta/securityPolicies).
+see the [official documentation](https://docs.cloud.google.com/armor/docs/configure-security-policies)
+and the [API](https://docs.cloud.google.com/compute/docs/reference/rest/beta/securityPolicies).
 
 Security Policy is used by [`google_compute_backend_service`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service#security_policy).
 
@@ -175,12 +175,12 @@ The following arguments are supported:
     rule (rule with priority 2147483647 and match "\*"). If no rules are provided when creating a
     security policy, a default rule with action "allow" will be added. Structure is [documented below](#nested_rule).
 
-* `advanced_options_config` - (Optional) [Advanced Configuration Options](https://cloud.google.com/armor/docs/security-policy-overview#json-parsing).
+* `advanced_options_config` - (Optional) [Advanced Configuration Options](https://docs.cloud.google.com/armor/docs/security-policy-overview#json-parsing).
     Structure is [documented below](#nested_advanced_options_config).
 
-* `adaptive_protection_config` - (Optional) Configuration for [Google Cloud Armor Adaptive Protection](https://cloud.google.com/armor/docs/adaptive-protection-overview?hl=en). Structure is [documented below](#nested_adaptive_protection_config).
+* `adaptive_protection_config` - (Optional) Configuration for [Google Cloud Armor Adaptive Protection](https://docs.cloud.google.com/armor/docs/adaptive-protection-overview?hl=en). Structure is [documented below](#nested_adaptive_protection_config).
 
-* `recaptcha_options_config` - (Optional) [reCAPTCHA Configuration Options](https://cloud.google.com/armor/docs/configure-security-policies?hl=en#use_a_manual_challenge_to_distinguish_between_human_or_automated_clients). Structure is [documented below](#nested_recaptcha_options_config).
+* `recaptcha_options_config` - (Optional) [reCAPTCHA Configuration Options](https://docs.cloud.google.com/armor/docs/configure-security-policies?hl=en#use_a_manual_challenge_to_distinguish_between_human_or_automated_clients). Structure is [documented below](#nested_recaptcha_options_config).
 
 * `type` - The type indicates the intended use of the security policy. This field can be set only at resource creation time.
   * `CLOUD_ARMOR` - Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services.
@@ -431,9 +431,9 @@ The following arguments are supported:
 
 <a name="nested_adaptive_protection_config"></a>The `adaptive_protection_config` block supports:
 
-* `layer_7_ddos_defense_config` - (Optional) Configuration for [Google Cloud Armor Adaptive Protection Layer 7 DDoS Defense](https://cloud.google.com/armor/docs/adaptive-protection-overview?hl=en). Structure is [documented below](#nested_layer_7_ddos_defense_config).
+* `layer_7_ddos_defense_config` - (Optional) Configuration for [Google Cloud Armor Adaptive Protection Layer 7 DDoS Defense](https://docs.cloud.google.com/armor/docs/adaptive-protection-overview?hl=en). Structure is [documented below](#nested_layer_7_ddos_defense_config).
 
-* `auto_deploy_config` - (Optional, [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Configuration for [Automatically deploy Adaptive Protection suggested rules](https://cloud.google.com/armor/docs/adaptive-protection-auto-deploy?hl=en). Structure is [documented below](#nested_auto_deploy_config).
+* `auto_deploy_config` - (Optional, [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Configuration for [Automatically deploy Adaptive Protection suggested rules](https://docs.cloud.google.com/armor/docs/adaptive-protection-auto-deploy?hl=en). Structure is [documented below](#nested_auto_deploy_config).
 
 <a name="nested_layer_7_ddos_defense_config"></a>The `layer_7_ddos_defense_config` block supports:
 

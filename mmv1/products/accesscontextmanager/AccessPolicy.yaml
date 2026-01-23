@@ -21,8 +21,8 @@ description: |
   restrictions it specifies apply to all projects within an organization.
 references:
   guides:
-    'Access Policy Quickstart': 'https://cloud.google.com/access-context-manager/docs/quickstart'
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies'
+    'Access Policy Quickstart': 'https://docs.cloud.google.com/access-context-manager/docs/quickstart'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,

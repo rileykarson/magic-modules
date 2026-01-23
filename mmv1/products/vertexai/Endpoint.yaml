@@ -20,8 +20,8 @@ description:
   predictions and explanations.'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/docs'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/docs'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/endpoints'
 self_link: 'projects/{{project}}/locations/{{location}}/endpoints/{{name}}'
@@ -136,9 +136,9 @@ properties:
                   description:
                     'The type of the machine. See the [list of machine types
                     supported for
-                    prediction](https://cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types)
+                    prediction](https://docs.cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types)
                     See the [list of machine types supported for custom
-                    training](https://cloud.google.com/vertex-ai/docs/training/configure-compute#machine-types).
+                    training](https://docs.cloud.google.com/vertex-ai/docs/training/configure-compute#machine-types).
                     For DeployedModel this field is optional, and the default
                     value is `n1-standard-2`. For BatchPredictionJob or as part
                     of WorkerPoolSpec this field is required. TODO:
@@ -149,7 +149,7 @@ properties:
                   description:
                     The type of accelerator(s) that may be attached to the
                     machine as per accelerator_count. See possible values
-                    [here](https://cloud.google.com/vertex-ai/docs/reference/rest/v1/MachineSpec#AcceleratorType).
+                    [here](https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/MachineSpec#AcceleratorType).
                   output: true
                 - name: 'acceleratorCount'
                   type: Integer
@@ -370,8 +370,8 @@ properties:
       A map from a DeployedModel's id to the percentage of this Endpoint's traffic that should be forwarded to that DeployedModel.
       If a DeployedModel's id is not listed in this map, then it receives no traffic.
       The traffic percentage values must add up to 100, or map must be empty if the Endpoint is to not accept any traffic at a moment. See
-      the `deployModel` [example](https://cloud.google.com/vertex-ai/docs/general/deployment#deploy_a_model_to_an_endpoint) and
-      [documentation](https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.endpoints/deployModel) for more information.
+      the `deployModel` [example](https://docs.cloud.google.com/vertex-ai/docs/general/deployment#deploy_a_model_to_an_endpoint) and
+      [documentation](https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.endpoints/deployModel) for more information.
 
       ~> **Note:** To set the map to empty, set `"{}"`, apply, and then remove the field from your config.
     state_func: 'func(v interface{}) string { s, _ := structure.NormalizeJsonString(v); return s }'
@@ -424,12 +424,12 @@ properties:
     type: String
     description:
       'The full name of the Google Compute Engine
-      [network](https://cloud.google.com//compute/docs/networks-and-firewalls#networks)
+      [network](https://docs.cloud.google.com//compute/docs/networks-and-firewalls#networks)
       to which the Endpoint should be peered. Private services access must
       already be configured for the network. If left unspecified, the Endpoint
       is not peered with any network. Only one of the fields, network or
       enable_private_service_connect, can be set.
-      [Format](https://cloud.google.com/compute/docs/reference/rest/v1/networks/insert):
+      [Format](https://docs.cloud.google.com/compute/docs/reference/rest/v1/networks/insert):
       `projects/{project}/global/networks/{network}`. Where `{project}` is a
       project number, as in `12345`, and `{network}` is network name.
       Only one of the fields, `network` or `privateServiceConnectConfig`, can be set.'
@@ -482,7 +482,7 @@ properties:
               type: String
               required: true
               description:
-                'The full name of the Google Compute Engine [network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks). [Format](https://cloud.google.com/compute/docs/reference/rest/v1/networks/get): projects/{project}/global/networks/{network}.'
+                'The full name of the Google Compute Engine [network](https://docs.cloud.google.com/compute/docs/networks-and-firewalls#networks). [Format](https://docs.cloud.google.com/compute/docs/reference/rest/v1/networks/get): projects/{project}/global/networks/{network}.'
             - name: 'ipAddress'
               type: String
               output: true

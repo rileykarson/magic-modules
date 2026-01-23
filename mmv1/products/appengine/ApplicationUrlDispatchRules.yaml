@@ -18,7 +18,7 @@ description: |
   Rules to match an HTTP request and dispatch that request to a service.
 references:
   guides:
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps#UrlDispatchRule'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps#UrlDispatchRule'
 docs:
 id_format: '{{project}}'
 base_url: 'apps/{{project}}'

@@ -17,8 +17,8 @@ description: |
   Allows creation of templates to de-identify content.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dlp/docs/concepts-templates'
-  api: 'https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates'
+    'Official Documentation': 'https://docs.cloud.google.com/dlp/docs/concepts-templates'
+  api: 'https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates'
 docs:
 id_format: '{{parent}}/deidentifyTemplates/{{name}}'
 base_url: '{{parent}}/deidentifyTemplates'
@@ -191,7 +191,7 @@ properties:
                   send_empty_value: true
                   allow_empty_object: true
                   properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#allinfotypes
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#allinfotypes
                     []
                 - name: 'allText'
                   type: NestedObject
@@ -202,7 +202,7 @@ properties:
                   send_empty_value: true
                   allow_empty_object: true
                   properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#alltext
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#alltext
                     []
       - name: 'infoTypeTransformations'
         type: NestedObject
@@ -430,8 +430,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -466,7 +466,7 @@ properties:
                             - name: 'name'
                               type: String
                               description: |
-                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                             - name: 'version'
                               type: String
                               description: |
@@ -506,7 +506,7 @@ properties:
                     - name: 'cryptoReplaceFfxFpeConfig'
                       type: NestedObject
                       description: |
-                        Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://cloud.google.com/dlp/docs/pseudonymization](https://cloud.google.com/dlp/docs/pseudonymization) to learn more.
+                        Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://docs.cloud.google.com/dlp/docs/pseudonymization](https://docs.cloud.google.com/dlp/docs/pseudonymization) to learn more.
 
                         Note: We recommend using CryptoDeterministicConfig for all use cases which do not require preserving the input alphabet space and size, plus warrant referential integrity.
                       properties:
@@ -542,8 +542,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -587,14 +587,14 @@ properties:
 
                             For example, if the name of custom infoType is 'MY\_TOKEN\_INFO\_TYPE' and the surrogate is 'abc', the full replacement value will be: 'MY\_TOKEN\_INFO\_TYPE(3):abc'
 
-                            This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
+                            This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://docs.cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
 
                             In order for inspection to work properly, the name of this infoType must not occur naturally anywhere in your data; otherwise, inspection may find a surrogate that does not correspond to an actual identifier. Therefore, choose your custom infoType name carefully after considering what your data looks like. One way to select a name that has a high chance of yielding reliable detection is to include one or more unicode characters that are highly improbable to exist in your data. For example, assuming your data is entered from a regular ASCII keyboard, the symbol with the hex code point 29DD might be used like so: ⧝MY\_TOKEN\_TYPE
                           properties:
                             - name: 'name'
                               type: String
                               description: |
-                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                             - name: 'version'
                               type: String
                               description: |
@@ -647,7 +647,7 @@ properties:
                         - name: 'wordList'
                           type: NestedObject
                           description: |
-                            A list of words to select from for random replacement. The [limits](https://cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
+                            A list of words to select from for random replacement. The [limits](https://docs.cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
                           required: true
                           properties:
                             - name: 'words'
@@ -703,8 +703,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -739,7 +739,7 @@ properties:
 
                         If the bound Value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
 
-                        See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                       properties:
                         - name: 'lowerBound'
                           type: NestedObject
@@ -782,7 +782,7 @@ properties:
                         Generalization function that buckets values based on ranges. The ranges and replacement values are dynamically provided by the user for custom behavior, such as 1-30 -> LOW 31-65 -> MEDIUM 66-100 -> HIGH
                         This can be used on data of type: number, long, string, timestamp.
                         If the provided value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
-                        See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                       properties:
                         - name: 'buckets'
                           type: Array
@@ -1067,7 +1067,7 @@ properties:
                       send_empty_value: true
                       allow_empty_object: true
                       properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
                         []
                     - name: 'cryptoHashConfig'
                       type: NestedObject
@@ -1075,7 +1075,7 @@ properties:
                         Pseudonymization method that generates surrogates via cryptographic hashing. Uses SHA-256. The key size must be either 32 or 64 bytes.
                         Outputs a base64 encoded representation of the hashed output (for example, L7k0BHmF1ha5U3NfGykjro4xWi1MPVQPjhMAZbSV9mM=).
                         Currently, only string and integer values can be hashed.
-                        See https://cloud.google.com/dlp/docs/pseudonymization to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/pseudonymization to learn more.
                       properties:
                         - name: 'cryptoKey'
                           type: NestedObject
@@ -1109,8 +1109,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -1435,7 +1435,7 @@ properties:
                       send_empty_value: true
                       allow_empty_object: true
                       properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
                         []
                     - name: 'characterMaskConfig'
                       type: NestedObject
@@ -1489,7 +1489,7 @@ properties:
                     - name: 'cryptoReplaceFfxFpeConfig'
                       type: NestedObject
                       description: |
-                        Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://cloud.google.com/dlp/docs/pseudonymization](https://cloud.google.com/dlp/docs/pseudonymization) to learn more.
+                        Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://docs.cloud.google.com/dlp/docs/pseudonymization](https://docs.cloud.google.com/dlp/docs/pseudonymization) to learn more.
 
                         Note: We recommend using CryptoDeterministicConfig for all use cases which do not require preserving the input alphabet space and size, plus warrant referential integrity.
                       properties:
@@ -1525,8 +1525,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -1570,14 +1570,14 @@ properties:
 
                             For example, if the name of custom infoType is 'MY\_TOKEN\_INFO\_TYPE' and the surrogate is 'abc', the full replacement value will be: 'MY\_TOKEN\_INFO\_TYPE(3):abc'
 
-                            This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
+                            This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://docs.cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
 
                             In order for inspection to work properly, the name of this infoType must not occur naturally anywhere in your data; otherwise, inspection may find a surrogate that does not correspond to an actual identifier. Therefore, choose your custom infoType name carefully after considering what your data looks like. One way to select a name that has a high chance of yielding reliable detection is to include one or more unicode characters that are highly improbable to exist in your data. For example, assuming your data is entered from a regular ASCII keyboard, the symbol with the hex code point 29DD might be used like so: ⧝MY\_TOKEN\_TYPE
                           properties:
                             - name: 'name'
                               type: String
                               description: |
-                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                             - name: 'version'
                               type: String
                               description: |
@@ -1627,7 +1627,7 @@ properties:
 
                         If the bound Value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
 
-                        See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                       properties:
                         - name: 'lowerBound'
                           type: NestedObject
@@ -1804,7 +1804,7 @@ properties:
                         Generalization function that buckets values based on ranges. The ranges and replacement values are dynamically provided by the user for custom behavior, such as 1-30 -> LOW 31-65 -> MEDIUM 66-100 -> HIGH
                         This can be used on data of type: number, long, string, timestamp.
                         If the provided value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
-                        See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                       properties:
                         - name: 'buckets'
                           type: Array
@@ -2089,7 +2089,7 @@ properties:
                         Pseudonymization method that generates surrogates via cryptographic hashing. Uses SHA-256. The key size must be either 32 or 64 bytes.
                         Outputs a base64 encoded representation of the hashed output (for example, L7k0BHmF1ha5U3NfGykjro4xWi1MPVQPjhMAZbSV9mM=).
                         Currently, only string and integer values can be hashed.
-                        See https://cloud.google.com/dlp/docs/pseudonymization to learn more.
+                        See https://docs.cloud.google.com/dlp/docs/pseudonymization to learn more.
                       properties:
                         - name: 'cryptoKey'
                           type: NestedObject
@@ -2123,8 +2123,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -2141,7 +2141,7 @@ properties:
                     - name: 'dateShiftConfig'
                       type: NestedObject
                       description: |
-                        Shifts dates by random number of days, with option to be consistent for the same context. See https://cloud.google.com/dlp/docs/concepts-date-shifting to learn more.
+                        Shifts dates by random number of days, with option to be consistent for the same context. See https://docs.cloud.google.com/dlp/docs/concepts-date-shifting to learn more.
                       properties:
                         - name: 'upperBoundDays'
                           type: Integer
@@ -2197,8 +2197,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -2249,8 +2249,8 @@ properties:
                               description: |
                                 KMS wrapped key.
                                 Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key).
-                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key).
+                                Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                               properties:
                                 - name: 'wrappedKey'
                                   type: String
@@ -2285,7 +2285,7 @@ properties:
                             - name: 'name'
                               type: String
                               description: |
-                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                             - name: 'version'
                               type: String
                               description: |
@@ -2331,7 +2331,7 @@ properties:
                         - name: 'wordList'
                           type: NestedObject
                           description: |
-                            A list of words to select from for random replacement. The [limits](https://cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
+                            A list of words to select from for random replacement. The [limits](https://docs.cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
                           properties:
                             - name: 'words'
                               type: Array
@@ -2498,7 +2498,7 @@ properties:
                                 send_empty_value: true
                                 allow_empty_object: true
                                 properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#redactconfig
                                   []
                               - name: 'characterMaskConfig'
                                 type: NestedObject
@@ -2552,7 +2552,7 @@ properties:
                               - name: 'cryptoReplaceFfxFpeConfig'
                                 type: NestedObject
                                 description: |
-                                  Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://cloud.google.com/dlp/docs/pseudonymization](https://cloud.google.com/dlp/docs/pseudonymization) to learn more.
+                                  Replaces an identifier with a surrogate using Format Preserving Encryption (FPE) with the FFX mode of operation; however when used in the `content.reidentify` API method, it serves the opposite function by reversing the surrogate back into the original identifier. The identifier must be encoded as ASCII. For a given crypto key and context, the same identifier will be replaced with the same surrogate. Identifiers must be at least two characters long. In the case that the identifier is the empty string, it will be skipped. See [https://docs.cloud.google.com/dlp/docs/pseudonymization](https://docs.cloud.google.com/dlp/docs/pseudonymization) to learn more.
 
                                   Note: We recommend using CryptoDeterministicConfig for all use cases which do not require preserving the input alphabet space and size, plus warrant referential integrity.
                                 properties:
@@ -2590,8 +2590,8 @@ properties:
                                         description: |
                                           KMS wrapped key.
                                           Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                          For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
-                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                          For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
+                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                                         properties:
                                           - name: 'wrappedKey'
                                             type: String
@@ -2636,14 +2636,14 @@ properties:
 
                                       For example, if the name of custom infoType is 'MY\_TOKEN\_INFO\_TYPE' and the surrogate is 'abc', the full replacement value will be: 'MY\_TOKEN\_INFO\_TYPE(3):abc'
 
-                                      This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
+                                      This annotation identifies the surrogate when inspecting content using the custom infoType [`SurrogateType`](https://docs.cloud.google.com/dlp/docs/reference/rest/v2/InspectConfig#surrogatetype). This facilitates reversal of the surrogate when it occurs in free text.
 
                                       In order for inspection to work properly, the name of this infoType must not occur naturally anywhere in your data; otherwise, inspection may find a surrogate that does not correspond to an actual identifier. Therefore, choose your custom infoType name carefully after considering what your data looks like. One way to select a name that has a high chance of yielding reliable detection is to include one or more unicode characters that are highly improbable to exist in your data. For example, assuming your data is entered from a regular ASCII keyboard, the symbol with the hex code point 29DD might be used like so: ⧝MY\_TOKEN\_TYPE
                                     properties:
                                       - name: 'name'
                                         type: String
                                         description: |
-                                          Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                          Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                                         required: true
                                       - name: 'version'
                                         type: String
@@ -2697,7 +2697,7 @@ properties:
 
                                   If the bound Value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
 
-                                  See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                                  See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                                 properties:
                                   - name: 'lowerBound'
                                     type: NestedObject
@@ -2742,7 +2742,7 @@ properties:
                                   Generalization function that buckets values based on ranges. The ranges and replacement values are dynamically provided by the user for custom behavior, such as 1-30 -> LOW 31-65 -> MEDIUM 66-100 -> HIGH
                                   This can be used on data of type: number, long, string, timestamp.
                                   If the provided value type differs from the type of data being transformed, we will first attempt converting the type of the data to be transformed to match the type of the bound before comparing.
-                                  See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
+                                  See https://docs.cloud.google.com/dlp/docs/concepts-bucketing to learn more.
                                 properties:
                                   - name: 'buckets'
                                     type: Array
@@ -3030,7 +3030,7 @@ properties:
                                 send_empty_value: true
                                 allow_empty_object: true
                                 properties:
- # Meant to be an empty object with no properties - see here : https://cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.ReplaceWithInfoTypeConfig
+ # Meant to be an empty object with no properties - see here : https://docs.cloud.google.com/dlp/docs/reference/rest/v2/projects.deidentifyTemplates#DeidentifyTemplate.ReplaceWithInfoTypeConfig
                                   []
                               - name: 'timePartConfig'
                                 type: NestedObject
@@ -3061,7 +3061,7 @@ properties:
                                   Pseudonymization method that generates surrogates via cryptographic hashing. Uses SHA-256. The key size must be either 32 or 64 bytes.
                                   Outputs a base64 encoded representation of the hashed output (for example, L7k0BHmF1ha5U3NfGykjro4xWi1MPVQPjhMAZbSV9mM=).
                                   Currently, only string and integer values can be hashed.
-                                  See https://cloud.google.com/dlp/docs/pseudonymization to learn more.
+                                  See https://docs.cloud.google.com/dlp/docs/pseudonymization to learn more.
                                 properties:
                                   - name: 'cryptoKey'
                                     type: NestedObject
@@ -3097,8 +3097,8 @@ properties:
                                         description: |
                                           KMS wrapped key.
                                           Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                          For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
-                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                          For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
+                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                                         properties:
                                           - name: 'wrappedKey'
                                             type: String
@@ -3115,7 +3115,7 @@ properties:
                               - name: 'dateShiftConfig'
                                 type: NestedObject
                                 description: |
-                                  Shifts dates by random number of days, with option to be consistent for the same context. See https://cloud.google.com/dlp/docs/concepts-date-shifting to learn more.
+                                  Shifts dates by random number of days, with option to be consistent for the same context. See https://docs.cloud.google.com/dlp/docs/concepts-date-shifting to learn more.
                                 properties:
                                   - name: 'upperBoundDays'
                                     type: Integer
@@ -3173,8 +3173,8 @@ properties:
                                         description: |
                                           KMS wrapped key.
                                           Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                          For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
-                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                          For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
+                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                                         properties:
                                           - name: 'wrappedKey'
                                             type: String
@@ -3227,8 +3227,8 @@ properties:
                                         description: |
                                           KMS wrapped key.
                                           Include to use an existing data crypto key wrapped by KMS. The wrapped key must be a 128-, 192-, or 256-bit key. Authorization requires the following IAM permissions when sending a request to perform a crypto transformation using a KMS-wrapped crypto key: dlp.kms.encrypt
-                                          For more information, see [Creating a wrapped key](https://cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
-                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://cloud.google.com/kms/pricing).
+                                          For more information, see [Creating a wrapped key](https://docs.cloud.google.com/dlp/docs/create-wrapped-key). Only one of this, `transient` or `unwrapped` must be specified.
+                                          Note: When you use Cloud KMS for cryptographic operations, [charges apply](https://docs.cloud.google.com/kms/pricing).
                                         properties:
                                           - name: 'wrappedKey'
                                             type: String
@@ -3264,7 +3264,7 @@ properties:
                                       - name: 'name'
                                         type: String
                                         description: |
-                                          Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://cloud.google.com/dlp/docs/infotypes-reference](https://cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
+                                          Name of the information type. Either a name of your choosing when creating a CustomInfoType, or one of the names listed at [https://docs.cloud.google.com/dlp/docs/infotypes-reference](https://docs.cloud.google.com/dlp/docs/infotypes-reference) when specifying a built-in type. When sending Cloud DLP results to Data Catalog, infoType names should conform to the pattern `[A-Za-z0-9$-_]{1,64}`.
                                         required: true
                                       - name: 'version'
                                         type: String
@@ -3312,7 +3312,7 @@ properties:
                                   - name: 'wordList'
                                     type: NestedObject
                                     description: |
-                                      A list of words to select from for random replacement. The [limits](https://cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
+                                      A list of words to select from for random replacement. The [limits](https://docs.cloud.google.com/dlp/limits) page contains details about the size limits of dictionaries.
                                     required: true
                                     properties:
                                       - name: 'words'

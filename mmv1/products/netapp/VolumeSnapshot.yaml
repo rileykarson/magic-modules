@@ -23,8 +23,8 @@ description: |
   consume any of the volume's capacity.
 references:
   guides:
-    'Documentation': 'https://cloud.google.com/netapp/volumes/docs/configure-and-use/volume-snapshots/overview'
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes.snapshots'
+    'Documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/volume-snapshots/overview'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes.snapshots'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/volumes/{{volume_name}}/snapshots'
 self_link: 'projects/{{project}}/locations/{{location}}/volumes/{{volume_name}}/snapshots/{{name}}'

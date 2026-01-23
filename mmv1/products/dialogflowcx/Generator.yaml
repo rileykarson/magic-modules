@@ -19,8 +19,8 @@ description:
   It can optionally contain banned phrases to ensure the model responses are safe.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.generators'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.generators'
 id_format: '{{parent}}/generators/{{name}}'
 base_url: '{{parent}}/generators'
 update_verb: 'PATCH'

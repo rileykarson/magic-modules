@@ -7,9 +7,9 @@ description: |-
 # google_kms_crypto_key
 
 Provides access to a Google Cloud Platform KMS CryptoKey. For more information see
-[the official documentation](https://cloud.google.com/kms/docs/object-hierarchy#key)
+[the official documentation](https://docs.cloud.google.com/kms/docs/object-hierarchy#key)
 and
-[API](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys).
+[API](https://docs.cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyRings.cryptoKeys).
 
 A CryptoKey is an interface to key material which can be used to encrypt and decrypt data. A CryptoKey belongs to a
 Google Cloud KMS KeyRing.

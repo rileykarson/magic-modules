@@ -30,9 +30,9 @@ update their configurations. It also causes churn in tooling built on top of
 the providers, such as:
 
 * Terraform modules that use `google` or `google-beta` resources
-* Policy tools like [`gcloud terraform vet`](https://cloud.google.com/docs/terraform/policy-validation/quickstart)
+* Policy tools like [`gcloud terraform vet`](https://docs.cloud.google.com/docs/terraform/policy-validation/quickstart)
   * There may also be churn in customer policies
-* [Config Connector](https://cloud.google.com/config-connector/docs/overview)
+* [Config Connector](https://docs.cloud.google.com/config-connector/docs/overview)
 * [Pulumi GCP Classic](https://www.pulumi.com/registry/packages/gcp/)
 
 This page covers the general process to make a breaking change. It does not

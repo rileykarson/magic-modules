@@ -65,7 +65,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 	switch rt {
 	// Dynamic ranges
 	case "cloud-netblocks":
-		// https://cloud.google.com/compute/docs/faq#find_ip_range
+		// https://docs.cloud.google.com/compute/docs/faq#find_ip_range
 		CidrBlocks, err := getCidrBlocksFromUrl(CLOUD_NETBLOCK_URL)
 
 		if err != nil {
@@ -81,7 +81,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv6: %s", err)
 		}
 	case "google-netblocks":
-		// https://cloud.google.com/vpc/docs/configure-private-google-access?hl=en#ip-addr-defaults
+		// https://docs.cloud.google.com/vpc/docs/configure-private-google-access?hl=en#ip-addr-defaults
 		CidrBlocks, err := getCidrBlocksFromUrl(GOOGLE_NETBLOCK_URL)
 
 		if err != nil {
@@ -122,7 +122,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 		}
 	// Static ranges
 	case "restricted-googleapis":
-		// https://cloud.google.com/vpc/docs/private-access-options#domain-vips
+		// https://docs.cloud.google.com/vpc/docs/private-access-options#domain-vips
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "199.36.153.4/30")
 		CidrBlocks["cidr_blocks_ipv6"] = append(CidrBlocks["cidr_blocks_ipv6"], "2600:2d00:0002:1000::/64")
 		CidrBlocks["cidr_blocks"] = append(CidrBlocks["cidr_blocks_ipv4"], CidrBlocks["cidr_blocks_ipv6"]...)
@@ -137,7 +137,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv6: %s", err)
 		}
 	case "restricted-googleapis-with-directconnectivity":
-		// https://cloud.google.com/vpc/docs/configure-private-google-access#config-options
+		// https://docs.cloud.google.com/vpc/docs/configure-private-google-access#config-options
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "199.36.153.4/30", "34.126.0.0/18")
 		CidrBlocks["cidr_blocks_ipv6"] = append(CidrBlocks["cidr_blocks_ipv6"], "2600:2d00:0002:1000::/64", "2001:4860:8040::/42")
 		CidrBlocks["cidr_blocks"] = append(CidrBlocks["cidr_blocks_ipv4"], CidrBlocks["cidr_blocks_ipv6"]...)
@@ -152,7 +152,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv6: %s", err)
 		}
 	case "private-googleapis":
-		// https://cloud.google.com/vpc/docs/private-access-options#domain-vips
+		// https://docs.cloud.google.com/vpc/docs/private-access-options#domain-vips
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "199.36.153.8/30")
 		CidrBlocks["cidr_blocks_ipv6"] = append(CidrBlocks["cidr_blocks_ipv6"], "2600:2d00:0002:2000::/64")
 		CidrBlocks["cidr_blocks"] = append(CidrBlocks["cidr_blocks_ipv4"], CidrBlocks["cidr_blocks_ipv6"]...)
@@ -167,7 +167,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv6: %s", err)
 		}
 	case "private-googleapis-with-directconnectivity":
-		// https://cloud.google.com/vpc/docs/private-access-options#domain-vips
+		// https://docs.cloud.google.com/vpc/docs/private-access-options#domain-vips
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "199.36.153.8/30", "34.126.0.0/18")
 		CidrBlocks["cidr_blocks_ipv6"] = append(CidrBlocks["cidr_blocks_ipv6"], "2600:2d00:0002:2000::/64", "2001:4860:8040::/42")
 		CidrBlocks["cidr_blocks"] = append(CidrBlocks["cidr_blocks_ipv4"], CidrBlocks["cidr_blocks_ipv6"]...)
@@ -182,7 +182,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv6: %s", err)
 		}
 	case "dns-forwarders":
-		// https://cloud.google.com/dns/zones/#creating-forwarding-zones
+		// https://docs.cloud.google.com/dns/zones/#creating-forwarding-zones
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "35.199.192.0/19")
 		CidrBlocks["cidr_blocks"] = CidrBlocks["cidr_blocks_ipv4"]
 		if err := d.Set("cidr_blocks", CidrBlocks["cidr_blocks"]); err != nil {
@@ -192,7 +192,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv4: %s", err)
 		}
 	case "iap-forwarders":
-		// https://cloud.google.com/iap/docs/using-tcp-forwarding
+		// https://docs.cloud.google.com/iap/docs/using-tcp-forwarding
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "35.235.240.0/20")
 		CidrBlocks["cidr_blocks"] = CidrBlocks["cidr_blocks_ipv4"]
 		if err := d.Set("cidr_blocks", CidrBlocks["cidr_blocks"]); err != nil {
@@ -202,7 +202,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv4: %s", err)
 		}
 	case "health-checkers":
-		// https://cloud.google.com/load-balancing/docs/health-checks#fw-ruleh
+		// https://docs.cloud.google.com/load-balancing/docs/health-checks#fw-ruleh
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "35.191.0.0/16")
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "130.211.0.0/22")
 		CidrBlocks["cidr_blocks"] = CidrBlocks["cidr_blocks_ipv4"]
@@ -213,7 +213,7 @@ func dataSourceGoogleNetblockIpRangesRead(d *schema.ResourceData, meta interface
 			return fmt.Errorf("Error setting cidr_blocks_ipv4: %s", err)
 		}
 	case "legacy-health-checkers":
-		// https://cloud.google.com/load-balancing/docs/health-check#fw-netlbs
+		// https://docs.cloud.google.com/load-balancing/docs/health-check#fw-netlbs
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "35.191.0.0/16")
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "209.85.152.0/22")
 		CidrBlocks["cidr_blocks_ipv4"] = append(CidrBlocks["cidr_blocks_ipv4"], "209.85.204.0/22")

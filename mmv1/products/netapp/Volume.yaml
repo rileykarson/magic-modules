@@ -21,9 +21,9 @@ description: |
   Storage pool settings apply to the volumes contained within them automatically.
 references:
   guides:
-    'Quickstart': 'https://cloud.google.com/netapp/volumes/docs/get-started/quickstarts/create-volume'
-    'Documentation': 'https://cloud.google.com/netapp/volumes/docs/configure-and-use/volumes/overview'
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes'
+    'Quickstart': 'https://docs.cloud.google.com/netapp/volumes/docs/get-started/quickstarts/create-volume'
+    'Documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/volumes/overview'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.volumes'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/volumes/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/volumes'

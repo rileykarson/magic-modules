@@ -8,8 +8,8 @@ description: |-
 # google_storage_bucket_objects
 
 Gets existing objects inside an existing bucket in Google Cloud Storage service (GCS).
-See [the official documentation](https://cloud.google.com/storage/docs/key-terms#objects)
-and [API](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
+See [the official documentation](https://docs.cloud.google.com/storage/docs/key-terms#objects)
+and [API](https://docs.cloud.google.com/storage/docs/json_api/v1/objects/list).
 
 ## Example Usage
 
@@ -42,4 +42,4 @@ The following attributes are exported:
 * `media_link` - A url reference to download this object.
 * `name` - The name of the object.
 * `self_link` - A url reference to this object.
-* `storage_class` - The [StorageClass](https://cloud.google.com/storage/docs/storage-classes) of the bucket object.
+* `storage_class` - The [StorageClass](https://docs.cloud.google.com/storage/docs/storage-classes) of the bucket object.

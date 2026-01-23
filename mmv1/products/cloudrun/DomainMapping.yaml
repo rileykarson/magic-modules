@@ -18,8 +18,8 @@ description: |-
   Resource to hold the state and status of a user's domain mapping.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/run/docs/mapping-custom-domains'
-  api: 'https://cloud.google.com/run/docs/reference/rest/v1/projects.locations.domainmappings'
+    'Official Documentation': 'https://docs.cloud.google.com/run/docs/mapping-custom-domains'
+  api: 'https://docs.cloud.google.com/run/docs/reference/rest/v1/projects.locations.domainmappings'
 docs:
 id_format: 'locations/{{location}}/namespaces/{{project}}/domainmappings/{{name}}'
 base_url: 'apis/domains.cloudrun.com/v1/namespaces/{{project}}/domainmappings'

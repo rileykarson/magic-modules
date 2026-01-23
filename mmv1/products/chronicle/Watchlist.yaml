@@ -16,8 +16,8 @@ name: Watchlist
 description: A watchlist is a list of entities that allows for bulk operations over the included entities.
 references:
   guides:
-    'Google SecOps Guides': 'https://cloud.google.com/chronicle/docs/secops/secops-overview'
-  api: 'https://cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.watchlists'
+    'Google SecOps Guides': 'https://docs.cloud.google.com/chronicle/docs/secops/secops-overview'
+  api: 'https://docs.cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.watchlists'
 base_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/watchlists
 self_link: projects/{{project}}/locations/{{location}}/instances/{{instance}}/watchlists/{{watchlist_id}}
 create_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/watchlists?watchlistId={{watchlist_id}}

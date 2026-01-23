@@ -70,10 +70,10 @@ Each document configuration must have one or more `binding` blocks, which
 each accept the following arguments:
 
 * `role` (Required) - The role/permission that will be granted to the members.
-  See the [IAM Roles](https://cloud.google.com/compute/docs/access/iam) documentation for a complete list of roles.
+  See the [IAM Roles](https://docs.cloud.google.com/compute/docs/access/iam) documentation for a complete list of roles.
   Note that custom roles must be of the format `[projects|organizations]/{parent-name}/roles/{role-name}`.
 
-* `members` (Required) - An array of identities that will be granted the privilege in the `role`. For more details on format and restrictions see https://cloud.google.com/billing/reference/rest/v1/Policy#Binding
+* `members` (Required) - An array of identities that will be granted the privilege in the `role`. For more details on format and restrictions see https://docs.cloud.google.com/billing/reference/rest/v1/Policy#Binding
   Each entry can have one of the following values:
   * **allUsers**: A special identifier that represents anyone who is on the internet; with or without a Google account. Some resources **don't** support this identity.
   * **allAuthenticatedUsers**: A special identifier that represents anyone who is authenticated with a Google account or a service account. Some resources **don't** support this identity.
@@ -82,7 +82,7 @@ each accept the following arguments:
   * **group:{emailid}**: An email address that represents a Google group. For example, admins@example.com.
   * **domain:{domain}**: A G Suite domain (primary, instead of alias) name that represents all the users of that domain. For example, google.com or example.com.
 
-* `condition` - (Optional) An [IAM Condition](https://cloud.google.com/iam/docs/conditions-overview) for a given binding. Structure is [documented below](#nested_condition).
+* `condition` - (Optional) An [IAM Condition](https://docs.cloud.google.com/iam/docs/conditions-overview) for a given binding. Structure is [documented below](#nested_condition).
 
 <a name="nested_condition"></a>The `condition` block supports:
 

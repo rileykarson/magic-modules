@@ -44,8 +44,8 @@ Example:
 ```yaml
 references:
   guides:
-    'Create and connect to a database': 'https://cloud.google.com/alloydb/docs/quickstart/create-and-connect'
-  api: 'https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.backups'
+    'Create and connect to a database': 'https://docs.cloud.google.com/alloydb/docs/quickstart/create-and-connect'
+  api: 'https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.backups'
 ```
 
 ### `min_version: beta`

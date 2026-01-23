@@ -18,8 +18,8 @@ description: |
   These configurations include instance filter, package repository settings, and a schedule.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/os-patch-management'
-  api: 'https://cloud.google.com/compute/docs/osconfig/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/os-patch-management'
+  api: 'https://docs.cloud.google.com/compute/docs/osconfig/rest'
 docs:
 id_format: '{{name}}'
 base_url: 'projects/{{project}}/patchDeployments'

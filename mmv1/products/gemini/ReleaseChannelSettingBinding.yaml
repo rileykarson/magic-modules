@@ -19,7 +19,7 @@ api_variant_patterns:
 description: The resource for managing ReleaseChannel setting bindings for Admin Control.
 references:
   guides:
-    'Gemini Cloud Assist overview': 'https://cloud.google.com/gemini/docs/cloud-assist/overview'
+    'Gemini Cloud Assist overview': 'https://docs.cloud.google.com/gemini/docs/cloud-assist/overview'
 base_url: projects/{{project}}/locations/{{location}}/releaseChannelSettings/{{release_channel_setting_id}}/settingBindings
 self_link: projects/{{project}}/locations/{{location}}/releaseChannelSettings/{{release_channel_setting_id}}/settingBindings/{{setting_binding_id}}
 create_url: projects/{{project}}/locations/{{location}}/releaseChannelSettings/{{release_channel_setting_id}}/settingBindings?settingBindingId={{setting_binding_id}}

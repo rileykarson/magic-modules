@@ -6,7 +6,7 @@ description: |-
 
 # google_service_account_id_token
 
-This data source provides a Google OpenID Connect (`oidc`) `id_token`.  Tokens issued from this data source are typically used to call external services that accept OIDC tokens for authentication (e.g. [Google Cloud Run](https://cloud.google.com/run/docs/authenticating/service-to-service)).
+This data source provides a Google OpenID Connect (`oidc`) `id_token`.  Tokens issued from this data source are typically used to call external services that accept OIDC tokens for authentication (e.g. [Google Cloud Run](https://docs.cloud.google.com/run/docs/authenticating/service-to-service)).
 
 For more information see
 [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html#IDToken).
@@ -59,7 +59,7 @@ For more information see
 
 ## Example Usage - Invoking Cloud Run Endpoint
 
-  The following configuration will invoke [Cloud Run](https://cloud.google.com/run/docs/authenticating/service-to-service) endpoint where the service account for Terraform has been granted `roles/run.invoker` role previously.
+  The following configuration will invoke [Cloud Run](https://docs.cloud.google.com/run/docs/authenticating/service-to-service) endpoint where the service account for Terraform has been granted `roles/run.invoker` role previously.
 
 ```hcl
 

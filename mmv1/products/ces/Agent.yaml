@@ -274,7 +274,7 @@ properties:
    type: NestedObject
    description: |-
      The agent which will transfer execution to an existing remote
-     [Dialogflow](https://cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents)
+     [Dialogflow](https://docs.cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents)
      agent flow. The corresponding Dialogflow agent will process subsequent user
      queries until the session ends or flow ends and the control is transferred
      back to the parent CES agent.
@@ -283,7 +283,7 @@ properties:
       type: String
       description: |-
        The
-       [Dialogflow](https://cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents
+       [Dialogflow](https://docs.cloud.google.com/dialogflow/cx/docs/concept/console-conversational-agents
        agent resource name.
        Format: `projects/{project}/locations/{location}/agents/{agent}`
       required: true

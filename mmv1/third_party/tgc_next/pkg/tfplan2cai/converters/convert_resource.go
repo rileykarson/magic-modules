@@ -25,7 +25,7 @@ func ConvertResource(rdList []*models.FakeResourceDataWithMeta, cfg *transport_t
 		// Skip unsupported resources
 		converter, ok := ConverterMap[rd.Kind()]
 		if !ok {
-			errLogger.Debug(fmt.Sprintf("%s: resource type cannot be converted for CAI-based policies: %s. For details, see https://cloud.google.com/docs/terraform/policy-validation/create-cai-constraints#supported_resources", rd.Address(), rd.Kind()))
+			errLogger.Debug(fmt.Sprintf("%s: resource type cannot be converted for CAI-based policies: %s. For details, see https://docs.cloud.google.com/docs/terraform/policy-validation/create-cai-constraints#supported_resources", rd.Address(), rd.Kind()))
 			continue
 		} else {
 			convertedAssets, err := converter.Convert(rd, cfg)

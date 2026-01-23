@@ -9,12 +9,12 @@ description: |-
 Get the email address of a project's unique BigQuery service account.
 
 Each Google Cloud project has a unique service account used by BigQuery. When using
-BigQuery with [customer-managed encryption keys](https://cloud.google.com/bigquery/docs/customer-managed-encryption),
+BigQuery with [customer-managed encryption keys](https://docs.cloud.google.com/bigquery/docs/customer-managed-encryption),
 this account needs to be granted the
 `cloudkms.cryptoKeyEncrypterDecrypter` IAM role on the customer-managed Cloud KMS key used to protect the data.
 
 For more information see
-[the API reference](https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/getServiceAccount).
+[the API reference](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/projects/getServiceAccount).
 
 ## Example Usage
 

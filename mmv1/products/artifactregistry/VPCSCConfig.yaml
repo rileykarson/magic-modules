@@ -19,7 +19,7 @@ description: |-
 min_version: 'beta'
 references:
   guides:
-  api: 'https://cloud.google.com/artifact-registry/docs/reference/rest/v1/VPCSCConfig'
+  api: 'https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/VPCSCConfig'
 docs:
   note: |-
     VPC SC configs are automatically created for a given location. Creating a

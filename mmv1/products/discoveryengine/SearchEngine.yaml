@@ -18,8 +18,8 @@ description: |
   Vertex AI Search and Conversation can be used to create a search engine or a chat application by connecting it with a datastore
 references:
   guides:
-    'Create a Search Engine': 'https://cloud.google.com/generative-ai-app-builder/docs/create-engine-es'
-  api: 'https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.engines'
+    'Create a Search Engine': 'https://docs.cloud.google.com/generative-ai-app-builder/docs/create-engine-es'
+  api: 'https://docs.cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.engines'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/collections/{{collection_id}}/engines/{{engine_id}}'
 self_link: 'projects/{{project}}/locations/{{location}}/collections/{{collection_id}}/engines/{{engine_id}}'

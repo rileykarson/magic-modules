@@ -15,9 +15,9 @@ Please refer to RFC4273.
 
 To get more information about RouterBgpPeer, see:
 
-* [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/routers)
+* [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/routers)
 * How-to Guides
-    * [Google Cloud Router](https://cloud.google.com/router/docs/)
+    * [Google Cloud Router](https://docs.cloud.google.com/router/docs/)
 
 ## Example Usage - Router Peer Basic
 

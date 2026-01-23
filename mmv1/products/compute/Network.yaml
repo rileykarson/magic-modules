@@ -18,8 +18,8 @@ description: |
   Manages a VPC network or legacy network resource on GCP.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vpc/docs/vpc'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/networks'
+    'Official Documentation': 'https://docs.cloud.google.com/vpc/docs/vpc'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/networks'
 docs:
 base_url: 'projects/{{project}}/global/networks'
 has_self_link: true

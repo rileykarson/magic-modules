@@ -20,7 +20,7 @@ description: |
   agent to handle the types of conversations required for your system.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/docs/'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/docs/'
   api: 'https://docs.cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.agent'
 docs:
 # Only one agent per project, API does not have an agent ID
@@ -55,7 +55,7 @@ properties:
   - name: 'defaultLanguageCode'
     type: String
     description: |
-      The default language of the agent as a language tag. [See Language Support](https://cloud.google.com/dialogflow/docs/reference/language)
+      The default language of the agent as a language tag. [See Language Support](https://docs.cloud.google.com/dialogflow/docs/reference/language)
       for a list of the currently supported language codes. This field cannot be updated after creation.
     required: true
     immutable: true

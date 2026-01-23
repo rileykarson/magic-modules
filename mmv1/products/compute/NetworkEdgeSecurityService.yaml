@@ -19,8 +19,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/armor/docs/advanced-network-ddos'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/networkEdgeSecurityServices'
+    'Official Documentation': 'https://docs.cloud.google.com/armor/docs/advanced-network-ddos'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/networkEdgeSecurityServices'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/networkEdgeSecurityServices'
 self_link: 'projects/{{project}}/regions/{{region}}/networkEdgeSecurityServices/{{name}}'

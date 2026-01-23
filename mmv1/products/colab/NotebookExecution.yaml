@@ -20,8 +20,8 @@ description: |
 
 references:
   guides:
-    'Schedule a notebook run': 'https://cloud.google.com/colab/docs/schedule-notebook-run'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookExecutionJobs'
+    'Schedule a notebook run': 'https://docs.cloud.google.com/colab/docs/schedule-notebook-run'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.notebookExecutionJobs'
 base_url: 'projects/{{project}}/locations/{{location}}/notebookExecutionJobs'
 self_link: 'projects/{{project}}/locations/{{location}}/notebookExecutionJobs/{{notebook_execution_job_id}}'
 immutable: true
@@ -88,7 +88,7 @@ parameters:
     type: String
     required: true
     url_param_only: true
-    description: 'The location for the resource: https://cloud.google.com/colab/docs/locations'
+    description: 'The location for the resource: https://docs.cloud.google.com/colab/docs/locations'
   - name: 'notebookExecutionJobId'
     type: String
     url_param_only: true
@@ -131,7 +131,7 @@ properties:
         required: true
       - name: 'generation'
         type: String
-        description: 'The version of the Cloud Storage object to read. If unset, the current version of the object is read. See https://cloud.google.com/storage/docs/metadata#generation-number.'
+        description: 'The version of the Cloud Storage object to read. If unset, the current version of the object is read. See https://docs.cloud.google.com/storage/docs/metadata#generation-number.'
   - name: 'directNotebookSource'
     type: NestedObject
     description: 'The content of the input notebook in ipynb format.'

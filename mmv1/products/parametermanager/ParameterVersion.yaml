@@ -17,7 +17,7 @@ description: |
   A Parameter Version resource that stores the actual value of the parameter.
 references:
   guides:
-  api: 'https://cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters.versions'
+  api: 'https://docs.cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters.versions'
 docs:
 base_url: '{{parameter}}/versions'
 self_link: '{{parameter}}/versions/{{parameter_version_id}}'

@@ -22,7 +22,7 @@ func TestAccSdkProvider_request_reason(t *testing.T) {
 
 		// Usage
 		// We cannot test the impact of this field in an acc test, as it sets the X-Goog-Request-Reason value for audit logging purposes in GCP
-		// See: https://cloud.google.com/apis/docs/system-parameters#definitions
+		// See: https://docs.cloud.google.com/apis/docs/system-parameters#definitions
 	}
 
 	for name, tc := range testCases {

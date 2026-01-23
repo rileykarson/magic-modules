@@ -7,7 +7,7 @@ description: |-
 # google_dataproc_job
 
 Manages a job resource within a Dataproc cluster within GCE. For more information see
-[the official dataproc documentation](https://cloud.google.com/dataproc/).
+[the official dataproc documentation](https://docs.cloud.google.com/dataproc/).
 
 !> **Note:** This resource does not support 'update' and changing any attributes will cause the resource to be recreated.
 

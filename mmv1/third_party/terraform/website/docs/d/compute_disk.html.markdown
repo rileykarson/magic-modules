@@ -8,7 +8,7 @@ description: |-
 
 Get information about a Google Compute Persistent disks.
 
-[the official documentation](https://cloud.google.com/compute/docs/disks) and its [API](https://cloud.google.com/compute/docs/reference/latest/disks).
+[the official documentation](https://docs.cloud.google.com/compute/docs/disks) and its [API](https://docs.cloud.google.com/compute/docs/reference/latest/disks).
 
 ## Example Usage
 

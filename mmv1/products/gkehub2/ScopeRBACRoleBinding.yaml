@@ -18,8 +18,8 @@ description: |
   RBACRoleBinding represents a rbacrolebinding across the Fleet.
 references:
   guides:
-    'Registering a Cluster': 'https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
-  api: 'https://cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.scopes.rbacrolebindings'
+    'Registering a Cluster': 'https://docs.cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
+  api: 'https://docs.cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.scopes.rbacrolebindings'
 docs:
 id_format: 'projects/{{project}}/locations/global/scopes/{{scope_id}}/rbacrolebindings/{{scope_rbac_role_binding_id}}'
 base_url: 'projects/{{project}}/locations/global/scopes/{{scope_id}}/rbacrolebindings'

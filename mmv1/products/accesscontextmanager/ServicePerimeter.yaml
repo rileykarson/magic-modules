@@ -26,9 +26,9 @@ description: |
   project may belong to multiple Service Perimeter Bridges.
 references:
   guides:
-    'Service Perimeter Quickstart': 'https://cloud.google.com/vpc-service-controls/docs/quickstart'
-    'Guide to Ingress and Egress Rules': 'https://cloud.google.com/vpc-service-controls/docs/ingress-egress-rules'
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.servicePerimeters'
+    'Service Perimeter Quickstart': 'https://docs.cloud.google.com/vpc-service-controls/docs/quickstart'
+    'Guide to Ingress and Egress Rules': 'https://docs.cloud.google.com/vpc-service-controls/docs/ingress-egress-rules'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.servicePerimeters'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,
@@ -265,7 +265,7 @@ properties:
                     or third-party identity. For third-party identity, only single identities
                     are supported and other identity types are not supported.The v1 identities
                     that have the prefix user, group and serviceAccount in
-                    https://cloud.google.com/iam/docs/principal-identifiers#v1 are supported.
+                    https://docs.cloud.google.com/iam/docs/principal-identifiers#v1 are supported.
                   is_set: true
                   item_type:
                     type: String
@@ -425,7 +425,7 @@ properties:
                     or third-party identity. For third-party identity, only single identities
                     are supported and other identity types are not supported.The v1 identities
                     that have the prefix user, group and serviceAccount in
-                    https://cloud.google.com/iam/docs/principal-identifiers#v1 are supported.
+                    https://docs.cloud.google.com/iam/docs/principal-identifiers#v1 are supported.
                   is_set: true
                   item_type:
                     type: String

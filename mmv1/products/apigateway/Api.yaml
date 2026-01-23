@@ -18,8 +18,8 @@ description: |
 min_version: 'beta'
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/api-gateway/docs/quickstart'
-  api: 'https://cloud.google.com/api-gateway/docs/reference/rest/v1beta/projects.locations.apis'
+    'Official Documentation': 'https://docs.cloud.google.com/api-gateway/docs/quickstart'
+  api: 'https://docs.cloud.google.com/api-gateway/docs/reference/rest/v1beta/projects.locations.apis'
 docs:
 base_url: 'projects/{{project}}/locations/global/apis'
 self_link: 'projects/{{project}}/locations/global/apis/{{api_id}}'
@@ -89,7 +89,7 @@ properties:
   - name: 'managedService'
     type: String
     description: |
-      Immutable. The name of a Google Managed Service ( https://cloud.google.com/service-infrastructure/docs/glossary#managed).
+      Immutable. The name of a Google Managed Service ( https://docs.cloud.google.com/service-infrastructure/docs/glossary#managed).
       If not specified, a new Service will automatically be created in the same project as this API.
     min_version: 'beta'
     immutable: true

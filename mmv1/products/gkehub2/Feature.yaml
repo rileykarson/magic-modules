@@ -17,8 +17,8 @@ description: |
   Feature represents the settings and status of any Hub Feature.
 references:
   guides:
-    'Registering a Cluster': 'https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
-  api: 'https://cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.features'
+    'Registering a Cluster': 'https://docs.cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
+  api: 'https://docs.cloud.google.com/anthos/fleet-management/docs/reference/rest/v1/projects.locations.features'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/features/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/features'

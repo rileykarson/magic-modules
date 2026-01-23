@@ -17,8 +17,8 @@ description: |
   An attestor that attests to container image artifacts.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/binary-authorization/'
-  api: 'https://cloud.google.com/binary-authorization/docs/reference/rest/'
+    'Official Documentation': 'https://docs.cloud.google.com/binary-authorization/'
+  api: 'https://docs.cloud.google.com/binary-authorization/docs/reference/rest/'
 docs:
 base_url: 'projects/{{project}}/attestors?attestorId={{name}}'
 self_link: 'projects/{{project}}/attestors/{{name}}'

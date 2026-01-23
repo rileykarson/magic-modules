@@ -20,8 +20,8 @@ description: |
   A policy binding to an organization. This is a Terraform resource, and maps to a policy binding resource in GCP.
 references:
   guides:
-    'Apply a policy binding': 'https://cloud.google.com/iam/docs/principal-access-boundary-policies-create#create_binding'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v3/organizations.locations.policyBindings'
+    'Apply a policy binding': 'https://docs.cloud.google.com/iam/docs/principal-access-boundary-policies-create#create_binding'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v3/organizations.locations.policyBindings'
 id_format: 'organizations/{{organization}}/locations/{{location}}/policyBindings/{{policy_binding_id}}'
 base_url: 'organizations/{{organization}}/locations/{{location}}/policyBindings'
 self_link: 'organizations/{{organization}}/locations/{{location}}/policyBindings/{{policy_binding_id}}'

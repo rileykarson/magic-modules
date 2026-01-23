@@ -8,8 +8,8 @@ description: |-
 
 Get information about a Google Compute Engine Reservation Block. Reservation blocks are automatically created by Google Cloud within reservations and represent a physical grouping of resources.
 
-For more information see the [official documentation](https://cloud.google.com/compute/docs/instances/reserving-zonal-resources)
-and the [API](https://cloud.google.com/compute/docs/reference/rest/v1/reservationBlocks).
+For more information see the [official documentation](https://docs.cloud.google.com/compute/docs/instances/reserving-zonal-resources)
+and the [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/reservationBlocks).
 
 ## Example Usage
 

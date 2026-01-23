@@ -6,11 +6,11 @@ description: |-
 ~> **Warning:** 
 `google_tpu_tensorflow_versions` is deprecated and will be removed in a future major release.
   Use `google_tpu_v2_runtime_versions` instead. For moving from TPU Node to TPU VM architecture, see
-  https://cloud.google.com/tpu/docs/system-architecture-tpu-vm#from-tpu-node-to-tpu-vm.
+  https://docs.cloud.google.com/tpu/docs/system-architecture-tpu-vm#from-tpu-node-to-tpu-vm.
 
 # google_tpu_tensorflow_versions
 
-Get TensorFlow versions available for a project. For more information see the [official documentation](https://cloud.google.com/tpu/docs/) and [API](https://cloud.google.com/tpu/docs/reference/rest/v1/projects.locations.tensorflowVersions).
+Get TensorFlow versions available for a project. For more information see the [official documentation](https://docs.cloud.google.com/tpu/docs/) and [API](https://docs.cloud.google.com/tpu/docs/reference/rest/v1/projects.locations.tensorflowVersions).
 
 ## Example Usage
 

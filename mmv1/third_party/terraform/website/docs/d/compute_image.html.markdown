@@ -6,8 +6,8 @@ description: |-
 
 # google_compute_image
 
-Get information about a Google Compute Image. Check that your service account has the `compute.imageUser` role if you want to share [custom images](https://cloud.google.com/compute/docs/images/sharing-images-across-projects) from another project. If you want to use [public images][pubimg], do not forget to specify the dedicated project. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/images) and its [API](https://cloud.google.com/compute/docs/reference/latest/images).
+Get information about a Google Compute Image. Check that your service account has the `compute.imageUser` role if you want to share [custom images](https://docs.cloud.google.com/compute/docs/images/sharing-images-across-projects) from another project. If you want to use [public images][pubimg], do not forget to specify the dedicated project. For more information see
+[the official documentation](https://docs.cloud.google.com/compute/docs/images) and its [API](https://docs.cloud.google.com/compute/docs/reference/latest/images).
 
 ## Example Usage
 
@@ -37,7 +37,7 @@ Exactly one of `name`, `family` or `filter` must be specified. If `name` is spec
 the corresponding image. If `family` is specified, it will return the latest image
 that is part of an image family and is not deprecated. If you specify `filter`, your 
 filter must return exactly one image unless you use `most_recent`. 
-Filter syntax can be found [here](https://cloud.google.com/compute/docs/reference/rest/v1/images/list) in the filter section.
+Filter syntax can be found [here](https://docs.cloud.google.com/compute/docs/reference/rest/v1/images/list) in the filter section.
 
 - - -
 
@@ -61,12 +61,12 @@ exported:
 * `archive_size_bytes` - The size of the image tar.gz archive stored in Google Cloud Storage in bytes.
 * `image_id` - The unique identifier for the image.
 * `image_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
-    encoded SHA-256 hash of the [customer-supplied encryption key](https://cloud.google.com/compute/docs/disks/customer-supplied-encryption)
+    encoded SHA-256 hash of the [customer-supplied encryption key](https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption)
     that protects this image.
 * `source_image_id` - The ID value of the image used to create this image.
 * `source_disk` - The URL of the source disk used to create this image.
 * `source_disk_encryption_key_sha256` - The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
-    encoded SHA-256 hash of the [customer-supplied encryption key](https://cloud.google.com/compute/docs/disks/customer-supplied-encryption)
+    encoded SHA-256 hash of the [customer-supplied encryption key](https://docs.cloud.google.com/compute/docs/disks/customer-supplied-encryption)
     that protects this image.
 * `source_disk_id` - The ID value of the disk used to create this image.
 * `creation_timestamp` - The creation timestamp in RFC3339 text format.
@@ -76,4 +76,4 @@ exported:
 * `licenses` - A list of applicable license URI.
 * `status` - The status of the image. Possible values are **FAILED**, **PENDING**, or **READY**.
 
-[pubimg]: https://cloud.google.com/compute/docs/images#os-compute-support "Google Cloud Public Base Images"
+[pubimg]: https://docs.cloud.google.com/compute/docs/images#os-compute-support "Google Cloud Public Base Images"

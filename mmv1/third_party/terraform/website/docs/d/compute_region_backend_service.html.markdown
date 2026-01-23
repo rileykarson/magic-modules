@@ -7,8 +7,8 @@ description: |-
 # google_compute_region_backend_service
 
 Get information about a Regional Backend Service. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/load-balancing/internal/backend-service) and
-[API](https://cloud.google.com/compute/docs/reference/rest/beta/regionBackendServices).
+[the official documentation](https://docs.cloud.google.com/compute/docs/load-balancing/internal/backend-service) and
+[API](https://docs.cloud.google.com/compute/docs/reference/rest/beta/regionBackendServices).
 
 ## Example Usage
 

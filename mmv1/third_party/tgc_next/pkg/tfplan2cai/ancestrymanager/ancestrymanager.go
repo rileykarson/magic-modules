@@ -277,7 +277,7 @@ func (m *manager) getAncestorsWithCache(key string) ([]string, error) {
 
 func handleCRMError(resource string, err error) error {
 	if isGoogleApiErrorWithCode(err, 403) {
-		helperURL := "https://cloud.google.com/docs/terraform/policy-validation/troubleshooting#ProjectCallerForbidden"
+		helperURL := "https://docs.cloud.google.com/docs/terraform/policy-validation/troubleshooting#ProjectCallerForbidden"
 		return fmt.Errorf("user does not have the correct permissions for %s. For more info: %s", resource, helperURL)
 	}
 	return err

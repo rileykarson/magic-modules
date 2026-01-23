@@ -17,8 +17,8 @@ description: |
   An Integration connectors Managed Zone.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/integration-connectors/docs'
-  api: 'https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.global.managedZones'
+    'Official Documentation': 'https://docs.cloud.google.com/integration-connectors/docs'
+  api: 'https://docs.cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.global.managedZones'
 docs:
 base_url: 'projects/{{project}}/locations/global/managedZones'
 self_link: 'projects/{{project}}/locations/global/managedZones/{{name}}'

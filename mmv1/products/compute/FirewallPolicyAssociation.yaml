@@ -18,10 +18,10 @@ api_resource_field: 'associations'
 kind: 'compute#firewallPolicyAssociation'
 description: |
   Allows associating hierarchical firewall policies with the target where they are applied. This allows creating policies and rules in a different location than they are applied.
-  For more information on applying hierarchical firewall policies see the [official documentation](https://cloud.google.com/firewall/docs/firewall-policies#managing_hierarchical_firewall_policy_resources)
+  For more information on applying hierarchical firewall policies see the [official documentation](https://docs.cloud.google.com/firewall/docs/firewall-policies#managing_hierarchical_firewall_policy_resources)
 references:
   guides:
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/firewallPolicies/addAssociation'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/firewallPolicies/addAssociation'
 docs:
 id_format: 'locations/global/firewallPolicies/{{firewall_policy}}/associations/{{name}}'
 base_url: 'locations/global/firewallPolicies/{{firewall_policy}}'

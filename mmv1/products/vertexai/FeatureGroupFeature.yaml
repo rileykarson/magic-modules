@@ -19,8 +19,8 @@ api_variant_patterns:
 description: Vertex AI Feature Group Feature is feature metadata information.
 references:
   guides:
-    'Creating a Feature': 'https://cloud.google.com/vertex-ai/docs/featurestore/latest/create-feature'
-  api: 'https://cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureGroups.features'
+    'Creating a Feature': 'https://docs.cloud.google.com/vertex-ai/docs/featurestore/latest/create-feature'
+  api: 'https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1beta1/projects.locations.featureGroups.features'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/featureGroups/{{feature_group}}/features'
 self_link: 'projects/{{project}}/locations/{{region}}/featureGroups/{{feature_group}}/features/{{name}}'

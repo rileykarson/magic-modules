@@ -16,8 +16,8 @@ name: ServiceInstance
 description: A service instance is an instance of the Dataproc operator running on a GDC cluster.
 references:
   guides:
-    'Dataproc Intro': 'https://cloud.google.com/dataproc/'
-  api: 'https://cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.serviceInstances'
+    'Dataproc Intro': 'https://docs.cloud.google.com/dataproc/'
+  api: 'https://docs.cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.serviceInstances'
 base_url: projects/{{project}}/locations/{{location}}/serviceInstances
 create_url: projects/{{project}}/locations/{{location}}/serviceInstances?serviceInstanceId={{service_instance_id}}
 self_link: projects/{{project}}/locations/{{location}}/serviceInstances/{{service_instance_id}}

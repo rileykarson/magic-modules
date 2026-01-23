@@ -7,8 +7,8 @@ description: |-
 # google_pubsub_topic
 
 Get information about a Google Cloud Pub/Sub Topic. For more information see
-the [official documentation](https://cloud.google.com/pubsub/docs/)
-and [API](https://cloud.google.com/pubsub/docs/apis).
+the [official documentation](https://docs.cloud.google.com/pubsub/docs/)
+and [API](https://docs.cloud.google.com/pubsub/docs/apis).
 
 ## Example Usage
 

@@ -44,7 +44,7 @@ func ResourceDataprocJob() *schema.Resource {
 				Description: `The project in which the cluster can be found and jobs subsequently run against. If it is not provided, the provider project is used.`,
 			},
 
-			// Ref: https://cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.jobs#JobReference
+			// Ref: https://docs.cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.jobs#JobReference
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,

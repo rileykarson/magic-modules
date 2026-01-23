@@ -20,8 +20,8 @@ description: |
   resource, then that resource is a member of that group.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/monitoring/groups/'
-  api: 'https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.groups'
+    'Official Documentation': 'https://docs.cloud.google.com/monitoring/groups/'
+  api: 'https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.groups'
 docs:
 id_format: '{{name}}'
 base_url: 'v3/projects/{{project}}/groups'

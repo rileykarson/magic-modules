@@ -6,7 +6,7 @@ description: |-
 
 # google_parameter_manager_regional_parameter_version
 
-Get the value and metadata from a Parameter Manager Regional Parameter version. For more information see the [official documentation](https://cloud.google.com/secret-manager/parameter-manager/docs/overview) and [API](https://cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters.versions).
+Get the value and metadata from a Parameter Manager Regional Parameter version. For more information see the [official documentation](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/overview) and [API](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/reference/rest/v1/projects.locations.parameters.versions).
 
 ## Example Usage
 

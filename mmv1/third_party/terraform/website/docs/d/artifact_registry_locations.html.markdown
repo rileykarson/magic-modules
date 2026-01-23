@@ -10,9 +10,9 @@ Get Artifact Registry locations available for a project.
 
 To get more information about Artifact Registry, see:
 
-* [API documentation](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations/list)
+* [API documentation](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations/list)
 * How-to Guides
-    * [Official Documentation](https://cloud.google.com/artifact-registry/docs/overview)
+    * [Official Documentation](https://docs.cloud.google.com/artifact-registry/docs/overview)
     
 ## Example Usage
 

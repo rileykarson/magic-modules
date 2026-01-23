@@ -41,7 +41,7 @@ type TgcMetadataPayload struct {
 }
 
 // PROJECT_NUMBER instead of PROJECT_ID is in the CAI asset names for the resources in those services
-// https://cloud.google.com/asset-inventory/docs/asset-names
+// https://docs.cloud.google.com/asset-inventory/docs/asset-names
 var serviceWithProjectNumber = map[string]struct{}{
 	"apikeys":               {}, // DCL
 	"binaryauthorization":   {},
@@ -86,7 +86,7 @@ func CollectAllTgcMetadata(tgcPayload TgcMetadataPayload) resource.TestCheckFunc
 
 		// Process each resource to get CAI asset names and resolve auto IDs
 		for address, metadata := range tgcPayload.ResourceMetadata {
-			// https://cloud.google.com/asset-inventory/docs/reference/rest/v1/feeds#ContentType
+			// https://docs.cloud.google.com/asset-inventory/docs/reference/rest/v1/feeds#ContentType
 			isIamResource := IsIamResource(metadata.ResourceType)
 			if isIamResource {
 				metadata.CaiContentType = "IAM_POLICY"

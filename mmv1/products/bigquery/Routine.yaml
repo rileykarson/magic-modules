@@ -18,8 +18,8 @@ description: |
   A user-defined function or a stored procedure that belongs to a Dataset
 references:
   guides:
-    'Routines Intro': 'https://cloud.google.com/bigquery/docs/reference/rest/v2/routines'
-  api: 'https://cloud.google.com/bigquery/docs/reference/rest/v2/routines'
+    'Routines Intro': 'https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/routines'
+  api: 'https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/routines'
 docs:
 base_url: 'projects/{{project}}/datasets/{{dataset_id}}/routines'
 self_link: 'projects/{{project}}/datasets/{{dataset_id}}/routines/{{routine_id}}'
@@ -236,7 +236,7 @@ properties:
       - 'NOT_DETERMINISTIC'
   - name: 'dataGovernanceType'
     type: Enum
-    description: If set to DATA_MASKING, the function is validated and made available as a masking function. For more information, see https://cloud.google.com/bigquery/docs/user-defined-functions#custom-mask
+    description: If set to DATA_MASKING, the function is validated and made available as a masking function. For more information, see https://docs.cloud.google.com/bigquery/docs/user-defined-functions#custom-mask
     enum_values:
       - 'DATA_MASKING'
   - name: 'securityMode'
@@ -355,7 +355,7 @@ properties:
           A list of Python package names along with versions to be installed.
           Example: ["pandas>=2.1", "google-cloud-translate==3.11"]. For more
           information, see [Use third-party
-          packages](https://cloud.google.com/bigquery/docs/user-defined-functions-python#third-party-packages).
+          packages](https://docs.cloud.google.com/bigquery/docs/user-defined-functions-python#third-party-packages).
         item_type:
           type: String
   - name: 'externalRuntimeOptions'
@@ -372,13 +372,13 @@ properties:
           {number}{unit} where unit is one of "M", "G", "Mi" and "Gi" (e.g. 1G,
           512Mi). If not specified, the default value is 512Mi. For more information,
           see [Configure container limits for Python
-          UDFs](https://cloud.google.com/bigquery/docs/user-defined-functions-python#configure-container-limits)
+          UDFs](https://docs.cloud.google.com/bigquery/docs/user-defined-functions-python#configure-container-limits)
       - name: 'containerCpu'
         type: Double
         description: |
           Amount of CPU provisioned for a Python UDF container instance. For more
           information, see [Configure container limits for Python
-          UDFs](https://cloud.google.com/bigquery/docs/user-defined-functions-python#configure-container-limits)
+          UDFs](https://docs.cloud.google.com/bigquery/docs/user-defined-functions-python#configure-container-limits)
       - name: 'runtimeConnection'
         type: String
         description: |

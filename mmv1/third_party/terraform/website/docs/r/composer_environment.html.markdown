@@ -12,17 +12,17 @@ Environments run Apache Airflow software on Google infrastructure.
 
 To get more information about Environments, see:
 
-* [Cloud Composer documentation](https://cloud.google.com/composer/docs)
-* [Cloud Composer API documentation](https://cloud.google.com/composer/docs/reference/rest/v1beta1/projects.locations.environments)
+* [Cloud Composer documentation](https://docs.cloud.google.com/composer/docs)
+* [Cloud Composer API documentation](https://docs.cloud.google.com/composer/docs/reference/rest/v1beta1/projects.locations.environments)
 * How-to Guides (Cloud Composer 2)
-  * [Creating environments](https://cloud.google.com/composer/docs/composer-2/create-environments)
-  * [Scaling environments](https://cloud.google.com/composer/docs/composer-2/scale-environments)
-  * [Configuring Shared VPC for Composer Environments](https://cloud.google.com/composer/docs/composer-2/configure-shared-vpc)
+  * [Creating environments](https://docs.cloud.google.com/composer/docs/composer-2/create-environments)
+  * [Scaling environments](https://docs.cloud.google.com/composer/docs/composer-2/scale-environments)
+  * [Configuring Shared VPC for Composer Environments](https://docs.cloud.google.com/composer/docs/composer-2/configure-shared-vpc)
 * How-to Guides (Cloud Composer 3)
-  * [Creating environments](https://cloud.google.com/composer/docs/composer-3/create-environments)
-  * [Scaling environments](https://cloud.google.com/composer/docs/composer-3/scale-environments)
-  * [Change environment networking type (Private or Public IP)](https://cloud.google.com/composer/docs/composer-3/change-networking-type)
-  * [Connect an environment to a VPC network](https://cloud.google.com/composer/docs/composer-3/connect-vpc-network)
+  * [Creating environments](https://docs.cloud.google.com/composer/docs/composer-3/create-environments)
+  * [Scaling environments](https://docs.cloud.google.com/composer/docs/composer-3/scale-environments)
+  * [Change environment networking type (Private or Public IP)](https://docs.cloud.google.com/composer/docs/composer-3/change-networking-type)
+  * [Connect an environment to a VPC network](https://docs.cloud.google.com/composer/docs/composer-3/connect-vpc-network)
 * [Apache Airflow Documentation](http://airflow.apache.org/)
 
 -> **Note**
@@ -44,7 +44,7 @@ with Terraform:
     errors, please verify your configuration is valid against GCP Cloud Composer before filing bugs for the Terraform provider.
 * **Environments have Google Cloud Storage buckets that are not automatically 
     deleted** with the environment.
-    See [Delete environments](https://cloud.google.com/composer/docs/composer-2/delete-environments)
+    See [Delete environments](https://docs.cloud.google.com/composer/docs/composer-2/delete-environments)
     for more information.
 * Please refer to
     [Troubleshooting pages](https://cloud.devsite.corp.google.com/composer/docs/composer-2/troubleshooting-environment-creation) if you encounter
@@ -97,7 +97,7 @@ resource "google_composer_environment" "test" {
   To use custom service accounts, you must give at least the
   `role/composer.worker` role to the service account of the Cloud Composer 
   environment. For more information, see the
-  [Access Control](https://cloud.google.com/composer/docs/how-to/access-control)
+  [Access Control](https://docs.cloud.google.com/composer/docs/how-to/access-control)
   page in the Cloud Composer documentation.
   You might need to assign additional roles depending on specific workflows 
   that the Airflow DAGs will be running.
@@ -584,7 +584,7 @@ The following arguments are supported:
   Deploys 'ip-masq-agent' daemon set in the GKE cluster and defines
   nonMasqueradeCIDRs equals to pod IP range so IP masquerading is used for
   all destination addresses, except between pods traffic.
-  See the [documentation](https://cloud.google.com/composer/docs/enable-ip-masquerade-agent).
+  See the [documentation](https://docs.cloud.google.com/composer/docs/enable-ip-masquerade-agent).
 
 <a name="nested_software_config_c1"></a>The `software_config` block supports:
 
@@ -596,7 +596,7 @@ The following arguments are supported:
   The property name must not be empty and cannot contain "=" or ";". Section and property names cannot contain
   characters: "." Apache Airflow configuration property names must be written in snake_case. Property values can
   contain any character, and can be written in any lower/upper case format. Certain Apache Airflow configuration
-  property values are [blacklisted](https://cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
+  property values are [blacklisted](https://docs.cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
   and cannot be overridden.
 
 * `pypi_packages` -
@@ -665,7 +665,7 @@ The following arguments are supported:
   The Apache Airflow portion of the image version is a full semantic version that points to one of the
   supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified.
   For more information about Cloud Composer images, see
-  [Cloud Composer version list](https://cloud.google.com/composer/docs/concepts/versioning/composer-versions).
+  [Cloud Composer version list](https://docs.cloud.google.com/composer/docs/concepts/versioning/composer-versions).
 
 * `python_version` -
   (Optional, Cloud Composer 1 only)
@@ -677,7 +677,7 @@ The following arguments are supported:
   The number of schedulers for Airflow.
 
 
-See [documentation](https://cloud.google.com/composer/docs/how-to/managing/configuring-private-ip) for setting up private environments. <a name="nested_private_environment_config_c1"></a>The `private_environment_config` block supports:
+See [documentation](https://docs.cloud.google.com/composer/docs/how-to/managing/configuring-private-ip) for setting up private environments. <a name="nested_private_environment_config_c1"></a>The `private_environment_config` block supports:
 
 * `enable_private_endpoint` -
   If true, access to the public endpoint of the GKE cluster is denied.
@@ -690,7 +690,7 @@ See [documentation](https://cloud.google.com/composer/docs/how-to/managing/confi
   for assigning internal IP addresses to the cluster master or set of masters and to the
   internal load balancer virtual IP. This range must not overlap with any other ranges
   in use within the cluster's network.
-  If left blank, the default value of is used. See [documentation](https://cloud.google.com/composer/docs/how-to/managing/configuring-private-ip#defaults) for default values per region.
+  If left blank, the default value of is used. See [documentation](https://docs.cloud.google.com/composer/docs/how-to/managing/configuring-private-ip#defaults) for default values per region.
 
 * `cloud_sql_ipv4_cidr_block` -
   (Optional)
@@ -1004,7 +1004,7 @@ The following arguments are supported:
   IP Masq Agent translates Pod IP addresses to node IP addresses, so that 
   destinations and services targeted from Airflow DAGs and tasks only receive 
   packets from node IP addresses instead of Pod IP addresses
-  See the [documentation](https://cloud.google.com/composer/docs/enable-ip-masquerade-agent).
+  See the [documentation](https://docs.cloud.google.com/composer/docs/enable-ip-masquerade-agent).
 
 <a name="nested_software_config_c2"></a>The `software_config` block supports:
 
@@ -1016,7 +1016,7 @@ The following arguments are supported:
   The property name must not be empty and cannot contain "=" or ";". Section and property names cannot contain
   characters: "." Apache Airflow configuration property names must be written in snake_case. Property values can
   contain any character, and can be written in any lower/upper case format. Certain Apache Airflow configuration
-  property values are [blacklisted](https://cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
+  property values are [blacklisted](https://docs.cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
   and cannot be overridden.
 
 * `pypi_packages` -
@@ -1074,7 +1074,7 @@ The following arguments are supported:
   (Required)
   Whether or not Cloud Data Lineage integration is enabled.
 
-<a name="nested_private_environment_config_c2"></a>See [documentation](https://cloud.google.com/composer/docs/how-to/managing/configuring-private-ip) for setting up private environments. The `private_environment_config` block supports:
+<a name="nested_private_environment_config_c2"></a>See [documentation](https://docs.cloud.google.com/composer/docs/how-to/managing/configuring-private-ip) for setting up private environments. The `private_environment_config` block supports:
 
 * `connection_type` -
   (Optional, Cloud Composer 2 only)
@@ -1090,7 +1090,7 @@ The following arguments are supported:
   for assigning internal IP addresses to the cluster master or set of masters and to the
   internal load balancer virtual IP. This range must not overlap with any other ranges
   in use within the cluster's network.
-  If left blank, the default value of is used. See [documentation](https://cloud.google.com/composer/docs/how-to/managing/configuring-private-ip#defaults) for default values per region.
+  If left blank, the default value of is used. See [documentation](https://docs.cloud.google.com/composer/docs/how-to/managing/configuring-private-ip#defaults) for default values per region.
 
 * `cloud_sql_ipv4_cidr_block` -
   (Optional)
@@ -1446,7 +1446,7 @@ The following arguments are supported:
   The property name must not be empty and cannot contain "=" or ";". Section and property names cannot contain
   characters: "." Apache Airflow configuration property names must be written in snake_case. Property values can
   contain any character, and can be written in any lower/upper case format. Certain Apache Airflow configuration
-  property values are [blacklisted](https://cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
+  property values are [blacklisted](https://docs.cloud.google.com/composer/docs/concepts/airflow-configurations#airflow_configuration_blacklists),
   and cannot be overridden.
 
 * `pypi_packages` -

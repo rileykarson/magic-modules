@@ -14,7 +14,7 @@ import (
 
 // Merged IamBinding, IamMember, and IamPolicy tests into a single test
 // to avoid storage pool's limit: create a maximum of 5 storage pools per hour
-// https://cloud.google.com/compute/docs/disks/storage-pools#sp_limitations
+// https://docs.cloud.google.com/compute/docs/disks/storage-pools#sp_limitations
 
 func TestAccComputeStoragePoolIam(t *testing.T) {
 	t.Parallel()

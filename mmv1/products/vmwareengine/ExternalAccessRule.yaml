@@ -17,7 +17,7 @@ description: |
   External access firewall rules for filtering incoming traffic destined to `ExternalAddress` resources.
 references:
   guides:
-  api: 'https://cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies.externalAccessRules'
+  api: 'https://docs.cloud.google.com/vmware-engine/docs/reference/rest/v1/projects.locations.networkPolicies.externalAccessRules'
 docs:
 id_format: '{{parent}}/externalAccessRules/{{name}}'
 base_url: '{{parent}}/externalAccessRules'
@@ -72,7 +72,7 @@ parameters:
     type: String
     description: |
       The resource name of the network policy.
-      Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names.
+      Resource names are schemeless URIs that follow the conventions in https://docs.cloud.google.com/apis/design/resource_names.
       For example: projects/my-project/locations/us-west1-a/networkPolicies/my-policy
 
     url_param_only: true

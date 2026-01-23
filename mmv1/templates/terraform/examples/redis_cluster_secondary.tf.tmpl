@@ -8,7 +8,7 @@ resource "google_redis_cluster" "primary_cluster" {
 
   // Settings that should match on primary and secondary clusters. 
   // If you define a setting here, ensure that the secondary clusters also define it with the same values. 
-  // Please see https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#settings_copied_from_the_primary_during_instance_creation for the complete list of such settings.
+  // Please see https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#settings_copied_from_the_primary_during_instance_creation for the complete list of such settings.
   authorization_mode = "AUTH_MODE_DISABLED"
   transit_encryption_mode = "TRANSIT_ENCRYPTION_MODE_DISABLED"
   shard_count   = 3
@@ -25,7 +25,7 @@ resource "google_redis_cluster" "primary_cluster" {
   }
 
   // Settings that can have different values on primary and secondary clusters.
-  // Please see https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#override_allowed_during_instance_creation for the complete list of such settings.
+  // Please see https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#override_allowed_during_instance_creation for the complete list of such settings.
   zone_distribution_config {
     mode = "MULTI_ZONE"
   }
@@ -59,7 +59,7 @@ resource "google_redis_cluster" "{{$.PrimaryResourceId}}" {
 
   // Settings that should match on primary and secondary clusters. 
   // If you defined a setting here for primary, ensure the secondary clusters also define it with the same values. 
-  // Please see https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#settings_copied_from_the_primary_during_instance_creation for the complete list of such settings.
+  // Please see https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#settings_copied_from_the_primary_during_instance_creation for the complete list of such settings.
   authorization_mode = "AUTH_MODE_DISABLED"
   transit_encryption_mode = "TRANSIT_ENCRYPTION_MODE_DISABLED"
   shard_count   = 3
@@ -76,7 +76,7 @@ resource "google_redis_cluster" "{{$.PrimaryResourceId}}" {
   }
 
   // Settings that can be different on primary and secondary clusters.
-  // Please see https://cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#override_allowed_during_instance_creation for the complete list of such settings.
+  // Please see https://docs.cloud.google.com/memorystore/docs/cluster/about-cross-region-replication#override_allowed_during_instance_creation for the complete list of such settings.
   zone_distribution_config {
     mode = "MULTI_ZONE"
   }

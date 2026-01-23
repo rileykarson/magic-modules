@@ -17,8 +17,8 @@ description: |
   You can use the built-in test feature to uncover bugs and prevent regressions. A test execution verifies that agent responses have not changed for end-user inputs defined in the test case.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.testCases'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.testCases'
 docs:
 id_format: '{{parent}}/testCases/{{name}}'
 base_url: '{{parent}}/testCases'
@@ -124,11 +124,11 @@ properties:
               description: |
                 User input. Supports text input, event input, dtmf input in the test case.
               properties:
-                # Does not support intent or audio as of this writing. https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/ConversationTurn#userinput
+                # Does not support intent or audio as of this writing. https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/ConversationTurn#userinput
                 - name: 'languageCode'
                   type: String
                   description: |
-                    The language of the input. See [Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
+                    The language of the input. See [Language Support](https://docs.cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
                     Note that queries in the same session do not necessarily need to specify the same language.
                 - name: 'text'
                   type: NestedObject
@@ -201,7 +201,7 @@ properties:
             - name: 'triggeredIntent'
               type: NestedObject
               description: |
-                The [Intent](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents#Intent) that triggered the response.
+                The [Intent](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents#Intent) that triggered the response.
               properties:
                 - name: 'name'
                   type: String
@@ -217,7 +217,7 @@ properties:
             - name: 'currentPage'
               type: NestedObject
               description: |
-                The [Page](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#Page) on which the utterance was spoken.
+                The [Page](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#Page) on which the utterance was spoken.
               properties:
                 - name: 'name'
                   type: String
@@ -281,7 +281,7 @@ properties:
                     - name: 'languageCode'
                       type: String
                       description: |
-                        The language of the input. See [Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
+                        The language of the input. See [Language Support](https://docs.cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
                         Note that queries in the same session do not necessarily need to specify the same language.
                     - name: 'text'
                       type: NestedObject
@@ -380,7 +380,7 @@ properties:
                 - name: 'triggeredIntent'
                   type: NestedObject
                   description: |
-                    The [Intent](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents#Intent) that triggered the response.
+                    The [Intent](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.intents#Intent) that triggered the response.
                   properties:
                     - name: 'name'
                       type: String
@@ -394,7 +394,7 @@ properties:
                 - name: 'currentPage'
                   type: NestedObject
                   description: |
-                    The [Page](https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#Page) on which the utterance was spoken.
+                    The [Page](https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.flows.pages#Page) on which the utterance was spoken.
                   properties:
                     - name: 'name'
                       type: String

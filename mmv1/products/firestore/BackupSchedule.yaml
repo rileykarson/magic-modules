@@ -19,8 +19,8 @@ description: |
   The actual backups are not though.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/firestore/docs/backups'
-  api: 'https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.backupSchedules'
+    'Official Documentation': 'https://docs.cloud.google.com/firestore/docs/backups'
+  api: 'https://docs.cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.backupSchedules'
 docs:
   warning: |
     This resource creates a Firestore Backup Schedule on a project that already has

@@ -21,8 +21,8 @@ description: |
   You can create a custom module at the organization level only.
 references:
   guides:
-    'Overview of custom modules for Event Threat Detection': 'https://cloud.google.com/security-command-center/docs/custom-modules-etd-overview'
-  api: 'https://cloud.google.com/security-command-center/docs/reference/rest/v1/organizations.eventThreatDetectionSettings.customModules'
+    'Overview of custom modules for Event Threat Detection': 'https://docs.cloud.google.com/security-command-center/docs/custom-modules-etd-overview'
+  api: 'https://docs.cloud.google.com/security-command-center/docs/reference/rest/v1/organizations.eventThreatDetectionSettings.customModules'
 docs:
 base_url: 'organizations/{{organization}}/eventThreatDetectionSettings/customModules'
 self_link: 'organizations/{{organization}}/eventThreatDetectionSettings/customModules/{{name}}'

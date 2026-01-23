@@ -21,12 +21,12 @@ api_resource_type_kind: Version
 description: |
   Standard App Version resource to create a new version of standard GAE Application.
   Learn about the differences between the standard environment and the flexible environment
-  at https://cloud.google.com/appengine/docs/the-appengine-environments.
+  at https://docs.cloud.google.com/appengine/docs/the-appengine-environments.
   Currently supporting Zip and File Containers.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/appengine/docs/standard'
-  api: 'https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions'
+    'Official Documentation': 'https://docs.cloud.google.com/appengine/docs/standard'
+  api: 'https://docs.cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions'
 docs:
 id_format: 'apps/{{project}}/services/{{service}}/versions/{{version_id}}'
 base_url: 'apps/{{project}}/services/{{service}}/versions'
@@ -128,7 +128,7 @@ properties:
     type: String
     description: |
       The version of the API in the given runtime environment.
-      Please see the app.yaml reference for valid values at `https://cloud.google.com/appengine/docs/standard/<language>/config/appref`\
+      Please see the app.yaml reference for valid values at `https://docs.cloud.google.com/appengine/docs/standard/<language>/config/appref`\
       Substitute `<language>` with `python`, `java`, `php`, `ruby`, `go` or `nodejs`.
   - name: 'handlers'
     type: Array

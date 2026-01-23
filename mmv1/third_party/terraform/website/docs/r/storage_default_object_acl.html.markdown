@@ -13,9 +13,9 @@ without managing the bucket itself.
 to the default ACL that has been defined.
 
 For more information see
-[the official documentation](https://cloud.google.com/storage/docs/access-control/lists) 
+[the official documentation](https://docs.cloud.google.com/storage/docs/access-control/lists) 
 and 
-[API](https://cloud.google.com/storage/docs/json_api/v1/defaultObjectAccessControls).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/defaultObjectAccessControls).
 
 -> Want fine-grained control over default object ACLs? Use `google_storage_default_object_access_control`
 to control individual role entity pairs.
@@ -46,7 +46,7 @@ resource "google_storage_default_object_acl" "image-store-default-acl" {
 ---
 
 * `role_entity` - (Optional) List of role/entity pairs in the form `ROLE:entity`.
-See [GCS Object ACL documentation](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.
+See [GCS Object ACL documentation](https://docs.cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.
 Omitting the field is the same as providing an empty list.
 
 ## Attributes Reference

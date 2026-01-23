@@ -21,9 +21,9 @@ description: |
   Settings resource defines the properties, applied directly to the resource or inherited through the hierarchy, to enable consistent, federated use of PAM.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/iam/docs/pam-overview'
-    'Configure Privileged Access Manager settings': 'https://cloud.google.com/iam/docs/pam-configure-settings'
-  api: 'https://cloud.google.com/iam/docs/reference/pam/rest/v1beta/folders.locations/updateSettings'
+    'Official Documentation': 'https://docs.cloud.google.com/iam/docs/pam-overview'
+    'Configure Privileged Access Manager settings': 'https://docs.cloud.google.com/iam/docs/pam-configure-settings'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/pam/rest/v1beta/folders.locations/updateSettings'
 docs:
 id_format: '{{parent}}/locations/{{location}}/settings'
 base_url: '{{parent}}/locations/{{location}}/settings'

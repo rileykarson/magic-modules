@@ -16,8 +16,8 @@ name: SparkApplication
 description: A Spark application is a single Spark workload run on a GDC cluster.
 references:
   guides:
-    'Dataproc Intro': 'https://cloud.google.com/dataproc/'
-  api: 'https://cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.serviceInstances.sparkApplications'
+    'Dataproc Intro': 'https://docs.cloud.google.com/dataproc/'
+  api: 'https://docs.cloud.google.com/dataproc-gdc/docs/reference/rest/v1/projects.locations.serviceInstances.sparkApplications'
 parameters:
   - name: location
     type: String

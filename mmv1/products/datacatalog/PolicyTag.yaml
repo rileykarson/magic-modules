@@ -17,8 +17,8 @@ description: |
   Denotes one policy tag in a taxonomy.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/data-catalog/docs'
-  api: 'https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.taxonomies.policyTags'
+    'Official Documentation': 'https://docs.cloud.google.com/data-catalog/docs'
+  api: 'https://docs.cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.taxonomies.policyTags'
 docs:
 base_url: '{{taxonomy}}/policyTags'
 self_link: '{{name}}'

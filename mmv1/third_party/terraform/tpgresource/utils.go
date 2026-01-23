@@ -947,7 +947,7 @@ func GetRawConfigAttributeAsString(d *schema.ResourceData, key string) string {
 // IamPrincipalIsCaseSensitive returns true if the type of the IAM Principal is case sensitive
 func IamPrincipalIsCaseSensitive(principal string) bool {
 	// allAuthenticatedUsers and allUsers are special identifiers that are case sensitive. See:
-	// https://cloud.google.com/iam/docs/overview#all-authenticated-users
+	// https://docs.cloud.google.com/iam/docs/overview#all-authenticated-users
 	return strings.Contains(principal, "allAuthenticatedUsers") || strings.Contains(principal, "allUsers") ||
 		strings.HasPrefix(principal, "principalSet:") || strings.HasPrefix(principal, "principal:") ||
 		strings.HasPrefix(principal, "principalHierarchy:")

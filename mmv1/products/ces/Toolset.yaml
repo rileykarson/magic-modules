@@ -216,7 +216,7 @@ properties:
             type: NestedObject
             description: |-
               Configurations for authentication with [ID
-              token](https://cloud.google.com/docs/authentication/token-types#id) generated
+              token](https://docs.cloud.google.com/docs/authentication/token-types#id) generated
               from service agent.
             allow_empty_object: true
             send_empty_value: true
@@ -244,7 +244,7 @@ properties:
             type: String
             description: |-
               The name of [Service
-              Directory](https://cloud.google.com/service-directory) service.
+              Directory](https://docs.cloud.google.com/service-directory) service.
               Format:
               `projects/{project}/locations/{location}/namespaces/{namespace}/services/{service}`.
               Location of the service directory must be the same as the location of the

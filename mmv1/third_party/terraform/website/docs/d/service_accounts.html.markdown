@@ -8,8 +8,8 @@ description: |-
 # google_service_accounts
 
 Gets a list of all service accounts from a project.
-See [the official documentation](https://cloud.google.com/iam/docs/service-account-overview)
-and [API](https://cloud.google.com/iam/docs/reference/rest/v1/projects.serviceAccounts).
+See [the official documentation](https://docs.cloud.google.com/iam/docs/service-account-overview)
+and [API](https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.serviceAccounts).
 
 ## Example Usage
 

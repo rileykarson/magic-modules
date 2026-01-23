@@ -17,8 +17,8 @@ description: |
   TargetServer configuration. TargetServers are used to decouple a proxy TargetEndpoint HTTPTargetConnections from concrete URLs for backend services.
 references:
   guides:
-    'Load balancing across backend servers': 'https://cloud.google.com/apigee/docs/api-platform/deploy/load-balancing-across-backend-servers'
-  api: 'https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.targetservers/create'
+    'Load balancing across backend servers': 'https://docs.cloud.google.com/apigee/docs/api-platform/deploy/load-balancing-across-backend-servers'
+  api: 'https://docs.cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.targetservers/create'
 docs:
 base_url: '{{env_id}}/targetservers'
 self_link: '{{env_id}}/targetservers/{{name}}'

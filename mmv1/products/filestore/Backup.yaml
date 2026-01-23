@@ -17,9 +17,9 @@ description: |
   A Google Cloud Filestore backup.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/filestore/docs/backups'
-    'Creating Backups': 'https://cloud.google.com/filestore/docs/create-backups'
-  api: 'https://cloud.google.com/filestore/docs/reference/rest/v1/projects.locations.backups'
+    'Official Documentation': 'https://docs.cloud.google.com/filestore/docs/backups'
+    'Creating Backups': 'https://docs.cloud.google.com/filestore/docs/create-backups'
+  api: 'https://docs.cloud.google.com/filestore/docs/reference/rest/v1/projects.locations.backups'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/backups'
 self_link: 'projects/{{project}}/locations/{{location}}/backups/{{name}}'

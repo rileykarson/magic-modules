@@ -19,13 +19,13 @@ description: |
 docs:
   note: |
     Please ensure your connections meet the requirements outlined at
-    https://cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking.
+    https://docs.cloud.google.com/memorystore/docs/cluster/about-multiple-vpc-networking.
     If you remove a connections item from the resource, the corresponding forwarding rule will no longer be functioning.
     If the corresponding forwarding rule is represented in your terraform configuration it is recommended to delete that
     `google_compute_forwarding_rule` resource at the same time.
 references:
   guides:
-  api: 'https://cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters'
+  api: 'https://docs.cloud.google.com/memorystore/docs/cluster/reference/rest/v1/projects.locations.clusters'
 id_format: 'projects/{{project}}/locations/{{region}}/clusters/{{name}}'
 base_url: 'projects/{{project}}/locations/{{region}}/clusters'
 self_link: 'projects/{{project}}/locations/{{region}}/clusters/{{name}}'

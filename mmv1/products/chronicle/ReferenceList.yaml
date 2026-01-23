@@ -16,8 +16,8 @@ name: ReferenceList
 description: Reference lists are user-defined lists of values which users can use in multiple Rules.
 references:
   guides:
-    'Google SecOps Guides': 'https://cloud.google.com/chronicle/docs/secops/secops-overview'
-  api: 'https://cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.referenceLists'
+    'Google SecOps Guides': 'https://docs.cloud.google.com/chronicle/docs/secops/secops-overview'
+  api: 'https://docs.cloud.google.com/chronicle/docs/reference/rest/v1/projects.locations.instances.referenceLists'
 base_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/referenceLists
 self_link: projects/{{project}}/locations/{{location}}/instances/{{instance}}/referenceLists/{{reference_list_id}}
 create_url: projects/{{project}}/locations/{{location}}/instances/{{instance}}/referenceLists?referenceListId={{reference_list_id}}

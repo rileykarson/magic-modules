@@ -33,14 +33,14 @@ description: |
  If a zone switch (manual or automatic) is triggered outside of Terraform, you need to adjust the `zone`
  and `replica_zone` values to reflect the current state, or Terraform will initiate a zone switch when running
  the next apply. You can trigger a manual
- [zone switch](https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones)
+ [zone switch](https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones)
  via Terraform by swapping the value of the `zone` and `replica_zone` parameters in your HCL code.
 
 references:
   guides:
-    'Quickstart documentation': 'https://cloud.google.com/netapp/volumes/docs/get-started/quickstarts/create-storage-pool'
-    'Regional Flex zone switch': 'https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones'
-  api: 'https://cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.storagePools'
+    'Quickstart documentation': 'https://docs.cloud.google.com/netapp/volumes/docs/get-started/quickstarts/create-storage-pool'
+    'Regional Flex zone switch': 'https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones'
+  api: 'https://docs.cloud.google.com/netapp/volumes/docs/reference/rest/v1/projects.locations.storagePools'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/storagePools/{{name}}'
 base_url: 'projects/{{project}}/locations/{{location}}/storagePools'
@@ -167,14 +167,14 @@ properties:
     type: String
     description: |
       Specifies the active zone for regional Flex pools. `zone` and `replica_zone` values can be swapped to initiate a
-      [zone switch](https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones).
+      [zone switch](https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones).
       If you want to create a zonal Flex pool, specify a zone name for `location` and omit `zone`.
     default_from_api: true
   - name: 'replicaZone'
     type: String
     description: |
       Specifies the replica zone for regional Flex pools. `zone` and `replica_zone` values can be swapped to initiate a
-      [zone switch](https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones).
+      [zone switch](https://docs.cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/edit-or-delete-storage-pool#switch_active_and_replica_zones).
   - name: 'allowAutoTiering'
     type: Boolean
     description: |

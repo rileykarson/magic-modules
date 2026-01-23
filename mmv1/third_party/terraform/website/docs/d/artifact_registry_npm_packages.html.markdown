@@ -7,8 +7,8 @@ description: |-
 # google_artifact_registry_npm_packages
 
 Get information about Artifact Registry Npm packages.
-See [the official documentation](https://cloud.google.com/artifact-registry/docs/nodejs)
-and [API](https://cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.npmPackages/list).
+See [the official documentation](https://docs.cloud.google.com/artifact-registry/docs/nodejs)
+and [API](https://docs.cloud.google.com/artifact-registry/docs/reference/rest/v1/projects.locations.repositories.npmPackages/list).
 
 ## Example Usage
 

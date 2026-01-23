@@ -19,8 +19,8 @@ description: |
   The actual backups are not though.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/spanner/docs/backup'
-  api: 'https://cloud.google.com/spanner/docs/reference/rest/v1/projects.instances.databases.backupSchedules'
+    'Official Documentation': 'https://docs.cloud.google.com/spanner/docs/backup'
+  api: 'https://docs.cloud.google.com/spanner/docs/reference/rest/v1/projects.instances.databases.backupSchedules'
 docs:
   warning: |
     This resource creates a Spanner Backup Schedule on a project that already has

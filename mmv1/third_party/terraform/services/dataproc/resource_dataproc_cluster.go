@@ -1825,14 +1825,14 @@ func metricsSchema() *schema.Resource {
 				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"MONITORING_AGENT_DEFAULTS", "HDFS", "SPARK", "YARN", "SPARK_HISTORY_SERVER", "HIVESERVER2"}, false),
-				Description:  `A source for the collection of Dataproc OSS metrics (see [available OSS metrics] (https://cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).`,
+				Description:  `A source for the collection of Dataproc OSS metrics (see [available OSS metrics] (https://docs.cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).`,
 			},
 			"metric_overrides": {
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Specify one or more [available OSS metrics] (https://cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect.`,
+				Description: `Specify one or more [available OSS metrics] (https://docs.cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect.`,
 			},
 		},
 	}

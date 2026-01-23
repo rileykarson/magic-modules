@@ -6,7 +6,7 @@ description: |-
 
 # Terraform provider for Google Cloud
 
-The Google Cloud provider is used to configure your [Google Cloud](https://cloud.google.com/) infrastructure.
+The Google Cloud provider is used to configure your [Google Cloud](https://docs.cloud.google.com/) infrastructure.
 
 To learn the basics of Terraform using this provider, follow the hands-on
 [get started tutorials](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/infrastructure-as-code).
@@ -35,13 +35,13 @@ to simplify your config by browsing the [Module Registry for Google Cloud module
 
 The Google Cloud provider is jointly maintained by:
 
-* The [Terraform Team](https://cloud.google.com/docs/terraform) at Google
+* The [Terraform Team](https://docs.cloud.google.com/docs/terraform) at Google
 * The Terraform team at [HashiCorp](https://www.hashicorp.com/)
 
 If you have configuration questions, or general questions about using the provider, try checking out:
 
 * [The Google category on discuss.hashicorp.com](https://discuss.hashicorp.com/c/terraform-providers/tf-google/32)
-* The [Google Cloud Community Slack](https://googlecloud-community.slack.com/) `#terraform` channel. If you are not registered with that Slack Workspace yet, the up-to-date **public sign-up link** can be found in the "Stay Connected" section of the [Google Developer Center](https://cloud.google.com/developers#stay-connected).
+* The [Google Cloud Community Slack](https://googlecloud-community.slack.com/) `#terraform` channel. If you are not registered with that Slack Workspace yet, the up-to-date **public sign-up link** can be found in the "Stay Connected" section of the [Google Developer Center](https://docs.cloud.google.com/developers#stay-connected).
 * [Terraform's community resources](https://developer.hashicorp.com/terraform)
 * [HashiCorp support](https://support.hashicorp.com) for Terraform Enterprise customers
 

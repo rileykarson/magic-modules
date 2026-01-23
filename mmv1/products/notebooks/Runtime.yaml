@@ -30,8 +30,8 @@ description: |
 # immutable: true
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/ai-platform-notebooks'
-  api: 'https://cloud.google.com/ai-platform/notebooks/docs/reference/rest'
+    'Official Documentation': 'https://docs.cloud.google.com/ai-platform-notebooks'
+  api: 'https://docs.cloud.google.com/ai-platform/notebooks/docs/reference/rest'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/runtimes'
 self_link: 'projects/{{project}}/locations/{{location}}/runtimes/{{name}}'
@@ -179,7 +179,7 @@ properties:
                 description: |
                   Indicates a list of features to enable on the guest operating
                   system. Applicable only for bootable images. To see a list of
-                  available features, read `https://cloud.google.com/compute/docs/
+                  available features, read `https://docs.cloud.google.com/compute/docs/
                   images/create-delete-deprecate-private-images#guest-os-features`
                   options. ``
                 output: true
@@ -226,7 +226,7 @@ properties:
                     description: |
                       The type of the boot disk attached to this runtime,
                       defaults to standard persistent disk. For valid values,
-                      see `https://cloud.google.com/vertex-ai/docs/workbench/
+                      see `https://docs.cloud.google.com/vertex-ai/docs/workbench/
                       reference/rest/v1/projects.locations.runtimes#disktype`
                   - name: 'labels'
                     type: KeyValuePairs
@@ -343,7 +343,7 @@ properties:
                 type: String
                 description: |
                   Accelerator model. For valid values, see
-                  `https://cloud.google.com/vertex-ai/docs/workbench/reference/
+                  `https://docs.cloud.google.com/vertex-ai/docs/workbench/reference/
                   rest/v1/projects.locations.runtimes#AcceleratorType`
               - name: 'coreCount'
                 type: Integer
@@ -392,7 +392,7 @@ properties:
             type: Array
             description: |
               The Compute Engine tags to add to runtime (see [Tagging instances]
-              (https://cloud.google.com/compute/docs/
+              (https://docs.cloud.google.com/compute/docs/
               label-or-tag-resources#tags)).
             default_from_api: true
             item_type:
@@ -401,14 +401,14 @@ properties:
             type: KeyValuePairs
             description: |
               The Compute Engine guest attributes. (see [Project and instance
-              guest attributes](https://cloud.google.com/compute/docs/
+              guest attributes](https://docs.cloud.google.com/compute/docs/
               storing-retrieving-metadata#guest_attributes)).
             output: true
           - name: 'metadata'
             type: KeyValuePairs
             description: |
               The Compute Engine metadata entries to add to virtual machine.
-              (see [Project and instance metadata](https://cloud.google.com
+              (see [Project and instance metadata](https://docs.cloud.google.com
               /compute/docs/storing-retrieving-metadata#project_and_instance
               _metadata)).
             default_from_api: true
@@ -458,7 +458,7 @@ properties:
     type: String
     description: |
       The health state of this runtime. For a list of possible output
-      values, see `https://cloud.google.com/vertex-ai/docs/workbench/
+      values, see `https://docs.cloud.google.com/vertex-ai/docs/workbench/
       reference/rest/v1/projects.locations.runtimes#healthstate`.
     output: true
   - name: 'accessConfig'
@@ -470,7 +470,7 @@ properties:
         type: String
         description: |
           The type of access mode this instance. For valid values, see
-          `https://cloud.google.com/vertex-ai/docs/workbench/reference/
+          `https://docs.cloud.google.com/vertex-ai/docs/workbench/reference/
           rest/v1/projects.locations.runtimes#RuntimeAccessType`.
       - name: 'runtimeOwner'
         type: String

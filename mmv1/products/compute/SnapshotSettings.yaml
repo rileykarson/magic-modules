@@ -18,8 +18,8 @@ description: |
   Updates your project's snapshot settings and sets a new default storage location for snapshots.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/disks/snapshot-settings#snapshot_settings_how_to_update'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/snapshotSettings'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/disks/snapshot-settings#snapshot_settings_how_to_update'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/snapshotSettings'
 base_url: 'projects/{{project}}/global/snapshotSettings'
 update_url: 'projects/{{project}}/global/snapshotSettings'
 import_format:

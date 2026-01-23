@@ -17,8 +17,8 @@ description: |
   Webhooks host the developer's business logic. During a session, webhooks allow the developer to use the data extracted by Dialogflow's natural language processing to generate dynamic responses, validate collected data, or trigger actions on the backend.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.webhooks'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.webhooks'
 docs:
 id_format: '{{parent}}/webhooks/{{name}}'
 base_url: '{{parent}}/webhooks'
@@ -205,7 +205,7 @@ properties:
         type: Enum
         description: |-
           Indicate the auth token type generated from the [Diglogflow service
-          agent](https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent).
+          agent](https://docs.cloud.google.com/iam/docs/service-agents#dialogflow-service-agent).
           The generated token is sent in the Authorization header.
         enum_values:
           - 'NONE'
@@ -225,7 +225,7 @@ properties:
 
               The service account must have the **roles/iam.serviceAccountTokenCreator** role
               granted to the
-              [Dialogflow service agent](https://cloud.google.com/iam/docs/service-agents?_gl=1*1jsujvh*_ga*NjYxMzU3OTg2LjE3Njc3MzQ4NjM.*_ga_WH2QY8WWF5*czE3Njc3MzQ2MjgkbzIkZzEkdDE3Njc3MzQ3NzQkajYwJGwwJGgw#dialogflow-service-agent).
+              [Dialogflow service agent](https://docs.cloud.google.com/iam/docs/service-agents?_gl=1*1jsujvh*_ga*NjYxMzU3OTg2LjE3Njc3MzQ4NjM.*_ga_WH2QY8WWF5*czE3Njc3MzQ2MjgkbzIkZzEkdDE3Njc3MzQ3NzQkajYwJGwwJGgw#dialogflow-service-agent).
       - name: uri
         type: String
         description: The webhook URI for receiving POST requests. It must use https protocol.
@@ -357,7 +357,7 @@ properties:
             type: Enum
             description: |-
               Indicate the auth token type generated from the [Diglogflow service
-              agent](https://cloud.google.com/iam/docs/service-agents#dialogflow-service-agent).
+              agent](https://docs.cloud.google.com/iam/docs/service-agents#dialogflow-service-agent).
               The generated token is sent in the Authorization header.
             enum_values:
               - 'NONE'
@@ -377,7 +377,7 @@ properties:
 
                   The service account must have the **roles/iam.serviceAccountTokenCreator** role
                   granted to the
-                  [Dialogflow service agent](https://cloud.google.com/iam/docs/service-agents?_gl=1*1jsujvh*_ga*NjYxMzU3OTg2LjE3Njc3MzQ4NjM.*_ga_WH2QY8WWF5*czE3Njc3MzQ2MjgkbzIkZzEkdDE3Njc3MzQ3NzQkajYwJGwwJGgw#dialogflow-service-agent).
+                  [Dialogflow service agent](https://docs.cloud.google.com/iam/docs/service-agents?_gl=1*1jsujvh*_ga*NjYxMzU3OTg2LjE3Njc3MzQ4NjM.*_ga_WH2QY8WWF5*czE3Njc3MzQ2MjgkbzIkZzEkdDE3Njc3MzQ3NzQkajYwJGwwJGgw#dialogflow-service-agent).
           - name: uri
             type: String
             description: The webhook URI for receiving POST requests. It must use https protocol.

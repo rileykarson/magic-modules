@@ -17,7 +17,7 @@ description: |
   The GatewaySecurityPolicy resource contains a collection of GatewaySecurityPolicyRules and associated metadata.
 references:
   guides:
-  api: 'https://cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.gatewaySecurityPolicies'
+  api: 'https://docs.cloud.google.com/secure-web-proxy/docs/reference/network-security/rest/v1/projects.locations.gatewaySecurityPolicies'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/gatewaySecurityPolicies'
 self_link: 'projects/{{project}}/locations/{{location}}/gatewaySecurityPolicies/{{name}}'

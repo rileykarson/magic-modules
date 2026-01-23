@@ -17,7 +17,7 @@ description: |
   A conversation profile configures a set of parameters that control the suggestions made to an agent. These parameters control the suggestions that are surfaced during runtime. Each profile configures either a Dialogflow virtual agent or a human agent for a conversation.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/docs/'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/docs/'
   api: 'https://docs.cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.conversationProfiles'
 docs:
 id_format: '{{name}}'

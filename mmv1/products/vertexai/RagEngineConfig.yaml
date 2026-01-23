@@ -17,8 +17,8 @@ description: |
   Vertex AI RAG Engine lets you scale your RagManagedDb instance based on your usage and performance requirements using a choice of two tiers, and optionally, lets you delete your Vertex AI RAG Engine data using a third tier. The tier is a project-level setting that's available in the RagEngineConfig resource that impacts all RAG corpora using RagManagedDb. The following tiers are available in RagEngineConfig: Basic, Scaled and Unprovisioned.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/understanding-ragmanageddb'
-  api: 'https://cloud.google.com/vertex-ai/generative-ai/docs/reference/rest/v1/RagEngineConfig'
+    'Official Documentation': 'https://docs.cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/understanding-ragmanageddb'
+  api: 'https://docs.cloud.google.com/vertex-ai/generative-ai/docs/reference/rest/v1/RagEngineConfig'
 docs:
 id_format: 'projects/{{project}}/locations/{{region}}/ragEngineConfig'
 base_url: 'projects/{{project}}/locations/{{region}}/ragEngineConfig'

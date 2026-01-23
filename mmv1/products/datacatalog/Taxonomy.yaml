@@ -17,8 +17,8 @@ description: |
   A collection of policy tags that classify data along a common axis.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/data-catalog/docs'
-  api: 'https://cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.taxonomies'
+    'Official Documentation': 'https://docs.cloud.google.com/data-catalog/docs'
+  api: 'https://docs.cloud.google.com/data-catalog/docs/reference/rest/v1/projects.locations.taxonomies'
 docs:
 base_url: 'projects/{{project}}/locations/{{region}}/taxonomies'
 self_link: '{{name}}'

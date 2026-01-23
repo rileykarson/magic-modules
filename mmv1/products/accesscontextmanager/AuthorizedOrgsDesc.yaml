@@ -21,8 +21,8 @@ description: |
   another organization at the enforcement points.
 references:
   guides:
-    'gcloud docs': 'https://cloud.google.com/beyondcorp-enterprise/docs/cross-org-authorization'
-  api: 'https://cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.authorizedOrgsDescs'
+    'gcloud docs': 'https://docs.cloud.google.com/beyondcorp-enterprise/docs/cross-org-authorization'
+  api: 'https://docs.cloud.google.com/access-context-manager/docs/reference/rest/v1/accessPolicies.authorizedOrgsDescs'
 docs:
   warning: |
     If you are using User ADCs (Application Default Credentials) with this resource,

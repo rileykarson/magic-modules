@@ -19,7 +19,7 @@ func DataSourceGoogleCloudIdentityGroupLookup() *schema.Resource {
 			"name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The [resource name](https://cloud.google.com/apis/design/resource_names) of the looked-up Group.`,
+				Description: `The [resource name](https://docs.cloud.google.com/apis/design/resource_names) of the looked-up Group.`,
 			},
 			"group_key": {
 				Type:     schema.TypeList,

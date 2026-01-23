@@ -49,7 +49,7 @@ func DataSourceGoogleKmsLatestCryptoKeyVersion() *schema.Resource {
 
 					* "state:ENABLED" will retrieve the latest cryptoKeyVersion that has the state "ENABLED".
 
-					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
+					[See the documentation about using filters](https://docs.cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
 			},
 			"public_key": {

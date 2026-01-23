@@ -18,10 +18,10 @@ description: |
   Create an Endpoint and deploy a Model Garden model to it.
 references:
   guides:
-    "Use models in Model Garden": "https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/use-models"
-    "Overview of Model Garden": "https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models"
-    "Overview of self-deployed models": "https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/self-deployed-models"
-  api: "https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations/deploy"
+    "Use models in Model Garden": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-garden/use-models"
+    "Overview of Model Garden": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models"
+    "Overview of self-deployed models": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-garden/self-deployed-models"
+  api: "https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations/deploy"
 docs:
 id_format: "projects/{{project}}/locations/{{location}}/endpoints/{{endpoint}}"
 base_url: "projects/{{project}}/locations/{{location}}:deploy"
@@ -125,7 +125,7 @@ properties:
     description: |
       Output only. The unique numeric ID that Vertex AI assigns to the model at the time it is deployed to the endpoint.
       It is required to undeploy the model from the endpoint during resource deletion as described in
-      https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/undeployModel.
+      https://docs.cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/undeployModel.
     output: true
   - name: deployedModelDisplayName
     type: String
@@ -180,7 +180,7 @@ properties:
               prediction requests that it receives to the first port on this list. Vertex
               AI also sends
               [liveness and health
-              checks](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#liveness)
+              checks](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#liveness)
               to this port.
 
               If you do not specify this field, it defaults to following value:
@@ -229,12 +229,12 @@ properties:
               Endpoint.name][] field of the Endpoint where this Model has been
               deployed. (Vertex AI makes this value available to your container code
               as the [`AIP_ENDPOINT_ID` environment
-              variable](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
+              variable](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
 
               * DEPLOYED_MODEL: DeployedModel.id of the `DeployedModel`.
               (Vertex AI makes this value available to your container code
               as the [`AIP_DEPLOYED_MODEL_ID` environment
-              variable](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
+              variable](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
             immutable: true
           - name: healthRoute
             type: String
@@ -243,7 +243,7 @@ properties:
               intermittently sends GET requests to this path on the container's IP
               address and port to check that the container is healthy. Read more about
               [health
-              checks](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#health).
+              checks](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#health).
 
               For example, if you set this field to `/bar`, then Vertex AI
               intermittently sends a GET request to the `/bar` path on the port of your
@@ -258,12 +258,12 @@ properties:
               Endpoint.name][] field of the Endpoint where this Model has been
               deployed. (Vertex AI makes this value available to your container code
               as the [`AIP_ENDPOINT_ID` environment
-              variable](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
+              variable](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
 
               * DEPLOYED_MODEL: DeployedModel.id of the `DeployedModel`.
               (Vertex AI makes this value available to your container code as the
               [`AIP_DEPLOYED_MODEL_ID` environment
-              variable](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
+              variable](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables).)
             immutable: true
           - name: deploymentTimeout
             type: String
@@ -533,7 +533,7 @@ properties:
               URI of the Docker image to be used as the custom container for serving
               predictions. This URI must identify an image in Artifact Registry or
               Container Registry. Learn more about the [container publishing
-              requirements](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#publishing),
+              requirements](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#publishing),
               including permissions requirements for the Vertex AI Service Agent.
 
               The container image is ingested upon ModelService.UploadModel, stored
@@ -541,10 +541,10 @@ properties:
 
               To learn about the requirements for the Docker image itself, see
               [Custom container
-              requirements](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#).
+              requirements](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#).
 
               You can use the URI to one of Vertex AI's [pre-built container images for
-              prediction](https://cloud.google.com/vertex-ai/docs/predictions/pre-built-containers)
+              prediction](https://docs.cloud.google.com/vertex-ai/docs/predictions/pre-built-containers)
               in this field.
             immutable: true
             required: true
@@ -573,7 +573,7 @@ properties:
               `CMD`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
 
               In this field, you can reference [environment variables set by Vertex
-              AI](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables)
+              AI](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables)
               and environment variables set in the env field.
               You cannot reference environment variables set in the Docker image. In
               order for environment variables to be expanded, reference them by using the
@@ -613,7 +613,7 @@ properties:
 
               In this field, you can reference [environment variables
               set by Vertex
-              AI](https://cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables)
+              AI](https://docs.cloud.google.com/vertex-ai/docs/predictions/custom-container-requirements#aip-variables)
               and environment variables set in the env field.
               You cannot reference environment variables set in the Docker image. In
               order for environment variables to be expanded, reference them by using the
@@ -982,10 +982,10 @@ properties:
                   The type of the machine.
 
                   See the [list of machine types supported for
-                  prediction](https://cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types)
+                  prediction](https://docs.cloud.google.com/vertex-ai/docs/predictions/configure-compute#machine-types)
 
                   See the [list of machine types supported for custom
-                  training](https://cloud.google.com/vertex-ai/docs/training/configure-compute#machine-types).
+                  training](https://docs.cloud.google.com/vertex-ai/docs/training/configure-compute#machine-types).
 
                   For DeployedModel this field is optional, and the default
                   value is `n1-standard-2`. For BatchPredictionJob or as part of
@@ -1109,7 +1109,7 @@ properties:
             type: Boolean
             description: |-
               If true, schedule the deployment workload on [spot
-              VMs](https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms).
+              VMs](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/spot-vms).
       - name: fastTryoutEnabled
         type: Boolean
         description: If true, enable the QMT fast tryout feature for this model if possible.

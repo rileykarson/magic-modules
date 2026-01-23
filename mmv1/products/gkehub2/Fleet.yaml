@@ -17,8 +17,8 @@ description: |
   Fleet contains information about a group of clusters.
 references:
   guides:
-    'Registering a Cluster to a Fleet': 'https://cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
-  api: 'https://cloud.google.com/anthos/multicluster-management/reference/rest/v1/projects.locations.fleets'
+    'Registering a Cluster to a Fleet': 'https://docs.cloud.google.com/anthos/multicluster-management/connect/registering-a-cluster#register_cluster'
+  api: 'https://docs.cloud.google.com/anthos/multicluster-management/reference/rest/v1/projects.locations.fleets'
 docs:
 id_format: 'projects/{{project}}/locations/global/fleets/default'
 base_url: 'projects/{{project}}/locations/global/fleets'

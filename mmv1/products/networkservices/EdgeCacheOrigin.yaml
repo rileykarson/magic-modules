@@ -17,7 +17,7 @@ description: |
   EdgeCacheOrigin represents a HTTP-reachable backend for an EdgeCacheService.
 references:
   guides:
-  api: 'https://cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheOrigins'
+  api: 'https://docs.cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheOrigins'
 docs:
 base_url: 'projects/{{project}}/locations/global/edgeCacheOrigins'
 self_link: 'projects/{{project}}/locations/global/edgeCacheOrigins/{{name}}'
@@ -327,7 +327,7 @@ properties:
         description: |
           The set of redirect response codes that the CDN
           follows. Values of
-          [RedirectConditions](https://cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheOrigins#redirectconditions)
+          [RedirectConditions](https://docs.cloud.google.com/media-cdn/docs/reference/rest/v1/projects.locations.edgeCacheOrigins#redirectconditions)
           are accepted.
         item_type:
           type: String

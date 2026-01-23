@@ -23,8 +23,8 @@ description: |-
   containing mirroring rules and associate it with the network.
 references:
   guides:
-    'Mirroring endpoint group association overview': 'https://cloud.google.com/network-security-integration/docs/out-of-band/endpoint-groups-overview#mirroring-endpoint-group-association'
-  api: 'https://cloud.google.com/network-security-integration/docs/reference/rest/v1/projects.locations.mirroringEndpointGroupAssociations'
+    'Mirroring endpoint group association overview': 'https://docs.cloud.google.com/network-security-integration/docs/out-of-band/endpoint-groups-overview#mirroring-endpoint-group-association'
+  api: 'https://docs.cloud.google.com/network-security-integration/docs/reference/rest/v1/projects.locations.mirroringEndpointGroupAssociations'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/mirroringEndpointGroupAssociations/{{mirroring_endpoint_group_association_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/mirroringEndpointGroupAssociations'

@@ -7,8 +7,8 @@ description: |-
 # `google_bigquery_datasets`
 
 Get a list of datasets in a GCP project. For more information see
-the [official documentation](https://cloud.google.com/bigquery/docs)
-and [API](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list).
+the [official documentation](https://docs.cloud.google.com/bigquery/docs)
+and [API](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list).
 
 ## Example Usage
 

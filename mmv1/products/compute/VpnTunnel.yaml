@@ -17,9 +17,9 @@ kind: 'compute#vpnTunnel'
 description: 'VPN tunnel resource.'
 references:
   guides:
-    'Cloud VPN Overview': 'https://cloud.google.com/vpn/docs/concepts/overview'
-    'Networks and Tunnel Routing': 'https://cloud.google.com/vpn/docs/concepts/choosing-networks-routing'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/vpnTunnels'
+    'Cloud VPN Overview': 'https://docs.cloud.google.com/vpn/docs/concepts/overview'
+    'Networks and Tunnel Routing': 'https://docs.cloud.google.com/vpn/docs/concepts/choosing-networks-routing'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/vpnTunnels'
 docs:
 base_url: 'projects/{{project}}/regions/{{region}}/vpnTunnels'
 has_self_link: true

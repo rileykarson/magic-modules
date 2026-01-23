@@ -18,8 +18,8 @@ description: |
   For example, a date range, a proper name such as a geographic location or landmark, and so on. Entities represent actionable data for your application.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/dialogflow/cx/docs'
-  api: 'https://cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.entityTypes'
+    'Official Documentation': 'https://docs.cloud.google.com/dialogflow/cx/docs'
+  api: 'https://docs.cloud.google.com/dialogflow/cx/docs/reference/rest/v3/projects.locations.agents.entityTypes'
 docs:
 id_format: '{{parent}}/entityTypes/{{name}}'
 base_url: '{{parent}}/entityTypes'

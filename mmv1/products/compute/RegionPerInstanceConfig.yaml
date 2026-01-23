@@ -22,8 +22,8 @@ description: |
   This resource works with regional instance group managers.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/compute/docs/instance-groups/stateful-migs#per-instance_configs'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroupManagers'
+    'Official Documentation': 'https://docs.cloud.google.com/compute/docs/instance-groups/stateful-migs#per-instance_configs'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroupManagers'
 docs:
 id_format: '{{project}}/{{region}}/{{region_instance_group_manager}}/{{name}}'
 base_url: 'projects/{{project}}/regions/{{region}}/instanceGroupManagers/{{region_instance_group_manager}}'

@@ -17,8 +17,8 @@ description: |
   An Integration connectors Endpoint Attachment.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/integration-connectors/docs/create-endpoint-attachment'
-  api: 'https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.endpointAttachments'
+    'Official Documentation': 'https://docs.cloud.google.com/integration-connectors/docs/create-endpoint-attachment'
+  api: 'https://docs.cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.endpointAttachments'
 docs:
 base_url: 'projects/{{project}}/locations/{{location}}/endpointAttachments'
 self_link: 'projects/{{project}}/locations/{{location}}/endpointAttachments/{{name}}'

@@ -7,7 +7,7 @@ description: |-
 # google_service_account
 
 Get the service account from a project. For more information see
-the official [API](https://cloud.google.com/compute/docs/access/service-accounts) documentation.
+the official [API](https://docs.cloud.google.com/compute/docs/access/service-accounts) documentation.
 
 ## Example Usage
 

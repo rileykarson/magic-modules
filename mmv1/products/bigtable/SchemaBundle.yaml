@@ -18,7 +18,7 @@ description: |
   A schema bundle object that can be referenced in SQL queries.
 references:
   guides:
-  api: 'https://cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.tables.schemaBundles'
+  api: 'https://docs.cloud.google.com/bigtable/docs/reference/admin/rest/v2/projects.instances.tables.schemaBundles'
 docs:
 id_format: 'projects/{{project}}/instances/{{instance}}/tables/{{table}}/schemaBundles/{{schema_bundle_id}}'
 base_url: 'projects/{{project}}/instances/{{instance}}/tables/{{table}}/schemaBundles?schemaBundleId={{schema_bundle_id}}'

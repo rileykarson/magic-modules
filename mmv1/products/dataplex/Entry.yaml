@@ -27,8 +27,8 @@ description: |
 
 references:
   guides:
-    'Manage entries and ingest custom sources': 'https://cloud.google.com/dataplex/docs/ingest-custom-sources'
-  api: 'https://cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.entryGroups.entries'
+    'Manage entries and ingest custom sources': 'https://docs.cloud.google.com/dataplex/docs/ingest-custom-sources'
+  api: 'https://docs.cloud.google.com/dataplex/docs/reference/rest/v1/projects.locations.entryGroups.entries'
 
 base_url: 'projects/{{project}}/locations/{{location}}/entryGroups/{{entry_group_id}}/entries/{{entry_id}}'
 self_link: 'projects/{{project}}/locations/{{location}}/entryGroups/{{entry_group_id}}/entries/{{entry_id}}'
@@ -224,7 +224,7 @@ properties:
   - name: 'fullyQualifiedName'
     type: String
     description: |
-      A name for the entry that can be referenced by an external system. For more information, see https://cloud.google.com/dataplex/docs/fully-qualified-names.
+      A name for the entry that can be referenced by an external system. For more information, see https://docs.cloud.google.com/dataplex/docs/fully-qualified-names.
       The maximum size of the field is 4000 characters.
 
   - name: 'entrySource'

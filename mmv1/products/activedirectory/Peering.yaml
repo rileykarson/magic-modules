@@ -18,8 +18,8 @@ description: Creates a Peering for Managed AD instance.
 min_version: 'beta'
 references:
   guides:
-    'Active Directory Domain Peering': 'https://cloud.google.com/managed-microsoft-ad/docs/domain-peering'
-  api: 'https://cloud.google.com/managed-microsoft-ad/reference/rest/v1beta1/projects.locations.global.peerings'
+    'Active Directory Domain Peering': 'https://docs.cloud.google.com/managed-microsoft-ad/docs/domain-peering'
+  api: 'https://docs.cloud.google.com/managed-microsoft-ad/reference/rest/v1beta1/projects.locations.global.peerings'
 docs:
 id_format: 'projects/{{project}}/locations/global/domains/{{peering_id}}'
 base_url: 'projects/{{project}}/locations/global/peerings'

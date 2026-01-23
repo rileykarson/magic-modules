@@ -17,8 +17,8 @@ description: |
   A set of reusable connection configurations to be used as a source or destination for a stream.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/datastream/docs/create-connection-profiles'
-  api: 'https://cloud.google.com/datastream/docs/reference/rest/v1/projects.locations.connectionProfiles'
+    'Official Documentation': 'https://docs.cloud.google.com/datastream/docs/create-connection-profiles'
+  api: 'https://docs.cloud.google.com/datastream/docs/reference/rest/v1/projects.locations.connectionProfiles'
 docs:
 id_format: 'projects/{{project}}/locations/{{location}}/connectionProfiles/{{connection_profile_id}}'
 base_url: 'projects/{{project}}/locations/{{location}}/connectionProfiles'

@@ -16,7 +16,7 @@ name: View
 description: |
   Insights View resource for filtering conversations
 references:
-  api: 'https://cloud.google.com/contact-center/insights/docs/reference/rest/v1/projects.locations.views'
+  api: 'https://docs.cloud.google.com/contact-center/insights/docs/reference/rest/v1/projects.locations.views'
 base_url: projects/{{project}}/locations/{{location}}/views
 self_link: projects/{{project}}/locations/{{location}}/views/{{name}}
 create_url: projects/{{project}}/locations/{{location}}/views
@@ -61,5 +61,5 @@ properties:
     type: String
     description: |-
       A filter to reduce conversation results to a specific subset.
-      Refer to https://cloud.google.com/contact-center/insights/docs/filtering
+      Refer to https://docs.cloud.google.com/contact-center/insights/docs/filtering
       for details.

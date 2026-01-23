@@ -7,9 +7,9 @@ description: |-
 # google_compute_network_peering
 
 Get information of a specified compute network peering. For more information see
-[the official documentation](https://cloud.google.com/compute/docs/vpc/vpc-peering)
+[the official documentation](https://docs.cloud.google.com/compute/docs/vpc/vpc-peering)
 and
-[API](https://cloud.google.com/compute/docs/reference/latest/networks).
+[API](https://docs.cloud.google.com/compute/docs/reference/latest/networks).
 
 ## Example Usage
 

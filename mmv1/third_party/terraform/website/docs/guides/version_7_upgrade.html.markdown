@@ -135,7 +135,7 @@ Use `google_beyondcorp_security_gateway_application` instead.
 
 ### `view.use_legacy_sql` no longer has a default value of `True`
 
-The `view.use_legacy_sql` field no longer has a default value. Configurations that relied on the old default will show no diff in the plan, and there will be no change to existing views. For newly created views, leaving this field unspecified in the configuration will result in the view being created with no `use_legacy_sql` value, which the API interprets as a `true` and assumes the legacy SQL dialect for its query. See the [API documentation](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#ViewDefinition) for more details.
+The `view.use_legacy_sql` field no longer has a default value. Configurations that relied on the old default will show no diff in the plan, and there will be no change to existing views. For newly created views, leaving this field unspecified in the configuration will result in the view being created with no `use_legacy_sql` value, which the API interprets as a `true` and assumes the legacy SQL dialect for its query. See the [API documentation](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#ViewDefinition) for more details.
 
 ## Resource: `google_bigtable_table_iam_binding`
 
@@ -187,7 +187,7 @@ Remove `post_startup_script_config` from your configuration after upgrade.
 
 ### `disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values
 
-`disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values and instead will be set by the API. See the [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates) for more details.
+`disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values and instead will be set by the API. See the [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceTemplates) for more details.
 
 ## Resource: `google_compute_packet_mirroring`
 
@@ -199,7 +199,7 @@ Remove `post_startup_script_config` from your configuration after upgrade.
 
 ### `disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values
 
-`disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values and instead will be set by the API. See the [API documentation](https://cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates) for more details.
+`disk.type`, `disk.mode` and `disk.interface` will no longer use provider configured default values and instead will be set by the API. See the [API documentation](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionInstanceTemplates) for more details.
 
 ## Resource: `google_compute_router`
 
@@ -316,7 +316,7 @@ A state upgrader will automatically migrate the `topic` field's format in your T
 
 ## Resource: `google_tpu_node` is now removed
 
-`google_tpu_node` is removed in favor of `google_tpu_v2_vm`. For moving from TPU Node to TPU VM architecture, see https://cloud.google.com/tpu/docs/system-architecture-tpu-vm#from-tpu-node-to-tpu-vm.
+`google_tpu_node` is removed in favor of `google_tpu_v2_vm`. For moving from TPU Node to TPU VM architecture, see https://docs.cloud.google.com/tpu/docs/system-architecture-tpu-vm#from-tpu-node-to-tpu-vm.
 
 ## Resource: `google_vertex_ai_endpoint`
 

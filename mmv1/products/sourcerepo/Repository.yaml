@@ -18,8 +18,8 @@ description: |
   A repository (or repo) is a Git repository storing versioned source content.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/source-repositories/'
-  api: 'https://cloud.google.com/source-repositories/docs/reference/rest/v1/projects.repos'
+    'Official Documentation': 'https://docs.cloud.google.com/source-repositories/'
+  api: 'https://docs.cloud.google.com/source-repositories/docs/reference/rest/v1/projects.repos'
 docs:
   optional_properties: |
     * `create_ignore_already_exists` - (Optional) If set to true, skip repository creation if a repository with the same name already exists.

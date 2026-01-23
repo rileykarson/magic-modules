@@ -7,9 +7,9 @@ description: |-
 # google_service_networking_connection
 
 Manages a private VPC connection with a GCP service provider. For more information see
-[the official documentation](https://cloud.google.com/vpc/docs/configure-private-services-access#creating-connection)
+[the official documentation](https://docs.cloud.google.com/vpc/docs/configure-private-services-access#creating-connection)
 and
-[API](https://cloud.google.com/service-infrastructure/docs/service-networking/reference/rest/v1/services.connections).
+[API](https://docs.cloud.google.com/service-infrastructure/docs/service-networking/reference/rest/v1/services.connections).
 
 ## Example usage
 

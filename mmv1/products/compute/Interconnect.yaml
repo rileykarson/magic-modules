@@ -19,8 +19,8 @@ description: |
   Google's network and your on-premises network.
 references:
   guides:
-    'Create a Dedicated Interconnect': 'https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/interconnects'
+    'Create a Dedicated Interconnect': 'https://docs.cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/interconnects'
 docs:
 base_url: 'projects/{{project}}/global/interconnects'
 self_link: 'projects/{{project}}/global/interconnects/{{name}}'

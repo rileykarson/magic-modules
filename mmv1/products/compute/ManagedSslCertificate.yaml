@@ -24,8 +24,8 @@ description: |
   SSL Certificate resource.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/ssl-certificates'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/sslCertificates'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/ssl-certificates'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/sslCertificates'
 docs:
   warning: |
     This resource should be used with extreme caution!  Provisioning an SSL

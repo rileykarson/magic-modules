@@ -18,8 +18,8 @@ description: |
   federated users that can be referenced in IAM policies.
 references:
   guides:
-    'Manage pools': 'https://cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#manage_pools'
-  api: 'https://cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools'
+    'Manage pools': 'https://docs.cloud.google.com/iam/docs/manage-workforce-identity-pools-providers#manage_pools'
+  api: 'https://docs.cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools'
 docs:
   note: |
     Ask your Google Cloud account team to request access to workforce identity federation for
@@ -122,7 +122,7 @@ properties:
        * ACTIVE: The pool is active, and may be used in Google Cloud policies.
        * DELETED: The pool is soft-deleted. Soft-deleted pools are permanently deleted
          after approximately 30 days. You can restore a soft-deleted pool using
-         [workforcePools.undelete](https://cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools/undelete#google.iam.admin.v1.WorkforcePools.UndeleteWorkforcePool).
+         [workforcePools.undelete](https://docs.cloud.google.com/iam/docs/reference/rest/v1/locations.workforcePools/undelete#google.iam.admin.v1.WorkforcePools.UndeleteWorkforcePool).
          You cannot reuse the ID of a soft-deleted pool until it is permanently deleted.
          While a pool is deleted, you cannot use it to exchange tokens, or use
          existing tokens to access resources. If the pool is undeleted, existing
@@ -170,4 +170,4 @@ properties:
         type: Boolean
         description: |
           Disable programmatic sign-in by disabling token issue via the Security Token API endpoint.
-          See [Security Token Service API](https://cloud.google.com/iam/docs/reference/sts/rest).
+          See [Security Token Service API](https://docs.cloud.google.com/iam/docs/reference/sts/rest).

@@ -153,7 +153,7 @@ func resourceGoogleProjectDefaultServiceAccountsCreate(d *schema.ResourceData, m
 	}
 	changedServiceAccounts := make(map[string]interface{})
 	for _, sa := range serviceAccounts {
-		// As per documentation https://cloud.google.com/iam/docs/service-accounts#default
+		// As per documentation https://docs.cloud.google.com/iam/docs/service-accounts#default
 		// we have just two default SAs and the e-mail may change. So, it is been filtered
 		// by the Display Name
 		if isDefaultServiceAccount(sa.DisplayName) {

@@ -10,9 +10,9 @@ Use this data source to get information about a Google Cloud Privileged Access M
 
 To get more information about Privileged Access Manager, see:
 
-* [API Documentation](https://cloud.google.com/iam/docs/reference/pam/rest)
+* [API Documentation](https://docs.cloud.google.com/iam/docs/reference/pam/rest)
 * How-to guides
-  * [Official documentation](https://cloud.google.com/iam/docs/pam-overview)
+  * [Official documentation](https://docs.cloud.google.com/iam/docs/pam-overview)
 
 ## Example Usage
 

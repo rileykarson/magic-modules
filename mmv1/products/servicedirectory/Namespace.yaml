@@ -18,8 +18,8 @@ description: |
   together and define permissions for a collection of services.
 references:
   guides:
-    'Configuring a namespace': 'https://cloud.google.com/service-directory/docs/configuring-service-directory#configuring_a_namespace'
-  api: 'https://cloud.google.com/service-directory/docs/reference/rest/v1/projects.locations.namespaces'
+    'Configuring a namespace': 'https://docs.cloud.google.com/service-directory/docs/configuring-service-directory#configuring_a_namespace'
+  api: 'https://docs.cloud.google.com/service-directory/docs/reference/rest/v1/projects.locations.namespaces'
 docs:
 base_url: '{{name}}'
 self_link: '{{name}}'

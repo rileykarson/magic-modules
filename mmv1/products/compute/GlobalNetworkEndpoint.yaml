@@ -21,8 +21,8 @@ description: |
   global network endpoint group.
 references:
   guides:
-    'Official Documentation': 'https://cloud.google.com/load-balancing/docs/negs/'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
+    'Official Documentation': 'https://docs.cloud.google.com/load-balancing/docs/negs/'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/beta/networkEndpointGroups'
 docs:
 id_format: '{{project}}/{{global_network_endpoint_group}}/{{ip_address}}/{{fqdn}}/{{port}}'
 base_url: 'projects/{{project}}/global/networkEndpointGroups/{{global_network_endpoint_group}}'

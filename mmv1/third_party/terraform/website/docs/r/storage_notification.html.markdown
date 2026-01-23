@@ -8,9 +8,9 @@ description: |-
 
 Creates a new notification configuration on a specified bucket, establishing a flow of event notifications from GCS to a Cloud Pub/Sub topic.
  For more information see
-[the official documentation](https://cloud.google.com/storage/docs/pubsub-notifications)
+[the official documentation](https://docs.cloud.google.com/storage/docs/pubsub-notifications)
 and
-[API](https://cloud.google.com/storage/docs/json_api/v1/notifications).
+[API](https://docs.cloud.google.com/storage/docs/json_api/v1/notifications).
 
 In order to enable notifications, a special Google Cloud Storage service account unique to the project
 must exist and have the IAM permission "projects.topics.publish" for a Cloud Pub/Sub topic in the project.
@@ -18,7 +18,7 @@ This service account is not created automatically when a project is created.
 To ensure the service account exists and obtain its email address for use in granting the correct IAM permission, use the
 [`google_storage_project_service_account`](/docs/providers/google/d/storage_project_service_account.html)
 datasource's `email_address` value, and see below for an example of enabling notifications by granting the correct IAM permission.
-See [the notifications documentation](https://cloud.google.com/storage/docs/gsutil/commands/notification) for more details.
+See [the notifications documentation](https://docs.cloud.google.com/storage/docs/gsutil/commands/notification) for more details.
 
 >**NOTE**: This resource can affect your storage IAM policy. If you are using this in the same config as your storage IAM policy resources, consider
 making this resource dependent on those IAM resources via `depends_on`. This will safeguard against errors due to IAM race conditions.

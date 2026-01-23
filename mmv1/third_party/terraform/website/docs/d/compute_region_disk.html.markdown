@@ -8,7 +8,7 @@ description: |-
 
 Get information about a Google Compute Regional Persistent disks.
 
-[the official documentation](https://cloud.google.com/compute/docs/disks) and its [API](https://cloud.google.com/compute/docs/reference/rest/v1/regionDisks).
+[the official documentation](https://docs.cloud.google.com/compute/docs/disks) and its [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/regionDisks).
 
 ## Example Usage
 

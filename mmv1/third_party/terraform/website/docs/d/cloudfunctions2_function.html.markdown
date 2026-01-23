@@ -8,7 +8,7 @@ description: |-
 
 Get information about a Google Cloud Function (2nd gen). For more information see:
 
-* [API documentation](https://cloud.google.com/functions/docs/reference/rest/v2beta/projects.locations.functions).
+* [API documentation](https://docs.cloud.google.com/functions/docs/reference/rest/v2beta/projects.locations.functions).
 
 ## Example Usage
 

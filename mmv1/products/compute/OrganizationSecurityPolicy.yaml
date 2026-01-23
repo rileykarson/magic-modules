@@ -18,8 +18,8 @@ description: |
   Organization security policies are used to control incoming/outgoing traffic.
 references:
   guides:
-    'Creating a firewall policy': 'https://cloud.google.com/vpc/docs/using-firewall-policies#create-policy'
-  api: 'https://cloud.google.com/compute/docs/reference/rest/v1/organizationSecurityPolicies'
+    'Creating a firewall policy': 'https://docs.cloud.google.com/vpc/docs/using-firewall-policies#create-policy'
+  api: 'https://docs.cloud.google.com/compute/docs/reference/rest/v1/organizationSecurityPolicies'
 docs:
 id_format: 'locations/global/securityPolicies/{{policy_id}}'
 base_url: 'locations/global/securityPolicies?parentId={{parent}}'

@@ -8,8 +8,8 @@ description: |-
 
 The Google Compute Engine Instance Group Manager API creates and manages pools
 of homogeneous Compute Engine virtual machine instances from a common instance
-template. For more information, see [the official documentation](https://cloud.google.com/compute/docs/instance-groups/manager)
-and [API](https://cloud.google.com/compute/docs/reference/latest/instanceGroupManagers)
+template. For more information, see [the official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/manager)
+and [API](https://docs.cloud.google.com/compute/docs/reference/latest/instanceGroupManagers)
 
 ~> **Note:** Use [google_compute_region_instance_group_manager](/docs/providers/google/r/compute_region_instance_group_manager.html) to create a regional (multi-zone) instance group manager.
 
@@ -231,28 +231,28 @@ The following arguments are supported:
 ---
 
 * `auto_healing_policies` - (Optional) The autohealing policies for this managed instance
-group. You can specify only one value. Structure is [documented below](#nested_auto_healing_policies). For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances#monitoring_groups).
+group. You can specify only one value. Structure is [documented below](#nested_auto_healing_policies). For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances#monitoring_groups).
 
 * `all_instances_config` - (Optional)
   Properties to set on all instances in the group. After setting
   allInstancesConfig on the group, you must update the group's instances to
   apply the configuration.
 
-* `standby_policy` - (Optional) The standby policy for stopped and suspended instances. Structure is documented below. For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/suspended-and-stopped-vms-in-mig).
+* `standby_policy` - (Optional) The standby policy for stopped and suspended instances. Structure is documented below. For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/suspended-and-stopped-vms-in-mig).
 
 * `target_suspended_size` - (Optional) The target number of suspended instances for this managed instance group.
 
 * `target_stopped_size` - (Optional) The target number of stopped instances for this managed instance group.
 
-* `stateful_disk` - (Optional) Disks created on the instances that will be preserved on instance delete, update, etc. Structure is [documented below](#nested_stateful_disk). For more information see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/configuring-stateful-disks-in-migs).
+* `stateful_disk` - (Optional) Disks created on the instances that will be preserved on instance delete, update, etc. Structure is [documented below](#nested_stateful_disk). For more information see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/configuring-stateful-disks-in-migs).
 
 * `stateful_internal_ip` - (Optional) Internal network IPs assigned to the instances that will be preserved on instance delete, update, etc. This map is keyed with the network interface name. Structure is [documented below](#nested_stateful_internal_ip).
 
 * `stateful_external_ip` - (Optional) External network IPs assigned to the instances that will be preserved on instance delete, update, etc. This map is keyed with the network interface name. Structure is [documented below](#nested_stateful_external_ip).
 
-* `update_policy` - (Optional) The update policy for this managed instance group. Structure is [documented below](#nested_update_policy). For more information, see the [official documentation](https://cloud.google.com/compute/docs/instance-groups/updating-managed-instance-groups) and [API](https://cloud.google.com/compute/docs/reference/rest/v1/instanceGroupManagers/patch).
+* `update_policy` - (Optional) The update policy for this managed instance group. Structure is [documented below](#nested_update_policy). For more information, see the [official documentation](https://docs.cloud.google.com/compute/docs/instance-groups/updating-managed-instance-groups) and [API](https://docs.cloud.google.com/compute/docs/reference/rest/v1/instanceGroupManagers/patch).
 
-* `params` - (Optional [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Input only additional params for instance group manager creation. Structure is [documented below](#nested_params). For more information, see [API](https://cloud.google.com/compute/docs/reference/rest/beta/instanceGroupManagers/insert).
+* `params` - (Optional [Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html)) Input only additional params for instance group manager creation. Structure is [documented below](#nested_params). For more information, see [API](https://docs.cloud.google.com/compute/docs/reference/rest/beta/instanceGroupManagers/insert).
 
 * `resource_policies` - (Optional) Resource policies for this managed instance group. Structure is [documented below](#nested_resource_policies).
 
@@ -341,7 +341,7 @@ all_instances_config {
 }
 ```
 
-* `metadata` - (Optional), The metadata key-value pairs that you want to patch onto the instance. For more information, see [Project and instance metadata](https://cloud.google.com/compute/docs/metadata#project_and_instance_metadata).
+* `metadata` - (Optional), The metadata key-value pairs that you want to patch onto the instance. For more information, see [Project and instance metadata](https://docs.cloud.google.com/compute/docs/metadata#project_and_instance_metadata).
 
 * `labels` - (Optional), The label key-value pairs that you want to patch onto the instance.
 
@@ -430,7 +430,7 @@ params{
 }
 ```
 
-* `resource_manager_tags` - (Optional) Resource manager tags to bind to the managed instance group. The tags are key-value pairs. Keys must be in the format tagKeys/123 and values in the format tagValues/456. For more information, see [Manage tags for resources](https://cloud.google.com/compute/docs/tag-resources)
+* `resource_manager_tags` - (Optional) Resource manager tags to bind to the managed instance group. The tags are key-value pairs. Keys must be in the format tagKeys/123 and values in the format tagValues/456. For more information, see [Manage tags for resources](https://docs.cloud.google.com/compute/docs/tag-resources)
 
 - - -
 

@@ -6,13 +6,13 @@ description: |-
 
 # google_logging_billing_account_sink
 
-* [API documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.sinks)
+* [API documentation](https://docs.cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.sinks)
 * How-to Guides
-    * [Exporting Logs](https://cloud.google.com/logging/docs/export)
+    * [Exporting Logs](https://docs.cloud.google.com/logging/docs/export)
 
 ~> **Note** You must have the "Logs Configuration Writer" IAM role (`roles/logging.configWriter`)
-[granted on the billing account](https://cloud.google.com/billing/reference/rest/v1/billingAccounts/getIamPolicy) to
-the credentials used with Terraform. [IAM roles granted on a billing account](https://cloud.google.com/billing/docs/how-to/billing-access) are separate from the
+[granted on the billing account](https://docs.cloud.google.com/billing/reference/rest/v1/billingAccounts/getIamPolicy) to
+the credentials used with Terraform. [IAM roles granted on a billing account](https://docs.cloud.google.com/billing/docs/how-to/billing-access) are separate from the
 typical IAM roles granted on a project.
 
 ## Example Usage
@@ -61,7 +61,7 @@ The following arguments are supported:
     The writer associated with the sink must have access to write to the above resource.
 
 * `filter` - (Optional) The filter to apply when exporting logs. Only log entries that match the filter are exported.
-    See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced_filters) for information on how to
+    See [Advanced Log Filters](https://docs.cloud.google.com/logging/docs/view/advanced_filters) for information on how to
     write a filter.
 
 * `description` - (Optional) A description of this sink. The maximum length of the description is 8000 characters.
@@ -74,16 +74,16 @@ The following arguments are supported:
 
 <a name="nested_bigquery_options"></a>The `bigquery_options` block supports:
 
-* `use_partitioned_tables` - (Required) Whether to use [BigQuery's partition tables](https://cloud.google.com/bigquery/docs/partitioned-tables).
+* `use_partitioned_tables` - (Required) Whether to use [BigQuery's partition tables](https://docs.cloud.google.com/bigquery/docs/partitioned-tables).
     By default, Logging creates dated tables based on the log entries' timestamps, e.g. syslog_20170523. With partitioned
-    tables, the date suffix is no longer present and [special query syntax](https://cloud.google.com/bigquery/docs/querying-partitioned-tables)
+    tables, the date suffix is no longer present and [special query syntax](https://docs.cloud.google.com/bigquery/docs/querying-partitioned-tables)
     has to be used instead. In both cases, tables are sharded based on UTC timezone.
 
 <a name="nested_exclusions"></a>The `exclusions` block supports:
 
 * `name` - (Required) A client-assigned identifier, such as `load-balancer-exclusion`. Identifiers are limited to 100 characters and can include only letters, digits, underscores, hyphens, and periods. First character has to be alphanumeric.
 * `description` - (Optional) A description of this exclusion.
-* `filter` - (Required) An advanced logs filter that matches the log entries to be excluded. By using the sample function, you can exclude less than 100% of the matching log entries. See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced_filters) for information on how to
+* `filter` - (Required) An advanced logs filter that matches the log entries to be excluded. By using the sample function, you can exclude less than 100% of the matching log entries. See [Advanced Log Filters](https://docs.cloud.google.com/logging/docs/view/advanced_filters) for information on how to
     write a filter.
 * `disabled` - (Optional) If set to True, then this exclusion is disabled and it does not exclude any log entries.
 

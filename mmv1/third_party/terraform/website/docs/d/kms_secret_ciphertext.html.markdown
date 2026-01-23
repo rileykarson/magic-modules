@@ -12,7 +12,7 @@ This data source allows you to encrypt data with Google Cloud KMS and use the
 ciphertext within your resource definitions.
 
 For more information see
-[the official documentation](https://cloud.google.com/kms/docs/encrypt-decrypt).
+[the official documentation](https://docs.cloud.google.com/kms/docs/encrypt-decrypt).
 
 ~> **NOTE:** Using this data source will allow you to conceal secret data within your
 resource definitions, but it does not take care of protecting that data in the
@@ -69,7 +69,7 @@ resource "google_compute_instance" "instance" {
 ```
 
 The resulting instance can then access the encrypted password from its metadata
-and decrypt it, e.g. using the [Cloud SDK](https://cloud.google.com/sdk/gcloud/reference/kms/decrypt)):
+and decrypt it, e.g. using the [Cloud SDK](https://docs.cloud.google.com/sdk/gcloud/reference/kms/decrypt)):
 
 ```bash
 $ curl -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/password \

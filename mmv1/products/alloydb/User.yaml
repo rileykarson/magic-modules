@@ -16,8 +16,8 @@ name: 'User'
 description: 'A database user in an AlloyDB cluster.'
 references:
   guides:
-    'AlloyDB': 'https://cloud.google.com/alloydb/docs/'
-  api: 'https://cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.users/create'
+    'AlloyDB': 'https://docs.cloud.google.com/alloydb/docs/'
+  api: 'https://docs.cloud.google.com/alloydb/docs/reference/rest/v1/projects.locations.clusters.users/create'
 docs:
 base_url: '{{cluster}}/users'
 self_link: '{{cluster}}/users/{{user_id}}'

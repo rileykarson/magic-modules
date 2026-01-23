@@ -9,7 +9,7 @@ description: |-
 Get information about an AutonomousDatabase.
 
 For more information see the
-[API](https://cloud.google.com/oracle/database/docs/reference/rest/v1/projects.locations.autonomousDatabases).
+[API](https://docs.cloud.google.com/oracle/database/docs/reference/rest/v1/projects.locations.autonomousDatabases).
 
 ## Example Usage
 

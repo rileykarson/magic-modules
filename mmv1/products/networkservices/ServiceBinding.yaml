@@ -18,7 +18,7 @@ description: |
   BackendService resource.
 references:
   guides:
-  api: 'https://cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.serviceBindings'
+  api: 'https://docs.cloud.google.com/traffic-director/docs/reference/network-services/rest/v1beta1/projects.locations.serviceBindings'
 docs:
 base_url: 'projects/{{project}}/locations/global/serviceBindings'
 create_url: 'projects/{{project}}/locations/global/serviceBindings?serviceBindingId={{name}}'
