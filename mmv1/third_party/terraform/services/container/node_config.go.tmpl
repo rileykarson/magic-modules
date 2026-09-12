@@ -1376,6 +1376,7 @@ func schemaNodeConfig() *schema.Schema {
 						},
 					},
 				},
+{{ if ne $.TargetVersionName `ga` -}}
 				"host_maintenance_policy": {
 					Type:        schema.TypeList,
 					Optional:    true,
@@ -1388,10 +1389,9 @@ func schemaNodeConfig() *schema.Schema {
 								Type: schema.TypeString,
 								Required:     true,
 								ForceNew:     true,
-								Description:  `.`,
+								Description:  `Specifies the frequency of planned maintenance events. One of: "MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC".`,
 								ValidateFunc: validation.StringInSlice([]string{"MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC"}, false),
 							},
-	{{ if ne $.TargetVersionName `ga` -}}
 							"opportunistic_maintenance_strategy": {
 								Type:        schema.TypeList,
 								Optional:    true,
@@ -1421,10 +1421,10 @@ func schemaNodeConfig() *schema.Schema {
 									},
 								},
 							},
-	{{- end }}
 						},
 					},
 				},
+{{- end }}
 				"confidential_nodes": {
 					Type:        schema.TypeList,
 					Optional:    true,
