@@ -419,17 +419,39 @@ func (l *Loader) loadResource(product *api.Product, baseResourcePath string, ove
 				e.ConfigPath = fmt.Sprintf("templates/terraform/examples/%s.tf.tmpl", e.Name)
 			}
 
+			var testVarsOverrides map[string]string
+			var bootstrapResources map[string]string
+			for k, v := range e.TestVarsOverrides {
+				if strings.Contains(v, "Bootstrap") {
+					if bootstrapResources == nil {
+						bootstrapResources = make(map[string]string)
+					}
+					bootstrapResources[k] = v
+				} else {
+					if testVarsOverrides == nil {
+						testVarsOverrides = make(map[string]string)
+					}
+					testVarsOverrides[k] = v
+				}
+			}
+
+			var oicsVarsOverrides map[string]string
+			if !e.ExcludeTest && len(e.TestEnvVars) == 0 && len(bootstrapResources) == 0 {
+				oicsVarsOverrides = e.OicsVarsOverrides
+			}
+
 			steps := []*apiresource.Step{
 				{
-					Name:              e.Name,
-					ConfigPath:        e.ConfigPath,
-					ResourceIdVars:    e.Vars,
-					TestEnvVars:       e.TestEnvVars,
-					TestVarsOverrides: e.TestVarsOverrides,
-					OicsVarsOverrides: e.OicsVarsOverrides,
-					MinVersion:        e.MinVersion,
-					IgnoreReadExtra:   e.IgnoreReadExtra,
-					ExcludeImportTest: e.ExcludeImportTest,
+					Name:               e.Name,
+					ConfigPath:         e.ConfigPath,
+					ResourceIdVars:     e.Vars,
+					TestEnvVars:        e.TestEnvVars,
+					TestVarsOverrides:  testVarsOverrides,
+					BootstrapResources: bootstrapResources,
+					OicsVarsOverrides:  oicsVarsOverrides,
+					MinVersion:         e.MinVersion,
+					IgnoreReadExtra:    e.IgnoreReadExtra,
+					ExcludeImportTest:  e.ExcludeImportTest,
 				},
 			}
 			sample := &apiresource.Sample{

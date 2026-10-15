@@ -564,3 +564,51 @@ examples:
 		t.Errorf("expected nested EAP config_path under samples/. Expected substring:\n%s\n\nGot:\n%s", expectedSubstr, updatedYaml)
 	}
 }
+
+func TestMigrateFile_BootstrapResourcesSplit(t *testing.T) {
+	tmpDir, err := ioutil.TempDir("", "mm-bootstrap-split-test")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	productsDir := filepath.Join(tmpDir, "mmv1", "products", "alloydb")
+	os.MkdirAll(productsDir, 0755)
+
+	examplesDir := filepath.Join(tmpDir, "mmv1", "templates", "terraform", "examples")
+	os.MkdirAll(examplesDir, 0755)
+
+	yamlPath := filepath.Join(productsDir, "Cluster.yaml")
+	yamlContent := `---
+name: Cluster
+examples:
+  - name: alloydb_cluster_basic
+    primary_resource_id: default
+    vars:
+      alloydb_cluster_name: full-alloydb-cluster
+      network_name: default
+    test_vars_overrides:
+      network_name: 'compute.BootstrapSharedTestNetwork(t, "alloydb")'
+      deletion_protection: 'false'
+`
+	ioutil.WriteFile(yamlPath, []byte(yamlContent), 0644)
+
+	tmplPath := filepath.Join(examplesDir, "alloydb_cluster_basic.tf.tmpl")
+	ioutil.WriteFile(tmplPath, []byte(`resource "google" "test" {}`), 0644)
+
+	err = MigrateFile(yamlPath, "alloydb", false, false, false, false)
+	if err != nil {
+		t.Fatalf("MigrateFile failed: %v", err)
+	}
+
+	updatedYamlBytes, _ := ioutil.ReadFile(yamlPath)
+	updatedYaml := string(updatedYamlBytes)
+
+	expectedSubstr := `        test_vars_overrides:
+          deletion_protection: "false"
+        bootstrap_resources:
+          network_name: compute.BootstrapSharedTestNetwork(t, "alloydb")`
+	if !strings.Contains(updatedYaml, expectedSubstr) {
+		t.Errorf("expected test_vars_overrides to split Bootstrap calls into bootstrap_resources. Expected substring:\n%s\n\nGot:\n%s", expectedSubstr, updatedYaml)
+	}
+}

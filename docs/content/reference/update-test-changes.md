@@ -118,7 +118,7 @@ These fields are now configured within each individual `Step` of a `Sample`.
 | :--- | :--- | :--- |
 | `examples.vars` | `step.resource_id_vars` | The entire `vars` map is moved into `resource_id_vars` within each step. |
 | `examples.test_env_vars` | `step.test_env_vars` | Moved to the step level. |
-| `examples.test_vars_overrides` | `step.test_vars_overrides` | Moved to the step level. |
+| `examples.test_vars_overrides` | `step.test_vars_overrides` / `step.bootstrap_resources` | Moved to the step level; `Bootstrap*` function calls move to `step.bootstrap_resources`. |
 | `examples.oics_vars_overrides` | `step.oics_vars_overrides` | Moved to the step level. |
 | `examples.ignore_read_extra` | `step.ignore_read_extra` | Moved to the step level. |
 | `examples.exclude_docs` | `sample.exclude_basic_doc` | Replaced by `sample.exclude_basic_doc` (or `step.include_step_doc` to override). |
@@ -133,6 +133,7 @@ This field is new in the `steps` object and has no direct equivalent in the old 
 | Old Field | New Location | Notes |
 | :--- | :--- | :--- |
 | *(N/A)* | `step.vars` | Newly added at the step level. Values are copied directly to tests. |
+| *(N/A)* | `step.bootstrap_resources` | Newly added at the step level for Go `Bootstrap*` function calls that provision shared prerequisite resources in tests. |
 | *(N/A)* | `step.min_version` | Newly added to set a version for a specific step |
 | *(N/A)* | `step.include_step_doc` | Explicitly forcing a step's docs generation (overriding Sample block). |
 

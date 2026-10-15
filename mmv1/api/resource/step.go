@@ -104,6 +104,14 @@ type Step struct {
 	// NOTE: Keys in TestVarsOverrides will apply to a matching key in EITHER Vars or ResourceIdVars.
 	TestVarsOverrides map[string]string `yaml:"test_vars_overrides,omitempty"`
 
+	// Map of variable names to Go bootstrap function calls used to provision
+	// shared prerequisite resources in acceptance tests (e.g., compute.BootstrapSharedTestNetwork,
+	// container.BootstrapSharedGKECluster, kms.BootstrapKMSKey,
+	// servicenetworking.BootstrapSharedServiceNetworkingConnection).
+	// Keys apply to a matching key in Vars or ResourceIdVars (or standalone test context keys).
+	// When set, Open in Cloud Shell (OiCS) generation is omitted for the step.
+	BootstrapResources map[string]string `yaml:"bootstrap_resources,omitempty"`
+
 	// Hash to provider custom override values for generating oics config
 	// See test_vars_overrides for more details
 	// NOTE: Keys in OicsVarsOverrides will apply to a matching key in EITHER Vars or ResourceIdVars for OiCS generation.
@@ -139,7 +147,7 @@ func (s *Step) TestStepSlug(productName, resourceName string) string {
 // by this step.
 func (s *Step) TestDependencies(resourcePrefixPkgMap map[string]string) map[string]string {
 	deps := map[string]string{}
-	for _, val := range s.TestContextVars {
+	for _, val := range s.BootstrapResources {
 		if strings.HasPrefix(val, "compute.") {
 			deps["services/compute"] = ""
 		}
@@ -180,6 +188,27 @@ func (s *Step) Validate(rName, sName string) (es []error) {
 	for k := range s.Vars {
 		if _, exists := s.ResourceIdVars[k]; exists {
 			es = append(es, fmt.Errorf("variable key '%s' cannot exist in both 'vars' and 'resource_id_vars' for step '%s' in sample '%s' of resource '%s'", k, s.Name, sName, rName))
+		}
+	}
+	for k, v := range s.BootstrapResources {
+		if _, exists := s.TestVarsOverrides[k]; exists {
+			es = append(es, fmt.Errorf("variable key '%s' cannot exist in both 'bootstrap_resources' and 'test_vars_overrides' for step '%s' in sample '%s' of resource '%s'", k, s.Name, sName, rName))
+		}
+		if !strings.Contains(v, "Bootstrap") {
+			es = append(es, fmt.Errorf("variable key '%s' in 'bootstrap_resources' does not contain a bootstrap function for step '%s' in sample '%s' of resource '%s'; use 'test_vars_overrides' instead", k, s.Name, sName, rName))
+		}
+	}
+	for k, v := range s.TestVarsOverrides {
+		if strings.Contains(v, "Bootstrap") {
+			es = append(es, fmt.Errorf("variable key '%s' in 'test_vars_overrides' contains a bootstrap function for step '%s' in sample '%s' of resource '%s'; use 'bootstrap_resources' instead", k, s.Name, sName, rName))
+		}
+	}
+	if len(s.OicsVarsOverrides) > 0 {
+		if len(s.TestEnvVars) > 0 {
+			es = append(es, fmt.Errorf("'oics_vars_overrides' cannot be specified when 'test_env_vars' is set for step '%s' in sample '%s' of resource '%s'", s.Name, sName, rName))
+		}
+		if len(s.BootstrapResources) > 0 {
+			es = append(es, fmt.Errorf("'oics_vars_overrides' cannot be specified when 'bootstrap_resources' is set for step '%s' in sample '%s' of resource '%s'", s.Name, sName, rName))
 		}
 	}
 	if s.Name == "" {
@@ -278,6 +307,9 @@ func (s *Step) SetHCLText(sysfs fs.FS) {
 
 	// Apply overrides from YAML
 	for key, value := range s.TestVarsOverrides {
+		testContextVars[key] = fmt.Sprintf("%s", value)
+	}
+	for key, value := range s.BootstrapResources {
 		testContextVars[key] = fmt.Sprintf("%s", value)
 	}
 

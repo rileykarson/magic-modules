@@ -107,15 +107,15 @@ An **acceptance test** verifies that a resource can be created, updated, and des
            resource_id_vars:
              resource_name: "example-resource"
              network_name: "example-network"
-           # test_vars_overrides contains literal overrides for variables in tests.
-           test_vars_overrides:
+           # bootstrap_resources contains Go bootstrap function calls for shared prerequisite resources in tests.
+           bootstrap_resources:
              network_name: 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "pubsub-topic-network-config")'
          # Subsequent steps define update configurations.
          - name: "pubsub_topic_full"
            resource_id_vars:
              resource_name: "example-resource"
              network_name: "example-network"
-           test_vars_overrides:
+           bootstrap_resources:
              network_name: 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "pubsub-topic-network-config")'
            # vars should ONLY be used for fields that vary between steps.
            # Fields that stay constant across steps should be hardcoded in the .tf.tmpl file.
@@ -125,7 +125,7 @@ An **acceptance test** verifies that a resource can be created, updated, and des
            resource_id_vars:
              resource_name: "example-resource"
              network_name: "example-network"
-           test_vars_overrides:
+           bootstrap_resources:
              network_name: 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "pubsub-topic-network-config")'
            vars:
              display_name: "Updated Display Name" # The new value for the updatable field
@@ -288,7 +288,7 @@ samples:
       - name: service_resource_basic
         resource_id_vars:
           kms_key_name: 'kms-key'
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: 'kms.BootstrapKMSKey(t).CryptoKey.Name'
 ```
 {{< /tab >}}
@@ -416,7 +416,7 @@ samples:
         resource_id_vars:
           network_name: 'default'
           subnetwork_name: 'default'
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: 'tpgcompute.BootstrapSharedTestNetwork(t, "network-identifier")'
           subnetwork_name: 'tpgcompute.BootstrapSubnet(t, "subnet-identifier", tpgcompute.BootstrapSharedTestNetwork(t, "network-identifier"))'
 ```

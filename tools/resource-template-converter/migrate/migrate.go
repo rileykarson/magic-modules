@@ -133,7 +133,41 @@ func MigrateFile(filePath, serviceName string, onlyMigration, onlyFormat, explic
 						keyNode.Value = "resource_id_vars"
 						stepContent = append(stepContent, keyNode, valNode)
 
-					case "test_env_vars", "test_vars_overrides", "oics_vars_overrides", "ignore_read_extra", "exclude_import_test":
+					case "test_vars_overrides":
+						if valNode.Kind == yaml.MappingNode {
+							var overrideContent []*yaml.Node
+							var bootstrapContent []*yaml.Node
+							for j := 0; j < len(valNode.Content); j += 2 {
+								kNode := valNode.Content[j]
+								vNode := valNode.Content[j+1]
+								if strings.Contains(vNode.Value, "Bootstrap") {
+									bootstrapContent = append(bootstrapContent, kNode, vNode)
+								} else {
+									overrideContent = append(overrideContent, kNode, vNode)
+								}
+							}
+							if len(overrideContent) > 0 {
+								overrideMapNode := cloneNode(valNode)
+								overrideMapNode.Content = overrideContent
+								stepContent = append(stepContent, keyNode, overrideMapNode)
+							}
+							if len(bootstrapContent) > 0 {
+								bootstrapKeyNode := cloneNode(keyNode)
+								bootstrapKeyNode.Value = "bootstrap_resources"
+								if len(overrideContent) > 0 {
+									bootstrapKeyNode.HeadComment = ""
+									bootstrapKeyNode.LineComment = ""
+									bootstrapKeyNode.FootComment = ""
+								}
+								bootstrapMapNode := cloneNode(valNode)
+								bootstrapMapNode.Content = bootstrapContent
+								stepContent = append(stepContent, bootstrapKeyNode, bootstrapMapNode)
+							}
+						} else {
+							stepContent = append(stepContent, keyNode, valNode)
+						}
+
+					case "test_env_vars", "bootstrap_resources", "oics_vars_overrides", "ignore_read_extra", "exclude_import_test":
 						stepContent = append(stepContent, keyNode, valNode)
 
 					case "exclude_docs":

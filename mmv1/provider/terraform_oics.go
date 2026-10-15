@@ -86,7 +86,7 @@ func (toics TerraformOiCS) GenerateResource(object api.Resource, templateData Te
 
 	for _, sample := range object.TestSamples() {
 		for _, step := range sample.NewConfigFuncs {
-			if len(step.TestEnvVars) > 0 {
+			if len(step.TestEnvVars) > 0 || len(step.BootstrapResources) > 0 {
 				continue
 			}
 

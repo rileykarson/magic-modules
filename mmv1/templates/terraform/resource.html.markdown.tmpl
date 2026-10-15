@@ -66,7 +66,7 @@ values will be stored in the raw state as plain text: {{ $.SensitivePropsToStrin
 	{{- range $sample := $.Samples }}
 		{{- range $index, $step := $sample.Steps }}
 			{{- if $step.ShouldGenerateDoc $index $sample }}
-				{{- if not (or $sample.ExcludeTest $step.TestEnvVars) }}
+				{{- if not (or $sample.ExcludeTest $step.TestEnvVars $step.BootstrapResources) }}
 <div class = "oics-button" style="float: right; margin: 0 0 -15px">
   <a href="{{ $step.OiCSLink }}" target="_blank">
     <img alt="Open in Cloud Shell" src="//gstatic.com/cloudssh/images/open-btn.svg" style="max-height: 44px; margin: 32px auto; max-width: 100%;">

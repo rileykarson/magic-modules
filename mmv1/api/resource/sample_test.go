@@ -20,8 +20,8 @@ func TestSample_TestDependencies(t *testing.T) {
 			sample: resource.Sample{
 				Steps: []*resource.Step{
 					{
-						TestContextVars: map[string]string{},
-						TestHCLText:     "",
+						BootstrapResources: map[string]string{},
+						TestHCLText:        "",
 					},
 				},
 			},
@@ -48,13 +48,13 @@ func TestSample_TestDependencies(t *testing.T) {
 			sample: resource.Sample{
 				Steps: []*resource.Step{
 					{
-						TestContextVars: map[string]string{
+						BootstrapResources: map[string]string{
 							"network": "compute.BootstrapSubnet",
 						},
 						TestHCLText: "",
 					},
 					{
-						TestContextVars: map[string]string{
+						BootstrapResources: map[string]string{
 							"network": "compute.BootstrapSubnet",
 						},
 						TestHCLText: "",
@@ -71,14 +71,14 @@ func TestSample_TestDependencies(t *testing.T) {
 			sample: resource.Sample{
 				Steps: []*resource.Step{
 					{
-						TestContextVars: map[string]string{
+						BootstrapResources: map[string]string{
 							"network": "compute.BootstrapSubnet",
 						},
 						TestHCLText: "",
 					},
 					{
-						TestContextVars: map[string]string{},
-						TestHCLText:     `resource "google_compute_instance"`,
+						BootstrapResources: map[string]string{},
+						TestHCLText:        `resource "google_compute_instance"`,
 					},
 				},
 			},
@@ -100,8 +100,8 @@ func TestSample_TestDependencies(t *testing.T) {
 				},
 				Steps: []*resource.Step{
 					{
-						TestContextVars: map[string]string{},
-						TestHCLText:     `resource "google_project"`,
+						BootstrapResources: map[string]string{},
+						TestHCLText:        `resource "google_project"`,
 					},
 				},
 			},
@@ -119,6 +119,61 @@ func TestSample_TestDependencies(t *testing.T) {
 			got := tc.sample.TestDependencies(tc.resourcePrefixServiceMap)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("TestDependencies() mismatch (-want +got:\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestSample_Validate(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name    string
+		sample  resource.Sample
+		wantErr bool
+	}{
+		{
+			name: "valid oics_vars_overrides when exclude_test is false",
+			sample: resource.Sample{
+				Name:        "basic",
+				ExcludeTest: false,
+				Steps: []*resource.Step{
+					{
+						Name: "basic",
+						OicsVarsOverrides: map[string]string{
+							"deletion_protection": "false",
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "oics_vars_overrides disallowed when exclude_test is true",
+			sample: resource.Sample{
+				Name:        "basic",
+				ExcludeTest: true,
+				Steps: []*resource.Step{
+					{
+						Name: "basic",
+						OicsVarsOverrides: map[string]string{
+							"deletion_protection": "false",
+						},
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			errs := tc.sample.Validate("TestResource")
+			if tc.wantErr && len(errs) == 0 {
+				t.Errorf("Validate() expected error, got nil")
+			}
+			if !tc.wantErr && len(errs) > 0 {
+				t.Errorf("Validate() unexpected error: %v", errs)
 			}
 		})
 	}

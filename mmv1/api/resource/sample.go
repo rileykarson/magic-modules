@@ -146,6 +146,9 @@ func (s *Sample) Validate(rName string) (es []error) {
 	es = append(es, s.ValidateExternalProviders()...)
 
 	for _, step := range s.Steps {
+		if s.ExcludeTest && len(step.OicsVarsOverrides) > 0 {
+			es = append(es, fmt.Errorf("'oics_vars_overrides' cannot be specified when 'exclude_test' is true for step '%s' in sample '%s' of resource '%s'", step.Name, s.Name, rName))
+		}
 		es = append(es, step.Validate(rName, s.Name)...)
 	}
 

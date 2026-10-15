@@ -41,7 +41,8 @@ A sample contains a list of one or more `steps`. Each step has its own configura
 * `vars`: Key/value pairs that are copied directly to tests without a prefix. Reference with `{{index $.Vars "key"}}`. **Note:** This should ONLY be used for fields that vary between steps (for example, to test update functionality). Constant values should be hardcoded directly in the `.tf.tmpl` file.
 * `test_env_vars`: Key/value pairs that map variable names to environment variables for tests (for example, `PROJECT_NAME`, `REGION`, `ORG_ID`).
 * `test_vars_overrides`: Key/value pairs to override variables with literal values or function calls specifically for tests.
-* `oics_vars_overrides`: Key/value pairs to override variables with literal values specifically for Open in Cloud Shell (OiCS) tutorial generation.
+* `bootstrap_resources`: Key/value pairs mapping variable names to Go bootstrap function calls that provision shared prerequisite resources in tests (for example, `compute.BootstrapSharedTestNetwork`, `kms.BootstrapKMSKey`, `servicenetworking.BootstrapSharedServiceNetworkingConnection`). When set, Open in Cloud Shell (OiCS) generation is omitted for the step.
+* `oics_vars_overrides`: Key/value pairs to override variables with literal values specifically for Open in Cloud Shell (OiCS) tutorial generation. Cannot be specified when OiCS is disabled (`exclude_test`, `test_env_vars`, or `bootstrap_resources`).
 * `min_version`: Overrides the sample-level `min_version` for this specific step.
 * `ignore_read_extra`: A list of properties to ignore during the import test for this step, typically for write-only fields.
 * `exclude_import_test`: If `true`, no import test is generated for this specific step.
@@ -73,8 +74,8 @@ samples:
           network_name: "my-network"
         test_env_vars:
           org_id: "ORG_ID"
-        test_vars_overrides:
-          network_name: 'acctest.BootstrapSharedServiceNetworkingConnection(t, "service-resource-network-config")'
+        bootstrap_resources:
+          network_name: 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "service-resource-network-config")'
         ignore_read_extra:
           - 'foo'
         exclude_import_test: true

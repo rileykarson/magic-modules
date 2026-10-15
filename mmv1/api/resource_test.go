@@ -917,8 +917,8 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{},
-								TestHCLText:     "",
+								BootstrapResources: map[string]string{},
+								TestHCLText:        "",
 							},
 						},
 					},
@@ -937,7 +937,7 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{
+								BootstrapResources: map[string]string{
 									"network": "compute.BootstrapSubnet",
 								},
 								TestHCLText: "",
@@ -947,7 +947,7 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{
+								BootstrapResources: map[string]string{
 									"network": "compute.BootstrapSubnet",
 								},
 								TestHCLText: "",
@@ -971,7 +971,7 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{
+								BootstrapResources: map[string]string{
 									"network": "compute.BootstrapSubnet",
 								},
 								TestHCLText: "",
@@ -981,8 +981,8 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{},
-								TestHCLText:     `resource "google_compute_instance"`,
+								BootstrapResources: map[string]string{},
+								TestHCLText:        `resource "google_compute_instance"`,
 							},
 						},
 					},
@@ -1005,7 +1005,7 @@ func TestResource_TestDependencies(t *testing.T) {
 					{
 						Steps: []*resource.Step{
 							{
-								TestContextVars: map[string]string{
+								BootstrapResources: map[string]string{
 									"network": "compute.BootstrapSubnet",
 								},
 								TestHCLText: "",

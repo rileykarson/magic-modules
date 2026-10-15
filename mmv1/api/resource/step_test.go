@@ -18,8 +18,8 @@ func TestStep_TestDependencies(t *testing.T) {
 		{
 			name: "empty",
 			step: resource.Step{
-				TestContextVars: map[string]string{},
-				TestHCLText:     "",
+				BootstrapResources: map[string]string{},
+				TestHCLText:        "",
 			},
 			resourcePrefixServiceMap: map[string]string{},
 			want:                     map[string]string{},
@@ -27,7 +27,7 @@ func TestStep_TestDependencies(t *testing.T) {
 		{
 			name: "compute bootstrapped",
 			step: resource.Step{
-				TestContextVars: map[string]string{
+				BootstrapResources: map[string]string{
 					"network": "compute.BootstrapSubnet",
 				},
 				TestHCLText: "",
@@ -38,9 +38,22 @@ func TestStep_TestDependencies(t *testing.T) {
 			},
 		},
 		{
+			name: "container bootstrapped",
+			step: resource.Step{
+				BootstrapResources: map[string]string{
+					"cluster": `container.BootstrapSharedGKECluster(t, "gkebackup")`,
+				},
+				TestHCLText: "",
+			},
+			resourcePrefixServiceMap: map[string]string{},
+			want: map[string]string{
+				"services/container": "",
+			},
+		},
+		{
 			name: "kms bootstrapped",
 			step: resource.Step{
-				TestContextVars: map[string]string{
+				BootstrapResources: map[string]string{
 					"kms_key": "kms.BootstrapKMSKey",
 				},
 				TestHCLText: "",
@@ -53,7 +66,7 @@ func TestStep_TestDependencies(t *testing.T) {
 		{
 			name: "servicenetworking bootstrapped",
 			step: resource.Step{
-				TestContextVars: map[string]string{
+				BootstrapResources: map[string]string{
 					"network_name": "servicenetworking.BootstrapSharedServiceNetworkingConnection",
 				},
 				TestHCLText: "",
@@ -66,7 +79,7 @@ func TestStep_TestDependencies(t *testing.T) {
 		{
 			name: "hcl without prefixes",
 			step: resource.Step{
-				TestContextVars: map[string]string{},
+				BootstrapResources: map[string]string{},
 				TestHCLText: `
 resource "google_compute_instance" "foobar" {
 }
@@ -79,8 +92,8 @@ resource "google_kms_crypto_key" "foobar" {
 		{
 			name: "prefixes without hcl",
 			step: resource.Step{
-				TestContextVars: map[string]string{},
-				TestHCLText:     "",
+				BootstrapResources: map[string]string{},
+				TestHCLText:        "",
 			},
 			resourcePrefixServiceMap: map[string]string{
 				"google_compute_": "services/compute",
@@ -91,7 +104,7 @@ resource "google_kms_crypto_key" "foobar" {
 		{
 			name: "hcl with prefixes",
 			step: resource.Step{
-				TestContextVars: map[string]string{},
+				BootstrapResources: map[string]string{},
 				TestHCLText: `
 resource "google_compute_instance" "foobar" {
 }
@@ -110,7 +123,7 @@ resource "google_kms_crypto_key" "foobar" {
 		{
 			name: "hcl with prefixes plus bootstrapped",
 			step: resource.Step{
-				TestContextVars: map[string]string{
+				BootstrapResources: map[string]string{
 					"network": "compute.BootstrapSubnet",
 					"kms_key": "kms.BootstrapKMSKey",
 				},
@@ -136,6 +149,101 @@ resource "google_kms_crypto_key" "foobar" {
 			got := tc.step.TestDependencies(tc.resourcePrefixServiceMap)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("TestDependencies() mismatch (-want +got:\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestStep_Validate(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name    string
+		step    resource.Step
+		wantErr bool
+	}{
+		{
+			name: "valid with bootstrap_resources and test_vars_overrides",
+			step: resource.Step{
+				Name: "basic",
+				BootstrapResources: map[string]string{
+					"network": `compute.BootstrapSharedTestNetwork(t, "test")`,
+				},
+				TestVarsOverrides: map[string]string{
+					"deletion_protection": "false",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "duplicate key in bootstrap_resources and test_vars_overrides",
+			step: resource.Step{
+				Name: "basic",
+				BootstrapResources: map[string]string{
+					"network": `compute.BootstrapSharedTestNetwork(t, "test")`,
+				},
+				TestVarsOverrides: map[string]string{
+					"network": `"other"`,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "bootstrap function in test_vars_overrides",
+			step: resource.Step{
+				Name: "basic",
+				TestVarsOverrides: map[string]string{
+					"network": `compute.BootstrapSharedTestNetwork(t, "test")`,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "non-bootstrap value in bootstrap_resources",
+			step: resource.Step{
+				Name: "basic",
+				BootstrapResources: map[string]string{
+					"deletion_protection": "false",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "oics_vars_overrides with test_env_vars",
+			step: resource.Step{
+				Name: "basic",
+				TestEnvVars: map[string]string{
+					"project": "PROJECT_NAME",
+				},
+				OicsVarsOverrides: map[string]string{
+					"deletion_protection": "false",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "oics_vars_overrides with bootstrap_resources",
+			step: resource.Step{
+				Name: "basic",
+				BootstrapResources: map[string]string{
+					"network": `compute.BootstrapSharedTestNetwork(t, "test")`,
+				},
+				OicsVarsOverrides: map[string]string{
+					"deletion_protection": "false",
+				},
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			errs := tc.step.Validate("TestResource", "test_sample")
+			if tc.wantErr && len(errs) == 0 {
+				t.Errorf("Validate() expected error, got nil")
+			}
+			if !tc.wantErr && len(errs) > 0 {
+				t.Errorf("Validate() unexpected error: %v", errs)
 			}
 		})
 	}
