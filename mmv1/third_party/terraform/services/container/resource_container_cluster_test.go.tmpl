@@ -3497,42 +3497,41 @@ func TestAccContainerCluster_withNodePoolDefaults(t *testing.T) {
 				Config: testAccContainerCluster_withNodePoolDefaults(clusterName, "true", networkName, subnetworkName),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_cluster.with_node_pool_defaults", plancheck.ResourceActionCreate),
-						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionDestroy),
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_defaults",
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
 						"node_pool_defaults.0.node_config_defaults.0.gcfs_config.#", "1"),
-					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_defaults",
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
 						"node_pool_defaults.0.node_config_defaults.0.gcfs_config.0.enabled", "true"),
 				),
 			},
 			{
-					ResourceName:            "google_container_cluster.with_node_pool_defaults",
-					ImportState:             true,
-					ImportStateVerify:       true,
-					ImportStateVerifyIgnore: []string{"deletion_protection"},
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
 			{
-					Config: testAccContainerCluster_withNodePoolDefaults(clusterName, "false", networkName, subnetworkName),
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectResourceAction("google_container_cluster.with_node_pool_defaults", plancheck.ResourceActionUpdate),
-						},
+				Config: testAccContainerCluster_withNodePoolDefaults(clusterName, "false", networkName, subnetworkName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
-					Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_defaults",
-							"node_pool_defaults.0.node_config_defaults.0.gcfs_config.#", "1"),
-					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_defaults",
-							"node_pool_defaults.0.node_config_defaults.0.gcfs_config.0.enabled", "false"),
-					),
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.gcfs_config.#", "1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.gcfs_config.0.enabled", "false"),
+				),
 			},
 			{
-					ResourceName:            "google_container_cluster.with_node_pool_defaults",
-					ImportState:             true,
-					ImportStateVerify:       true,
-					ImportStateVerifyIgnore: []string{"deletion_protection"},
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
 		},
 	})
@@ -11290,8 +11289,8 @@ resource "google_container_cluster" "with_advanced_machine_features_in_node_pool
 }
 
 func testAccContainerCluster_withNodePoolDefaults(clusterName, enabled, networkName, subnetworkName string) string {
-        return fmt.Sprintf(`
-resource "google_container_cluster" "with_node_pool_defaults" {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-east1-b"
   initial_node_count = 1
