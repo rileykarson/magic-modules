@@ -79,6 +79,7 @@ samples:
           kms_key_name: my-key
         test_vars_overrides:
           prevent_destroy: "false"
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-west1").CryptoKey.Name
         ignore_read_extra:
           - update_time

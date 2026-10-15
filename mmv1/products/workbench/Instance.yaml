@@ -123,7 +123,7 @@ samples:
         test_env_vars:
           project_id: 'PROJECT_NAME'
           service_account: 'SERVICE_ACCT'
-        test_vars_overrides:
+        bootstrap_resources:
           'key_name': 'kms.BootstrapKMSKeyInLocation(t, "us-east1").CryptoKey.Name'
         ignore_read_extra:
           - 'gce_setup.0.vm_image'

@@ -67,9 +67,10 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
   - name: privateca_certificate_authority_basic_no_org
@@ -82,9 +83,10 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
   # This example is meant to confirm that it's possible to make
@@ -100,9 +102,10 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
           - subordinate_config.0.certificate_authority
@@ -124,10 +127,11 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocation(t, "ASYMMETRIC_SIGN", "us-central1").CryptoKey.Name
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocation(t, "ASYMMETRIC_SIGN", "us-central1").CryptoKey.Name
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
   - name: privateca_certificate_authority_custom_ski
@@ -145,10 +149,11 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocation(t, "ASYMMETRIC_SIGN", "us-central1").CryptoKey.Name
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocation(t, "ASYMMETRIC_SIGN", "us-central1").CryptoKey.Name
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
   - name: privateca_certificate_authority_basic_with_custom_cdp_aia_urls
@@ -161,9 +166,10 @@ samples:
           pool_location: us-central1
           deletion_protection: "true"
         test_vars_overrides:
-          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
           pool_location: '"us-central1"'
           deletion_protection: "false"
+        bootstrap_resources:
+          pool_name: BootstrapSharedCaPoolInLocation(t, "us-central1")
         ignore_read_extra:
           - deletion_protection
 virtual_fields:

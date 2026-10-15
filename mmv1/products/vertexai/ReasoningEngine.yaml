@@ -125,7 +125,7 @@ samples:
           kms_key_name: 'example-key'
           secret_name: 'secret'
           service_account_id: 'sa'
-        test_vars_overrides:
+        bootstrap_resources:
           'kms_key_name': 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-re-key1").CryptoKey.Name'
         ignore_read_extra:
           - 'deletion_policy'

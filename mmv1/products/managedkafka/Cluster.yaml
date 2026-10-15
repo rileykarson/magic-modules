@@ -68,7 +68,7 @@ samples:
           cluster_id: 'my-cluster'
           key_name: 'example-key'
           key_ring_name: 'example-key-ring'
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
   - name: 'managedkafka_cluster_public'
     primary_resource_id: 'example'

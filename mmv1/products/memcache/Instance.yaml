@@ -58,9 +58,10 @@ samples:
           instance_name: test-instance
           network_name: test-network
         test_vars_overrides:
-          network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
           # for backward compatible
           address_name: '"address" + randomSuffix'
+        bootstrap_resources:
+          network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
 virtual_fields:
   - name: deletion_protection
     type: Boolean

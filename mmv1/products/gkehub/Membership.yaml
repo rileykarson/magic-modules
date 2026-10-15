@@ -68,10 +68,11 @@ samples:
           project: PROJECT_NAME
           location: REGION
         test_vars_overrides:
-          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
-          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
           # for backward compatible
           name: '"basic" + randomSuffix'
+        bootstrap_resources:
+          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
+          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
   - name: gkehub_membership_basic
     primary_resource_id: membership
     steps:
@@ -84,12 +85,11 @@ samples:
           subnetwork_name: default
         test_vars_overrides:
           deletion_protection: "false"
-          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
-          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
           # for backward compatible
           name: '"basic" + randomSuffix'
-        oics_vars_overrides:
-          deletion_protection: "false"
+        bootstrap_resources:
+          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
+          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
   - name: gkehub_membership_issuer
     primary_resource_id: membership
     steps:
@@ -104,12 +104,11 @@ samples:
           project: PROJECT_NAME
         test_vars_overrides:
           deletion_protection: "false"
-          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
-          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
           # for backward compatible
           name: '"basic" + randomSuffix'
-        oics_vars_overrides:
-          deletion_protection: "false"
+        bootstrap_resources:
+          network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
+          subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
 parameters:
   - name: location
     type: String

@@ -237,9 +237,8 @@ samples:
           deletion_protection_enabled: "true"
         test_vars_overrides:
           deletion_protection_enabled: "false"
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-west1").CryptoKey.Name
-        oics_vars_overrides:
-          deletion_protection_enabled: "false"
   - name: redis_cluster_flexible_ca
     primary_resource_id: test-cluster
     bootstrap_iam:

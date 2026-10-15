@@ -58,7 +58,7 @@ samples:
         resource_id_vars:
           name: restore-all-ns
           cluster: projects/my-project-name/locations/us-east1/clusters/restore-all-ns-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_rollback_namespace
     primary_resource_id: rollback_ns
@@ -67,7 +67,7 @@ samples:
         resource_id_vars:
           name: rollback-ns
           cluster: projects/my-project-name/locations/us-east1/clusters/rollback-ns-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_protected_application
     primary_resource_id: rollback_app
@@ -76,7 +76,7 @@ samples:
         resource_id_vars:
           name: rollback-app
           cluster: projects/my-project-name/locations/us-east1/clusters/rollback-app-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_all_cluster_resources
     primary_resource_id: all_cluster_resources
@@ -85,7 +85,7 @@ samples:
         resource_id_vars:
           name: all-groupkinds
           cluster: projects/my-project-name/locations/us-east1/clusters/all-groupkinds-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_rename_namespace
     primary_resource_id: rename_ns
@@ -94,7 +94,7 @@ samples:
         resource_id_vars:
           name: rename-ns
           cluster: projects/my-project-name/locations/us-east1/clusters/rename-ns-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_second_transformation
     primary_resource_id: transform_rule
@@ -103,7 +103,7 @@ samples:
         resource_id_vars:
           name: transform-rule
           cluster: projects/my-project-name/locations/us-east1/clusters/transform-rule-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_gitops_mode
     primary_resource_id: gitops_mode
@@ -112,7 +112,7 @@ samples:
         resource_id_vars:
           name: gitops-mode
           cluster: projects/my-project-name/locations/us-east1/clusters/gitops-mode-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_restore_order
     primary_resource_id: restore_order
@@ -121,7 +121,7 @@ samples:
         resource_id_vars:
           name: restore-order
           cluster: projects/my-project-name/locations/us-east1/clusters/restore-order-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_volume_res
     primary_resource_id: volume_res
@@ -130,7 +130,7 @@ samples:
         resource_id_vars:
           name: volume-res
           cluster: projects/my-project-name/locations/us-east1/clusters/volume-res-cluster
-        test_vars_overrides:
+        bootstrap_resources:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
 parameters:
   - name: location

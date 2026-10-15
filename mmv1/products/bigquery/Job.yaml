@@ -145,9 +145,10 @@ samples:
         test_env_vars:
           project: 'PROJECT_NAME'
         test_vars_overrides:
-          'kms_key_name': 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "global", "tf-bootstrap-bigquery-job-key1").CryptoKey.Name'
           # for backward compatible
           account_name: '"bqowner" + randomSuffix'
+        bootstrap_resources:
+          'kms_key_name': 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "global", "tf-bootstrap-bigquery-job-key1").CryptoKey.Name'
         ignore_read_extra:
           - 'etag'
           - 'status.0.state'
@@ -164,9 +165,10 @@ samples:
         test_env_vars:
           project: 'PROJECT_NAME'
         test_vars_overrides:
-          'kms_key_name': 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "global", "tf-bootstrap-bigquery-job-key2").CryptoKey.Name'
           # for backward compatible
           account_name: '"bqowner" + randomSuffix'
+        bootstrap_resources:
+          'kms_key_name': 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "global", "tf-bootstrap-bigquery-job-key2").CryptoKey.Name'
         ignore_read_extra:
           - 'etag'
           - 'copy.0.destination_table.0.table_id'

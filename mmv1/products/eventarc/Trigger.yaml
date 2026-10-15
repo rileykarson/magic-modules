@@ -57,7 +57,7 @@ samples:
         resource_id_vars:
           trigger_name: some-trigger
           network_attachment_name: network-attachment
-        test_vars_overrides:
+        bootstrap_resources:
           network_attachment_name: compute.BootstrapNetworkAttachment(t, "tf-bootstrap-eventarc-trigger-na", compute.BootstrapSubnet(t, "tf-bootstrap-eventarc-trigger-subnet", compute.BootstrapSharedTestNetwork(t, "tf-bootstrap-eventarc-trigger-network")))
         test_env_vars:
           project_id: PROJECT_NAME
@@ -78,7 +78,7 @@ samples:
         test_env_vars:
           project_id: PROJECT_NAME
           service_account: SERVICE_ACCT
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-eventarc-trigger-key").CryptoKey.Name
   - name: eventarc_trigger_with_workflow_destination
     primary_resource_id: primary

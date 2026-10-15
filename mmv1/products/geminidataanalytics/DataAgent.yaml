@@ -85,7 +85,7 @@ samples:
         resource_id_vars:
           data_agent_id: 'data-agent-cmek'
           kms_key_name: 'kms-key'
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
 parameters:
   - name: 'location'

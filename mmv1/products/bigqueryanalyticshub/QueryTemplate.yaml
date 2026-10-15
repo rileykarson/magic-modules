@@ -77,7 +77,7 @@ samples:
           data_exchange_id: "my_data_exchange"
           query_template_id: "my_query_template"
           kms_key_name: "projects/keys-project/locations/us/keyRings/key-ring/cryptoKeys/crypto-key"
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: 'kms.BootstrapKMSKeyInLocation(t, "us").CryptoKey.Name'
         ignore_read_extra:
           - "submit"

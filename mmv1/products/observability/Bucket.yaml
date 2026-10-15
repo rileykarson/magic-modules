@@ -54,7 +54,7 @@ samples:
         test_env_vars:
           org_id: ORG_ID
           billing_account: BILLING_ACCT
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-east1", "tf-bootstrap-observability-key1").CryptoKey.Name
         vars:
           display_name: "Initial Display Name"
@@ -64,7 +64,7 @@ samples:
         test_env_vars:
           org_id: ORG_ID
           billing_account: BILLING_ACCT
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-east1", "tf-bootstrap-observability-key2").CryptoKey.Name
         vars:
           display_name: "Updated Display Name"

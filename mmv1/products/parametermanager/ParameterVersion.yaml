@@ -66,9 +66,10 @@ samples:
           parameter_version_id: parameter_version
           kms_key: kms-key
         test_vars_overrides:
-          kms_key: kms.BootstrapKMSKey(t).CryptoKey.Name
           # for backward compatible
           parameter_id: '"parameter" + randomSuffix'
+        bootstrap_resources:
+          kms_key: kms.BootstrapKMSKey(t).CryptoKey.Name
   - name: parameter_version_with_yaml_format
     primary_resource_id: parameter-version-with-yaml-format
     steps:

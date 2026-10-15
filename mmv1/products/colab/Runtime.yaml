@@ -58,7 +58,7 @@ samples:
         resource_id_vars:
           runtime_name: 'colab-runtime'
           key_name: 'my-crypto-key'
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
         ignore_read_extra:
           - 'desired_state'

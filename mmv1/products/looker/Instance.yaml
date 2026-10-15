@@ -101,7 +101,7 @@ samples:
           instance_name: my-instance
           client_id: my-client-id
           client_secret: my-client-secret
-        test_vars_overrides:
+        bootstrap_resources:
           address_name: compute.BootstrapSharedTestGlobalAddress(t, "looker-vpc-network-3", compute.AddressWithPrefixLength(8))
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "looker-vpc-network-3", servicenetworking.ServiceNetworkWithPrefixLength(8))

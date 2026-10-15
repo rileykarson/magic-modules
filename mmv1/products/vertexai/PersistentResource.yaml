@@ -84,7 +84,7 @@ samples:
           subnetwork_name: psc-subnetwork
           kms_key_name: example-key
           resource_pool_id: vpr-resource-pool
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: 'kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-pr-key1").CryptoKey.Name'
 parameters:
   - name: location

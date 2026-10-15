@@ -47,9 +47,10 @@ samples:
           location: us
           kms_key_name: example-key
         test_vars_overrides:
-          kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us").CryptoKey.Name
           # for backward compatible
           location: '"us" + randomSuffix'
+        bootstrap_resources:
+          kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us").CryptoKey.Name
         test_env_vars:
           org_id: ORG_ID
   - name: observability_organization_settings_basic_global

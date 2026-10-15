@@ -81,7 +81,7 @@ samples:
           alloydb_cluster_name: alloydb-cluster
           alloydb_instance_name: alloydb-instance
           network_name: alloydb-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "alloydb-1")
         ignore_read_extra:
           - deletion_protection
@@ -93,7 +93,7 @@ samples:
           alloydb_cluster_name: alloydb-cluster
           alloydb_instance_name: alloydb-instance
           network_name: alloydb-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "alloydb-1")
         ignore_read_extra:
           - deletion_protection
@@ -117,7 +117,7 @@ samples:
           alloydb_backup_id: alloydb-backup
           alloydb_instance_name: alloydb-instance
           network_name: alloydb-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "alloydb-instance-basic")
         ignore_read_extra:
           - deletion_protection
@@ -144,7 +144,7 @@ samples:
           alloydb_primary_instance_name: alloydb-primary-instance
           alloydb_secondary_cluster_name: alloydb-secondary-cluster
           network_name: alloydb-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1")
         ignore_read_extra:
           - deletion_protection

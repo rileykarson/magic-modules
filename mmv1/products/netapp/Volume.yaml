@@ -72,7 +72,7 @@ samples:
           volume_name: test-volume
           pool_name: test-pool
           network_name: test-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
         ignore_read_extra:
           - deletion_policy

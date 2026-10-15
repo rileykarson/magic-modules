@@ -54,7 +54,7 @@ samples:
         resource_id_vars:
           display_name: 'rag-corpus-full'
           kms_key_name: 'kms-key'
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: 'kms.BootstrapKMSKeyInLocation(t, "europe-west4").CryptoKey.Name'
   - name: 'vertex_ai_rag_corpus_search'
     primary_resource_id: 'example'

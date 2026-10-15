@@ -77,10 +77,9 @@ samples:
           network_name: redis-test-network
           prevent_destroy: "true"
         test_vars_overrides:
+          prevent_destroy: "false"
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "redis-full")
-          prevent_destroy: "false"
-        oics_vars_overrides:
-          prevent_destroy: "false"
   - name: redis_instance_full_with_persistence_config
     primary_resource_id: cache-persis
     steps:
@@ -90,10 +89,9 @@ samples:
           network_name: redis-test-network
           prevent_destroy: "true"
         test_vars_overrides:
+          prevent_destroy: "false"
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "redis-full-persis")
-          prevent_destroy: "false"
-        oics_vars_overrides:
-          prevent_destroy: "false"
   - name: redis_instance_private_service
     primary_resource_id: cache
     exclude_test: true
@@ -108,8 +106,6 @@ samples:
           prevent_destroy: "false"
           # for backward compatible
           address_name: '"address" + randomSuffix'
-        oics_vars_overrides:
-          prevent_destroy: "false"
   - name: redis_instance_private_service_test
     primary_resource_id: cache
     exclude_basic_doc: true
@@ -120,10 +116,9 @@ samples:
           network_name: redis-test-network
           prevent_destroy: "true"
         test_vars_overrides:
+          prevent_destroy: "false"
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
-          prevent_destroy: "false"
-        oics_vars_overrides:
-          prevent_destroy: "false"
   - name: redis_instance_mrr
     primary_resource_id: cache
     steps:
@@ -133,10 +128,9 @@ samples:
           network_name: redis-test-network
           prevent_destroy: "true"
         test_vars_overrides:
+          prevent_destroy: "false"
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "redis-mrr")
-          prevent_destroy: "false"
-        oics_vars_overrides:
-          prevent_destroy: "false"
   - name: redis_instance_cmek
     primary_resource_id: cache
     exclude_test: true
@@ -147,10 +141,9 @@ samples:
           network_name: redis-test-network
           prevent_destroy: "true"
         test_vars_overrides:
+          prevent_destroy: "false"
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "redis-cmek")
-          prevent_destroy: "false"
-        oics_vars_overrides:
-          prevent_destroy: "false"
 virtual_fields:
   - name: deletion_protection
     description: |

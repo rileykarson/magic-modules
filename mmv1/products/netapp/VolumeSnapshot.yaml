@@ -59,9 +59,10 @@ samples:
           network_name: test-network
           snap_name: testvolumesnap
         test_vars_overrides:
-          network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
           # for backward compatible
           snap_name: '"testvolumesnap" + randomSuffix'
+        bootstrap_resources:
+          network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
 parameters:
   - name: location
     type: String

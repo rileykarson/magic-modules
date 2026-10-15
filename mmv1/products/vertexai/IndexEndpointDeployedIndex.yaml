@@ -68,7 +68,7 @@ samples:
           bucket_name: bucket-name
           service_account_id: vertex-sa
           address_name: vertex-ai-range
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
           address_name: compute.BootstrapSharedTestGlobalAddress(t, "vpc-network-1", compute.AddressWithPrefixLength(8))
   - name: vertex_ai_index_endpoint_deployed_index_basic_two
@@ -85,7 +85,7 @@ samples:
           bucket_name: bucket-name
           service_account_id: vertex-sa
           address_name: vertex-ai-range
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
           address_name: compute.BootstrapSharedTestGlobalAddress(t, "vpc-network-1", compute.AddressWithPrefixLength(8))
   - name: vertex_ai_index_endpoint_deployed_index_dedicated_resources

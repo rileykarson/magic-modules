@@ -74,9 +74,10 @@ samples:
           parameter_id: parameter
           kms_key: kms-key
         test_vars_overrides:
-          kms_key: kms.BootstrapKMSKey(t).CryptoKey.Name
           # for backward compatible
           parameter_id: '"parameter" + randomSuffix'
+        bootstrap_resources:
+          kms_key: kms.BootstrapKMSKey(t).CryptoKey.Name
   - name: parameter_with_tags
     primary_resource_id: parameter-with-tags
     # Docs example only. The tag key/value IDs here are illustrative

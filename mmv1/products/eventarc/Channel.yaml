@@ -50,7 +50,7 @@ samples:
         test_env_vars:
           project: PROJECT_NAME
           project_number: PROJECT_NUMBER
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-eventarc-channel-key").CryptoKey.Name
   - name: eventarc_channel
     primary_resource_id: primary

@@ -56,7 +56,7 @@ samples:
           region: 'us-central1'
         test_env_vars:
           project: PROJECT_NAME
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
         ignore_read_extra:
           - metadata.0.contents_delta_uri
@@ -73,7 +73,7 @@ samples:
           region: 'us-central1'
         test_env_vars:
           project: PROJECT_NAME
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
         ignore_read_extra:
           - metadata.0.contents_delta_uri

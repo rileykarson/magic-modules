@@ -68,7 +68,7 @@ samples:
         test_env_vars:
           org_id: ORG_ID
           billing_account: BILLING_ACCT
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
   - name: vertex_ai_featurestore_entitytype_with_beta_fields
     primary_resource_id: entity
@@ -83,7 +83,7 @@ samples:
         test_env_vars:
           org_id: ORG_ID
           billing_account: BILLING_ACCT
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
 parameters:
   - name: featurestore

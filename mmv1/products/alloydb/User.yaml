@@ -69,9 +69,10 @@ samples:
           alloydb_user_pass: 'user_secret'
           network_name: 'alloydb-network'
         test_vars_overrides:
-          'network_name': 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1")'
           # for backward compatible
           alloydb_user_name: '"user1" + randomSuffix'
+        bootstrap_resources:
+          'network_name': 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1")'
         ignore_read_extra:
           - 'password'
   - name: 'alloydb_user_iam'
@@ -100,9 +101,10 @@ samples:
           alloydb_user_name: 'user2@foo.com'
           network_name: 'alloydb-network'
         test_vars_overrides:
-          'network_name': 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1")'
           # for backward compatible
           alloydb_user_name: '"user2@foo.com" + randomSuffix'
+        bootstrap_resources:
+          'network_name': 'servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1")'
 parameters:
   - name: 'cluster'
     type: ResourceRef

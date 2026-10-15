@@ -55,7 +55,7 @@ samples:
           network_name: network-name
           kms_key_name: kms-name
           index_endpoint_display_name: sample-endpoint
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-network-1")
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
         min_version: beta

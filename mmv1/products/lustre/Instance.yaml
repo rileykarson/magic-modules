@@ -68,7 +68,7 @@ samples:
           address_name: my-ip-address-name
           network_name: my-network
           subnetwork_name: my-subnetwork
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "default-vpc")
 parameters:
   - name: location

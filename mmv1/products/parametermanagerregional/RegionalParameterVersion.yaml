@@ -69,7 +69,7 @@ samples:
           parameter_id: regional_parameter
           parameter_version_id: regional_parameter_version
           kms_key: kms-key
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
   - name: regional_parameter_version_with_json_format_with_file
     primary_resource_id: regional-parameter-version-with-json-format-with-file

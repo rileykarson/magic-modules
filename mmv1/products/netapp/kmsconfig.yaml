@@ -64,7 +64,7 @@ samples:
         resource_id_vars:
           kms_name: kms-test
           kms_key_name: crypto-name
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-netapp-kmsconfig-key1").CryptoKey.Name
 parameters:
   - name: location

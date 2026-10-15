@@ -67,7 +67,7 @@ samples:
       - name: integrations_auth_config_username_and_password
         resource_id_vars:
           auth_config_name: test-authconfig-username-and-password
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_oauth2_authorization_code
     primary_resource_id: oauth2_authotization_code_example
@@ -76,7 +76,7 @@ samples:
       - name: integrations_auth_config_oauth2_authorization_code
         resource_id_vars:
           auth_config_name: test-authconfig-oauth2-authorization-code
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_oauth2_client_credentials
     primary_resource_id: oauth2_client_credentials_example
@@ -85,7 +85,7 @@ samples:
       - name: integrations_auth_config_oauth2_client_credentials
         resource_id_vars:
           auth_config_name: test-authconfig-oauth2-client-credentials
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_jwt
     primary_resource_id: jwt_example
@@ -94,7 +94,7 @@ samples:
       - name: integrations_auth_config_jwt
         resource_id_vars:
           auth_config_name: test-authconfig-jwt
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_auth_token
     primary_resource_id: auth_token_example
@@ -103,7 +103,7 @@ samples:
       - name: integrations_auth_config_auth_token
         resource_id_vars:
           auth_config_name: test-authconfig-auth-token
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_service_account
     primary_resource_id: service_account_example
@@ -114,9 +114,10 @@ samples:
           auth_config_name: test-authconfig-service-account
           service_account_id: sa
         test_vars_overrides:
-          client: BootstrapIntegrationsClient(t, "us-east4")
           # for backward compatible
           service_account_id: '"sa" + randomSuffix'
+        bootstrap_resources:
+          client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_oidc_token
     primary_resource_id: oidc_token_example
     exclude_basic_doc: true
@@ -126,9 +127,10 @@ samples:
           auth_config_name: test-authconfig-oidc-token
           service_account_id: sa
         test_vars_overrides:
-          client: BootstrapIntegrationsClient(t, "us-east4")
           # for backward compatible
           service_account_id: '"sa" + randomSuffix'
+        bootstrap_resources:
+          client: BootstrapIntegrationsClient(t, "us-east4")
   - name: integrations_auth_config_client_certificate_only
     primary_resource_id: client_certificate_example
     exclude_basic_doc: true
@@ -136,7 +138,7 @@ samples:
       - name: integrations_auth_config_client_certificate_only
         resource_id_vars:
           auth_config_name: test-authconfig-client-certificate
-        test_vars_overrides:
+        bootstrap_resources:
           client: BootstrapIntegrationsClient(t, "us-east4")
 parameters:
   - name: location

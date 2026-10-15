@@ -102,8 +102,6 @@ samples:
           project: PROJECT_NAME
         test_vars_overrides:
           deletion_policy: '"DELETE"'
-        oics_vars_overrides:
-          deletion_policy: '"DELETE"'
         ignore_read_extra:
           - deletion_policy
   - name: secure_source_manager_repository_secret_scanning_default

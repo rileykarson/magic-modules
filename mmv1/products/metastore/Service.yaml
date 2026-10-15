@@ -77,7 +77,7 @@ samples:
         resource_id_vars:
           metastore_service_name: example-service
           kms_key_name: example-key
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-central1", "tf-bootstrap-metastore-service-key1").CryptoKey.Name
   - name: dataproc_metastore_service_cmek_example
     primary_resource_id: default

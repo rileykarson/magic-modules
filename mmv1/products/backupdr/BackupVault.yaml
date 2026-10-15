@@ -61,7 +61,7 @@ samples:
           kms_key_name: bkpvault-key
         test_env_vars:
           project: PROJECT_NAME
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name
 parameters:
   - name: location

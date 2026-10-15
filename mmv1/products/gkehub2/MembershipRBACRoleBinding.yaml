@@ -61,10 +61,9 @@ samples:
           location: global
         test_vars_overrides:
           deletion_protection: "false"
+        bootstrap_resources:
           network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
           subnetwork_name: compute.BootstrapSubnet(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"))
-        oics_vars_overrides:
-          deletion_protection: "false"
 parameters:
   - name: membership_id
     type: String

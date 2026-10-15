@@ -63,7 +63,7 @@ samples:
           runtime_template_name: 'colab-runtime-template'
           network_name: 'colab-test-default'
           key_name: 'my-crypto-key'
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
 parameters:
   - name: 'location'

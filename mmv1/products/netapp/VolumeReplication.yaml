@@ -73,7 +73,7 @@ samples:
           replication_name: test-replication
           destination_volume: destination-volume
           network_name: test-network
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
         ignore_read_extra:
           - delete_destination_volume

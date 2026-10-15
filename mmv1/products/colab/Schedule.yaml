@@ -93,12 +93,13 @@ samples:
           location: 'REGION'
           service_account: 'SERVICE_ACCT'
         test_vars_overrides:
-          key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
           # Tests use a (relatively static) future date so that VCR cassettes can stay valid for a long time
           start_time: 'time.Date(time.Now().Year(), 12, 31, 0, 0, 0, 0, time.Now().Location()).AddDate(0, 0, 1).Format(time.RFC3339)'
           end_time: 'time.Date(time.Now().Year(), 12, 31, 0, 0, 0, 0, time.Now().Location()).AddDate(0, 0, 10).Format(time.RFC3339)'
           # for backward compatible
           secret: '"secret" + randomSuffix'
+        bootstrap_resources:
+          key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
         ignore_read_extra:
           - last_scheduled_run_response
           - next_run_time
@@ -119,7 +120,7 @@ samples:
           project_id: 'PROJECT_NAME'
           location: 'REGION'
           service_account: 'SERVICE_ACCT'
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
         ignore_read_extra:
           - last_scheduled_run_response
@@ -144,7 +145,7 @@ samples:
           preflight_validations: true
           pipeline_job_label_value: value-one
           failure_policy: PIPELINE_FAILURE_POLICY_FAIL_FAST
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
         ignore_read_extra:
           - last_scheduled_run_response
@@ -166,7 +167,7 @@ samples:
           preflight_validations: false
           pipeline_job_label_value: value-updated
           failure_policy: PIPELINE_FAILURE_POLICY_FAIL_SLOW
-        test_vars_overrides:
+        bootstrap_resources:
           key_name: 'kms.BootstrapKMSKeyInLocation(t, "us-central1").CryptoKey.Name'
         ignore_read_extra:
           - last_scheduled_run_response

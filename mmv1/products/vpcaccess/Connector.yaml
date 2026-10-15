@@ -60,7 +60,7 @@ samples:
         resource_id_vars:
           name: vpc-con
           network_name: default
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-access-connector")
   - name: vpc_access_connector_shared_vpc
     primary_resource_id: connector
@@ -69,7 +69,7 @@ samples:
         resource_id_vars:
           name: vpc-con
           network_name: default
-        test_vars_overrides:
+        bootstrap_resources:
           network_name: servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "vpc-access-connector")
 parameters:
   - name: region

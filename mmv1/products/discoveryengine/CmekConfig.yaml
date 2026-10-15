@@ -61,7 +61,7 @@ samples:
         resource_id_vars:
           cmek_config_id: cmek-config-id
           kms_key_name: kms-key-name
-        test_vars_overrides:
+        bootstrap_resources:
           kms_key_name: kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us", "tftest-shared-key-5").CryptoKey.Name
         ignore_read_extra:
           - project

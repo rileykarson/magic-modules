@@ -57,6 +57,7 @@ samples:
         test_vars_overrides:
           key_ring_name: '"tftest-shared-keyring-1"'
           crypto_key_name: '"tftest-shared-key-1"'
+        bootstrap_resources:
           kms_key: kms.BootstrapKMSKeyInLocation(t, "us-east1")
 parameters:
   - name: location
