@@ -1334,6 +1334,14 @@ resource "google_project_service" "monitoring" {
 	depends_on = [google_project_service.service]
 }
 
+resource "google_compute_network" "default" {
+  provider                = google-beta
+  project                 = google_project.project.project_id
+  name                    = "default"
+  auto_create_subnetworks = true
+  depends_on              = [google_project_service.service]
+}
+
 resource "google_compute_instance" "vm" {
   provider     = google-beta
   project = google_project.project.project_id
@@ -1347,7 +1355,7 @@ resource "google_compute_instance" "vm" {
   machine_type = "n1-standard-1"
 
   network_interface {
-    network = "default"
+    network = google_compute_network.default.self_link
   }
 
   metadata = {
