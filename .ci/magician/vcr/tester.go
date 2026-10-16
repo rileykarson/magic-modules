@@ -56,15 +56,17 @@ type logKey struct {
 }
 
 type Tester struct {
-	env            map[string]string           // shared environment variables for running tests
-	rnr            ExecRunner                  // for running commands and manipulating files
-	cassetteBucket string                      // name of GCS bucket to store cassettes
-	logBucket      string                      // name of GCS bucket to store logs
-	baseDir        string                      // the directory in which this tester was created
-	saKeyPath      string                      // where sa_key.json is relative to baseDir
-	cassettePaths  map[provider.Version]string // where cassettes are relative to baseDir by version
-	logPaths       map[logKey]string           // where logs are relative to baseDir by version and mode
-	repoPaths      map[provider.Version]string // relative paths of already cloned repos by version
+	env            map[string]string                      // shared environment variables for running tests
+	rnr            ExecRunner                             // for running commands and manipulating files
+	cassetteBucket string                                 // name of GCS bucket to store cassettes
+	logBucket      string                                 // name of GCS bucket to store logs
+	baseDir        string                                 // the directory in which this tester was created
+	saKeyPath      string                                 // where sa_key.json is relative to baseDir
+	cassettePaths  map[provider.Version]string            // where cassettes are relative to baseDir by version
+	logPaths       map[logKey]string                      // where logs are relative to baseDir by version and mode
+	repoPaths      map[provider.Version]string            // relative paths of already cloned repos by version
+	testDirs       map[provider.Version]map[string]string // package path by test name recorded from Run output by version
+	logMu          sync.Mutex                             // protects concurrent read/write to per-test build logs
 
 	// the following are for async upload cassettes
 	enableAsyncUploadCassettes bool
@@ -84,6 +86,8 @@ var subtestResultsExpression = regexp.MustCompile(`(?m:^    --- (PASS|FAIL|SKIP)
 var testPanicExpression = regexp.MustCompile(`(?m:^panic: .*)`)
 
 var buildFailedExpression = regexp.MustCompile(`FAIL\s+(\S+)\s+\[build failed\]`)
+
+var pkgSummaryExpression = regexp.MustCompile(`^(?:ok  |FAIL)\t(\S+)\t`)
 
 var safeToLog = map[string]bool{
 	"ACCTEST_PARALLELISM":                        true,
@@ -146,6 +150,7 @@ func NewTester(env map[string]string, cassetteBucket, logBucket string, rnr Exec
 		cassettePaths:  make(map[provider.Version]string, provider.NumVersions),
 		logPaths:       make(map[logKey]string, provider.NumVersions*numModes),
 		repoPaths:      make(map[provider.Version]string, provider.NumVersions),
+		testDirs:       make(map[provider.Version]map[string]string, provider.NumVersions),
 	}
 
 	if enableAsyncUpload {
@@ -234,6 +239,12 @@ func (vt *Tester) Run(opt RunOptions) (Result, error) {
 	if err := vt.rnr.PushDir(repoPath); err != nil {
 		return Result{}, err
 	}
+	poppedDir := false
+	defer func() {
+		if !poppedDir {
+			_ = vt.rnr.PopDir()
+		}
+	}()
 	if len(opt.TestDirs) == 0 {
 		var err error
 		opt.TestDirs, err = vt.googleTestDirectory()
@@ -315,6 +326,7 @@ func (vt *Tester) Run(opt RunOptions) (Result, error) {
 		output = fmt.Sprintf("Error %s tests:\n%v", opt.Mode.Lower(), testErr)
 	}
 	// Leave repo directory.
+	poppedDir = true
 	if err := vt.rnr.PopDir(); err != nil {
 		return Result{}, err
 	}
@@ -330,6 +342,7 @@ func (vt *Tester) Run(opt RunOptions) (Result, error) {
 	if err := vt.rnr.WriteFile(logFileName, allOutput); err != nil {
 		return Result{}, fmt.Errorf("error writing log: %v, test output: %v", err, allOutput)
 	}
+	vt.recordTestDirs(opt.Version, output)
 	return collectResult(output), testErr
 }
 
@@ -348,12 +361,15 @@ func (vt *Tester) RunParallel(opt RunOptions) (Result, error) {
 	if err := vt.rnr.PushDir(repoPath); err != nil {
 		return Result{}, err
 	}
-	if len(opt.TestDirs) == 0 {
-		var err error
-		opt.TestDirs, err = vt.googleTestDirectory()
-		if err != nil {
-			return Result{}, err
+	poppedDir := false
+	defer func() {
+		if !poppedDir {
+			_ = vt.rnr.PopDir()
 		}
+	}()
+	targets, err := vt.resolveTestTargets(opt)
+	if err != nil {
+		return Result{}, err
 	}
 
 	cassettePath := filepath.Join(vt.baseDir, "cassettes", opt.Version.String())
@@ -387,15 +403,13 @@ func (vt *Tester) RunParallel(opt RunOptions) (Result, error) {
 	}
 
 	running := make(chan struct{}, parallelJobs)
-	outputs := make(chan string, len(opt.TestDirs)*len(opt.Tests))
+	outputs := make(chan string, len(targets))
 	wg := &sync.WaitGroup{}
-	wg.Add(len(opt.TestDirs) * len(opt.Tests))
-	errs := make(chan error, len(opt.TestDirs)*len(opt.Tests)*2)
-	for _, testDir := range opt.TestDirs {
-		for _, test := range opt.Tests {
-			running <- struct{}{}
-			go vt.runInParallel(opt.Mode, opt.Version, testDir, test, logPath, cassettePath, running, wg, outputs, errs)
-		}
+	wg.Add(len(targets))
+	errs := make(chan error, len(targets)*2)
+	for _, target := range targets {
+		running <- struct{}{}
+		go vt.runInParallel(opt.Mode, opt.Version, target.testDir, target.test, logPath, cassettePath, running, wg, outputs, errs)
 	}
 
 	wg.Wait()
@@ -404,6 +418,7 @@ func (vt *Tester) RunParallel(opt RunOptions) (Result, error) {
 	close(errs)
 
 	// Leave repo directory.
+	poppedDir = true
 	if err := vt.rnr.PopDir(); err != nil {
 		return Result{}, err
 	}
@@ -422,6 +437,7 @@ func (vt *Tester) RunParallel(opt RunOptions) (Result, error) {
 			break
 		}
 	}
+	vt.recordTestDirs(opt.Version, output)
 	return collectResult(output), testErr
 }
 
@@ -468,6 +484,7 @@ func (vt *Tester) runInParallel(mode Mode, version provider.Version, testDir, te
 	logFileName := filepath.Join(vt.baseDir, "testlogs", mode.Lower()+"_build", fmt.Sprintf("%s_%s_test.log", test, mode.Lower()))
 	// Write output (or error) to test log.
 	// Append to existing log file.
+	vt.logMu.Lock()
 	previousLog, _ := vt.rnr.ReadFile(logFileName)
 	if previousLog != "" {
 		output = previousLog + "\n" + output
@@ -475,6 +492,7 @@ func (vt *Tester) runInParallel(mode Mode, version provider.Version, testDir, te
 	if err := vt.rnr.WriteFile(logFileName, output); err != nil {
 		errs <- fmt.Errorf("error writing log: %v, test output: %v", err, output)
 	}
+	vt.logMu.Unlock()
 	<-running
 	wg.Done()
 }
@@ -679,12 +697,57 @@ func (vt *Tester) googleTestDirectory() ([]string, error) {
 		return nil, err
 	} else {
 		for _, dir := range strings.Split(allPackages, "\n") {
-			if !strings.Contains(dir, "github.com/hashicorp/terraform-provider-google-beta/scripts") {
+			dir = strings.TrimSpace(dir)
+			if dir != "" && !strings.Contains(dir, "github.com/hashicorp/terraform-provider-google-beta/scripts") {
 				testDirs = append(testDirs, dir)
 			}
 		}
 	}
 	return testDirs, nil
+}
+
+type testRunTarget struct{ testDir, test string }
+
+func (vt *Tester) recordTestDirs(version provider.Version, output string) {
+	if vt.testDirs == nil {
+		vt.testDirs = make(map[provider.Version]map[string]string)
+	}
+	if vt.testDirs[version] == nil {
+		vt.testDirs[version] = make(map[string]string)
+	}
+	var pendingTests []string
+	for _, line := range strings.Split(output, "\n") {
+		if m := testResultsExpression.FindStringSubmatch(line); len(m) == 3 {
+			pendingTests = append(pendingTests, m[2])
+		} else if m := pkgSummaryExpression.FindStringSubmatch(line); len(m) == 2 {
+			for _, test := range pendingTests {
+				vt.testDirs[version][test] = m[1]
+			}
+			pendingTests = nil
+		}
+	}
+}
+
+func (vt *Tester) resolveTestTargets(opt RunOptions) ([]testRunTarget, error) {
+	testDirs := opt.TestDirs
+	var targets []testRunTarget
+	for _, test := range opt.Tests {
+		if dir, ok := vt.testDirs[opt.Version][test]; ok {
+			targets = append(targets, testRunTarget{testDir: dir, test: test})
+			continue
+		}
+		if len(testDirs) == 0 {
+			var err error
+			testDirs, err = vt.googleTestDirectory()
+			if err != nil {
+				return nil, err
+			}
+		}
+		for _, testDir := range testDirs {
+			targets = append(targets, testRunTarget{testDir: testDir, test: test})
+		}
+	}
+	return targets, nil
 }
 
 // Print all log file names and contents, except for all_tests.log.
