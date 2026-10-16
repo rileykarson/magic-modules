@@ -1,6 +1,7 @@
 package reader
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -312,16 +313,19 @@ func readConfigCallExpr(configCallExpr *ast.CallExpr, funcDecls map[string]*ast.
 		return readConfigFuncResult(configCallExpr.Args[0], funcDecls, varDecls)
 	case "Sprint":
 		// Every argument is part of the config. This is used to join a shared
-		// setup config to the config under test.
+		// setup config to the config under test. Keep the readable arguments
+		// when another argument can't be read so the rest of the config still
+		// parses instead of the whole test step being discarded.
 		var configStr strings.Builder
+		var errs []error
 		for _, arg := range configCallExpr.Args {
 			argConfigStr, err := readConfigFuncResult(arg, funcDecls, varDecls)
 			if err != nil {
-				return "", err
+				errs = append(errs, err)
 			}
 			configStr.WriteString(argConfigStr)
 		}
-		return configStr.String(), nil
+		return configStr.String(), errors.Join(errs...)
 	}
 	return "", fmt.Errorf("failed to read config from call to %s.%s, which is not a config formatting function", selectorExpr.X, selectorExpr.Sel.Name)
 }
@@ -351,16 +355,14 @@ func readConfigFuncResult(result ast.Expr, funcDecls map[string]*ast.FuncDecl, v
 		return "", fmt.Errorf("failed to find variable declaration %s", ident.Name)
 	} else if callExpr, ok := result.(*ast.CallExpr); ok {
 		return readConfigCallExpr(callExpr, funcDecls, varDecls)
-	} else if binaryExpr, ok := result.(*ast.BinaryExpr); ok {
-		xConfigStr, err := readConfigFuncResult(binaryExpr.X, funcDecls, varDecls)
-		if err != nil {
-			return "", err
-		}
-		yConfigStr, err := readConfigFuncResult(binaryExpr.Y, funcDecls, varDecls)
-		if err != nil {
-			return "", err
-		}
-		return xConfigStr + yConfigStr, nil
+	} else if binaryExpr, ok := result.(*ast.BinaryExpr); ok && binaryExpr.Op == token.ADD {
+		// Keep the readable side when the other side can't be read (for
+		// example, a call to a setup helper in another package) so the rest of
+		// the config still parses instead of the whole test step being
+		// discarded.
+		xConfigStr, xErr := readConfigFuncResult(binaryExpr.X, funcDecls, varDecls)
+		yConfigStr, yErr := readConfigFuncResult(binaryExpr.Y, funcDecls, varDecls)
+		return xConfigStr + yConfigStr, errors.Join(xErr, yErr)
 	}
 	return "", fmt.Errorf("unknown config func result %v (%T)", result, result)
 }

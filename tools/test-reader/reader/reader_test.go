@@ -355,17 +355,27 @@ func TestReadNonFormattingCallTestFile(t *testing.T) {
 	// Only known formatting functions return their first argument's config;
 	// calling any other cross-package helper must return a "not a config
 	// formatting function" error rather than recording its first argument as
-	// coverage. This fixture is written to a temp dir because detector_test.go
-	// runs ReadAllTests over testdata/ and fails on any intentional read error.
+	// coverage. When a call to such a helper is joined onto the rest of a
+	// config with + or fmt.Sprint, the readable parts of the config must still
+	// be recorded. This fixture is written to a temp dir because
+	// detector_test.go runs ReadAllTests over testdata/ and fails on any
+	// intentional read error.
 	testFile := filepath.Join(t.TempDir(), "non_formatting_call_test.go")
 	src := `package service_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-provider-google-beta/google-beta/acctest"
 )
+
+var testNonFormattingCallBase = ` + "`" + `
+resource "non_formatting_call_base" "base" {
+  field_one = "value-one"
+}
+` + "`" + `
 
 func TestAccNonFormattingCall(t *testing.T) {
 	acctest.VcrTest(t, resource.TestCase{
@@ -377,8 +387,38 @@ resource "non_formatting_call_decoy" "decoy" {
 }
 ` + "`" + `, "echo"),
 			},
+			{
+				Config: testAccNonFormattingCallConcat("value-two"),
+			},
+			{
+				Config: testAccNonFormattingCallSprint("value-three"),
+			},
 		},
 	})
+}
+
+func testAccNonFormattingCallConcat(fieldTwo string) string {
+	return testNonFormattingCallBase + acctest.EchoResourceConfig(` + "`" + `
+resource "non_formatting_call_decoy" "decoy" {
+  field_one = "value-one"
+}
+` + "`" + `, "echo") + fmt.Sprintf(` + "`" + `
+resource "non_formatting_call_concat" "concat" {
+  field_two = "%s"
+}
+` + "`" + `, fieldTwo)
+}
+
+func testAccNonFormattingCallSprint(fieldThree string) string {
+	return fmt.Sprint(testNonFormattingCallBase, acctest.EchoResourceConfig(` + "`" + `
+resource "non_formatting_call_decoy" "decoy" {
+  field_one = "value-one"
+}
+` + "`" + `, "echo"), fmt.Sprintf(` + "`" + `
+resource "non_formatting_call_sprint" "sprint" {
+  field_three = "%s"
+}
+` + "`" + `, fieldThree))
 }
 `
 	if err := os.WriteFile(testFile, []byte(src), 0o600); err != nil {
@@ -392,11 +432,25 @@ resource "non_formatting_call_decoy" "decoy" {
 	if !strings.Contains(err.Error(), "is not a config formatting function") {
 		t.Errorf("unexpected error %q, expected it to contain %q", err.Error(), "is not a config formatting function")
 	}
-	if len(tests) != 1 || len(tests[0].Steps) != 1 {
+	if len(tests) != 1 {
 		t.Fatalf("unexpected tests %#v", tests)
 	}
-	if len(tests[0].Steps[0]) != 0 {
-		t.Errorf("expected empty step when config call is not a formatting function, got %#v", tests[0].Steps[0])
+	if expectedSteps := []Step{
+		{},
+		{
+			ResourceBlock: {
+				"non_formatting_call_base":   {"base": {"field_one": "\"value-one\""}},
+				"non_formatting_call_concat": {"concat": {"field_two": "\"true\""}},
+			},
+		},
+		{
+			ResourceBlock: {
+				"non_formatting_call_base":   {"base": {"field_one": "\"value-one\""}},
+				"non_formatting_call_sprint": {"sprint": {"field_three": "\"true\""}},
+			},
+		},
+	}; !reflect.DeepEqual(tests[0].Steps, expectedSteps) {
+		t.Errorf("found unexpected steps: %#v, expected %#v", tests[0].Steps, expectedSteps)
 	}
 }
 
@@ -432,6 +486,14 @@ func TestReadConfigCallExpr(t *testing.T) {
 			wantErr: "is not a config formatting function",
 		},
 		{
+			// When Sprint joins an unreadable call onto a readable argument,
+			// the readable argument is still returned alongside the error.
+			name:     "sprint-with-non-formatting-call",
+			expr:     "fmt.Sprint(acctest.EchoResourceConfig(`resource \"a\" \"b\" {}`, \"echo\"), `resource \"c\" \"d\" {}`)",
+			expected: "resource \"c\" \"d\" {}",
+			wantErr:  "is not a config formatting function",
+		},
+		{
 			name:    "undeclared-config-func",
 			expr:    "testAccUndeclared(\"name\")",
 			wantErr: "failed to find function declaration testAccUndeclared",
@@ -458,9 +520,7 @@ func TestReadConfigCallExpr(t *testing.T) {
 				} else if !strings.Contains(err.Error(), tc.wantErr) {
 					t.Errorf("unexpected error %q reading %s, expected it to contain %q", err.Error(), tc.expr, tc.wantErr)
 				}
-				return
-			}
-			if err != nil {
+			} else if err != nil {
 				t.Fatalf("error reading %s: %v", tc.expr, err)
 			}
 			if configStr != tc.expected {
