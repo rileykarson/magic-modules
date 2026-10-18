@@ -59,7 +59,6 @@ type IamMemberListCallConfig = IamListCallConfig
 type IamListCore struct {
 	tpgresource.ListResourceMetadata
 
-	typeName          string
 	iamResource       *schema.Resource          // the underlying member/binding SDKv2 resource.
 	iamResourceSchema map[string]*schema.Schema // parent-identifying fields (project, zone, name, …)
 	listBlockSchema   listschema.Schema
@@ -123,7 +122,6 @@ func buildIamListCore(typeName string, iamResource *schema.Resource, newUpdater 
 			SDKv2Resource:    iamResource,
 			ListConfigFields: listConfigFields,
 		},
-		typeName:          typeName,
 		iamResource:       iamResource,
 		iamResourceSchema: iamResourceSchema,
 		listCallConfig:    listCallConfig,
@@ -131,8 +129,8 @@ func buildIamListCore(typeName string, iamResource *schema.Resource, newUpdater 
 	}
 }
 
-func (r *IamListCore) Metadata(_ context.Context, _ resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = r.typeName
+func (r *IamListCore) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	r.ListResourceMetadata.Metadata(ctx, req, resp)
 }
 
 func (r *IamListCore) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -154,11 +152,8 @@ func (r *IamListCore) Configure(_ context.Context, req resource.ConfigureRequest
 	r.Client = config
 }
 
-func (r *IamListCore) RawV5Schemas(ctx context.Context, _ list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
-	resp.ProtoV5Schema = r.iamResource.ProtoSchema(ctx)()
-	if fn := r.iamResource.ProtoIdentitySchema(ctx); fn != nil {
-		resp.ProtoV5IdentitySchema = fn()
-	}
+func (r *IamListCore) RawV5Schemas(ctx context.Context, req list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
+	r.ListResourceMetadata.RawV5Schemas(ctx, req, resp)
 }
 
 func iamListResourceData(r *schema.Resource) *schema.ResourceData {
