@@ -276,6 +276,7 @@ func (tgc TerraformGoogleConversionNext) CopyCommonFiles(outputFolder string, ge
 		"pkg/transport/batcher.go":                "third_party/terraform/transport/batcher.go",
 		"pkg/transport/error_retry_predicates.go": "third_party/terraform/transport/error_retry_predicates.go",
 		"pkg/transport/header_transport.go":       "third_party/terraform/transport/header_transport.go",
+		"pkg/transport/log_visibility.go":         "third_party/terraform/transport/log_visibility.go",
 		"pkg/transport/retry_transport.go":        "third_party/terraform/transport/retry_transport.go",
 		"pkg/transport/retry_utils.go":            "third_party/terraform/transport/retry_utils.go",
 		"pkg/transport/transport.go":              "third_party/terraform/transport/transport.go",
