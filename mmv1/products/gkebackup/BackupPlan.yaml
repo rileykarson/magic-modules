@@ -57,7 +57,7 @@ samples:
       - name: gkebackup_backupplan_basic
         resource_id_vars:
           name: basic-plan
-          cluster: projects/my-project-name/locations/us-east1/clusters/basic-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/basic-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_backupplan_autopilot
@@ -73,7 +73,7 @@ samples:
         test_vars_overrides:
           deletion_protection: "false"
           network_name: compute.BootstrapSharedTestNetwork(t, "gke-cluster")
-          subnetwork_name: compute.BootstrapSubnetInRegion(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"), "us-east1", "10.79.0.0/20")
+          subnetwork_name: compute.BootstrapSubnetInRegion(t, "gke-cluster", compute.BootstrapSharedTestNetwork(t, "gke-cluster"), "us-central1", "10.79.0.0/20")
         oics_vars_overrides:
           deletion_protection: "false"
   - name: gkebackup_backupplan_cmek
@@ -82,7 +82,7 @@ samples:
       - name: gkebackup_backupplan_cmek
         resource_id_vars:
           name: cmek-plan
-          cluster: projects/my-project-name/locations/us-east1/clusters/cmek-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/cmek-cluster
           key_name: backup-key
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
@@ -92,7 +92,7 @@ samples:
       - name: gkebackup_backupplan_nslabels
         resource_id_vars:
           name: nslabels-plan
-          cluster: projects/my-project-name/locations/us-east1/clusters/nslabels-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/nslabels-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_backupplan_full
@@ -101,7 +101,7 @@ samples:
       - name: gkebackup_backupplan_full
         resource_id_vars:
           name: full-plan
-          cluster: projects/my-project-name/locations/us-east1/clusters/full-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/full-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_backupplan_permissive
@@ -110,7 +110,7 @@ samples:
       - name: gkebackup_backupplan_permissive
         resource_id_vars:
           name: permissive-plan
-          cluster: projects/my-project-name/locations/us-east1/clusters/permissive-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/permissive-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_backupplan_rpo_daily_window
@@ -119,7 +119,7 @@ samples:
       - name: gkebackup_backupplan_rpo_daily_window
         resource_id_vars:
           name: rpo-daily-window
-          cluster: projects/my-project-name/locations/us-east1/clusters/rpo-daily-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/rpo-daily-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_backupplan_rpo_weekly_window
@@ -128,7 +128,7 @@ samples:
       - name: gkebackup_backupplan_rpo_weekly_window
         resource_id_vars:
           name: rpo-weekly-window
-          cluster: projects/my-project-name/locations/us-east1/clusters/rpo-weekly-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/rpo-weekly-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
 parameters:

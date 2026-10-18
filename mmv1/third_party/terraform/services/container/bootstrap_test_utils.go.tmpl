@@ -19,11 +19,11 @@ import (
 
 const SharedGKEClusterPrefix = "tf-bootstrap-gke-"
 
-// BootstrapSharedGKECluster returns the ID of a shared GKE cluster in us-east1,
+// BootstrapSharedGKECluster returns the ID of a shared GKE cluster in us-central1,
 // creating it if it hasn't been created in the test project yet.
 func BootstrapSharedGKECluster(t *testing.T, testId string) string {
 	project := envvar.GetTestProjectFromEnv()
-	location := "us-east1"
+	location := "us-central1"
 	clusterName := SharedGKEClusterPrefix + testId
 	parent := fmt.Sprintf("projects/%s/locations/%s", project, location)
 	clusterId := fmt.Sprintf("%s/clusters/%s", parent, clusterName)
@@ -70,10 +70,10 @@ func BootstrapSharedGKECluster(t *testing.T, testId string) string {
 		req := &container.CreateClusterRequest{
 			Cluster: &container.Cluster{
 				Name:             clusterName,
-				Locations:        []string{"us-east1-b"},
+				Locations:        []string{"us-central1-a"},
 				InitialNodeCount: 1,
 				NodeConfig: &container.NodeConfig{
-					MachineType: "n4-standard-2",
+					MachineType: "e2-medium",
 				},
 				WorkloadIdentityConfig: &container.WorkloadIdentityConfig{
 					WorkloadPool: fmt.Sprintf("%s.svc.id.goog", project),

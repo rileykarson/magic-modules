@@ -48,7 +48,7 @@ func testAccGKEBackupRestorePlan_full(context map[string]interface{}) string {
 resource "google_gke_backup_backup_plan" "basic" {
   name = "tf-test-restore-plan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   backup_config {
     include_volume_data = true
     include_secrets = true
@@ -58,7 +58,7 @@ resource "google_gke_backup_backup_plan" "basic" {
 
 resource "google_gke_backup_restore_plan" "restore_plan" {
   name = "tf-test-restore-plan%{random_suffix}"
-  location = "us-east1"
+  location = "us-central1"
   backup_plan = google_gke_backup_backup_plan.basic.id
   cluster = "%{cluster}"
   restore_config {
@@ -105,7 +105,7 @@ func testAccGKEBackupRestorePlan_update(context map[string]interface{}) string {
 resource "google_gke_backup_backup_plan" "basic" {
   name = "tf-test-restore-plan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   backup_config {
     include_volume_data = true
     include_secrets = true
@@ -115,7 +115,7 @@ resource "google_gke_backup_backup_plan" "basic" {
 
 resource "google_gke_backup_restore_plan" "restore_plan" {
   name = "tf-test-restore-plan%{random_suffix}"
-  location = "us-east1"
+  location = "us-central1"
   backup_plan = google_gke_backup_backup_plan.basic.id
   cluster = "%{cluster}"
   restore_config {

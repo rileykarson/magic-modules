@@ -86,7 +86,7 @@ func testAccGKEBackupBackupPlan_basic(context map[string]interface{}) string {
 resource "google_gke_backup_backup_plan" "backupplan" {
   name = "tf-test-testplan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   backup_config {
     include_volume_data = false
     include_secrets = false
@@ -104,7 +104,7 @@ func testAccGKEBackupBackupPlan_permissive(context map[string]interface{}) strin
 resource "google_gke_backup_backup_plan" "backupplan" {
   name = "tf-test-testplan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   backup_config {
     include_volume_data = false
     include_secrets = false
@@ -123,7 +123,7 @@ func testAccGKEBackupBackupPlan_full(context map[string]interface{}) string {
 resource "google_gke_backup_backup_plan" "backupplan" {
   name = "tf-test-testplan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   retention_policy {
     backup_delete_lock_days = 30
     backup_retain_days = 180
@@ -157,7 +157,7 @@ func testAccGKEBackupBackupPlan_rpo_daily_window(context map[string]interface{})
 resource "google_gke_backup_backup_plan" "backupplan" {
   name = "tf-test-testplan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   retention_policy {
     backup_delete_lock_days = 30
     backup_retain_days = 180
@@ -214,7 +214,7 @@ func testAccGKEBackupBackupPlan_rpo_weekly_window(context map[string]interface{}
 resource "google_gke_backup_backup_plan" "backupplan" {
   name = "tf-test-testplan%{random_suffix}"
   cluster = "%{cluster}"
-  location = "us-east1"
+  location = "us-central1"
   retention_policy {
     backup_delete_lock_days = 30
     backup_retain_days = 180

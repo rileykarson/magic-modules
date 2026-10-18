@@ -1,7 +1,7 @@
 resource "google_gke_backup_backup_plan" "{{$.PrimaryResourceId}}" {
   name = "{{index $.ResourceIdVars "name"}}"
   cluster = "{{index $.ResourceIdVars "cluster"}}"
-  location = "us-east1"
+  location = "us-central1"
   retention_policy {
     backup_delete_lock_days = 30
     backup_retain_days = 180

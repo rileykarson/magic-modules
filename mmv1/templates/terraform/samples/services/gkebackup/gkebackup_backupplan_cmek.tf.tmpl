@@ -1,7 +1,7 @@
 resource "google_gke_backup_backup_plan" "cmek" {
   name = "{{index $.ResourceIdVars "name"}}"
   cluster = "{{index $.ResourceIdVars "cluster"}}"
-  location = "us-east1"
+  location = "us-central1"
   backup_config {
     include_volume_data = true
     include_secrets = true
@@ -21,5 +21,5 @@ resource "google_kms_crypto_key" "crypto_key" {
 
 resource "google_kms_key_ring" "key_ring" {
   name     = "{{index $.ResourceIdVars "key_name"}}"
-  location = "us-east1"
+  location = "us-central1"
 }

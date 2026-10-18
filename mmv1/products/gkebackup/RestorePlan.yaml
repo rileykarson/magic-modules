@@ -57,7 +57,7 @@ samples:
       - name: gkebackup_restoreplan_all_namespaces
         resource_id_vars:
           name: restore-all-ns
-          cluster: projects/my-project-name/locations/us-east1/clusters/restore-all-ns-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/restore-all-ns-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_rollback_namespace
@@ -66,7 +66,7 @@ samples:
       - name: gkebackup_restoreplan_rollback_namespace
         resource_id_vars:
           name: rollback-ns
-          cluster: projects/my-project-name/locations/us-east1/clusters/rollback-ns-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/rollback-ns-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_protected_application
@@ -75,7 +75,7 @@ samples:
       - name: gkebackup_restoreplan_protected_application
         resource_id_vars:
           name: rollback-app
-          cluster: projects/my-project-name/locations/us-east1/clusters/rollback-app-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/rollback-app-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_all_cluster_resources
@@ -84,7 +84,7 @@ samples:
       - name: gkebackup_restoreplan_all_cluster_resources
         resource_id_vars:
           name: all-groupkinds
-          cluster: projects/my-project-name/locations/us-east1/clusters/all-groupkinds-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/all-groupkinds-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_rename_namespace
@@ -93,7 +93,7 @@ samples:
       - name: gkebackup_restoreplan_rename_namespace
         resource_id_vars:
           name: rename-ns
-          cluster: projects/my-project-name/locations/us-east1/clusters/rename-ns-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/rename-ns-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_second_transformation
@@ -102,7 +102,7 @@ samples:
       - name: gkebackup_restoreplan_second_transformation
         resource_id_vars:
           name: transform-rule
-          cluster: projects/my-project-name/locations/us-east1/clusters/transform-rule-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/transform-rule-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_gitops_mode
@@ -111,7 +111,7 @@ samples:
       - name: gkebackup_restoreplan_gitops_mode
         resource_id_vars:
           name: gitops-mode
-          cluster: projects/my-project-name/locations/us-east1/clusters/gitops-mode-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/gitops-mode-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_restore_order
@@ -120,7 +120,7 @@ samples:
       - name: gkebackup_restoreplan_restore_order
         resource_id_vars:
           name: restore-order
-          cluster: projects/my-project-name/locations/us-east1/clusters/restore-order-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/restore-order-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
   - name: gkebackup_restoreplan_volume_res
@@ -129,7 +129,7 @@ samples:
       - name: gkebackup_restoreplan_volume_res
         resource_id_vars:
           name: volume-res
-          cluster: projects/my-project-name/locations/us-east1/clusters/volume-res-cluster
+          cluster: projects/my-project-name/locations/us-central1/clusters/volume-res-cluster
         test_vars_overrides:
           cluster: container.BootstrapSharedGKECluster(t, "gkebackup")
 parameters:
