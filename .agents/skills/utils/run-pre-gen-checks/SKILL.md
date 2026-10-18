@@ -26,16 +26,20 @@ description: "Run fast static checks that don't require generating downstreams, 
 
 ### 1. Run Pre-Generation & Static Checks Runner
 
-Execute the script to run all pre-generation static checks and unit tests in parallel:
+Execute via the wrapper script or directly via Go:
 
 ```bash
 ./.agents/skills/utils/run-pre-gen-checks/scripts/run_pre_gen_checks.sh
+# or
+go run -C tools/pre-gen-checks .
 ```
 
-Pass `--all` if you want to force running unit tests across all internal tools and CI automation regardless of whether they were modified:
+Pass `--all` (or `-all`) if you want to force running unit tests across all internal tools and CI automation regardless of whether they were modified:
 
 ```bash
 ./.agents/skills/utils/run-pre-gen-checks/scripts/run_pre_gen_checks.sh --all
+# or
+go run -C tools/pre-gen-checks . -all
 ```
 
 ### 2. Output and Verification
