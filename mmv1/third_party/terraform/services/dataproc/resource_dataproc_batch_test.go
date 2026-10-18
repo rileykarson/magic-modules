@@ -67,10 +67,18 @@ func TestCloudDataprocBatchRuntimeConfigVersionDiffSuppress(t *testing.T) {
 }
 
 func BootstrapSubnetForDataprocBatches(t *testing.T, subnetName string, networkName string) string {
+	return BootstrapSubnetForDataprocBatchesInRegion(t, subnetName, networkName, "us-east1")
+}
+
+func BootstrapSubnetForDataprocBatchesInRegion(t *testing.T, subnetName string, networkName string, region string) string {
+	cidr := "10.79.0.0/20"
+	if region == "us-central1" {
+		cidr = "10.80.0.0/20"
+	}
 	subnetOptions := map[string]interface{}{
 		"privateIpGoogleAccess": true,
-		"region":                "us-east1",
-		"ipCidrRange":           "10.79.0.0/20",
+		"region":                region,
+		"ipCidrRange":           cidr,
 	}
 	return tpgcompute.BootstrapSubnetWithOverrides(t, subnetName, networkName, subnetOptions)
 }

@@ -591,11 +591,11 @@ func TestAccDataprocCluster_updatable(t *testing.T) {
 					resource.TestCheckResourceAttr("google_dataproc_cluster.updatable", "cluster_config.0.preemptible_worker_config.0.num_instances", "0")),
 			},
 			{
-				Config: testAccDataprocCluster_updatable(rnd, 3, 2),
+				Config: testAccDataprocCluster_updatable(rnd, 3, 1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_dataproc_cluster.updatable", "cluster_config.0.master_config.0.num_instances", "1"),
 					resource.TestCheckResourceAttr("google_dataproc_cluster.updatable", "cluster_config.0.worker_config.0.num_instances", "3"),
-					resource.TestCheckResourceAttr("google_dataproc_cluster.updatable", "cluster_config.0.preemptible_worker_config.0.num_instances", "2")),
+					resource.TestCheckResourceAttr("google_dataproc_cluster.updatable", "cluster_config.0.preemptible_worker_config.0.num_instances", "1")),
 			},
 		},
 	})
@@ -606,7 +606,7 @@ func TestAccDataprocCluster_nonPreemptibleSecondary(t *testing.T) {
 
 	rnd := acctest.RandString(t, 10)
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "dataproc-cluster")
-	subnetworkName := BootstrapSubnetForDataprocBatches(t, "dataproc-cluster", networkName)
+	subnetworkName := BootstrapSubnetForDataprocBatchesInRegion(t, "dataproc-cluster", networkName, "us-central1")
 	BootstrapFirewallForDataprocSharedNetwork(t, "dataproc-cluster", networkName)
 	var cluster dataproc.Cluster
 
@@ -631,7 +631,7 @@ func TestAccDataprocCluster_spotSecondary(t *testing.T) {
 
 	rnd := acctest.RandString(t, 10)
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "dataproc-cluster")
-	subnetworkName := BootstrapSubnetForDataprocBatches(t, "dataproc-cluster", networkName)
+	subnetworkName := BootstrapSubnetForDataprocBatchesInRegion(t, "dataproc-cluster", networkName, "us-central1")
 	BootstrapFirewallForDataprocSharedNetwork(t, "dataproc-cluster", networkName)
 	var cluster dataproc.Cluster
 
@@ -2633,7 +2633,7 @@ func testAccDataprocCluster_updatable(rnd string, w, p int) string {
 	return fmt.Sprintf(`
 resource "google_dataproc_cluster" "updatable" {
   name   = "tf-test-dproc-%s"
-  region = "us-east1"
+  region = "us-central1"
   graceful_decommission_timeout = "0.2s"
 
   cluster_config {
@@ -2657,6 +2657,7 @@ resource "google_dataproc_cluster" "updatable" {
 
     preemptible_worker_config {
       num_instances = "%d"
+      preemptibility = "SPOT"
       disk_config {
         boot_disk_type    = "hyperdisk-balanced"
         boot_disk_size_gb = 35
@@ -2671,7 +2672,7 @@ func testAccDataprocCluster_nonPreemptibleSecondary(rnd, subnetworkName string) 
 	return fmt.Sprintf(`
 resource "google_dataproc_cluster" "non_preemptible_secondary" {
   name   = "tf-test-dproc-%s"
-  region = "us-east1"
+  region = "us-central1"
 
   cluster_config {
     gce_cluster_config {
@@ -2713,7 +2714,7 @@ func testAccDataprocCluster_spotSecondary(rnd, subnetworkName string) string {
 	return fmt.Sprintf(`
 resource "google_dataproc_cluster" "spot_secondary" {
   name   = "tf-test-dproc-%s"
-  region = "us-east1"
+  region = "us-central1"
 
   cluster_config {
     gce_cluster_config {
