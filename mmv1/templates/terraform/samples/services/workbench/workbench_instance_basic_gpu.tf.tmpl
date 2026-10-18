@@ -1,6 +1,6 @@
 resource "google_compute_reservation" "gpu_reservation" {
   name     = "{{index $.ResourceIdVars "reservation_name"}}"
-  zone     = "us-east1-b"
+  zone     = "us-central1-a"
 
   specific_reservation {
     count = 1
@@ -20,7 +20,7 @@ resource "google_compute_reservation" "gpu_reservation" {
 
 resource "google_workbench_instance" "{{$.PrimaryResourceId}}" {
   name = "{{index $.ResourceIdVars "instance_name"}}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "g2-standard-4"
     accelerator_configs {

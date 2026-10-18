@@ -6,13 +6,13 @@ resource "google_compute_network" "my_network" {
 resource "google_compute_subnetwork" "my_subnetwork" {
   name   = "{{index $.ResourceIdVars "network_name"}}"
   network = google_compute_network.my_network.id
-  region = "us-east1"
+  region = "us-central1"
   ip_cidr_range = "10.0.1.0/24"
 }
 
 resource "google_compute_address" "static" {
   name   = "{{index $.ResourceIdVars "network_name"}}"
-  region = "us-east1"
+  region = "us-central1"
 }
 
 resource "google_service_account_iam_member" "act_as_permission" {
@@ -23,7 +23,7 @@ resource "google_service_account_iam_member" "act_as_permission" {
 
 resource "google_compute_reservation" "gpu_reservation" {
   name     = "{{index $.ResourceIdVars "reservation_name"}}"
-  zone     = "us-east1-b"
+  zone     = "us-central1-a"
 
   specific_reservation {
     count = 1
@@ -44,7 +44,7 @@ resource "google_compute_reservation" "gpu_reservation" {
 
 resource "google_compute_resource_policy" "my_policy" {
   name   = "{{index $.ResourceIdVars "resource_policy_name"}}"
-  region = "us-east1"
+  region = "us-central1"
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
@@ -57,7 +57,7 @@ resource "google_compute_resource_policy" "my_policy" {
 
 resource "google_workbench_instance" "{{$.PrimaryResourceId}}" {
   name = "{{index $.ResourceIdVars "instance_name"}}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   enable_deletion_protection = false
 
@@ -82,14 +82,14 @@ resource "google_workbench_instance" "{{$.PrimaryResourceId}}" {
     }
 
     boot_disk {
-      disk_size_gb  = 310
+      disk_size_gb  = 160
       disk_type = "PD_SSD"
       disk_encryption = "CMEK"
       kms_key = "{{index $.ResourceIdVars "key_name"}}"
     }
 
     data_disks {
-      disk_size_gb  = 330
+      disk_size_gb  = 110
       disk_type = "PD_SSD"
       disk_encryption = "CMEK"
       kms_key = "{{index $.ResourceIdVars "key_name"}}"

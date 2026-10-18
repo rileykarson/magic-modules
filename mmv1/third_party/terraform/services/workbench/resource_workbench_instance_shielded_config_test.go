@@ -188,7 +188,7 @@ func testAccWorkbenchInstance_shielded_config_true(context map[string]interface{
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -209,7 +209,7 @@ func testAccWorkbenchInstance_shielded_config_false(context map[string]interface
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -231,7 +231,7 @@ func testAccWorkbenchInstance_shielded_config_none(context map[string]interface{
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"

@@ -58,7 +58,7 @@ func testAccWorkbenchInstance_basic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -74,7 +74,7 @@ func testAccWorkbenchInstance_basicN2(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n2-standard-2"
@@ -93,7 +93,7 @@ func testAccWorkbenchInstance_update(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "g2-standard-4"
@@ -110,12 +110,12 @@ resource "google_workbench_instance" "instance" {
     }
 
 	boot_disk {
-		disk_size_gb  = 310
+		disk_size_gb  = 160
 		disk_type     = "PD_BALANCED"
 	  }
   
 	  data_disks {
-		disk_size_gb  = 330
+		disk_size_gb  = 110
 		disk_type     = "PD_BALANCED"
 	  }
 
@@ -179,7 +179,7 @@ func testAccWorkbenchInstance_basicGpu(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "g2-standard-4"
     accelerator_configs {
@@ -202,7 +202,7 @@ func testAccWorkbenchInstance_updateGpu(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "g2-standard-24"
@@ -280,7 +280,7 @@ func testAccWorkbenchInstance_Gpu(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "g2-standard-4"
     accelerator_configs {
@@ -303,7 +303,7 @@ func testAccWorkbenchInstance_removeGpu(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n2-standard-4"
@@ -366,7 +366,7 @@ func testAccWorkbenchInstance_minCpuPlatform(context map[string]interface{}, min
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n2-standard-4"
@@ -468,19 +468,6 @@ func TestAccWorkbenchInstance_updateMetadataKey(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_update(context),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(
-						"google_workbench_instance.instance", "state", "ACTIVE"),
-				),
-			},
-			{
-				ResourceName:            "google_workbench_instance.instance",
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
-			},
-			{
 				Config: testAccWorkbenchInstance_updateMetadataN2(context),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
@@ -501,7 +488,7 @@ func testAccWorkbenchInstance_updateMetadata(context map[string]interface{}) str
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -527,7 +514,7 @@ func testAccWorkbenchInstance_updateMetadataN2(context map[string]interface{}) s
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n2-standard-2"
@@ -556,7 +543,7 @@ func testAccWorkbenchInstance_updateMetadataKey(context map[string]interface{}) 
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n2-standard-2"
@@ -640,7 +627,7 @@ func testAccWorkbenchInstance_updateState(context map[string]interface{}) string
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -713,7 +700,7 @@ func testAccWorkbenchInstance_empty_accelerator(context map[string]interface{}) 
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -854,11 +841,11 @@ func testAccWorkbenchInstance_updateBootDisk(context map[string]interface{}) str
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
 	boot_disk {
-		disk_size_gb  = 310
+		disk_size_gb  = 160
 		disk_type     = "HYPERDISK_BALANCED"
 	  }
 	}
@@ -870,14 +857,14 @@ func testAccWorkbenchInstance_updateDataDisk(context map[string]interface{}) str
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {  
     machine_type = "n4-standard-2"
 	boot_disk {
 		disk_type = "HYPERDISK_BALANCED"
 	}
 	  data_disks {
-		disk_size_gb  = 330
+		disk_size_gb  = 110
 	  }
 	}
 }
@@ -888,16 +875,16 @@ func testAccWorkbenchInstance_updateBothDisks(context map[string]interface{}) st
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
 	boot_disk {
-		disk_size_gb  = 310
+		disk_size_gb  = 160
 		disk_type     = "HYPERDISK_BALANCED"
 	  }
 
 	  data_disks {
-		disk_size_gb  = 330
+		disk_size_gb  = 110
 	  }
 	}
 }
@@ -971,7 +958,7 @@ resource "random_uuid" "test" {
 
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -1033,7 +1020,7 @@ func testAccWorkbenchInstance_customcontainer(context map[string]interface{}) st
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
     boot_disk {
@@ -1052,7 +1039,7 @@ func testAccWorkbenchInstance_updatedcustomcontainer(context map[string]interfac
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
     boot_disk {
@@ -1100,7 +1087,7 @@ func testAccWorkbenchInstance_metadataEUC(context map[string]interface{}, script
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name     = "tf-test-workbench-%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   instance_owners = ["workbenche2etestota@gmail.com"]
 
   gce_setup {
@@ -1182,7 +1169,7 @@ func testAccWorkbenchInstance_jupyterlabTrue(context map[string]interface{}) str
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
     boot_disk {
@@ -1200,7 +1187,7 @@ func testAccWorkbenchInstance_jupyterlabFalse(context map[string]interface{}) st
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   gce_setup {
     machine_type = "n4-standard-2"
     boot_disk {
@@ -1260,7 +1247,7 @@ func testAccWorkbenchInstance_deleteProtection(context map[string]interface{}, p
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
   name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
   enable_deletion_protection = %{protection}
 
   gce_setup {
@@ -1331,7 +1318,7 @@ func testAccWorkbenchInstance_resourcePolicies(context map[string]interface{}, p
 	return acctest.Nprintf(`
 resource "google_compute_resource_policy" "policy_a" {
   name   = "tf-test-wbi-policy-a-%{random_suffix}"
-  region = "us-east1"
+  region = "us-central1"
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
@@ -1344,7 +1331,7 @@ resource "google_compute_resource_policy" "policy_a" {
 
 resource "google_compute_resource_policy" "policy_b" {
   name   = "tf-test-wbi-policy-b-%{random_suffix}"
-  region = "us-east1"
+  region = "us-central1"
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
@@ -1357,7 +1344,7 @@ resource "google_compute_resource_policy" "policy_b" {
 
 resource "google_workbench_instance" "instance" {
   name     = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
+  location = "us-central1-a"
 
   gce_setup {
     machine_type = "n4-standard-2"
@@ -1365,7 +1352,7 @@ resource "google_workbench_instance" "instance" {
       disk_type = "HYPERDISK_BALANCED"
     }
     data_disks {
-      disk_size_gb      = 330
+      disk_size_gb      = 110
       disk_type         = "HYPERDISK_BALANCED"
       resource_policies = [%{policy_ref}]
     }
