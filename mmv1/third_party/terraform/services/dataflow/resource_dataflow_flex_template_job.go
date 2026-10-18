@@ -954,6 +954,6 @@ func init() {
 		Name:        "google_dataflow_flex_template_job",
 		ProductName: "dataflow",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceDataflowFlexTemplateJob(),
+		SchemaFunc:  ResourceDataflowFlexTemplateJob,
 	}.Register()
 }

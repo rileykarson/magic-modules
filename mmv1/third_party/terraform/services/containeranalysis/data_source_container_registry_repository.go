@@ -61,6 +61,6 @@ func init() {
 		Name:        "google_container_registry_repository",
 		ProductName: "containeranalysis",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerRepo(),
+		SchemaFunc:  DataSourceGoogleContainerRepo,
 	}.Register()
 }

@@ -550,7 +550,7 @@ func init() {
 		Name:        "google_service_networking_connection",
 		ProductName: "servicenetworking",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceServiceNetworkingConnection(),
+		SchemaFunc:  ResourceServiceNetworkingConnection,
 	}.Register()
 }
 

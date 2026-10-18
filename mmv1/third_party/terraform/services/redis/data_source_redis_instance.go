@@ -69,6 +69,6 @@ func init() {
 		Name:        "google_redis_instance",
 		ProductName: "redis",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleRedisInstance(),
+		SchemaFunc:  DataSourceGoogleRedisInstance,
 	}.Register()
 }

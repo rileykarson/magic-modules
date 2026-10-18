@@ -51,6 +51,6 @@ func init() {
 		Name:        "google_logging_sink",
 		ProductName: "logging",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleLoggingSink(),
+		SchemaFunc:  DataSourceGoogleLoggingSink,
 	}.Register()
 }

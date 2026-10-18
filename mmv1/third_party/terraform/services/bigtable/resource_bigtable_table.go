@@ -804,6 +804,6 @@ func init() {
 		Name:        "google_bigtable_table",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceBigtableTable(),
+		SchemaFunc:  ResourceBigtableTable,
 	}.Register()
 }

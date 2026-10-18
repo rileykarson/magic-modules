@@ -115,6 +115,6 @@ func init() {
 		Name:        "google_sql_tiers",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleSQLTiers(),
+		SchemaFunc:  DataSourceGoogleSQLTiers,
 	}.Register()
 }

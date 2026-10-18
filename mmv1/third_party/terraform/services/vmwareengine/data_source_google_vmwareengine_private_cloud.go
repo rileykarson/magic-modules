@@ -45,6 +45,6 @@ func init() {
 		Name:        "google_vmwareengine_private_cloud",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareenginePrivateCloud(),
+		SchemaFunc:  DataSourceVmwareenginePrivateCloud,
 	}.Register()
 }

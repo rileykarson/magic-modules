@@ -9503,6 +9503,6 @@ func init() {
 		Name: "google_container_cluster",
 		ProductName: "container",
 		Type: registry.SchemaTypeResource,
-		Schema: ResourceContainerCluster(),
+		SchemaFunc: ResourceContainerCluster,
 	}.Register()
 }

@@ -124,6 +124,6 @@ func init() {
 		Name:        "google_vertex_ai_reasoning_engine_query",
 		ProductName: "vertexai",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVertexAIReasoningEngineQuery(),
+		SchemaFunc:  DataSourceVertexAIReasoningEngineQuery,
 	}.Register()
 }

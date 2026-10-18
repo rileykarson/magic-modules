@@ -135,24 +135,32 @@ func init() {
 		Name:        "google_healthcare_dataset_iam_member",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc, tpgiamresource.IamWithBatching),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc, tpgiamresource.IamWithBatching)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_dataset_iam_binding",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc, tpgiamresource.IamWithBatching),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc, tpgiamresource.IamWithBatching)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_dataset_iam_policy",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater, DatasetIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_dataset_iam_policy",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamHealthcareDatasetSchema, NewHealthcareDatasetIamUpdater)
+		},
 	}.Register()
 }

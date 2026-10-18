@@ -60,6 +60,6 @@ func init() {
 		Name:        "google_compute_ha_vpn_gateway",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeHaVpnGateway(),
+		SchemaFunc:  DataSourceGoogleComputeHaVpnGateway,
 	}.Register()
 }

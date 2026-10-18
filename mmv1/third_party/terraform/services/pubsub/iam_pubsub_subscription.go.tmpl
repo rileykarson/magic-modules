@@ -172,7 +172,7 @@ func init() {
         Name:        "google_pubsub_subscription_iam_member",
         ProductName: "pubsub",
         Type:        registry.SchemaTypeIAMResource,
-        Schema:      PubsubSubscriptionIamMemberResource(),
+        SchemaFunc: PubsubSubscriptionIamMemberResource,
     }.Register()
     registry.FrameworkListResource{
         Name:        "google_pubsub_subscription_iam_member",
@@ -183,19 +183,25 @@ func init() {
         Name:        "google_pubsub_subscription_iam_binding",
         ProductName: "pubsub",
         Type:        registry.SchemaTypeIAMResource,
-        Schema:      tpgiamresource.ResourceIamBinding(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater, PubsubSubscriptionIdParseFunc),
+        SchemaFunc: func() *schema.Resource {
+        	return tpgiamresource.ResourceIamBinding(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater, PubsubSubscriptionIdParseFunc)
+        },
     }.Register()
     registry.Schema{
         Name:        "google_pubsub_subscription_iam_policy",
         ProductName: "pubsub",
         Type:        registry.SchemaTypeIAMResource,
-        Schema:      tpgiamresource.ResourceIamPolicy(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater, PubsubSubscriptionIdParseFunc),
+        SchemaFunc: func() *schema.Resource {
+        	return tpgiamresource.ResourceIamPolicy(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater, PubsubSubscriptionIdParseFunc)
+        },
     }.Register()
     registry.Schema{
         Name:        "google_pubsub_subscription_iam_policy",
         ProductName: "pubsub",
         Type:        registry.SchemaTypeIAMDataSource,
-        Schema:      tpgiamresource.DataSourceIamPolicy(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater),
+        SchemaFunc: func() *schema.Resource {
+        	return tpgiamresource.DataSourceIamPolicy(IamPubsubSubscriptionSchema, NewPubsubSubscriptionIamUpdater)
+        },
     }.Register()
 }
 {{- end}}

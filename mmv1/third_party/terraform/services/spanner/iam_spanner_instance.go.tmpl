@@ -197,25 +197,33 @@ func init() {
 		Name:        "google_spanner_instance_iam_member",
 		ProductName: "spanner",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_spanner_instance_iam_binding",
 		ProductName: "spanner",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_spanner_instance_iam_policy",
 		ProductName: "spanner",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater, SpannerInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_spanner_instance_iam_policy",
 		ProductName: "spanner",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamSpannerInstanceSchema, NewSpannerInstanceIamUpdater)
+		},
 	}.Register()
 }
 {{- end}}

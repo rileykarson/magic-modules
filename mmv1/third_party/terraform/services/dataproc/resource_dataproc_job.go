@@ -1380,6 +1380,6 @@ func init() {
 		Name:        "google_dataproc_job",
 		ProductName: "dataproc",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceDataprocJob(),
+		SchemaFunc:  ResourceDataprocJob,
 	}.Register()
 }

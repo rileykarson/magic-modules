@@ -128,24 +128,32 @@ func init() {
 		Name:        "google_billing_account_iam_binding",
 		ProductName: "billing",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_billing_account_iam_member",
 		ProductName: "billing",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_billing_account_iam_policy",
 		ProductName: "billing",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamBillingAccountSchema, NewBillingAccountIamUpdater, BillingAccountIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_billing_account_iam_policy",
 		ProductName: "billing",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamBillingAccountSchema, NewBillingAccountIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamBillingAccountSchema, NewBillingAccountIamUpdater)
+		},
 	}.Register()
 }

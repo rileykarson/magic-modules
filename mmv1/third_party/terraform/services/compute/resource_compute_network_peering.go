@@ -478,6 +478,6 @@ func init() {
 		Name:        "google_compute_network_peering",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceComputeNetworkPeering(),
+		SchemaFunc:  ResourceComputeNetworkPeering,
 	}.Register()
 }

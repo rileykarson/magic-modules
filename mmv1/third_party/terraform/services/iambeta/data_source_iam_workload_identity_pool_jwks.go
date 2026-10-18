@@ -155,6 +155,6 @@ func init() {
 		Name:        "google_iam_workload_identity_pool_jwks",
 		ProductName: "iambeta",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceIAMBetaWorkloadIdentityPoolJwks(),
+		SchemaFunc:  DataSourceIAMBetaWorkloadIdentityPoolJwks,
 	}.Register()
 }

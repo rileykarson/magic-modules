@@ -303,6 +303,6 @@ func init() {
 		Name: "google_compute_image",
 		ProductName: "compute",
 		Type: registry.SchemaTypeDataSource,
-		Schema: DataSourceGoogleComputeImage(),
+		SchemaFunc: DataSourceGoogleComputeImage,
 	}.Register()
 }

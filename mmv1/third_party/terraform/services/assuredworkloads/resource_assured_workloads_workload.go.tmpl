@@ -992,6 +992,6 @@ func init() {
 		Name:        "google_assured_workloads_workload",
 		ProductName: "assuredworkloads",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceAssuredWorkloadsWorkload(),
+		SchemaFunc: ResourceAssuredWorkloadsWorkload,
 	}.Register()
 }

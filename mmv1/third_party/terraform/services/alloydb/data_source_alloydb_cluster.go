@@ -69,6 +69,6 @@ func init() {
 		Name:        "google_alloydb_cluster",
 		ProductName: "alloydb",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAlloydbDatabaseCluster(),
+		SchemaFunc:  DataSourceAlloydbDatabaseCluster,
 	}.Register()
 }

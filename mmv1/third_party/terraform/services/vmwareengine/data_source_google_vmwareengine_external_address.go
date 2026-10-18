@@ -44,6 +44,6 @@ func init() {
 		Name:        "google_vmwareengine_external_address",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareengineExternalAddress(),
+		SchemaFunc:  DataSourceVmwareengineExternalAddress,
 	}.Register()
 }

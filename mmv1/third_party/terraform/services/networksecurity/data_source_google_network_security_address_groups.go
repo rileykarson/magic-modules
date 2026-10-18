@@ -155,6 +155,6 @@ func init() {
 		Name:        "google_network_security_address_groups",
 		ProductName: "networksecurity",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceNetworkSecurityAddressGroups(),
+		SchemaFunc:  DataSourceNetworkSecurityAddressGroups,
 	}.Register()
 }

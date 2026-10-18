@@ -749,6 +749,6 @@ func init() {
 		Name:        "google_apikeys_key",
 		ProductName: "apikeys",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceApikeysKey(),
+		SchemaFunc:  ResourceApikeysKey,
 	}.Register()
 }

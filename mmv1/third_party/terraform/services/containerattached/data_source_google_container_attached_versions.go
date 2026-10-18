@@ -83,6 +83,6 @@ func init() {
 		Name:        "google_container_attached_versions",
 		ProductName: "containerattached",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerAttachedVersions(),
+		SchemaFunc:  DataSourceGoogleContainerAttachedVersions,
 	}.Register()
 }

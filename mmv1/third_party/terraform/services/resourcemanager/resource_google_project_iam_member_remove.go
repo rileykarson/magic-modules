@@ -139,6 +139,6 @@ func init() {
 		Name:        "google_project_iam_member_remove",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceGoogleProjectIamMemberRemove(),
+		SchemaFunc:  ResourceGoogleProjectIamMemberRemove,
 	}.Register()
 }

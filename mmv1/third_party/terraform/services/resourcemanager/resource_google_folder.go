@@ -366,6 +366,6 @@ func init() {
 		Name:        "google_folder",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceGoogleFolder(),
+		SchemaFunc:  ResourceGoogleFolder,
 	}.Register()
 }

@@ -42,6 +42,6 @@ func init() {
 		Name:        "google_oracle_database_exascale_db_storage_vault",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseExascaleDbStorageVault(),
+		SchemaFunc:  DataSourceOracleDatabaseExascaleDbStorageVault,
 	}.Register()
 }

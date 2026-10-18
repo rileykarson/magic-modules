@@ -227,7 +227,7 @@ func init() {
 		Name:        "google_backup_dr_backup_plan_association",
 		ProductName: "backupdr",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudBackupDRBackupPlanAssociation(),
+		SchemaFunc:  DataSourceGoogleCloudBackupDRBackupPlanAssociation,
 	}.Register()
 }
 
@@ -236,6 +236,6 @@ func init() {
 		Name:        "google_backup_dr_backup_plan_associations",
 		ProductName: "backupdr",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudBackupDRBackupPlanAssociations(),
+		SchemaFunc:  DataSourceGoogleCloudBackupDRBackupPlanAssociations,
 	}.Register()
 }

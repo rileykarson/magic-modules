@@ -147,24 +147,32 @@ func init() {
 		Name:        "google_dataproc_cluster_iam_member",
 		ProductName: "dataproc",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_dataproc_cluster_iam_binding",
 		ProductName: "dataproc",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_dataproc_cluster_iam_policy",
 		ProductName: "dataproc",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamDataprocClusterSchema, NewDataprocClusterUpdater, DataprocClusterIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_dataproc_cluster_iam_policy",
 		ProductName: "dataproc",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamDataprocClusterSchema, NewDataprocClusterUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamDataprocClusterSchema, NewDataprocClusterUpdater)
+		},
 	}.Register()
 }

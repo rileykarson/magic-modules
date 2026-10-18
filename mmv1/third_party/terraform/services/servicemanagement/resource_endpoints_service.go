@@ -469,6 +469,6 @@ func init() {
 		Name:        "google_endpoints_service",
 		ProductName: "servicemanagement",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceEndpointsService(),
+		SchemaFunc:  ResourceEndpointsService,
 	}.Register()
 }

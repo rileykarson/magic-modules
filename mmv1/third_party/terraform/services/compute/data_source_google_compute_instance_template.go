@@ -141,6 +141,6 @@ func init() {
 		Name:        "google_compute_instance_template",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeInstanceTemplate(),
+		SchemaFunc:  DataSourceGoogleComputeInstanceTemplate,
 	}.Register()
 }

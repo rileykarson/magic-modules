@@ -146,6 +146,6 @@ func init() {
 		Name:        "google_compute_project_default_network_tier",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceComputeProjectDefaultNetworkTier(),
+		SchemaFunc:  ResourceComputeProjectDefaultNetworkTier,
 	}.Register()
 }

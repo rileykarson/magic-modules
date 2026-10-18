@@ -80,6 +80,6 @@ func init() {
 		Name:        "google_kms_secret_ciphertext",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleKmsSecretCiphertext(),
+		SchemaFunc:  DataSourceGoogleKmsSecretCiphertext,
 	}.Register()
 }

@@ -17,51 +17,30 @@ var (
 	lastValidatedConfig   *tfprotov5.DynamicValue
 )
 
-// fastValidateProviderServer serves every RPC from the real SDKv2 provider
-// server except PrepareProviderConfig (the protocol v5 name for
-// ValidateProviderConfig), which it serves from a second provider server built
-// over a provider that has the same top level Schema and ProviderMetaSchema but
-// no resources or data sources.
-//
-// helper/schema.Provider.Validate, which PrepareProviderConfig calls, runs
-// Provider.InternalValidate first, and that walks every registered resource and
-// data source schema. The provider has ~1500 of them, so the walk dominates the
-// RPC, and Terraform issues the RPC once per provider instance on every plan
-// and apply. PrepareProviderConfig itself only ever reads Provider.Schema (for
-// the config block) and Provider.ProviderMetaSchema, so a resource-less
-// provider returns the same PreparedConfig and the same user facing
-// diagnostics.
-//
-// The resource and data source half of InternalValidate is not lost: it is
-// checked for every resource by TestProvider in provider_test.go, which is the
-// documented place for that check ("This should be called in a unit test for
-// any provider to verify before release that a provider is properly configured
-// for use with this library").
 type fastValidateProviderServer struct {
-	// Embedding the concrete SDK server type, rather than the
-	// tfprotov5.ProviderServer interface, promotes every method it has. That
-	// keeps the optional protocol interfaces (list resources, actions, and
-	// anything the SDK adds later) satisfied without having to enumerate them.
 	*schema.GRPCProviderServer
 
+	provider         *schema.Provider
 	validate         *schema.GRPCProviderServer
+	mu               sync.RWMutex
+	resMaps          sync.Map
+	dsMaps           sync.Map
+	allOnce          sync.Once
+	allResMap        map[string]*schema.Resource
+	allDsMap         map[string]*schema.Resource
 	fwValidateNeeded atomic.Bool
 }
 
 // NewFastValidateProviderServer returns a tfprotov5.ProviderServer for p that
-// answers PrepareProviderConfig without walking every resource schema. It is a
-// drop-in replacement for p.GRPCProvider().
+// answers PrepareProviderConfig without walking every resource schema, and
+// lazily resolves per-resource schemas when p was created via LazyProvider().
 func NewFastValidateProviderServer(p *schema.Provider) tfprotov5.ProviderServer {
 	srv := &fastValidateProviderServer{
 		GRPCProviderServer: schema.NewGRPCProviderServer(p),
+		provider:           p,
 	}
 
 	validateSchema := maps.Clone(p.Schema)
-	// request_timeout and poll_interval have schema-level duration validators on
-	// the Framework provider but are validated during Configure on the SDKv2
-	// provider. Probe them during SDKv2 PrepareProviderConfig without altering
-	// SDKv2 diagnostics so the Framework server wrapper knows whether it needs
-	// to run its own schema validation to emit duration diagnostics.
 	checkDuration := func(v interface{}, _ string) ([]string, []error) {
 		s, ok := v.(string)
 		if !ok || s == "" {
@@ -90,6 +69,85 @@ func NewFastValidateProviderServer(p *schema.Provider) tfprotov5.ProviderServer 
 	return srv
 }
 
+func (s *fastValidateProviderServer) serverForResource(typeName string) *schema.GRPCProviderServer {
+	if typeName == "" {
+		return s.GRPCProviderServer
+	}
+	res, ok := s.provider.ResourcesMap[typeName]
+	if !ok || res != nil {
+		return s.GRPCProviderServer
+	}
+
+	var m map[string]*schema.Resource
+	if cached, ok := s.resMaps.Load(typeName); ok {
+		m = cached.(map[string]*schema.Resource)
+	} else {
+		built := registry.Resource(typeName)
+		m = map[string]*schema.Resource{typeName: built}
+		actual, _ := s.resMaps.LoadOrStore(typeName, m)
+		m = actual.(map[string]*schema.Resource)
+	}
+
+	s.mu.RLock()
+	pCopy := *s.provider
+	s.mu.RUnlock()
+	pCopy.ResourcesMap = m
+	return schema.NewGRPCProviderServer(&pCopy)
+}
+
+func (s *fastValidateProviderServer) serverForDataSource(typeName string) *schema.GRPCProviderServer {
+	if typeName == "" {
+		return s.GRPCProviderServer
+	}
+	ds, ok := s.provider.DataSourcesMap[typeName]
+	if !ok || ds != nil {
+		return s.GRPCProviderServer
+	}
+
+	var m map[string]*schema.Resource
+	if cached, ok := s.dsMaps.Load(typeName); ok {
+		m = cached.(map[string]*schema.Resource)
+	} else {
+		built := registry.DataSource(typeName)
+		m = map[string]*schema.Resource{typeName: built}
+		actual, _ := s.dsMaps.LoadOrStore(typeName, m)
+		m = actual.(map[string]*schema.Resource)
+	}
+
+	s.mu.RLock()
+	pCopy := *s.provider
+	s.mu.RUnlock()
+	pCopy.DataSourcesMap = m
+	return schema.NewGRPCProviderServer(&pCopy)
+}
+
+func (s *fastValidateProviderServer) allSchemasServer() *schema.GRPCProviderServer {
+	s.allOnce.Do(func() {
+		s.allResMap = registry.ResourceMap()
+		s.allDsMap = registry.DatasourceMap()
+	})
+	s.mu.RLock()
+	pCopy := *s.provider
+	s.mu.RUnlock()
+	pCopy.ResourcesMap = s.allResMap
+	pCopy.DataSourcesMap = s.allDsMap
+	return schema.NewGRPCProviderServer(&pCopy)
+}
+
+func (s *fastValidateProviderServer) ConfigureProvider(ctx context.Context, req *tfprotov5.ConfigureProviderRequest) (*tfprotov5.ConfigureProviderResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.GRPCProviderServer.ConfigureProvider(ctx, req)
+}
+
+func (s *fastValidateProviderServer) GetProviderSchema(ctx context.Context, req *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
+	return s.allSchemasServer().GetProviderSchema(ctx, req)
+}
+
+func (s *fastValidateProviderServer) GetResourceIdentitySchemas(ctx context.Context, req *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+	return s.allSchemasServer().GetResourceIdentitySchemas(ctx, req)
+}
+
 func (s *fastValidateProviderServer) PrepareProviderConfig(ctx context.Context, req *tfprotov5.PrepareProviderConfigRequest) (*tfprotov5.PrepareProviderConfigResponse, error) {
 	s.fwValidateNeeded.Store(false)
 	resp, err := s.validate.PrepareProviderConfig(ctx, req)
@@ -103,6 +161,76 @@ func (s *fastValidateProviderServer) PrepareProviderConfig(ctx context.Context, 
 		lastValidatedConfigMu.Unlock()
 	}
 	return resp, err
+}
+
+func (s *fastValidateProviderServer) ValidateResourceTypeConfig(ctx context.Context, req *tfprotov5.ValidateResourceTypeConfigRequest) (*tfprotov5.ValidateResourceTypeConfigResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ValidateResourceTypeConfig(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).ValidateResourceTypeConfig(ctx, req)
+}
+
+func (s *fastValidateProviderServer) ValidateDataSourceConfig(ctx context.Context, req *tfprotov5.ValidateDataSourceConfigRequest) (*tfprotov5.ValidateDataSourceConfigResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ValidateDataSourceConfig(ctx, req)
+	}
+	return s.serverForDataSource(req.TypeName).ValidateDataSourceConfig(ctx, req)
+}
+
+func (s *fastValidateProviderServer) UpgradeResourceState(ctx context.Context, req *tfprotov5.UpgradeResourceStateRequest) (*tfprotov5.UpgradeResourceStateResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.UpgradeResourceState(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).UpgradeResourceState(ctx, req)
+}
+
+func (s *fastValidateProviderServer) UpgradeResourceIdentity(ctx context.Context, req *tfprotov5.UpgradeResourceIdentityRequest) (*tfprotov5.UpgradeResourceIdentityResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.UpgradeResourceIdentity(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).UpgradeResourceIdentity(ctx, req)
+}
+
+func (s *fastValidateProviderServer) ReadResource(ctx context.Context, req *tfprotov5.ReadResourceRequest) (*tfprotov5.ReadResourceResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ReadResource(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).ReadResource(ctx, req)
+}
+
+func (s *fastValidateProviderServer) PlanResourceChange(ctx context.Context, req *tfprotov5.PlanResourceChangeRequest) (*tfprotov5.PlanResourceChangeResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.PlanResourceChange(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).PlanResourceChange(ctx, req)
+}
+
+func (s *fastValidateProviderServer) ApplyResourceChange(ctx context.Context, req *tfprotov5.ApplyResourceChangeRequest) (*tfprotov5.ApplyResourceChangeResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ApplyResourceChange(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).ApplyResourceChange(ctx, req)
+}
+
+func (s *fastValidateProviderServer) ImportResourceState(ctx context.Context, req *tfprotov5.ImportResourceStateRequest) (*tfprotov5.ImportResourceStateResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ImportResourceState(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).ImportResourceState(ctx, req)
+}
+
+func (s *fastValidateProviderServer) GenerateResourceConfig(ctx context.Context, req *tfprotov5.GenerateResourceConfigRequest) (*tfprotov5.GenerateResourceConfigResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.GenerateResourceConfig(ctx, req)
+	}
+	return s.serverForResource(req.TypeName).GenerateResourceConfig(ctx, req)
+}
+
+func (s *fastValidateProviderServer) ReadDataSource(ctx context.Context, req *tfprotov5.ReadDataSourceRequest) (*tfprotov5.ReadDataSourceResponse, error) {
+	if req == nil {
+		return s.GRPCProviderServer.ReadDataSource(ctx, req)
+	}
+	return s.serverForDataSource(req.TypeName).ReadDataSource(ctx, req)
 }
 
 type fullProviderServer interface {
@@ -125,15 +253,8 @@ var frameworkFunctionNames = []string{
 }
 
 // NewFastFrameworkProviderServer wraps the Plugin Framework protocol v5 server
-// so that:
-//   - GetMetadata answers directly from the registry without instantiating all
-//     152 list resources and their underlying SDKv2 resource schemas.
-//   - PrepareProviderConfig short-circuits when the preceding SDKv2
-//     PrepareProviderConfig pass on the same request Config produced zero
-//     diagnostics and valid duration fields.
-//   - ConfigureProvider passes a nil Config to avoid unmarshaling and
-//     nullifying the ~220-attribute config MsgPack a second time when
-//     FrameworkProvider.Configure reads primary.Meta() directly.
+// so that GetMetadata answers directly from the registry without instantiating
+// all 152 list resources and their underlying SDKv2 resource schemas.
 func NewFastFrameworkProviderServer(next func() tfprotov5.ProviderServer) func() tfprotov5.ProviderServer {
 	return func() tfprotov5.ProviderServer {
 		srv := next()

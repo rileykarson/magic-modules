@@ -51,6 +51,6 @@ func init() {
 		Name:        "google_compute_region_security_policy",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeRegionSecurityPolicy(),
+		SchemaFunc:  DataSourceGoogleComputeRegionSecurityPolicy,
 	}.Register()
 }

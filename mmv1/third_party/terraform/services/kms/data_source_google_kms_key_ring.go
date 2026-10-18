@@ -53,6 +53,6 @@ func init() {
 		Name:        "google_kms_key_ring",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleKmsKeyRing(),
+		SchemaFunc:  DataSourceGoogleKmsKeyRing,
 	}.Register()
 }

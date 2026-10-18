@@ -106,6 +106,6 @@ func init() {
 		Name:        "google_cloud_identity_group_lookup",
 		ProductName: "cloudidentity",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudIdentityGroupLookup(),
+		SchemaFunc:  DataSourceGoogleCloudIdentityGroupLookup,
 	}.Register()
 }

@@ -165,6 +165,6 @@ func init() {
 		Name:        "google_compute_instance_guest_attributes",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeInstanceGuestAttributes(),
+		SchemaFunc:  DataSourceGoogleComputeInstanceGuestAttributes,
 	}.Register()
 }

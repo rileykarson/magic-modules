@@ -46,6 +46,6 @@ func init() {
 		Name:        "google_storage_insights_dataset_config",
 		ProductName: "storageinsights",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleStorageInsightsDatasetConfig(),
+		SchemaFunc:  DataSourceGoogleStorageInsightsDatasetConfig,
 	}.Register()
 }

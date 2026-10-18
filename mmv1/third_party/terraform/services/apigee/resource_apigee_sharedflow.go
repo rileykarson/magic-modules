@@ -429,6 +429,6 @@ func init() {
 		Name:        "google_apigee_sharedflow",
 		ProductName: "apigee",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceApigeeSharedFlow(),
+		SchemaFunc:  ResourceApigeeSharedFlow,
 	}.Register()
 }

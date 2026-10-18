@@ -298,6 +298,6 @@ func init() {
 		Name:        "google_apigee_flowhook",
 		ProductName: "apigee",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceApigeeFlowhook(),
+		SchemaFunc:  ResourceApigeeFlowhook,
 	}.Register()
 }

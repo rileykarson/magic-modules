@@ -54,6 +54,6 @@ func init() {
 		Name:        "google_compute_ssl_policy",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeSslPolicy(),
+		SchemaFunc:  DataSourceGoogleComputeSslPolicy,
 	}.Register()
 }

@@ -44,6 +44,6 @@ func init() {
 		Name:        "google_vmwareengine_external_access_rule",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareengineExternalAccessRule(),
+		SchemaFunc:  DataSourceVmwareengineExternalAccessRule,
 	}.Register()
 }

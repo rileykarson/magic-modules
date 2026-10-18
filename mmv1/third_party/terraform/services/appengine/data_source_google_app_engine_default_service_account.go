@@ -95,6 +95,6 @@ func init() {
 		Name:        "google_app_engine_default_service_account",
 		ProductName: "appengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleAppEngineDefaultServiceAccount(),
+		SchemaFunc:  DataSourceGoogleAppEngineDefaultServiceAccount,
 	}.Register()
 }

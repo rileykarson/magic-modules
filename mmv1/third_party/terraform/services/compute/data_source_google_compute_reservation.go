@@ -52,6 +52,6 @@ func init() {
 		Name:        "google_compute_reservation",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeReservation(),
+		SchemaFunc:  DataSourceGoogleComputeReservation,
 	}.Register()
 }

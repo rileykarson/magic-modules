@@ -331,19 +331,25 @@ func init() {
 		Name:        "google_bigquery_dataset_iam_binding",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater, BigqueryDatasetIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater, BigqueryDatasetIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_bigquery_dataset_iam_policy",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater, BigqueryDatasetIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater, BigqueryDatasetIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_bigquery_dataset_iam_policy",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamBigqueryDatasetSchema, NewBigqueryDatasetIamUpdater)
+		},
 	}.Register()
 }
 {{- end}}

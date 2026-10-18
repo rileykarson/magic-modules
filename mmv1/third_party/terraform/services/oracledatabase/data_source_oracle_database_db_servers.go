@@ -256,6 +256,6 @@ func init() {
 		Name:        "google_oracle_database_db_servers",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseDbServers(),
+		SchemaFunc:  DataSourceOracleDatabaseDbServers,
 	}.Register()
 }

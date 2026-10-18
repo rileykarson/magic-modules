@@ -21,7 +21,7 @@ func main() {
 	flag.Parse()
 
 	// primary is the SDKv2 implementation of the provider
-	primary := provider.Provider()
+	primary := provider.LazyProvider()
 
 	providers := []func() tfprotov5.ProviderServer{
 		// sdk provider

@@ -120,6 +120,6 @@ func init() {
 		Name:        "google_sql_backup_run",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceSqlBackupRun(),
+		SchemaFunc:  DataSourceSqlBackupRun,
 	}.Register()
 }

@@ -57,6 +57,6 @@ func init() {
 		Name:        "google_cloudfunctions2_function",
 		ProductName: "cloudfunctions2",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudFunctions2Function(),
+		SchemaFunc:  DataSourceGoogleCloudFunctions2Function,
 	}.Register()
 }

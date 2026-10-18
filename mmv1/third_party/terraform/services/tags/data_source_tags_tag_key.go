@@ -122,6 +122,6 @@ func init() {
 		Name:        "google_tags_tag_key",
 		ProductName: "tags",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleTagsTagKey(),
+		SchemaFunc:  DataSourceGoogleTagsTagKey,
 	}.Register()
 }

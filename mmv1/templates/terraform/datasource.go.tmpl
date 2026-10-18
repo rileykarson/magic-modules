@@ -77,7 +77,7 @@ func init() {
 		Name:        "{{ $.TerraformName }}",
 		ProductName: "{{ lower $.ProductMetadata.Name }}",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSource{{ .ResourceName -}}(),
+		SchemaFunc:  DataSource{{ .ResourceName -}},
 	}.Register()
 }
 

@@ -233,6 +233,6 @@ func init() {
 		Name:        "google_compute_service_attachments",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeServiceAttachments(),
+		SchemaFunc:  DataSourceGoogleComputeServiceAttachments,
 	}.Register()
 }

@@ -698,6 +698,6 @@ func init() {
 		Name: "google_compute_target_pool",
 		ProductName: "compute",
 		Type: registry.SchemaTypeResource,
-		Schema: ResourceComputeTargetPool(),
+		SchemaFunc: ResourceComputeTargetPool,
 	}.Register()
 }

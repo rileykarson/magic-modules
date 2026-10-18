@@ -117,6 +117,6 @@ func init() {
 		Name:        "google_oracle_database_autonomous_databases",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseAutonomousDatabases(),
+		SchemaFunc:  DataSourceOracleDatabaseAutonomousDatabases,
 	}.Register()
 }
