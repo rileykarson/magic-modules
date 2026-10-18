@@ -2,6 +2,7 @@ package fwprovider
 
 import (
     "context"
+    "sync"
 
     sdk_schema "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -21,7 +22,6 @@ import (
 
     "github.com/hashicorp/terraform-provider-google/google/fwvalidators"
     "github.com/hashicorp/terraform-provider-google/google/functions"
-    "github.com/hashicorp/terraform-provider-google/google/fwmodels"
     "github.com/hashicorp/terraform-provider-google/google/registry"
     "github.com/hashicorp/terraform-provider-google/version"
 
@@ -70,12 +70,24 @@ func (p *FrameworkProvider) MetaSchema(_ context.Context, _ provider.MetaSchemaR
     }
 }
 
+var (
+    frameworkProviderSchemaOnce sync.Once
+    frameworkProviderSchema     schema.Schema
+)
+
 // Schema defines the provider-level schema for configuration data.
 // See: https://developer.hashicorp.com/terraform/plugin/framework/migrating/mux
 // "The schema and configuration handling must exactly match between all underlying providers of the mux server"
 // This schema matches the schema implemented with SDKv2 in google/provider/provider.go
 func (p *FrameworkProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
-    resp.Schema = schema.Schema{
+    frameworkProviderSchemaOnce.Do(func() {
+        frameworkProviderSchema = buildFrameworkProviderSchema()
+    })
+    resp.Schema = frameworkProviderSchema
+}
+
+func buildFrameworkProviderSchema() schema.Schema {
+    return schema.Schema{
         Attributes: map[string]schema.Attribute{
             "credentials": schema.StringAttribute{
                 Optional: true,
@@ -283,28 +295,13 @@ func (p *FrameworkProvider) Schema(_ context.Context, _ provider.SchemaRequest, 
 // Configuration logic implemented here should take user inputs and use them to populate a struct
 // with that necessary metadata, e.g. default project value, configured client, etc.
 // That prepared 'meta' struct is then returned in the response, and that value will later be supplied to all resources/data sources when they need to configure themselves.
-func (p *FrameworkProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-    var data fwmodels.ProviderModel
-
-    resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
-
-    if resp.Diagnostics.HasError() {
-        return
-    }
-
-	// Configuration values are now available.
-    // However we don't use them; for the plugin-framework implementation of the provider
-	// we take the configuration values from the SDK implementation of the provider. This avoids duplicated logic and inconsistencies in implementation.
-	// The trade off is that we don't benefit from the new type system that differentiates Null and Unknown values, which is especially useful for strings.
-	// This makes it necessary to write code that stops empty strings (etc) being passed from the Config struct to PF-implemented resources/datasources.
-	//    E.g. GetProjectFramework treats Null and "" the same way : https://github.com/hashicorp/terraform-provider-google/blob/74c815ee4ad059453e06b84448af244d80490ec1/google/fwresource/field_helpers.go#L21-L36
-	//    See also, new approaches to handle this: https://github.com/GoogleCloudPlatform/magic-modules/pull/11925
-
-
-	// This is how we make provider configuration info (configured clients, default project, etc) available to resources, data sources,
-	// ephemeral resources, and list resources implemented using the plugin-framework. Their Configure functions receive this data via ConfigureRequest.ProviderData
-	// (list resources use ConfigureResponse.ListResourceData — see terraform-plugin-framework list.ConfigureRequest).
-	meta := p.Primary.Meta().(*transport_tpg.Config)
+func (p *FrameworkProvider) Configure(_ context.Context, _ provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	// Configuration values are available on req.Config, however we don't use them; for the
+	// plugin-framework implementation of the provider we take the configuration values from the
+	// SDK implementation of the provider (which has already decoded and validated the config).
+	// This avoids duplicated logic, inconsistencies in implementation, and redundant reflection
+	// over the ~220-attribute ProviderModel struct.
+	meta, _ := p.Primary.Meta().(*transport_tpg.Config)
 	resp.DataSourceData = meta
 	resp.ResourceData = meta
 	resp.EphemeralResourceData = meta

@@ -4,13 +4,17 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
+	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 
+	"github.com/hashicorp/terraform-provider-google/google/fwprovider"
 	"github.com/hashicorp/terraform-provider-google/google/provider"
 	_ "github.com/hashicorp/terraform-provider-google/google/services/compute"
 )
@@ -96,6 +100,93 @@ func TestFastValidateProviderServer_servesRealSchema(t *testing.T) {
 	}
 }
 
+func TestFastFrameworkProviderServer_matchesMuxServer(t *testing.T) {
+	ctx := context.Background()
+
+	stockPrimary := provider.Provider()
+	stockMux, err := tf5muxserver.NewMuxServer(ctx,
+		stockPrimary.GRPCProvider,
+		providerserver.NewProtocol5(fwprovider.New(stockPrimary)),
+	)
+	if err != nil {
+		t.Fatalf("NewMuxServer failed: %s", err)
+	}
+
+	fastPrimary := provider.Provider()
+	fastMux, err := tf5muxserver.NewMuxServer(ctx,
+		func() tfprotov5.ProviderServer { return provider.NewFastValidateProviderServer(fastPrimary) },
+		provider.NewFastFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(fastPrimary))),
+	)
+	if err != nil {
+		t.Fatalf("NewMuxServer failed: %s", err)
+	}
+
+	wantMeta, err := stockMux.ProviderServer().GetMetadata(ctx, &tfprotov5.GetMetadataRequest{})
+	if err != nil {
+		t.Fatalf("stock mux GetMetadata failed: %s", err)
+	}
+	gotMeta, err := fastMux.ProviderServer().GetMetadata(ctx, &tfprotov5.GetMetadataRequest{})
+	if err != nil {
+		t.Fatalf("fast mux GetMetadata failed: %s", err)
+	}
+	sortMetadata(wantMeta)
+	sortMetadata(gotMeta)
+	if !reflect.DeepEqual(gotMeta, wantMeta) {
+		t.Errorf("GetMetadata differs between fastMux and stockMux:\ngot:  %#v\nwant: %#v", gotMeta, wantMeta)
+	}
+
+	providerType := providerConfigType(ctx, t, stockMux.ProviderServer())
+
+	cases := map[string]map[string]tftypes.Value{
+		"empty config":                {},
+		"valid config":                {"project": tftypes.NewValue(tftypes.String, "my-project"), "request_timeout": tftypes.NewValue(tftypes.String, "30s")},
+		"invalid credentials":         {"credentials": tftypes.NewValue(tftypes.String, "this is not json")},
+		"empty credentials":           {"credentials": tftypes.NewValue(tftypes.String, "")},
+		"invalid custom endpoint":     {"compute_custom_endpoint": tftypes.NewValue(tftypes.String, "https://example.com/no-trailing-slash")},
+		"invalid access token & cred": {"access_token": tftypes.NewValue(tftypes.String, ""), "credentials": tftypes.NewValue(tftypes.String, "{}")},
+		"empty request_timeout":       {"request_timeout": tftypes.NewValue(tftypes.String, "")},
+		"invalid request_timeout":     {"request_timeout": tftypes.NewValue(tftypes.String, "not-a-duration")},
+		"negative request_timeout":    {"request_timeout": tftypes.NewValue(tftypes.String, "-5s")},
+		"invalid poll_interval":       {"poll_interval": tftypes.NewValue(tftypes.String, "bad-interval")},
+	}
+
+	for name, attrs := range cases {
+		t.Run(name, func(t *testing.T) {
+			req := &tfprotov5.PrepareProviderConfigRequest{
+				Config: providerConfigValue(t, providerType, attrs),
+			}
+
+			want, err := stockMux.ProviderServer().PrepareProviderConfig(ctx, req)
+			if err != nil {
+				t.Fatalf("stock mux server PrepareProviderConfig returned an error: %s", err)
+			}
+			got, err := fastMux.ProviderServer().PrepareProviderConfig(ctx, req)
+			if err != nil {
+				t.Fatalf("fast mux server PrepareProviderConfig returned an error: %s", err)
+			}
+
+			if diff := diagnosticsDiff(want.Diagnostics, got.Diagnostics); diff != "" {
+				t.Errorf("diagnostics differ from the stock mux server: %s", diff)
+			}
+		})
+	}
+
+	// Verify ConfigureProvider on the fast Framework server succeeds without
+	// panicking even when Primary.Meta() is nil or when Config is non-nil.
+	fwSrv := provider.NewFastFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(fastPrimary)))()
+	cfgResp, err := fwSrv.ConfigureProvider(ctx, &tfprotov5.ConfigureProviderRequest{
+		Config: providerConfigValue(t, providerType, map[string]tftypes.Value{
+			"project": tftypes.NewValue(tftypes.String, "my-project"),
+		}),
+	})
+	if err != nil {
+		t.Fatalf("fast framework ConfigureProvider returned an error: %s", err)
+	}
+	if len(cfgResp.Diagnostics) != 0 {
+		t.Errorf("fast framework ConfigureProvider returned unexpected diagnostics: %v", cfgResp.Diagnostics)
+	}
+}
+
 // providerConfigType returns the tftypes.Type of the provider config block.
 func providerConfigType(ctx context.Context, t *testing.T, server tfprotov5.ProviderServer) tftypes.Object {
 	t.Helper()
@@ -170,4 +261,22 @@ func diagnosticStrings(diags []*tfprotov5.Diagnostic) []string {
 	}
 	slices.Sort(out)
 	return out
+}
+
+func sortMetadata(resp *tfprotov5.GetMetadataResponse) {
+	slices.SortFunc(resp.DataSources, func(a, b tfprotov5.DataSourceMetadata) int {
+		return strings.Compare(a.TypeName, b.TypeName)
+	})
+	slices.SortFunc(resp.Resources, func(a, b tfprotov5.ResourceMetadata) int {
+		return strings.Compare(a.TypeName, b.TypeName)
+	})
+	slices.SortFunc(resp.Functions, func(a, b tfprotov5.FunctionMetadata) int {
+		return strings.Compare(a.Name, b.Name)
+	})
+	slices.SortFunc(resp.ListResources, func(a, b tfprotov5.ListResourceMetadata) int {
+		return strings.Compare(a.TypeName, b.TypeName)
+	})
+	slices.SortFunc(resp.EphemeralResources, func(a, b tfprotov5.EphemeralResourceMetadata) int {
+		return strings.Compare(a.TypeName, b.TypeName)
+	})
 }
