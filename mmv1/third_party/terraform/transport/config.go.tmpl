@@ -815,8 +815,10 @@ func GetCurrentUserEmail(config *Config, userAgent string) (string, error) {
 	return res["email"].(string), nil
 }
 
+var customEndpointValidator = stringvalidator.RegexMatches(regexp.MustCompile(`.*/[^/]+/$`), "")
+
 func CustomEndpointValidator() validator.String {
-	return stringvalidator.RegexMatches(regexp.MustCompile(`.*/[^/]+/$`), "")
+	return customEndpointValidator
 }
 
 // return the region a selfLink is referring to
