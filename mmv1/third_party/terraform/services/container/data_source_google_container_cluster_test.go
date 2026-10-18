@@ -14,7 +14,7 @@ func TestAccContainerClusterDatasource_zonal(t *testing.T) {
 	t.Parallel()
 
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -39,7 +39,7 @@ func TestAccContainerClusterDatasource_regional(t *testing.T) {
 	t.Parallel()
 
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -66,11 +66,11 @@ func testAccContainerClusterDatasource_zonal(suffix, networkName, subnetworkName
 	return fmt.Sprintf(`
 resource "google_container_cluster" "kubes" {
   name               = "tf-test-cluster-%s"
-  location           = "us-east1-b"
+  location           = "us-central1-a"
   initial_node_count = 1
 
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
   }
 
   network    = "%s"
@@ -97,11 +97,11 @@ func testAccContainerClusterDatasource_regional(suffix, networkName, subnetworkN
 	return fmt.Sprintf(`
 resource "google_container_cluster" "kubes" {
   name               = "tf-test-cluster-%s"
-  location           = "us-east1"
+  location           = "us-central1"
   initial_node_count = 1
 
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
   }
 
   resource_labels = {

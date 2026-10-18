@@ -1843,7 +1843,7 @@ func TestAccContainerNodePool_withRDMA(t *testing.T) {
 	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	np := fmt.Sprintf("tf-test-np-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -5337,12 +5337,12 @@ resource "google_container_node_pool" "with_upgrade_settings" {
 func testAccContainerNodePool_withRDMA(cluster, np, networkName, subnetworkName string) string {
 	return fmt.Sprintf(`
 data "google_container_engine_versions" "central1b" {
-  location = "us-east1-d"
+  location = "us-central1-a"
 }
 
 resource "google_container_cluster" "cluster" {
   name                = "%s"
-  location            = "us-east1-d"
+  location            = "us-central1-a"
   min_master_version  = data.google_container_engine_versions.central1b.latest_master_version
   deletion_protection = false
   network             = "%s"
@@ -5353,7 +5353,7 @@ resource "google_container_cluster" "cluster" {
   initial_node_count       = 1
   remove_default_node_pool = true
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
   }
 
   lifecycle {
@@ -5363,7 +5363,7 @@ resource "google_container_cluster" "cluster" {
 
 resource "google_container_node_pool" "np_with_gpudirect" {
   name     = "%s"
-  location = "us-east1-d"
+  location = "us-central1-a"
   cluster  = google_container_cluster.cluster.name
   initial_node_count = 0
 
@@ -6022,16 +6022,25 @@ func testAccContainerNodePool_withConfidentialNodes(clusterName, np, networkName
 	return fmt.Sprintf(`
 resource "google_container_cluster" "cluster" {
   name               = "%s"
-  location           = "us-central1-a"
+  location           = "us-central1-f"
   initial_node_count = 1
   deletion_protection = false
   network    = "%s"
   subnetwork = "%s"
+
+  remove_default_node_pool = true
+  node_config {
+    machine_type = "e2-micro"
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
+  }
 }
 
 resource "google_container_node_pool" "np" {
   name               = "%s"
-  location           = "us-central1-a"
+  location           = "us-central1-f"
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
   node_config {
@@ -7446,7 +7455,7 @@ resource "google_compute_subnetwork" "main_subnet" {
   name                     = "%[1]s-main-subnet"
   network                  = google_compute_network.main_net.name
   ip_cidr_range            = "10.0.0.0/24"
-  region                   = "us-east1"
+  region                   = "us-central1"
   private_ip_google_access = true
 }
 
@@ -7460,12 +7469,12 @@ resource "google_compute_subnetwork" "add_subnet" {
   name          = "%[1]s-add-subnet"
   network       = google_compute_network.add_net.name
   ip_cidr_range = "10.1.0.0/24"
-  region        = "us-east1"
+  region        = "us-central1"
 }
 
 resource "google_container_cluster" "cluster" {
   name     = "%[1]s"
-  location = "us-east1-d"
+  location = "us-central1-a"
   
   network    = google_compute_network.main_net.id
   subnetwork = google_compute_subnetwork.main_subnet.id
@@ -7480,15 +7489,20 @@ resource "google_container_cluster" "cluster" {
 
   deletion_protection = false
   initial_node_count  = 1
+  remove_default_node_pool = true
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
   }
 }
 
 resource "google_container_node_pool" "np" {
   name     = "%[2]s"
   cluster  = google_container_cluster.cluster.id
-  location = "us-east1-d"
+  location = "us-central1-a"
   initial_node_count = 0
 
   // Enabling Flex Start
@@ -7540,13 +7554,13 @@ resource "google_compute_subnetwork" "main_subnet" {
   name                     = "%[1]s-main-subnet"
   network                  = google_compute_network.main_net.name
   ip_cidr_range            = "10.0.0.0/24"
-  region                   = "us-east1"
+  region                   = "us-central1"
   private_ip_google_access = true
 }
 
 resource "google_container_cluster" "cluster" {
   name     = "%[1]s"
-  location = "us-east1-d"
+  location = "us-central1-a"
   
   network    = google_compute_network.main_net.id
   subnetwork = google_compute_subnetwork.main_subnet.id
@@ -7560,15 +7574,20 @@ resource "google_container_cluster" "cluster" {
 
   deletion_protection = false
   initial_node_count  = 1
+  remove_default_node_pool = true
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
   }
 }
 
 resource "google_container_node_pool" "np" {
   name     = "%[2]s"
   cluster  = google_container_cluster.cluster.id
-  location = "us-east1-d"
+  location = "us-central1-a"
   initial_node_count = 0
 
   // Enabling Flex Start
@@ -7615,13 +7634,13 @@ resource "google_compute_subnetwork" "main_subnet" {
   name                     = "%[1]s-main-subnet"
   network                  = google_compute_network.main_net.name
   ip_cidr_range            = "10.0.0.0/24"
-  region                   = "us-east1"
+  region                   = "us-central1"
   private_ip_google_access = true
 }
 
 resource "google_container_cluster" "cluster" {
   name     = "%[1]s"
-  location = "us-east1-d"
+  location = "us-central1-a"
   
   network    = google_compute_network.main_net.id
   subnetwork = google_compute_subnetwork.main_subnet.id
@@ -7635,15 +7654,20 @@ resource "google_container_cluster" "cluster" {
 
   deletion_protection = false
   initial_node_count  = 1
+  remove_default_node_pool = true
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
   }
 }
 
 resource "google_container_node_pool" "np" {
   name     = "%[2]s"
   cluster  = google_container_cluster.cluster.id
-  location = "us-east1-d"
+  location = "us-central1-a"
   initial_node_count = 0
   
   // Enabling Flex Start
@@ -7767,32 +7791,19 @@ func TestAccContainerNodePool_ignoreNodeCountChanges(t *testing.T) {
 		CheckDestroy:             testAccCheckContainerNodePoolDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 2, true),
+				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 1, true),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_count", "2"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_count", "1"),
 				),
 			},
 			{
-				PreConfig: func() { testAccResizeNodePoolExternally(t, clusterName, poolName, 3) },
-				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 2, true),
+				PreConfig: func() { testAccResizeNodePoolExternally(t, clusterName, poolName, 2) },
+				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 1, true),
 				PlanOnly: true,
 			},
 			{
-				// Step 3: Flip ignore_node_count_changes to false and set node_count = 3 (matching GKE cloud state).
+				// Step 3: Flip ignore_node_count_changes to false and set node_count = 2 (matching GKE cloud state).
 				// This registers the flag update and aligns HCL with the actual GKE size.
-				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 3, false),
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
-					},
-				},
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_count", "3"),
-				),
-			},
-			{
-				// Step 4: Now that drift detection is active (flag is false in state), set node_count = 2.
-				// This detects the difference (3 -> 2) and resizes the GKE Node Pool back to 2.
 				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 2, false),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
@@ -7801,6 +7812,19 @@ func TestAccContainerNodePool_ignoreNodeCountChanges(t *testing.T) {
 				},
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_count", "2"),
+				),
+			},
+			{
+				// Step 4: Now that drift detection is active (flag is false in state), set node_count = 1.
+				// This detects the difference (2 -> 1) and resizes the GKE Node Pool back to 1.
+				Config: testAccContainerNodePool_ignoreNodeCountChanges(suffix, clusterName, poolName, 1, false),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_count", "1"),
 				),
 			},
 		},
@@ -7817,7 +7841,7 @@ resource "google_compute_network" "custom" {
 resource "google_compute_subnetwork" "custom" {
   name          = "tf-test-subnet-%s"
   ip_cidr_range = "10.0.0.0/16"
-  region        = "us-east1"
+  region        = "us-central1"
   network       = google_compute_network.custom.id
 
   secondary_ip_range {
@@ -7833,7 +7857,7 @@ resource "google_compute_subnetwork" "custom" {
 
 resource "google_container_cluster" "cluster" {
   name                = "%s"
-  location            = "us-east1-b"
+  location            = "us-central1-a"
   initial_node_count  = 1
   network             = google_compute_network.custom.id
   subnetwork          = google_compute_subnetwork.custom.id
@@ -7846,7 +7870,7 @@ resource "google_container_cluster" "cluster" {
 
   remove_default_node_pool = true
   node_config {
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
   }
 
   lifecycle {
@@ -7856,14 +7880,14 @@ resource "google_container_cluster" "cluster" {
 
 resource "google_container_node_pool" "np" {
   name               = "%s"
-  location           = "us-east1-b"
+  location           = "us-central1-a"
   cluster            = google_container_cluster.cluster.name
   node_count         = %d
   ignore_node_count_changes = %t
 
   node_config {
     preemptible  = true
-    machine_type = "n4-standard-2"
+    machine_type = "e2-micro"
   }
 }
 `, suffix, suffix, clusterName, poolName, count, ignoreChanges)
@@ -7872,7 +7896,7 @@ resource "google_container_node_pool" "np" {
 func testAccResizeNodePoolExternally(t *testing.T, clusterName, poolName string, size int64) {
 	config := acctest.GoogleProviderConfig(t)
 	userAgent := "terraform-provider-google-test"
-	location := "us-east1-b"
+	location := "us-central1-a"
 	fqName := fmt.Sprintf("projects/%s/locations/%s/clusters/%s/nodePools/%s", 
 		config.Project, location, clusterName, poolName)
 	
@@ -7898,7 +7922,7 @@ func TestAccContainerNodePool_withTaintConfig(t *testing.T) {
 	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	np := fmt.Sprintf("tf-test-nodepool-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -7967,22 +7991,31 @@ func TestAccContainerNodePool_withTaintConfig(t *testing.T) {
 func testAccContainerNodePool_withTaintConfig(cluster, np, networkName, subnetworkName, behavior string) string {
 	return fmt.Sprintf(`
 data "google_container_engine_versions" "central1a" {
-  location = "us-east1-b"
+  location = "us-central1-a"
 }
 
 resource "google_container_cluster" "cluster" {
   name               = "%s"
-  location           = "us-east1-b"
+  location           = "us-central1-a"
   initial_node_count = 1
   deletion_protection = false
   network            = "%s"
   subnetwork         = "%s"
   min_master_version  = data.google_container_engine_versions.central1a.release_channel_latest_version["RAPID"]
+
+  remove_default_node_pool = true
+  node_config {
+    machine_type = "e2-micro"
+  }
+
+  lifecycle {
+    ignore_changes = [node_config]
+  }
 }
 
 resource "google_container_node_pool" "np" {
   name               = "%s"
-  location           = "us-east1-b"
+  location           = "us-central1-a"
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
 
