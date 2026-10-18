@@ -457,21 +457,32 @@ func (c *Config) synchronousTimeout() time.Duration {
 }
 
 // Print Identities executing terraform API Calls.
+//
+// The GetCurrentUserEmail round trip below exists purely to fill in the
+// [INFO] lines this function writes, and it is the single most expensive step
+// of provider configuration - a blocking HTTPS request to
+// openidconnect.googleapis.com on the critical path of every plan and every
+// apply. When nothing is collecting [INFO] output there is no reason to pay
+// for it, so it is gated on InfoLogsVisible. Everything else here - both
+// getTokenSource calls, their error returns, and the c.Client assignments -
+// runs unconditionally, because those have effects beyond logging.
 func (c *Config) logGoogleIdentities(ctx context.Context) error {
 	if c.ImpersonateServiceAccount == "" {
 
-	tokenSource, err := c.getTokenSource(ctx, c.Scopes, true)
+		tokenSource, err := c.getTokenSource(ctx, c.Scopes, true)
 		if err != nil {
 			return err
 		}
 		c.Client = oauth2.NewClient(c.Context, tokenSource) // c.Client isn't initialised fully when this code is called.
 
-		email, err := GetCurrentUserEmail(c, c.UserAgent)
-		if err != nil {
-			log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
-		}
+		if InfoLogsVisible() {
+			email, err := GetCurrentUserEmail(c, c.UserAgent)
+			if err != nil {
+				log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
+			}
 
-		log.Printf("[INFO] Terraform is using this identity: %s", email)
+			log.Printf("[INFO] Terraform is using this identity: %s", email)
+		}
 
 		return nil
 
@@ -485,12 +496,14 @@ func (c *Config) logGoogleIdentities(ctx context.Context) error {
 	}
 	c.Client = oauth2.NewClient(c.Context, tokenSource) // c.Client isn't initialised fully when this code is called.
 
-	email, err := GetCurrentUserEmail(c, c.UserAgent)
-	if err != nil {
-		log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
-	}
+	if InfoLogsVisible() {
+		email, err := GetCurrentUserEmail(c, c.UserAgent)
+		if err != nil {
+			log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
+		}
 
-	log.Printf("[INFO] Terraform is configured with service account impersonation, original identity: %s, impersonated identity: %s", email, c.ImpersonateServiceAccount)
+		log.Printf("[INFO] Terraform is configured with service account impersonation, original identity: %s, impersonated identity: %s", email, c.ImpersonateServiceAccount)
+	}
 
 	// Add the Impersonated ClientOption back in to the OAuth2 TokenSource
 
