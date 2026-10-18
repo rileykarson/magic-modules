@@ -299,6 +299,6 @@ func init() {
 		Name:        "google_container_azure_client",
 		ProductName: "containerazure",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceContainerAzureClient(),
+		SchemaFunc:  ResourceContainerAzureClient,
 	}.Register()
 }

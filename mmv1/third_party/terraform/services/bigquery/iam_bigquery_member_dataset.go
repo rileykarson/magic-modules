@@ -404,7 +404,7 @@ func init() {
 		Name:        "google_bigquery_dataset_iam_member",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      BigqueryDatasetIamMemberResource(),
+		SchemaFunc:  BigqueryDatasetIamMemberResource,
 	}.Register()
 	registry.FrameworkListResource{
 		Name:        "google_bigquery_dataset_iam_member",

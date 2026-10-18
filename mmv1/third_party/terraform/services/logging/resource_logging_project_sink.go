@@ -254,6 +254,6 @@ func init() {
 		Name:        "google_logging_project_sink",
 		ProductName: "logging",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceLoggingProjectSink(),
+		SchemaFunc:  ResourceLoggingProjectSink,
 	}.Register()
 }

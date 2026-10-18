@@ -497,6 +497,6 @@ func init() {
 		Name: "google_tags_location_tag_binding",
 		ProductName: "tags",
 		Type: registry.SchemaTypeResource,
-		Schema: ResourceTagsLocationTagBinding(),
+		SchemaFunc: ResourceTagsLocationTagBinding,
 	}.Register()
 }

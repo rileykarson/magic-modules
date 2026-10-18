@@ -171,6 +171,6 @@ func init() {
 		Name:        "google_storage_default_object_acl",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceStorageDefaultObjectAcl(),
+		SchemaFunc:  ResourceStorageDefaultObjectAcl,
 	}.Register()
 }

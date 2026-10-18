@@ -56,6 +56,6 @@ func init() {
 		Name:        "google_compute_lb_ip_ranges",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeLbIpRanges(),
+		SchemaFunc:  DataSourceGoogleComputeLbIpRanges,
 	}.Register()
 }

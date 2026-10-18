@@ -52,6 +52,6 @@ func init() {
 		Name:        "google_spanner_database",
 		ProductName: "spanner",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceSpannerDatabase(),
+		SchemaFunc:  DataSourceSpannerDatabase,
 	}.Register()
 }

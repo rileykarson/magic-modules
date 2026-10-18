@@ -53,6 +53,6 @@ func init() {
 		Name:        "google_backup_dr_backup_vault",
 		ProductName: "backupdr",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudBackupDRBackupVault(),
+		SchemaFunc:  DataSourceGoogleCloudBackupDRBackupVault,
 	}.Register()
 }

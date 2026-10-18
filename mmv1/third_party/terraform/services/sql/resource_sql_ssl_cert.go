@@ -276,6 +276,6 @@ func init() {
 		Name:        "google_sql_ssl_cert",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceSqlSslCert(),
+		SchemaFunc:  ResourceSqlSslCert,
 	}.Register()
 }

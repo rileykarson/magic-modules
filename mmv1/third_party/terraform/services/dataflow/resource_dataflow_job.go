@@ -776,6 +776,6 @@ func init() {
 		Name:        "google_dataflow_job",
 		ProductName: "dataflow",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceDataflowJob(),
+		SchemaFunc:  ResourceDataflowJob,
 	}.Register()
 }

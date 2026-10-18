@@ -91,6 +91,6 @@ func init() {
 		Name:        "google_container_azure_versions",
 		ProductName: "containerazure",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerAzureVersions(),
+		SchemaFunc:  DataSourceGoogleContainerAzureVersions,
 	}.Register()
 }

@@ -269,6 +269,6 @@ func init() {
 		Name:        "google_agent_registry_endpoint",
 		ProductName: "agentregistry",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAgentRegistryEndpoint(),
+		SchemaFunc:  DataSourceAgentRegistryEndpoint,
 	}.Register()
 }

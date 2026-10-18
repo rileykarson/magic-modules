@@ -326,6 +326,6 @@ func init() {
 		Name:        "google_artifact_registry_docker_image",
 		ProductName: "artifactregistry",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceArtifactRegistryDockerImage(),
+		SchemaFunc:  DataSourceArtifactRegistryDockerImage,
 	}.Register()
 }

@@ -52,6 +52,6 @@ func init() {
 		Name:        "google_cloudbuild_worker_pool",
 		ProductName: "cloudbuild",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudbuildWorkerPool(),
+		SchemaFunc:  DataSourceGoogleCloudbuildWorkerPool,
 	}.Register()
 }

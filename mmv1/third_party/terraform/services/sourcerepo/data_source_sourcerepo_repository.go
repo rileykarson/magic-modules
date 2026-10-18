@@ -48,6 +48,6 @@ func init() {
 		Name:        "google_sourcerepo_repository",
 		ProductName: "sourcerepo",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleSourceRepoRepository(),
+		SchemaFunc:  DataSourceGoogleSourceRepoRepository,
 	}.Register()
 }

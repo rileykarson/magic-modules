@@ -51,6 +51,6 @@ func init() {
 		Name:        "google_compute_disk",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeDisk(),
+		SchemaFunc:  DataSourceGoogleComputeDisk,
 	}.Register()
 }

@@ -157,6 +157,6 @@ func init() {
 		Name:        "google_compute_router_status",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeRouterStatus(),
+		SchemaFunc:  DataSourceGoogleComputeRouterStatus,
 	}.Register()
 }

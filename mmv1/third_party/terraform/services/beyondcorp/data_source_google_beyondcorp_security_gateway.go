@@ -58,6 +58,6 @@ func init() {
 		Name:        "google_beyondcorp_security_gateway",
 		ProductName: "beyondcorp",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleBeyondcorpSecurityGateway(),
+		SchemaFunc:  DataSourceGoogleBeyondcorpSecurityGateway,
 	}.Register()
 }

@@ -303,6 +303,6 @@ func init() {
 		Name:        "google_site_verification_owner",
 		ProductName: "siteverification",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceSiteVerificationOwner(),
+		SchemaFunc:  ResourceSiteVerificationOwner,
 	}.Register()
 }

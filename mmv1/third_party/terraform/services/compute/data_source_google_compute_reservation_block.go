@@ -353,6 +353,6 @@ func init() {
 		Name:        "google_compute_reservation_block",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeReservationBlock(),
+		SchemaFunc:  DataSourceGoogleComputeReservationBlock,
 	}.Register()
 }

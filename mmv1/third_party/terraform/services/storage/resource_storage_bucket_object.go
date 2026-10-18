@@ -895,6 +895,6 @@ func init() {
 		Name:        "google_storage_bucket_object",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceStorageBucketObject(),
+		SchemaFunc:  ResourceStorageBucketObject,
 	}.Register()
 }

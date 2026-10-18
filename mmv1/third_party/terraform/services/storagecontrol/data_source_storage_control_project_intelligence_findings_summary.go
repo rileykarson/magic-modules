@@ -101,6 +101,6 @@ func init() {
 		Name:        "google_storage_control_project_intelligence_findings_summary",
 		ProductName: "storagecontrol",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleStorageControlProjectIntelligenceFindingsSummary(),
+		SchemaFunc:  DataSourceGoogleStorageControlProjectIntelligenceFindingsSummary,
 	}.Register()
 }

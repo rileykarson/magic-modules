@@ -64,6 +64,6 @@ func init() {
 		Name:        "google_memorystore_acl_policy",
 		ProductName: "memorystore",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceMemorystoreAclPolicy(),
+		SchemaFunc:  DataSourceMemorystoreAclPolicy,
 	}.Register()
 }

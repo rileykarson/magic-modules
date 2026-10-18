@@ -77,6 +77,6 @@ func init() {
 		Name:        "google_compute_network_endpoint_group",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeNetworkEndpointGroup(),
+		SchemaFunc:  DataSourceGoogleComputeNetworkEndpointGroup,
 	}.Register()
 }

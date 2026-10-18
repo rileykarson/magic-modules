@@ -171,6 +171,6 @@ func init() {
 		Name: "google_parameter_manager_parameters",
 		ProductName: "parametermanager",
 		Type: registry.SchemaTypeDataSource,
-		Schema: DataSourceParameterManagerParameters(),
+		SchemaFunc: DataSourceParameterManagerParameters,
 	}.Register()
 }

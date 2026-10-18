@@ -43,6 +43,6 @@ func init() {
 		Name:        "google_vmwareengine_subnet",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareengineSubnet(),
+		SchemaFunc:  DataSourceVmwareengineSubnet,
 	}.Register()
 }

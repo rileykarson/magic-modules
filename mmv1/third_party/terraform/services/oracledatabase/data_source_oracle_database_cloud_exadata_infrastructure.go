@@ -41,6 +41,6 @@ func init() {
 		Name:        "google_oracle_database_cloud_exadata_infrastructure",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseCloudExadataInfrastructure(),
+		SchemaFunc:  DataSourceOracleDatabaseCloudExadataInfrastructure,
 	}.Register()
 }

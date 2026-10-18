@@ -450,6 +450,6 @@ func init() {
 		Name:        "google_compute_routers",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeRouters(),
+		SchemaFunc:  DataSourceGoogleComputeRouters,
 	}.Register()
 }

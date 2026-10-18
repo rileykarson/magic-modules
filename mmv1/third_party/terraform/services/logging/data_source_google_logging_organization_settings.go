@@ -105,6 +105,6 @@ func init() {
 		Name:        "google_logging_organization_settings",
 		ProductName: "logging",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleLoggingOrganizationSettings(),
+		SchemaFunc:  DataSourceGoogleLoggingOrganizationSettings,
 	}.Register()
 }

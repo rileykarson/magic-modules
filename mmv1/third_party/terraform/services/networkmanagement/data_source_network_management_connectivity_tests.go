@@ -169,6 +169,6 @@ func init() {
 		Name:        "google_network_management_connectivity_tests",
 		ProductName: "networkmanagement",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleNetworkManagementConnectivityTests(),
+		SchemaFunc:  DataSourceGoogleNetworkManagementConnectivityTests,
 	}.Register()
 }

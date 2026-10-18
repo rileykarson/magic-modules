@@ -42,6 +42,6 @@ func init() {
 		Name:        "google_project_organization_policy",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleProjectOrganizationPolicy(),
+		SchemaFunc:  DataSourceGoogleProjectOrganizationPolicy,
 	}.Register()
 }

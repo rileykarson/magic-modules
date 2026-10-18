@@ -438,6 +438,6 @@ func init() {
 		Name:        "google_storage_object_acl",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceStorageObjectAcl(),
+		SchemaFunc:  ResourceStorageObjectAcl,
 	}.Register()
 }

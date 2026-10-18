@@ -198,6 +198,6 @@ func init() {
 		Name:        "google_sql_provision_script",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceSqlProvisionScript(),
+		SchemaFunc:  ResourceSqlProvisionScript,
 	}.Register()
 }

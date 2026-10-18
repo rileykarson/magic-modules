@@ -824,6 +824,6 @@ func init() {
 		Name:        "google_sql_user",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceSqlUser(),
+		SchemaFunc:  ResourceSqlUser,
 	}.Register()
 }

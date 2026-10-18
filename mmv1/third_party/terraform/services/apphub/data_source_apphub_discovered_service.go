@@ -176,6 +176,6 @@ func init() {
 		Name:        "google_apphub_discovered_service",
 		ProductName: "apphub",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceApphubDiscoveredService(),
+		SchemaFunc:  DataSourceApphubDiscoveredService,
 	}.Register()
 }

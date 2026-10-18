@@ -151,24 +151,32 @@ func init() {
 		Name:        "google_bigtable_instance_iam_binding",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_bigtable_instance_iam_member",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_bigtable_instance_iam_policy",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamBigtableInstanceSchema, NewBigtableInstanceUpdater, BigtableInstanceIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_bigtable_instance_iam_policy",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamBigtableInstanceSchema, NewBigtableInstanceUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamBigtableInstanceSchema, NewBigtableInstanceUpdater)
+		},
 	}.Register()
 }

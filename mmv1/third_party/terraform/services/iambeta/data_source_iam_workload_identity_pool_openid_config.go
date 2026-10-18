@@ -146,6 +146,6 @@ func init() {
 		Name:        "google_iam_workload_identity_pool_openid_config",
 		ProductName: "iambeta",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceIAMBetaWorkloadIdentityPoolOpenIdConfig(),
+		SchemaFunc:  DataSourceIAMBetaWorkloadIdentityPoolOpenIdConfig,
 	}.Register()
 }

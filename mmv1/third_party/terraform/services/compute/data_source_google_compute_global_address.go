@@ -145,6 +145,6 @@ func init() {
 		Name:        "google_compute_global_address",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeGlobalAddress(),
+		SchemaFunc:  DataSourceGoogleComputeGlobalAddress,
 	}.Register()
 }

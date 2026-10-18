@@ -175,6 +175,6 @@ func init() {
 		Name:        "google_cloud_identity_policies",
 		ProductName: "cloudidentity",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudIdentityPolicies(),
+		SchemaFunc:  DataSourceGoogleCloudIdentityPolicies,
 	}.Register()
 }

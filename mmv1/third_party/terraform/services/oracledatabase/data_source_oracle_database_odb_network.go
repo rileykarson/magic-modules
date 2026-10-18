@@ -47,6 +47,6 @@ func init() {
 		Name:        "google_oracle_database_odb_network",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseOdbNetwork(),
+		SchemaFunc:  DataSourceOracleDatabaseOdbNetwork,
 	}.Register()
 }

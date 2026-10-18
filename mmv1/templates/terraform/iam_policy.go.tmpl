@@ -50,13 +50,15 @@ func init() {
         Name: "{{ $.TerraformName }}_iam_binding",
         ProductName: "{{ $.ProductMetadata.Name }}",
         Type: registry.SchemaTypeIAMResource,
-        Schema: tpgiamresource.ResourceIamBinding({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer, {{ $.ResourceName }}IdParseFunc{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }}),
+        SchemaFunc: func() *schema.Resource {
+            return tpgiamresource.ResourceIamBinding({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer, {{ $.ResourceName }}IdParseFunc{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }})
+        },
     }.Register()
     registry.Schema{
         Name: "{{ $.TerraformName }}_iam_member",
         ProductName: "{{ $.ProductMetadata.Name }}",
         Type: registry.SchemaTypeIAMResource,
-        Schema: New{{ $.ResourceName }}IamMemberResource(),
+        SchemaFunc: New{{ $.ResourceName }}IamMemberResource,
     }.Register()
 {{- if $.IamPolicy.MemberListResource.ShouldGenerate }}
     registry.FrameworkListResource{
@@ -69,13 +71,17 @@ func init() {
         Name: "{{ $.TerraformName }}_iam_policy",
         ProductName: "{{ $.ProductMetadata.Name }}",
         Type: registry.SchemaTypeIAMResource,
-        Schema: tpgiamresource.ResourceIamPolicy({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer, {{ $.ResourceName }}IdParseFunc{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }}),
+        SchemaFunc: func() *schema.Resource {
+            return tpgiamresource.ResourceIamPolicy({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer, {{ $.ResourceName }}IdParseFunc{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }})
+        },
     }.Register()
     registry.Schema{
         Name: "{{ $.TerraformName }}_iam_policy",
         ProductName: "{{ $.ProductMetadata.Name }}",
         Type: registry.SchemaTypeIAMDataSource,
-        Schema: tpgiamresource.DataSourceIamPolicy({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }}),
+        SchemaFunc: func() *schema.Resource {
+            return tpgiamresource.DataSourceIamPolicy({{ $.ResourceName }}IamSchema, {{ $.ResourceName }}IamUpdaterProducer{{ if $.IamPolicy.DeprecationMessage }}, tpgiamresource.IamWithDeprecationMessage("{{ $.IamPolicy.DeprecationMessage }}"){{- end }})
+        },
     }.Register()
 }
 {{- end }}

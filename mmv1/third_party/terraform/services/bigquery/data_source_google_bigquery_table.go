@@ -56,6 +56,6 @@ func init() {
 		Name:        "google_bigquery_table",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleBigQueryTable(),
+		SchemaFunc:  DataSourceGoogleBigQueryTable,
 	}.Register()
 }

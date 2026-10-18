@@ -94,6 +94,6 @@ func init() {
 		Name:        "google_cloud_run_locations",
 		ProductName: "cloudrun",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudRunLocations(),
+		SchemaFunc:  DataSourceGoogleCloudRunLocations,
 	}.Register()
 }

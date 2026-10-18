@@ -98,6 +98,8 @@ type Schema struct {
 	// Schema contains the underlying Terraform schema. The data within is shared and assumed
 	// to be immutable.
 	Schema *schema.Resource
+	// SchemaFunc constructs Schema on demand when Schema is nil.
+	SchemaFunc func() *schema.Resource
 }
 
 // Register adds the schema definition to the internal registry.
@@ -119,8 +121,9 @@ func (s Schema) Register() {
 
 type registeredSchemas struct {
 	sync.RWMutex
-	r map[string]Schema
-	d map[string]Schema
+	buildOnce sync.Once
+	r         map[string]Schema
+	d         map[string]Schema
 }
 
 var schemas = &registeredSchemas{
@@ -128,21 +131,68 @@ var schemas = &registeredSchemas{
 	d: make(map[string]Schema),
 }
 
+func (rs *registeredSchemas) buildAll() {
+	rs.buildOnce.Do(func() {
+		rs.Lock()
+		defer rs.Unlock()
+
+		for k, v := range rs.r {
+			if v.Schema == nil && v.SchemaFunc != nil {
+				v.Schema = v.SchemaFunc()
+				rs.r[k] = v
+			}
+		}
+		for k, v := range rs.d {
+			if v.Schema == nil && v.SchemaFunc != nil {
+				v.Schema = v.SchemaFunc()
+				rs.d[k] = v
+			}
+		}
+	})
+}
+
 // Resource returns the Terraform schema for the requested resource. The function panics
 // if the requested resource is not registered. This function is called during provider
 // intitialization when the absence of a resource is an unrecoverable error.
 func Resource(name string) *schema.Resource {
 	schemas.RLock()
-	defer schemas.RUnlock()
 	r, ok := schemas.r[name]
 	if !ok {
+		schemas.RUnlock()
 		log.Fatalf("No resource schema for %q registered", name)
+	}
+	res := r.Schema
+	fn := r.SchemaFunc
+	schemas.RUnlock()
+	if res != nil || fn == nil {
+		return res
+	}
+	built := fn()
+	schemas.Lock()
+	defer schemas.Unlock()
+	r = schemas.r[name]
+	if r.Schema == nil {
+		r.Schema = built
+		schemas.r[name] = r
 	}
 	return r.Schema
 }
 
+// ResourceNamesMap returns a map with an entry for every registered resource
+// name and its currently resolved (possibly nil) *schema.Resource.
+func ResourceNamesMap() map[string]*schema.Resource {
+	schemas.RLock()
+	defer schemas.RUnlock()
+	ret := make(map[string]*schema.Resource, len(schemas.r))
+	for k, v := range schemas.r {
+		ret[k] = v.Schema
+	}
+	return ret
+}
+
 func ResourceMap() map[string]*schema.Resource {
-	ret := map[string]*schema.Resource{}
+	schemas.buildAll()
+	ret := make(map[string]*schema.Resource, len(schemas.r))
 	for k, v := range schemas.r {
 		ret[k] = v.Schema
 	}
@@ -154,16 +204,43 @@ func ResourceMap() map[string]*schema.Resource {
 // intitialization when the absence of a data source is an unrecoverable error.
 func DataSource(name string) *schema.Resource {
 	schemas.RLock()
-	defer schemas.RUnlock()
 	d, ok := schemas.d[name]
 	if !ok {
+		schemas.RUnlock()
 		log.Fatalf("No data source schema for %q registered", name)
+	}
+	res := d.Schema
+	fn := d.SchemaFunc
+	schemas.RUnlock()
+	if res != nil || fn == nil {
+		return res
+	}
+	built := fn()
+	schemas.Lock()
+	defer schemas.Unlock()
+	d = schemas.d[name]
+	if d.Schema == nil {
+		d.Schema = built
+		schemas.d[name] = d
 	}
 	return d.Schema
 }
 
+// DatasourceNamesMap returns a map with an entry for every registered data
+// source name and its currently resolved (possibly nil) *schema.Resource.
+func DatasourceNamesMap() map[string]*schema.Resource {
+	schemas.RLock()
+	defer schemas.RUnlock()
+	ret := make(map[string]*schema.Resource, len(schemas.d))
+	for k, v := range schemas.d {
+		ret[k] = v.Schema
+	}
+	return ret
+}
+
 func DatasourceMap() map[string]*schema.Resource {
-	ret := map[string]*schema.Resource{}
+	schemas.buildAll()
+	ret := make(map[string]*schema.Resource, len(schemas.d))
 	for k, v := range schemas.d {
 		ret[k] = v.Schema
 	}

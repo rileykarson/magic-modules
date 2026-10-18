@@ -159,6 +159,6 @@ func init() {
 		Name:        "google_alloydb_locations",
 		ProductName: "alloydb",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAlloydbLocations(),
+		SchemaFunc:  DataSourceAlloydbLocations,
 	}.Register()
 }
