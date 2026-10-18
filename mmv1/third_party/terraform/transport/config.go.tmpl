@@ -47,6 +47,8 @@ type Formatter struct {
 	LogFormat string
 }
 
+var listenSocketRegex = regexp.MustCompile(`\[Server #\d+( ListenSocket #\d+)*\]`) // Match patterns like `[Server #00]` or `[Server #00 ListenSocket #00]`
+
 // Borrowed logic from https://github.com/sirupsen/logrus/blob/master/json_formatter.go and https://github.com/t-tomalak/logrus-easy-formatter/blob/master/formatter.go
 func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	// Suppress logs if TF_LOG is not DEBUG or TRACE
@@ -58,7 +60,6 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	// - frequent transport spam
 	// - ListenSocket logs from gRPC
 	isTransportSpam := strings.Contains(entry.Message, "transport is closing")
-	listenSocketRegex := regexp.MustCompile(`\[Server #\d+( ListenSocket #\d+)*\]`) // Match patterns like `[Server #00]` or `[Server #00 ListenSocket #00]`
 	isListenSocketLog := listenSocketRegex.MatchString(entry.Message)
 	if isTransportSpam || isListenSocketLog {
 		return nil, nil
@@ -777,10 +778,11 @@ func AreADCCredentialsX509() bool {
 	return false
 }
 
+var basePathVersionRegex = regexp.MustCompile(`(?P<base>https?://.*)(?P<version>/[^/]+?/$)`)
+
 // Remove the `/{{"{{"}}version{{"}}"}}/` from a base path if present.
 func RemoveBasePathVersion(url string) string {
-	re := regexp.MustCompile(`(?P<base>https?://.*)(?P<version>/[^/]+?/$)`)
-	return re.ReplaceAllString(url, "$1/")
+	return basePathVersionRegex.ReplaceAllString(url, "$1/")
 }
 
 func GetCurrentUserEmail(config *Config, userAgent string) (string, error) {
@@ -821,14 +823,15 @@ func CustomEndpointValidator() validator.String {
 	return customEndpointValidator
 }
 
+var regionSelfLinkRegex = regexp.MustCompile("/compute/[a-zA-Z0-9]*/projects/[a-zA-Z0-9-]*/regions/([a-zA-Z0-9-]*)")
+
 // return the region a selfLink is referring to
 func GetRegionFromRegionSelfLink(selfLink string) string {
-	re := regexp.MustCompile("/compute/[a-zA-Z0-9]*/projects/[a-zA-Z0-9-]*/regions/([a-zA-Z0-9-]*)")
-	switch {
-	case re.MatchString(selfLink):
-		if res := re.FindStringSubmatch(selfLink); len(res) == 2 && res[1] != "" {
-			return res[1]
-		}
+	if !strings.Contains(selfLink, "/") {
+		return selfLink
+	}
+	if res := regionSelfLinkRegex.FindStringSubmatch(selfLink); len(res) == 2 && res[1] != "" {
+		return res[1]
 	}
 	return selfLink
 }
