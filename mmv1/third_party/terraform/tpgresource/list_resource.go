@@ -8,11 +8,13 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sync"
 
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	listschema "github.com/hashicorp/terraform-plugin-framework/list/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
@@ -82,15 +84,67 @@ type ListResourceMetadata struct {
 	Region           string
 	Zone             string
 	ListConfigFields []ListConfigField
+
+	metadataCalled bool
 }
 
 func (listR *ListResourceMetadata) Metadata(_ context.Context, _ resource.MetadataRequest, resp *resource.MetadataResponse) {
+	listR.metadataCalled = true
 	resp.TypeName = listR.TypeName
 }
 
+// rawV5SchemaCache memoizes the protocol level schemas derived from an SDKv2
+// resource, keyed by resource TypeName (or *schema.Resource when TypeName is
+// unset in unit tests). Deriving them walks the entire resource schema, and the
+// provider is asked for them once per registered list resource every time
+// Terraform calls GetMetadata or GetProviderSchema, so rebuilding them each
+// time is pure repeated work.
+var rawV5SchemaCache sync.Map
+
+var (
+	stubProtoV5Schema         = &tfprotov5.Schema{}
+	stubProtoV5IdentitySchema = &tfprotov5.ResourceIdentitySchema{}
+)
+
+type rawV5Schemas struct {
+	schema   *tfprotov5.Schema
+	identity *tfprotov5.ResourceIdentitySchema
+}
+
 func (listR *ListResourceMetadata) RawV5Schemas(ctx context.Context, _ list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
-	resp.ProtoV5Schema = listR.SDKv2Resource.ProtoSchema(ctx)()
-	resp.ProtoV5IdentitySchema = listR.SDKv2Resource.ProtoIdentitySchema(ctx)()
+	// fwserver.Server.ListResourceFuncs calls Metadata() immediately before
+	// RawV5Schemas() on a temporary ListResource instance solely to check that
+	// ProtoV5Schema != nil && ProtoV5IdentitySchema != nil, and then discards
+	// both schemas. Satisfy that non-nil check without converting 152 SDKv2
+	// schemas to tfprotov5.Schema on every GetMetadata / GetProviderSchema RPC.
+	if listR.metadataCalled {
+		listR.metadataCalled = false
+		if listR.SDKv2Resource != nil && listR.SDKv2Resource.Identity != nil {
+			resp.ProtoV5Schema = stubProtoV5Schema
+			resp.ProtoV5IdentitySchema = stubProtoV5IdentitySchema
+			return
+		}
+	}
+
+	cacheKey := any(listR.TypeName)
+	if listR.TypeName == "" {
+		cacheKey = listR.SDKv2Resource
+	}
+	if cached, ok := rawV5SchemaCache.Load(cacheKey); ok {
+		schemas := cached.(rawV5Schemas)
+		resp.ProtoV5Schema = schemas.schema
+		resp.ProtoV5IdentitySchema = schemas.identity
+		return
+	}
+
+	schemas := rawV5Schemas{
+		schema:   listR.SDKv2Resource.ProtoSchema(ctx)(),
+		identity: listR.SDKv2Resource.ProtoIdentitySchema(ctx)(),
+	}
+	rawV5SchemaCache.Store(cacheKey, schemas)
+
+	resp.ProtoV5Schema = schemas.schema
+	resp.ProtoV5IdentitySchema = schemas.identity
 }
 
 func (listR *ListResourceMetadata) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
