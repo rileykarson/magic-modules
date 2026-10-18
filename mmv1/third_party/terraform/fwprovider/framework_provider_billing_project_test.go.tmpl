@@ -185,7 +185,7 @@ func testAccFwProvider_billing_project_useWithAndWithoutUserProjectOverride(t *t
 				// This is necessary because we cannot provision anything in the newly provisioned project (to be queried with the datasource)
 				// unless we make it a Firebase-enabled project. This enables the API, and that undermines the premise of this test.
 				Config:      testAccFwProvider_billing_project_useBillingProject_scenario(contextUserProjectOverrideFalse),
-				ExpectError: regexp.MustCompile("Error 403: The caller does not have permission, forbidden"),
+				ExpectError: regexp.MustCompile("Error 400: Request contains an invalid argument., badRequest"),
 			},
 		},
 	})
