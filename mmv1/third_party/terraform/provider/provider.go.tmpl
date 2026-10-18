@@ -348,12 +348,22 @@ func ProviderConfigure(ctx context.Context, d *schema.ResourceData, p *schema.Pr
 	}
 
 	config.CustomEndpoints = map[string]string{}
+	rawCfg := d.GetRawConfig()
+	rawCfgType := rawCfg.Type()
+	hasRawCfg := !rawCfg.IsNull() && rawCfg.IsKnown() && rawCfgType.IsObjectType()
 	for _, p := range registry.ListProducts() {
 		customEndpoint := ""
-		if v := d.Get(p.CustomEndpointField).(string); v != "" {
-			customEndpoint = v
-		} else if v = envvar.MultiEnvSearch([]string{p.CustomEndpointEnvVar}); v != "" {
-			customEndpoint = v
+		if hasRawCfg && rawCfgType.HasAttribute(p.CustomEndpointField) {
+			if attr := rawCfg.GetAttr(p.CustomEndpointField); !attr.IsNull() && attr.IsKnown() {
+				customEndpoint = attr.AsString()
+			}
+		} else if !hasRawCfg {
+			if v, ok := d.Get(p.CustomEndpointField).(string); ok && v != "" {
+				customEndpoint = v
+			}
+		}
+		if customEndpoint == "" && p.CustomEndpointEnvVar != "" {
+			customEndpoint = os.Getenv(p.CustomEndpointEnvVar)
 		}
 		if customEndpoint != "" {
 			config.CustomEndpoints[p.CustomEndpointField] = customEndpoint

@@ -85,6 +85,8 @@ func ValidateJWT(v interface{}, k string) (warnings []string, errors []error) {
 	return
 }
 
+var serviceAccountRegex = regexp.MustCompile(`^[a-zA-Z0-9-]+@[a-zA-Z0-9-]+\.iam\.gserviceaccount\.com$`)
+
 func ValidateServiceAccountEmail(v interface{}, k string) (warnings []string, errors []error) {
 	value := v.(string)
 	if value == "" {
@@ -92,7 +94,6 @@ func ValidateServiceAccountEmail(v interface{}, k string) (warnings []string, er
 		return
 	}
 
-	serviceAccountRegex := regexp.MustCompile(`^[a-zA-Z0-9-]+@[a-zA-Z0-9-]+\.iam\.gserviceaccount\.com$`)
 	if !serviceAccountRegex.MatchString(value) {
 		errors = append(errors, fmt.Errorf("%q is not a valid service account email address (expected format: name@project-id.iam.gserviceaccount.com)", k))
 	}

@@ -131,6 +131,15 @@ var ServiceAccountEmailPatterns = []string{
 	`^service-[0-9]+@.+-compute\.iam\.gserviceaccount\.com$`, // Compute Engine service account
 }
 
+var serviceAccountEmailRegexes = []*regexp.Regexp{
+	regexp.MustCompile(`^.+@.+\.iam\.gserviceaccount\.com$`),
+	regexp.MustCompile(`^.+@developer\.gserviceaccount\.com$`),
+	regexp.MustCompile(`^.+@appspot\.gserviceaccount\.com$`),
+	regexp.MustCompile(`^.+@cloudservices\.gserviceaccount\.com$`),
+	regexp.MustCompile(`^.+@cloudbuild\.gserviceaccount\.com$`),
+	regexp.MustCompile(`^service-[0-9]+@.+-compute\.iam\.gserviceaccount\.com$`),
+}
+
 // Create a custom validator for service account names
 type ServiceAccountEmailValidator struct{}
 
@@ -156,8 +165,8 @@ func (v ServiceAccountEmailValidator) ValidateString(ctx context.Context, req va
 	}
 
 	valid := false
-	for _, pattern := range ServiceAccountEmailPatterns {
-		if matched, _ := regexp.MatchString(pattern, value); matched {
+	for _, re := range serviceAccountEmailRegexes {
+		if re.MatchString(value) {
 			valid = true
 			break
 		}
