@@ -4698,6 +4698,6 @@ func init() {
 		Name:        "google_os_config_os_policy_assignment",
 		ProductName: "osconfig",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceOSConfigOSPolicyAssignment(),
+		SchemaFunc:  ResourceOSConfigOSPolicyAssignment,
 	}.Register()
 }

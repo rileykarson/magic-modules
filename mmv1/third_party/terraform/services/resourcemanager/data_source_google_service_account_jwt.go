@@ -115,6 +115,6 @@ func init() {
 		Name:        "google_service_account_jwt",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleServiceAccountJwt(),
+		SchemaFunc:  DataSourceGoogleServiceAccountJwt,
 	}.Register()
 }

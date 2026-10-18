@@ -19,6 +19,49 @@ import (
 	_ "github.com/hashicorp/terraform-provider-google/google/services/compute"
 )
 
+func TestLazyProvider_resolvesOnDemand(t *testing.T) {
+	ctx := context.Background()
+
+	lazyP := provider.LazyProvider()
+	lazyP.ResourcesMap["google_compute_network"] = nil
+	fastServer := provider.NewFastValidateProviderServer(lazyP)
+
+	metaResp, err := fastServer.GetMetadata(ctx, &tfprotov5.GetMetadataRequest{})
+	if err != nil {
+		t.Fatalf("lazy fastServer GetMetadata failed: %s", err)
+	}
+	if len(metaResp.Resources) == 0 {
+		t.Fatal("expected non-empty resources metadata from LazyProvider")
+	}
+
+	// Obtain the object type for google_compute_network via a separate server
+	// while lazyP.ResourcesMap["google_compute_network"] remains nil.
+	schemaHelper := provider.NewFastValidateProviderServer(provider.LazyProvider())
+	schemaResp, err := schemaHelper.GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
+	if err != nil {
+		t.Fatalf("lazy schemaHelper GetProviderSchema failed: %s", err)
+	}
+	netSchema, ok := schemaResp.ResourceSchemas["google_compute_network"]
+	if !ok {
+		t.Fatal("expected google_compute_network schema in GetProviderSchema response")
+	}
+	netObjType, ok := netSchema.ValueType().(tftypes.Object)
+	if !ok {
+		t.Fatalf("google_compute_network ValueType is %T, want tftypes.Object", netSchema.ValueType())
+	}
+
+	valResp, err := fastServer.ValidateResourceTypeConfig(ctx, &tfprotov5.ValidateResourceTypeConfigRequest{
+		TypeName: "google_compute_network",
+		Config:   providerConfigValue(t, netObjType, map[string]tftypes.Value{"name": tftypes.NewValue(tftypes.String, "my-net")}),
+	})
+	if err != nil {
+		t.Fatalf("ValidateResourceTypeConfig failed: %s", err)
+	}
+	if len(valResp.Diagnostics) != 0 {
+		t.Errorf("unexpected diagnostics from ValidateResourceTypeConfig: %v", valResp.Diagnostics)
+	}
+}
+
 // TestFastValidateProviderServer_matchesSDKServer checks that the
 // PrepareProviderConfig responses of the fast validation server are
 // indistinguishable from the stock SDK server's, for both accepted and

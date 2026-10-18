@@ -56,6 +56,6 @@ func init() {
 		Name:        "google_compute_network_peering",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceComputeNetworkPeering(),
+		SchemaFunc:  DataSourceComputeNetworkPeering,
 	}.Register()
 }

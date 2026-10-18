@@ -96,6 +96,6 @@ func init() {
 		Name:        "google_vmwareengine_vcenter_credentials",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareengineVcenterCredentials(),
+		SchemaFunc:  DataSourceVmwareengineVcenterCredentials,
 	}.Register()
 }

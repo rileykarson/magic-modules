@@ -580,6 +580,6 @@ func init() {
 		Name:        "google_dataplex_lake",
 		ProductName: "dataplex",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceDataplexLake(),
+		SchemaFunc:  ResourceDataplexLake,
 	}.Register()
 }

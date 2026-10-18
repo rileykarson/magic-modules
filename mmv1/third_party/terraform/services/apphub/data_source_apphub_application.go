@@ -50,6 +50,6 @@ func init() {
 		Name:        "google_apphub_application",
 		ProductName: "apphub",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleApphubApplication(),
+		SchemaFunc:  DataSourceGoogleApphubApplication,
 	}.Register()
 }

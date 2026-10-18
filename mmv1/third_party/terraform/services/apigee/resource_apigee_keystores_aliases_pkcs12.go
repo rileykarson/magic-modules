@@ -662,6 +662,6 @@ func init() {
 		Name:        "google_apigee_keystores_aliases_pkcs12",
 		ProductName: "apigee",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceApigeeKeystoresAliasesPkcs12(),
+		SchemaFunc:  ResourceApigeeKeystoresAliasesPkcs12,
 	}.Register()
 }

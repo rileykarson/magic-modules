@@ -1459,6 +1459,6 @@ func init() {
 		Name:        "google_container_azure_cluster",
 		ProductName: "containerazure",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceContainerAzureCluster(),
+		SchemaFunc: ResourceContainerAzureCluster,
 	}.Register()
 }

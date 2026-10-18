@@ -413,6 +413,6 @@ func init() {
 		Name:        "google_compute_disk_async_replication",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceComputeDiskAsyncReplication(),
+		SchemaFunc:  ResourceComputeDiskAsyncReplication,
 	}.Register()
 }

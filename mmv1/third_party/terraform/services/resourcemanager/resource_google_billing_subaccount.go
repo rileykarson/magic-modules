@@ -184,6 +184,6 @@ func init() {
 		Name:        "google_billing_subaccount",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceBillingSubaccount(),
+		SchemaFunc:  ResourceBillingSubaccount,
 	}.Register()
 }

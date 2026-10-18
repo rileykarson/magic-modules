@@ -166,6 +166,6 @@ func init() {
 		Name:        "google_kms_key_handles",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleKmsKeyHandles(),
+		SchemaFunc:  DataSourceGoogleKmsKeyHandles,
 	}.Register()
 }

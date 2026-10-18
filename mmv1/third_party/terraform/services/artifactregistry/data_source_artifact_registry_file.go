@@ -312,6 +312,6 @@ func init() {
 		Name:        "google_artifact_registry_file",
 		ProductName: "artifactregistry",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceArtifactRegistryFile(),
+		SchemaFunc:  DataSourceArtifactRegistryFile,
 	}.Register()
 }

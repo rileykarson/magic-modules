@@ -163,6 +163,6 @@ func init() {
 		Name:        "google_container_engine_versions",
 		ProductName: "container",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerEngineVersions(),
+		SchemaFunc:  DataSourceGoogleContainerEngineVersions,
 	}.Register()
 }

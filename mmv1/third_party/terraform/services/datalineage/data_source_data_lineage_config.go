@@ -44,6 +44,6 @@ func init() {
 		Name:        "google_data_lineage_config",
 		ProductName: "datalineage",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceDataLineageConfig(),
+		SchemaFunc:  DataSourceDataLineageConfig,
 	}.Register()
 }

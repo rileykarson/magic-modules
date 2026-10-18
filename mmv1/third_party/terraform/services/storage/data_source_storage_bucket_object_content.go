@@ -110,6 +110,6 @@ func init() {
 		Name:        "google_storage_bucket_object_content",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleStorageBucketObjectContent(),
+		SchemaFunc:  DataSourceGoogleStorageBucketObjectContent,
 	}.Register()
 }

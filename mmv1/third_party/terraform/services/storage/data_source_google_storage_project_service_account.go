@@ -79,6 +79,6 @@ func init() {
 		Name:        "google_storage_project_service_account",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleStorageProjectServiceAccount(),
+		SchemaFunc:  DataSourceGoogleStorageProjectServiceAccount,
 	}.Register()
 }

@@ -85,6 +85,6 @@ func init() {
 		Name:        "google_alloydb_instance",
 		ProductName: "alloydb",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAlloydbDatabaseInstance(),
+		SchemaFunc:  DataSourceAlloydbDatabaseInstance,
 	}.Register()
 }

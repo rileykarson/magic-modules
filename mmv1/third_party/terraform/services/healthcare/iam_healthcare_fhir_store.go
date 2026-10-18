@@ -116,24 +116,32 @@ func init() {
 		Name:        "google_healthcare_fhir_store_iam_member",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc, tpgiamresource.IamWithBatching),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc, tpgiamresource.IamWithBatching)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_fhir_store_iam_binding",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc, tpgiamresource.IamWithBatching),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc, tpgiamresource.IamWithBatching)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_fhir_store_iam_policy",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater, FhirStoreIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_healthcare_fhir_store_iam_policy",
 		ProductName: "healthcare",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamHealthcareFhirStoreSchema, NewHealthcareFhirStoreIamUpdater)
+		},
 	}.Register()
 }

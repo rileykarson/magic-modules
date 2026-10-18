@@ -85,6 +85,6 @@ func init() {
 		Name:        "google_container_registry_image",
 		ProductName: "containeranalysis",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerImage(),
+		SchemaFunc:  DataSourceGoogleContainerImage,
 	}.Register()
 }

@@ -236,6 +236,6 @@ func init() {
 		Name:        "google_dns_keys",
 		ProductName: "dns",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceDNSKeys(),
+		SchemaFunc:  DataSourceDNSKeys,
 	}.Register()
 }

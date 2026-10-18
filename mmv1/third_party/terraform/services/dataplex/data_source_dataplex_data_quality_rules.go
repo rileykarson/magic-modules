@@ -339,6 +339,6 @@ func init() {
 		Name:        "google_dataplex_data_quality_rules",
 		ProductName: "dataplex",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceDataplexDataQualityRules(),
+		SchemaFunc:  DataSourceDataplexDataQualityRules,
 	}.Register()
 }

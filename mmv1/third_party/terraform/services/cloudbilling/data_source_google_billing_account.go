@@ -159,6 +159,6 @@ func init() {
 		Name:        "google_billing_account",
 		ProductName: "billing",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleBillingAccount(),
+		SchemaFunc:  DataSourceGoogleBillingAccount,
 	}.Register()
 }

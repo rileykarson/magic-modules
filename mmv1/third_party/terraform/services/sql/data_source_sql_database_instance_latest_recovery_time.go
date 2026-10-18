@@ -78,6 +78,6 @@ func init() {
 		Name:        "google_sql_database_instance_latest_recovery_time",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceSqlDatabaseInstanceLatestRecoveryTime(),
+		SchemaFunc:  DataSourceSqlDatabaseInstanceLatestRecoveryTime,
 	}.Register()
 }

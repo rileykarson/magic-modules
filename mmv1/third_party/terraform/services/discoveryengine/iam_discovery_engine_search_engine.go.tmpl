@@ -30,25 +30,33 @@ func init() {
 		Name:        "google_discovery_engine_search_engine_iam_binding",
 		ProductName: "DiscoveryEngine",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_discovery_engine_search_engine_iam_member",
 		ProductName: "DiscoveryEngine",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(DiscoveryEngineSearchEngineIamParentParentResourceIdentityParser)),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(DiscoveryEngineSearchEngineIamParentParentResourceIdentityParser))
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_discovery_engine_search_engine_iam_policy",
 		ProductName: "DiscoveryEngine",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer, DiscoveryEngineSearchEngineIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_discovery_engine_search_engine_iam_policy",
 		ProductName: "DiscoveryEngine",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(DiscoveryEngineSearchEngineIamSchema, DiscoveryEngineSearchEngineIamUpdaterProducer)
+		},
 	}.Register()
 }
 {{- end}}

@@ -95,6 +95,6 @@ func init() {
 		Name:        "google_vmwareengine_nsx_credentials",
 		ProductName: "vmwareengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceVmwareengineNsxCredentials(),
+		SchemaFunc:  DataSourceVmwareengineNsxCredentials,
 	}.Register()
 }

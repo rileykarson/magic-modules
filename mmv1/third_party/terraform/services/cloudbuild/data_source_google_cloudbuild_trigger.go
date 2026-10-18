@@ -52,6 +52,6 @@ func init() {
 		Name:        "google_cloudbuild_trigger",
 		ProductName: "cloudbuild",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudBuildTrigger(),
+		SchemaFunc:  DataSourceGoogleCloudBuildTrigger,
 	}.Register()
 }

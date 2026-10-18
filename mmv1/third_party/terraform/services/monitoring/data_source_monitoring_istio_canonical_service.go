@@ -59,6 +59,6 @@ func init() {
 		Name:        "google_monitoring_istio_canonical_service",
 		ProductName: "monitoring",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceMonitoringIstioCanonicalService(),
+		SchemaFunc:  DataSourceMonitoringIstioCanonicalService,
 	}.Register()
 }

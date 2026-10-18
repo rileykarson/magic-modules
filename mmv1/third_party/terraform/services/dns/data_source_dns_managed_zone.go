@@ -112,6 +112,6 @@ func init() {
 		Name:        "google_dns_managed_zone",
 		ProductName: "dns",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceDnsManagedZone(),
+		SchemaFunc:  DataSourceDnsManagedZone,
 	}.Register()
 }

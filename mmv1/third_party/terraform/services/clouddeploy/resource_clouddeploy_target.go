@@ -1302,6 +1302,6 @@ func init() {
 		Name:        "google_clouddeploy_target",
 		ProductName: "clouddeploy",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceClouddeployTarget(),
+		SchemaFunc:  ResourceClouddeployTarget,
 	}.Register()
 }

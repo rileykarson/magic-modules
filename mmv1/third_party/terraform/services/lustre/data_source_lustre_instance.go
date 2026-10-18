@@ -81,6 +81,6 @@ func init() {
 		Name:        "google_lustre_instance",
 		ProductName: "lustre",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceLustreInstance(),
+		SchemaFunc:  DataSourceLustreInstance,
 	}.Register()
 }

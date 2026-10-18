@@ -458,6 +458,6 @@ func init() {
 		Name:        "google_storage_bucket_acl",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceStorageBucketAcl(),
+		SchemaFunc:  ResourceStorageBucketAcl,
 	}.Register()
 }

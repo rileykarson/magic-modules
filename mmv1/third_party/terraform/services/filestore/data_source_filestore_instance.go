@@ -64,6 +64,6 @@ func init() {
 		Name:        "google_filestore_instance",
 		ProductName: "filestore",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleFilestoreInstance(),
+		SchemaFunc:  DataSourceGoogleFilestoreInstance,
 	}.Register()
 }

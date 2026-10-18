@@ -118,25 +118,33 @@ func init() {
 		Name:        "google_kms_crypto_key_iam_member",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_kms_crypto_key_iam_binding",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_kms_crypto_key_iam_policy",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater, CryptoIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_kms_crypto_key_iam_policy",
 		ProductName: "kms",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(IamKmsCryptoKeySchema, NewKmsCryptoKeyIamUpdater)
+		},
 	}.Register()
 }
 {{- end}}

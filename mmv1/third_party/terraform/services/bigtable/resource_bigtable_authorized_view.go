@@ -488,6 +488,6 @@ func init() {
 		Name:        "google_bigtable_authorized_view",
 		ProductName: "bigtable",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceBigtableAuthorizedView(),
+		SchemaFunc:  ResourceBigtableAuthorizedView,
 	}.Register()
 }

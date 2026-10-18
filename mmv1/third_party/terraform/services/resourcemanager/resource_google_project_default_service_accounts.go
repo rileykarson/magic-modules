@@ -230,6 +230,6 @@ func init() {
 		Name:        "google_project_default_service_accounts",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceGoogleProjectDefaultServiceAccounts(),
+		SchemaFunc:  ResourceGoogleProjectDefaultServiceAccounts,
 	}.Register()
 }

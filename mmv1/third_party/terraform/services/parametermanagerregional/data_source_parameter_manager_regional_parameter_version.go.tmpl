@@ -191,6 +191,6 @@ func init() {
 		Name: "google_parameter_manager_regional_parameter_version",
 		ProductName: "parametermanagerregional",
 		Type: registry.SchemaTypeDataSource,
-		Schema: DataSourceParameterManagerRegionalRegionalParameterVersion(),
+		SchemaFunc: DataSourceParameterManagerRegionalRegionalParameterVersion,
 	}.Register()
 }

@@ -78,6 +78,6 @@ func init() {
 		Name:        "google_monitoring_uptime_check_ips",
 		ProductName: "monitoring",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleMonitoringUptimeCheckIps(),
+		SchemaFunc:  DataSourceGoogleMonitoringUptimeCheckIps,
 	}.Register()
 }

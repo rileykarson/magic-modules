@@ -105,6 +105,6 @@ func init() {
 		Name:        "google_sql_ca_certs",
 		ProductName: "sql",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleSQLCaCerts(),
+		SchemaFunc:  DataSourceGoogleSQLCaCerts,
 	}.Register()
 }

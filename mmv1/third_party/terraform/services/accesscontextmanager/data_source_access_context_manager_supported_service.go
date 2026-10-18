@@ -147,6 +147,6 @@ func init() {
 		Name:        "google_access_context_manager_supported_service",
 		ProductName: "accesscontextmanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAccessContextManagerSupportedService(),
+		SchemaFunc:  DataSourceAccessContextManagerSupportedService,
 	}.Register()
 }

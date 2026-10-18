@@ -57,6 +57,6 @@ func init() {
 		Name:        "google_cloud_run_v2_job",
 		ProductName: "cloudrunv2",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleCloudRunV2Job(),
+		SchemaFunc:  DataSourceGoogleCloudRunV2Job,
 	}.Register()
 }

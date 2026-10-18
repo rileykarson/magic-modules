@@ -171,6 +171,6 @@ func init() {
 		Name:        "google_folders",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleFolders(),
+		SchemaFunc:  DataSourceGoogleFolders,
 	}.Register()
 }

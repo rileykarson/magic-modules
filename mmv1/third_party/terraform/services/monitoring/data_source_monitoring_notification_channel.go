@@ -124,6 +124,6 @@ func init() {
 		Name:        "google_monitoring_notification_channel",
 		ProductName: "monitoring",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceMonitoringNotificationChannel(),
+		SchemaFunc:  DataSourceMonitoringNotificationChannel,
 	}.Register()
 }

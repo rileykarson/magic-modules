@@ -49,6 +49,6 @@ func init() {
 		Name:        "google_compute_health_check",
 		ProductName: "compute",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleComputeHealthCheck(),
+		SchemaFunc:  DataSourceGoogleComputeHealthCheck,
 	}.Register()
 }

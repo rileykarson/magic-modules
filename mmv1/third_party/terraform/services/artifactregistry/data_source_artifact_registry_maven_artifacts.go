@@ -172,6 +172,6 @@ func init() {
 		Name:        "google_artifact_registry_maven_artifacts",
 		ProductName: "artifactregistry",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceArtifactRegistryMavenArtifacts(),
+		SchemaFunc:  DataSourceArtifactRegistryMavenArtifacts,
 	}.Register()
 }

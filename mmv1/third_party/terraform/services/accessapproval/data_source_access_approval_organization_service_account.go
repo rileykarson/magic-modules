@@ -76,6 +76,6 @@ func init() {
 		Name:        "google_access_approval_organization_service_account",
 		ProductName: "accessapproval",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceAccessApprovalOrganizationServiceAccount(),
+		SchemaFunc:  DataSourceAccessApprovalOrganizationServiceAccount,
 	}.Register()
 }

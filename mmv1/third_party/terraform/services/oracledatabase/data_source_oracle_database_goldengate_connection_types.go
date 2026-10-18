@@ -149,6 +149,6 @@ func init() {
 		Name:        "google_oracle_database_goldengate_connection_types",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseGoldengateConnectionTypes(),
+		SchemaFunc:  DataSourceOracleDatabaseGoldengateConnectionTypes,
 	}.Register()
 }

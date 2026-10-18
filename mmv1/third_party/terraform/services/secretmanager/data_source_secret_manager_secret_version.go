@@ -195,6 +195,6 @@ func init() {
 		Name:        "google_secret_manager_secret_version",
 		ProductName: "secretmanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceSecretManagerSecretVersion(),
+		SchemaFunc:  DataSourceSecretManagerSecretVersion,
 	}.Register()
 }

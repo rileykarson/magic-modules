@@ -2317,6 +2317,6 @@ func init() {
 		Name:        "google_clouddeploy_delivery_pipeline",
 		ProductName: "clouddeploy",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceClouddeployDeliveryPipeline(),
+		SchemaFunc:  ResourceClouddeployDeliveryPipeline,
 	}.Register()
 }

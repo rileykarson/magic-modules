@@ -72,6 +72,6 @@ func init() {
 		Name:        "google_container_cluster",
 		ProductName: "container",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleContainerCluster(),
+		SchemaFunc:  DataSourceGoogleContainerCluster,
 	}.Register()
 }

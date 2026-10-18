@@ -148,6 +148,6 @@ func init() {
 		Name:        "google_dns_record_sets",
 		ProductName: "dns",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceDnsRecordSets(),
+		SchemaFunc:  DataSourceDnsRecordSets,
 	}.Register()
 }

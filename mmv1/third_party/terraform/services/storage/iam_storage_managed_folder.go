@@ -189,24 +189,32 @@ func init() {
 		Name:        "google_storage_managed_folder_iam_member",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamMember(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamMember(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_storage_managed_folder_iam_binding",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamBinding(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamBinding(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_storage_managed_folder_iam_policy",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeIAMResource,
-		Schema:      tpgiamresource.ResourceIamPolicy(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.ResourceIamPolicy(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer, StorageManagedFolderIdParseFunc)
+		},
 	}.Register()
 	registry.Schema{
 		Name:        "google_storage_managed_folder_iam_policy",
 		ProductName: "storage",
 		Type:        registry.SchemaTypeIAMDataSource,
-		Schema:      tpgiamresource.DataSourceIamPolicy(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer),
+		SchemaFunc: func() *schema.Resource {
+			return tpgiamresource.DataSourceIamPolicy(StorageManagedFolderIamSchema, StorageManagedFolderIamUpdaterProducer)
+		},
 	}.Register()
 }

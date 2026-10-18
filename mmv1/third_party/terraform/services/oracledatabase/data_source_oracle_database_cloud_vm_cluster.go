@@ -41,6 +41,6 @@ func init() {
 		Name:        "google_oracle_database_cloud_vm_cluster",
 		ProductName: "oracledatabase",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceOracleDatabaseCloudVmCluster(),
+		SchemaFunc:  DataSourceOracleDatabaseCloudVmCluster,
 	}.Register()
 }

@@ -116,6 +116,6 @@ func init() {
 		Name:        "google_logging_project_cmek_settings",
 		ProductName: "logging",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleLoggingProjectCmekSettings(),
+		SchemaFunc:  DataSourceGoogleLoggingProjectCmekSettings,
 	}.Register()
 }

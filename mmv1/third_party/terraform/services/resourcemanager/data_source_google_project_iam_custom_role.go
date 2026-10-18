@@ -52,6 +52,6 @@ func init() {
 		Name:        "google_project_iam_custom_role",
 		ProductName: "resourcemanager",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleProjectIamCustomRole(),
+		SchemaFunc:  DataSourceGoogleProjectIamCustomRole,
 	}.Register()
 }

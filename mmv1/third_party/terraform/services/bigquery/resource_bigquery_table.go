@@ -4044,6 +4044,6 @@ func init() {
 		Name:        "google_bigquery_table",
 		ProductName: "bigquery",
 		Type:        registry.SchemaTypeResource,
-		Schema:      ResourceBigQueryTable(),
+		SchemaFunc:  ResourceBigQueryTable,
 	}.Register()
 }

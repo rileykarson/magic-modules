@@ -167,6 +167,6 @@ func init() {
 		Name:        "google_discovery_engine_data_store",
 		ProductName: "discoveryengine",
 		Type:        registry.SchemaTypeDataSource,
-		Schema:      DataSourceGoogleDiscoveryEngineDataStore(),
+		SchemaFunc:  DataSourceGoogleDiscoveryEngineDataStore,
 	}.Register()
 }
