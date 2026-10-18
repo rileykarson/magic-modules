@@ -123,6 +123,7 @@ func getSccNotificationServiceAccountDetails(d *schema.ResourceData, config *tra
 		if err != nil {
 			return "", "", "", err
 		}
+		url = strings.Replace(url, "/v1/", "/v1beta1/", 1)
 		email := fmt.Sprintf("service-org-%s@gcp-sa-scc-notification.iam.gserviceaccount.com", org)
 		parentId := fmt.Sprintf("organizations/%s", org)
 		return url, email, parentId, nil
@@ -138,6 +139,7 @@ func getSccNotificationServiceAccountDetails(d *schema.ResourceData, config *tra
 		if err != nil {
 			return "", "", "", err
 		}
+		url = strings.Replace(url, "/v1/", "/v1beta1/", 1)
 		email := fmt.Sprintf("service-%s@gcp-sa-scc-notification.iam.gserviceaccount.com", projectNumber)
 		parentId := fmt.Sprintf("projects/%s", project)
 		return url, email, parentId, nil
