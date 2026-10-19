@@ -10,42 +10,12 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-google/google/envvar"
+	providerschema "github.com/hashicorp/terraform-provider-google/google/provider/schema"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 	googleoauth "golang.org/x/oauth2/google"
 )
 
 const testOauthScope = "https://www.googleapis.com/auth/compute"
-
-var testHandleSDKDefaultsSchema = map[string]*schema.Schema{
-	"impersonate_service_account": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-	"project": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-	"billing_project": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-	"region": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-	"zone": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-	"user_project_override": {
-		Type:     schema.TypeBool,
-		Optional: true,
-	},
-	"request_reason": {
-		Type:     schema.TypeString,
-		Optional: true,
-	},
-}
 
 func TestHandleSDKDefaults_BillingProject(t *testing.T) {
 	cases := map[string]struct {
@@ -80,9 +50,9 @@ func TestHandleSDKDefaults_BillingProject(t *testing.T) {
 		t.Run(tn, func(t *testing.T) {
 
 			// Arrange
-			// Create empty schema.ResourceData using the SDK Provider schema fields read by HandleSDKDefaults
+			// Create empty schema.ResourceData using the SDK Provider schema
 			emptyConfigMap := map[string]interface{}{}
-			d := schema.TestResourceDataRaw(t, testHandleSDKDefaultsSchema, emptyConfigMap)
+			d := schema.TestResourceDataRaw(t, providerschema.Schema(), emptyConfigMap)
 
 			// Set config value(s)
 			if tc.ConfigValue != "" {
@@ -183,9 +153,9 @@ func TestHandleSDKDefaults_UserProjectOverride(t *testing.T) {
 	for tn, tc := range cases {
 		t.Run(tn, func(t *testing.T) {
 			// Arrange
-			// Create empty schema.ResourceData using the SDK Provider schema fields read by HandleSDKDefaults
+			// Create empty schema.ResourceData using the SDK Provider schema
 			emptyConfigMap := map[string]interface{}{}
-			d := schema.TestResourceDataRaw(t, testHandleSDKDefaultsSchema, emptyConfigMap)
+			d := schema.TestResourceDataRaw(t, providerschema.Schema(), emptyConfigMap)
 
 			// Set config value(s)
 			if tc.SetViaConfig {

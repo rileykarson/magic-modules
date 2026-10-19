@@ -1,101 +1,25 @@
 package provider
 
 import (
-	"context"
-	"encoding/base64"
-	"fmt"
-	"os"
-	"regexp"
-	"strings"
-
-	googleoauth "golang.org/x/oauth2/google"
-
-	"github.com/hashicorp/terraform-provider-google/google/verify"
+	providerschema "github.com/hashicorp/terraform-provider-google/google/provider/schema"
 )
 
 func ValidateCredentials(v interface{}, k string) (warnings []string, errors []error) {
-	if v == nil {
-		return
-	}
-	creds := v.(string)
-
-	// reject empty strings
-	if v.(string) == "" {
-		errors = append(errors,
-			fmt.Errorf("expected a non-empty string"))
-		return
-	}
-
-	// if this is a path and we can stat it, assume it's ok
-	if _, err := os.Stat(creds); err == nil {
-		return
-	}
-	if _, err := googleoauth.CredentialsFromJSON(context.Background(), []byte(creds)); err != nil {
-		errors = append(errors,
-			fmt.Errorf("JSON credentials are not valid: %s", err))
-	}
-
-	return
+	return providerschema.ValidateCredentials(v, k)
 }
 
 func ValidateCustomEndpoint(v interface{}, k string) (ws []string, errors []error) {
-	re := `.*/[^/]+/$`
-	return verify.ValidateRegexp(re)(v, k)
+	return providerschema.ValidateCustomEndpoint(v, k)
 }
 
 func ValidateEmptyStrings(v interface{}, k string) (warnings []string, errors []error) {
-	if v == nil {
-		return
-	}
-
-	if v.(string) == "" {
-		errors = append(errors,
-			fmt.Errorf("expected a non-empty string"))
-	}
-
-	return
+	return providerschema.ValidateEmptyStrings(v, k)
 }
 
 func ValidateJWT(v interface{}, k string) (warnings []string, errors []error) {
-	if v == nil || v.(string) == "" {
-		errors = append(errors, fmt.Errorf("%q cannot be empty", k))
-		return
-	}
-
-	// JWT consists of 3 parts separated by dots: header.payload.signature
-	parts := strings.Split(v.(string), ".")
-	if len(parts) != 3 {
-		errors = append(errors, fmt.Errorf("%q is not a valid JWT format", k))
-		return
-	}
-
-	// Check that each part is non-empty and base64url encoded. An empty
-	// segment decodes without error, so a token like ".." would otherwise
-	// be accepted as a valid JWT.
-	for i, part := range parts {
-		if part == "" {
-			errors = append(errors, fmt.Errorf("part %d of JWT must not be empty (expected header.payload.signature)", i+1))
-			continue
-		}
-		if _, err := base64.RawURLEncoding.DecodeString(part); err != nil {
-			errors = append(errors, fmt.Errorf("part %d of JWT is not valid base64: %v", i+1, err))
-		}
-	}
-
-	return
+	return providerschema.ValidateJWT(v, k)
 }
 
 func ValidateServiceAccountEmail(v interface{}, k string) (warnings []string, errors []error) {
-	value := v.(string)
-	if value == "" {
-		errors = append(errors, fmt.Errorf("%q cannot be empty", k))
-		return
-	}
-
-	serviceAccountRegex := regexp.MustCompile(`^[a-zA-Z0-9-]+@[a-zA-Z0-9-]+\.iam\.gserviceaccount\.com$`)
-	if !serviceAccountRegex.MatchString(value) {
-		errors = append(errors, fmt.Errorf("%q is not a valid service account email address (expected format: name@project-id.iam.gserviceaccount.com)", k))
-	}
-
-	return
+	return providerschema.ValidateServiceAccountEmail(v, k)
 }
