@@ -25,6 +25,15 @@ const (
 	RFC1035NameTemplate = "[a-z]([-a-z0-9]%v[a-z0-9])?"
 	CloudIoTIdRegex     = "^[a-zA-Z][-a-zA-Z0-9._+~%]{2,254}$"
 
+	// Service account name must have a length between 6 and 30.
+	// The first and last characters have different restrictions, than
+	// the middle characters. The middle characters length must be between
+	// 4 and 28 since the first and last character are excluded.
+	ServiceAccountNameRegex = "[a-z]([-a-z0-9]{4,28}[a-z0-9])?"
+
+	// Format of service accounts created through the API
+	CreatedServiceAccountNameRegex = ServiceAccountNameRegex + "@" + ProjectNameInDNSFormRegex + "\\.iam\\.gserviceaccount\\.com$"
+
 	// Format of default Compute service accounts created by Google
 	// ${PROJECT_ID}-compute@developer.gserviceaccount.com where PROJECT_ID is an int64 (max 20 digits)
 	ComputeServiceAccountNameRegex = "[0-9]{1,20}-compute@developer.gserviceaccount.com"
@@ -34,15 +43,11 @@ const (
 
 	// https://cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains/create#query-parameters
 	ADDomainNameRegex = "^[a-z][a-z0-9-]{0,14}\\.[a-z0-9-\\.]*[a-z]+[a-z0-9]*$"
+
+	ProjectNameInDNSFormRegex = "[-a-z0-9\\.]{1,63}"
 )
 
 var (
-	// Service account name must have a length between 6 and 30.
-	// The first and last characters have different restrictions, than
-	// the middle characters. The middle characters length must be between
-	// 4 and 28 since the first and last character are excluded.
-	ServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}")
-
 	ServiceAccountLinkRegexPrefix = "projects/" + ProjectRegexWildCard + "/serviceAccounts/"
 	PossibleServiceAccountNames   = []string{
 		ServiceDefaultAccountNameRegex,
@@ -53,9 +58,6 @@ var (
 
 	ServiceAccountKeyNameRegex = "^" + ServiceAccountLinkRegexPrefix + "([^/]+)/keys/([^/]+)$"
 
-	// Format of service accounts created through the API
-	CreatedServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}") + "@" + ProjectNameInDNSFormRegex + "\\.iam\\.gserviceaccount\\.com$"
-
 	// Format of service-created service account
 	// examples are:
 	// 		$PROJECTID@cloudbuild.gserviceaccount.com
@@ -63,8 +65,7 @@ var (
 	// 		$PROJECTID@appspot.gserviceaccount.com
 	ServiceDefaultAccountNameRegex = ProjectRegex + "@[a-z]+.gserviceaccount.com$"
 
-	ProjectNameInDNSFormRegex = "[-a-z0-9\\.]{1,63}"
-	ProjectNameRegex          = "^[A-Za-z0-9-'\"\\s!]{4,30}$"
+	ProjectNameRegex = "^[A-Za-z0-9-'\"\\s!]{4,30}$"
 
 	// Valid range for Cloud Router ASN values as per RFC6996
 	// https://tools.ietf.org/html/rfc6996
