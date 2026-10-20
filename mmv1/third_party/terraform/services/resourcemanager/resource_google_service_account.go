@@ -194,6 +194,7 @@ func resourceGoogleServiceAccountCreate(d *schema.ResourceData, meta interface{}
 	// We can't guarantee complete consistency even after polling,
 	// so sleep for some additional time to reduce the likelihood of
 	// eventual consistency failures.
+	config.RequestBatcherIam.FlushInVcrReplay(200 * time.Millisecond)
 	time.Sleep(10 * time.Second)
 
 	return nil

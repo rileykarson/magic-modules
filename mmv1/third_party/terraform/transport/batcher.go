@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"sync"
 	"time"
 
@@ -135,6 +136,42 @@ func (b *RequestBatcher) stop() {
 			close(l.respCh)
 		}
 	}
+}
+
+// FlushAll immediately sends any pending batches whose timers have not yet fired.
+func (b *RequestBatcher) FlushAll() {
+	if b == nil || b.BatchingConfig == nil || !b.EnableBatching {
+		return
+	}
+	b.Lock()
+	if b.parentCtx != nil && b.parentCtx.Err() != nil {
+		b.Unlock()
+		return
+	}
+	batches := make([]*startedBatch, 0, len(b.batches))
+	for k, batch := range b.batches {
+		if batch.timer == nil || batch.timer.Stop() {
+			batches = append(batches, batch)
+			delete(b.batches, k)
+		}
+	}
+	b.Unlock()
+
+	for _, batch := range batches {
+		b.sendBatchWithSingleRetry(batch.batchKey, batch)
+	}
+}
+
+// FlushInVcrReplay waits briefly for any concurrent requests from the current DAG wave
+// to register and then immediately flushes any pending batches when replaying VCR cassettes.
+func (b *RequestBatcher) FlushInVcrReplay(wait time.Duration) {
+	if b == nil || b.BatchingConfig == nil || !b.EnableBatching || os.Getenv("VCR_PATH") == "" || os.Getenv("VCR_MODE") != "REPLAYING" {
+		return
+	}
+	if wait > 0 {
+		time.Sleep(wait)
+	}
+	b.FlushAll()
 }
 
 // SendRequestWithTimeout is a blocking call for making a single request, run alone or as part of a batch.
