@@ -566,10 +566,10 @@ func (vt *Tester) UploadLogs(opts UploadLogsOptions) error {
 }
 
 func (vt *Tester) asyncUploadCassettes(version provider.Version, branch string, w *fsnotify.Watcher) error {
+	const waitFor = 100 * time.Millisecond
 	var (
-		waitFor = 100 * time.Millisecond
-		mu      sync.Mutex
-		timers  = make(map[string]*time.Timer)
+		mu     sync.Mutex
+		timers = make(map[string]*time.Timer)
 
 		// Callback we run.
 		cb = func(e fsnotify.Event) {

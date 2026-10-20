@@ -41,10 +41,10 @@ type TemplateData struct {
 	//     attr_accessor :env
 }
 
-var GA_VERSION = "ga"
-var BETA_VERSION = "beta"
-var ALPHA_VERSION = "alpha"
-var PRIVATE_VERSION = "private"
+const GA_VERSION = "ga"
+const BETA_VERSION = "beta"
+const ALPHA_VERSION = "alpha"
+const PRIVATE_VERSION = "private"
 
 func NewTemplateData(outputFolder string, versionName string, templateFS fs.FS) *TemplateData {
 	td := TemplateData{OutputFolder: outputFolder, VersionName: versionName, templateFS: templateFS}

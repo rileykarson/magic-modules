@@ -12,9 +12,9 @@ var (
 	nestedObjectRegex   = regexp.MustCompile(`<a\s+name="([a-z0-9_]+)">`)     // <a name="xxx">
 	nestedHashTagRegex  = regexp.MustCompile(`\(#(nested_[a-z0-9_]+)\)`)      // #(nested_xxx)
 	horizontalLineRegex = regexp.MustCompile("- - -|-{3,}")                   // - - - or ---
-
-	sectionSeparator = "## "
 )
+
+const sectionSeparator = "## "
 
 // DocumentParser parse *.html.markdown resource doc files.
 type DocumentParser struct {

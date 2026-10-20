@@ -11,8 +11,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-var GA_VERSION = "ga"
-var BETA_VERSION = "beta"
+const GA_VERSION = "ga"
+const BETA_VERSION = "beta"
 
 var oPath = flag.String("output", "", "path to output generated files to")
 var ver = flag.String("version", "", "version name, value must be `ga` or `beta`")
