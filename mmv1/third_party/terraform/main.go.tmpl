@@ -24,7 +24,10 @@ func main() {
 	primary := provider.Provider()
 
 	providers := []func() tfprotov5.ProviderServer{
-		primary.GRPCProvider, // sdk provider
+		// sdk provider
+		func() tfprotov5.ProviderServer {
+			return provider.NewFastValidateProviderServer(primary)
+		},
 		providerserver.NewProtocol5(fwprovider.New(primary)), // framework provider
 	}
 
