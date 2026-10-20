@@ -582,3 +582,63 @@ func TestGetRegionFromRegionSelfLink(t *testing.T) {
 		})
 	}
 }
+
+func TestBootstrapConfig_delegatesAndFallback(t *testing.T) {
+	t.Run("skips_when_TF_ACC_unset", func(t *testing.T) {
+		t.Setenv("TF_ACC", "")
+		defer func() {
+			if !t.Skipped() {
+				t.Errorf("expected BootstrapConfig to skip test when TF_ACC is empty")
+			}
+		}()
+		_ = transport_tpg.BootstrapConfig(t)
+		t.Errorf("expected BootstrapConfig to call t.Skip and not reach here")
+	})
+
+	origHook := transport_tpg.ConfigureTestProvider
+	t.Cleanup(func() {
+		transport_tpg.ConfigureTestProvider = origHook
+	})
+
+	t.Setenv("TF_ACC", "1")
+	t.Setenv("GOOGLE_CREDENTIALS", "")
+	t.Setenv("GOOGLE_CREDENTIALS_FILE", transport_tpg.TestFakeCredentialsPath)
+	t.Setenv("GOOGLE_PROJECT", "fallback-project")
+	t.Setenv("GOOGLE_REGION", "us-central1")
+	t.Setenv("GOOGLE_ZONE", "us-central1-a")
+
+	// 1. When ConfigureTestProvider is set, BootstrapConfig delegates to it.
+	expectedCfg := &transport_tpg.Config{Project: "delegated-project"}
+	called := false
+	transport_tpg.ConfigureTestProvider = func(t *testing.T) *transport_tpg.Config {
+		called = true
+		return expectedCfg
+	}
+
+	got := transport_tpg.BootstrapConfig(t)
+	if !called {
+		t.Fatalf("expected ConfigureTestProvider hook to be called")
+	}
+	if got != expectedCfg {
+		t.Fatalf("expected delegated config %p, got %p", expectedCfg, got)
+	}
+
+	// 2. When ConfigureTestProvider is nil, BootstrapConfig uses the fallback and loads GOOGLE_CREDENTIALS_FILE.
+	transport_tpg.ConfigureTestProvider = nil
+	fallbackCfg := transport_tpg.BootstrapConfig(t)
+	if fallbackCfg == nil {
+		t.Fatalf("expected non-nil fallback config")
+	}
+	if fallbackCfg.Project != "fallback-project" {
+		t.Fatalf("expected project %q, got %q", "fallback-project", fallbackCfg.Project)
+	}
+	if fallbackCfg.Region != "us-central1" {
+		t.Fatalf("expected region %q, got %q", "us-central1", fallbackCfg.Region)
+	}
+	if fallbackCfg.Zone != "us-central1-a" {
+		t.Fatalf("expected zone %q, got %q", "us-central1-a", fallbackCfg.Zone)
+	}
+	if fallbackCfg.Client == nil {
+		t.Fatalf("expected initialized HTTP client on fallback config")
+	}
+}

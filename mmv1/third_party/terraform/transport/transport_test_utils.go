@@ -29,11 +29,28 @@ func (e *TimeoutError) Error() string {
 
 var TimeoutErr = &TimeoutError{timeout: true}
 
+// ConfigureTestProvider is registered by the acctest package to configure a full
+// TPG provider Config without introducing an import cycle between transport and
+// acctest/provider. It must not attach a VCR recorder or touch VCR's cached configs.
+var ConfigureTestProvider func(t *testing.T) *Config
+
 // BootstrapConfig returns a Config pulled from the environment.
 func BootstrapConfig(t *testing.T) *Config {
 	if v := os.Getenv("TF_ACC"); v == "" {
 		t.Skip("Acceptance tests and bootstrapping skipped unless env 'TF_ACC' set")
 		return nil
+	}
+
+	if v := os.Getenv("GOOGLE_CREDENTIALS_FILE"); v != "" {
+		creds, err := os.ReadFile(v)
+		if err != nil {
+			t.Fatalf("Error reading GOOGLE_CREDENTIALS_FILE path: %s", err)
+		}
+		os.Setenv("GOOGLE_CREDENTIALS", string(creds))
+	}
+
+	if ConfigureTestProvider != nil {
+		return ConfigureTestProvider(t)
 	}
 
 	config := &Config{
