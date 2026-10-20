@@ -11,9 +11,10 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
+const computeInterconnectLocationIdTemplate = "projects/%s/global/interconnectlocations/%s"
+
 var (
-	computeInterconnectLocationIdTemplate = "projects/%s/global/interconnectlocations/%s"
-	computeInterconnectLocationLinkRegex  = regexp.MustCompile(`projects/(.+)/global/interconnectlocations/(.+)$`)
+	computeInterconnectLocationLinkRegex = regexp.MustCompile(`projects/(.+)/global/interconnectlocations/(.+)$`)
 )
 
 type ComputeInterconnectLocationId struct {

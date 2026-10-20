@@ -11,8 +11,8 @@ import (
 	iam "google.golang.org/api/iam/v1"
 )
 
-var ServiceAccountPrefix = "tf-bootstrap-sa-"
-var serviceAccountDisplay = "Bootstrapped Service Account for Terraform tests"
+const ServiceAccountPrefix = "tf-bootstrap-sa-"
+const serviceAccountDisplay = "Bootstrapped Service Account for Terraform tests"
 
 // Some tests need a second service account, other than the test runner, to assert functionality on.
 // This provides a well-known service account that can be used when dynamically creating a service

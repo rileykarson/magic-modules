@@ -61,7 +61,7 @@ func HandleNotFoundError(ctx context.Context, err error, state *tfsdk.State, res
 	diags.AddError(fmt.Sprintf("Error when reading or editing %s", resource), err.Error())
 }
 
-var DefaultRequestTimeout = 5 * time.Minute
+const DefaultRequestTimeout = 5 * time.Minute
 
 type SendRequestOptions struct {
 	Config               *transport_tpg.Config

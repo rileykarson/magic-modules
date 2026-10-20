@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-provider-google/google/sweeper"
 )
 
-var (
+const (
 	TestPrefix = "tf-test"
 )
 

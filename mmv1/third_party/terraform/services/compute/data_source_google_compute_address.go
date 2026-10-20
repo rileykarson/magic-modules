@@ -12,9 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+const computeAddressIdTemplate = "projects/%s/regions/%s/addresses/%s"
+
 var (
-	computeAddressIdTemplate = "projects/%s/regions/%s/addresses/%s"
-	computeAddressLinkRegex  = regexp.MustCompile("projects/(.+)/regions/(.+)/addresses/(.+)$")
+	computeAddressLinkRegex = regexp.MustCompile("projects/(.+)/regions/(.+)/addresses/(.+)$")
 )
 
 func DataSourceGoogleComputeAddress() *schema.Resource {

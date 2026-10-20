@@ -14,7 +14,7 @@ import (
 	"google.golang.org/api/googleapi"
 )
 
-var DefaultRequestTimeout = 5 * time.Minute
+const DefaultRequestTimeout = 5 * time.Minute
 
 type SendRequestOptions struct {
 	Config               *Config

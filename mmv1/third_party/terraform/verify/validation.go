@@ -34,27 +34,9 @@ const (
 
 	// https://cloud.google.com/managed-microsoft-ad/reference/rest/v1/projects.locations.global.domains/create#query-parameters
 	ADDomainNameRegex = "^[a-z][a-z0-9-]{0,14}\\.[a-z0-9-\\.]*[a-z]+[a-z0-9]*$"
-)
-
-var (
-	// Service account name must have a length between 6 and 30.
-	// The first and last characters have different restrictions, than
-	// the middle characters. The middle characters length must be between
-	// 4 and 28 since the first and last character are excluded.
-	ServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}")
 
 	ServiceAccountLinkRegexPrefix = "projects/" + ProjectRegexWildCard + "/serviceAccounts/"
-	PossibleServiceAccountNames   = []string{
-		ServiceDefaultAccountNameRegex,
-		ComputeServiceAccountNameRegex,
-		CreatedServiceAccountNameRegex,
-	}
-	ServiceAccountLinkRegex = ServiceAccountLinkRegexPrefix + "(" + strings.Join(PossibleServiceAccountNames, "|") + ")"
-
-	ServiceAccountKeyNameRegex = "^" + ServiceAccountLinkRegexPrefix + "([^/]+)/keys/([^/]+)$"
-
-	// Format of service accounts created through the API
-	CreatedServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}") + "@" + ProjectNameInDNSFormRegex + "\\.iam\\.gserviceaccount\\.com$"
+	ServiceAccountKeyNameRegex    = "^" + ServiceAccountLinkRegexPrefix + "([^/]+)/keys/([^/]+)$"
 
 	// Format of service-created service account
 	// examples are:
@@ -74,6 +56,24 @@ var (
 	Rfc6996Asn32BitMin  = int64(4200000000)
 	Rfc6996Asn32BitMax  = int64(4294967294)
 	GcpRouterPartnerAsn = int64(16550)
+)
+
+var (
+	// Service account name must have a length between 6 and 30.
+	// The first and last characters have different restrictions, than
+	// the middle characters. The middle characters length must be between
+	// 4 and 28 since the first and last character are excluded.
+	ServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}")
+
+	PossibleServiceAccountNames = []string{
+		ServiceDefaultAccountNameRegex,
+		ComputeServiceAccountNameRegex,
+		CreatedServiceAccountNameRegex,
+	}
+	ServiceAccountLinkRegex = ServiceAccountLinkRegexPrefix + "(" + strings.Join(PossibleServiceAccountNames, "|") + ")"
+
+	// Format of service accounts created through the API
+	CreatedServiceAccountNameRegex = fmt.Sprintf(RFC1035NameTemplate, "{4,28}") + "@" + ProjectNameInDNSFormRegex + "\\.iam\\.gserviceaccount\\.com$"
 )
 
 var Rfc1918Networks = []string{

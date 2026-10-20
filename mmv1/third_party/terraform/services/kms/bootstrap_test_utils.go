@@ -10,7 +10,7 @@ import (
 	cloudkms "google.golang.org/api/cloudkms/v1"
 )
 
-var SharedKeyRing = "tftest-shared-keyring-1"
+const SharedKeyRing = "tftest-shared-keyring-1"
 
 var SharedCryptoKey = map[string]string{
 	"ENCRYPT_DECRYPT":    "tftest-shared-key-1",

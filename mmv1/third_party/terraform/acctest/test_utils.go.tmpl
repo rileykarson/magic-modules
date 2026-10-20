@@ -310,7 +310,7 @@ func ProtoV6ProviderFactories(t *testing.T) map[string]func() (tfprotov6.Provide
 	}
 }
 
-var EchoResourceName string = "echo.test"
+const EchoResourceName string = "echo.test"
 
 // EchoResourceConfig returns some HCL that configures the echo provider with a reference to an ephemeral value (e.g. an ephemeral resource)
 // and provisions an echo resource that surfaces that ephemeral data in a non-ephemeral way, for testing purposes.
