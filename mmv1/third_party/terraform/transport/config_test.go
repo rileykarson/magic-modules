@@ -1,8 +1,11 @@
 package transport_test
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"testing"
@@ -578,6 +581,113 @@ func TestGetRegionFromRegionSelfLink(t *testing.T) {
 
 			if region != tc.ExpectedOutput {
 				t.Fatalf("want %s,  got %s", region, tc.ExpectedOutput)
+			}
+		})
+	}
+}
+
+func makeTestJWT(payloadJSON string) string {
+	header := base64.RawURLEncoding.EncodeToString([]byte(`{"alg":"RS256","typ":"JWT"}`))
+	payload := base64.RawURLEncoding.EncodeToString([]byte(payloadJSON))
+	return header + "." + payload + ".sig"
+}
+
+func TestConfigLoadAndValidate_offlineIdentityLogging(t *testing.T) {
+	fakeSACredsBytes, err := os.ReadFile(transport_tpg.TestFakeCredentialsPath)
+	if err != nil {
+		t.Fatalf("failed to read fake credentials: %v", err)
+	}
+
+	cases := map[string]struct {
+		Config      *transport_tpg.Config
+		ExpectedLog string
+	}{
+		"service_account credentials": {
+			Config: &transport_tpg.Config{
+				Credentials: transport_tpg.TestFakeCredentialsPath,
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: foo@bar.com",
+		},
+		"service_account credentials with impersonate_service_account": {
+			Config: &transport_tpg.Config{
+				Credentials:               transport_tpg.TestFakeCredentialsPath,
+				ImpersonateServiceAccount: "target-sa@my-project.iam.gserviceaccount.com",
+				Project:                   "my-gce-project",
+				Region:                    "us-central1",
+			},
+			ExpectedLog: "Terraform is configured with service account impersonation, original identity: foo@bar.com, impersonated identity: target-sa@my-project.iam.gserviceaccount.com",
+		},
+		"authorized_user credentials": {
+			Config: &transport_tpg.Config{
+				Credentials: `{"type":"authorized_user","client_id":"my-client.apps.googleusercontent.com","client_secret":"secret","refresh_token":"refresh"}`,
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: authorized_user (client_id: my-client.apps.googleusercontent.com)",
+		},
+		"impersonated_service_account credentials": {
+			Config: &transport_tpg.Config{
+				Credentials: fmt.Sprintf(`{"type":"impersonated_service_account","service_account_impersonation_url":"https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/imp-sa@my-project.iam.gserviceaccount.com:generateAccessToken","source_credentials":%s}`, string(fakeSACredsBytes)),
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: imp-sa@my-project.iam.gserviceaccount.com (impersonated from foo@bar.com)",
+		},
+		"external_account credentials with SA impersonation": {
+			Config: &transport_tpg.Config{
+				Credentials: `{"type":"external_account","audience":"//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/my-pool/providers/my-provider","subject_token_type":"urn:ietf:params:oauth:token-type:jwt","token_url":"https://sts.googleapis.com/v1/token","service_account_impersonation_url":"https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/wif-sa@my-project.iam.gserviceaccount.com:generateAccessToken","credential_source":{"file":"/tmp/token"}}`,
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: wif-sa@my-project.iam.gserviceaccount.com (external_account audience: //iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/my-pool/providers/my-provider)",
+		},
+		"external_credentials block with JWT": {
+			Config: &transport_tpg.Config{
+				ExternalCredentials: &transport_tpg.ExternalCredentials{
+					Audience:            "//iam.googleapis.com/projects/123/locations/global/workloadIdentityPools/my-pool/providers/my-provider",
+					ServiceAccountEmail: "ext-sa@my-project.iam.gserviceaccount.com",
+					IdentityToken:       makeTestJWT(`{"sub":"repo:org/repo:ref:refs/heads/main","email":"ci-runner@example.com"}`),
+				},
+				Project: "my-gce-project",
+				Region:  "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: ext-sa@my-project.iam.gserviceaccount.com (external_credentials subject: ci-runner@example.com)",
+		},
+		"opaque access_token": {
+			Config: &transport_tpg.Config{
+				AccessToken: "fake-opaque-access-token",
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: access_token (opaque)",
+		},
+		"JWT access_token": {
+			Config: &transport_tpg.Config{
+				AccessToken: makeTestJWT(`{"sub":"jwt-subject-123","iss":"issuer@my-project.iam.gserviceaccount.com"}`),
+				Project:     "my-gce-project",
+				Region:      "us-central1",
+			},
+			ExpectedLog: "Terraform is using this identity: jwt-subject-123",
+		},
+	}
+
+	origOut := log.Writer()
+	defer log.SetOutput(origOut)
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			var buf bytes.Buffer
+			log.SetOutput(&buf)
+
+			if err := tc.Config.LoadAndValidate(context.Background()); err != nil {
+				t.Fatalf("LoadAndValidate returned unexpected error: %v", err)
+			}
+
+			gotLogs := buf.String()
+			if !strings.Contains(gotLogs, tc.ExpectedLog) {
+				t.Fatalf("expected logs to contain %q, got:\n%s", tc.ExpectedLog, gotLogs)
 			}
 		})
 	}

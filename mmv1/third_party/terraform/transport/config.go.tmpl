@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/auth/credentials"
+	"cloud.google.com/go/auth/credentials/idtoken"
 	"cloud.google.com/go/auth/credentials/impersonate"
 	"cloud.google.com/go/auth/oauth2adapt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -470,50 +471,164 @@ func (c *Config) synchronousTimeout() time.Duration {
 	return c.RequestTimeout
 }
 
+var serviceAccountImpersonationURLRegex = regexp.MustCompile(`/serviceAccounts/([^/:]+)`)
+
+type credentialsFileMetadata struct {
+	Type                           string          `json:"type"`
+	ClientEmail                    string          `json:"client_email"`
+	ClientID                       string          `json:"client_id"`
+	ServiceAccountImpersonationURL string          `json:"service_account_impersonation_url"`
+	Audience                       string          `json:"audience"`
+	SourceCredentials              json.RawMessage `json:"source_credentials"`
+	Project                        string          `json:"project"`
+	Name                           string          `json:"name"`
+}
+
+func extractServiceAccountFromImpersonationURL(rawURL string) string {
+	if matches := serviceAccountImpersonationURLRegex.FindStringSubmatch(rawURL); len(matches) == 2 {
+		return matches[1]
+	}
+	return ""
+}
+
+func extractIdentityFromJWT(rawToken string) string {
+	payload, err := idtoken.ParsePayload(strings.TrimSpace(rawToken))
+	if err != nil || payload == nil {
+		return ""
+	}
+	if email, ok := payload.Claims["email"].(string); ok && email != "" {
+		return email
+	}
+	if payload.Subject != "" {
+		return payload.Subject
+	}
+	if payload.Issuer != "" {
+		return payload.Issuer
+	}
+	return ""
+}
+
+func extractIdentityFromCredentialsJSON(rawJSON []byte) (string, error) {
+	var meta credentialsFileMetadata
+	if err := json.Unmarshal(rawJSON, &meta); err != nil {
+		return "", fmt.Errorf("error unmarshaling credentials: %s", err)
+	}
+
+	switch meta.Type {
+	case "service_account":
+		if jwtCfg, err := googleoauth.JWTConfigFromJSON(rawJSON); err == nil && jwtCfg.Email != "" {
+			return jwtCfg.Email, nil
+		}
+		if meta.ClientEmail != "" {
+			return meta.ClientEmail, nil
+		}
+		return "service_account", nil
+	case "authorized_user":
+		if meta.ClientID != "" {
+			return fmt.Sprintf("authorized_user (client_id: %s)", meta.ClientID), nil
+		}
+		return "authorized_user", nil
+	case "impersonated_service_account":
+		targetSA := extractServiceAccountFromImpersonationURL(meta.ServiceAccountImpersonationURL)
+		if len(meta.SourceCredentials) > 0 {
+			if sourceIdentity, err := extractIdentityFromCredentialsJSON(meta.SourceCredentials); err == nil && sourceIdentity != "" && targetSA != "" {
+				return fmt.Sprintf("%s (impersonated from %s)", targetSA, sourceIdentity), nil
+			}
+		}
+		if targetSA != "" {
+			return targetSA, nil
+		}
+		return "impersonated_service_account", nil
+	case "external_account":
+		targetSA := extractServiceAccountFromImpersonationURL(meta.ServiceAccountImpersonationURL)
+		if targetSA != "" && meta.Audience != "" {
+			return fmt.Sprintf("%s (external_account audience: %s)", targetSA, meta.Audience), nil
+		}
+		if targetSA != "" {
+			return targetSA, nil
+		}
+		if meta.Audience != "" {
+			return fmt.Sprintf("external_account (audience: %s)", meta.Audience), nil
+		}
+		return "external_account", nil
+	case "external_account_authorized_user":
+		if meta.Audience != "" {
+			return fmt.Sprintf("external_account_authorized_user (audience: %s)", meta.Audience), nil
+		}
+		return "external_account_authorized_user", nil
+	case "gdch_service_account":
+		if meta.Project != "" && meta.Name != "" {
+			return fmt.Sprintf("gdch_service_account (project: %s, name: %s)", meta.Project, meta.Name), nil
+		}
+		return "gdch_service_account", nil
+	default:
+		if meta.ClientEmail != "" {
+			return meta.ClientEmail, nil
+		}
+		if meta.Type != "" {
+			return meta.Type, nil
+		}
+		return "unknown", nil
+	}
+}
+
+func (c *Config) resolveIdentityOffline() (string, error) {
+	if c.ExternalCredentials != nil {
+		subject := extractIdentityFromJWT(c.ExternalCredentials.IdentityToken)
+		if subject != "" && c.ExternalCredentials.ServiceAccountEmail != "" {
+			return fmt.Sprintf("%s (external_credentials subject: %s)", c.ExternalCredentials.ServiceAccountEmail, subject), nil
+		}
+		if c.ExternalCredentials.ServiceAccountEmail != "" {
+			return c.ExternalCredentials.ServiceAccountEmail, nil
+		}
+		if subject != "" {
+			return subject, nil
+		}
+		return "external_credentials", nil
+	}
+
+	if c.AccessToken != "" {
+		contents, _, err := verify.PathOrContents(c.AccessToken)
+		if err != nil {
+			return "", fmt.Errorf("Error loading access token: %s", err)
+		}
+		if subject := extractIdentityFromJWT(contents); subject != "" {
+			return subject, nil
+		}
+		return "access_token (opaque)", nil
+	}
+
+	if c.Credentials != "" {
+		contents, _, err := verify.PathOrContents(c.Credentials)
+		if err != nil {
+			return "", fmt.Errorf("error loading credentials: %s", err)
+		}
+		return extractIdentityFromCredentialsJSON([]byte(contents))
+	}
+
+	creds, err := c.GetCredentials(c.Scopes, true)
+	if err != nil {
+		return "", err
+	}
+	if len(creds.JSON) > 0 {
+		return extractIdentityFromCredentialsJSON(creds.JSON)
+	}
+	return "gce_metadata_server", nil
+}
+
 // Print Identities executing terraform API Calls.
 func (c *Config) logGoogleIdentities(ctx context.Context) error {
+	identity, err := c.resolveIdentityOffline()
+	if err != nil {
+		return err
+	}
+
 	if c.ImpersonateServiceAccount == "" {
-
-	tokenSource, err := c.getTokenSource(ctx, c.Scopes, true)
-		if err != nil {
-			return err
-		}
-		c.Client = oauth2.NewClient(c.Context, tokenSource) // c.Client isn't initialised fully when this code is called.
-
-		email, err := GetCurrentUserEmail(c, c.UserAgent)
-		if err != nil {
-			log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
-		}
-
-		log.Printf("[INFO] Terraform is using this identity: %s", email)
-
+		log.Printf("[INFO] Terraform is using this identity: %s", identity)
 		return nil
-
 	}
 
-	// Drop Impersonated ClientOption from OAuth2 TokenSource to infer original identity
-
-	tokenSource, err := c.getTokenSource(ctx, c.Scopes, true)
-	if err != nil {
-		return err
-	}
-	c.Client = oauth2.NewClient(c.Context, tokenSource) // c.Client isn't initialised fully when this code is called.
-
-	email, err := GetCurrentUserEmail(c, c.UserAgent)
-	if err != nil {
-		log.Printf("[INFO] error retrieving userinfo for your provider credentials. have you enabled the 'https://www.googleapis.com/auth/userinfo.email' scope? error: %s", err)
-	}
-
-	log.Printf("[INFO] Terraform is configured with service account impersonation, original identity: %s, impersonated identity: %s", email, c.ImpersonateServiceAccount)
-
-	// Add the Impersonated ClientOption back in to the OAuth2 TokenSource
-
-	tokenSource, err = c.getTokenSource(ctx, c.Scopes, false)
-	if err != nil {
-		return err
-	}
-	c.Client = oauth2.NewClient(c.Context, tokenSource) // c.Client isn't initialised fully when this code is called.
-
+	log.Printf("[INFO] Terraform is configured with service account impersonation, original identity: %s, impersonated identity: %s", identity, c.ImpersonateServiceAccount)
 	return nil
 }
 
