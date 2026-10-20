@@ -1,6 +1,32 @@
 package acctest
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/dnaeon/go-vcr/recorder"
+)
+
+// CleanupVcrConfigForTest stops any active VCR recorder and removes cached VCR
+// state for t.Name(). Used by acctest_test unit tests that exercise GetSDKProvider.
+func CleanupVcrConfigForTest(t *testing.T) {
+	t.Helper()
+	configsLock.Lock()
+	if cfg, ok := configs[t.Name()]; ok && cfg != nil && cfg.Client != nil {
+		rt := cfg.Client.Transport
+		if w, ok := rt.(*requestWatcherRoundTripper); ok {
+			rt = w.base
+		}
+		if rec, ok := rt.(*recorder.Recorder); ok {
+			_ = rec.Stop()
+		}
+	}
+	delete(configs, t.Name())
+	configsLock.Unlock()
+
+	sourcesLock.Lock()
+	delete(sources, t.Name())
+	sourcesLock.Unlock()
+}
 
 func TestNprintf(t *testing.T) {
 	var nilStringPtr *string

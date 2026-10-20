@@ -24,6 +24,7 @@ func init() {
 	TestAccProviders = map[string]*schema.Provider{
 		"google": testAccProvider,
 	}
+	transport_tpg.ConfigureTestProvider = configureTestProvider
 }
 
 // GoogleProviderConfig returns a configured SDKv2 provider.
@@ -40,22 +41,42 @@ func GoogleProviderConfig(t *testing.T) *transport_tpg.Config {
 		return config
 	}
 
-	sdkProvider := provider.Provider()
-	rc := terraform.ResourceConfig{}
+	config = configureTestProvider(t)
+	if config != nil && config.Client != nil {
+		config.Client.Transport = wrapWithRequestWatcher(t.Name(), config.Client.Transport)
+	}
+	return config
+}
+
+func configureTestProvider(t *testing.T) *transport_tpg.Config {
+	rawConfig := make(map[string]interface{})
+
+	if v := os.Getenv("GOOGLE_CREDENTIALS_FILE"); v != "" && envvar.MultiEnvSearch(envvar.CredsEnvVarsExcludingAdcs()) == "" && envvar.GetTestAccessTokenFromEnv() == "" {
+		creds, err := os.ReadFile(v)
+		if err != nil {
+			t.Fatalf("Error reading GOOGLE_CREDENTIALS_FILE path: %s", err)
+		}
+		rawConfig["credentials"] = string(creds)
+	}
 
 	// `universe_domain` must be specified through config (i.e. unlike most provider settings there's no environment variable), and we check the value matches the credentials during provider initilization
 	// In the test environment we seed the value through a test-only environment variable, and we need to pre-seed a value in ResourceConfig as if it was in config to pass the check
 	universeDomain := envvar.GetTestUniverseDomainFromEnv(t)
 	if universeDomain != "" && universeDomain != "googleapis.com" {
-		rc.Config = make(map[string]interface{})
-		rc.Config["universe_domain"] = universeDomain
+		rawConfig["universe_domain"] = universeDomain
 	}
-	sdkProvider.Configure(context.Background(), &rc)
-	config = sdkProvider.Meta().(*transport_tpg.Config)
-	if config != nil && config.Client != nil {
-		config.Client.Transport = wrapWithRequestWatcher(t.Name(), config.Client.Transport)
+
+	rc := terraform.ResourceConfig{}
+	if len(rawConfig) > 0 {
+		rc.Config = rawConfig
 	}
-	return config
+
+	sdkProvider := provider.Provider()
+	diags := sdkProvider.Configure(context.Background(), &rc)
+	if diags.HasError() {
+		t.Fatalf("Bootstrapping failed. Unable to load test config: %v", diags)
+	}
+	return sdkProvider.Meta().(*transport_tpg.Config)
 }
 
 // AccTestPreCheck wraps envvar.AccTestPreCheck for backwards compatibility with existing

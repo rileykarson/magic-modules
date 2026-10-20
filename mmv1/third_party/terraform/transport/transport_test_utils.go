@@ -29,6 +29,11 @@ func (e *TimeoutError) Error() string {
 
 var TimeoutErr = &TimeoutError{timeout: true}
 
+// ConfigureTestProvider is registered by the acctest package to configure a full
+// TPG provider Config without introducing an import cycle between transport and
+// acctest/provider. It must not attach a VCR recorder or touch VCR's cached configs.
+var ConfigureTestProvider func(t *testing.T) *Config
+
 // BootstrapConfig returns a Config pulled from the environment.
 func BootstrapConfig(t *testing.T) *Config {
 	if v := os.Getenv("TF_ACC"); v == "" {
@@ -36,13 +41,35 @@ func BootstrapConfig(t *testing.T) *Config {
 		return nil
 	}
 
+	if ConfigureTestProvider != nil {
+		return ConfigureTestProvider(t)
+	}
+
+	creds := envvar.GetTestCredsFromEnv()
+	if v := os.Getenv("GOOGLE_CREDENTIALS_FILE"); v != "" && envvar.MultiEnvSearch(envvar.CredsEnvVarsExcludingAdcs()) == "" && envvar.GetTestAccessTokenFromEnv() == "" {
+		b, err := os.ReadFile(v)
+		if err != nil {
+			t.Fatalf("Error reading GOOGLE_CREDENTIALS_FILE path: %s", err)
+		}
+		creds = string(b)
+	}
+
+	batchCfg, err := ExpandProviderBatchingConfig(nil)
+	if err != nil {
+		t.Fatalf("Bootstrapping failed. Unable to expand default batching config: %s", err)
+	}
+
 	config := &Config{
-		Credentials:               envvar.GetTestCredsFromEnv(),
+		Credentials:               creds,
 		AccessToken:               envvar.GetTestAccessTokenFromEnv(),
 		ImpersonateServiceAccount: envvar.GetTestImpersonateServiceAccountFromEnv(),
 		Project:                   envvar.GetTestProjectFromEnv(),
 		Region:                    envvar.GetTestRegionFromEnv(),
 		Zone:                      envvar.GetTestZoneFromEnv(),
+		BatchingConfig:            batchCfg,
+	}
+	if universeDomain := envvar.GetTestUniverseDomainFromEnv(t); universeDomain != "" && universeDomain != "googleapis.com" {
+		config.UniverseDomain = universeDomain
 	}
 
 	if err := config.LoadAndValidate(context.Background()); err != nil {

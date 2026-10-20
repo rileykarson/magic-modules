@@ -444,6 +444,7 @@ func providerConfigEnvNames() []string {
 	envs = append(envs, "CLOUDSDK_CORE_REQUEST_REASON")       // request_reason field
 
 	envs = append(envs, "GOOGLE_APPLICATION_CREDENTIALS") // ADC used to configure clients when provider lacks credentials and access_token
+	envs = append(envs, "GOOGLE_CREDENTIALS_FILE")        // test helper file path for credentials
 
 	return envs
 }
