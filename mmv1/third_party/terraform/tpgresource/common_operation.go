@@ -141,12 +141,17 @@ func OperationWait(w Waiter, activity string, timeout time.Duration, pollInterva
 		return w.Error()
 	}
 
+	minTimeout := 2 * time.Second
+	if pollInterval > 0 && pollInterval < minTimeout {
+		minTimeout = pollInterval
+	}
+
 	c := &retry.StateChangeConf{
 		Pending:      w.PendingStates(),
 		Target:       w.TargetStates(),
 		Refresh:      CommonRefreshFunc(w),
 		Timeout:      timeout,
-		MinTimeout:   2 * time.Second,
+		MinTimeout:   minTimeout,
 		PollInterval: pollInterval,
 	}
 	opRaw, err := c.WaitForState()

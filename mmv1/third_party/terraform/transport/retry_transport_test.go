@@ -305,3 +305,30 @@ func testRetryTransportRetryPredicate(err error) (bool, string) {
 	}
 	return false, ""
 }
+
+func TestRetry_VcrReplayingFastPoll(t *testing.T) {
+	t.Setenv("VCR_PATH", "/tmp")
+	t.Setenv("VCR_MODE", "REPLAYING")
+	attempts := 0
+	start := time.Now()
+	err := Retry(RetryOptions{
+		RetryFunc: func() error {
+			attempts++
+			if attempts < 3 {
+				return &googleapi.Error{Code: testRetryTransportCodeRetry}
+			}
+			return nil
+		},
+		Timeout:              5 * time.Second,
+		ErrorRetryPredicates: []RetryErrorPredicateFunc{testRetryTransportRetryPredicate},
+	})
+	if err != nil {
+		t.Fatalf("Unexpected error from Retry: %v", err)
+	}
+	if attempts != 3 {
+		t.Fatalf("Expected 3 attempts, got %d", attempts)
+	}
+	if elapsed := time.Since(start); elapsed > 100*time.Millisecond {
+		t.Fatalf("Expected Retry to poll at 1ms in REPLAYING mode, took %v", elapsed)
+	}
+}

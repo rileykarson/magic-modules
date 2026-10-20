@@ -2084,13 +2084,20 @@ func waitUntilInstanceHasDesiredStatus(config *transport_tpg.Config, d *schema.R
 			status, _ := instance["status"].(string)
 			return instance["id"], status, nil
 		}
+		delay := 5 * time.Second
+		minTimeout := 2 * time.Second
+		if config.PollInterval > 0 && config.PollInterval < minTimeout {
+			delay = 0
+			minTimeout = config.PollInterval
+		}
 		stateChangeConf := retry.StateChangeConf{
-			Delay:      5 * time.Second,
-			Pending:    getAllStatusBut(status),
-			Refresh:    stateRefreshFunc,
-			Target:     []string{status},
-			Timeout:    d.Timeout(schema.TimeoutUpdate),
-			MinTimeout: 2 * time.Second,
+			Delay:        delay,
+			Pending:      getAllStatusBut(status),
+			Refresh:      stateRefreshFunc,
+			Target:       []string{status},
+			Timeout:      d.Timeout(schema.TimeoutUpdate),
+			MinTimeout:   minTimeout,
+			PollInterval: config.PollInterval,
 		}
 		_, err := stateChangeConf.WaitForState()
 

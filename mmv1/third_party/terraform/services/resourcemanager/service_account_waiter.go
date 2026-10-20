@@ -2,6 +2,7 @@ package resourcemanager
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
@@ -40,12 +41,20 @@ func ServiceAccountKeyWaitTime(client *iam.ProjectsServiceAccountsKeysService, k
 		KeyName:       keyName,
 	}
 
+	minTimeout := 2 * time.Second
+	var pollInterval time.Duration
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		minTimeout = time.Millisecond
+		pollInterval = time.Millisecond
+	}
+
 	c := &retry.StateChangeConf{
-		Pending:    []string{"PENDING"},
-		Target:     []string{"DONE"},
-		Refresh:    w.RefreshFunc(),
-		Timeout:    timeout,
-		MinTimeout: 2 * time.Second,
+		Pending:      []string{"PENDING"},
+		Target:       []string{"DONE"},
+		Refresh:      w.RefreshFunc(),
+		Timeout:      timeout,
+		MinTimeout:   minTimeout,
+		PollInterval: pollInterval,
 	}
 	_, err := c.WaitForState()
 	if err != nil {

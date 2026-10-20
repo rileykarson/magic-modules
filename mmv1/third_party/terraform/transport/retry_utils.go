@@ -2,6 +2,7 @@ package transport
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/hashicorp/errwrap"
@@ -21,6 +22,10 @@ func Retry(opt RetryOptions) error {
 		opt.Timeout = 1 * time.Minute
 	}
 
+	if opt.PollInterval == 0 && os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		opt.PollInterval = time.Millisecond
+	}
+
 	if opt.PollInterval != 0 {
 		refreshFunc := func() (interface{}, string, error) {
 			err := opt.RetryFunc()
@@ -36,6 +41,10 @@ func Retry(opt RetryOptions) error {
 			// The error is not retryable.
 			return "", "done", err
 		}
+		var minTimeout time.Duration
+		if opt.PollInterval > 0 && opt.PollInterval < 500*time.Millisecond {
+			minTimeout = opt.PollInterval
+		}
 		stateChange := &retry.StateChangeConf{
 			Pending: []string{
 				"retrying",
@@ -45,6 +54,7 @@ func Retry(opt RetryOptions) error {
 			},
 			Refresh:      refreshFunc,
 			Timeout:      opt.Timeout,
+			MinTimeout:   minTimeout,
 			PollInterval: opt.PollInterval,
 		}
 
