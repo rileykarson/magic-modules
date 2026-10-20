@@ -146,7 +146,7 @@ func Resource(name string) *schema.Resource {
 func ResourceMap() map[string]*schema.Resource {
 	schemas.RLock()
 	defer schemas.RUnlock()
-	ret := map[string]*schema.Resource{}
+	ret := make(map[string]*schema.Resource, len(schemas.r))
 	for k, v := range schemas.r {
 		ret[k] = v.Schema
 	}
@@ -169,7 +169,7 @@ func DataSource(name string) *schema.Resource {
 func DatasourceMap() map[string]*schema.Resource {
 	schemas.RLock()
 	defer schemas.RUnlock()
-	ret := map[string]*schema.Resource{}
+	ret := make(map[string]*schema.Resource, len(schemas.d))
 	for k, v := range schemas.d {
 		ret[k] = v.Schema
 	}

@@ -777,10 +777,11 @@ func AreADCCredentialsX509() bool {
 	return false
 }
 
+var basePathVersionRegex = regexp.MustCompile(`(?P<base>https?://.*)(?P<version>/[^/]+?/$)`)
+
 // Remove the `/{{"{{"}}version{{"}}"}}/` from a base path if present.
 func RemoveBasePathVersion(url string) string {
-	re := regexp.MustCompile(`(?P<base>https?://.*)(?P<version>/[^/]+?/$)`)
-	return re.ReplaceAllString(url, "$1/")
+	return basePathVersionRegex.ReplaceAllString(url, "$1/")
 }
 
 func GetCurrentUserEmail(config *Config, userAgent string) (string, error) {
@@ -815,16 +816,19 @@ func GetCurrentUserEmail(config *Config, userAgent string) (string, error) {
 	return res["email"].(string), nil
 }
 
+var customEndpointRegexValidator = stringvalidator.RegexMatches(regexp.MustCompile(`.*/[^/]+/$`), "")
+
 func CustomEndpointValidator() validator.String {
-	return stringvalidator.RegexMatches(regexp.MustCompile(`.*/[^/]+/$`), "")
+	return customEndpointRegexValidator
 }
+
+var regionFromRegionSelfLinkRegex = regexp.MustCompile("/compute/[a-zA-Z0-9]*/projects/[a-zA-Z0-9-]*/regions/([a-zA-Z0-9-]*)")
 
 // return the region a selfLink is referring to
 func GetRegionFromRegionSelfLink(selfLink string) string {
-	re := regexp.MustCompile("/compute/[a-zA-Z0-9]*/projects/[a-zA-Z0-9-]*/regions/([a-zA-Z0-9-]*)")
 	switch {
-	case re.MatchString(selfLink):
-		if res := re.FindStringSubmatch(selfLink); len(res) == 2 && res[1] != "" {
+	case regionFromRegionSelfLinkRegex.MatchString(selfLink):
+		if res := regionFromRegionSelfLinkRegex.FindStringSubmatch(selfLink); len(res) == 2 && res[1] != "" {
 			return res[1]
 		}
 	}

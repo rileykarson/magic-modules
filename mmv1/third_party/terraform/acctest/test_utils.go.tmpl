@@ -12,6 +12,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -188,6 +189,228 @@ func (c *ListScopeCapture) AsConfigVariables() config.Variables {
 
 // General test utils
 
+type cachedSchemaState struct {
+	schemaOnce    sync.Once
+	schemaResp    *tfprotov5.GetProviderSchemaResponse
+	schemaErr     error
+	metaOnce      sync.Once
+	metaResp      *tfprotov5.GetMetadataResponse
+	metaErr       error
+	functionsOnce sync.Once
+	functionsResp *tfprotov5.GetFunctionsResponse
+	functionsErr  error
+	identityOnce  sync.Once
+	identityResp  *tfprotov5.GetResourceIdentitySchemasResponse
+	identityErr   error
+}
+
+var (
+	sdkProviderSchemaCache cachedSchemaState
+	fwProviderSchemaCache  cachedSchemaState
+	muxProviderSchemaCache cachedSchemaState
+	fullMuxServerOnce      sync.Once
+	fullMuxServer          tfprotov5.ProviderServer
+)
+
+func getFullSDKServer() tfprotov5.ProviderServer {
+	return initBaseSDKProvider().GRPCProvider()
+}
+
+func getFullFWServer() tfprotov5.ProviderServer {
+	return providerserver.NewProtocol5(NewFrameworkTestProvider("", initBaseSDKProvider()))()
+}
+
+func getFullMuxServer() tfprotov5.ProviderServer {
+	fullMuxServerOnce.Do(func() {
+		srv, _ := tf5muxserver.NewMuxServer(context.Background(),
+			func() tfprotov5.ProviderServer {
+				return &cachedProviderServer{
+					ProviderServer: getFullSDKServer(),
+					fullServer:     getFullSDKServer,
+					cache:          &sdkProviderSchemaCache,
+				}
+			},
+			func() tfprotov5.ProviderServer {
+				return &cachedProviderServer{
+					ProviderServer: getFullFWServer(),
+					fullServer:     getFullFWServer,
+					cache:          &fwProviderSchemaCache,
+				}
+			},
+		)
+		fullMuxServer = srv.ProviderServer()
+	})
+	return fullMuxServer
+}
+
+type cachedProviderServer struct {
+	tfprotov5.ProviderServer
+	fullServer func() tfprotov5.ProviderServer
+	cache      *cachedSchemaState
+	testName   string
+}
+
+func (s *cachedProviderServer) GetProviderSchema(ctx context.Context, req *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
+	s.cache.schemaOnce.Do(func() {
+		s.cache.schemaResp, s.cache.schemaErr = s.fullServer().GetProviderSchema(context.Background(), req)
+	})
+	if s.cache.schemaErr != nil || s.cache.schemaResp == nil {
+		return s.cache.schemaResp, s.cache.schemaErr
+	}
+	used := getUsedTypesForTest(s.testName)
+	if used == nil {
+		return s.cache.schemaResp, nil
+	}
+	base := s.cache.schemaResp
+	resp := &tfprotov5.GetProviderSchemaResponse{
+		Provider:                 base.Provider,
+		ProviderMeta:             base.ProviderMeta,
+		Functions:                base.Functions,
+		ServerCapabilities:       base.ServerCapabilities,
+		Diagnostics:              base.Diagnostics,
+		ResourceSchemas:          make(map[string]*tfprotov5.Schema, len(used)),
+		DataSourceSchemas:        make(map[string]*tfprotov5.Schema, len(used)),
+		EphemeralResourceSchemas: make(map[string]*tfprotov5.Schema),
+		ListResourceSchemas:      make(map[string]*tfprotov5.Schema),
+		ActionSchemas:            make(map[string]*tfprotov5.ActionSchema),
+	}
+	for k := range used {
+		if v, ok := base.ResourceSchemas[k]; ok {
+			resp.ResourceSchemas[k] = v
+		}
+		if v, ok := base.DataSourceSchemas[k]; ok {
+			resp.DataSourceSchemas[k] = v
+		}
+		if v, ok := base.EphemeralResourceSchemas[k]; ok {
+			resp.EphemeralResourceSchemas[k] = v
+		}
+		if v, ok := base.ListResourceSchemas[k]; ok {
+			resp.ListResourceSchemas[k] = v
+		}
+		if v, ok := base.ActionSchemas[k]; ok {
+			resp.ActionSchemas[k] = v
+		}
+	}
+	return resp, nil
+}
+
+func (s *cachedProviderServer) GetMetadata(ctx context.Context, req *tfprotov5.GetMetadataRequest) (*tfprotov5.GetMetadataResponse, error) {
+	s.cache.metaOnce.Do(func() {
+		s.cache.metaResp, s.cache.metaErr = s.fullServer().GetMetadata(context.Background(), req)
+	})
+	if s.cache.metaErr != nil || s.cache.metaResp == nil {
+		return s.cache.metaResp, s.cache.metaErr
+	}
+	used := getUsedTypesForTest(s.testName)
+	if used == nil {
+		return s.cache.metaResp, nil
+	}
+	base := s.cache.metaResp
+	resp := &tfprotov5.GetMetadataResponse{
+		Functions:          base.Functions,
+		ServerCapabilities: base.ServerCapabilities,
+		Diagnostics:        base.Diagnostics,
+		Resources:          make([]tfprotov5.ResourceMetadata, 0, len(used)),
+		DataSources:        make([]tfprotov5.DataSourceMetadata, 0, len(used)),
+		EphemeralResources: make([]tfprotov5.EphemeralResourceMetadata, 0),
+		ListResources:      make([]tfprotov5.ListResourceMetadata, 0),
+		Actions:            make([]tfprotov5.ActionMetadata, 0),
+	}
+	for _, r := range base.Resources {
+		if _, ok := used[r.TypeName]; ok {
+			resp.Resources = append(resp.Resources, r)
+		}
+	}
+	for _, d := range base.DataSources {
+		if _, ok := used[d.TypeName]; ok {
+			resp.DataSources = append(resp.DataSources, d)
+		}
+	}
+	for _, e := range base.EphemeralResources {
+		if _, ok := used[e.TypeName]; ok {
+			resp.EphemeralResources = append(resp.EphemeralResources, e)
+		}
+	}
+	for _, l := range base.ListResources {
+		if _, ok := used[l.TypeName]; ok {
+			resp.ListResources = append(resp.ListResources, l)
+		}
+	}
+	for _, a := range base.Actions {
+		if _, ok := used[a.TypeName]; ok {
+			resp.Actions = append(resp.Actions, a)
+		}
+	}
+	return resp, nil
+}
+
+func (s *cachedProviderServer) GetFunctions(ctx context.Context, req *tfprotov5.GetFunctionsRequest) (*tfprotov5.GetFunctionsResponse, error) {
+	s.cache.functionsOnce.Do(func() {
+		s.cache.functionsResp, s.cache.functionsErr = s.fullServer().GetFunctions(context.Background(), req)
+	})
+	return s.cache.functionsResp, s.cache.functionsErr
+}
+
+func (s *cachedProviderServer) GetResourceIdentitySchemas(ctx context.Context, req *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+	s.cache.identityOnce.Do(func() {
+		s.cache.identityResp, s.cache.identityErr = s.fullServer().GetResourceIdentitySchemas(context.Background(), req)
+	})
+	if s.cache.identityErr != nil || s.cache.identityResp == nil {
+		return s.cache.identityResp, s.cache.identityErr
+	}
+	used := getUsedTypesForTest(s.testName)
+	if used == nil {
+		return s.cache.identityResp, nil
+	}
+	base := s.cache.identityResp
+	resp := &tfprotov5.GetResourceIdentitySchemasResponse{
+		Diagnostics:     base.Diagnostics,
+		IdentitySchemas: make(map[string]*tfprotov5.ResourceIdentitySchema, len(used)),
+	}
+	for k := range used {
+		if v, ok := base.IdentitySchemas[k]; ok {
+			resp.IdentitySchemas[k] = v
+		}
+	}
+	return resp, nil
+}
+
+func (s *cachedProviderServer) ValidateListResourceConfig(ctx context.Context, req *tfprotov5.ValidateListResourceConfigRequest) (*tfprotov5.ValidateListResourceConfigResponse, error) {
+	if lr, ok := s.ProviderServer.(tfprotov5.ListResourceServer); ok {
+		return lr.ValidateListResourceConfig(ctx, req)
+	}
+	return &tfprotov5.ValidateListResourceConfigResponse{}, nil
+}
+
+func (s *cachedProviderServer) ListResource(ctx context.Context, req *tfprotov5.ListResourceRequest) (*tfprotov5.ListResourceServerStream, error) {
+	if lr, ok := s.ProviderServer.(tfprotov5.ListResourceServer); ok {
+		return lr.ListResource(ctx, req)
+	}
+	return &tfprotov5.ListResourceServerStream{Results: tfprotov5.NoListResults}, nil
+}
+
+func (s *cachedProviderServer) ValidateActionConfig(ctx context.Context, req *tfprotov5.ValidateActionConfigRequest) (*tfprotov5.ValidateActionConfigResponse, error) {
+	if as, ok := s.ProviderServer.(tfprotov5.ActionServer); ok {
+		return as.ValidateActionConfig(ctx, req)
+	}
+	return &tfprotov5.ValidateActionConfigResponse{}, nil
+}
+
+func (s *cachedProviderServer) PlanAction(ctx context.Context, req *tfprotov5.PlanActionRequest) (*tfprotov5.PlanActionResponse, error) {
+	if as, ok := s.ProviderServer.(tfprotov5.ActionServer); ok {
+		return as.PlanAction(ctx, req)
+	}
+	return &tfprotov5.PlanActionResponse{}, nil
+}
+
+func (s *cachedProviderServer) InvokeAction(ctx context.Context, req *tfprotov5.InvokeActionRequest) (*tfprotov5.InvokeActionServerStream, error) {
+	if as, ok := s.ProviderServer.(tfprotov5.ActionServer); ok {
+		return as.InvokeAction(ctx, req)
+	}
+	return &tfprotov5.InvokeActionServerStream{}, nil
+}
+
+
 // MuxedProviders returns the correct test provider (between the sdk version or the framework version)
 func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
 	ctx := context.Background()
@@ -195,10 +418,25 @@ func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
 	// primary is the SDKv2 implementation of the provider
 	// If tests are run in VCR mode, the provider will use a cached config specific to the test name
 	primary := GetSDKProvider(testName)
+	fwServerFactory := providerserver.NewProtocol5(NewFrameworkTestProvider(testName, primary))
 
 	providers := []func() tfprotov5.ProviderServer{
-		primary.GRPCProvider, // sdk provider
-		providerserver.NewProtocol5(NewFrameworkTestProvider(testName, primary)), // framework provider
+		func() tfprotov5.ProviderServer {
+			return &cachedProviderServer{
+				ProviderServer: primary.GRPCProvider(),
+				fullServer:     getFullSDKServer,
+				cache:          &sdkProviderSchemaCache,
+				testName:       testName,
+			}
+		},
+		func() tfprotov5.ProviderServer {
+			return &cachedProviderServer{
+				ProviderServer: fwServerFactory(),
+				fullServer:     getFullFWServer,
+				cache:          &fwProviderSchemaCache,
+				testName:       testName,
+			}
+		},
 	}
 
 	muxServer, err := tf5muxserver.NewMuxServer(ctx, providers...)
@@ -207,7 +445,14 @@ func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
 		return nil, err
 	}
 
-	return muxServer.ProviderServer, nil
+	return func() tfprotov5.ProviderServer {
+		return &cachedProviderServer{
+			ProviderServer: muxServer.ProviderServer(),
+			fullServer:     getFullMuxServer,
+			cache:          &muxProviderSchemaCache,
+			testName:       testName,
+		}
+	}, nil
 }
 
 func RandString(t *testing.T, length int) string {

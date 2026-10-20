@@ -146,6 +146,20 @@ func vcrFileName(name string) string {
 	return strings.ReplaceAll(name, "/", "_")
 }
 
+var googleTypeRegex = regexp.MustCompile(`\bgoogle_[a-z0-9_]+\b`)
+
+var testUsedTypesLock = sync.RWMutex{}
+var testUsedTypes = make(map[string]map[string]struct{})
+
+func getUsedTypesForTest(testName string) map[string]struct{} {
+	if testName == "" {
+		return nil
+	}
+	testUsedTypesLock.RLock()
+	used := testUsedTypes[testName]
+	testUsedTypesLock.RUnlock()
+	return used
+}
 // VcrTest is a wrapper for resource.Test to swap out providers for VCR providers and handle VCR specific things
 // Can be called when VCR is not enabled, and it will behave as normal
 func VcrTest(t *testing.T, c resource.TestCase) {
@@ -167,6 +181,31 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 
 	if !(IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING") {
 		c = extendWithTGCData(t, c)
+	} else {
+		canPruneSchema := true
+		for _, s := range c.Steps {
+			if s.ConfigDirectory != nil || s.ConfigFile != nil {
+				canPruneSchema = false
+				break
+			}
+		}
+		if canPruneSchema {
+			used := map[string]struct{}{
+				"google_provider_config_sdk":              {},
+				"google_provider_config_plugin_framework": {},
+			}
+			for _, s := range c.Steps {
+				for _, m := range googleTypeRegex.FindAllString(s.Config, -1) {
+					used[m] = struct{}{}
+				}
+				for _, m := range googleTypeRegex.FindAllString(s.ResourceName, -1) {
+					used[m] = struct{}{}
+				}
+			}
+			testUsedTypesLock.Lock()
+			testUsedTypes[t.Name()] = used
+			testUsedTypesLock.Unlock()
+		}
 	}
 
 	// terraform_labels is a computed field to which "goog-terraform-provisioned": "true" is always
@@ -247,6 +286,9 @@ func closeRecorder(t *testing.T) {
 		delete(sources, t.Name())
 		sourcesLock.Unlock()
 	}
+	testUsedTypesLock.Lock()
+	delete(testUsedTypes, t.Name())
+	testUsedTypesLock.Unlock()
 }
 
 // HandleVCRConfiguration configures the recorder (github.com/dnaeon/go-vcr/recorder) used in the VCR test
@@ -387,30 +429,75 @@ func (p *frameworkTestProvider) Configure(ctx context.Context, req provider.Conf
 	p.FrameworkProvider.Configure(ctx, req, resp)
 }
 
+var (
+	baseSDKProviderOnce   sync.Once
+	baseSDKProvider       *schema.Provider
+	testFWDataSourcesOnce sync.Once
+	testFWDataSources     []func() datasource.DataSource
+	testFWResourcesOnce   sync.Once
+	testFWResources       []func() fwResource.Resource
+)
+
 // DataSources overrides the provider's DataSources function so that we can append test-specific data sources to the list of data sources on the provider.
 // This makes the data source(s) usable only in the context of acctests, and isn't available to users
 func (p *frameworkTestProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	ds := p.FrameworkProvider.DataSources(ctx)
-	ds = append(ds, fwprovider.NewGoogleProviderConfigPluginFrameworkDataSource) // google_provider_config_plugin_framework
+	testFWDataSourcesOnce.Do(func() {
+		ds := p.FrameworkProvider.DataSources(ctx)
+		testFWDataSources = append(ds, fwprovider.NewGoogleProviderConfigPluginFrameworkDataSource) // google_provider_config_plugin_framework
+	})
 
-	return ds
+	return testFWDataSources
 }
 
 func (p *frameworkTestProvider) Resources(ctx context.Context) []func() fwResource.Resource {
-	r := p.FrameworkProvider.Resources(ctx)
+	testFWResourcesOnce.Do(func() {
+		testFWResources = p.FrameworkProvider.Resources(ctx)
+	})
 
-	return r
+	return testFWResources
+}
+
+func initBaseSDKProvider() *schema.Provider {
+	baseSDKProviderOnce.Do(func() {
+		p := testAccProvider
+		if p == nil {
+			p = tpgprovider.Provider()
+		}
+		// Append a test-specific data source to the list of data sources on the provider
+		// This makes the data source(s) usable only in the context of acctests, and isn't available to users
+		p.DataSourcesMap["google_provider_config_sdk"] = tpgprovider.DataSourceGoogleProviderConfigSdk()
+		baseSDKProvider = p
+	})
+	return baseSDKProvider
 }
 
 // GetSDKProvider gets the SDK provider for use in acceptance tests
 // If VCR is in use, the configure function is overwritten.
 // See usage in MuxedProviders
 func GetSDKProvider(testName string) *schema.Provider {
-	prov := tpgprovider.Provider()
+	base := initBaseSDKProvider()
 
-	// Append a test-specific data source to the list of data sources on the provider
-	// This makes the data source(s) usable only in the context of acctests, and isn't available to users
-	prov.DataSourcesMap["google_provider_config_sdk"] = tpgprovider.DataSourceGoogleProviderConfigSdk()
+	provCopy := *base
+	prov := &provCopy
+
+	if used := getUsedTypesForTest(testName); used != nil {
+		resMap := make(map[string]*schema.Resource, len(used))
+		dsMap := make(map[string]*schema.Resource, len(used))
+		for k := range used {
+			if r, ok := base.ResourcesMap[k]; ok {
+				resMap[k] = r
+			}
+			if d, ok := base.DataSourcesMap[k]; ok {
+				dsMap[k] = d
+			}
+		}
+		prov.ResourcesMap = resMap
+		prov.DataSourcesMap = dsMap
+	}
+
+	prov.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		return tpgprovider.ProviderConfigure(ctx, d, prov)
+	}
 
 	if IsVcrEnabled() {
 		old := prov.ConfigureContextFunc

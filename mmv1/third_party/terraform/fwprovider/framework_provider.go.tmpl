@@ -2,6 +2,7 @@ package fwprovider
 
 import (
     "context"
+    "sync"
 
     sdk_schema "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -70,12 +71,18 @@ func (p *FrameworkProvider) MetaSchema(_ context.Context, _ provider.MetaSchemaR
     }
 }
 
+var (
+    cachedProviderSchema     schema.Schema
+    cachedProviderSchemaOnce sync.Once
+)
+
 // Schema defines the provider-level schema for configuration data.
 // See: https://developer.hashicorp.com/terraform/plugin/framework/migrating/mux
 // "The schema and configuration handling must exactly match between all underlying providers of the mux server"
 // This schema matches the schema implemented with SDKv2 in google/provider/provider.go
 func (p *FrameworkProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
-    resp.Schema = schema.Schema{
+    cachedProviderSchemaOnce.Do(func() {
+        cachedProviderSchema = schema.Schema{
         Attributes: map[string]schema.Attribute{
             "credentials": schema.StringAttribute{
                 Optional: true,
@@ -276,7 +283,9 @@ func (p *FrameworkProvider) Schema(_ context.Context, _ provider.SchemaRequest, 
                 },
             },
         },
-    }
+        }
+    })
+    resp.Schema = cachedProviderSchema
 }
 
 // Configure prepares the metadata/'meta' required for data sources and resources to function.
