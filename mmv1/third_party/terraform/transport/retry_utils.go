@@ -69,10 +69,11 @@ func IsRetryableError(topErr error, retryPredicates, abortPredicates []RetryErro
 		return false
 	}
 
-	retryPredicates = append(
-		// Global error retry predicates are registered in this default list.
-		defaultErrorRetryPredicates,
-		retryPredicates...)
+	// Global error retry predicates are registered in this default list.
+	allRetryPredicates := make([]RetryErrorPredicateFunc, 0, len(defaultErrorRetryPredicates)+len(retryPredicates))
+	allRetryPredicates = append(allRetryPredicates, defaultErrorRetryPredicates...)
+	allRetryPredicates = append(allRetryPredicates, retryPredicates...)
+	retryPredicates = allRetryPredicates
 
 	// Check all wrapped errors for an abortable error status.
 	isAbortable := false
