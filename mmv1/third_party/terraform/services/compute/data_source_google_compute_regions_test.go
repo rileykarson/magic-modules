@@ -69,6 +69,6 @@ func testAccCheckGoogleComputeRegionsMeta(n string) resource.TestCheckFunc {
 	}
 }
 
-var testAccCheckGoogleComputeRegionsConfig = `
+const testAccCheckGoogleComputeRegionsConfig = `
 data "google_compute_regions" "available" {}
 `

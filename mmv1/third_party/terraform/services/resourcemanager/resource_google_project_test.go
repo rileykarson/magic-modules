@@ -21,7 +21,7 @@ import (
 	"github.com/hashicorp/terraform-provider-google/google/services/tags"
 )
 
-var (
+const (
 	TestPrefix = "tf-test"
 )
 

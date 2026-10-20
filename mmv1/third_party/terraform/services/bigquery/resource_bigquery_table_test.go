@@ -6153,7 +6153,7 @@ EOF
 `, project, tagKeyShortName, tagValueShortName, datasetID, tableID)
 }
 
-var TEST_CSV = `lifelock,LifeLock,,web,Tempe,AZ,1-May-07,6850000,USD,b
+const TEST_CSV = `lifelock,LifeLock,,web,Tempe,AZ,1-May-07,6850000,USD,b
 lifelock,LifeLock,,web,Tempe,AZ,1-Oct-06,6000000,USD,a
 lifelock,LifeLock,,web,Tempe,AZ,1-Jan-08,25000000,USD,c
 mycityfaces,MyCityFaces,7,web,Scottsdale,AZ,1-Jan-08,50000,USD,seed
@@ -6163,11 +6163,11 @@ gauto,gAuto,4,web,Scottsdale,AZ,1-Jan-08,250000,USD,seed
 chosenlist-com,ChosenList.com,5,web,Scottsdale,AZ,1-Oct-06,140000,USD,seed
 chosenlist-com,ChosenList.com,5,web,Scottsdale,AZ,25-Jan-08,233750,USD,angel
 `
-var TEST_SIMPLE_CSV = `US,phone,100
+const TEST_SIMPLE_CSV = `US,phone,100
 JP,tablet,300
 UK,laptop,200
 `
-var TEST_SIMPLE_CSV_SCHEMA = `[
+const TEST_SIMPLE_CSV_SCHEMA = `[
     {
       "name": "country",
       "type": "STRING"
@@ -6181,15 +6181,15 @@ var TEST_SIMPLE_CSV_SCHEMA = `[
       "type": "INT64"
     }
   ]`
-var TEST_INVALID_SCHEMA_NOT_JSON = `
+const TEST_INVALID_SCHEMA_NOT_JSON = `
 	not a valid table schema
 	`
-var TEST_INVALID_SCHEMA_NOT_JSON_LIST = `
+const TEST_INVALID_SCHEMA_NOT_JSON_LIST = `
     {
       "name": "country",
       "type": "STRING"
     }`
-var TEST_INVALID_SCHEMA_JSON_LIST_WITH_NULL_ELEMENT = `[
+const TEST_INVALID_SCHEMA_JSON_LIST_WITH_NULL_ELEMENT = `[
     {
       "name": "country",
       "type": "STRING"

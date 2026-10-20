@@ -659,7 +659,7 @@ func matchError(attr, tf interface{}, gcp interface{}) string {
 // }`
 // }
 
-var singleNodeClusterConfig = `
+const singleNodeClusterConfig = `
 resource "google_dataproc_cluster" "basic" {
   name   = "tf-test-dproc-job-%s"
   region = "us-east1"

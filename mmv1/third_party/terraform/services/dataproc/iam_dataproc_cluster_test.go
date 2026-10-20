@@ -225,7 +225,7 @@ data "google_dataproc_cluster_iam_policy" "policy" {
 }
 
 // Smallest cluster possible for testing
-var testDataprocIamSingleNodeCluster = `
+const testDataprocIamSingleNodeCluster = `
 resource "google_dataproc_cluster" "cluster" {
   name   = "%s"
   region = "us-east1"

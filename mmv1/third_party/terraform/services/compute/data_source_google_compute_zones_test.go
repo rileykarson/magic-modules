@@ -124,7 +124,7 @@ func testAccCheckGoogleComputeZonesRegion(n, region string) resource.TestCheckFu
 	}
 }
 
-var testAccComputeZones_basic = `
+const testAccComputeZones_basic = `
 data "google_compute_zones" "available" {}
 `
 

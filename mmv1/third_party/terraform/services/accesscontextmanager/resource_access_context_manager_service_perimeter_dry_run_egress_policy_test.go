@@ -21,7 +21,7 @@ import (
 	cloudresourcemanager "google.golang.org/api/cloudresourcemanager/v1"
 )
 
-var SharedServicePerimeterProjectPrefix = "tf-bootstrap-sp-"
+const SharedServicePerimeterProjectPrefix = "tf-bootstrap-sp-"
 
 func BootstrapServicePerimeterProjects(t *testing.T, desiredProjects int) []*cloudresourcemanager.Project {
 	config := transport_tpg.BootstrapConfig(t)

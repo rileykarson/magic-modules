@@ -245,7 +245,7 @@ resource "google_sql_database" "database" {
 `, instance_name, activationPolicy, database_name)
 }
 
-var testGoogleSqlDatabase_basic = `
+const testGoogleSqlDatabase_basic = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -261,7 +261,7 @@ resource "google_sql_database" "database" {
   instance = google_sql_database_instance.instance.name
 }
 `
-var testGoogleSqlDatabase_latin1 = `
+const testGoogleSqlDatabase_latin1 = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"

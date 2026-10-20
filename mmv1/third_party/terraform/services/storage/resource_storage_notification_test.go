@@ -16,7 +16,7 @@ import (
 	"google.golang.org/api/storage/v1"
 )
 
-var (
+const (
 	payload = "JSON_API_V1"
 )
 

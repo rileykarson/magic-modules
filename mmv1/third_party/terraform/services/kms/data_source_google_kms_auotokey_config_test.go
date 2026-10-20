@@ -24,9 +24,9 @@ import (
 	cloudresourcemanager "google.golang.org/api/cloudresourcemanager/v1"
 )
 
-var DefaultKeyHandleName = "eed58b7b-20ad-4da8-ad85-ba78a0d5ab87"
-var DefaultKeyHandleResourceType = "compute.googleapis.com/Disk"
-var CloudKmsSrviceName = "cloudkms.googleapis.com"
+const DefaultKeyHandleName = "eed58b7b-20ad-4da8-ad85-ba78a0d5ab87"
+const DefaultKeyHandleResourceType = "compute.googleapis.com/Disk"
+const CloudKmsSrviceName = "cloudkms.googleapis.com"
 
 type BootstrappedKMSAutokey struct {
 	*cloudkms.AutokeyConfig

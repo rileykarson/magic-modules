@@ -122,7 +122,7 @@ func testAccDataSourceCheckPublicImage() resource.TestCheckFunc {
 	}
 }
 
-var testAccDataSourcePublicImageConfig = `
+const testAccDataSourcePublicImageConfig = `
 data "google_compute_image" "debian" {
   project = "debian-cloud"
   name    = "debian-13-trixie-v20260827"

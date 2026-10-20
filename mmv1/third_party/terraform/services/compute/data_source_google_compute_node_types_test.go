@@ -73,7 +73,7 @@ func testAccCheckGoogleComputeNodeTypes(n string) resource.TestCheckFunc {
 	}
 }
 
-var testAccDataSourceComputeNodeTypes_basic = `
+const testAccDataSourceComputeNodeTypes_basic = `
 data "google_compute_node_types" "available" {
 	zone = "us-central1-a"
 }

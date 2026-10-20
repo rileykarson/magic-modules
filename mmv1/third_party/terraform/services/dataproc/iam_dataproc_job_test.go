@@ -126,7 +126,7 @@ func TestAccDataprocJobIamPolicy(t *testing.T) {
 	})
 }
 
-var testDataprocIamJobConfig = `
+const testDataprocIamJobConfig = `
 resource "google_dataproc_job" "pyspark" {
   region = google_dataproc_cluster.cluster.region
 

@@ -221,7 +221,7 @@ data "google_bigtable_table_iam_policy" "policy" {
 }
 
 // Smallest instance possible for testing
-var testBigtableTableIam = `
+const testBigtableTableIam = `
 resource "google_bigtable_instance" "instance" {
 	name                  = "%s"
     instance_type         = "DEVELOPMENT"

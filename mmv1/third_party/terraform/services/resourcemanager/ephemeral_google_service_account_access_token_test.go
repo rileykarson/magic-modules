@@ -10,7 +10,7 @@ import (
 	_ "github.com/hashicorp/terraform-provider-google/google/services/resourcemanager"
 )
 
-var defaultMaxLifetime string = "3600s"
+const defaultMaxLifetime string = "3600s"
 
 func TestAccEphemeralServiceAccountToken_basic(t *testing.T) {
 	t.Parallel()

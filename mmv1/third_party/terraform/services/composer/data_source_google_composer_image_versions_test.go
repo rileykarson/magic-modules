@@ -68,7 +68,7 @@ func testAccCheckGoogleComposerImageVersionsMeta(n string) resource.TestCheckFun
 	}
 }
 
-var testAccCheckGoogleComposerImageVersionsConfig = `
+const testAccCheckGoogleComposerImageVersionsConfig = `
 data "google_composer_image_versions" "versions" {
 }
 `

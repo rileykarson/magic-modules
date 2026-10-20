@@ -6078,7 +6078,7 @@ resource "google_sql_database_instance" "mysql_pvp_instance_name" {
 `, context)
 }
 
-var testGoogleSqlDatabaseInstance_basic2 = `
+const testGoogleSqlDatabaseInstance_basic2 = `
 resource "google_sql_database_instance" "instance" {
   region              = "us-central1"
   database_version    = "MYSQL_5_7"
@@ -6089,7 +6089,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic3 = `
+const testGoogleSqlDatabaseInstance_basic3 = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -6101,7 +6101,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic3_update = `
+const testGoogleSqlDatabaseInstance_basic3_update = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -6113,7 +6113,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic_mssql = `
+const testGoogleSqlDatabaseInstance_basic_mssql = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   database_version    = "SQLSERVER_2022_STANDARD"
@@ -6126,7 +6126,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_sqlServer2025 = `
+const testGoogleSqlDatabaseInstance_sqlServer2025 = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   database_version    = "SQLSERVER_2025_STANDARD"
@@ -6138,7 +6138,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_sqlServer2025Enterprise = `
+const testGoogleSqlDatabaseInstance_sqlServer2025Enterprise = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   database_version    = "SQLSERVER_2025_ENTERPRISE"
@@ -6150,7 +6150,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic_mssql_wo_password = `
+const testGoogleSqlDatabaseInstance_basic_mssql_wo_password = `
 resource "google_sql_database_instance" "instance" {
   name                     = "%s"
   database_version         = "SQLSERVER_2022_STANDARD"
@@ -6164,7 +6164,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic_mssql_wo_password_update = `
+const testGoogleSqlDatabaseInstance_basic_mssql_wo_password_update = `
 resource "google_sql_database_instance" "instance" {
   name                     = "%s"
   database_version         = "SQLSERVER_2022_STANDARD"
@@ -6178,7 +6178,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic_mssql_with_entraid = `
+const testGoogleSqlDatabaseInstance_basic_mssql_with_entraid = `
 resource "google_sql_database_instance" "instance" {
   name             = "%s"
   region           = "us-west2"
@@ -6195,7 +6195,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_update_mssql = `
+const testGoogleSqlDatabaseInstance_update_mssql = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   database_version    = "SQLSERVER_2022_STANDARD"
@@ -8785,7 +8785,7 @@ resource "google_sql_database_instance" "clone1" {
 `, networkName, databaseName, databaseName, addressRangeName)
 }
 
-var testGoogleSqlDatabaseInstance_settings = `
+const testGoogleSqlDatabaseInstance_settings = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -8816,7 +8816,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_settings_secondary = `
+const testGoogleSqlDatabaseInstance_settings_secondary = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -8852,7 +8852,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_settings_deletionProtection = `
+const testGoogleSqlDatabaseInstance_settings_deletionProtection = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -8883,7 +8883,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_maintenanceVersionWithOldVersion = `
+const testGoogleSqlDatabaseInstance_maintenanceVersionWithOldVersion = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -8896,7 +8896,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_settings_deletionProtectionEnabled = `
+const testGoogleSqlDatabaseInstance_settings_deletionProtectionEnabled = `
 resource "google_sql_database_instance" "instance" {
   name                        = "%s"
   region                      = "us-central1"
@@ -8909,7 +8909,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_settings_checkServiceNetworking = `
+const testGoogleSqlDatabaseInstance_settings_checkServiceNetworking = `
 resource "google_compute_network" "servicenet" {
   name                    = "%s"
 }
@@ -8929,7 +8929,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_replica = `
+const testGoogleSqlDatabaseInstance_replica = `
 resource "google_sql_database_instance" "instance_master" {
   name                = "tf-test-%d"
   database_version    = "MYSQL_5_7"
@@ -8999,7 +8999,7 @@ resource "google_sql_database_instance" "replica2" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_slave = `
+const testGoogleSqlDatabaseInstance_slave = `
 resource "google_sql_database_instance" "instance_master" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9030,7 +9030,7 @@ resource "google_sql_database_instance" "instance_slave" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_highAvailability = `
+const testGoogleSqlDatabaseInstance_highAvailability = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9050,7 +9050,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_diskspecs = `
+const testGoogleSqlDatabaseInstance_diskspecs = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9102,7 +9102,7 @@ resource "google_sql_database_instance" "instance" {
 }`, databaseName, iops, throughput)
 }
 
-var testGoogleSqlDatabaseInstance_maintenance = `
+const testGoogleSqlDatabaseInstance_maintenance = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9121,7 +9121,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_maintenance_update = `
+const testGoogleSqlDatabaseInstance_maintenance_update = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9138,7 +9138,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_maintenance_week5 = `
+const testGoogleSqlDatabaseInstance_maintenance_week5 = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9157,7 +9157,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_authNets_step1 = `
+const testGoogleSqlDatabaseInstance_authNets_step1 = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9177,7 +9177,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_authNets_step2 = `
+const testGoogleSqlDatabaseInstance_authNets_step2 = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9193,7 +9193,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_multipleOperations = `
+const testGoogleSqlDatabaseInstance_multipleOperations = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%s"
   region              = "us-central1"
@@ -9217,7 +9217,7 @@ resource "google_sql_user" "user" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_basic_with_user_labels = `
+const testGoogleSqlDatabaseInstance_basic_with_user_labels = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -9232,7 +9232,7 @@ resource "google_sql_database_instance" "instance" {
   }
 }
 `
-var testGoogleSqlDatabaseInstance_basic_with_user_labels_update = `
+const testGoogleSqlDatabaseInstance_basic_with_user_labels_update = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -9247,7 +9247,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_insights = `
+const testGoogleSqlDatabaseInstance_insights = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9269,7 +9269,7 @@ resource "google_sql_database_instance" "instance" {
 `
 
 {{- if ne $.TargetVersionName "ga" }}
-var testGoogleSqlDatabaseInstance_performanceCaptureConfig = `
+const testGoogleSqlDatabaseInstance_performanceCaptureConfig = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9304,7 +9304,7 @@ resource "google_sql_database_instance" "instance" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_performanceCaptureConfig_update = `
+const testGoogleSqlDatabaseInstance_performanceCaptureConfig_update = `
 resource "google_sql_database_instance" "instance" {
   name                = "tf-test-%d"
   region              = "us-central1"
@@ -9397,7 +9397,7 @@ resource "google_sql_database_instance" "master" {
 }
 `, context)
 }
-var testGoogleSqlDatabaseInstance_encryptionKey = `
+const testGoogleSqlDatabaseInstance_encryptionKey = `
 data "google_project" "project" {
   project_id = "%{project_id}"
 }
@@ -9452,7 +9452,7 @@ resource "google_sql_database_instance" "replica" {
 }
 `
 
-var testGoogleSqlDatabaseInstance_encryptionKey_replicaInDifferentRegion = `
+const testGoogleSqlDatabaseInstance_encryptionKey_replicaInDifferentRegion = `
 
 data "google_project" "project" {
   project_id = "%{project_id}"

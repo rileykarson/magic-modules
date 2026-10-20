@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
-var interconnectLoc = "z2z-us-west8-zone2-ncphxk-z"
+const interconnectLoc = "z2z-us-west8-zone2-ncphxk-z"
 
 func testAccDataSourceCheckInterconnectLocation() func(s *terraform.State) error {
 	return func(s *terraform.State) error {

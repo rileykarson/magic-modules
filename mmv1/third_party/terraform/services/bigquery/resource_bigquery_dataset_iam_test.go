@@ -256,7 +256,7 @@ data "google_bigquery_dataset_iam_policy" "policy" {
 `, dataset, account, role)
 }
 
-var testBigqueryDatasetIam = `
+const testBigqueryDatasetIam = `
 resource "google_bigquery_dataset" "dataset" {
   dataset_id = "%s"
 }

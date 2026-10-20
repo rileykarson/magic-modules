@@ -13,13 +13,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
-var (
+const (
 	roleEntityBasic1        = "OWNER:user-gterraformtest1@gmail.com"
 	roleEntityBasic1_reader = "READER:user-gterraformtest1@gmail.com"
 	roleEntityBasic2        = "READER:user-gterraformtest2@gmail.com"
 	roleEntityBasic3_owner  = "OWNER:user-paddy@paddy.io"
 	roleEntityBasic3_reader = "READER:user-foran.paddy@gmail.com"
+)
 
+var (
 	roleEntityOwners  = "OWNER:project-owners-" + os.Getenv("GOOGLE_PROJECT_NUMBER")
 	roleEntityEditors = "OWNER:project-editors-" + os.Getenv("GOOGLE_PROJECT_NUMBER")
 	roleEntityViewers = "READER:project-viewers-" + os.Getenv("GOOGLE_PROJECT_NUMBER")

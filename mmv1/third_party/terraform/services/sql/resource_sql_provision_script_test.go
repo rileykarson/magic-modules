@@ -71,7 +71,7 @@ func TestAccSqlProvisionScript_iam_postgres(t *testing.T) {
 	})
 }
 
-var testGoogleSqlProvisionScript_iam_mysql = `
+const testGoogleSqlProvisionScript_iam_mysql = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -107,7 +107,7 @@ resource "google_sql_provision_script" "script" {
 }
 `
 
-var testGoogleSqlProvisionScript_iam_postgres = `
+const testGoogleSqlProvisionScript_iam_postgres = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -211,7 +211,7 @@ func TestAccSqlProvisionScript_secret_postgres(t *testing.T) {
 	})
 }
 
-var testGoogleSqlProvisionScript_secret_mysql = `
+const testGoogleSqlProvisionScript_secret_mysql = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"
@@ -260,7 +260,7 @@ resource "google_sql_provision_script" "script" {
 }
 `
 
-var testGoogleSqlProvisionScript_secret_postgres = `
+const testGoogleSqlProvisionScript_secret_postgres = `
 resource "google_sql_database_instance" "instance" {
   name                = "%s"
   region              = "us-central1"

@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-var runOrgIamAuditConfigTestEnvVar = "TF_RUN_ORG_IAM_AUDIT_CONFIG"
+const runOrgIamAuditConfigTestEnvVar = "TF_RUN_ORG_IAM_AUDIT_CONFIG"
 
 func organizationIamAuditConfigImportStep(resourceName, org, service string) resource.TestStep {
 	return resource.TestStep{
