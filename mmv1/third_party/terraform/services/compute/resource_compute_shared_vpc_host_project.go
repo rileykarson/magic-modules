@@ -31,16 +31,18 @@ func ResourceComputeSharedVpcHostProject() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The ID of the project that will serve as a Shared VPC host project`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The ID of the project that will serve as a Shared VPC host project`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

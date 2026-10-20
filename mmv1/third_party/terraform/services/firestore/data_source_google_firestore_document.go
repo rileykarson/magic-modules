@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleFirestoreDocument() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirestoreDocument().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "collection")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "document_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "database")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   DataSourceGoogleFirestoreDocumentRead,
-		Schema: dsSchema,
+		Read: DataSourceGoogleFirestoreDocumentRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirestoreDocument().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "collection")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "document_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "database")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

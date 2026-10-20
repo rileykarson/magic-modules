@@ -39,120 +39,122 @@ func ResourceRecaptchaEnterpriseKey() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"display_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Human-readable display name of this key. Modifiable by user.",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"display_name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "Human-readable display name of this key. Modifiable by user.",
+				},
 
-			"android_settings": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Settings for keys that can be used by Android apps.",
-				MaxItems:      1,
-				Elem:          RecaptchaEnterpriseKeyAndroidSettingsSchema(),
-				ConflictsWith: []string{"web_settings", "ios_settings", "express_settings", "universal_settings"},
-			},
+				"android_settings": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Settings for keys that can be used by Android apps.",
+					MaxItems:      1,
+					Elem:          RecaptchaEnterpriseKeyAndroidSettingsSchema(),
+					ConflictsWith: []string{"web_settings", "ios_settings", "express_settings", "universal_settings"},
+				},
 
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
-			},
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
+				},
 
-			"express_settings": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				ForceNew:      true,
-				Description:   "Settings for keys that can be used by reCAPTCHA Express.",
-				MaxItems:      1,
-				Elem:          RecaptchaEnterpriseKeyExpressSettingsSchema(),
-				ConflictsWith: []string{"web_settings", "android_settings", "ios_settings", "universal_settings"},
-			},
+				"express_settings": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					ForceNew:      true,
+					Description:   "Settings for keys that can be used by reCAPTCHA Express.",
+					MaxItems:      1,
+					Elem:          RecaptchaEnterpriseKeyExpressSettingsSchema(),
+					ConflictsWith: []string{"web_settings", "android_settings", "ios_settings", "universal_settings"},
+				},
 
-			"ios_settings": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Settings for keys that can be used by iOS apps.",
-				MaxItems:      1,
-				Elem:          RecaptchaEnterpriseKeyIosSettingsSchema(),
-				ConflictsWith: []string{"web_settings", "android_settings", "express_settings", "universal_settings"},
-			},
+				"ios_settings": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Settings for keys that can be used by iOS apps.",
+					MaxItems:      1,
+					Elem:          RecaptchaEnterpriseKeyIosSettingsSchema(),
+					ConflictsWith: []string{"web_settings", "android_settings", "express_settings", "universal_settings"},
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"testing_options": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				Description: "Options for user acceptance testing.",
-				MaxItems:    1,
-				Elem:        RecaptchaEnterpriseKeyTestingOptionsSchema(),
-			},
+				"testing_options": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					ForceNew:    true,
+					Description: "Options for user acceptance testing.",
+					MaxItems:    1,
+					Elem:        RecaptchaEnterpriseKeyTestingOptionsSchema(),
+				},
 
-			"universal_settings": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				ForceNew:      true,
-				Description:   "Settings for keys that can be used by universal frontend integrations.",
-				MaxItems:      1,
-				Elem:          RecaptchaEnterpriseKeyUniversalSettingsSchema(),
-				ConflictsWith: []string{"web_settings", "android_settings", "ios_settings", "express_settings"},
-			},
+				"universal_settings": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					ForceNew:      true,
+					Description:   "Settings for keys that can be used by universal frontend integrations.",
+					MaxItems:      1,
+					Elem:          RecaptchaEnterpriseKeyUniversalSettingsSchema(),
+					ConflictsWith: []string{"web_settings", "android_settings", "ios_settings", "express_settings"},
+				},
 
-			"waf_settings": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				Description: "Settings specific to keys that can be used for WAF (Web Application Firewall).",
-				MaxItems:    1,
-				Elem:        RecaptchaEnterpriseKeyWafSettingsSchema(),
-			},
+				"waf_settings": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					ForceNew:    true,
+					Description: "Settings specific to keys that can be used for WAF (Web Application Firewall).",
+					MaxItems:    1,
+					Elem:        RecaptchaEnterpriseKeyWafSettingsSchema(),
+				},
 
-			"web_settings": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Settings for keys that can be used by websites.",
-				MaxItems:      1,
-				Elem:          RecaptchaEnterpriseKeyWebSettingsSchema(),
-				ConflictsWith: []string{"android_settings", "ios_settings", "express_settings", "universal_settings"},
-			},
+				"web_settings": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Settings for keys that can be used by websites.",
+					MaxItems:      1,
+					Elem:          RecaptchaEnterpriseKeyWebSettingsSchema(),
+					ConflictsWith: []string{"android_settings", "ios_settings", "express_settings", "universal_settings"},
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The timestamp corresponding to the creation of this Key.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The timestamp corresponding to the creation of this Key.",
+				},
 
-			"labels": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "See [Creating and managing labels](https://cloud.google.com/recaptcha-enterprise/docs/labels).\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"labels": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "See [Creating and managing labels](https://cloud.google.com/recaptcha-enterprise/docs/labels).\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The resource id for the Key, which is the same as the Site Key itself.",
-			},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The resource id for the Key, which is the same as the Site Key itself.",
+				},
 
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

@@ -15,43 +15,45 @@ import (
 func DataSourceGoogleBillingAccount() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceBillingAccountRead,
-		Schema: map[string]*schema.Schema{
-			"billing_account": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"display_name"},
-			},
-			"display_name": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"billing_account"},
-			},
-			"open": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"project_ids": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"billing_account": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"display_name"},
 				},
-			},
-			"lookup_projects": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"currency_code": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"display_name": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"billing_account"},
+				},
+				"open": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"project_ids": {
+					Type:     schema.TypeSet,
+					Computed: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+				"lookup_projects": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  true,
+				},
+				"currency_code": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

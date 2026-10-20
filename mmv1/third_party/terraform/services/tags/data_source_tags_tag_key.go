@@ -18,43 +18,45 @@ func DataSourceGoogleTagsTagKey() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleTagsTagKeyRead,
 
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"short_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"namespaced_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"update_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"allowed_values_regex": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"short_name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"namespaced_name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"update_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"allowed_values_regex": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

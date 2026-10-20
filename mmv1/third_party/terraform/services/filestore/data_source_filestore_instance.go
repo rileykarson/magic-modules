@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleFilestoreInstance() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFilestoreInstance().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleFilestoreInstanceRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleFilestoreInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFilestoreInstance().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			return dsSchema
+		},
 	}
 }
 

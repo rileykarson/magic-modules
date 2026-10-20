@@ -28,8 +28,8 @@ func resourceOrgPolicyPolicySpecRulesDiffSuppress(k, o, n string, d *schema.Reso
 		}
 	}
 
-	oldSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().Schema["spec"].Elem.(*schema.Resource).Schema["rules"].Elem.(*schema.Resource)), old)
-	newSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().Schema["spec"].Elem.(*schema.Resource).Schema["rules"].Elem.(*schema.Resource)), new)
+	oldSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().SchemaMap()["spec"].Elem.(*schema.Resource).SchemaMap()["rules"].Elem.(*schema.Resource)), old)
+	newSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().SchemaMap()["spec"].Elem.(*schema.Resource).SchemaMap()["rules"].Elem.(*schema.Resource)), new)
 
 	return oldSet.Equal(newSet)
 }
@@ -57,8 +57,8 @@ func resourceOrgPolicyPolicyDryRunSpecRulesDiffSuppress(k, o, n string, d *schem
 		}
 	}
 
-	oldSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().Schema["dry_run_spec"].Elem.(*schema.Resource).Schema["rules"].Elem.(*schema.Resource)), old)
-	newSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().Schema["dry_run_spec"].Elem.(*schema.Resource).Schema["rules"].Elem.(*schema.Resource)), new)
+	oldSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().SchemaMap()["dry_run_spec"].Elem.(*schema.Resource).SchemaMap()["rules"].Elem.(*schema.Resource)), old)
+	newSet := schema.NewSet(schema.HashResource(ResourceOrgPolicyPolicy().SchemaMap()["dry_run_spec"].Elem.(*schema.Resource).SchemaMap()["rules"].Elem.(*schema.Resource)), new)
 
 	return oldSet.Equal(newSet)
 }

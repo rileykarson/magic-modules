@@ -10,12 +10,13 @@ import (
 )
 
 func DataSourceVmwareengineExternalAddress() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineExternalAddress().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineExternalAddressRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineExternalAddressRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineExternalAddress().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
+			return dsSchema
+		},
 	}
 }
 

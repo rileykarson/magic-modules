@@ -14,51 +14,53 @@ import (
 func DataSourceArtifactRegistryRepositories() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryRepositoriesRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"name_filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"repositories": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"repository_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"format": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"name_filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"repositories": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"repository_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"format": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

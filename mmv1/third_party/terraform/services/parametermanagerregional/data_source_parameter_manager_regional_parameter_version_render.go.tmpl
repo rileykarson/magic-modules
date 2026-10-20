@@ -16,7 +16,8 @@ import (
 func DataSourceParameterManagerRegionalRegionalParameterVersionRender() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceParameterManagerRegionalRegionalParameterVersionRenderRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -54,6 +55,7 @@ func DataSourceParameterManagerRegionalRegionalParameterVersionRender() *schema.
 				Type:     schema.TypeBool,
 				Computed: true,
 			},
+		}
 		},
 	}
 }

@@ -35,7 +35,8 @@ func ResourceComputeProjectMetadataItem() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"key": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -57,6 +58,7 @@ func ResourceComputeProjectMetadataItem() *schema.Resource {
 			//UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 
 		Timeouts: &schema.ResourceTimeout{

@@ -14,25 +14,27 @@ func DataSourceGoogleComputeForwardingRules() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeForwardingRulesRead,
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"rules": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeForwardingRule().Schema),
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+
+				"rules": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeForwardingRule().SchemaMap()),
+					},
+				},
+			}
 		},
 	}
 }

@@ -24,72 +24,73 @@ type DockerImage struct {
 }
 
 func DataSourceArtifactRegistryDockerImage() *schema.Resource {
-
 	return &schema.Resource{
 		Read: DataSourceArtifactRegistryDockerImageRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The region of the artifact registry repository. For example, "us-west1".`,
-			},
-			"repository_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The last part of the repository name to fetch from.`,
-			},
-			"image_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The image name to fetch.`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The fully qualified name of the fetched image.`,
-			},
-			"self_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The URI to access the image.`,
-			},
-			"tags": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `All tags associated with the image.`,
-			},
-			"image_size_bytes": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Calculated size of the image in bytes.`,
-			},
-			"media_type": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Media type of this image.`,
-			},
-			"upload_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time, as a RFC 3339 string, the image was uploaded.`,
-			},
-			"build_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time, as a RFC 3339 string, this image was built.`,
-			},
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time, as a RFC 3339 string, this image was updated.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The region of the artifact registry repository. For example, "us-west1".`,
+				},
+				"repository_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The last part of the repository name to fetch from.`,
+				},
+				"image_name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The image name to fetch.`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The fully qualified name of the fetched image.`,
+				},
+				"self_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The URI to access the image.`,
+				},
+				"tags": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `All tags associated with the image.`,
+				},
+				"image_size_bytes": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Calculated size of the image in bytes.`,
+				},
+				"media_type": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Media type of this image.`,
+				},
+				"upload_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The time, as a RFC 3339 string, the image was uploaded.`,
+				},
+				"build_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The time, as a RFC 3339 string, this image was built.`,
+				},
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The time, as a RFC 3339 string, this image was updated.`,
+				},
+			}
 		},
 	}
 }

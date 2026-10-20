@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceOracleDatabaseCloudExadataInfrastructure() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseCloudExadataInfrastructure().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "cloud_exadata_infrastructure_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseCloudExadataInfrastructureRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseCloudExadataInfrastructureRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseCloudExadataInfrastructure().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "cloud_exadata_infrastructure_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceOracleDatabaseCloudExadataInfrastructureRead(d *schema.ResourceData, meta interface{}) error {

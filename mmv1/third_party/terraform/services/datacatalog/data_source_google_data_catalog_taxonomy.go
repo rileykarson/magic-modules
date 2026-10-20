@@ -13,35 +13,37 @@ func DataSourceGoogleDataCatalogTaxonomy() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleDataCatalogTaxonomyRead,
 
-		Schema: map[string]*schema.Schema{
-			"display_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"activated_policy_types": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"display_name": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"activated_policy_types": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+			}
 		},
 	}
 }

@@ -17,38 +17,40 @@ import (
 func DataSourceGoogleStorageControlProjectIntelligenceFindingRevisions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleStorageControlProjectIntelligenceFindingRevisionsRead,
-		Schema: map[string]*schema.Schema{
-			"finding_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The ID of the intelligence finding.`,
-			},
-			"page_size": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     100,
-				Description: `The maximum number of IntelligenceFindingRevision resources to return.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "global",
-				Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			"revisions": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The list of intelligence finding revisions.`,
-				Elem: &schema.Resource{
-					Schema: storageControlProjectIntelligenceFindingRevisionSchema(),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"finding_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The ID of the intelligence finding.`,
 				},
-			},
+				"page_size": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Default:     100,
+					Description: `The maximum number of IntelligenceFindingRevision resources to return.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				"revisions": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The list of intelligence finding revisions.`,
+					Elem: &schema.Resource{
+						Schema: storageControlProjectIntelligenceFindingRevisionSchema(),
+					},
+				},
+			}
 		},
 	}
 }

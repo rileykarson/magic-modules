@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceVertexAIIndex() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVertexAIIndex().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "region")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceVertexAIIndexRead,
-		Schema: dsSchema,
+		Read: dataSourceVertexAIIndexRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVertexAIIndex().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "region")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

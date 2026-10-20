@@ -17,13 +17,13 @@ import (
 )
 
 func DataSourceGoogleCloudIdentityGroupMemberships() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudIdentityGroupMembership().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudIdentityGroupMembershipsRead,
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudIdentityGroupMembership().SchemaMap())
+			return map[string]*schema.Schema{
 			"memberships": {
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -39,6 +39,7 @@ func DataSourceGoogleCloudIdentityGroupMemberships() *schema.Resource {
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 				Description:      `The name of the Group to get memberships from.`,
 			},
+		}
 		},
 	}
 }

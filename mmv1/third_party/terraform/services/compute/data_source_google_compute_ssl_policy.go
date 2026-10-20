@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleComputeSslPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeSslPolicy().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   datasourceComputeSslPolicyRead,
-		Schema: dsSchema,
+		Read: datasourceComputeSslPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeSslPolicy().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

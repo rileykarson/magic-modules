@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceGoogleSourceRepoRepository() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSourceRepoRepository().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleSourceRepoRepositoryRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleSourceRepoRepositoryRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSourceRepoRepository().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

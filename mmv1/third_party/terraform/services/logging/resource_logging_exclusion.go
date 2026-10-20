@@ -49,7 +49,9 @@ func ResourceLoggingExclusion(parentSpecificSchema map[string]*schema.Schema, ne
 			State: resourceLoggingExclusionImportState(resourceIdParser),
 		},
 
-		Schema:        tpgresource.MergeSchemas(LoggingExclusionBaseSchema, parentSpecificSchema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(LoggingExclusionBaseSchema, parentSpecificSchema)
+		},
 		UseJSONNumber: true,
 	}
 }

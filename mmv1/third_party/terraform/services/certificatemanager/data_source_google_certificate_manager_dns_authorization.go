@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceGoogleCertificateManagerDnsAuthorization() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerDnsAuthorization().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "domain")
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCertificateManagerDnsAuthorizationRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCertificateManagerDnsAuthorizationRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerDnsAuthorization().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "domain")
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			return dsSchema
+		},
 	}
 }
 

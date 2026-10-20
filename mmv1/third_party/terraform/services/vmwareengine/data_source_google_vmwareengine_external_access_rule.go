@@ -10,12 +10,13 @@ import (
 )
 
 func DataSourceVmwareengineExternalAccessRule() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineExternalAccessRule().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineExternalAccessRuleRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineExternalAccessRuleRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineExternalAccessRule().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
+			return dsSchema
+		},
 	}
 }
 

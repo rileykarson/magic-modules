@@ -10,34 +10,35 @@ import (
 )
 
 func DataSourceAlloydbDatabaseInstance() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceAlloydbInstance().Schema)
-	// Set custom fields
-	dsScema_cluster_id := map[string]*schema.Schema{
-		"cluster_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: `The ID of the alloydb cluster that the instance belongs to.'alloydb_cluster_id'`,
-		},
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: `Project ID of the project.`,
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: `The canonical ID for the location. For example: "us-east1".`,
-		},
-	}
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
-
-	// Set 'Required' schema elements
-	dsSchema_m := tpgresource.MergeSchemas(dsScema_cluster_id, dsSchema)
-
 	return &schema.Resource{
-		Read:   dataSourceAlloydbDatabaseInstanceRead,
-		Schema: dsSchema_m,
+		Read: dataSourceAlloydbDatabaseInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceAlloydbInstance().SchemaMap())
+			// Set custom fields
+			dsScema_cluster_id := map[string]*schema.Schema{
+				"cluster_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The ID of the alloydb cluster that the instance belongs to.'alloydb_cluster_id'`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The canonical ID for the location. For example: "us-east1".`,
+				},
+			}
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
+
+			// Set 'Required' schema elements
+			dsSchema_m := tpgresource.MergeSchemas(dsScema_cluster_id, dsSchema)
+			return dsSchema_m
+		},
 	}
 }
 

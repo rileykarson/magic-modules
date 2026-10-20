@@ -9,15 +9,16 @@ import (
 )
 
 func DataSourceGoogleProjectOrganizationPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectOrganizationPolicy().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "constraint")
-
 	return &schema.Resource{
-		Read:   datasourceGoogleProjectOrganizationPolicyRead,
-		Schema: dsSchema,
+		Read: datasourceGoogleProjectOrganizationPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectOrganizationPolicy().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "constraint")
+			return dsSchema
+		},
 	}
 }
 

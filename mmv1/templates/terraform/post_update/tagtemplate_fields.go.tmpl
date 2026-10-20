@@ -33,7 +33,7 @@ for _, raw := range n.(*schema.Set).List() {
 
 // fields schema to create schema.set below
 dataCatalogTagTemplateFieldsSchema := &schema.Resource{
-    Schema: ResourceDataCatalogTagTemplate().Schema["fields"].Elem.(*schema.Resource).Schema,
+    Schema: ResourceDataCatalogTagTemplate().SchemaMap()["fields"].Elem.(*schema.Resource).SchemaMap(),
 }
 
 for name, change := range vals {

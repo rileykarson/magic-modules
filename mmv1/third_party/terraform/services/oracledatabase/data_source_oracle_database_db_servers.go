@@ -10,100 +10,102 @@ import (
 )
 
 func DataSourceOracleDatabaseDbServers() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "location",
-		},
-		"cloud_exadata_infrastructure": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "exadata",
-		},
-		"db_servers": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"display_name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The Display name",
-					},
-					"properties": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Resource{
-							Schema: map[string]*schema.Schema{
-								"ocid": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"ocpu_count": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"max_ocpu_count": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"memory_size_gb": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"max_memory_size_gb": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"db_node_storage_size_gb": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"max_db_node_storage_size_gb": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"vm_count": {
-									Type:        schema.TypeInt,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"state": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "Output only",
-								},
-								"db_node_ids": {
-									Type:        schema.TypeList,
-									Computed:    true,
-									Description: "Output only",
-									Elem: &schema.Schema{
-										Type: schema.TypeString,
+	return &schema.Resource{
+		Read: DataSourceOracleDatabaseDbServersRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "location",
+				},
+				"cloud_exadata_infrastructure": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "exadata",
+				},
+				"db_servers": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"display_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The Display name",
+							},
+							"properties": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"ocid": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"ocpu_count": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"max_ocpu_count": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"memory_size_gb": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"max_memory_size_gb": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"db_node_storage_size_gb": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"max_db_node_storage_size_gb": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"vm_count": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"state": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "Output only",
+										},
+										"db_node_ids": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Description: "Output only",
+											Elem: &schema.Schema{
+												Type: schema.TypeString,
+											},
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-	return &schema.Resource{
-		Read:          DataSourceOracleDatabaseDbServersRead,
-		Schema:        dsSchema,
 		UseJSONNumber: true,
 	}
 }

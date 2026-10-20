@@ -59,56 +59,58 @@ func ParseComputeInterconnectLocationId(id string, config *transport_tpg.Config)
 func DataSourceGoogleComputeInterconnectLocation() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeInterconnectLocationRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"self_link": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"peeringdb_facility_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"address": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"facility_provider": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"facility_provider_facility_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"continent": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"city": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"availability_zone": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"status": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"self_link": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"peeringdb_facility_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"address": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"facility_provider": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"facility_provider_facility_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"continent": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"city": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"availability_zone": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"status": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

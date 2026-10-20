@@ -13,15 +13,15 @@ import (
 )
 
 func DataSourceGoogleRuntimeconfigVariable() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceRuntimeconfigVariable().Schema)
+	return &schema.Resource{
+		Read:   dataSourceGoogleRuntimeconfigVariableRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceRuntimeconfigVariable().SchemaMap())
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent")
 	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
-	return &schema.Resource{
-		Read:   dataSourceGoogleRuntimeconfigVariableRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 

@@ -10,14 +10,14 @@ import (
 )
 
 func DataSourceGoogleStorageInsightsDatasetConfig() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageInsightsDatasetConfig().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "dataset_config_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleStorageInsightsDatasetConfigRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleStorageInsightsDatasetConfigRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageInsightsDatasetConfig().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "dataset_config_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

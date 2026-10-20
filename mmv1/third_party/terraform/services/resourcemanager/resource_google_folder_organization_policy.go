@@ -35,20 +35,22 @@ func ResourceGoogleFolderOrganizationPolicy() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: tpgresource.MergeSchemas(
-			schemaOrganizationPolicy,
-			map[string]*schema.Schema{
-				"folder": {
-					Type:        schema.TypeString,
-					Required:    true,
-					ForceNew:    true,
-					Description: `The resource name of the folder to set the policy for. Its format is folders/{folder_id}.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(
+				schemaOrganizationPolicy,
+				map[string]*schema.Schema{
+					"folder": {
+						Type:        schema.TypeString,
+						Required:    true,
+						ForceNew:    true,
+						Description: `The resource name of the folder to set the policy for. Its format is folders/{folder_id}.`,
+					},
+					//UDP schema start
+					"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+					//UDP schema end
 				},
-				//UDP schema start
-				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-				//UDP schema end
-			},
-		),
+			)
+		},
 		UseJSONNumber: true,
 	}
 }

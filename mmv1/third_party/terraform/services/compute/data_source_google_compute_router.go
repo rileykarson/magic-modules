@@ -9,15 +9,16 @@ import (
 )
 
 func DataSourceGoogleComputeRouter() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRouter().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "network")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceComputeRouterRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeRouterRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRouter().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "network")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

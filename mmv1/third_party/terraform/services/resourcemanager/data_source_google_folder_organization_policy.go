@@ -9,15 +9,16 @@ import (
 )
 
 func DataSourceGoogleFolderOrganizationPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleFolderOrganizationPolicy().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "folder")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "constraint")
-
 	return &schema.Resource{
-		Read:   datasourceGoogleFolderOrganizationPolicyRead,
-		Schema: dsSchema,
+		Read: datasourceGoogleFolderOrganizationPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleFolderOrganizationPolicy().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "folder")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "constraint")
+			return dsSchema
+		},
 	}
 }
 

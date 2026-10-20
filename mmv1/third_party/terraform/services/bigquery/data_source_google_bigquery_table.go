@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleBigQueryTable() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBigQueryTable().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "dataset_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "table_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceBigQueryTableRead,
-		Schema: dsSchema,
+		Read: dataSourceBigQueryTableRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBigQueryTable().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "dataset_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "table_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

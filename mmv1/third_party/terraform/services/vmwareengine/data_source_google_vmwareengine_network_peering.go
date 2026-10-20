@@ -10,13 +10,14 @@ import (
 )
 
 func DataSourceVmwareengineNetworkPeering() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetworkPeering().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineNetworkPeeringRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineNetworkPeeringRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetworkPeering().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

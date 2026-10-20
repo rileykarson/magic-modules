@@ -158,7 +158,9 @@ func ResourceLoggingProjectBucketConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: resourceLoggingBucketConfigImportState("project"),
 		},
-		Schema:        loggingProjectBucketConfigSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return loggingProjectBucketConfigSchema
+		},
 		UseJSONNumber: true,
 	}
 }

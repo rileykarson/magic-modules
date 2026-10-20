@@ -12,28 +12,30 @@ import (
 func DataSourceSqlDatabaseInstanceLatestRecoveryTime() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSqlDatabaseInstanceLatestRecoveryTimeRead,
-		Schema: map[string]*schema.Schema{
-			"instance": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-				ForceNew: true,
-			},
-			"latest_recovery_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Timestamp, identifies the latest recovery time of the source instance.`,
-			},
-			"source_instance_deletion_time": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Timestamp, identifies when the source instance was deleted. If this instance is deleted, then you must set the timestamp.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"instance": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+					ForceNew: true,
+				},
+				"latest_recovery_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Timestamp, identifies the latest recovery time of the source instance.`,
+				},
+				"source_instance_deletion_time": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Timestamp, identifies when the source instance was deleted. If this instance is deleted, then you must set the timestamp.`,
+				},
+			}
 		},
 	}
 }

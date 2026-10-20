@@ -15,155 +15,157 @@ import (
 func DataSourceAgentRegistryAgent() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAgentRegistryAgentRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The location of the resource.`,
-			},
-			"agent_id": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"filter"},
-				Description:   `The unique identifier for the Agent.`,
-			},
-			"filter": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"agent_id"},
-				Description:   `A filter string that identifies a unique Agent.`,
-			},
-			"protocols": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The connection details for the Agent.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"type": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The type of the protocol.",
-						},
-						"protocol_version": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The version of the protocol, for example, the A2A Agent Card version.",
-						},
-						"interfaces": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `The connection details for the Agent.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"url": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The destination URL.`,
-									},
-									"protocol_binding": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The protocol binding of the interface.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The location of the resource.`,
+				},
+				"agent_id": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"filter"},
+					Description:   `The unique identifier for the Agent.`,
+				},
+				"filter": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"agent_id"},
+					Description:   `A filter string that identifies a unique Agent.`,
+				},
+				"protocols": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The connection details for the Agent.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The type of the protocol.",
+							},
+							"protocol_version": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The version of the protocol, for example, the A2A Agent Card version.",
+							},
+							"interfaces": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `The connection details for the Agent.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"url": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The destination URL.`,
+										},
+										"protocol_binding": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The protocol binding of the interface.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
-			"urn": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The URN of the Agent.`,
-			},
-			"display_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Obtained from the A2A Agent Card. The display name of the Agent.`,
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Obtained from the A2A Agent Card. The description of the Agent.`,
-			},
-			"version": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Obtained from the A2A Agent Card. Contains the version of the Agent.`,
-			},
-			"framework": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The OSS agent framework used to develop the agent. Currently supported values: "google-adk", "langchain", "langgraph", "ag2", "llama-index", "custom".`,
-			},
-			"skills": {
-				Type:        schema.TypeList, // Object
-				Computed:    true,
-				Description: `Obtained from the A2A Agent Card. Skills represent the ability of an agent. It is largely a descriptive concept but represents a more focused set of behaviors that the agent is likely to succeed at.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "A unique identifier for the agent's skill.",
-						},
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "A human readable name for the agent's skill.",
-						},
-						"description": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "A more detailed description of the skill.",
-						},
-						"tags": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: "A set of keywords describing the skills.  Example:  [[\"cooking\", \"customer support\", \"billing\"]]",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+				"urn": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The URN of the Agent.`,
+				},
+				"display_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Obtained from the A2A Agent Card. The display name of the Agent.`,
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Obtained from the A2A Agent Card. The description of the Agent.`,
+				},
+				"version": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Obtained from the A2A Agent Card. Contains the version of the Agent.`,
+				},
+				"framework": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The OSS agent framework used to develop the agent. Currently supported values: "google-adk", "langchain", "langgraph", "ag2", "llama-index", "custom".`,
+				},
+				"skills": {
+					Type:        schema.TypeList, // Object
+					Computed:    true,
+					Description: `Obtained from the A2A Agent Card. Skills represent the ability of an agent. It is largely a descriptive concept but represents a more focused set of behaviors that the agent is likely to succeed at.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "A unique identifier for the agent's skill.",
 							},
-						},
-						"examples": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: "Example prompts or scenarios that this skill can handle. Provides a hint to the client on how to use the skill. Example: [[\"I need a recipe for bread\"]]",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "A human readable name for the agent's skill.",
+							},
+							"description": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "A more detailed description of the skill.",
+							},
+							"tags": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "A set of keywords describing the skills.  Example:  [[\"cooking\", \"customer support\", \"billing\"]]",
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"examples": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "Example prompts or scenarios that this skill can handle. Provides a hint to the client on how to use the skill. Example: [[\"I need a recipe for bread\"]]",
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
 							},
 						},
 					},
 				},
-			},
-			"attributes": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `Attributes of the Agent.`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"attributes": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `Attributes of the Agent.`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
 				},
-			},
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Create time.`,
-			},
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Update time.`,
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Create time.`,
+				},
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Update time.`,
+				},
+			}
 		},
 	}
 }

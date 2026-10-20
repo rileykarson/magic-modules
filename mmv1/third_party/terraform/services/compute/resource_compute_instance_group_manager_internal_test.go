@@ -282,7 +282,7 @@ func TestFlattenStatefulPolicyStatefulIps(t *testing.T) {
 		t.Run(tn, func(t *testing.T) {
 
 			// Terraform config
-			schema := ResourceComputeRegionInstanceGroupManager().Schema
+			schema := ResourceComputeRegionInstanceGroupManager().SchemaMap()
 			config := map[string]interface{}{
 				"stateful_external_ip": tc.ConfigValues,
 				"stateful_internal_ip": tc.ConfigValues,

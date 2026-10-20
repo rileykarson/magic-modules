@@ -11,18 +11,19 @@ import (
 )
 
 func DataSourceGoogleComputeStoragePool() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeStoragePool().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "zone")
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeStoragePoolRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeStoragePoolRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeStoragePool().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "zone")
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

@@ -10,19 +10,20 @@ import (
 )
 
 func DataSourceGoogleComputeRegionBackendService() *schema.Resource {
-	// Get schema from the resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionBackendService().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
-
 	return &schema.Resource{
-		Read:   dataSourceComputeRegionBackendServiceRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeRegionBackendServiceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Get schema from the resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionBackendService().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
+			return dsSchema
+		},
 	}
 }
 

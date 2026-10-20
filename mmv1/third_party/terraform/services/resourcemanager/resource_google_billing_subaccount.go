@@ -30,32 +30,34 @@ func ResourceBillingSubaccount() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy(""),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"display_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"master_billing_account": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry(""),
-			//UDP schema end
-			"billing_account_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"open": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"display_name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"master_billing_account": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry(""),
+				//UDP schema end
+				"billing_account_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"open": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -16,26 +16,28 @@ func DataSourceGoogleActiveFolder() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleActiveFolderRead,
 
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"display_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"api_method": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  "Provides the REST method through which to find the folder. LIST is recommended as it is strongly consistent.",
-				Default:      "LIST",
-				ValidateFunc: verify.ValidateEnum([]string{"LIST", "SEARCH"}),
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"display_name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"api_method": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Description:  "Provides the REST method through which to find the folder. LIST is recommended as it is strongly consistent.",
+					Default:      "LIST",
+					ValidateFunc: verify.ValidateEnum([]string{"LIST", "SEARCH"}),
+				},
+			}
 		},
 	}
 }

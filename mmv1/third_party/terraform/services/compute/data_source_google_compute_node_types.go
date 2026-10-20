@@ -14,22 +14,24 @@ import (
 func DataSourceGoogleComputeNodeTypes() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeNodeTypesRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"names": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"names": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

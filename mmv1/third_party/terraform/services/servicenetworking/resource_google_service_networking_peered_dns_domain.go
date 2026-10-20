@@ -39,46 +39,48 @@ func ResourceGoogleServiceNetworkingPeeredDNSDomain() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `The ID of the project that the service account will be created in. Defaults to the provider project configuration.`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Name of the peered DNS domain.",
-			},
-			"dns_suffix": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The DNS domain name suffix of the peered DNS domain.",
-			},
-			"service": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
-				Default:     "servicenetworking.googleapis.com",
-				Description: "The name of the service to create a peered DNS domain for, e.g. servicenetworking.googleapis.com",
-			},
-			"network": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Network in the consumer project to peer with.",
-			},
-			"parent": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `The ID of the project that the service account will be created in. Defaults to the provider project configuration.`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "Name of the peered DNS domain.",
+				},
+				"dns_suffix": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The DNS domain name suffix of the peered DNS domain.",
+				},
+				"service": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					ForceNew:    true,
+					Default:     "servicenetworking.googleapis.com",
+					Description: "The name of the service to create a peered DNS domain for, e.g. servicenetworking.googleapis.com",
+				},
+				"network": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "Network in the consumer project to peer with.",
+				},
+				"parent": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

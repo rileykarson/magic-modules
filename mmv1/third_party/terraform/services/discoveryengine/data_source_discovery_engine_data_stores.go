@@ -12,61 +12,63 @@ import (
 func DataSourceGoogleDiscoveryEngineDataStores() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleDiscoveryEngineDataStoresRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "global",
-				Description: `The geographic location where the data stores reside. The value can only be one of "global", "us" and "eu".`,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			"data_stores": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"data_store_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"display_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"industry_vertical": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"content_config": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"solution_types": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The geographic location where the data stores reside. The value can only be one of "global", "us" and "eu".`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				"data_stores": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-						},
-						"default_schema_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
+							"data_store_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"display_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"industry_vertical": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"content_config": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"solution_types": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"default_schema_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

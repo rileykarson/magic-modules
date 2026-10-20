@@ -23,34 +23,36 @@ func DataSourceSiteVerificationToken() *schema.Resource {
 			Read: schema.DefaultTimeout(5 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"identifier": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-				Description: `The site identifier. If the type is set to SITE, the identifier is a URL. If the type is
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"identifier": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+					Description: `The site identifier. If the type is set to SITE, the identifier is a URL. If the type is
 set to INET_DOMAIN, the identifier is a domain name.`,
-			},
-			"type": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: verify.ValidateEnum([]string{"INET_DOMAIN", "SITE"}),
-				Description:  `The type of resource to be verified, either a domain or a web site. Possible values: ["INET_DOMAIN", "SITE"]`,
-			},
-			"verification_method": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: verify.ValidateEnum([]string{"ANALYTICS", "DNS_CNAME", "DNS_TXT", "FILE", "META", "TAG_MANAGER"}),
-				Description: `The verification method for the Site Verification system to use to verify
+				},
+				"type": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: verify.ValidateEnum([]string{"INET_DOMAIN", "SITE"}),
+					Description:  `The type of resource to be verified, either a domain or a web site. Possible values: ["INET_DOMAIN", "SITE"]`,
+				},
+				"verification_method": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: verify.ValidateEnum([]string{"ANALYTICS", "DNS_CNAME", "DNS_TXT", "FILE", "META", "TAG_MANAGER"}),
+					Description: `The verification method for the Site Verification system to use to verify
 this site or domain. Possible values: ["ANALYTICS", "DNS_CNAME", "DNS_TXT", "FILE", "META", "TAG_MANAGER"]`,
-			},
-			"token": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The returned token for use in subsequent verification steps.`,
-			},
+				},
+				"token": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The returned token for use in subsequent verification steps.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

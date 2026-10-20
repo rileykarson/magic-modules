@@ -14,66 +14,68 @@ import (
 func DataSourceGoogleCloudBackupDRDataSourceReferences() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudBackupDRDataSourceReferencesRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The location to list the data source references from.",
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "The ID of the project in which the resource belongs.",
-			},
-			// Output: a computed list of the data source references found
-			"data_source_references": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of the data source references found.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"data_source": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The underlying data source resource.",
-						},
-						"gcp_resource_name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The GCP resource name for the data source.",
-						},
-						"backup_config_state": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The state of the backup config for the data source.",
-						},
-						"backup_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "The number of backups for the data source.",
-						},
-						"last_backup_state": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The state of the last backup.",
-						},
-						"last_successful_backup_time": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The last time a successful backup was made.",
-						},
-						"resource_type": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location to list the data source references from.",
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: "The ID of the project in which the resource belongs.",
+				},
+				// Output: a computed list of the data source references found
+				"data_source_references": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of the data source references found.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"data_source": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The underlying data source resource.",
+							},
+							"gcp_resource_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The GCP resource name for the data source.",
+							},
+							"backup_config_state": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The state of the backup config for the data source.",
+							},
+							"backup_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The number of backups for the data source.",
+							},
+							"last_backup_state": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The state of the last backup.",
+							},
+							"last_successful_backup_time": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The last time a successful backup was made.",
+							},
+							"resource_type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }
@@ -164,61 +166,63 @@ func flattenDataSourceReferences(items []interface{}) ([]map[string]interface{},
 func DataSourceGoogleCloudBackupDRDataSourceReference() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudBackupDRDataSourceReferenceRead,
-		Schema: map[string]*schema.Schema{
-			"data_source_reference_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The `id` of the data source reference.",
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The location of the data source reference.",
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "The ID of the project in which the resource belongs.",
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"data_source": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The underlying data source resource.",
-			},
-			"backup_config_state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The state of the backup config for the data source.",
-			},
-			"backup_count": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "The number of backups for the data source.",
-			},
-			"last_backup_state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The state of the last backup.",
-			},
-			"last_successful_backup_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The last time a successful backup was made.",
-			},
-			"gcp_resource_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The GCP resource name for the data source.",
-			},
-			"resource_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"data_source_reference_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The `id` of the data source reference.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the data source reference.",
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: "The ID of the project in which the resource belongs.",
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"data_source": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The underlying data source resource.",
+				},
+				"backup_config_state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The state of the backup config for the data source.",
+				},
+				"backup_count": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: "The number of backups for the data source.",
+				},
+				"last_backup_state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The state of the last backup.",
+				},
+				"last_successful_backup_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The last time a successful backup was made.",
+				},
+				"gcp_resource_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The GCP resource name for the data source.",
+				},
+				"resource_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

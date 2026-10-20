@@ -13,74 +13,76 @@ func DataSourceGoogleComputeImages() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeImagesRead,
 
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"images": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"family": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"archive_size_bytes": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-						"creation_timestamp": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"disk_size_gb": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-						"image_id": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-						"labels": {
-							Type: schema.TypeMap,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"images": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-							Computed: true,
-						},
-						"source_disk": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"source_disk_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"source_image_id": {
-							Type:     schema.TypeString,
-							Computed: true,
+							"family": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"archive_size_bytes": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
+							"creation_timestamp": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"disk_size_gb": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
+							"image_id": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
+							"labels": {
+								Type: schema.TypeMap,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Computed: true,
+							},
+							"source_disk": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"source_disk_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"source_image_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

@@ -10,16 +10,17 @@ import (
 )
 
 func DataSourceGoogleCloudRunV2Job() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudRunV2Job().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "location")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudRunV2JobRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCloudRunV2JobRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudRunV2Job().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "location")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

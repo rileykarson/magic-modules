@@ -14,27 +14,29 @@ import (
 func DataSourceAccessContextManagerAccessPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAccessContextManagerAccessPolicyRead,
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-			"scopes": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
 				},
-				Optional: true,
-			},
-			"title": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"scopes": {
+					Type: schema.TypeList,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+					Optional: true,
+				},
+				"title": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

@@ -12,12 +12,35 @@ import (
 )
 
 func ResourceLoggingOrganizationSink() *schema.Resource {
-	schm := &schema.Resource{
+	return &schema.Resource{
 		Create: resourceLoggingOrganizationSinkCreate,
 		Read:   resourceLoggingOrganizationSinkRead,
 		Delete: resourceLoggingOrganizationSinkDelete,
 		Update: resourceLoggingOrganizationSinkUpdate,
-		Schema: resourceLoggingSinkSchema(),
+		SchemaFunc: func() map[string]*schema.Schema {
+			s := resourceLoggingSinkSchema()
+			s["org_id"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: `The numeric ID of the organization to be exported to the sink.`,
+				StateFunc: func(v interface{}) string {
+					return strings.Replace(v.(string), "organizations/", "", 1)
+				},
+			}
+			s["include_children"] = &schema.Schema{
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: `Whether or not to include child folders or projects in the sink export. If true, logs associated with child projects are also exported; otherwise only logs relating to the provided organization are included.`,
+			}
+			s["intercept_children"] = &schema.Schema{
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: `Whether or not to intercept logs from child projects. If true, matching logs will not match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
+			}
+			return s
+		},
 		CustomizeDiff: customdiff.All(
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
@@ -26,28 +49,6 @@ func ResourceLoggingOrganizationSink() *schema.Resource {
 		},
 		UseJSONNumber: true,
 	}
-	schm.Schema["org_id"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Required:    true,
-		Description: `The numeric ID of the organization to be exported to the sink.`,
-		StateFunc: func(v interface{}) string {
-			return strings.Replace(v.(string), "organizations/", "", 1)
-		},
-	}
-	schm.Schema["include_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to include child folders or projects in the sink export. If true, logs associated with child projects are also exported; otherwise only logs relating to the provided organization are included.`,
-	}
-	schm.Schema["intercept_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to intercept logs from child projects. If true, matching logs will not match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
-	}
-
-	return schm
 }
 
 func resourceLoggingOrganizationSinkCreate(d *schema.ResourceData, meta interface{}) error {

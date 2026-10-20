@@ -13,21 +13,22 @@ import (
 func DataSourceGoogleKmsKeyRings() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsKeyRingsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The canonical id for the location. For example: "us-east1".`,
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Description: `
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The canonical id for the location. For example: "us-east1".`,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: `
 					The filter argument is used to add a filter query parameter that limits which keys are retrieved by the data source: ?filter={{filter}}.
 					Example values:
 					
@@ -36,25 +37,26 @@ func DataSourceGoogleKmsKeyRings() *schema.Resource {
 					
 					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
-			},
-			"key_rings": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of all the retrieved key rings",
-				Elem: &schema.Resource{
-					// schema isn't used from resource_kms_key_ring due to having project and location fields which are empty when grabbed in a list.
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
+				},
+				"key_rings": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of all the retrieved key rings",
+					Elem: &schema.Resource{
+						// schema isn't used from resource_kms_key_ring due to having project and location fields which are empty when grabbed in a list.
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

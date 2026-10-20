@@ -11,17 +11,19 @@ func DataSourceGoogleComputeLbIpRanges() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeLbIpRangesRead,
 
-		Schema: map[string]*schema.Schema{
-			"network": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-			},
-			"http_ssl_tcp_internal": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"network": {
+					Type:     schema.TypeList,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Computed: true,
+				},
+				"http_ssl_tcp_internal": {
+					Type:     schema.TypeList,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Computed: true,
+				},
+			}
 		},
 	}
 }

@@ -26,40 +26,42 @@ func ResourceStorageObjectAcl() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-
-			"object": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-
-			"predefined_acl": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"role_entity"},
-				ValidateFunc:  validation.StringInSlice([]string{"private", "bucketOwnerRead", "bucketOwnerFullControl", "projectPrivate", "authenticatedRead", "publicRead", ""}, false),
-			},
-
-			"role_entity": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Computed: true,
-				Elem: &schema.Schema{
-					Type:         schema.TypeString,
-					ValidateFunc: validateRoleEntityPair,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
 				},
-				ConflictsWith: []string{"predefined_acl"},
-			},
 
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"object": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+				},
+
+				"predefined_acl": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"role_entity"},
+					ValidateFunc:  validation.StringInSlice([]string{"private", "bucketOwnerRead", "bucketOwnerFullControl", "projectPrivate", "authenticatedRead", "publicRead", ""}, false),
+				},
+
+				"role_entity": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Computed: true,
+					Elem: &schema.Schema{
+						Type:         schema.TypeString,
+						ValidateFunc: validateRoleEntityPair,
+					},
+					ConflictsWith: []string{"predefined_acl"},
+				},
+
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

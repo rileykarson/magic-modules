@@ -14,219 +14,221 @@ import (
 func DataSourceDataplexDataQualityRules() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceDataplexDataQualityRulesRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"data_scan_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"rules": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"column": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The unnested column which this rule is evaluated against.`,
-						},
-						"ignore_null": {
-							Type:     schema.TypeBool,
-							Computed: true,
-							Description: `Rows with null values will automatically fail a rule, unless ignoreNull is true. In that case, such null rows are trivially considered passing. 
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"data_scan_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"rules": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"column": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The unnested column which this rule is evaluated against.`,
+							},
+							"ignore_null": {
+								Type:     schema.TypeBool,
+								Computed: true,
+								Description: `Rows with null values will automatically fail a rule, unless ignoreNull is true. In that case, such null rows are trivially considered passing. 
 											This field is only valid for the following type of rules: RangeExpectation, RegexExpectation, SetExpectation, UniquenessExpectation`,
-						},
-						"dimension": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The dimension a rule belongs to. Supported dimensions are "COMPLETENESS", "ACCURACY", "CONSISTENCY", "VALIDITY", "UNIQUENESS", "FRESHNESS", "VOLUME"`,
-						},
-						"threshold": {
-							Type:        schema.TypeFloat,
-							Computed:    true,
-							Description: `The minimum ratio of passing_rows / total_rows required to pass this rule, with a range of [0.0, 1.0]. 0 indicates default value (i.e. 1.0). This field is only valid for row-level type rules.`,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `A mutable name for the rule. 
+							},
+							"dimension": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The dimension a rule belongs to. Supported dimensions are "COMPLETENESS", "ACCURACY", "CONSISTENCY", "VALIDITY", "UNIQUENESS", "FRESHNESS", "VOLUME"`,
+							},
+							"threshold": {
+								Type:        schema.TypeFloat,
+								Computed:    true,
+								Description: `The minimum ratio of passing_rows / total_rows required to pass this rule, with a range of [0.0, 1.0]. 0 indicates default value (i.e. 1.0). This field is only valid for row-level type rules.`,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `A mutable name for the rule. 
 											The name must contain only letters (a-z, A-Z), numbers (0-9), or hyphens (-).
 											The maximum length is 63 characters.
 											Must start with a letter.
 											Must end with a number or a letter.`,
-						},
-						"description": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `Description of the rule. (The maximum length is 1,024 characters.)`,
-						},
-						"suspended": {
-							Type:        schema.TypeBool,
-							Computed:    true,
-							Description: `Whether the Rule is active or suspended. Default is false.`,
-						},
-						"range_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"min_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The minimum column value allowed for a row to pass this validation.`,
-									},
-									"max_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The maximum column value allowed for a row to pass this validation.`,
-									},
-									"strict_min_enabled": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: `Whether each value needs to be strictly greater than ('>') the minimum, or if equality is allowed.`,
-									},
-									"strict_max_enabled": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: ` Whether each value needs to be strictly lesser than ('<') the maximum, or if equality is allowed.`,
+							},
+							"description": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `Description of the rule. (The maximum length is 1,024 characters.)`,
+							},
+							"suspended": {
+								Type:        schema.TypeBool,
+								Computed:    true,
+								Description: `Whether the Rule is active or suspended. Default is false.`,
+							},
+							"range_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"min_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The minimum column value allowed for a row to pass this validation.`,
+										},
+										"max_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The maximum column value allowed for a row to pass this validation.`,
+										},
+										"strict_min_enabled": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: `Whether each value needs to be strictly greater than ('>') the minimum, or if equality is allowed.`,
+										},
+										"strict_max_enabled": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: ` Whether each value needs to be strictly lesser than ('<') the maximum, or if equality is allowed.`,
+										},
 									},
 								},
+								Description: `Row-level rule which evaluates whether each column value lies between a specified range.`,
 							},
-							Description: `Row-level rule which evaluates whether each column value lies between a specified range.`,
-						},
-						"non_null_expectation": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `Row-level rule which evaluates whether each column value is null.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{},
-							},
-						},
-						"set_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"values": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Elem:        &schema.Schema{Type: schema.TypeString},
-										Description: `Expected values for the column value.`,
-									},
+							"non_null_expectation": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `Row-level rule which evaluates whether each column value is null.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{},
 								},
 							},
-							Description: `Row-level rule which evaluates whether each column value is contained by a specified set.`,
-						},
-						"regex_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"regex": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `A regular expression the column value is expected to match.`,
+							"set_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"values": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Elem:        &schema.Schema{Type: schema.TypeString},
+											Description: `Expected values for the column value.`,
+										},
 									},
 								},
+								Description: `Row-level rule which evaluates whether each column value is contained by a specified set.`,
 							},
+							"regex_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"regex": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `A regular expression the column value is expected to match.`,
+										},
+									},
+								},
 
-							Description: `Row-level rule which evaluates whether each column value matches a specified regex.`,
-						},
-						"uniqueness_expectation": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `Row-level rule which evaluates whether each column value is unique.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{},
+								Description: `Row-level rule which evaluates whether each column value matches a specified regex.`,
 							},
-						},
-						"statistic_range_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"statistic": {
-										Type:     schema.TypeString,
-										Computed: true,
-										Description: `The list of aggregate metrics a rule can be evaluated against. 
+							"uniqueness_expectation": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `Row-level rule which evaluates whether each column value is unique.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{},
+								},
+							},
+							"statistic_range_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"statistic": {
+											Type:     schema.TypeString,
+											Computed: true,
+											Description: `The list of aggregate metrics a rule can be evaluated against. 
 																	Possible values: ["STATISTIC_UNDEFINED", "MEAN", "MIN", "MAX"]`,
-									},
-									"min_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The minimum column value allowed for a row to pass this validation.`,
-									},
-									"max_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The maximum column value allowed for a row to pass this validation.`,
-									},
-									"strict_min_enabled": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: `Whether each value needs to be strictly greater than ('>') the minimum, or if equality is allowed.`,
-									},
-									"strict_max_enabled": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: ` Whether each value needs to be strictly lesser than ('<') the maximum, or if equality is allowed.`,
-									},
-								},
-							},
-							Description: `Aggregate rule which evaluates whether the column aggregate statistic lies between a specified range.`,
-						},
-						"row_condition_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"sql_expression": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The SQL expression.`,
+										},
+										"min_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The minimum column value allowed for a row to pass this validation.`,
+										},
+										"max_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The maximum column value allowed for a row to pass this validation.`,
+										},
+										"strict_min_enabled": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: `Whether each value needs to be strictly greater than ('>') the minimum, or if equality is allowed.`,
+										},
+										"strict_max_enabled": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: ` Whether each value needs to be strictly lesser than ('<') the maximum, or if equality is allowed.`,
+										},
 									},
 								},
+								Description: `Aggregate rule which evaluates whether the column aggregate statistic lies between a specified range.`,
 							},
-							Description: `Row-level rule which evaluates whether each row in a table passes the specified condition.`,
-						},
-						"table_condition_expectation": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"sql_expression": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The SQL expression.`,
+							"row_condition_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"sql_expression": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The SQL expression.`,
+										},
 									},
 								},
+								Description: `Row-level rule which evaluates whether each row in a table passes the specified condition.`,
 							},
-							Description: `Aggregate rule which evaluates whether the provided expression is true for a table.`,
-						},
-						"sql_assertion": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"sql_statement": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `The SQL expression.`,
+							"table_condition_expectation": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"sql_expression": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The SQL expression.`,
+										},
 									},
 								},
+								Description: `Aggregate rule which evaluates whether the provided expression is true for a table.`,
 							},
-							Description: `Aggregate rule which evaluates the number of rows returned for the provided statement. If any rows are returned, this rule fails.`,
+							"sql_assertion": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"sql_statement": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `The SQL expression.`,
+										},
+									},
+								},
+								Description: `Aggregate rule which evaluates the number of rows returned for the provided statement. If any rows are returned, this rule fails.`,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

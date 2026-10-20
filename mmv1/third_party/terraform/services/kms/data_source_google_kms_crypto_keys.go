@@ -13,29 +13,29 @@ import (
 )
 
 func DataSourceGoogleKmsCryptoKeys() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSCryptoKey().Schema)
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "key_ring")
-
-	// We need to explicitly add the id field to the schema used for individual keys
-	// Currently the id field in the google_kms_crypto_key resource is implied/added by the SDK
-	dsSchema["id"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Computed: true,
-	}
-
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsCryptoKeysRead,
-		Schema: map[string]*schema.Schema{
-			"key_ring": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The key ring that the keys belongs to. Format: 'projects/{{project}}/locations/{{location}}/keyRings/{{keyRing}}'.`,
-			},
-			"filter": {
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSCryptoKey().SchemaMap())
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "key_ring")
+
+			// We need to explicitly add the id field to the schema used for individual keys
+			// Currently the id field in the google_kms_crypto_key resource is implied/added by the SDK
+			dsSchema["id"] = &schema.Schema{
 				Type:     schema.TypeString,
-				Optional: true,
-				Description: `
+				Computed: true,
+			}
+			return map[string]*schema.Schema{
+				"key_ring": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The key ring that the keys belongs to. Format: 'projects/{{project}}/locations/{{location}}/keyRings/{{keyRing}}'.`,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: `
 					The filter argument is used to add a filter query parameter that limits which keys are retrieved by the data source: ?filter={{filter}}.
 					Example values:
 					
@@ -44,15 +44,16 @@ func DataSourceGoogleKmsCryptoKeys() *schema.Resource {
 					
 					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
-			},
-			"keys": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of all the retrieved keys from the provided key ring",
-				Elem: &schema.Resource{
-					Schema: dsSchema,
 				},
-			},
+				"keys": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of all the retrieved keys from the provided key ring",
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+			}
 		},
 	}
 }

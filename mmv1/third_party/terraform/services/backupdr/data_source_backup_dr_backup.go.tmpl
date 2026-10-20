@@ -9,7 +9,10 @@ import (
 )
 
 func DataSourceGoogleCloudBackupDRBackup() *schema.Resource {
-    dsSchema := map[string]*schema.Schema{
+	return &schema.Resource{
+        Read:   dataSourceGoogleCloudBackupDrBackupRead,
+        SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
         "name": {
             Type:   schema.TypeString,
             Computed: true,
@@ -105,10 +108,8 @@ func DataSourceGoogleCloudBackupDRBackup() *schema.Resource {
             Description: `The time when the backup was created.`,
         },
     }
-
-    return &schema.Resource{
-        Read:   dataSourceGoogleCloudBackupDrBackupRead,
-        Schema: dsSchema,
+			return dsSchema
+		},
     }
 }
 

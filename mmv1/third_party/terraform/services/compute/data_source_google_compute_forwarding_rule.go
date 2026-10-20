@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleComputeForwardingRule() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeForwardingRule().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeForwardingRuleRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeForwardingRuleRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeForwardingRule().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
+			return dsSchema
+		},
 	}
 }
 

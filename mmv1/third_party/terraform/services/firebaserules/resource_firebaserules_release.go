@@ -36,51 +36,53 @@ func ResourceFirebaserulesRelease() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Format: `projects/{project_id}/releases/{release_id}`\\Firestore Rules Releases will **always** have the name 'cloud.firestore'",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "Format: `projects/{project_id}/releases/{release_id}`\\Firestore Rules Releases will **always** have the name 'cloud.firestore'",
+				},
 
-			"ruleset_name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "Name of the `Ruleset` referred to by this `Release`. The `Ruleset` must exist for the `Release` to be created.",
-			},
+				"ruleset_name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "Name of the `Ruleset` referred to by this `Release`. The `Ruleset` must exist for the `Release` to be created.",
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time the release was created.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time the release was created.",
+				},
 
-			"disabled": {
-				Type:        schema.TypeBool,
-				Computed:    true,
-				Description: "Disable the release to keep it from being served. The response code of NOT_FOUND will be given for executables generated from this Release.",
-			},
+				"disabled": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: "Disable the release to keep it from being served. The response code of NOT_FOUND will be given for executables generated from this Release.",
+				},
 
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time the release was updated.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time the release was updated.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func TestPopulateGoogleProjectResourceData_DoesNotCopyAllLabelsToTerraformLabelsWhenUnset(t *testing.T) {
-	d := schema.TestResourceDataRaw(t, ResourceGoogleProject().Schema, map[string]interface{}{
+	d := schema.TestResourceDataRaw(t, ResourceGoogleProject().SchemaMap(), map[string]interface{}{
 		"project_id": "example-project",
 		"name":       "Example Project",
 	})

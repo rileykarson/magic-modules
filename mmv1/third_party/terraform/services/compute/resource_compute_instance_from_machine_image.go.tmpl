@@ -24,14 +24,14 @@ func ResourceComputeInstanceFromMachineImage() *schema.Resource {
 
 		Timeouts: ResourceComputeInstance().Timeouts,
 
-		Schema:        computeInstanceFromMachineImageSchema(),
+		SchemaFunc:    computeInstanceFromMachineImageSchema,
 		CustomizeDiff: ResourceComputeInstance().CustomizeDiff,
 		UseJSONNumber: true,
 	}
 }
 
 func computeInstanceFromMachineImageSchema() map[string]*schema.Schema {
-	s := ResourceComputeInstance().Schema
+	s := ResourceComputeInstance().SchemaMap()
 
 	for _, field := range []string{"boot_disk", "machine_type", "network_interface"} {
 		// The user can set these fields as an override, but doesn't need to -

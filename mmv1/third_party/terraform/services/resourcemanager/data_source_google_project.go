@@ -11,15 +11,17 @@ import (
 )
 
 func DataSourceGoogleProject() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProject().Schema)
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project_id")
-
-	dsSchema["project_id"].ValidateFunc = verify.ValidateDSProjectID()
 	return &schema.Resource{
-		Read:   datasourceGoogleProjectRead,
-		Schema: dsSchema,
+		Read: datasourceGoogleProjectRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProject().SchemaMap())
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project_id")
+
+			dsSchema["project_id"].ValidateFunc = verify.ValidateDSProjectID()
+			return dsSchema
+		},
 	}
 }
 

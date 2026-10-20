@@ -13,25 +13,27 @@ import (
 func DataSourceGoogleContainerAzureVersions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleContainerAzureVersionsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"valid_versions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"supported_regions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"valid_versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"supported_regions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

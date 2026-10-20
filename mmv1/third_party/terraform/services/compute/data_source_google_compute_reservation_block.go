@@ -14,173 +14,175 @@ func DataSourceGoogleComputeReservationBlock() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeReservationBlockRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The name of the reservation block.",
-			},
-			"reservation": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The name of the parent reservation.",
-			},
-			"zone": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "The zone where the reservation block resides.",
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "The project in which the resource belongs.",
-			},
-			"kind": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Type of the resource. Always compute#reservationBlock for reservation blocks.",
-			},
-			"resource_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The unique identifier for the resource.",
-			},
-			"creation_timestamp": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Creation timestamp in RFC3339 text format.",
-			},
-			"self_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Server-defined fully-qualified URL for this resource.",
-			},
-			"self_link_with_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Server-defined URL for this resource with the resource id.",
-			},
-			"block_count": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "The number of resources that are allocated in this reservation block.",
-			},
-			"in_use_count": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "The number of instances that are currently in use on this reservation block.",
-			},
-			"status": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Status of the reservation block.",
-			},
-			"reservation_sub_block_count": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "The number of reservation subBlocks associated with this reservation block.",
-			},
-			"reservation_sub_block_in_use_count": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "The number of in-use reservation subBlocks associated with this reservation block.",
-			},
-			"reservation_maintenance": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Maintenance information for this reservation block.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"maintenance_ongoing_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of hosts in the block that have ongoing maintenance.",
-						},
-						"maintenance_pending_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of hosts in the block that have pending maintenance.",
-						},
-						"scheduling_type": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The type of maintenance for the reservation.",
-						},
-						"subblock_infra_maintenance_ongoing_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of subblock Infrastructure that has ongoing maintenance.",
-						},
-						"subblock_infra_maintenance_pending_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of subblock Infrastructure that has pending maintenance.",
-						},
-						"instance_maintenance_ongoing_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of instances that have ongoing maintenance.",
-						},
-						"instance_maintenance_pending_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Number of instances that have pending maintenance.",
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The name of the reservation block.",
+				},
+				"reservation": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The name of the parent reservation.",
+				},
+				"zone": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The zone where the reservation block resides.",
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: "The project in which the resource belongs.",
+				},
+				"kind": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Type of the resource. Always compute#reservationBlock for reservation blocks.",
+				},
+				"resource_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The unique identifier for the resource.",
+				},
+				"creation_timestamp": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Creation timestamp in RFC3339 text format.",
+				},
+				"self_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Server-defined fully-qualified URL for this resource.",
+				},
+				"self_link_with_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Server-defined URL for this resource with the resource id.",
+				},
+				"block_count": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: "The number of resources that are allocated in this reservation block.",
+				},
+				"in_use_count": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: "The number of instances that are currently in use on this reservation block.",
+				},
+				"status": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Status of the reservation block.",
+				},
+				"reservation_sub_block_count": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: "The number of reservation subBlocks associated with this reservation block.",
+				},
+				"reservation_sub_block_in_use_count": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: "The number of in-use reservation subBlocks associated with this reservation block.",
+				},
+				"reservation_maintenance": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "Maintenance information for this reservation block.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"maintenance_ongoing_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of hosts in the block that have ongoing maintenance.",
+							},
+							"maintenance_pending_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of hosts in the block that have pending maintenance.",
+							},
+							"scheduling_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The type of maintenance for the reservation.",
+							},
+							"subblock_infra_maintenance_ongoing_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of subblock Infrastructure that has ongoing maintenance.",
+							},
+							"subblock_infra_maintenance_pending_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of subblock Infrastructure that has pending maintenance.",
+							},
+							"instance_maintenance_ongoing_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of instances that have ongoing maintenance.",
+							},
+							"instance_maintenance_pending_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "Number of instances that have pending maintenance.",
+							},
 						},
 					},
 				},
-			},
-			"physical_topology": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "The physical topology of the reservation block.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"cluster": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The cluster name of the reservation block.",
-						},
-						"block": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The hash of the capacity block within the cluster.",
-						},
-					},
-				},
-			},
-			"health_info": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Health information for the reservation block.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"health_status": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The health status of the reservation block.",
-						},
-						"healthy_sub_block_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "The number of subBlocks that are healthy.",
-						},
-						"degraded_sub_block_count": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "The number of subBlocks that are degraded.",
+				"physical_topology": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "The physical topology of the reservation block.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"cluster": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The cluster name of the reservation block.",
+							},
+							"block": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The hash of the capacity block within the cluster.",
+							},
 						},
 					},
 				},
-			},
-			"sub_block_names": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "List of all block sub-block names in the parent block.",
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"health_info": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "Health information for the reservation block.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"health_status": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The health status of the reservation block.",
+							},
+							"healthy_sub_block_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The number of subBlocks that are healthy.",
+							},
+							"degraded_sub_block_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The number of subBlocks that are degraded.",
+							},
+						},
+					},
 				},
-			},
+				"sub_block_names": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "List of all block sub-block names in the parent block.",
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+			}
 		},
 	}
 }

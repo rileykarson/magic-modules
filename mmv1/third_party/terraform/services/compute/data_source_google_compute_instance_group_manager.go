@@ -11,13 +11,13 @@ import (
 )
 
 func DataSourceGoogleComputeInstanceGroupManager() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceGroupManager().Schema)
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "self_link", "project", "zone")
-
 	return &schema.Resource{
-		Read:   dataSourceComputeInstanceGroupManagerRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeInstanceGroupManagerRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceGroupManager().SchemaMap())
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "self_link", "project", "zone")
+			return dsSchema
+		},
 	}
 }
 

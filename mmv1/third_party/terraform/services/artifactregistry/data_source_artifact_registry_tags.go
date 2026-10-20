@@ -14,43 +14,45 @@ import (
 func DataSourceArtifactRegistryTags() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryTagsRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"package_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"tags": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"version": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"package_name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"tags": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"version": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

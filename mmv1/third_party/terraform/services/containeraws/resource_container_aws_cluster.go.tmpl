@@ -36,7 +36,8 @@ func ResourceContainerAwsCluster() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"authorization": {
 				Type:        schema.TypeList,
 				Required:    true,
@@ -190,6 +191,7 @@ func ResourceContainerAwsCluster() *schema.Resource {
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 	}
 }

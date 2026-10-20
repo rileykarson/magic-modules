@@ -10,14 +10,14 @@ import (
 )
 
 func DataSourceGoogleCertificateManagerCertificateMap() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerCertificateMap().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCertificateManagerCertificateMapRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCertificateManagerCertificateMapRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerCertificateMap().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

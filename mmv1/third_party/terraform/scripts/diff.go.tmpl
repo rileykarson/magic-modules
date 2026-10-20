@@ -38,7 +38,7 @@ func main() {
 		panic(fmt.Sprintf("Unable to find resource in clean TPGB: %s", resourceName))
 	}
 	fmt.Printf("------------Diffing resource %s------------\n", resourceName)
-	diffSchema(res2.Schema, res.Schema, []string{})
+	diffSchema(res2.SchemaMap(), res.SchemaMap(), []string{})
 	fmt.Print("------------Done------------\n")
 }
 
@@ -155,7 +155,7 @@ func diffSchemaObject(old, new *schema.Schema, path []string) {
 		}
 		switch v := oldElem.(type) {
 		case *schema.Resource:
-			diffSchema(v.Schema, newElem.(*schema.Resource).Schema, path)
+			diffSchema(v.SchemaMap(), newElem.(*schema.Resource).SchemaMap(), path)
 		case *schema.Schema:
 			// Primitive unnamed field as only element
 			diffSchemaObject(v, newElem.(*schema.Schema), append(path, "elem"))

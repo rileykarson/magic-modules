@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceGoogleComputeDisk() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeDisk().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "zone")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeDiskRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeDiskRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeDisk().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "zone")
+			return dsSchema
+		},
 	}
 }
 

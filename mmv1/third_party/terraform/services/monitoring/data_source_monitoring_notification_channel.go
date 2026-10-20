@@ -11,18 +11,19 @@ import (
 )
 
 func DataSourceMonitoringNotificationChannel() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMonitoringNotificationChannel().Schema)
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "display_name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "type")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "labels")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "user_labels")
-
 	return &schema.Resource{
-		Read:   dataSourceMonitoringNotificationChannelRead,
-		Schema: dsSchema,
+		Read: dataSourceMonitoringNotificationChannelRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMonitoringNotificationChannel().SchemaMap())
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "display_name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "type")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "labels")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "user_labels")
+			return dsSchema
+		},
 	}
 }
 

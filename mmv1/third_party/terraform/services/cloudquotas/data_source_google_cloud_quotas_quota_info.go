@@ -14,113 +14,115 @@ func DataSourceGoogleCloudQuotasQuotaInfo() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudQuotasQuotaInfoRead,
 
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"service": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"quota_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"metric": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"is_precise": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"refresh_interval": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"container_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"dimensions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"metric_display_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"quota_display_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"metric_unit": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"quota_increase_eligibility": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"is_eligible": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"ineligibility_reason": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"service": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"quota_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"metric": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"is_precise": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"refresh_interval": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"container_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"dimensions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"metric_display_name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"quota_display_name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"metric_unit": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"quota_increase_eligibility": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"is_eligible": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"ineligibility_reason": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
-			"is_fixed": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"dimensions_infos": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"dimensions": {
-							Type:     schema.TypeMap,
-							Computed: true,
-						},
-						"details": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"value": {
-										Type:     schema.TypeString,
-										Computed: true,
+				"is_fixed": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"dimensions_infos": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"dimensions": {
+								Type:     schema.TypeMap,
+								Computed: true,
+							},
+							"details": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"value": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
 									},
 								},
 							},
-						},
-						"applicable_locations": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+							"applicable_locations": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
-			"is_concurrent": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"service_request_quota_uri": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"is_concurrent": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"service_request_quota_uri": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleFirebaseAndroidApp() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirebaseAndroidApp().Schema)
+	return &schema.Resource{
+		Read:   dataSourceGoogleFirebaseAndroidAppRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirebaseAndroidApp().SchemaMap())
 
 	// Set 'Required' schema elements
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "app_id")
 
 	// Allow specifying a project
 	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
-	return &schema.Resource{
-		Read:   dataSourceGoogleFirebaseAndroidAppRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 

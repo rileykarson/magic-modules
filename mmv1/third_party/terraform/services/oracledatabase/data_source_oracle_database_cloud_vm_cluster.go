@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceOracleDatabaseCloudVmCluster() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseCloudVmCluster().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "cloud_vm_cluster_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseCloudVmClusterRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseCloudVmClusterRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseCloudVmCluster().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "cloud_vm_cluster_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceOracleDatabaseCloudVmClusterRead(d *schema.ResourceData, meta interface{}) error {

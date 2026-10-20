@@ -47,7 +47,8 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Version: 0,
 			},
 		},
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 
 			"container_spec_gcs_path": {
 				Type:     schema.TypeString,
@@ -268,6 +269,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}
@@ -603,7 +605,7 @@ func waitForDataflowJobState(d *schema.ResourceData, config *transport_tpg.Confi
 // resourceDataflowFlexTemplateJobUpdate updates a Flex Template Job resource.
 func resourceDataflowFlexTemplateJobUpdate(d *schema.ResourceData, meta interface{}) error {
 	// Don't send an update request if only virtual fields have changes
-	if resourceDataflowJobIsVirtualUpdate(d, ResourceDataflowFlexTemplateJob().Schema) {
+	if resourceDataflowJobIsVirtualUpdate(d, ResourceDataflowFlexTemplateJob().SchemaMap()) {
 		return nil
 	}
 	
@@ -612,7 +614,7 @@ func resourceDataflowFlexTemplateJobUpdate(d *schema.ResourceData, meta interfac
 	}
 	
 
-	if flexTemplateJobHasUpdate(d, ResourceDataflowFlexTemplateJob().Schema) {
+	if flexTemplateJobHasUpdate(d, ResourceDataflowFlexTemplateJob().SchemaMap()) {
 		config := meta.(*transport_tpg.Config)
 		userAgent, err := tpgresource.GenerateUserAgentString(d, config.UserAgent)
 		if err != nil {
@@ -863,7 +865,7 @@ func resourceDataflowFlexJobTypeCustomizeDiff(_ context.Context, d *schema.Resou
 
 	// All non-virtual fields are ForceNew for batch jobs
 	if d.Get("type") == "JOB_TYPE_BATCH" {
-		resourceSchema := ResourceDataflowFlexTemplateJob().Schema
+		resourceSchema := ResourceDataflowFlexTemplateJob().SchemaMap()
 		for field := range resourceSchema {
 			if field == "on_delete" {
 				continue

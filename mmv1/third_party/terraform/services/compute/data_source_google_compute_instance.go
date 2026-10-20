@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleComputeInstance() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstance().Schema)
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "self_link", "project", "zone")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeInstanceRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstance().SchemaMap())
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "self_link", "project", "zone")
+			return dsSchema
+		},
 	}
 }
 

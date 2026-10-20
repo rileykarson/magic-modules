@@ -31,8 +31,10 @@ func DataSourceIamPolicy(parentSpecificSchema map[string]*schema.Schema, newUpda
 		// if non-empty, this will be used to send a deprecation message when the
 		// datasource is used.
 		DeprecationMessage: settings.DeprecationMessage,
-		Schema:             tpgresource.MergeSchemas(IamPolicyBaseDataSourceSchema, parentSpecificSchema),
-		UseJSONNumber:      true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(IamPolicyBaseDataSourceSchema, parentSpecificSchema)
+		},
+		UseJSONNumber: true,
 	}
 }
 

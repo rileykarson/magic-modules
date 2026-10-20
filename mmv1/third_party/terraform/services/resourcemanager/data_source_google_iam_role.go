@@ -13,24 +13,26 @@ import (
 func DataSourceGoogleIamRole() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleIamRoleRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"title": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"included_permissions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"stage": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"title": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"included_permissions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"stage": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

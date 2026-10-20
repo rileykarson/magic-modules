@@ -10,107 +10,108 @@ import (
 )
 
 func DataSourceAlloydbSupportedDatabaseFlags() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceAlloydbSupportedDatabaseFlagsRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The canonical id for the location. For example: "us-east1".`,
-			},
-			"supported_database_flags": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The name of the flag resource, following Google Cloud conventions, e.g.: * projects/{project}/locations/{location}/flags/{flag} This field currently has no semantic meaning.`,
-						},
-						"flag_name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The name of the database flag, e.g. "max_allowed_packets". The is a possibly key for the Instance.database_flags map field.`,
-						},
-						"value_type": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `ValueType describes the semantic type of the value that the flag accepts. The supported values are:- 'VALUE_TYPE_UNSPECIFIED', 'STRING', 'INTEGER', 'FLOAT', 'NONE'.`,
-						},
-						"accepts_multiple_values": {
-							Type:        schema.TypeBool,
-							Computed:    true,
-							Optional:    true,
-							Description: `Whether the database flag accepts multiple values. If true, a comma-separated list of stringified values may be specified.`,
-						},
-						"supported_db_versions": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Optional:    true,
-							Description: `Major database engine versions for which this flag is supported. Supported values are:- 'DATABASE_VERSION_UNSPECIFIED', and 'POSTGRES_14'.`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-						},
-						"requires_db_restart": {
-							Type:        schema.TypeBool,
-							Computed:    true,
-							Optional:    true,
-							Description: `Whether setting or updating this flag on an Instance requires a database restart. If a flag that requires database restart is set, the backend will automatically restart the database (making sure to satisfy any availability SLO's).`,
-						},
-						"string_restrictions": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Optional:    true,
-							Description: `Restriction on STRING type value.`,
-							MaxItems:    1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"allowed_values": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Optional:    true,
-										Description: `The list of allowed values, if bounded. This field will be empty if there is a unbounded number of allowed values.`,
-										Elem:        &schema.Schema{Type: schema.TypeString},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The canonical id for the location. For example: "us-east1".`,
+				},
+				"supported_database_flags": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `The name of the flag resource, following Google Cloud conventions, e.g.: * projects/{project}/locations/{location}/flags/{flag} This field currently has no semantic meaning.`,
+							},
+							"flag_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `The name of the database flag, e.g. "max_allowed_packets". The is a possibly key for the Instance.database_flags map field.`,
+							},
+							"value_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `ValueType describes the semantic type of the value that the flag accepts. The supported values are:- 'VALUE_TYPE_UNSPECIFIED', 'STRING', 'INTEGER', 'FLOAT', 'NONE'.`,
+							},
+							"accepts_multiple_values": {
+								Type:        schema.TypeBool,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether the database flag accepts multiple values. If true, a comma-separated list of stringified values may be specified.`,
+							},
+							"supported_db_versions": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Optional:    true,
+								Description: `Major database engine versions for which this flag is supported. Supported values are:- 'DATABASE_VERSION_UNSPECIFIED', and 'POSTGRES_14'.`,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+							},
+							"requires_db_restart": {
+								Type:        schema.TypeBool,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether setting or updating this flag on an Instance requires a database restart. If a flag that requires database restart is set, the backend will automatically restart the database (making sure to satisfy any availability SLO's).`,
+							},
+							"string_restrictions": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Optional:    true,
+								Description: `Restriction on STRING type value.`,
+								MaxItems:    1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"allowed_values": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Optional:    true,
+											Description: `The list of allowed values, if bounded. This field will be empty if there is a unbounded number of allowed values.`,
+											Elem:        &schema.Schema{Type: schema.TypeString},
+										},
 									},
 								},
 							},
-						},
-						"integer_restrictions": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Optional:    true,
-							Description: `Restriction on INTEGER type value.`,
-							MaxItems:    1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"min_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Optional:    true,
-										Description: `The minimum value that can be specified, if applicable.`,
-									},
-									"max_value": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Optional:    true,
-										Description: `The maximum value that can be specified, if applicable.`,
+							"integer_restrictions": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Optional:    true,
+								Description: `Restriction on INTEGER type value.`,
+								MaxItems:    1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"min_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Optional:    true,
+											Description: `The minimum value that can be specified, if applicable.`,
+										},
+										"max_value": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Optional:    true,
+											Description: `The maximum value that can be specified, if applicable.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

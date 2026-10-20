@@ -10,96 +10,98 @@ import (
 )
 
 func DataSourceOracleDatabaseGoldengateDeploymentTypes() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The location of the resource.",
-		},
-		"goldengate_deployment_types": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The name of the Goldengate Deployment Type resource.",
-					},
-					"deployment_type": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The deployment type of the Goldengate Deployment Type resource.",
-					},
-					"category": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The category of the Goldengate Deployment Type resource.",
-					},
-					"connection_types": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
+	return &schema.Resource{
+		Read: DataSourceOracleDatabaseGoldengateDeploymentTypesRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the resource.",
+				},
+				"goldengate_deployment_types": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The name of the Goldengate Deployment Type resource.",
+							},
+							"deployment_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The deployment type of the Goldengate Deployment Type resource.",
+							},
+							"category": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The category of the Goldengate Deployment Type resource.",
+							},
+							"connection_types": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "The connection types of the Goldengate Deployment Type resource.",
+							},
+							"display_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The display name of the Goldengate Deployment Type resource.",
+							},
+							"ogg_version": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The OGG version of the Goldengate Deployment Type resource.",
+							},
+							"source_technologies": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "The source technologies of the Goldengate Deployment Type resource.",
+							},
+							"target_technologies": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "The target technologies of the Goldengate Deployment Type resource.",
+							},
+							"supported_capabilities": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "The supported capabilities of the Goldengate Deployment Type resource.",
+							},
+							"supported_technologies_url": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The supported technologies URL of the Goldengate Deployment Type resource.",
+							},
+							"default_username": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The default username of the Goldengate Deployment Type resource.",
+							},
 						},
-						Description: "The connection types of the Goldengate Deployment Type resource.",
-					},
-					"display_name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The display name of the Goldengate Deployment Type resource.",
-					},
-					"ogg_version": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The OGG version of the Goldengate Deployment Type resource.",
-					},
-					"source_technologies": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
-						},
-						Description: "The source technologies of the Goldengate Deployment Type resource.",
-					},
-					"target_technologies": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
-						},
-						Description: "The target technologies of the Goldengate Deployment Type resource.",
-					},
-					"supported_capabilities": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
-						},
-						Description: "The supported capabilities of the Goldengate Deployment Type resource.",
-					},
-					"supported_technologies_url": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The supported technologies URL of the Goldengate Deployment Type resource.",
-					},
-					"default_username": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The default username of the Goldengate Deployment Type resource.",
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-	return &schema.Resource{
-		Read:   DataSourceOracleDatabaseGoldengateDeploymentTypesRead,
-		Schema: dsSchema,
 	}
 }
 

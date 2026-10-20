@@ -14,74 +14,76 @@ import (
 func DataSourceGoogleComputeRegionInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceComputeRegionInstanceGroupRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					Computed: true,
+				},
 
-			"instances": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"instance": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
+				"instances": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"instance": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
 
-						"status": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
+							"status": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
 
-						"named_ports": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-									"port": {
-										Type:     schema.TypeInt,
-										Required: true,
+							"named_ports": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Required: true,
+										},
+										"port": {
+											Type:     schema.TypeInt,
+											Required: true,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
 
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				Computed: true,
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					Computed: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				Computed: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					Computed: true,
+				},
 
-			"self_link": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				Computed: true,
-			},
+				"self_link": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					Computed: true,
+				},
 
-			"size": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
+				"size": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

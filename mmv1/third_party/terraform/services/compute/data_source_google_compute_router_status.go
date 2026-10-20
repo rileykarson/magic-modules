@@ -10,50 +10,52 @@ import (
 )
 
 func DataSourceGoogleComputeRouterStatus() *schema.Resource {
-	routeElemSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRoute().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceComputeRouterStatusRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Description: "Name of the router to query.",
-				Required:    true,
-				Computed:    false,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Description: "Project ID of the target router.",
-				Optional:    true,
-				Computed:    false,
-			},
-			"region": {
-				Type:        schema.TypeString,
-				Description: "Region of the target router.",
-				Optional:    true,
-				Computed:    true,
-			},
-			"network": {
-				Type:        schema.TypeString,
-				Description: "URI of the network to which this router belongs.",
-				Computed:    true,
-			},
-			"best_routes": {
-				Type:        schema.TypeList,
-				Description: "Best routes for this router's network.",
-				Elem: &schema.Resource{
-					Schema: routeElemSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			routeElemSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRoute().SchemaMap())
+
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Description: "Name of the router to query.",
+					Required:    true,
+					Computed:    false,
 				},
-				Computed: true,
-			},
-			"best_routes_for_router": {
-				Type:        schema.TypeList,
-				Description: "Best routes learned by this router.",
-				Elem: &schema.Resource{
-					Schema: routeElemSchema,
+				"project": {
+					Type:        schema.TypeString,
+					Description: "Project ID of the target router.",
+					Optional:    true,
+					Computed:    false,
 				},
-				Computed: true,
-			},
+				"region": {
+					Type:        schema.TypeString,
+					Description: "Region of the target router.",
+					Optional:    true,
+					Computed:    true,
+				},
+				"network": {
+					Type:        schema.TypeString,
+					Description: "URI of the network to which this router belongs.",
+					Computed:    true,
+				},
+				"best_routes": {
+					Type:        schema.TypeList,
+					Description: "Best routes for this router's network.",
+					Elem: &schema.Resource{
+						Schema: routeElemSchema,
+					},
+					Computed: true,
+				},
+				"best_routes_for_router": {
+					Type:        schema.TypeList,
+					Description: "Best routes learned by this router.",
+					Elem: &schema.Resource{
+						Schema: routeElemSchema,
+					},
+					Computed: true,
+				},
+			}
 		},
 	}
 }

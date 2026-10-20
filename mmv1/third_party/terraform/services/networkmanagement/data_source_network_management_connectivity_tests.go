@@ -11,27 +11,29 @@ import (
 )
 
 func DataSourceGoogleNetworkManagementConnectivityTests() *schema.Resource {
-	testSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceNetworkManagementConnectivityTest().Schema)
 	return &schema.Resource{
 		Read: dataSourceGoogleNetworkManagementConnectivityTests,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"filter": {
-				Type:        schema.TypeString,
-				Description: `Lists the ConnectivityTests that match the filter expression. A filter expression filters the resources listed in the response.`,
-				Optional:    true,
-			},
-			"connectivity_tests": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: testSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			testSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceNetworkManagementConnectivityTest().SchemaMap())
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
 				},
-			},
+				"filter": {
+					Type:        schema.TypeString,
+					Description: `Lists the ConnectivityTests that match the filter expression. A filter expression filters the resources listed in the response.`,
+					Optional:    true,
+				},
+				"connectivity_tests": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: testSchema,
+					},
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -980,7 +980,7 @@ func TestResourceTagsTagBindingCollectionImport(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.Name, func(t *testing.T) {
-			d := schema.TestResourceDataRaw(t, tags.ResourceTagsTagBindingCollection().Schema, nil)
+			d := schema.TestResourceDataRaw(t, tags.ResourceTagsTagBindingCollection().SchemaMap(), nil)
 			d.SetId(tc.ImportID)
 
 			newData, err := StateContext(context.Background(), d, nil)

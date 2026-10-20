@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceAlloydbDatabaseCluster() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceAlloydbCluster().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "cluster_id")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "location", "project")
-
 	return &schema.Resource{
-		Read:   dataSourceAlloydbDatabaseClusterRead,
-		Schema: dsSchema,
+		Read: dataSourceAlloydbDatabaseClusterRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceAlloydbCluster().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "cluster_id")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "location", "project")
+			return dsSchema
+		},
 	}
 }
 

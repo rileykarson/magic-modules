@@ -39,7 +39,8 @@ func ResourceComputeAttachedDisk() *schema.Resource {
 			computeAttachedDiskDefaultProviderZone,
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"disk": {
 				Type:             schema.TypeString,
 				Required:         true,
@@ -93,6 +94,7 @@ func ResourceComputeAttachedDisk() *schema.Resource {
 //UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

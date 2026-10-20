@@ -15,47 +15,49 @@ import (
 func DataSourceArtifactRegistryPythonPackages() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryPythonPackagesRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"python_packages": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"package_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"version": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"python_packages": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"package_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"version": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

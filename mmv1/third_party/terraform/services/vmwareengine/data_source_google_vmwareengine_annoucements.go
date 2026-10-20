@@ -13,25 +13,27 @@ import (
 func DataSourceVmwareengineAnnouncements() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceVmwareengineAnnouncementsRead,
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Required. The resource name of the location to be queried for announcements. Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names. For example: projects/my-project/locations/us-west1-a`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `The resource name of the specific Announcements to retrieve. If provided, the 'announcements' list will contain only this announcement.`,
-			},
-			"announcements": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: ` A list of announcements`,
-				Elem:        dataSourceVmwareengineAnnouncement(),
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Required. The resource name of the location to be queried for announcements. Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names. For example: projects/my-project/locations/us-west1-a`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `The resource name of the specific Announcements to retrieve. If provided, the 'announcements' list will contain only this announcement.`,
+				},
+				"announcements": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: ` A list of announcements`,
+					Elem:        dataSourceVmwareengineAnnouncement(),
+				},
+			}
 		},
 	}
 }

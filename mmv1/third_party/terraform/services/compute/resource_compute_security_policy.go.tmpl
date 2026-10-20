@@ -69,7 +69,8 @@ func ResourceComputeSecurityPolicy() *schema.Resource {
 			Delete: schema.DefaultTimeout(60 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"name": {
 				Type:         schema.TypeString,
 				Required:     true,
@@ -733,6 +734,7 @@ Please refer to the field 'effective_labels' for all of the labels present on th
 			//UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

@@ -257,7 +257,8 @@ func ResourceSqlDatabaseInstance() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1796,6 +1797,7 @@ API (for read pools, effective_availability_type may differ from availability_ty
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}
@@ -4531,7 +4533,7 @@ func validateSwitchoverMatchesGreenInstance(d *schema.ResourceDiff, config *tran
 		return err
 	}
 
-	resourceSchema := ResourceSqlDatabaseInstance().Schema
+	resourceSchema := ResourceSqlDatabaseInstance().SchemaMap()
 	greenData := ResourceSqlDatabaseInstance().Data(nil)
 	for k := range resourceSchema {
 		oldVal, _ := d.GetChange(k)
@@ -4583,7 +4585,7 @@ func compareConfiguredField(key string, rawVal cty.Value, fieldSchema *schema.Sc
 					if rawElem.IsNull() || !rawElem.IsKnown() {
 						continue
 					}
-					for subName, subSchema := range subRes.Schema {
+					for subName, subSchema := range subRes.SchemaMap() {
 						compareConfiguredField(fmt.Sprintf("%s.%d.%s", key, i, subName), rawElem.GetAttr(subName), subSchema, d, greenData, mismatches)
 					}
 				}

@@ -12,20 +12,22 @@ import (
 func DataSourceGoogleBigqueryDefaultServiceAccount() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleBigqueryDefaultServiceAccountRead,
-		Schema: map[string]*schema.Schema{
-			"email": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"member": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"email": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"member": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

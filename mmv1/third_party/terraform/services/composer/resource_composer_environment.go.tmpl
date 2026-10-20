@@ -172,7 +172,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 			customdiff.ForceNewIf("config.0.node_config.0.subnetwork", forceNewIfNotComposer3CustomDiff("config.0.node_config.0.subnetwork")),
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"name": {
 				Type:         schema.TypeString,
 				Required:     true,
@@ -1103,6 +1104,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 //UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

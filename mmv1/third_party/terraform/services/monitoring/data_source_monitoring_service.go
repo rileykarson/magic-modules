@@ -20,16 +20,16 @@ func dataSourceMonitoringServiceType(
 	listFilter string,
 	typeStateSetter monitoringServiceTypeStateSetter) *schema.Resource {
 
-	// Convert monitoring schema to ds schema
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMonitoringService().Schema)
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
-	// Add schema specific to the service type
-	dsSchema = tpgresource.MergeSchemas(typeSchema, dsSchema)
-
 	return &schema.Resource{
-		Read:   dataSourceMonitoringServiceTypeReadFromList(listFilter, typeStateSetter),
-		Schema: dsSchema,
+		Read: dataSourceMonitoringServiceTypeReadFromList(listFilter, typeStateSetter),
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Convert monitoring schema to ds schema
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMonitoringService().SchemaMap())
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+
+			// Add schema specific to the service type
+			return tpgresource.MergeSchemas(typeSchema, dsSchema)
+		},
 	}
 }
 

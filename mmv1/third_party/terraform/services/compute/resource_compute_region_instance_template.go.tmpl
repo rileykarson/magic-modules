@@ -46,7 +46,8 @@ func ResourceComputeRegionInstanceTemplate() *schema.Resource {
 		// A compute region instance template is more or less a subset of a compute
 		// instance. Please attempt to maintain consistency with the
 		// resource_compute_instance schema when updating this one.
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1337,6 +1338,7 @@ be from 0 to 999,999,999 inclusive.`,
 			//UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

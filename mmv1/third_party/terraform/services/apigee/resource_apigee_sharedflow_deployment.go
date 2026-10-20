@@ -34,39 +34,41 @@ func ResourceApigeeSharedFlowDeployment() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"environment": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The resource ID of the environment.`,
-			},
-			"org_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The Apigee Organization associated with the Apigee instance`,
-			},
-			"revision": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `Revision of the Sharedflow to be deployed.`,
-			},
-			"service_account": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `The service account represents the identity of the deployed proxy, and determines what permissions it has. The format must be {ACCOUNT_ID}@{PROJECT}.iam.gserviceaccount.com.`,
-			},
-			"sharedflow_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Id of the Sharedflow to be deployed.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"environment": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The resource ID of the environment.`,
+				},
+				"org_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The Apigee Organization associated with the Apigee instance`,
+				},
+				"revision": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `Revision of the Sharedflow to be deployed.`,
+				},
+				"service_account": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Optional:    true,
+					Description: `The service account represents the identity of the deployed proxy, and determines what permissions it has. The format must be {ACCOUNT_ID}@{PROJECT}.iam.gserviceaccount.com.`,
+				},
+				"sharedflow_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Id of the Sharedflow to be deployed.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleCloudFunctionsFunction() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudFunctionsFunction().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudFunctionsFunctionRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCloudFunctionsFunctionRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudFunctionsFunction().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
+			return dsSchema
+		},
 	}
 }
 

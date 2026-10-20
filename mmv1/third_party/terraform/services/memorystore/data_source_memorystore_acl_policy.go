@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceMemorystoreAclPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMemorystoreAclPolicy().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "acl_policy_id")
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceMemorystoreAclPolicyRead,
-		Schema: dsSchema,
+		Read: dataSourceMemorystoreAclPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMemorystoreAclPolicy().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "acl_policy_id")
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			return dsSchema
+		},
 	}
 }
 

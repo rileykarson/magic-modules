@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleCloudBackupDRBackupPlanAssociation() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRBackupPlanAssociation().Schema)
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "backup_plan_association_id", "location")
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudBackupDRBackupPlanAssociationRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCloudBackupDRBackupPlanAssociationRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRBackupPlanAssociation().SchemaMap())
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "backup_plan_association_id", "location")
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 
@@ -50,90 +51,92 @@ func dataSourceGoogleCloudBackupDRBackupPlanAssociationRead(d *schema.ResourceDa
 func DataSourceGoogleCloudBackupDRBackupPlanAssociations() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudBackupDRBackupPlanAssociationsRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The location to list the backup plan associations from.",
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "The ID of the project in which the resource belongs.",
-			},
-			"associations": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of the backup plan associations found.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"resource": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"backup_plan": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"data_source": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"rules_config_info": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: "Message for rules config info",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"rule_id": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "Backup Rule id fetched from backup plan.",
-									},
-									"last_backup_state": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "State of last backup taken.",
-									},
-									"last_backup_error": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Description: "google.rpc.Status object to store the last backup error",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"code": {
-													Type:        schema.TypeInt,
-													Computed:    true,
-													Description: "The status code, which should be an enum value of [google.rpc.Code]",
-												},
-												"message": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: "A developer-facing error message, which should be in English.",
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location to list the backup plan associations from.",
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: "The ID of the project in which the resource belongs.",
+				},
+				"associations": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of the backup plan associations found.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"resource": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"backup_plan": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"data_source": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"rules_config_info": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "Message for rules config info",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"rule_id": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "Backup Rule id fetched from backup plan.",
+										},
+										"last_backup_state": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "State of last backup taken.",
+										},
+										"last_backup_error": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Description: "google.rpc.Status object to store the last backup error",
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"code": {
+														Type:        schema.TypeInt,
+														Computed:    true,
+														Description: "The status code, which should be an enum value of [google.rpc.Code]",
+													},
+													"message": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: "A developer-facing error message, which should be in English.",
+													},
 												},
 											},
 										},
-									},
-									"last_successful_backup_consistency_time": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The point in time when the last successful backup was captured from the source",
+										"last_successful_backup_consistency_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The point in time when the last successful backup was captured from the source",
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

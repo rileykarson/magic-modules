@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleGkeHubMembershipBinding() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHub2MembershipBinding().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_binding_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleGkeHubMembershipBindingRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleGkeHubMembershipBindingRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHub2MembershipBinding().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_binding_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

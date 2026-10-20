@@ -10,78 +10,80 @@ import (
 )
 
 func DataSourceOracleDatabaseGoldengateDeploymentVersions() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The location of the resource.",
-		},
-		"goldengate_deployment_versions": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The name of the Goldengate Deployment Version resource.",
-					},
-					"ocid": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The Oracle Cloud Infrastructure OCID of the Goldengate Deployment Version resource.",
-					},
-					"properties": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Resource{
-							Schema: map[string]*schema.Schema{
-								"deployment_type": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "The deployment type of the Goldengate Deployment Version resource.",
+	return &schema.Resource{
+		Read: DataSourceOracleDatabaseGoldengateDeploymentVersionsRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the resource.",
+				},
+				"goldengate_deployment_versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The name of the Goldengate Deployment Version resource.",
+							},
+							"ocid": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The Oracle Cloud Infrastructure OCID of the Goldengate Deployment Version resource.",
+							},
+							"properties": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"deployment_type": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The deployment type of the Goldengate Deployment Version resource.",
+										},
+										"security_fix": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: "Specifies whether this version has a security fix.",
+										},
+										"ogg_version": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The OGG version of the Goldengate Deployment Version resource.",
+										},
+										"release_type": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The release type of the Goldengate Deployment Version resource.",
+										},
+										"release_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The release time of the Goldengate Deployment Version resource.",
+										},
+										"support_end_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The support end time of the Goldengate Deployment Version resource.",
+										},
+									},
 								},
-								"security_fix": {
-									Type:        schema.TypeBool,
-									Computed:    true,
-									Description: "Specifies whether this version has a security fix.",
-								},
-								"ogg_version": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "The OGG version of the Goldengate Deployment Version resource.",
-								},
-								"release_type": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "The release type of the Goldengate Deployment Version resource.",
-								},
-								"release_time": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "The release time of the Goldengate Deployment Version resource.",
-								},
-								"support_end_time": {
-									Type:        schema.TypeString,
-									Computed:    true,
-									Description: "The support end time of the Goldengate Deployment Version resource.",
-								},
+								Description: "The properties of the Goldengate Deployment Version resource.",
 							},
 						},
-						Description: "The properties of the Goldengate Deployment Version resource.",
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-	return &schema.Resource{
-		Read:   DataSourceOracleDatabaseGoldengateDeploymentVersionsRead,
-		Schema: dsSchema,
 	}
 }
 

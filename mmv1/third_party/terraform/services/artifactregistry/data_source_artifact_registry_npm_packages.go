@@ -15,58 +15,60 @@ import (
 func DataSourceArtifactRegistryNpmPackages() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryNpmPackagesRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"npm_packages": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"package_name": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "The name of the Npm package.",
-						},
-						"version": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The version of the Npm package.",
-						},
-						"tags": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: "The tags associated with the Npm package.",
-							Elem:        &schema.Schema{Type: schema.TypeString},
-						},
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The fully qualified name of the Npm package.",
-						},
-						"create_time": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The time the package was created.",
-						},
-						"update_time": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The time the package was last updated.",
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"npm_packages": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"package_name": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: "The name of the Npm package.",
+							},
+							"version": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The version of the Npm package.",
+							},
+							"tags": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "The tags associated with the Npm package.",
+								Elem:        &schema.Schema{Type: schema.TypeString},
+							},
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The fully qualified name of the Npm package.",
+							},
+							"create_time": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The time the package was created.",
+							},
+							"update_time": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The time the package was last updated.",
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

@@ -12,82 +12,84 @@ import (
 func DataSourceGoogleComputeInterconnectLocations() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeInterconnectLocationsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"locations": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"peeringdb_facility_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"address": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"facility_provider": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"facility_provider_facility_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"status": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"continent": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"city": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"availability_zone": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"supports_pzs": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"available_features": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"locations": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-						},
-						"available_link_types": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"peeringdb_facility_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"address": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"facility_provider": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"facility_provider_facility_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"status": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"continent": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"city": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"availability_zone": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"supports_pzs": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"available_features": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"available_link_types": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
 							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

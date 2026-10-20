@@ -14,32 +14,34 @@ func DataSourceGoogleContainerImage() *schema.Resource {
 	return &schema.Resource{
 		DeprecationMessage: "Container Registry is deprecated. Effective March 18, 2025, Container Registry is shut down and writing images to Container Registry is unavailable. Resource will be removed in future major release.",
 		Read:               containerRegistryImageRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"tag": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"digest": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"image_url": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"tag": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"digest": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"image_url": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

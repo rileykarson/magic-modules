@@ -40,90 +40,92 @@ func ResourceComputeNetworkPeering() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: verify.ValidateGCEName,
-				Description:  `Name of the peering.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: verify.ValidateGCEName,
+					Description:  `Name of the peering.`,
+				},
 
-			"network": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				ValidateFunc:     verify.ValidateRegexp(peerNetworkLinkRegex),
-				DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
-				Description:      `The primary network of the peering.`,
-			},
+				"network": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					ValidateFunc:     verify.ValidateRegexp(peerNetworkLinkRegex),
+					DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
+					Description:      `The primary network of the peering.`,
+				},
 
-			"peer_network": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				ValidateFunc:     verify.ValidateRegexp(peerNetworkLinkRegex),
-				DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
-				Description:      `The peer network in the peering. The peer network may belong to a different project.`,
-			},
+				"peer_network": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					ValidateFunc:     verify.ValidateRegexp(peerNetworkLinkRegex),
+					DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
+					Description:      `The peer network in the peering. The peer network may belong to a different project.`,
+				},
 
-			"export_custom_routes": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-				Description: `Whether to export the custom routes to the peer network. Defaults to false.`,
-			},
+				"export_custom_routes": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     false,
+					Description: `Whether to export the custom routes to the peer network. Defaults to false.`,
+				},
 
-			"import_custom_routes": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-				Description: `Whether to export the custom routes from the peer network. Defaults to false.`,
-			},
+				"import_custom_routes": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     false,
+					Description: `Whether to export the custom routes from the peer network. Defaults to false.`,
+				},
 
-			"export_subnet_routes_with_public_ip": {
-				Type:     schema.TypeBool,
-				ForceNew: true,
-				Optional: true,
-				Default:  true,
-			},
+				"export_subnet_routes_with_public_ip": {
+					Type:     schema.TypeBool,
+					ForceNew: true,
+					Optional: true,
+					Default:  true,
+				},
 
-			"import_subnet_routes_with_public_ip": {
-				Type:     schema.TypeBool,
-				ForceNew: true,
-				Optional: true,
-			},
+				"import_subnet_routes_with_public_ip": {
+					Type:     schema.TypeBool,
+					ForceNew: true,
+					Optional: true,
+				},
 
-			"state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `State for the peering, either ACTIVE or INACTIVE. The peering is ACTIVE when there's a matching configuration in the peer network.`,
-			},
+				"state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `State for the peering, either ACTIVE or INACTIVE. The peering is ACTIVE when there's a matching configuration in the peer network.`,
+				},
 
-			"state_details": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Details about the current state of the peering.`,
-			},
+				"state_details": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Details about the current state of the peering.`,
+				},
 
-			"stack_type": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: verify.ValidateEnum([]string{"IPV4_ONLY", "IPV4_IPV6"}),
-				Description:  `Which IP version(s) of traffic and routes are allowed to be imported or exported between peer networks. The default value is IPV4_ONLY. Possible values: ["IPV4_ONLY", "IPV4_IPV6"]`,
-				Default:      "IPV4_ONLY",
-			},
+				"stack_type": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: verify.ValidateEnum([]string{"IPV4_ONLY", "IPV4_IPV6"}),
+					Description:  `Which IP version(s) of traffic and routes are allowed to be imported or exported between peer networks. The default value is IPV4_ONLY. Possible values: ["IPV4_ONLY", "IPV4_IPV6"]`,
+					Default:      "IPV4_ONLY",
+				},
 
-			"update_strategy": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: verify.ValidateEnum([]string{"INDEPENDENT", "CONSENSUS"}),
-				Description:  `The update strategy determines the semantics for updates and deletes to the peering connection configuration. The default value is INDEPENDENT. Possible values: ["INDEPENDENT", "CONSENSUS"]`,
-				Default:      "INDEPENDENT",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"update_strategy": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: verify.ValidateEnum([]string{"INDEPENDENT", "CONSENSUS"}),
+					Description:  `The update strategy determines the semantics for updates and deletes to the peering connection configuration. The default value is INDEPENDENT. Possible values: ["INDEPENDENT", "CONSENSUS"]`,
+					Default:      "INDEPENDENT",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

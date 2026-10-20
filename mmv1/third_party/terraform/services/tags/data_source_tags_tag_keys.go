@@ -15,18 +15,20 @@ func DataSourceGoogleTagsTagKeys() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleTagsTagKeysRead,
 
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"keys": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceTagsTagKey().Schema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-			},
+				"keys": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceTagsTagKey().SchemaMap()),
+					},
+				},
+			}
 		},
 	}
 }

@@ -109,122 +109,124 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 			Delete: schema.DefaultTimeout(20 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"instance_name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareResourceNames,
-				Description:      `The name of the Bigtable instance.`,
-			},
-
-			"table": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the table.`,
-			},
-
-			"column_family": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the column family.`,
-			},
-
-			"gc_rules": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Description:   `Serialized JSON string for garbage collection policy. Conflicts with "mode", "max_age" and "max_version".`,
-				ValidateFunc:  validation.StringIsJSON,
-				ConflictsWith: []string{"mode", "max_age", "max_version"},
-				StateFunc: func(v interface{}) string {
-					json, _ := structure.NormalizeJsonString(v)
-					return json
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"instance_name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareResourceNames,
+					Description:      `The name of the Bigtable instance.`,
 				},
-				DiffSuppressFunc: func(k, old, new string, _ *schema.ResourceData) bool {
-					return gcRulesDiffSuppress(old, new)
-				},
-			},
-			"mode": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				Description:   `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. If multiple policies are set, you should choose between UNION OR INTERSECTION.`,
-				ValidateFunc:  validation.StringInSlice([]string{GCPolicyModeIntersection, GCPolicyModeUnion}, false),
-				ConflictsWith: []string{"gc_rules"},
-			},
 
-			"max_age": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all cells older than the given age.`,
-				MaxItems:    1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"days": {
-							Type:         schema.TypeInt,
-							Optional:     true,
-							Computed:     true,
-							ForceNew:     true,
-							Deprecated:   "Deprecated in favor of duration",
-							Description:  `Number of days before applying GC policy.`,
-							ExactlyOneOf: []string{"max_age.0.days", "max_age.0.duration"},
-						},
-						"duration": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ForceNew:     true,
-							Description:  `Duration before applying GC policy`,
-							ValidateFunc: verify.ValidateDuration(),
-							ExactlyOneOf: []string{"max_age.0.days", "max_age.0.duration"},
-						},
+				"table": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the table.`,
+				},
+
+				"column_family": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the column family.`,
+				},
+
+				"gc_rules": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Description:   `Serialized JSON string for garbage collection policy. Conflicts with "mode", "max_age" and "max_version".`,
+					ValidateFunc:  validation.StringIsJSON,
+					ConflictsWith: []string{"mode", "max_age", "max_version"},
+					StateFunc: func(v interface{}) string {
+						json, _ := structure.NormalizeJsonString(v)
+						return json
+					},
+					DiffSuppressFunc: func(k, old, new string, _ *schema.ResourceData) bool {
+						return gcRulesDiffSuppress(old, new)
 					},
 				},
-				ConflictsWith: []string{"gc_rules"},
-			},
+				"mode": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					Description:   `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. If multiple policies are set, you should choose between UNION OR INTERSECTION.`,
+					ValidateFunc:  validation.StringInSlice([]string{GCPolicyModeIntersection, GCPolicyModeUnion}, false),
+					ConflictsWith: []string{"gc_rules"},
+				},
 
-			"max_version": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all versions of a cell except for the most recent.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"number": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							ForceNew:    true,
-							Description: `Number of version before applying the GC policy.`,
+				"max_age": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all cells older than the given age.`,
+					MaxItems:    1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"days": {
+								Type:         schema.TypeInt,
+								Optional:     true,
+								Computed:     true,
+								ForceNew:     true,
+								Deprecated:   "Deprecated in favor of duration",
+								Description:  `Number of days before applying GC policy.`,
+								ExactlyOneOf: []string{"max_age.0.days", "max_age.0.duration"},
+							},
+							"duration": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Computed:     true,
+								ForceNew:     true,
+								Description:  `Duration before applying GC policy`,
+								ValidateFunc: verify.ValidateDuration(),
+								ExactlyOneOf: []string{"max_age.0.days", "max_age.0.duration"},
+							},
 						},
 					},
+					ConflictsWith: []string{"gc_rules"},
 				},
-				ConflictsWith: []string{"gc_rules"},
-			},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
+				"max_version": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all versions of a cell except for the most recent.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"number": {
+								Type:        schema.TypeInt,
+								Required:    true,
+								ForceNew:    true,
+								Description: `Number of version before applying the GC policy.`,
+							},
+						},
+					},
+					ConflictsWith: []string{"gc_rules"},
+				},
 
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
 
-			"ignore_warnings": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Description: `Allows ignoring warnings when updating the GC policy. This can be used
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+
+				"ignore_warnings": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: `Allows ignoring warnings when updating the GC policy. This can be used
 				to increase the gc policy on replicated clusters. Doing this may make clusters be
 				inconsistent for a longer period of time, before using this make sure you understand
 				the risks listed at https://cloud.google.com/bigtable/docs/garbage-collection#increasing`,
-				Default: false,
-			},
+					Default: false,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

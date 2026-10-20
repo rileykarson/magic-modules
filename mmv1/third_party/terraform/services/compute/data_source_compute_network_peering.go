@@ -14,15 +14,16 @@ import (
 const regexGCEName = "^(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)$"
 
 func DataSourceComputeNetworkPeering() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkPeering().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "network")
-
-	dsSchema["name"].ValidateFunc = verify.ValidateRegexp(regexGCEName)
-	dsSchema["network"].ValidateFunc = verify.ValidateRegexp(peerNetworkLinkRegex)
 	return &schema.Resource{
-		Read:   dataSourceComputeNetworkPeeringRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeNetworkPeeringRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkPeering().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "network")
+
+			dsSchema["name"].ValidateFunc = verify.ValidateRegexp(regexGCEName)
+			dsSchema["network"].ValidateFunc = verify.ValidateRegexp(peerNetworkLinkRegex)
+			return dsSchema
+		},
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(4 * time.Minute),
 		},

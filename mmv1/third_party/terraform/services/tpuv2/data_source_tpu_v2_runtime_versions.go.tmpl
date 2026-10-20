@@ -15,7 +15,8 @@ import (
 func DataSourceTpuV2RuntimeVersions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceTpuV2RuntimeVersionsRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -31,6 +32,7 @@ func DataSourceTpuV2RuntimeVersions() *schema.Resource {
 				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+		}
 		},
 	}
 }

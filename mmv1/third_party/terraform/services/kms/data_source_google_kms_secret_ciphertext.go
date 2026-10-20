@@ -18,20 +18,22 @@ func DataSourceGoogleKmsSecretCiphertext() *schema.Resource {
 	return &schema.Resource{
 		DeprecationMessage: "Use the google_kms_secret_ciphertext resource instead.",
 		Read:               dataSourceGoogleKmsSecretCiphertextRead,
-		Schema: map[string]*schema.Schema{
-			"crypto_key": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"ciphertext": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"plaintext": {
-				Type:      schema.TypeString,
-				Required:  true,
-				Sensitive: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"crypto_key": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"ciphertext": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"plaintext": {
+					Type:      schema.TypeString,
+					Required:  true,
+					Sensitive: true,
+				},
+			}
 		},
 	}
 }

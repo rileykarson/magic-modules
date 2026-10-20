@@ -15,54 +15,56 @@ func DataSourceDnsRecordSets() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceDnsRecordSetsRead,
 
-		Schema: map[string]*schema.Schema{
-			"managed_zone": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"managed_zone": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
 
-			"type": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"type": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
 
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"name": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
 
-			"rrsets": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"type": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"ttl": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-						"rrdatas": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+				"rrsets": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"ttl": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
+							"rrdatas": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
 							},
 						},
 					},
 				},
-			},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

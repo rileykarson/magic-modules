@@ -58,13 +58,14 @@ func TestServiceAccountCredentialDataSources_targetValidation(t *testing.T) {
 		"jwt":          DataSourceGoogleServiceAccountJwt(),
 	}
 	for ds, res := range sources {
-		runSAValidation(t, ds+".target_service_account", res.Schema["target_service_account"].ValidateFunc, targetCases)
-		runSAValidation(t, ds+".delegates", elemValidateFunc(t, res.Schema["delegates"]), delegateCases)
+		resSchema := res.SchemaMap()
+		runSAValidation(t, ds+".target_service_account", resSchema["target_service_account"].ValidateFunc, targetCases)
+		runSAValidation(t, ds+".delegates", elemValidateFunc(t, resSchema["delegates"]), delegateCases)
 	}
 }
 
 func TestServiceAccountKeyDataSource_nameValidation(t *testing.T) {
-	vf := DataSourceGoogleServiceAccountKey().Schema["name"].ValidateFunc
+	vf := DataSourceGoogleServiceAccountKey().SchemaMap()["name"].ValidateFunc
 	cases := []saValidationCase{
 		{value: "projects/my-project/serviceAccounts/svcacct@my-project.iam.gserviceaccount.com/keys/abcd1234"},
 		{value: "../../../../projects/-/serviceAccounts/x@y.iam.gserviceaccount.com/keys/1", expectError: true},

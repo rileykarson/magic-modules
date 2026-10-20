@@ -10,42 +10,42 @@ import (
 )
 
 func DataSourceGoogleBigQueryTables() *schema.Resource {
-
-	dsSchema := map[string]*schema.Schema{
-		"dataset_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The ID of the dataset containing the tables.",
-		},
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
-		},
-		"tables": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"labels": {
-						Type:     schema.TypeMap,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
+	return &schema.Resource{
+		Read: DataSourceGoogleBigQueryTablesRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"dataset_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The ID of the dataset containing the tables.",
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
+				},
+				"tables": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"labels": {
+								Type:     schema.TypeMap,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"table_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
-					"table_id": {
-						Type:     schema.TypeString,
-						Computed: true,
-					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-
-	return &schema.Resource{
-		Read:   DataSourceGoogleBigQueryTablesRead,
-		Schema: dsSchema,
 	}
 }
 

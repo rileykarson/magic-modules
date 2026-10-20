@@ -10,84 +10,86 @@ import (
 )
 
 func DataSourceOracleDatabaseGoldengateDeploymentEnvironments() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The location of the resource.",
-		},
-		"goldengate_deployment_environments": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The name of the Goldengate Deployment Environment resource.",
-					},
-					"category": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The category of the Goldengate Deployment Environment resource.",
-					},
-					"display_name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The display name of the Goldengate Deployment Environment resource.",
-					},
-					"default_cpu_core_count": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The default CPU core count of the Goldengate Deployment Environment resource.",
-					},
-					"environment_type": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The environment type of the Goldengate Deployment Environment resource.",
-					},
-					"auto_scaling_enabled": {
-						Type:        schema.TypeBool,
-						Computed:    true,
-						Description: "Whether auto scaling is enabled by default for the Goldengate Deployment Environment resource.",
-					},
-					"max_cpu_core_count": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The max CPU core count of the Goldengate Deployment Environment resource.",
-					},
-					"memory_gb_per_cpu_core": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The memory per CPU core in GBs of the Goldengate Deployment Environment resource.",
-					},
-					"min_cpu_core_count": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The min CPU core count of the Goldengate Deployment Environment resource.",
-					},
-					"network_bandwidth_gbps_per_cpu_core": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The network bandwidth per CPU core in Gbps of the Goldengate Deployment Environment resource.",
-					},
-					"storage_usage_limit_gb_per_cpu_core": {
-						Type:        schema.TypeInt,
-						Computed:    true,
-						Description: "The storage usage limit per CPU core in GBs of the Goldengate Deployment Environment resource.",
+	return &schema.Resource{
+		Read: DataSourceOracleDatabaseGoldengateDeploymentEnvironmentsRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the resource.",
+				},
+				"goldengate_deployment_environments": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The name of the Goldengate Deployment Environment resource.",
+							},
+							"category": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The category of the Goldengate Deployment Environment resource.",
+							},
+							"display_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The display name of the Goldengate Deployment Environment resource.",
+							},
+							"default_cpu_core_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The default CPU core count of the Goldengate Deployment Environment resource.",
+							},
+							"environment_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The environment type of the Goldengate Deployment Environment resource.",
+							},
+							"auto_scaling_enabled": {
+								Type:        schema.TypeBool,
+								Computed:    true,
+								Description: "Whether auto scaling is enabled by default for the Goldengate Deployment Environment resource.",
+							},
+							"max_cpu_core_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The max CPU core count of the Goldengate Deployment Environment resource.",
+							},
+							"memory_gb_per_cpu_core": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The memory per CPU core in GBs of the Goldengate Deployment Environment resource.",
+							},
+							"min_cpu_core_count": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The min CPU core count of the Goldengate Deployment Environment resource.",
+							},
+							"network_bandwidth_gbps_per_cpu_core": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The network bandwidth per CPU core in Gbps of the Goldengate Deployment Environment resource.",
+							},
+							"storage_usage_limit_gb_per_cpu_core": {
+								Type:        schema.TypeInt,
+								Computed:    true,
+								Description: "The storage usage limit per CPU core in GBs of the Goldengate Deployment Environment resource.",
+							},
+						},
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-	return &schema.Resource{
-		Read:   DataSourceOracleDatabaseGoldengateDeploymentEnvironmentsRead,
-		Schema: dsSchema,
 	}
 }
 

@@ -13,44 +13,46 @@ import (
 func DataSourceGoogleStorageBuckets() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleStorageBucketsRead,
-		Schema: map[string]*schema.Schema{
-			"prefix": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"buckets": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"labels": {
-							Type:     schema.TypeMap,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
-						},
-						"location": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"storage_class": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"prefix": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"buckets": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"labels": {
+								Type:     schema.TypeMap,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
+							"location": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"storage_class": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceGoogleGkeHubMembership() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHubMembership().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleGkeHubMembershipRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleGkeHubMembershipRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHubMembership().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "membership_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

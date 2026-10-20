@@ -11,14 +11,14 @@ import (
 )
 
 func DataSourceSecretManagerSecret() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerSecret().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "secret_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceSecretManagerSecretRead,
-		Schema: dsSchema,
+		Read: dataSourceSecretManagerSecretRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerSecret().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "secret_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

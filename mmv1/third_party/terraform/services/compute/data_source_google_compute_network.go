@@ -14,62 +14,64 @@ func DataSourceGoogleComputeNetwork() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeNetworkRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"network_id": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
+				"network_id": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
 
-			// Deprecated in favor of network_id
-			"numeric_id": {
-				Type:       schema.TypeString,
-				Computed:   true,
-				Deprecated: "`numeric_id` is deprecated and will be removed in a future major release. Use `network_id` instead.",
-			},
+				// Deprecated in favor of network_id
+				"numeric_id": {
+					Type:       schema.TypeString,
+					Computed:   true,
+					Deprecated: "`numeric_id` is deprecated and will be removed in a future major release. Use `network_id` instead.",
+				},
 
-			"gateway_ipv4": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"gateway_ipv4": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"internal_ipv6_range": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"internal_ipv6_range": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"network_profile": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"network_profile": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
 
-			"self_link": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"self_link": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"subnetworks_self_links": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
+				"subnetworks_self_links": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

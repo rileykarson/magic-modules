@@ -17,13 +17,13 @@ import (
 )
 
 func DataSourceGoogleCloudIdentityGroups() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudIdentityGroup().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudIdentityGroupsRead,
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudIdentityGroup().SchemaMap())
+			return map[string]*schema.Schema{
 			"groups": {
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -42,6 +42,7 @@ Cloud Identity resource hierarchy.
 Must be of the form identitysources/{identity_source_id} for external-identity-mapped
 groups or customers/{customer_id} for Google Groups.`,
 			},
+		}
 		},
 	}
 }

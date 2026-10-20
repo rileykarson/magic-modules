@@ -33,28 +33,30 @@ func DataSourceDNSKeys() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceDNSKeysRead,
 
-		Schema: map[string]*schema.Schema{
-			"managed_zone": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
-			"key_signing_keys": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     kskResource(),
-			},
-			"zone_signing_keys": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     dnsKeyResource(),
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"managed_zone": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+				"key_signing_keys": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     kskResource(),
+				},
+				"zone_signing_keys": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     dnsKeyResource(),
+				},
+			}
 		},
 	}
 }

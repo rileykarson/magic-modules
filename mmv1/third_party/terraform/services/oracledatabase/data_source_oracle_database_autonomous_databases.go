@@ -10,28 +10,29 @@ import (
 )
 
 func DataSourceOracleDatabaseAutonomousDatabases() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "location",
-		},
-		"autonomous_databases": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseAutonomousDatabase().Schema),
-			},
-		},
-	}
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseAutonomousDatabasesRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseAutonomousDatabasesRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "location",
+				},
+				"autonomous_databases": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseAutonomousDatabase().SchemaMap()),
+					},
+				},
+			}
+		},
 	}
 
 }

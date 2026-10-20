@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceRedisClusterAclPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceRedisClusterAclPolicy().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "acl_policy_id")
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceRedisClusterAclPolicyRead,
-		Schema: dsSchema,
+		Read: dataSourceRedisClusterAclPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceRedisClusterAclPolicy().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "acl_policy_id")
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			return dsSchema
+		},
 	}
 }
 

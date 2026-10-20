@@ -17,41 +17,41 @@ import (
 )
 
 func DataSourceGoogleStorageBucketObjectContent() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageBucketObject().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "bucket")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// The field must be optional for backward compatibility.
-	dsSchema["content"].Optional = true
-	dsSchema["content_base64"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Description: "Base64 encoded version of the object content. Use this when dealing with binary data.",
-		Computed:    true,
-		Optional:    false,
-		Required:    false,
-	}
-
-	dsSchema["content_hexsha512"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Description: "Hex encoded SHA512 checksum of object content.",
-		Computed:    true,
-		Optional:    false,
-		Required:    false,
-	}
-
-	dsSchema["content_base64sha512"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Description: "Base64 encoded SHA512 checksum of object content.",
-		Computed:    true,
-		Optional:    false,
-		Required:    false,
-	}
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleStorageBucketObjectContentRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleStorageBucketObjectContentRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageBucketObject().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "bucket")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// The field must be optional for backward compatibility.
+			dsSchema["content"].Optional = true
+			dsSchema["content_base64"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Base64 encoded version of the object content. Use this when dealing with binary data.",
+				Computed:    true,
+				Optional:    false,
+				Required:    false,
+			}
+
+			dsSchema["content_hexsha512"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Hex encoded SHA512 checksum of object content.",
+				Computed:    true,
+				Optional:    false,
+				Required:    false,
+			}
+
+			dsSchema["content_base64sha512"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Description: "Base64 encoded SHA512 checksum of object content.",
+				Computed:    true,
+				Optional:    false,
+				Required:    false,
+			}
+			return dsSchema
+		},
 	}
 }
 

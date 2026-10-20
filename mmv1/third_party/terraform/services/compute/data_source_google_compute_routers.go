@@ -12,240 +12,242 @@ import (
 func DataSourceGoogleComputeRouters() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeRoutersRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"routers": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"network": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"creation_timestamp": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"bgp": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"asn": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"advertise_mode": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"advertised_groups": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-									},
-									"advertised_ip_ranges": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"range": {
-													Type:     schema.TypeString,
-													Computed: true,
-												},
-												"description": {
-													Type:     schema.TypeString,
-													Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"routers": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"network": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"creation_timestamp": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"bgp": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"asn": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"advertise_mode": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"advertised_groups": {
+											Type:     schema.TypeList,
+											Computed: true,
+											Elem:     &schema.Schema{Type: schema.TypeString},
+										},
+										"advertised_ip_ranges": {
+											Type:     schema.TypeList,
+											Computed: true,
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"range": {
+														Type:     schema.TypeString,
+														Computed: true,
+													},
+													"description": {
+														Type:     schema.TypeString,
+														Computed: true,
+													},
 												},
 											},
 										},
-									},
-									"keepalive_interval": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-								},
-							},
-						},
-						"interfaces": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"linked_vpn_tunnel": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"linked_interconnect_attachment": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"ip_range": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"private_ip_address": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"redundant_interface": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"subnetwork": {
-										Type:     schema.TypeString,
-										Computed: true,
+										"keepalive_interval": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
 									},
 								},
 							},
-						},
-						"bgp_peers": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"interface_name": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"ip_address": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"peer_ip_address": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"peer_asn": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"advertised_route_priority": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"advertise_mode": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"management_type": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"enable": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"enable_ipv6": {
-										Type:     schema.TypeBool,
-										Computed: true,
+							"interfaces": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"linked_vpn_tunnel": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"linked_interconnect_attachment": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"ip_range": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"private_ip_address": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"redundant_interface": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"subnetwork": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
 									},
 								},
 							},
-						},
-						"nats": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"source_subnetwork_ip_ranges_to_nat": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"nat_ip_allocate_option": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"nat_ips": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-									},
-									"min_ports_per_vm": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"udp_idle_timeout_sec": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"icmp_idle_timeout_sec": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"tcp_established_idle_timeout_sec": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"tcp_transitory_idle_timeout_sec": {
-										Type:     schema.TypeInt,
-										Computed: true,
-									},
-									"enable_endpoint_independent_mapping": {
-										Type:     schema.TypeBool,
-										Computed: true,
+							"bgp_peers": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"interface_name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"ip_address": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"peer_ip_address": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"peer_asn": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"advertised_route_priority": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"advertise_mode": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"management_type": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"enable": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"enable_ipv6": {
+											Type:     schema.TypeBool,
+											Computed: true,
+										},
 									},
 								},
 							},
-						},
-						"encrypted_interconnect_router": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"md5_authentication_keys": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Computed: true,
+							"nats": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"source_subnetwork_ip_ranges_to_nat": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"nat_ip_allocate_option": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"nat_ips": {
+											Type:     schema.TypeList,
+											Computed: true,
+											Elem:     &schema.Schema{Type: schema.TypeString},
+										},
+										"min_ports_per_vm": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"udp_idle_timeout_sec": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"icmp_idle_timeout_sec": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"tcp_established_idle_timeout_sec": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"tcp_transitory_idle_timeout_sec": {
+											Type:     schema.TypeInt,
+											Computed: true,
+										},
+										"enable_endpoint_independent_mapping": {
+											Type:     schema.TypeBool,
+											Computed: true,
+										},
 									},
-									"key": {
-										Type:      schema.TypeString,
-										Computed:  true,
-										Sensitive: true,
+								},
+							},
+							"encrypted_interconnect_router": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"md5_authentication_keys": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"key": {
+											Type:      schema.TypeString,
+											Computed:  true,
+											Sensitive: true,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

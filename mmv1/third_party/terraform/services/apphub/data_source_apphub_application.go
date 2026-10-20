@@ -11,14 +11,15 @@ import (
 )
 
 func DataSourceGoogleApphubApplication() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceApphubApplication().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "application_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleApphubApplicationRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleApphubApplicationRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceApphubApplication().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "application_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			return dsSchema
+		},
 	}
 }
 

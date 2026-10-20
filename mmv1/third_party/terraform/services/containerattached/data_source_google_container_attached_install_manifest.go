@@ -13,27 +13,29 @@ import (
 func DataSourceGoogleContainerAttachedInstallManifest() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleContainerAttachedInstallManifestRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"cluster_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"platform_version": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"manifest": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"cluster_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"platform_version": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"manifest": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

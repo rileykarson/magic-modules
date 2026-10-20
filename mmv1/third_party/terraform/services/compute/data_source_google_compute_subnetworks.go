@@ -14,61 +14,63 @@ func DataSourceGoogleComputeSubnetworks() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeSubnetworksRead,
 
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"subnetworks": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"ip_cidr_range": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"network": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"network_self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-							// TODO: remove in next major release (7.0.0) also from docs and implementation below
-							Deprecated: "Use `network_name` instead. This field will be removed in a future major release.",
-						},
-						"network_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"private_ip_google_access": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"subnetworks": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"ip_cidr_range": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"network": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"network_self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+								// TODO: remove in next major release (7.0.0) also from docs and implementation below
+								Deprecated: "Use `network_name` instead. This field will be removed in a future major release.",
+							},
+							"network_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"private_ip_google_access": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

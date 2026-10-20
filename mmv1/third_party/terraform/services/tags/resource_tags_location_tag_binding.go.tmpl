@@ -37,7 +37,8 @@ func ResourceTagsLocationTagBinding() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"parent": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -66,6 +67,7 @@ Examples: US, EU, asia-northeast1. The default value is US.`,
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

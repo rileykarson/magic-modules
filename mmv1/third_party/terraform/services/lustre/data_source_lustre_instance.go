@@ -10,30 +10,30 @@ import (
 )
 
 func DataSourceLustreInstance() *schema.Resource {
-
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceLustreInstance().Schema)
-
-	dsScema_zone := map[string]*schema.Schema{
-		"zone": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: `Zone of Lustre instance`,
-		},
-	}
-
-	// Set 'Required' schema elements from resource
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
-
-	// Set 'Optional' schema elements from resource
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
-	// Merge schema elements
-	dsSchema_m := tpgresource.MergeSchemas(dsScema_zone, dsSchema)
-
 	return &schema.Resource{
-		Read:   dataSourceLustreInstanceRead,
-		Schema: dsSchema_m,
+		Read: dataSourceLustreInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceLustreInstance().SchemaMap())
+
+			dsScema_zone := map[string]*schema.Schema{
+				"zone": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Zone of Lustre instance`,
+				},
+			}
+
+			// Set 'Required' schema elements from resource
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
+
+			// Set 'Optional' schema elements from resource
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+
+			// Merge schema elements
+			dsSchema_m := tpgresource.MergeSchemas(dsScema_zone, dsSchema)
+			return dsSchema_m
+		},
 	}
 }
 

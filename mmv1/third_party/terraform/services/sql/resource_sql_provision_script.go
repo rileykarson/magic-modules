@@ -26,84 +26,86 @@ func ResourceSqlProvisionScript() *schema.Resource {
 
 		SchemaVersion: 1,
 
-		Schema: map[string]*schema.Schema{
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The description of the provision script.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The description of the provision script.`,
+				},
 
-			"script": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-				Description: `The SQL script to provision database resources. Its execution time limit is 30 s.
+				"script": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+					Description: `The SQL script to provision database resources. Its execution time limit is 30 s.
 				Changing this forces the script to be rerun. Make sure the script is idempotent.
 				You can use statements like "create if not exists …" or
 				"if not exists (select …) then … end if" to prevent existence-related errors. If it's not
 				possible to make a statement idempotent, you can run it once and then remove it from this script.`,
-			},
+				},
 
-			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the Cloud SQL instance. Changing this forces the script to be run on the new instance.`,
-			},
+				"instance": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the Cloud SQL instance. Changing this forces the script to be run on the new instance.`,
+				},
 
-			"database": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				Description: `The name of the database to which Terraform connects. Changing
+				"database": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					Description: `The name of the database to which Terraform connects. Changing
 				this forces Terraform to connect to the new database and run the script. This argument is
 				required for Postgres instances. It's optional for MySQL, but some of your queries may require
 				a database. You can create and use a database in the script or explicitly reference a
 				google_sql_database.`,
-			},
+				},
 
-			"user": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ForceNew:     true,
-				RequiredWith: []string{"password_secret_version"},
-				Description: `The name of the built-in database user to authenticate as. For MySQL user,
+				"user": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ForceNew:     true,
+					RequiredWith: []string{"password_secret_version"},
+					Description: `The name of the built-in database user to authenticate as. For MySQL user,
 				omit '@' and the hostname. The user should exist as a built-in user in the database.
 				When user and password_secret_version are provided, the script is run using this user. Otherwise,
 				the script is run using the identity account used to apply your Terraform config.
 				Changing this forces the script to be run using the new user.`,
-			},
+				},
 
-			"password_secret_version": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ForceNew:     true,
-				RequiredWith: []string{"user"},
-				Description: `The resource name of the Secret Manager secret storing the password. The secret
+				"password_secret_version": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ForceNew:     true,
+					RequiredWith: []string{"user"},
+					Description: `The resource name of the Secret Manager secret storing the password. The secret
 				should be a regional secret and stored in the exact same region as the Cloud SQL instance.
 				Follow https://docs.cloud.google.com/secret-manager/regional-secrets/create-regional-secret.
 				When user and password_secret_version are provided, the script is run using this user.
 				Otherwise, the script is run using the identity account used to apply your Terraform config.
 				Changing this field forces the script to be run again.`,
-			},
+				},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
 
-			"deletion_policy": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "ABANDON",
-				Description: `The deletion policy for the resources created by the script. The default is "ABANDON".
+				"deletion_policy": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "ABANDON",
+					Description: `The deletion policy for the resources created by the script. The default is "ABANDON".
 				It must be "ABANDON" to allow Terraform to abandon the resources. If you want to delete resources, add statements
 				in the script such as "drop … if exists".`,
-				ValidateFunc: validation.StringInSlice([]string{"ABANDON"}, false),
-			},
+					ValidateFunc: validation.StringInSlice([]string{"ABANDON"}, false),
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

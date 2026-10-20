@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceGoogleComposerEnvironment() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComposerEnvironment().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComposerEnvironmentRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComposerEnvironmentRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComposerEnvironment().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
+			return dsSchema
+		},
 	}
 }
 

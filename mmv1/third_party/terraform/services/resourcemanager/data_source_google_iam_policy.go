@@ -30,84 +30,86 @@ import (
 func DataSourceGoogleIamPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleIamPolicyRead,
-		Schema: map[string]*schema.Schema{
-			"binding": {
-				Type: schema.TypeSet,
-				// Binding is optional because a user may want to set an IAM policy with no bindings
-				// This allows users to ensure that no bindings were created outside of terraform
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"role": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"members": {
-							Type:     schema.TypeSet,
-							Required: true,
-							Elem: &schema.Schema{
-								Type:         schema.TypeString,
-								ValidateFunc: validation.StringDoesNotMatch(regexp.MustCompile("^deleted:"), "Terraform does not support IAM policies for deleted principals"),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"binding": {
+					Type: schema.TypeSet,
+					// Binding is optional because a user may want to set an IAM policy with no bindings
+					// This allows users to ensure that no bindings were created outside of terraform
+					Optional: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"role": {
+								Type:     schema.TypeString,
+								Required: true,
 							},
-							Set: schema.HashString,
-						},
-						"condition": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"expression": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-									"title": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-									"description": {
-										Type:     schema.TypeString,
-										Optional: true,
+							"members": {
+								Type:     schema.TypeSet,
+								Required: true,
+								Elem: &schema.Schema{
+									Type:         schema.TypeString,
+									ValidateFunc: validation.StringDoesNotMatch(regexp.MustCompile("^deleted:"), "Terraform does not support IAM policies for deleted principals"),
+								},
+								Set: schema.HashString,
+							},
+							"condition": {
+								Type:     schema.TypeList,
+								Optional: true,
+								MaxItems: 1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"expression": {
+											Type:     schema.TypeString,
+											Required: true,
+										},
+										"title": {
+											Type:     schema.TypeString,
+											Required: true,
+										},
+										"description": {
+											Type:     schema.TypeString,
+											Optional: true,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
-			"policy_data": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"audit_config": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"service": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"audit_log_configs": {
-							Type:     schema.TypeSet,
-							Required: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"log_type": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-									"exempted_members": {
-										Type:     schema.TypeSet,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-										Optional: true,
+				"policy_data": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"audit_config": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"service": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"audit_log_configs": {
+								Type:     schema.TypeSet,
+								Required: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"log_type": {
+											Type:     schema.TypeString,
+											Required: true,
+										},
+										"exempted_members": {
+											Type:     schema.TypeSet,
+											Elem:     &schema.Schema{Type: schema.TypeString},
+											Optional: true,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

@@ -12,41 +12,42 @@ import (
 )
 
 func DataSourceGoogleCloudIdentityGroupLookup() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudIdentityGroupLookupRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The [resource name](https://cloud.google.com/apis/design/resource_names) of the looked-up Group.`,
-			},
-			"group_key": {
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Required: true,
-				Description: `The EntityKey of the Group to lookup. A unique identifier for an entity in the Cloud Identity Groups API.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The [resource name](https://cloud.google.com/apis/design/resource_names) of the looked-up Group.`,
+				},
+				"group_key": {
+					Type:     schema.TypeList,
+					MaxItems: 1,
+					Required: true,
+					Description: `The EntityKey of the Group to lookup. A unique identifier for an entity in the Cloud Identity Groups API.
 An entity can represent either a group with an optional namespace or a user without a namespace.
 The combination of id and namespace must be unique; however, the same id can be used with different namespaces.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Required: true,
-							Description: `The ID of the entity. For Google-managed entities, the id should be the email address of an existing group or user.
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:     schema.TypeString,
+								Required: true,
+								Description: `The ID of the entity. For Google-managed entities, the id should be the email address of an existing group or user.
 For external-identity-mapped entities, the id must be a string conforming to the Identity Source's requirements.
 Must be unique within a namespace.`,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Description: `The namespace in which the entity exists. If not specified, the EntityKey represents a Google-managed entity such as a Google user or a Google Group.
+							},
+							"namespace": {
+								Type:     schema.TypeString,
+								Optional: true,
+								Description: `The namespace in which the entity exists. If not specified, the EntityKey represents a Google-managed entity such as a Google user or a Google Group.
 If specified, the EntityKey represents an external-identity-mapped group. The namespace must correspond to an identity source created in Admin Console and must be in the form of identitysources/{identity_source}.`,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

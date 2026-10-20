@@ -10,12 +10,13 @@ import (
 )
 
 func DataSourceVmwareengineCluster() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineCluster().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineClusterRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineClusterRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineCluster().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "name")
+			return dsSchema
+		},
 	}
 }
 

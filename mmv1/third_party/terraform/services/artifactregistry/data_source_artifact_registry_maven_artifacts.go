@@ -14,55 +14,57 @@ import (
 func DataSourceArtifactRegistryMavenArtifacts() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryMavenArtifactsRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"maven_artifacts": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"group_id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"artifact_id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"pom_uri": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"version": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"maven_artifacts": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"group_id": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"artifact_id": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"pom_uri": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"version": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

@@ -10,12 +10,14 @@ import (
 )
 
 func DataSourceOracleDatabaseExascaleDbStorageVault() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseExascaleDbStorageVault().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "exascale_db_storage_vault_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseExascaleDbStorageVaultRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseExascaleDbStorageVaultRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseExascaleDbStorageVault().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "exascale_db_storage_vault_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

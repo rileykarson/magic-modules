@@ -19,26 +19,28 @@ func DataSourceGoogleServiceAccountKey() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleServiceAccountKeyRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ValidateFunc: verify.ValidateRegexp(verify.ServiceAccountKeyNameRegex),
-			},
-			"public_key_type": {
-				Type:         schema.TypeString,
-				Default:      "TYPE_X509_PEM_FILE",
-				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"TYPE_NONE", "TYPE_X509_PEM_FILE", "TYPE_RAW_PUBLIC_KEY"}, false),
-			},
-			"key_algorithm": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"public_key": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ValidateFunc: verify.ValidateRegexp(verify.ServiceAccountKeyNameRegex),
+				},
+				"public_key_type": {
+					Type:         schema.TypeString,
+					Default:      "TYPE_X509_PEM_FILE",
+					Optional:     true,
+					ValidateFunc: validation.StringInSlice([]string{"TYPE_NONE", "TYPE_X509_PEM_FILE", "TYPE_RAW_PUBLIC_KEY"}, false),
+				},
+				"key_algorithm": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"public_key": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

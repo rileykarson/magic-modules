@@ -37,886 +37,888 @@ func ResourceOSConfigOSPolicyAssignment() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"instance_filter": {
-				Type:        schema.TypeList,
-				Required:    true,
-				Description: `Filter to select VMs.`,
-				MaxItems:    1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"all": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `Target all VMs in the project. If true, no other criteria is permitted.`,
-						},
-						"exclusion_labels": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Description: `List of label sets used for VM exclusion.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"instance_filter": {
+					Type:        schema.TypeList,
+					Required:    true,
+					Description: `Filter to select VMs.`,
+					MaxItems:    1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"all": {
+								Type:        schema.TypeBool,
+								Optional:    true,
+								Description: `Target all VMs in the project. If true, no other criteria is permitted.`,
+							},
+							"exclusion_labels": {
+								Type:     schema.TypeList,
+								Optional: true,
+								Description: `List of label sets used for VM exclusion.
 If the list has more than one label set, the VM is excluded if any of the label sets are applicable for the VM.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"labels": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
-										Elem:        &schema.Schema{Type: schema.TypeString},
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"labels": {
+											Type:        schema.TypeMap,
+											Optional:    true,
+											Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
+											Elem:        &schema.Schema{Type: schema.TypeString},
+										},
 									},
 								},
 							},
-						},
-						"inclusion_labels": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Description: `List of label sets used for VM inclusion.
+							"inclusion_labels": {
+								Type:     schema.TypeList,
+								Optional: true,
+								Description: `List of label sets used for VM inclusion.
 If the list has more than one 'LabelSet', the VM is included if any of the label sets are applicable for the VM.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"labels": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
-										Elem:        &schema.Schema{Type: schema.TypeString},
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"labels": {
+											Type:        schema.TypeMap,
+											Optional:    true,
+											Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
+											Elem:        &schema.Schema{Type: schema.TypeString},
+										},
 									},
 								},
 							},
-						},
-						"inventories": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Description: `List of inventories to select VMs.
+							"inventories": {
+								Type:     schema.TypeList,
+								Optional: true,
+								Description: `List of inventories to select VMs.
 A VM is selected if its inventory data matches at least one of the following inventories.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"os_short_name": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: `The OS short name`,
-									},
-									"os_version": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `The OS version Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of '7', specify the following value for this field '7.*' An empty string matches all OS versions.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"os_short_name": {
+											Type:        schema.TypeString,
+											Required:    true,
+											Description: `The OS short name`,
+										},
+										"os_version": {
+											Type:        schema.TypeString,
+											Optional:    true,
+											Description: `The OS version Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of '7', specify the following value for this field '7.*' An empty string matches all OS versions.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The location for the resource`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Resource name.`,
-			},
-			"os_policies": {
-				Type:        schema.TypeList,
-				Required:    true,
-				Description: `List of OS policies to be applied to the VMs.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Required: true,
-							Description: `The id of the OS policy with the following restrictions:
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The location for the resource`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Resource name.`,
+				},
+				"os_policies": {
+					Type:        schema.TypeList,
+					Required:    true,
+					Description: `List of OS policies to be applied to the VMs.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:     schema.TypeString,
+								Required: true,
+								Description: `The id of the OS policy with the following restrictions:
 * Must contain only lowercase letters, numbers, and hyphens.
 * Must start with a letter.
 * Must be between 1-63 characters.
 * Must end with a number or a letter.
 * Must be unique within the assignment.`,
-						},
-						"mode": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ValidateFunc: verify.ValidateEnum([]string{"MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"}),
-							Description:  `Policy mode Possible values: ["MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"]`,
-						},
-						"resource_groups": {
-							Type:     schema.TypeList,
-							Required: true,
-							Description: `List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored.
+							},
+							"mode": {
+								Type:         schema.TypeString,
+								Required:     true,
+								ValidateFunc: verify.ValidateEnum([]string{"MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"}),
+								Description:  `Policy mode Possible values: ["MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"]`,
+							},
+							"resource_groups": {
+								Type:     schema.TypeList,
+								Required: true,
+								Description: `List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored.
 If none of the resource groups are applicable for a VM, the VM is considered to be non-compliant w.r.t this policy. This behavior can be toggled by the flag 'allow_no_resource_group_match'`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"resources": {
-										Type:        schema.TypeList,
-										Required:    true,
-										Description: `List of resources configured for this resource group. The resources are executed in the exact order specified here.`,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"id": {
-													Type:     schema.TypeString,
-													Required: true,
-													Description: `The id of the resource with the following restrictions:
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"resources": {
+											Type:        schema.TypeList,
+											Required:    true,
+											Description: `List of resources configured for this resource group. The resources are executed in the exact order specified here.`,
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"id": {
+														Type:     schema.TypeString,
+														Required: true,
+														Description: `The id of the resource with the following restrictions:
 * Must contain only lowercase letters, numbers, and hyphens.
 * Must start with a letter.
 * Must be between 1-63 characters.
 * Must end with a number or a letter.
 * Must be unique within the OS policy.`,
-												},
-												"exec": {
-													Type:        schema.TypeList,
-													Optional:    true,
-													Description: `Exec resource`,
-													MaxItems:    1,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-															"validate": {
-																Type:        schema.TypeList,
-																Required:    true,
-																Description: `What to run to validate this resource is in the desired state. An exit code of 100 indicates "in desired state", and exit code of 101 indicates "not in desired state". Any other exit code indicates a failure running validate.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"interpreter": {
-																			Type:         schema.TypeString,
-																			Required:     true,
-																			ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
-																			Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
-																		},
-																		"args": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `Optional arguments to pass to the source during execution.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
+													},
+													"exec": {
+														Type:        schema.TypeList,
+														Optional:    true,
+														Description: `Exec resource`,
+														MaxItems:    1,
+														Elem: &schema.Resource{
+															Schema: map[string]*schema.Schema{
+																"validate": {
+																	Type:        schema.TypeList,
+																	Required:    true,
+																	Description: `What to run to validate this resource is in the desired state. An exit code of 100 indicates "in desired state", and exit code of 101 indicates "not in desired state". Any other exit code indicates a failure running validate.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"interpreter": {
+																				Type:         schema.TypeString,
+																				Required:     true,
+																				ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
+																				Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
 																			},
-																		},
-																		"file": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `A remote or local file.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"allow_insecure": {
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
+																			"args": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `Optional arguments to pass to the source during execution.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
+																			},
+																			"file": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `A remote or local file.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"allow_insecure": {
+																							Type:     schema.TypeBool,
+																							Optional: true,
+																							Description: `Defaults to false. When false, files are subject to validations based on the file type:
 Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																					},
-																					"gcs": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A Cloud Storage object.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"bucket": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Bucket of the Cloud Storage object.`,
-																								},
-																								"object": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Name of the Cloud Storage object.`,
-																								},
-																								"generation": {
-																									Type:        schema.TypeInt,
-																									Optional:    true,
-																									Description: `Generation number of the Cloud Storage object.`,
+																						},
+																						"gcs": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A Cloud Storage object.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"bucket": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Bucket of the Cloud Storage object.`,
+																									},
+																									"object": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Name of the Cloud Storage object.`,
+																									},
+																									"generation": {
+																										Type:        schema.TypeInt,
+																										Optional:    true,
+																										Description: `Generation number of the Cloud Storage object.`,
+																									},
 																								},
 																							},
 																						},
-																					},
-																					"local_path": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `A local path within the VM to use.`,
-																					},
-																					"remote": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A generic remote file.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"uri": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																								},
-																								"sha256_checksum": {
-																									Type:        schema.TypeString,
-																									Optional:    true,
-																									Description: `SHA256 checksum of the remote file.`,
+																						"local_path": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `A local path within the VM to use.`,
+																						},
+																						"remote": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A generic remote file.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"uri": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									},
+																									"sha256_checksum": {
+																										Type:        schema.TypeString,
+																										Optional:    true,
+																										Description: `SHA256 checksum of the remote file.`,
+																									},
 																								},
 																							},
 																						},
 																					},
 																				},
 																			},
-																		},
-																		"output_file_path": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
-																		},
-																		"script": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			"output_file_path": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
+																			},
+																			"script": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			},
 																		},
 																	},
 																},
-															},
-															"enforce": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `What to run to bring this resource into the desired state. An exit code of 100 indicates "success", any other exit code indicates a failure running enforce.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"interpreter": {
-																			Type:         schema.TypeString,
-																			Required:     true,
-																			ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
-																			Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
-																		},
-																		"args": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `Optional arguments to pass to the source during execution.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
+																"enforce": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `What to run to bring this resource into the desired state. An exit code of 100 indicates "success", any other exit code indicates a failure running enforce.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"interpreter": {
+																				Type:         schema.TypeString,
+																				Required:     true,
+																				ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
+																				Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
 																			},
-																		},
-																		"file": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `A remote or local file.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"allow_insecure": {
-																						Type:        schema.TypeBool,
-																						Optional:    true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																					},
-																					"gcs": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A Cloud Storage object.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"bucket": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Bucket of the Cloud Storage object.`,
-																								},
-																								"object": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Name of the Cloud Storage object.`,
-																								},
-																								"generation": {
-																									Type:        schema.TypeInt,
-																									Optional:    true,
-																									Description: `Generation number of the Cloud Storage object.`,
+																			"args": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `Optional arguments to pass to the source during execution.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
+																			},
+																			"file": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `A remote or local file.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"allow_insecure": {
+																							Type:        schema.TypeBool,
+																							Optional:    true,
+																							Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						},
+																						"gcs": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A Cloud Storage object.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"bucket": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Bucket of the Cloud Storage object.`,
+																									},
+																									"object": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Name of the Cloud Storage object.`,
+																									},
+																									"generation": {
+																										Type:        schema.TypeInt,
+																										Optional:    true,
+																										Description: `Generation number of the Cloud Storage object.`,
+																									},
 																								},
 																							},
 																						},
-																					},
-																					"local_path": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `A local path within the VM to use.`,
-																					},
-																					"remote": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A generic remote file.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"uri": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																								},
-																								"sha256_checksum": {
-																									Type:        schema.TypeString,
-																									Optional:    true,
-																									Description: `SHA256 checksum of the remote file.`,
+																						"local_path": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `A local path within the VM to use.`,
+																						},
+																						"remote": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A generic remote file.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"uri": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									},
+																									"sha256_checksum": {
+																										Type:        schema.TypeString,
+																										Optional:    true,
+																										Description: `SHA256 checksum of the remote file.`,
+																									},
 																								},
 																							},
 																						},
 																					},
 																				},
 																			},
-																		},
-																		"output_file_path": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
-																		},
-																		"script": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			"output_file_path": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
+																			},
+																			"script": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			},
 																		},
 																	},
 																},
 															},
 														},
 													},
-												},
-												"file": {
-													Type:        schema.TypeList,
-													Optional:    true,
-													Description: `File resource`,
-													MaxItems:    1,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-															"path": {
-																Type:        schema.TypeString,
-																Required:    true,
-																Description: `The absolute path of the file within the VM.`,
-															},
-															"state": {
-																Type:         schema.TypeString,
-																Required:     true,
-																ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"}),
-																Description:  `Desired state of the file. Possible values: ["DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"]`,
-															},
-															"content": {
-																Type:        schema.TypeString,
-																Optional:    true,
-																Description: `A a file with this content. The size of the content is limited to 1024 characters.`,
-															},
-															"file": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A remote or local source.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"allow_insecure": {
-																			Type:        schema.TypeBool,
-																			Optional:    true,
-																			Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																		},
-																		"gcs": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `A Cloud Storage object.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"bucket": {
-																						Type:        schema.TypeString,
-																						Required:    true,
-																						Description: `Bucket of the Cloud Storage object.`,
-																					},
-																					"object": {
-																						Type:        schema.TypeString,
-																						Required:    true,
-																						Description: `Name of the Cloud Storage object.`,
-																					},
-																					"generation": {
-																						Type:        schema.TypeInt,
-																						Optional:    true,
-																						Description: `Generation number of the Cloud Storage object.`,
+													"file": {
+														Type:        schema.TypeList,
+														Optional:    true,
+														Description: `File resource`,
+														MaxItems:    1,
+														Elem: &schema.Resource{
+															Schema: map[string]*schema.Schema{
+																"path": {
+																	Type:        schema.TypeString,
+																	Required:    true,
+																	Description: `The absolute path of the file within the VM.`,
+																},
+																"state": {
+																	Type:         schema.TypeString,
+																	Required:     true,
+																	ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"}),
+																	Description:  `Desired state of the file. Possible values: ["DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"]`,
+																},
+																"content": {
+																	Type:        schema.TypeString,
+																	Optional:    true,
+																	Description: `A a file with this content. The size of the content is limited to 1024 characters.`,
+																},
+																"file": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A remote or local source.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"allow_insecure": {
+																				Type:        schema.TypeBool,
+																				Optional:    true,
+																				Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																			},
+																			"gcs": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `A Cloud Storage object.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"bucket": {
+																							Type:        schema.TypeString,
+																							Required:    true,
+																							Description: `Bucket of the Cloud Storage object.`,
+																						},
+																						"object": {
+																							Type:        schema.TypeString,
+																							Required:    true,
+																							Description: `Name of the Cloud Storage object.`,
+																						},
+																						"generation": {
+																							Type:        schema.TypeInt,
+																							Optional:    true,
+																							Description: `Generation number of the Cloud Storage object.`,
+																						},
 																					},
 																				},
 																			},
-																		},
-																		"local_path": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `A local path within the VM to use.`,
-																		},
-																		"remote": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `A generic remote file.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"uri": {
-																						Type:        schema.TypeString,
-																						Required:    true,
-																						Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																					},
-																					"sha256_checksum": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `SHA256 checksum of the remote file.`,
+																			"local_path": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `A local path within the VM to use.`,
+																			},
+																			"remote": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `A generic remote file.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"uri": {
+																							Type:        schema.TypeString,
+																							Required:    true,
+																							Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																						},
+																						"sha256_checksum": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `SHA256 checksum of the remote file.`,
+																						},
 																					},
 																				},
 																			},
 																		},
 																	},
 																},
-															},
-															"permissions": {
-																Type:     schema.TypeString,
-																Computed: true,
-																Description: `Consists of three octal digits which represent, in order, the permissions of the owner, group, and other users for the file (similarly to the numeric mode used in the linux chmod utility). Each digit represents a three bit number with the 4 bit corresponding to the read permissions, the 2 bit corresponds to the write bit, and the one bit corresponds to the execute permission. Default behavior is 755.
+																"permissions": {
+																	Type:     schema.TypeString,
+																	Computed: true,
+																	Description: `Consists of three octal digits which represent, in order, the permissions of the owner, group, and other users for the file (similarly to the numeric mode used in the linux chmod utility). Each digit represents a three bit number with the 4 bit corresponding to the read permissions, the 2 bit corresponds to the write bit, and the one bit corresponds to the execute permission. Default behavior is 755.
 Below are some examples of permissions and their associated values: read, write, and execute: 7 read and execute: 5 read and write: 6 read only: 4`,
-															},
-														},
-													},
-												},
-												"pkg": {
-													Type:        schema.TypeList,
-													Optional:    true,
-													Description: `Package resource`,
-													MaxItems:    1,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-															"desired_state": {
-																Type:         schema.TypeString,
-																Required:     true,
-																ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"}),
-																Description:  `The desired state the agent should maintain for this package. Possible values: ["DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"]`,
-															},
-															"apt": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A package managed by Apt.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"name": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `Package name.`,
-																		},
-																	},
-																},
-															},
-															"deb": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A deb package file.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"source": {
-																			Type:        schema.TypeList,
-																			Required:    true,
-																			Description: `A deb package.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"allow_insecure": {
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																					},
-																					"gcs": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A Cloud Storage object.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"bucket": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Bucket of the Cloud Storage object.`,
-																								},
-																								"object": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Name of the Cloud Storage object.`,
-																								},
-																								"generation": {
-																									Type:        schema.TypeInt,
-																									Optional:    true,
-																									Description: `Generation number of the Cloud Storage object.`,
-																								},
-																							},
-																						},
-																					},
-																					"local_path": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `A local path within the VM to use.`,
-																					},
-																					"remote": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A generic remote file.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"uri": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																								},
-																								"sha256_checksum": {
-																									Type:        schema.TypeString,
-																									Optional:    true,
-																									Description: `SHA256 checksum of the remote file.`,
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-																		"pull_deps": {
-																			Type:        schema.TypeBool,
-																			Optional:    true,
-																			Description: `Whether dependencies should also be installed. - install when false: 'dpkg -i package' - install when true: 'apt-get update && apt-get -y install package.deb'`,
-																		},
-																	},
-																},
-															},
-															"googet": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A package managed by GooGet.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"name": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `Package name.`,
-																		},
-																	},
-																},
-															},
-															"msi": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `An MSI package.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"source": {
-																			Type:        schema.TypeList,
-																			Required:    true,
-																			Description: `The MSI package.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"allow_insecure": {
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																					},
-																					"gcs": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A Cloud Storage object.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"bucket": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Bucket of the Cloud Storage object.`,
-																								},
-																								"object": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Name of the Cloud Storage object.`,
-																								},
-																								"generation": {
-																									Type:        schema.TypeInt,
-																									Optional:    true,
-																									Description: `Generation number of the Cloud Storage object.`,
-																								},
-																							},
-																						},
-																					},
-																					"local_path": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `A local path within the VM to use.`,
-																					},
-																					"remote": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A generic remote file.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"uri": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																								},
-																								"sha256_checksum": {
-																									Type:        schema.TypeString,
-																									Optional:    true,
-																									Description: `SHA256 checksum of the remote file.`,
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-																		"properties": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `Additional properties to use during installation. This should be in the format of Property=Setting. Appended to the defaults of 'ACTION=INSTALL REBOOT=ReallySuppress'.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
-																			},
-																		},
-																	},
-																},
-															},
-															"rpm": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `An rpm package file.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"source": {
-																			Type:        schema.TypeList,
-																			Required:    true,
-																			Description: `An rpm package.`,
-																			MaxItems:    1,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-																					"allow_insecure": {
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
-																					},
-																					"gcs": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A Cloud Storage object.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"bucket": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Bucket of the Cloud Storage object.`,
-																								},
-																								"object": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `Name of the Cloud Storage object.`,
-																								},
-																								"generation": {
-																									Type:        schema.TypeInt,
-																									Optional:    true,
-																									Description: `Generation number of the Cloud Storage object.`,
-																								},
-																							},
-																						},
-																					},
-																					"local_path": {
-																						Type:        schema.TypeString,
-																						Optional:    true,
-																						Description: `A local path within the VM to use.`,
-																					},
-																					"remote": {
-																						Type:        schema.TypeList,
-																						Optional:    true,
-																						Description: `A generic remote file.`,
-																						MaxItems:    1,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-																								"uri": {
-																									Type:        schema.TypeString,
-																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
-																								},
-																								"sha256_checksum": {
-																									Type:        schema.TypeString,
-																									Optional:    true,
-																									Description: `SHA256 checksum of the remote file.`,
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-																		"pull_deps": {
-																			Type:        schema.TypeBool,
-																			Optional:    true,
-																			Description: `Whether dependencies should also be installed. - install when false: 'rpm --upgrade --replacepkgs package.rpm' - install when true: 'yum -y install package.rpm' or 'zypper -y install package.rpm'`,
-																		},
-																	},
-																},
-															},
-															"yum": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A package managed by YUM.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"name": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `Package name.`,
-																		},
-																	},
-																},
-															},
-															"zypper": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A package managed by Zypper.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"name": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `Package name.`,
-																		},
-																	},
 																},
 															},
 														},
 													},
-												},
-												"repository": {
-													Type:        schema.TypeList,
-													Optional:    true,
-													Description: `Package repository resource`,
-													MaxItems:    1,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-															"apt": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `An Apt Repository.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"archive_type": {
-																			Type:         schema.TypeString,
-																			Required:     true,
-																			ValidateFunc: verify.ValidateEnum([]string{"ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"}),
-																			Description:  `Type of archive files in this repository. Possible values: ["ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"]`,
-																		},
-																		"components": {
-																			Type:        schema.TypeList,
-																			Required:    true,
-																			Description: `List of components for this repository. Must contain at least one item.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
-																			},
-																		},
-																		"distribution": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `Distribution of this repository.`,
-																		},
-																		"uri": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `URI for this repository.`,
-																		},
-																		"gpg_key": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `URI of the key file for this repository. The agent maintains a keyring at '/etc/apt/trusted.gpg.d/osconfig_agent_managed.gpg'.`,
-																		},
-																	},
+													"pkg": {
+														Type:        schema.TypeList,
+														Optional:    true,
+														Description: `Package resource`,
+														MaxItems:    1,
+														Elem: &schema.Resource{
+															Schema: map[string]*schema.Schema{
+																"desired_state": {
+																	Type:         schema.TypeString,
+																	Required:     true,
+																	ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"}),
+																	Description:  `The desired state the agent should maintain for this package. Possible values: ["DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"]`,
 																},
-															},
-															"goo": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A Goo Repository.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"name": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `The name of the repository.`,
-																		},
-																		"url": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `The url of the repository.`,
-																		},
-																	},
-																},
-															},
-															"yum": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A Yum Repository.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"base_url": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `The location of the repository directory.`,
-																		},
-																		"id": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `A one word, unique name for this repository. This is the 'repo id' in the yum config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for resource conflicts.`,
-																		},
-																		"display_name": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `The display name of the repository.`,
-																		},
-																		"gpg_keys": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `URIs of GPG keys.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
+																"apt": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A package managed by Apt.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"name": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `Package name.`,
 																			},
 																		},
 																	},
 																},
+																"deb": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A deb package file.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"source": {
+																				Type:        schema.TypeList,
+																				Required:    true,
+																				Description: `A deb package.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"allow_insecure": {
+																							Type:     schema.TypeBool,
+																							Optional: true,
+																							Description: `Defaults to false. When false, files are subject to validations based on the file type:
+Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						},
+																						"gcs": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A Cloud Storage object.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"bucket": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Bucket of the Cloud Storage object.`,
+																									},
+																									"object": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Name of the Cloud Storage object.`,
+																									},
+																									"generation": {
+																										Type:        schema.TypeInt,
+																										Optional:    true,
+																										Description: `Generation number of the Cloud Storage object.`,
+																									},
+																								},
+																							},
+																						},
+																						"local_path": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `A local path within the VM to use.`,
+																						},
+																						"remote": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A generic remote file.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"uri": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									},
+																									"sha256_checksum": {
+																										Type:        schema.TypeString,
+																										Optional:    true,
+																										Description: `SHA256 checksum of the remote file.`,
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																			"pull_deps": {
+																				Type:        schema.TypeBool,
+																				Optional:    true,
+																				Description: `Whether dependencies should also be installed. - install when false: 'dpkg -i package' - install when true: 'apt-get update && apt-get -y install package.deb'`,
+																			},
+																		},
+																	},
+																},
+																"googet": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A package managed by GooGet.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"name": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `Package name.`,
+																			},
+																		},
+																	},
+																},
+																"msi": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `An MSI package.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"source": {
+																				Type:        schema.TypeList,
+																				Required:    true,
+																				Description: `The MSI package.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"allow_insecure": {
+																							Type:     schema.TypeBool,
+																							Optional: true,
+																							Description: `Defaults to false. When false, files are subject to validations based on the file type:
+Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						},
+																						"gcs": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A Cloud Storage object.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"bucket": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Bucket of the Cloud Storage object.`,
+																									},
+																									"object": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Name of the Cloud Storage object.`,
+																									},
+																									"generation": {
+																										Type:        schema.TypeInt,
+																										Optional:    true,
+																										Description: `Generation number of the Cloud Storage object.`,
+																									},
+																								},
+																							},
+																						},
+																						"local_path": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `A local path within the VM to use.`,
+																						},
+																						"remote": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A generic remote file.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"uri": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									},
+																									"sha256_checksum": {
+																										Type:        schema.TypeString,
+																										Optional:    true,
+																										Description: `SHA256 checksum of the remote file.`,
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																			"properties": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `Additional properties to use during installation. This should be in the format of Property=Setting. Appended to the defaults of 'ACTION=INSTALL REBOOT=ReallySuppress'.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
+																			},
+																		},
+																	},
+																},
+																"rpm": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `An rpm package file.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"source": {
+																				Type:        schema.TypeList,
+																				Required:    true,
+																				Description: `An rpm package.`,
+																				MaxItems:    1,
+																				Elem: &schema.Resource{
+																					Schema: map[string]*schema.Schema{
+																						"allow_insecure": {
+																							Type:     schema.TypeBool,
+																							Optional: true,
+																							Description: `Defaults to false. When false, files are subject to validations based on the file type:
+Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						},
+																						"gcs": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A Cloud Storage object.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"bucket": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Bucket of the Cloud Storage object.`,
+																									},
+																									"object": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `Name of the Cloud Storage object.`,
+																									},
+																									"generation": {
+																										Type:        schema.TypeInt,
+																										Optional:    true,
+																										Description: `Generation number of the Cloud Storage object.`,
+																									},
+																								},
+																							},
+																						},
+																						"local_path": {
+																							Type:        schema.TypeString,
+																							Optional:    true,
+																							Description: `A local path within the VM to use.`,
+																						},
+																						"remote": {
+																							Type:        schema.TypeList,
+																							Optional:    true,
+																							Description: `A generic remote file.`,
+																							MaxItems:    1,
+																							Elem: &schema.Resource{
+																								Schema: map[string]*schema.Schema{
+																									"uri": {
+																										Type:        schema.TypeString,
+																										Required:    true,
+																										Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									},
+																									"sha256_checksum": {
+																										Type:        schema.TypeString,
+																										Optional:    true,
+																										Description: `SHA256 checksum of the remote file.`,
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																			"pull_deps": {
+																				Type:        schema.TypeBool,
+																				Optional:    true,
+																				Description: `Whether dependencies should also be installed. - install when false: 'rpm --upgrade --replacepkgs package.rpm' - install when true: 'yum -y install package.rpm' or 'zypper -y install package.rpm'`,
+																			},
+																		},
+																	},
+																},
+																"yum": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A package managed by YUM.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"name": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `Package name.`,
+																			},
+																		},
+																	},
+																},
+																"zypper": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A package managed by Zypper.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"name": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `Package name.`,
+																			},
+																		},
+																	},
+																},
 															},
-															"zypper": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `A Zypper Repository.`,
-																MaxItems:    1,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-																		"base_url": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `The location of the repository directory.`,
+														},
+													},
+													"repository": {
+														Type:        schema.TypeList,
+														Optional:    true,
+														Description: `Package repository resource`,
+														MaxItems:    1,
+														Elem: &schema.Resource{
+															Schema: map[string]*schema.Schema{
+																"apt": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `An Apt Repository.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"archive_type": {
+																				Type:         schema.TypeString,
+																				Required:     true,
+																				ValidateFunc: verify.ValidateEnum([]string{"ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"}),
+																				Description:  `Type of archive files in this repository. Possible values: ["ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"]`,
+																			},
+																			"components": {
+																				Type:        schema.TypeList,
+																				Required:    true,
+																				Description: `List of components for this repository. Must contain at least one item.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
+																			},
+																			"distribution": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `Distribution of this repository.`,
+																			},
+																			"uri": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `URI for this repository.`,
+																			},
+																			"gpg_key": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `URI of the key file for this repository. The agent maintains a keyring at '/etc/apt/trusted.gpg.d/osconfig_agent_managed.gpg'.`,
+																			},
 																		},
-																		"id": {
-																			Type:        schema.TypeString,
-																			Required:    true,
-																			Description: `A one word, unique name for this repository. This is the 'repo id' in the zypper config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for GuestPolicy conflicts.`,
+																	},
+																},
+																"goo": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A Goo Repository.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"name": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `The name of the repository.`,
+																			},
+																			"url": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `The url of the repository.`,
+																			},
 																		},
-																		"display_name": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `The display name of the repository.`,
+																	},
+																},
+																"yum": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A Yum Repository.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"base_url": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `The location of the repository directory.`,
+																			},
+																			"id": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `A one word, unique name for this repository. This is the 'repo id' in the yum config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for resource conflicts.`,
+																			},
+																			"display_name": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `The display name of the repository.`,
+																			},
+																			"gpg_keys": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `URIs of GPG keys.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
+																			},
 																		},
-																		"gpg_keys": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `URIs of GPG keys.`,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
+																	},
+																},
+																"zypper": {
+																	Type:        schema.TypeList,
+																	Optional:    true,
+																	Description: `A Zypper Repository.`,
+																	MaxItems:    1,
+																	Elem: &schema.Resource{
+																		Schema: map[string]*schema.Schema{
+																			"base_url": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `The location of the repository directory.`,
+																			},
+																			"id": {
+																				Type:        schema.TypeString,
+																				Required:    true,
+																				Description: `A one word, unique name for this repository. This is the 'repo id' in the zypper config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for GuestPolicy conflicts.`,
+																			},
+																			"display_name": {
+																				Type:        schema.TypeString,
+																				Optional:    true,
+																				Description: `The display name of the repository.`,
+																			},
+																			"gpg_keys": {
+																				Type:        schema.TypeList,
+																				Optional:    true,
+																				Description: `URIs of GPG keys.`,
+																				Elem: &schema.Schema{
+																					Type: schema.TypeString,
+																				},
 																			},
 																		},
 																	},
@@ -927,147 +929,147 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 												},
 											},
 										},
-									},
-									"inventory_filters": {
-										Type:     schema.TypeList,
-										Optional: true,
-										Description: `List of inventory filters for the resource group.
+										"inventory_filters": {
+											Type:     schema.TypeList,
+											Optional: true,
+											Description: `List of inventory filters for the resource group.
 The resources in this resource group are applied to the target VM if it satisfies at least one of the following inventory filters.
 For example, to apply this resource group to VMs running either 'RHEL' or 'CentOS' operating systems, specify 2 items for the list with following values: inventory_filters[0].os_short_name='rhel' and inventory_filters[1].os_short_name='centos'
 If the list is empty, this resource group will be applied to the target VM unconditionally.`,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"os_short_name": {
-													Type:        schema.TypeString,
-													Required:    true,
-													Description: `The OS short name`,
-												},
-												"os_version": {
-													Type:     schema.TypeString,
-													Optional: true,
-													Description: `The OS version
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"os_short_name": {
+														Type:        schema.TypeString,
+														Required:    true,
+														Description: `The OS short name`,
+													},
+													"os_version": {
+														Type:     schema.TypeString,
+														Optional: true,
+														Description: `The OS version
 Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of '7', specify the following value for this field '7.*'
 An empty string matches all OS versions.`,
+													},
 												},
 											},
 										},
 									},
 								},
 							},
-						},
-						"allow_no_resource_group_match": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `This flag determines the OS policy compliance status when none of the resource groups within the policy are applicable for a VM. Set this value to 'true' if the policy needs to be reported as compliant even if the policy has nothing to validate or enforce.`,
-						},
-						"description": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: `Policy description. Length of the description is limited to 1024 characters.`,
+							"allow_no_resource_group_match": {
+								Type:        schema.TypeBool,
+								Optional:    true,
+								Description: `This flag determines the OS policy compliance status when none of the resource groups within the policy are applicable for a VM. Set this value to 'true' if the policy needs to be reported as compliant even if the policy has nothing to validate or enforce.`,
+							},
+							"description": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Description: `Policy description. Length of the description is limited to 1024 characters.`,
+							},
 						},
 					},
 				},
-			},
-			"rollout": {
-				Type:        schema.TypeList,
-				Required:    true,
-				Description: `Rollout to deploy the OS policy assignment. A rollout is triggered in the following situations: 1) OSPolicyAssignment is created. 2) OSPolicyAssignment is updated and the update contains changes to one of the following fields: - instance_filter - os_policies 3) OSPolicyAssignment is deleted.`,
-				MaxItems:    1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"disruption_budget": {
-							Type:        schema.TypeList,
-							Required:    true,
-							Description: `The maximum number (or percentage) of VMs per zone to disrupt at any given moment.`,
-							MaxItems:    1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"fixed": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Description: `Specifies a fixed value.`,
-									},
-									"percent": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Description: `Specifies the relative value defined as a percentage, which will be multiplied by a reference value.`,
+				"rollout": {
+					Type:        schema.TypeList,
+					Required:    true,
+					Description: `Rollout to deploy the OS policy assignment. A rollout is triggered in the following situations: 1) OSPolicyAssignment is created. 2) OSPolicyAssignment is updated and the update contains changes to one of the following fields: - instance_filter - os_policies 3) OSPolicyAssignment is deleted.`,
+					MaxItems:    1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"disruption_budget": {
+								Type:        schema.TypeList,
+								Required:    true,
+								Description: `The maximum number (or percentage) of VMs per zone to disrupt at any given moment.`,
+								MaxItems:    1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"fixed": {
+											Type:        schema.TypeInt,
+											Optional:    true,
+											Description: `Specifies a fixed value.`,
+										},
+										"percent": {
+											Type:        schema.TypeInt,
+											Optional:    true,
+											Description: `Specifies the relative value defined as a percentage, which will be multiplied by a reference value.`,
+										},
 									},
 								},
 							},
-						},
-						"min_wait_duration": {
-							Type:             schema.TypeString,
-							Required:         true,
-							Description:      `This determines the minimum duration of time to wait after the configuration changes are applied through the current rollout. A VM continues to count towards the 'disruption_budget' at least until this duration of time has passed after configuration changes are applied.`,
-							DiffSuppressFunc: compareDuration,
+							"min_wait_duration": {
+								Type:             schema.TypeString,
+								Required:         true,
+								Description:      `This determines the minimum duration of time to wait after the configuration changes are applied through the current rollout. A VM continues to count towards the 'disruption_budget' at least until this duration of time has passed after configuration changes are applied.`,
+								DiffSuppressFunc: compareDuration,
+							},
 						},
 					},
 				},
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `OS policy assignment description. Length of the description is limited to 1024 characters.`,
-			},
-			"baseline": {
-				Type:     schema.TypeBool,
-				Computed: true,
-				Description: `Output only. Indicates that this revision has been successfully rolled out in this zone and new VMs will be assigned OS policies from this revision.
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `OS policy assignment description. Length of the description is limited to 1024 characters.`,
+				},
+				"baseline": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: `Output only. Indicates that this revision has been successfully rolled out in this zone and new VMs will be assigned OS policies from this revision.
 For a given OS policy assignment, there is only one revision with a value of 'true' for this field.`,
-			},
-			"deleted": {
-				Type:        schema.TypeBool,
-				Computed:    true,
-				Description: `Output only. Indicates that this revision deletes the OS policy assignment.`,
-			},
-			"etag": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The etag for this OS policy assignment. If this is provided on update, it must match the server's etag.`,
-			},
-			"reconciling": {
-				Type:     schema.TypeBool,
-				Computed: true,
-				Description: `Output only. Indicates that reconciliation is in progress for the revision. This value is 'true' when the 'rollout_state' is one of:
+				},
+				"deleted": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: `Output only. Indicates that this revision deletes the OS policy assignment.`,
+				},
+				"etag": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The etag for this OS policy assignment. If this is provided on update, it must match the server's etag.`,
+				},
+				"reconciling": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: `Output only. Indicates that reconciliation is in progress for the revision. This value is 'true' when the 'rollout_state' is one of:
 * IN_PROGRESS
 * CANCELLING`,
-			},
-			"revision_create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. The timestamp that the revision was created.`,
-			},
-			"revision_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. The assignment revision ID A new revision is committed whenever a rollout is triggered for a OS policy assignment`,
-			},
-			"rollout_state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. OS policy assignment rollout state`,
-			},
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. Server generated unique id for the OS policy assignment resource.`,
-			},
-			"skip_await_rollout": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `Set to true to skip awaiting rollout during resource creation and update.`,
-			},
-			"project": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				Computed:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				},
+				"revision_create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Output only. The timestamp that the revision was created.`,
+				},
+				"revision_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Output only. The assignment revision ID A new revision is committed whenever a rollout is triggered for a OS policy assignment`,
+				},
+				"rollout_state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Output only. OS policy assignment rollout state`,
+				},
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Output only. Server generated unique id for the OS policy assignment resource.`,
+				},
+				"skip_await_rollout": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: `Set to true to skip awaiting rollout during resource creation and update.`,
+				},
+				"project": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					Computed:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

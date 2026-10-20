@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceMemorystoreInstance() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMemorystoreInstance().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceMemorystoreInstanceRead,
-		Schema: dsSchema,
+		Read: dataSourceMemorystoreInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceMemorystoreInstance().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "instance_id")
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			return dsSchema
+		},
 	}
 }
 

@@ -14,36 +14,37 @@ import (
 func DataSourceGoogleKmsLatestCryptoKeyVersion() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsLatestCryptoKeyVersionRead,
-		Schema: map[string]*schema.Schema{
-			"crypto_key": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"version": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
-			"algorithm": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"protection_level": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"state": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Description: `
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"crypto_key": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"version": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
+				"algorithm": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"protection_level": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"state": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: `
 					The filter argument is used to add a filter query parameter that limits which type of cryptoKeyVersion is retrieved as the latest by the data source: ?filter={{filter}}. When no value is provided there is no filtering.
 
 					Example filter values if filtering on state.
@@ -52,23 +53,24 @@ func DataSourceGoogleKmsLatestCryptoKeyVersion() *schema.Resource {
 
 					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
-			},
-			"public_key": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"algorithm": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"pem": {
-							Type:     schema.TypeString,
-							Computed: true,
+				},
+				"public_key": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"algorithm": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"pem": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

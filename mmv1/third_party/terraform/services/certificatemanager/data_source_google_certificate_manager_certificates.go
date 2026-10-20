@@ -11,28 +11,29 @@ import (
 )
 
 func DataSourceGoogleCertificateManagerCertificates() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerCertificate().Schema)
-	tpgresource.DeleteFieldsFromSchema(dsSchema, "self_managed")
-
 	return &schema.Resource{
 		Read: dataSourceGoogleCertificateManagerCertificatesRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "global",
-			},
-			"certificates": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: dsSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCertificateManagerCertificate().SchemaMap())
+			tpgresource.DeleteFieldsFromSchema(dsSchema, "self_managed")
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "global",
+				},
+				"certificates": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+			}
 		},
 	}
 }

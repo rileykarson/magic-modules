@@ -11,17 +11,16 @@ import (
 )
 
 func DataSourceGoogleCloudBuildTrigger() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudBuildTrigger().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "trigger_id", "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudBuildTriggerRead,
-		Schema: dsSchema,
-	}
+		Read: dataSourceGoogleCloudBuildTriggerRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudBuildTrigger().SchemaMap())
 
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "trigger_id", "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
+	}
 }
 
 func dataSourceGoogleCloudBuildTriggerRead(d *schema.ResourceData, meta interface{}) error {

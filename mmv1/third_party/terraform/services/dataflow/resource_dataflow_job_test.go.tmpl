@@ -1431,7 +1431,7 @@ func TestResourceDataflowJobTemplateGcsPathDiffSuppress(t *testing.T) {
 			ExpectDiffSuppress: true,
 		},
 	}
-	rd := schema.TestResourceDataRaw(t, dataflow.ResourceDataflowJob().Schema, nil)
+	rd := schema.TestResourceDataRaw(t, dataflow.ResourceDataflowJob().SchemaMap(), nil)
 	rd.Set("region", "us-central1")
 
 	for tn, tc := range cases {

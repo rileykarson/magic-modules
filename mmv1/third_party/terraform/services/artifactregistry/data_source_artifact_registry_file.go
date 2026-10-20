@@ -30,62 +30,64 @@ func DataSourceArtifactRegistryFile() *schema.Resource {
 			Read: schema.DefaultTimeout(10 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"file_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"output_path": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"overwrite": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"size_bytes": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
-			"hashes": {
-				Type:     schema.TypeMap,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"update_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"output_sha256": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"output_base64sha256": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"file_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"output_path": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"overwrite": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"size_bytes": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
+				"hashes": {
+					Type:     schema.TypeMap,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"update_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"output_sha256": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"output_base64sha256": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

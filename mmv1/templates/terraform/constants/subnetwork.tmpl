@@ -185,8 +185,8 @@ func resourceComputeSubnetworkSecondaryIpRangeCustomDiffFunc(diff tpgresource.Te
 
 	// Compare Sets and Clear Diff
 	var hashFunc schema.SchemaSetFunc
-	if ResourceComputeSubnetwork().Schema != nil && ResourceComputeSubnetwork().Schema["secondary_ip_range"] != nil {
-		hashFunc = schema.HashResource(ResourceComputeSubnetwork().Schema["secondary_ip_range"].Elem.(*schema.Resource))
+	if subnetworkSchema := ResourceComputeSubnetwork().SchemaMap(); subnetworkSchema != nil && subnetworkSchema["secondary_ip_range"] != nil {
+		hashFunc = schema.HashResource(subnetworkSchema["secondary_ip_range"].Elem.(*schema.Resource))
 	} else {
 		hashFunc = func(v interface{}) int {
 			buf := &bytes.Buffer{}

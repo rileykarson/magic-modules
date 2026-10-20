@@ -106,155 +106,157 @@ func ResourceSqlUser() *schema.Resource {
 			},
 		},
 
-		Schema: map[string]*schema.Schema{
-			"host": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The host the user can connect from. This is only supported for MySQL instances. Don't set this field for PostgreSQL instances. Can be an IP address. Changing this forces a new resource to be created.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"host": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The host the user can connect from. This is only supported for MySQL instances. Don't set this field for PostgreSQL instances. Can be an IP address. Changing this forces a new resource to be created.`,
+				},
 
-			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the Cloud SQL instance. Changing this forces a new resource to be created.`,
-			},
+				"instance": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the Cloud SQL instance. Changing this forces a new resource to be created.`,
+				},
 
-			"name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: diffSuppressIamUserName,
-				Description:      `The name of the user. Changing this forces a new resource to be created.`,
-			},
+				"name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: diffSuppressIamUserName,
+					Description:      `The name of the user. Changing this forces a new resource to be created.`,
+				},
 
-			"password": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Sensitive:     true,
-				ConflictsWith: []string{"password_wo"},
-				Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
+				"password": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Sensitive:     true,
+					ConflictsWith: []string{"password_wo"},
+					Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
 				either CLOUD_IAM_USER or CLOUD_IAM_SERVICE_ACCOUNT.`,
-			},
+				},
 
-			"password_wo": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				WriteOnly:     true,
-				ConflictsWith: []string{"password"},
-				RequiredWith:  []string{"password_wo_version"},
-				Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
+				"password_wo": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					WriteOnly:     true,
+					ConflictsWith: []string{"password"},
+					RequiredWith:  []string{"password_wo_version"},
+					Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
 				either CLOUD_IAM_USER or CLOUD_IAM_SERVICE_ACCOUNT.`,
-			},
+				},
 
-			"password_wo_version": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				RequiredWith: []string{"password_wo"},
-				Description:  `The version of the password_wo.`,
-			},
+				"password_wo_version": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					RequiredWith: []string{"password_wo"},
+					Description:  `The version of the password_wo.`,
+				},
 
-			"type": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("BUILT_IN"),
-				Description: `The user type. It determines the method to authenticate the user during login.
+				"type": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("BUILT_IN"),
+					Description: `The user type. It determines the method to authenticate the user during login.
 				The default is the database's built-in user type.`,
-			},
-			"sql_server_user_details": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"disabled": {
-							Type:        schema.TypeBool,
-							Computed:    true,
-							Description: `If the user has been disabled.`,
-						},
-						"server_roles": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `The server roles for this user in the database.`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"sql_server_user_details": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"disabled": {
+								Type:        schema.TypeBool,
+								Computed:    true,
+								Description: `If the user has been disabled.`,
+							},
+							"server_roles": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `The server roles for this user in the database.`,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
 
-			"password_policy": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"allowed_failed_attempts": {
-							Type:        schema.TypeInt,
-							Optional:    true,
-							Description: `Number of failed attempts allowed before the user get locked.`,
-						},
-						"password_expiration_duration": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: `Password expiration duration with one week grace period.`,
-						},
-						"enable_failed_attempts_check": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `If true, the check that will lock user after too many failed login attempts will be enabled.`,
-						},
-						"enable_password_verification": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `If true, the user must specify the current password before changing the password. This flag is supported only for MySQL.`,
-						},
-						"status": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"locked": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: `If true, user does not have login privileges.`,
-									},
-									"password_expiration_time": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `Password expiration duration with one week grace period.`,
+				"password_policy": {
+					Type:     schema.TypeList,
+					Optional: true,
+					MaxItems: 1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"allowed_failed_attempts": {
+								Type:        schema.TypeInt,
+								Optional:    true,
+								Description: `Number of failed attempts allowed before the user get locked.`,
+							},
+							"password_expiration_duration": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Description: `Password expiration duration with one week grace period.`,
+							},
+							"enable_failed_attempts_check": {
+								Type:        schema.TypeBool,
+								Optional:    true,
+								Description: `If true, the check that will lock user after too many failed login attempts will be enabled.`,
+							},
+							"enable_password_verification": {
+								Type:        schema.TypeBool,
+								Optional:    true,
+								Description: `If true, the user must specify the current password before changing the password. This flag is supported only for MySQL.`,
+							},
+							"status": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"locked": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: `If true, user does not have login privileges.`,
+										},
+										"password_expiration_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `Password expiration duration with one week grace period.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
 
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
-			"database_roles": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `A list of database roles to be assigned to the user. This option is only available for MySQL and PostgreSQL instances.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"iam_email": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The email address for MySQL IAM database users.`,
-			},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+				"database_roles": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `A list of database roles to be assigned to the user. This option is only available for MySQL and PostgreSQL instances.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"iam_email": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The email address for MySQL IAM database users.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

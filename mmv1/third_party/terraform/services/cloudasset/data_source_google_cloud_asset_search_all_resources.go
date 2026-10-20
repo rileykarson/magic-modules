@@ -12,104 +12,106 @@ import (
 func DataSourceGoogleCloudAssetSearchAllResources() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleCloudAssetSearchAllResourcesRead,
-		Schema: map[string]*schema.Schema{
-			"scope": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"query": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"asset_types": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"scope": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-				Optional: true,
-			},
-			"results": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"asset_type": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"project": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"folders": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+				"query": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"asset_types": {
+					Type: schema.TypeList,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+					Optional: true,
+				},
+				"results": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-						},
-						"organization": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"display_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"location": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"labels": {
-							Type:     schema.TypeMap,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
-						},
-						"network_tags": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+							"asset_type": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-						},
-						"kms_keys": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+							"project": {
+								Type:     schema.TypeString,
+								Computed: true,
 							},
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"state": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"parent_full_resource_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"parent_asset_type": {
-							Type:     schema.TypeString,
-							Computed: true,
+							"folders": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"organization": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"display_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"location": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"labels": {
+								Type:     schema.TypeMap,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
+							"network_tags": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"kms_keys": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"state": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"parent_full_resource_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"parent_asset_type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

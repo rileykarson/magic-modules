@@ -16,53 +16,55 @@ import (
 func DataSourceSecretManagerSecretVersion() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSecretManagerSecretVersionRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"secret": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"version": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"destroy_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"enabled": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"secret_data": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"is_secret_data_base64": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"fetch_secret_data": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"secret": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"version": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"destroy_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"enabled": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"secret_data": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"is_secret_data_base64": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+				"fetch_secret_data": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  true,
+				},
+			}
 		},
 	}
 }

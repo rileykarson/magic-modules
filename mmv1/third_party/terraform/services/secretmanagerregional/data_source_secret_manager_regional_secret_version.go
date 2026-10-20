@@ -16,65 +16,67 @@ import (
 func DataSourceSecretManagerRegionalRegionalSecretVersion() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSecretManagerRegionalRegionalSecretVersionRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"secret": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"version": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"destroy_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"enabled": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"secret_data": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"customer_managed_encryption": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"kms_key_version_name": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"secret": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"version": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"destroy_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"enabled": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"secret_data": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"customer_managed_encryption": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"kms_key_version_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
-			"is_secret_data_base64": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
+				"is_secret_data_base64": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+			}
 		},
 	}
 }

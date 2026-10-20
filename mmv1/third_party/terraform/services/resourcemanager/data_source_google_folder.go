@@ -13,61 +13,63 @@ import (
 func DataSourceGoogleFolder() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceFolderRead,
-		Schema: map[string]*schema.Schema{
-			"folder": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"folder_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"parent": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"display_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"lifecycle_state": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"lookup_organization": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"organization": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"deletion_protection": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"configured_capabilities": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"management_project": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"deletion_policy": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"folder": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"folder_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"parent": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"display_name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"lifecycle_state": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"lookup_organization": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+				"organization": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"deletion_protection": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"configured_capabilities": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"management_project": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"deletion_policy": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

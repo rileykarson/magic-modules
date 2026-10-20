@@ -12,8 +12,11 @@ import (
 )
 
 func DataSourceGoogleComputeRegionInstanceTemplate() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionInstanceTemplate().Schema)
+	return &schema.Resource{
+		Read:   datasourceComputeRegionInstanceTemplateRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionInstanceTemplate().SchemaMap())
 
 	dsSchema["filter"] = &schema.Schema{
 		Type:     schema.TypeString,
@@ -29,10 +32,8 @@ func DataSourceGoogleComputeRegionInstanceTemplate() *schema.Resource {
 
 	dsSchema["name"].ExactlyOneOf = []string{"name", "filter"}
 	dsSchema["filter"].ExactlyOneOf = []string{"name", "filter"}
-
-	return &schema.Resource{
-		Read:   datasourceComputeRegionInstanceTemplateRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 

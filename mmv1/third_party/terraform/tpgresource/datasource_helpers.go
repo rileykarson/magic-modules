@@ -32,7 +32,7 @@ func DatasourceSchemaFromResourceSchema(rs map[string]*schema.Schema) map[string
 			if elem, ok := v.Elem.(*schema.Resource); ok {
 				// handle the case where the Element is a sub-resource
 				dv.Elem = &schema.Resource{
-					Schema: DatasourceSchemaFromResourceSchema(elem.Schema),
+					Schema: DatasourceSchemaFromResourceSchema(elem.SchemaMap()),
 				}
 			} else {
 				// handle simple primitive case

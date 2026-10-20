@@ -150,394 +150,396 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 			tpgresource.SetLabelsDiff,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				Description:  `A user-defined name of the function. Function names must be unique globally.`,
-				ValidateFunc: validateResourceCloudFunctionsFunctionName,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					Description:  `A user-defined name of the function. Function names must be unique globally.`,
+					ValidateFunc: validateResourceCloudFunctionsFunctionName,
+				},
 
-			"build_worker_pool": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Name of the Cloud Build Custom Worker Pool that should be used to build the function.`,
-			},
+				"build_worker_pool": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Name of the Cloud Build Custom Worker Pool that should be used to build the function.`,
+				},
 
-			"source_archive_bucket": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The GCS bucket containing the zip archive which contains the function.`,
-			},
+				"source_archive_bucket": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The GCS bucket containing the zip archive which contains the function.`,
+				},
 
-			"source_archive_object": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The source archive object (file) in archive bucket.`,
-			},
+				"source_archive_object": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The source archive object (file) in archive bucket.`,
+				},
 
-			"source_repository": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				MaxItems:      1,
-				Description:   `Represents parameters related to source repository where a function is hosted. Cannot be set alongside source_archive_bucket or source_archive_object.`,
-				ConflictsWith: []string{"source_archive_bucket", "source_archive_object"},
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"url": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `The URL pointing to the hosted repository where the function is defined.`,
-						},
-						"deployed_url": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The URL pointing to the hosted repository where the function was defined at the time of deployment.`,
+				"source_repository": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					MaxItems:      1,
+					Description:   `Represents parameters related to source repository where a function is hosted. Cannot be set alongside source_archive_bucket or source_archive_object.`,
+					ConflictsWith: []string{"source_archive_bucket", "source_archive_object"},
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"url": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `The URL pointing to the hosted repository where the function is defined.`,
+							},
+							"deployed_url": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The URL pointing to the hosted repository where the function was defined at the time of deployment.`,
+							},
 						},
 					},
 				},
-			},
 
-			"docker_registry": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `Docker Registry to use for storing the function's Docker images. Allowed values are ARTIFACT_REGISTRY (default) and CONTAINER_REGISTRY.`,
-			},
+				"docker_registry": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `Docker Registry to use for storing the function's Docker images. Allowed values are ARTIFACT_REGISTRY (default) and CONTAINER_REGISTRY.`,
+				},
 
-			"docker_repository": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.`,
-			},
+				"docker_repository": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.`,
+				},
 
-			"kms_key_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.`,
-			},
+				"kms_key_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.`,
+				},
 
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Description of the function.`,
-			},
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Description of the function.`,
+				},
 
-			"available_memory_mb": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     256,
-				Description: `Memory (in MB), available to the function. Default value is 256. Possible values include 128, 256, 512, 1024, etc.`,
-			},
+				"available_memory_mb": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Default:     256,
+					Description: `Memory (in MB), available to the function. Default value is 256. Possible values include 128, 256, 512, 1024, etc.`,
+				},
 
-			"timeout": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				Default:      60,
-				ValidateFunc: validation.IntBetween(1, 540),
-				Description:  `Timeout (in seconds) for the function. Default value is 60 seconds. Cannot be more than 540 seconds.`,
-			},
+				"timeout": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					Default:      60,
+					ValidateFunc: validation.IntBetween(1, 540),
+					Description:  `Timeout (in seconds) for the function. Default value is 60 seconds. Cannot be more than 540 seconds.`,
+				},
 
-			"entry_point": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `Name of the function that will be executed when the Google Cloud Function is triggered.`,
-			},
+				"entry_point": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `Name of the function that will be executed when the Google Cloud Function is triggered.`,
+				},
 
-			"ingress_settings": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "ALLOW_ALL",
-				ValidateFunc: validation.StringInSlice(allowedIngressSettings, true),
-				Description:  `String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.`,
-			},
+				"ingress_settings": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "ALLOW_ALL",
+					ValidateFunc: validation.StringInSlice(allowedIngressSettings, true),
+					Description:  `String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.`,
+				},
 
-			"vpc_connector_egress_settings": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.StringInSlice(allowedVpcConnectorEgressSettings, true),
-				Description:  `The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are ALL_TRAFFIC and PRIVATE_RANGES_ONLY. Defaults to PRIVATE_RANGES_ONLY. If unset, this field preserves the previously set value.`,
-			},
+				"vpc_connector_egress_settings": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ValidateFunc: validation.StringInSlice(allowedVpcConnectorEgressSettings, true),
+					Description:  `The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are ALL_TRAFFIC and PRIVATE_RANGES_ONLY. Defaults to PRIVATE_RANGES_ONLY. If unset, this field preserves the previously set value.`,
+				},
 
-			"labels": {
-				Type:         schema.TypeMap,
-				ValidateFunc: labelKeyValidator,
-				Optional:     true,
-				Description: `A set of key/value label pairs to assign to the function. Label keys must follow the requirements at https://docs.cloud.google.com/resource-manager/docs/creating-managing-labels#requirements.
+				"labels": {
+					Type:         schema.TypeMap,
+					ValidateFunc: labelKeyValidator,
+					Optional:     true,
+					Description: `A set of key/value label pairs to assign to the function. Label keys must follow the requirements at https://docs.cloud.google.com/resource-manager/docs/creating-managing-labels#requirements.
 
 				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
 				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
-			},
+				},
 
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"runtime": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The runtime in which the function is going to run. Eg. "nodejs20", "python37", "go111".`,
-			},
+				"runtime": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The runtime in which the function is going to run. Eg. "nodejs20", "python37", "go111".`,
+				},
 
-			"service_account_email": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: ` If provided, the self-provided service account to run the function with.`,
-			},
+				"service_account_email": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: ` If provided, the self-provided service account to run the function with.`,
+				},
 
-			"build_service_account": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The fully-qualified name of the service account to be used for the build step of deploying this function`,
-			},
+				"build_service_account": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The fully-qualified name of the service account to be used for the build step of deploying this function`,
+				},
 
-			"vpc_connector": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The VPC Network Connector that this cloud function can connect to. It can be either the fully-qualified URI, or the short name of the network connector resource. The format of this field is projects/*/locations/*/connectors/*.`,
-			},
+				"vpc_connector": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      `The VPC Network Connector that this cloud function can connect to. It can be either the fully-qualified URI, or the short name of the network connector resource. The format of this field is projects/*/locations/*/connectors/*.`,
+				},
 
-			"environment_variables": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: `A set of key/value environment variable pairs to assign to the function.`,
-			},
+				"environment_variables": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: `A set of key/value environment variable pairs to assign to the function.`,
+				},
 
-			"build_environment_variables": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: ` A set of key/value environment variable pairs available during build time.`,
-			},
+				"build_environment_variables": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: ` A set of key/value environment variable pairs available during build time.`,
+				},
 
-			"trigger_http": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `Boolean variable. Any HTTP request (of a supported type) to the endpoint will trigger function execution. Supported HTTP request types are: POST, PUT, GET, DELETE, and OPTIONS. Endpoint is returned as https_trigger_url. Cannot be used with trigger_bucket and trigger_topic.`,
-			},
+				"trigger_http": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `Boolean variable. Any HTTP request (of a supported type) to the endpoint will trigger function execution. Supported HTTP request types are: POST, PUT, GET, DELETE, and OPTIONS. Endpoint is returned as https_trigger_url. Cannot be used with trigger_bucket and trigger_topic.`,
+				},
 
-			"event_trigger": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"trigger_http"},
-				MaxItems:      1,
-				Description:   `A source that fires events in response to a condition in another service. Cannot be used with trigger_http.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"event_type": {
-							Type:        schema.TypeString,
-							ForceNew:    true,
-							Required:    true,
-							Description: `The type of event to observe. For example: "google.storage.object.finalize". See the documentation on calling Cloud Functions for a full reference of accepted triggers.`,
-						},
-						"resource": {
-							Type:             schema.TypeString,
-							Required:         true,
-							DiffSuppressFunc: compareSelfLinkOrResourceNameWithMultipleParts,
-							Description:      `The name or partial URI of the resource from which to observe events. For example, "myBucket" or "projects/my-project/topics/my-topic"`,
-						},
-						"failure_policy": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: `Specifies policy for failed executions`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"retry": {
-										Type: schema.TypeBool,
-										// not strictly required, but this way an empty block can't be specified
-										Required:    true,
-										Description: `Whether the function should be retried on failure. Defaults to false.`,
-									},
-								}},
+				"event_trigger": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"trigger_http"},
+					MaxItems:      1,
+					Description:   `A source that fires events in response to a condition in another service. Cannot be used with trigger_http.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"event_type": {
+								Type:        schema.TypeString,
+								ForceNew:    true,
+								Required:    true,
+								Description: `The type of event to observe. For example: "google.storage.object.finalize". See the documentation on calling Cloud Functions for a full reference of accepted triggers.`,
+							},
+							"resource": {
+								Type:             schema.TypeString,
+								Required:         true,
+								DiffSuppressFunc: compareSelfLinkOrResourceNameWithMultipleParts,
+								Description:      `The name or partial URI of the resource from which to observe events. For example, "myBucket" or "projects/my-project/topics/my-topic"`,
+							},
+							"failure_policy": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								Computed:    true,
+								MaxItems:    1,
+								Description: `Specifies policy for failed executions`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"retry": {
+											Type: schema.TypeBool,
+											// not strictly required, but this way an empty block can't be specified
+											Required:    true,
+											Description: `Whether the function should be retried on failure. Defaults to false.`,
+										},
+									}},
+							},
 						},
 					},
 				},
-			},
 
-			"https_trigger_url": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `URL which triggers function execution. Returned only if trigger_http is used.`,
-			},
+				"https_trigger_url": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `URL which triggers function execution. Returned only if trigger_http is used.`,
+				},
 
-			"https_trigger_security_level": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The security level for the function. Defaults to SECURE_OPTIONAL. Valid only if trigger_http is used.`,
-			},
+				"https_trigger_security_level": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The security level for the function. Defaults to SECURE_OPTIONAL. Valid only if trigger_http is used.`,
+				},
 
-			"max_instances": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.IntAtLeast(0),
-				Description:  `The limit on the maximum number of function instances that may coexist at a given time.`,
-			},
+				"max_instances": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					Computed:     true,
+					ValidateFunc: validation.IntAtLeast(0),
+					Description:  `The limit on the maximum number of function instances that may coexist at a given time.`,
+				},
 
-			"min_instances": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				ValidateFunc: validation.IntAtLeast(0),
-				Description:  `The limit on the minimum number of function instances that may coexist at a given time.`,
-			},
+				"min_instances": {
+					Type:         schema.TypeInt,
+					Optional:     true,
+					ValidateFunc: validation.IntAtLeast(0),
+					Description:  `The limit on the minimum number of function instances that may coexist at a given time.`,
+				},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `Project of the function. If it is not provided, the provider project is used.`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `Project of the function. If it is not provided, the provider project is used.`,
+				},
 
-			"region": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `Region of function. If it is not provided, the provider region is used.`,
-			},
+				"region": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `Region of function. If it is not provided, the provider region is used.`,
+				},
 
-			"secret_environment_variables": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `Secret environment variables configuration`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"key": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `Name of the environment variable.`,
-						},
-						"project_id": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Computed:    true,
-							Description: `Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.`,
-						},
-						"secret": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `ID of the secret in secret manager (not the full resource name).`,
-						},
-						"version": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `Version of the secret (version number or the string "latest"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.`,
+				"secret_environment_variables": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `Secret environment variables configuration`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"key": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `Name of the environment variable.`,
+							},
+							"project_id": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Computed:    true,
+								Description: `Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.`,
+							},
+							"secret": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `ID of the secret in secret manager (not the full resource name).`,
+							},
+							"version": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `Version of the secret (version number or the string "latest"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.`,
+							},
 						},
 					},
 				},
-			},
 
-			"secret_volumes": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `Secret volumes configuration.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"mount_path": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `The path within the container to mount the secret volume. For example, setting the mount_path as "/etc/secrets" would mount the secret value files under the "/etc/secrets" directory. This directory will also be completely shadowed and unavailable to mount any other secrets. Recommended mount paths: "/etc/secrets" Restricted mount paths: "/cloudsql", "/dev/log", "/pod", "/proc", "/var/log".`,
-						},
-						"project_id": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Computed:    true,
-							Description: `Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.`,
-						},
-						"secret": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `ID of the secret in secret manager (not the full resource name).`,
-						},
-						"versions": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Description: `List of secret versions to mount for this secret. If empty, the "latest" version of the secret will be made available in a file named after the secret under the mount point.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"path": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: `Relative path of the file under the mount path where the secret value for this version will be fetched and made available. For example, setting the mount_path as "/etc/secrets" and path as "/secret_foo" would mount the secret value file at "/etc/secrets/secret_foo".`,
-									},
-									"version": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: `Version of the secret (version number or the string "latest"). It is preferable to use "latest" version with secret volumes as secret value changes are reflected immediately.`,
+				"secret_volumes": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `Secret volumes configuration.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"mount_path": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `The path within the container to mount the secret volume. For example, setting the mount_path as "/etc/secrets" would mount the secret value files under the "/etc/secrets" directory. This directory will also be completely shadowed and unavailable to mount any other secrets. Recommended mount paths: "/etc/secrets" Restricted mount paths: "/cloudsql", "/dev/log", "/pod", "/proc", "/var/log".`,
+							},
+							"project_id": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Computed:    true,
+								Description: `Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.`,
+							},
+							"secret": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `ID of the secret in secret manager (not the full resource name).`,
+							},
+							"versions": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								Description: `List of secret versions to mount for this secret. If empty, the "latest" version of the secret will be made available in a file named after the secret under the mount point.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"path": {
+											Type:        schema.TypeString,
+											Required:    true,
+											Description: `Relative path of the file under the mount path where the secret value for this version will be fetched and made available. For example, setting the mount_path as "/etc/secrets" and path as "/secret_foo" would mount the secret value file at "/etc/secrets/secret_foo".`,
+										},
+										"version": {
+											Type:        schema.TypeString,
+											Required:    true,
+											Description: `Version of the secret (version number or the string "latest"). It is preferable to use "latest" version with secret volumes as secret value changes are reflected immediately.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
 
-			"automatic_update_policy": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"on_deploy_update_policy"},
-				MaxItems:      1,
-				Description:   `Security patches are applied automatically to the runtime without requiring the function to be redeployed.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{},
+				"automatic_update_policy": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"on_deploy_update_policy"},
+					MaxItems:      1,
+					Description:   `Security patches are applied automatically to the runtime without requiring the function to be redeployed.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{},
+					},
 				},
-			},
 
-			"on_deploy_update_policy": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				ConflictsWith: []string{"automatic_update_policy"},
-				MaxItems:      1,
-				Description:   `Security patches are only applied when a function is redeployed.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"runtime_version": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The runtime version which was used during latest function deployment.`,
+				"on_deploy_update_policy": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					ConflictsWith: []string{"automatic_update_policy"},
+					MaxItems:      1,
+					Description:   `Security patches are only applied when a function is redeployed.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"runtime_version": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The runtime version which was used during latest function deployment.`,
+							},
 						},
 					},
 				},
-			},
 
-			"status": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Describes the current stage of a deployment.`,
-			},
+				"status": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Describes the current stage of a deployment.`,
+				},
 
-			"version_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The version identifier of the Cloud Function. Each deployment attempt results in a new version of a function being created.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"version_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The version identifier of the Cloud Function. Each deployment attempt results in a new version of a function being created.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

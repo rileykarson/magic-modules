@@ -10,13 +10,14 @@ import (
 )
 
 func DataSourceVmwareengineNetwork() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetwork().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineNetworkRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineNetworkRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetwork().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

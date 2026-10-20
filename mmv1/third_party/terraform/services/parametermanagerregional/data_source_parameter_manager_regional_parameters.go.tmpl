@@ -12,12 +12,11 @@ import (
 )
 
 func DataSourceParameterManagerRegionalRegionalParameters() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerRegionalRegionalParameter().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceParameterManagerRegionalRegionalParametersRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerRegionalRegionalParameter().SchemaMap())
+			return map[string]*schema.Schema{
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -40,6 +39,7 @@ If filter is empty, all regional parameters are listed from specific location.`,
 				Type:     schema.TypeString,
 				Required: true,
 			},
+		}
 		},
 	}
 }

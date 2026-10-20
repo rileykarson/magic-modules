@@ -22,8 +22,8 @@ func resourceComputeRegionSecurityPolicySpecRulesDiffSuppress(k, o, n string, d 
         }
     }
 
-    oldSet := schema.NewSet(schema.HashResource(ResourceComputeRegionSecurityPolicy().Schema["rules"].Elem.(*schema.Resource)), old)
-    newSet := schema.NewSet(schema.HashResource(ResourceComputeRegionSecurityPolicy().Schema["rules"].Elem.(*schema.Resource)), new)
+    oldSet := schema.NewSet(schema.HashResource(ResourceComputeRegionSecurityPolicy().SchemaMap()["rules"].Elem.(*schema.Resource)), old)
+    newSet := schema.NewSet(schema.HashResource(ResourceComputeRegionSecurityPolicy().SchemaMap()["rules"].Elem.(*schema.Resource)), new)
 
     return oldSet.Equal(newSet)
 }

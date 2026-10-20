@@ -13,77 +13,79 @@ import (
 func DataSourceGoogleComputeInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceComputeInstanceGroupRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"self_link"},
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"self_link"},
+				},
 
-			"self_link": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"name", "zone"},
-			},
+				"self_link": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"name", "zone"},
+				},
 
-			"zone": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"self_link"},
-			},
+				"zone": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"self_link"},
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"instances": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Set:      schema.HashString,
-			},
+				"instances": {
+					Type:     schema.TypeSet,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Set:      schema.HashString,
+				},
 
-			"named_port": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
+				"named_port": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 
-						"port": {
-							Type:     schema.TypeInt,
-							Computed: true,
+							"port": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
 
-			"network": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"network": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"size": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
+				"size": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
 
-			"deletion_policy": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"deletion_policy": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

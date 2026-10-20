@@ -76,8 +76,8 @@ if v, ok := d.GetOk("send_secondary_ip_range_if_empty"); ok && v.(bool) {
 // due to the API limitation
 if d.HasChange("secondary_ip_range") {
 	old, new := d.GetChange("secondary_ip_range")
-	oldRanges := schema.NewSet(schema.HashResource(ResourceComputeSubnetwork().Schema["secondary_ip_range"].Elem.(*schema.Resource)), old.([]interface{}))
-	newRanges := schema.NewSet(schema.HashResource(ResourceComputeSubnetwork().Schema["secondary_ip_range"].Elem.(*schema.Resource)), new.([]interface{}))
+	oldRanges := schema.NewSet(schema.HashResource(ResourceComputeSubnetwork().SchemaMap()["secondary_ip_range"].Elem.(*schema.Resource)), old.([]interface{}))
+	newRanges := schema.NewSet(schema.HashResource(ResourceComputeSubnetwork().SchemaMap()["secondary_ip_range"].Elem.(*schema.Resource)), new.([]interface{}))
 
 
 	removalsRaw := oldRanges.Difference(newRanges)

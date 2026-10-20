@@ -16,63 +16,65 @@ import (
 func DataSourceGoogleOrganizationIamCustomRoles() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceOrganizationIamCustomRolesRead,
-		Schema: map[string]*schema.Schema{
-			"org_id": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"show_deleted": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			"view": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "BASIC",
-				ValidateFunc: validateViewOrganizationIamCustomRoles,
-			},
-			"roles": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"deleted": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"permissions": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
-						},
-						"role_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"stage": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"title": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"org_id": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"show_deleted": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+				"view": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "BASIC",
+					ValidateFunc: validateViewOrganizationIamCustomRoles,
+				},
+				"roles": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"deleted": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"permissions": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
+							"role_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"stage": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"title": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

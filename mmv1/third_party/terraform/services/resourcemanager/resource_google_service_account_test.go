@@ -434,7 +434,7 @@ func TestResourceServiceAccountCustomDiff(t *testing.T) {
 			diff := &tpgresource.ResourceDiffMock{
 				Before: tc.before,
 				After:  tc.after,
-				Schema: tpgresourcemanager.ResourceGoogleServiceAccount().Schema,
+				Schema: tpgresourcemanager.ResourceGoogleServiceAccount().SchemaMap(),
 			}
 			tpgresourcemanager.ResourceServiceAccountCustomDiffFunc(diff)
 			if d := cmp.Diff(result, diff.After); d != "" {

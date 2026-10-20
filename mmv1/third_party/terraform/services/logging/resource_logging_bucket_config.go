@@ -130,7 +130,9 @@ func ResourceLoggingBucketConfig(parentType string, parentSpecificSchema map[str
 		Importer: &schema.ResourceImporter{
 			State: resourceLoggingBucketConfigImportState(parentType),
 		},
-		Schema:        tpgresource.MergeSchemas(loggingBucketConfigSchema, parentSpecificSchema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(loggingBucketConfigSchema, parentSpecificSchema)
+		},
 		UseJSONNumber: true,
 		CustomizeDiff: customdiff.All(
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),

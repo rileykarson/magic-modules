@@ -14,22 +14,24 @@ func DataSourceGoogleDatastreamStaticIps() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleDatastreamStaticIpsRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"static_ips": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"static_ips": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+			}
 		},
 	}
 }

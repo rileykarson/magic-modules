@@ -13,56 +13,58 @@ import (
 func DataSourceGoogleCloudIdentityPolicy() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudIdentityPolicyRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The resource name of the policy to retrieve.`,
-			},
-			"customer": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The customer that the policy belongs to.`,
-			},
-			"policy_query": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The CEL query that defines which entities the policy applies to.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"query": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The query that defines which entities the policy applies to.",
-						},
-						"group": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The group that the policy applies to.",
-						},
-						"org_unit": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The org unit that the policy applies to.",
-						},
-						"sort_order": {
-							Type:        schema.TypeFloat,
-							Computed:    true,
-							Description: "The sort order of the policy.",
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The resource name of the policy to retrieve.`,
+				},
+				"customer": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The customer that the policy belongs to.`,
+				},
+				"policy_query": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The CEL query that defines which entities the policy applies to.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"query": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The query that defines which entities the policy applies to.",
+							},
+							"group": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The group that the policy applies to.",
+							},
+							"org_unit": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The org unit that the policy applies to.",
+							},
+							"sort_order": {
+								Type:        schema.TypeFloat,
+								Computed:    true,
+								Description: "The sort order of the policy.",
+							},
 						},
 					},
 				},
-			},
-			"setting": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The setting configured by this policy.`,
-			},
-			"type": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The type of the policy.`,
-			},
+				"setting": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The setting configured by this policy.`,
+				},
+				"type": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The type of the policy.`,
+				},
+			}
 		},
 	}
 }

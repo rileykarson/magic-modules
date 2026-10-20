@@ -81,7 +81,9 @@ func ResourceIamPolicy(parentSpecificSchema map[string]*schema.Schema, newUpdate
 		// resource is used.
 		DeprecationMessage: settings.DeprecationMessage,
 
-		Schema:         tpgresource.MergeSchemas(IamPolicyBaseSchema, parentSpecificSchema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(IamPolicyBaseSchema, parentSpecificSchema)
+		},
 		SchemaVersion:  settings.SchemaVersion,
 		StateUpgraders: settings.StateUpgraders,
 		Importer: &schema.ResourceImporter{

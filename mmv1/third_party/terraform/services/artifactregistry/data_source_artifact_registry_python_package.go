@@ -25,47 +25,49 @@ func DataSourceArtifactRegistryPythonPackage() *schema.Resource {
 	return &schema.Resource{
 		Read: DataSourceArtifactRegistryPythonPackageRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Project ID of the project.",
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The region of the Artifact Registry repository.",
-			},
-			"repository_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The repository ID containing the Python package.",
-			},
-			"package_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The name of the Python package.",
-			},
-			"version": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The version of the Python package.",
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The fully qualified name of the Python package.",
-			},
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The time the package was created.",
-			},
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The time the package was last updated.",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Project ID of the project.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The region of the Artifact Registry repository.",
+				},
+				"repository_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The repository ID containing the Python package.",
+				},
+				"package_name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The name of the Python package.",
+				},
+				"version": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The version of the Python package.",
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The fully qualified name of the Python package.",
+				},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The time the package was created.",
+				},
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The time the package was last updated.",
+				},
+			}
 		},
 	}
 }

@@ -12,51 +12,53 @@ import (
 func DataSourceGoogleStorageBucketObjects() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleStorageBucketObjectsRead,
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"match_glob": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"prefix": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"bucket_objects": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"content_type": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"media_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"storage_class": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"updated": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"match_glob": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"prefix": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"bucket_objects": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"content_type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"media_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"storage_class": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"updated": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

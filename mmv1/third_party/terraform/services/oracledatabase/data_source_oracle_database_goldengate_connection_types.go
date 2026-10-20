@@ -10,47 +10,49 @@ import (
 )
 
 func DataSourceOracleDatabaseGoldengateConnectionTypes() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "The location of the resource.",
-		},
-		"goldengate_connection_types": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The name of the Goldengate Connection Type resource.",
-					},
-					"connection_type": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The connection type of the Goldengate Connection Type resource.",
-					},
-					"technology_types": {
-						Type:     schema.TypeList,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
+	return &schema.Resource{
+		Read: DataSourceOracleDatabaseGoldengateConnectionTypesRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the resource is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the resource.",
+				},
+				"goldengate_connection_types": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The name of the Goldengate Connection Type resource.",
+							},
+							"connection_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The connection type of the Goldengate Connection Type resource.",
+							},
+							"technology_types": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "An array of technologyTypes supported for the connection type.",
+							},
 						},
-						Description: "An array of technologyTypes supported for the connection type.",
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-	return &schema.Resource{
-		Read:   DataSourceOracleDatabaseGoldengateConnectionTypesRead,
-		Schema: dsSchema,
 	}
 }
 

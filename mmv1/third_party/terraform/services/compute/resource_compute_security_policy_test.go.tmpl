@@ -2765,7 +2765,7 @@ resource "google_compute_security_policy" "policy" {
 }
 
 func TestComputeSecurityPolicyRuleHash_nilAndEmptyCases(t *testing.T) {
-	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().Schema["rule"]
+	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().SchemaMap()["rule"]
 	ruleSetFunc := ruleSchema.Set
 
 	nilHash := ruleSetFunc(nil)
@@ -2796,7 +2796,7 @@ func TestComputeSecurityPolicyRuleHash_nilAndEmptyCases(t *testing.T) {
 }
 
 func TestComputeSecurityPolicyRuleHash_defaultAndZeroValueEquivalence(t *testing.T) {
-	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().Schema["rule"]
+	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().SchemaMap()["rule"]
 	ruleSetFunc := ruleSchema.Set
 
 	baseRule := map[string]interface{}{
@@ -2860,7 +2860,7 @@ func TestComputeSecurityPolicyRuleHash_defaultAndZeroValueEquivalence(t *testing
 }
 
 func TestComputeSecurityPolicyRuleHash_inlineRuleModification(t *testing.T) {
-	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().Schema["rule"]
+	ruleSchema := tpgcompute.ResourceComputeSecurityPolicy().SchemaMap()["rule"]
 	ruleSetFunc := ruleSchema.Set
 
 	baseRule := map[string]interface{}{

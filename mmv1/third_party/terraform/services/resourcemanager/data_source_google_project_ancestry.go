@@ -15,39 +15,41 @@ import (
 func DataSourceGoogleProjectAncestry() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleProjectAncestryRead,
-		Schema: map[string]*schema.Schema{
-			"ancestors": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"type": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"ancestors": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
-			"org_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"parent_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"parent_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"org_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"parent_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"parent_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

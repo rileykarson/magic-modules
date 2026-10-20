@@ -22,59 +22,61 @@ import (
 func DataSourceGoogleStorageBucketObjectContents() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleStorageBucketObjectContentsRead,
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"match_glob": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"prefix": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"bucket_objects": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"content": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"content_base64": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"content_base64sha512": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"content_hexsha512": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"content_type": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"media_link": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"self_link": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"match_glob": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"prefix": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"bucket_objects": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"content": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"content_base64": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"content_base64sha512": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"content_hexsha512": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"content_type": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"media_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"self_link": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

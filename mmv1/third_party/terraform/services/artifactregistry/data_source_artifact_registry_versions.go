@@ -14,78 +14,80 @@ import (
 func DataSourceArtifactRegistryVersions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceArtifactRegistryVersionsRead,
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"repository_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"package_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"view": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "BASIC",
-				ValidateFunc: validateViewArtifactRegistryVersions,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"versions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"description": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"related_tags": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"name": {
-										Type:     schema.TypeString,
-										Computed: true,
-									},
-									"version": {
-										Type:     schema.TypeString,
-										Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"repository_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"package_name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"view": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "BASIC",
+					ValidateFunc: validateViewArtifactRegistryVersions,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"description": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"related_tags": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"name": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
+										"version": {
+											Type:     schema.TypeString,
+											Computed: true,
+										},
 									},
 								},
 							},
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"annotations": {
-							Type:     schema.TypeMap,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"annotations": {
+								Type:     schema.TypeMap,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

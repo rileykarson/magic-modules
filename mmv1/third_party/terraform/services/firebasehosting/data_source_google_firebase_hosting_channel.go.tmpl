@@ -10,15 +10,16 @@ import (
 )
 
 func DataSourceGoogleFirebaseHostingChannel() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirebaseHostingChannel().Schema)
+	return &schema.Resource{
+		Read:   dataSourceGoogleFirebaseHostingChannelRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceFirebaseHostingChannel().SchemaMap())
 
 	// Set 'Required' schema elements
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "site_id", "channel_id")
-
-	return &schema.Resource{
-		Read:   dataSourceGoogleFirebaseHostingChannelRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 

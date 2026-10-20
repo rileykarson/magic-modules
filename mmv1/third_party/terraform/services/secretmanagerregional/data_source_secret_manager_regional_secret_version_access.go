@@ -16,41 +16,43 @@ import (
 func DataSourceSecretManagerRegionalRegionalSecretVersionAccess() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSecretManagerRegionalRegionalSecretVersionAccessRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"secret": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"version": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"secret_data": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"is_secret_data_base64": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"secret": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"version": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"secret_data": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"is_secret_data_base64": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+			}
 		},
 	}
 }

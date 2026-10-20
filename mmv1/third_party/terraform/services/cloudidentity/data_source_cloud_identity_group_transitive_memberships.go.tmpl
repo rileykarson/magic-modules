@@ -16,13 +16,13 @@ import (
 )
 
 func DataSourceGoogleCloudIdentityGroupTransitiveMemberships() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceGoogleCloudIdentityGroupTransitiveMembershipsRead,
 
 		// We don't reuse schemas from google_cloud_identity_group_membership because data returned about
 		// transative memberships is structured differently, with information like expiry missing.
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"group": {
 				Type:             schema.TypeString,
 				Required:         true,
@@ -98,6 +98,7 @@ and must be in the form of 'identitysources/{identity_source_id}'.`,
 					},
 				},
 			},
+		}
 		},
 	}
 }

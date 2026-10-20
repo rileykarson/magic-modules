@@ -13,25 +13,27 @@ import (
 func DataSourceVmwareengineVcenterCredentials() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceVmwareengineVcenterCredentialsRead,
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-				Description: `The resource name of the private cloud which contains vcenter.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+					Description: `The resource name of the private cloud which contains vcenter.
 Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names.
 For example: projects/my-project/locations/us-west1-a/privateClouds/my-cloud`,
-			},
-			"username": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Initial username.`,
-			},
-			"password": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Initial password.`,
-			},
+				},
+				"username": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Initial username.`,
+				},
+				"password": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Initial password.`,
+				},
+			}
 		},
 	}
 }

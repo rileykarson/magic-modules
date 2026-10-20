@@ -14,33 +14,33 @@ import (
 )
 
 func DataSourceGoogleKmsCryptoKeyVersions() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(DataSourceGoogleKmsCryptoKeyVersion().Schema)
-
-	dsSchema["id"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Computed: true,
-	}
-
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsCryptoKeyVersionsRead,
-		Schema: map[string]*schema.Schema{
-			"crypto_key": {
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(DataSourceGoogleKmsCryptoKeyVersion().SchemaMap())
+
+			dsSchema["id"] = &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-			"versions": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of all the retrieved cryptoKeyVersions from the provided crypto key",
-				Elem: &schema.Resource{
-					Schema: dsSchema,
+				Computed: true,
+			}
+			return map[string]*schema.Schema{
+				"crypto_key": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
 				},
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Description: `
+				"versions": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of all the retrieved cryptoKeyVersions from the provided crypto key",
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: `
 					The filter argument is used to add a filter query parameter that limits which cryptoKeyVersions are retrieved by the data source: ?filter={{filter}}.
 					Example values:
 					
@@ -49,23 +49,24 @@ func DataSourceGoogleKmsCryptoKeyVersions() *schema.Resource {
 					
 					[See the documentation about using filters](https://cloud.google.com/kms/docs/sorting-and-filtering)
 				`,
-			},
-			"public_key": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"algorithm": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"pem": {
-							Type:     schema.TypeString,
-							Computed: true,
+				},
+				"public_key": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"algorithm": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"pem": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

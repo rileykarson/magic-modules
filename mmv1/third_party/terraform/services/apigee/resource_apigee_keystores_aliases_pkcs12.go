@@ -37,134 +37,136 @@ func ResourceApigeeKeystoresAliasesPkcs12() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"alias": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Alias Name`,
-			},
-			"file": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Cert content`,
-			},
-			"environment": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Required:    true,
-				Description: `Environment associated with the alias`,
-			},
-			"keystore": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Keystore Name`,
-			},
-			"org_id": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Required:    true,
-				Description: `Organization ID associated with the alias`,
-			},
-			"filehash": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Hash of the pkcs file",
-			},
-			"certs_info": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `Chain of certificates under this alias.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"cert_info": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `List of all properties in the object.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"basic_constraints": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 basic constraints extension.`,
-									},
-									"expiry_date": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 notAfter validity period in milliseconds since epoch.`,
-									},
-									"is_valid": {
-										Type:     schema.TypeString,
-										Computed: true,
-										Description: `Flag that specifies whether the certificate is valid. 
-Flag is set to Yes if the certificate is valid, No if expired, or Not yet if not yet valid.`,
-									},
-									"issuer": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 issuer.`,
-									},
-									"public_key": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `Public key component of the X.509 subject public key info.`,
-									},
-									"serial_number": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 serial number.`,
-									},
-									"sig_alg_name": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 signatureAlgorithm.`,
-									},
-									"subject": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 subject.`,
-									},
-									"subject_alternative_names": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Description: `X.509 subject alternative names (SANs) extension.`,
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"alias": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Alias Name`,
+				},
+				"file": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Cert content`,
+				},
+				"environment": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Required:    true,
+					Description: `Environment associated with the alias`,
+				},
+				"keystore": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Keystore Name`,
+				},
+				"org_id": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Required:    true,
+					Description: `Organization ID associated with the alias`,
+				},
+				"filehash": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "Hash of the pkcs file",
+				},
+				"certs_info": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `Chain of certificates under this alias.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"cert_info": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `List of all properties in the object.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"basic_constraints": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 basic constraints extension.`,
 										},
-									},
-									"valid_from": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `X.509 notBefore validity period in milliseconds since epoch.`,
-									},
-									"version": {
-										Type:        schema.TypeInt,
-										Computed:    true,
-										Description: `X.509 version.`,
+										"expiry_date": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 notAfter validity period in milliseconds since epoch.`,
+										},
+										"is_valid": {
+											Type:     schema.TypeString,
+											Computed: true,
+											Description: `Flag that specifies whether the certificate is valid. 
+Flag is set to Yes if the certificate is valid, No if expired, or Not yet if not yet valid.`,
+										},
+										"issuer": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 issuer.`,
+										},
+										"public_key": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `Public key component of the X.509 subject public key info.`,
+										},
+										"serial_number": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 serial number.`,
+										},
+										"sig_alg_name": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 signatureAlgorithm.`,
+										},
+										"subject": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 subject.`,
+										},
+										"subject_alternative_names": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Description: `X.509 subject alternative names (SANs) extension.`,
+											Elem: &schema.Schema{
+												Type: schema.TypeString,
+											},
+										},
+										"valid_from": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: `X.509 notBefore validity period in milliseconds since epoch.`,
+										},
+										"version": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: `X.509 version.`,
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
-			"password": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `Password for the Private Key if it's encrypted`,
-			},
-			"type": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Optional.Type of Alias`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"password": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `Password for the Private Key if it's encrypted`,
+				},
+				"type": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Optional.Type of Alias`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -35,35 +35,37 @@ func ResourceGoogleProjectDefaultServiceAccounts() *schema.Resource {
 			Delete: schema.DefaultTimeout(10 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: verify.ValidateProjectID(),
-				Description:  `The project ID where service accounts are created.`,
-			},
-			"action": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: validation.StringInSlice([]string{"DEPRIVILEGE", "DELETE", "DISABLE"}, false),
-				Description: `The action to be performed in the default service accounts. Valid values are: DEPRIVILEGE, DELETE, DISABLE.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: verify.ValidateProjectID(),
+					Description:  `The project ID where service accounts are created.`,
+				},
+				"action": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: validation.StringInSlice([]string{"DEPRIVILEGE", "DELETE", "DISABLE"}, false),
+					Description: `The action to be performed in the default service accounts. Valid values are: DEPRIVILEGE, DELETE, DISABLE.
 				Note that DEPRIVILEGE action will ignore the REVERT configuration in the restore_policy.`,
-			},
-			"restore_policy": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "REVERT",
-				ValidateFunc: validation.StringInSlice([]string{"NONE", "REVERT", "REVERT_AND_IGNORE_FAILURE"}, false),
-				Description: `The action to be performed in the default service accounts on the resource destroy.
+				},
+				"restore_policy": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "REVERT",
+					ValidateFunc: validation.StringInSlice([]string{"NONE", "REVERT", "REVERT_AND_IGNORE_FAILURE"}, false),
+					Description: `The action to be performed in the default service accounts on the resource destroy.
 				Valid values are NONE, REVERT and REVERT_AND_IGNORE_FAILURE. It is applied for any action but in the DEPRIVILEGE.`,
-			},
-			"service_accounts": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `The Service Accounts changed by this resource. It is used for revert the action on the destroy.`,
-			},
+				},
+				"service_accounts": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `The Service Accounts changed by this resource. It is used for revert the action on the destroy.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

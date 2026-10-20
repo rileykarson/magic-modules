@@ -43,322 +43,324 @@ func ResourceStorageBucketObject() *schema.Resource {
 			Delete: schema.DefaultTimeout(4 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the containing bucket.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the containing bucket.`,
+				},
 
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the object. If you're interpolating the name of this object, see output_name instead.`,
-			},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the object. If you're interpolating the name of this object, see output_name instead.`,
+				},
 
-			"cache_control": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `Cache-Control directive to specify caching behavior of object data. If omitted and object is accessible to all anonymous users, the default will be public, max-age=3600`,
-			},
+				"cache_control": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Optional:    true,
+					Description: `Cache-Control directive to specify caching behavior of object data. If omitted and object is accessible to all anonymous users, the default will be public, max-age=3600`,
+				},
 
-			"content_disposition": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `Content-Disposition of the object data.`,
-			},
+				"content_disposition": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Optional:    true,
+					Description: `Content-Disposition of the object data.`,
+				},
 
-			"content_encoding": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `Content-Encoding of the object data.`,
-			},
+				"content_encoding": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Optional:    true,
+					Description: `Content-Encoding of the object data.`,
+				},
 
-			"content_language": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `Content-Language of the object data.`,
-			},
+				"content_language": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Optional:    true,
+					Description: `Content-Language of the object data.`,
+				},
 
-			"content_type": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				Computed:      true,
-				ConflictsWith: []string{"force_empty_content_type"},
-				Description:   `Content-Type of the object data. Defaults to "application/octet-stream" or "text/plain; charset=utf-8".`,
-			},
+				"content_type": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					Computed:      true,
+					ConflictsWith: []string{"force_empty_content_type"},
+					Description:   `Content-Type of the object data. Defaults to "application/octet-stream" or "text/plain; charset=utf-8".`,
+				},
 
-			"force_empty_content_type": {
-				Type:          schema.TypeBool,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"content_type"},
-				Description:   `Flag to set empty Content-Type.`,
-			},
+				"force_empty_content_type": {
+					Type:          schema.TypeBool,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"content_type"},
+					Description:   `Flag to set empty Content-Type.`,
+				},
 
-			"content": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ExactlyOneOf: []string{"source"},
-				Sensitive:    true,
-				Computed:     true,
-				Description:  `Data as string to be uploaded. Must be defined if source is not. Note: The content field is marked as sensitive. To view the raw contents of the object, please define an output.`,
-			},
+				"content": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ExactlyOneOf: []string{"source"},
+					Sensitive:    true,
+					Computed:     true,
+					Description:  `Data as string to be uploaded. Must be defined if source is not. Note: The content field is marked as sensitive. To view the raw contents of the object, please define an output.`,
+				},
 
-			"contexts": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: "Contexts attached to an object, in key-value pairs.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"custom": {
-							Type:        schema.TypeList,
-							Required:    true,
-							Description: "A list of custom context key-value pairs.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"key": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: "An individual object context. Context keys and their corresponding values must start with an alphanumeric character.",
-									},
-									"value": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: "The value associated with this context. This field holds the primary information for the given context key.",
-									},
-									"create_time": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The time when context was first added to the storage#object in RFC 3339 format.",
-									},
-									"update_time": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The time when context was last updated in RFC 3339 format.",
+				"contexts": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					MaxItems:    1,
+					Description: "Contexts attached to an object, in key-value pairs.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"custom": {
+								Type:        schema.TypeList,
+								Required:    true,
+								Description: "A list of custom context key-value pairs.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"key": {
+											Type:        schema.TypeString,
+											Required:    true,
+											Description: "An individual object context. Context keys and their corresponding values must start with an alphanumeric character.",
+										},
+										"value": {
+											Type:        schema.TypeString,
+											Required:    true,
+											Description: "The value associated with this context. This field holds the primary information for the given context key.",
+										},
+										"create_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The time when context was first added to the storage#object in RFC 3339 format.",
+										},
+										"update_time": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The time when context was last updated in RFC 3339 format.",
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
 
-			"generation": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `The content generation of this object. Used for object versioning and soft delete.`,
-			},
-
-			"crc32c": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Base 64 CRC32 hash of the uploaded data.`,
-			},
-
-			"md5hash": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Base 64 MD5 hash of the uploaded data.`,
-			},
-
-			"md5hexhash": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Optional:    false,
-				Required:    false,
-				Description: `Hex value of md5hash`,
-			},
-
-			"source": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ForceNew:     true,
-				ExactlyOneOf: []string{"content"},
-				Description:  `A path to the data you want to upload. Must be defined if content is not.`,
-			},
-
-			"source_md5hash": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `User-provided md5hash, Base 64 MD5 hash of the object data.`,
-			},
-
-			// Detect changes to local file or changes made outside of Terraform to the file stored on the server.
-			"detect_md5hash": {
-				Type: schema.TypeString,
-				// This field is not Computed because it needs to trigger a diff.
-				Optional: true,
-				// Makes the diff message nicer:
-				// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "different hash" (forces new resource)
-				// Instead of the more confusing:
-				// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "" (forces new resource)
-				Default: "different hash",
-				// 1. Compute the md5 hash of the local file
-				// 2. Compare the computed md5 hash with the hash stored in Cloud Storage
-				// 3. Don't suppress the diff iff they don't match
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					localMd5Hash := ""
-					if !d.GetRawConfig().GetAttr("source_md5hash").IsKnown() ||
-						!d.GetRawConfig().GetAttr("source").IsKnown() ||
-						!d.GetRawConfig().GetAttr("content").IsKnown() {
-						return true
-					}
-					if v, ok := d.GetOk("source_md5hash"); ok && v != "" {
-						return true
-					}
-					if d.HasChange("source") || d.HasChange("content") || d.HasChange("source_md5hash") {
-						return true
-					}
-					if source, ok := d.GetOkExists("source"); ok {
-						localMd5Hash = tpgresource.GetFileMd5Hash(source.(string))
-					}
-
-					if content, ok := d.GetOkExists("content"); ok {
-						localMd5Hash = tpgresource.GetContentMd5Hash([]byte(content.(string)))
-					}
-
-					// If `source` or `content` is dynamically set, both field will be empty.
-					// We should not suppress the diff to avoid the following error:
-					// 'Mismatch reason: extra attributes: detect_md5hash'
-					if localMd5Hash == "" {
-						return false
-					}
-
-					// `old` is the md5 hash we retrieved from the server in the ReadFunc
-					if old != localMd5Hash {
-						return false
-					}
-
-					return true
+				"generation": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `The content generation of this object. Used for object versioning and soft delete.`,
 				},
-			},
 
-			"storage_class": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
-				Computed:    true,
-				Description: `The StorageClass of the new bucket object. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE. If not provided, this defaults to the bucket's default storage class or to a standard class.`,
-			},
+				"crc32c": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Base 64 CRC32 hash of the uploaded data.`,
+				},
 
-			"kms_key_name": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				ForceNew:         true,
-				Computed:         true,
-				ConflictsWith:    []string{"customer_encryption"},
-				DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
-				Description:      `Resource name of the Cloud KMS key that will be used to encrypt the object. Overrides the object metadata's kmsKeyName value, if any.`,
-			},
+				"md5hash": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Base 64 MD5 hash of the uploaded data.`,
+				},
 
-			"customer_encryption": {
-				Type:          schema.TypeList,
-				MaxItems:      1,
-				Optional:      true,
-				Sensitive:     true,
-				ConflictsWith: []string{"kms_key_name"},
-				Description:   `Encryption key; encoded using base64.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"encryption_algorithm": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Default:     "AES256",
-							ForceNew:    true,
-							Description: `The encryption algorithm. Default: AES256`,
-						},
-						"encryption_key": {
-							Type:        schema.TypeString,
-							Required:    true,
-							ForceNew:    true,
-							Sensitive:   true,
-							Description: `Base64 encoded customer supplied encryption key.`,
-							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
-								_, err := base64.StdEncoding.DecodeString(val.(string))
-								if err != nil {
-									errs = append(errs, fmt.Errorf("Failed to decode (base64) customer_encryption, expecting valid base64 encoded key"))
-								}
-								return
+				"md5hexhash": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Optional:    false,
+					Required:    false,
+					Description: `Hex value of md5hash`,
+				},
+
+				"source": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ForceNew:     true,
+					ExactlyOneOf: []string{"content"},
+					Description:  `A path to the data you want to upload. Must be defined if content is not.`,
+				},
+
+				"source_md5hash": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `User-provided md5hash, Base 64 MD5 hash of the object data.`,
+				},
+
+				// Detect changes to local file or changes made outside of Terraform to the file stored on the server.
+				"detect_md5hash": {
+					Type: schema.TypeString,
+					// This field is not Computed because it needs to trigger a diff.
+					Optional: true,
+					// Makes the diff message nicer:
+					// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "different hash" (forces new resource)
+					// Instead of the more confusing:
+					// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "" (forces new resource)
+					Default: "different hash",
+					// 1. Compute the md5 hash of the local file
+					// 2. Compare the computed md5 hash with the hash stored in Cloud Storage
+					// 3. Don't suppress the diff iff they don't match
+					DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+						localMd5Hash := ""
+						if !d.GetRawConfig().GetAttr("source_md5hash").IsKnown() ||
+							!d.GetRawConfig().GetAttr("source").IsKnown() ||
+							!d.GetRawConfig().GetAttr("content").IsKnown() {
+							return true
+						}
+						if v, ok := d.GetOk("source_md5hash"); ok && v != "" {
+							return true
+						}
+						if d.HasChange("source") || d.HasChange("content") || d.HasChange("source_md5hash") {
+							return true
+						}
+						if source, ok := d.GetOkExists("source"); ok {
+							localMd5Hash = tpgresource.GetFileMd5Hash(source.(string))
+						}
+
+						if content, ok := d.GetOkExists("content"); ok {
+							localMd5Hash = tpgresource.GetContentMd5Hash([]byte(content.(string)))
+						}
+
+						// If `source` or `content` is dynamically set, both field will be empty.
+						// We should not suppress the diff to avoid the following error:
+						// 'Mismatch reason: extra attributes: detect_md5hash'
+						if localMd5Hash == "" {
+							return false
+						}
+
+						// `old` is the md5 hash we retrieved from the server in the ReadFunc
+						if old != localMd5Hash {
+							return false
+						}
+
+						return true
+					},
+				},
+
+				"storage_class": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					ForceNew:    true,
+					Computed:    true,
+					Description: `The StorageClass of the new bucket object. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE. If not provided, this defaults to the bucket's default storage class or to a standard class.`,
+				},
+
+				"kms_key_name": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					ForceNew:         true,
+					Computed:         true,
+					ConflictsWith:    []string{"customer_encryption"},
+					DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
+					Description:      `Resource name of the Cloud KMS key that will be used to encrypt the object. Overrides the object metadata's kmsKeyName value, if any.`,
+				},
+
+				"customer_encryption": {
+					Type:          schema.TypeList,
+					MaxItems:      1,
+					Optional:      true,
+					Sensitive:     true,
+					ConflictsWith: []string{"kms_key_name"},
+					Description:   `Encryption key; encoded using base64.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"encryption_algorithm": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Default:     "AES256",
+								ForceNew:    true,
+								Description: `The encryption algorithm. Default: AES256`,
+							},
+							"encryption_key": {
+								Type:        schema.TypeString,
+								Required:    true,
+								ForceNew:    true,
+								Sensitive:   true,
+								Description: `Base64 encoded customer supplied encryption key.`,
+								ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+									_, err := base64.StdEncoding.DecodeString(val.(string))
+									if err != nil {
+										errs = append(errs, fmt.Errorf("Failed to decode (base64) customer_encryption, expecting valid base64 encoded key"))
+									}
+									return
+								},
 							},
 						},
 					},
 				},
-			},
 
-			"retention": {
-				Type:          schema.TypeList,
-				MaxItems:      1,
-				Optional:      true,
-				ConflictsWith: []string{"event_based_hold"},
-				Description:   `Object level retention configuration.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"retain_until_time": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `Time in RFC 3339 (e.g. 2030-01-01T02:03:04Z) until which object retention protects this object.`,
-						},
-						"mode": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `The object retention mode. Supported values include: "Unlocked", "Locked".`,
+				"retention": {
+					Type:          schema.TypeList,
+					MaxItems:      1,
+					Optional:      true,
+					ConflictsWith: []string{"event_based_hold"},
+					Description:   `Object level retention configuration.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"retain_until_time": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `Time in RFC 3339 (e.g. 2030-01-01T02:03:04Z) until which object retention protects this object.`,
+							},
+							"mode": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `The object retention mode. Supported values include: "Unlocked", "Locked".`,
+							},
 						},
 					},
 				},
-			},
 
-			"event_based_hold": {
-				Type:          schema.TypeBool,
-				Optional:      true,
-				ConflictsWith: []string{"retention"},
-				Description:   `Whether an object is under event-based hold. Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).`,
-			},
+				"event_based_hold": {
+					Type:          schema.TypeBool,
+					Optional:      true,
+					ConflictsWith: []string{"retention"},
+					Description:   `Whether an object is under event-based hold. Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).`,
+				},
 
-			"temporary_hold": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `Whether an object is under temporary hold. While this flag is set to true, the object is protected against deletion and overwrites.`,
-			},
+				"temporary_hold": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: `Whether an object is under temporary hold. While this flag is set to true, the object is protected against deletion and overwrites.`,
+				},
 
-			"metadata": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				ForceNew:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `User-provided metadata, in key/value pairs.`,
-			},
+				"metadata": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					ForceNew:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `User-provided metadata, in key/value pairs.`,
+				},
 
-			"self_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `A url reference to this object.`,
-			},
+				"self_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `A url reference to this object.`,
+				},
 
-			// https://github.com/hashicorp/terraform/issues/19052
-			"output_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The name of the object. Use this field in interpolations with google_storage_object_acl to recreate google_storage_object_acl resources when your google_storage_bucket_object is recreated.`,
-			},
+				// https://github.com/hashicorp/terraform/issues/19052
+				"output_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The name of the object. Use this field in interpolations with google_storage_object_acl to recreate google_storage_object_acl resources when your google_storage_bucket_object is recreated.`,
+				},
 
-			"media_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `A url reference to download this object.`,
-			},
+				"media_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `A url reference to download this object.`,
+				},
 
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

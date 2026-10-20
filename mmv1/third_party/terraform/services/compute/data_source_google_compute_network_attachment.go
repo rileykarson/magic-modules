@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceGoogleComputeNetworkAttachment() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkAttachment().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "region")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceComputeNetworkAttachmentRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeNetworkAttachmentRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkAttachment().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "region")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

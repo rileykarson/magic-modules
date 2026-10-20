@@ -10,16 +10,17 @@ import (
 )
 
 func DataSourceGoogleProjectIamCustomRole() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectIamCustomRole().Schema)
-
-	dsSchema["project"].Computed = false
-	dsSchema["project"].Optional = true
-	dsSchema["role_id"].Computed = false
-	dsSchema["role_id"].Required = true
-
 	return &schema.Resource{
-		Read:   dataSourceProjectIamCustomRoleRead,
-		Schema: dsSchema,
+		Read: dataSourceProjectIamCustomRoleRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectIamCustomRole().SchemaMap())
+
+			dsSchema["project"].Computed = false
+			dsSchema["project"].Optional = true
+			dsSchema["role_id"].Computed = false
+			dsSchema["role_id"].Required = true
+			return dsSchema
+		},
 	}
 }
 

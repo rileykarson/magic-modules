@@ -15,50 +15,52 @@ import (
 func DataSourceIAMBetaWorkloadIdentityPoolOpenIdConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceIAMBetaWorkloadIdentityPoolOpenIdConfigRead,
-		Schema: map[string]*schema.Schema{
-			"resource_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The OIDC discovery URI.",
-			},
-			"issuer": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "URL using the https scheme with no query or fragment components that the OP asserts as its issuer identifier.",
-			},
-			"jwks_uri": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "URL of the OP's JWK Set [JWK] document, which MUST use the https scheme.",
-			},
-			"authorization_endpoint": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "URL pointing to an authorization endpoint under this issuer.",
-			},
-			"token_endpoint": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "URL pointing to a token endpoint under this issuer.",
-			},
-			"response_types_supported": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "JSON array containing a list of the OAuth 2.0 response_type values that this OP supports.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"subject_types_supported": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "JSON array containing a list of the subject identifier types that this OP supports.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"id_token_signing_alg_values_supported": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for the ID token to encode the claims in a JWT [JWT].",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"resource_name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The OIDC discovery URI.",
+				},
+				"issuer": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "URL using the https scheme with no query or fragment components that the OP asserts as its issuer identifier.",
+				},
+				"jwks_uri": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "URL of the OP's JWK Set [JWK] document, which MUST use the https scheme.",
+				},
+				"authorization_endpoint": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "URL pointing to an authorization endpoint under this issuer.",
+				},
+				"token_endpoint": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "URL pointing to a token endpoint under this issuer.",
+				},
+				"response_types_supported": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "JSON array containing a list of the OAuth 2.0 response_type values that this OP supports.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"subject_types_supported": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "JSON array containing a list of the subject identifier types that this OP supports.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"id_token_signing_alg_values_supported": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for the ID token to encode the claims in a JWT [JWT].",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

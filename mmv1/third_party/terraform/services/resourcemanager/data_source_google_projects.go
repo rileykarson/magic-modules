@@ -12,54 +12,56 @@ import (
 func DataSourceGoogleProjects() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleProjectsRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"projects": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"project_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"labels": {
-							Type:        schema.TypeMap,
-							Computed:    true,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: `A set of key/value label pairs assigned on a project.`,
-						},
-						"parent": {
-							Type:        schema.TypeMap,
-							Computed:    true,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: `An optional reference to a parent Resource.`,
-						},
-						"number": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The numeric identifier of the project.`,
-						},
-						"lifecycle_state": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The numeric identifier of the project.`,
-						},
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The optional user-assigned display name of the Project.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"projects": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"project_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"labels": {
+								Type:        schema.TypeMap,
+								Computed:    true,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+								Description: `A set of key/value label pairs assigned on a project.`,
+							},
+							"parent": {
+								Type:        schema.TypeMap,
+								Computed:    true,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+								Description: `An optional reference to a parent Resource.`,
+							},
+							"number": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The numeric identifier of the project.`,
+							},
+							"lifecycle_state": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The numeric identifier of the project.`,
+							},
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The optional user-assigned display name of the Project.`,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

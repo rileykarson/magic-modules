@@ -21,7 +21,7 @@ func setResourceDataConfig(d *schema.ResourceData, config *terraform.ResourceCon
 func TestReservationDiffSuppress(t *testing.T) {
 	t.Parallel()
 
-	reservationSchema := ResourceComputeReservation().Schema
+	reservationSchema := ResourceComputeReservation().SchemaMap()
 
 	cases := map[string]struct {
 		rawConfig           cty.Value

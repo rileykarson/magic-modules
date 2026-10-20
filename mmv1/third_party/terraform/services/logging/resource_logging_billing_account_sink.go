@@ -11,12 +11,21 @@ import (
 )
 
 func ResourceLoggingBillingAccountSink() *schema.Resource {
-	schm := &schema.Resource{
+	return &schema.Resource{
 		Create: resourceLoggingBillingAccountSinkCreate,
 		Read:   resourceLoggingBillingAccountSinkRead,
 		Delete: resourceLoggingBillingAccountSinkDelete,
 		Update: resourceLoggingBillingAccountSinkUpdate,
-		Schema: resourceLoggingSinkSchema(),
+		SchemaFunc: func() map[string]*schema.Schema {
+			s := resourceLoggingSinkSchema()
+			s["billing_account"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: `The billing account exported to the sink.`,
+			}
+			return s
+		},
 		Importer: &schema.ResourceImporter{
 			State: resourceLoggingSinkImportState("billing_account"),
 		},
@@ -25,13 +34,6 @@ func ResourceLoggingBillingAccountSink() *schema.Resource {
 		),
 		UseJSONNumber: true,
 	}
-	schm.Schema["billing_account"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Required:    true,
-		ForceNew:    true,
-		Description: `The billing account exported to the sink.`,
-	}
-	return schm
 }
 
 func resourceLoggingBillingAccountSinkCreate(d *schema.ResourceData, meta interface{}) error {

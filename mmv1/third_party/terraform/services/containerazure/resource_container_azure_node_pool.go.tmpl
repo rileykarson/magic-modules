@@ -36,7 +36,8 @@ func ResourceContainerAzureNodePool() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"autoscaling": {
 				Type:        schema.TypeList,
 				Required:    true,
@@ -174,6 +175,7 @@ func ResourceContainerAzureNodePool() *schema.Resource {
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 	}
 }

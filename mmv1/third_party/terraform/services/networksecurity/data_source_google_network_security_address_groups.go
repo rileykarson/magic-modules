@@ -14,49 +14,51 @@ func DataSourceNetworkSecurityAddressGroups() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceNetworkSecurityAddressGroups,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"parent"},
-			},
-			"parent": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Description: `The parent of the Address Group. Use "organizations/{organization_id}" ` +
-					`for organization-level address groups or "projects/{project_id}" for project-level address groups.`,
-				ConflictsWith: []string{"project"},
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"address_groups": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"location": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"capacity": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-						"items": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"parent"},
+				},
+				"parent": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: `The parent of the Address Group. Use "organizations/{organization_id}" ` +
+						`for organization-level address groups or "projects/{project_id}" for project-level address groups.`,
+					ConflictsWith: []string{"project"},
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"address_groups": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"location": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"capacity": {
+								Type:     schema.TypeInt,
+								Computed: true,
+							},
+							"items": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

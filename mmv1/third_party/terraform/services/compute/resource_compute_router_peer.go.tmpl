@@ -54,7 +54,8 @@ func ResourceComputeRouterBgpPeer() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"interface": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -376,6 +377,7 @@ Must be unique within a router. Must be referenced by exactly one bgpPeer. Must 
 //UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

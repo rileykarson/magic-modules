@@ -62,125 +62,127 @@ func ResourceBigtableTable() *schema.Resource {
 		// IMPORTANT: Do not add any additional ForceNew fields to this resource.
 		// Destroying/recreating tables can lead to data loss for users.
 		// ----------------------------------------------------------------------
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the table. Must be 1-50 characters and must only contain hyphens, underscores, periods, letters and numbers.`,
-			},
-
-			"column_family": {
-				Type:        schema.TypeSet,
-				Optional:    true,
-				Description: `A group of columns within a table which share a common configuration. This can be specified multiple times.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"family": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `The name of the column family.`,
-						},
-						"type": {
-							Type:             schema.TypeString,
-							Optional:         true,
-							Description:      `The type of the column family.`,
-							DiffSuppressFunc: typeDiffFunc,
-						},
-					},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the table. Must be 1-50 characters and must only contain hyphens, underscores, periods, letters and numbers.`,
 				},
-				Set: familyHash,
-			},
 
-			"instance_name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareResourceNames,
-				Description:      `The name of the Bigtable instance.`,
-			},
-
-			"split_keys": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A list of predefined keys to split the table on. !> Warning: Modifying the split_keys of an existing table will cause Terraform to delete/recreate the entire google_bigtable_table resource.`,
-			},
-
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-
-			"deletion_protection": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
-				Elem:         &schema.Schema{Type: schema.TypeString},
-				Description:  `A field to make the table protected against data loss i.e. when set to PROTECTED, deleting the table, the column families in the table, and the instance containing the table would be prohibited. If not provided, currently deletion protection will be set to UNPROTECTED as it is the API default value.`,
-			},
-
-			"change_stream_retention": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: verify.ValidateDuration(),
-				Description:  `Duration to retain change stream data for the table. Set to 0 to disable. Must be between 1 and 7 days.`,
-			},
-
-			"automated_backup_policy": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"retention_period": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ValidateFunc: verify.ValidateDuration(),
-							Description:  `How long the automated backups should be retained.`,
-						},
-						"frequency": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ValidateFunc: verify.ValidateDuration(),
-							Description:  `How frequently automated backups should occur.`,
-						},
-						"locations": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+				"column_family": {
+					Type:        schema.TypeSet,
+					Optional:    true,
+					Description: `A group of columns within a table which share a common configuration. This can be specified multiple times.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"family": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `The name of the column family.`,
 							},
-							Description: `A list of Cloud Bigtable zones where automated backups are allowed to be created. If empty, automated backups will be created in all zones of the instance. Locations are in the format projects/{project}/locations/{zone}. This field can only be set for tables in Enterprise Plus instances.`,
+							"type": {
+								Type:             schema.TypeString,
+								Optional:         true,
+								Description:      `The type of the column family.`,
+								DiffSuppressFunc: typeDiffFunc,
+							},
 						},
 					},
+					Set: familyHash,
 				},
-				Description: `Defines an automated backup policy for a table, specified by Retention Period and Frequency. To _create_ a table with automated backup disabled, either omit the automated_backup_policy argument, or set both Retention Period and Frequency properties to "0". To disable automated backup on an _existing_ table that has automated backup enabled, set _both_ Retention Period and Frequency properties to "0". When updating an existing table, to modify the Retention Period or Frequency properties of the resource's automated backup policy, set the respective property to a non-zero value. If the automated_backup_policy argument is not provided in the configuration on update, the resource's automated backup policy will _not_ be modified.`,
-			},
-			"row_key_schema": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				DiffSuppressFunc: typeDiffFunc,
-				Description: `Defines the row key schema of a table. To create or update a table with a row key schema, specify this argument.
+
+				"instance_name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareResourceNames,
+					Description:      `The name of the Bigtable instance.`,
+				},
+
+				"split_keys": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					ForceNew:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `A list of predefined keys to split the table on. !> Warning: Modifying the split_keys of an existing table will cause Terraform to delete/recreate the entire google_bigtable_table resource.`,
+				},
+
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+
+				"deletion_protection": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
+					Elem:         &schema.Schema{Type: schema.TypeString},
+					Description:  `A field to make the table protected against data loss i.e. when set to PROTECTED, deleting the table, the column families in the table, and the instance containing the table would be prohibited. If not provided, currently deletion protection will be set to UNPROTECTED as it is the API default value.`,
+				},
+
+				"change_stream_retention": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ValidateFunc: verify.ValidateDuration(),
+					Description:  `Duration to retain change stream data for the table. Set to 0 to disable. Must be between 1 and 7 days.`,
+				},
+
+				"automated_backup_policy": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Computed: true,
+					MaxItems: 1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"retention_period": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Computed:     true,
+								ValidateFunc: verify.ValidateDuration(),
+								Description:  `How long the automated backups should be retained.`,
+							},
+							"frequency": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Computed:     true,
+								ValidateFunc: verify.ValidateDuration(),
+								Description:  `How frequently automated backups should occur.`,
+							},
+							"locations": {
+								Type:     schema.TypeList,
+								Optional: true,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: `A list of Cloud Bigtable zones where automated backups are allowed to be created. If empty, automated backups will be created in all zones of the instance. Locations are in the format projects/{project}/locations/{zone}. This field can only be set for tables in Enterprise Plus instances.`,
+							},
+						},
+					},
+					Description: `Defines an automated backup policy for a table, specified by Retention Period and Frequency. To _create_ a table with automated backup disabled, either omit the automated_backup_policy argument, or set both Retention Period and Frequency properties to "0". To disable automated backup on an _existing_ table that has automated backup enabled, set _both_ Retention Period and Frequency properties to "0". When updating an existing table, to modify the Retention Period or Frequency properties of the resource's automated backup policy, set the respective property to a non-zero value. If the automated_backup_policy argument is not provided in the configuration on update, the resource's automated backup policy will _not_ be modified.`,
+				},
+				"row_key_schema": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					DiffSuppressFunc: typeDiffFunc,
+					Description: `Defines the row key schema of a table. To create or update a table with a row key schema, specify this argument.
 					Note that in-place update is not supported, and any in-place modification to the schema will lead to failure.
 				    To update a schema, please clear it (by omitting the field), and update the resource again with a new schema.\n
 					
 					The schema must be a valid JSON encoded string representing a Type's struct protobuf message. Note that for bytes sequence (like delimited_bytes.delimiter)
 					the delimiter must be base64 encoded. For example, if you want to set a delimiter to a single byte character "#", it should be set to "Iw==", which is the base64 encoding of the byte sequence "#".`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

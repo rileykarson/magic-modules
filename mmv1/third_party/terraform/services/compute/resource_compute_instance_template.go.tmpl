@@ -86,7 +86,8 @@ func ResourceComputeInstanceTemplate() *schema.Resource {
 		// A compute instance template is more or less a subset of a compute
 		// instance. Please attempt to maintain consistency with the
 		// resource_compute_instance schema when updating this one.
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"name": {
 				Type:          schema.TypeString,
 				Optional:      true,
@@ -1379,6 +1380,7 @@ be from 0 to 999,999,999 inclusive.`,
 					},
 				},
 			},
+		}
 		},
 		UseJSONNumber: true,
 	}

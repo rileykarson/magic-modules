@@ -13,27 +13,29 @@ func DataSourceGoogleMonitoringUptimeCheckIps() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleMonitoringUptimeCheckIpsRead,
 
-		Schema: map[string]*schema.Schema{
-			"uptime_check_ips": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"region": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"location": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"ip_address": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"uptime_check_ips": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"region": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"location": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"ip_address": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

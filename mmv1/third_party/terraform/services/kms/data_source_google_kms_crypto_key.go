@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceGoogleKmsCryptoKey() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSCryptoKey().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "key_ring")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleKmsCryptoKeyRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleKmsCryptoKeyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSCryptoKey().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "key_ring")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceGoogleKmsCryptoKeyRead(d *schema.ResourceData, meta interface{}) error {

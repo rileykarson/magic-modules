@@ -9,14 +9,15 @@ import (
 )
 
 func DataSourceObservabilityProjectSettings() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceObservabilityProjectSettings().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-
 	return &schema.Resource{
-		Read:   dataSourceObservabilityProjectSettingsRead,
-		Schema: dsSchema,
+		Read: dataSourceObservabilityProjectSettingsRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceObservabilityProjectSettings().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "project")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			return dsSchema
+		},
 	}
 }
 

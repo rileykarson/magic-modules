@@ -33,27 +33,29 @@ func DataSourceGoogleNetblockIpRanges() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleNetblockIpRangesRead,
 
-		Schema: map[string]*schema.Schema{
-			"range_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "cloud-netblocks",
-			},
-			"cidr_blocks": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-			},
-			"cidr_blocks_ipv4": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-			},
-			"cidr_blocks_ipv6": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"range_type": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "cloud-netblocks",
+				},
+				"cidr_blocks": {
+					Type:     schema.TypeList,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Computed: true,
+				},
+				"cidr_blocks_ipv4": {
+					Type:     schema.TypeList,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Computed: true,
+				},
+				"cidr_blocks_ipv6": {
+					Type:     schema.TypeList,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Computed: true,
+				},
+			}
 		},
 	}
 }

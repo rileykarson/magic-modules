@@ -14,36 +14,38 @@ import (
 )
 
 func DataSourceGoogleStorageControlProjectIntelligenceFindingRevision() *schema.Resource {
-	s := map[string]*schema.Schema{
-		"finding_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: `The ID of the intelligence finding.`,
-		},
-		"revision_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: `The ID of the finding revision.`,
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Default:     "global",
-			Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
-		},
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Computed:    true,
-			Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-		},
-	}
-	for k, v := range storageControlProjectIntelligenceFindingRevisionSchema() {
-		s[k] = v
-	}
 	return &schema.Resource{
-		Read:   dataSourceGoogleStorageControlProjectIntelligenceFindingRevisionRead,
-		Schema: s,
+		Read: dataSourceGoogleStorageControlProjectIntelligenceFindingRevisionRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			s := map[string]*schema.Schema{
+				"finding_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The ID of the intelligence finding.`,
+				},
+				"revision_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The ID of the finding revision.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+			}
+			for k, v := range storageControlProjectIntelligenceFindingRevisionSchema() {
+				s[k] = v
+			}
+			return s
+		},
 	}
 }
 

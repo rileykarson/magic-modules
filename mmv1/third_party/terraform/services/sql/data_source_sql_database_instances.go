@@ -16,44 +16,46 @@ func DataSourceSqlDatabaseInstances() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSqlDatabaseInstancesRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project that contains the instances.`,
-			},
-			"database_version": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `To filter out the database instances which are of the specified database version.`,
-			},
-			"region": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `To filter out the database instances which are located in this specified region.`,
-			},
-			"zone": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `To filter out the database instances which are located in this specified zone.`,
-			},
-			"tier": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `To filter out the database instances based on the machine type.`,
-			},
-			"state": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `To filter out the database instances based on the current state of the database instance, valid values include : "SQL_INSTANCE_STATE_UNSPECIFIED", "RUNNABLE", "SUSPENDED", "PENDING_DELETE", "PENDING_CREATE", "MAINTENANCE" and "FAILED".`,
-			},
-			"instances": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceSqlDatabaseInstance().Schema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project that contains the instances.`,
 				},
-			},
+				"database_version": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `To filter out the database instances which are of the specified database version.`,
+				},
+				"region": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `To filter out the database instances which are located in this specified region.`,
+				},
+				"zone": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `To filter out the database instances which are located in this specified zone.`,
+				},
+				"tier": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `To filter out the database instances based on the machine type.`,
+				},
+				"state": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `To filter out the database instances based on the current state of the database instance, valid values include : "SQL_INSTANCE_STATE_UNSPECIFIED", "RUNNABLE", "SUSPENDED", "PENDING_DELETE", "PENDING_CREATE", "MAINTENANCE" and "FAILED".`,
+				},
+				"instances": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceSqlDatabaseInstance().SchemaMap()),
+					},
+				},
+			}
 		},
 	}
 }

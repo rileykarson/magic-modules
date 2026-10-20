@@ -13,7 +13,8 @@ import (
 func DataSourceGoogleCloudAssetResourcesSearchAll() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleCloudAssetResourcesSearchAllRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"scope": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -80,6 +81,7 @@ func DataSourceGoogleCloudAssetResourcesSearchAll() *schema.Resource {
 					},
 				},
 			},
+		}
 		},
 	}
 }

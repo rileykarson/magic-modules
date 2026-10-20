@@ -11,14 +11,14 @@ import (
 )
 
 func DataSourceIAMBetaWorkloadIdentityPool() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceIAMBetaWorkloadIdentityPool().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "workload_identity_pool_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
 		Read:   dataSourceIAMBetaWorkloadIdentityPoolRead,
-		Schema: dsSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceIAMBetaWorkloadIdentityPool().SchemaMap())
+	tpgresource.AddRequiredFieldsToSchema(dsSchema, "workload_identity_pool_id")
+	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

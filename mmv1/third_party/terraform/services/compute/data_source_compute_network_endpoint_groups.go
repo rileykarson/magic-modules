@@ -11,34 +11,35 @@ import (
 )
 
 func DataSourceGoogleComputeNetworkEndpointGroups() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkEndpointGroup().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceComputeNetworkEndpointGroupsRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"network_endpoint_groups": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: dsSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeNetworkEndpointGroup().SchemaMap())
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+
+				"network_endpoint_groups": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+			}
 		},
 	}
 }

@@ -59,14 +59,14 @@ func ComputeSchemaDiff(oldResourceMap, newResourceMap map[string]*schema.Resourc
 		resourceDiff := ResourceDiff{}
 		var flattenedOldSchema map[string]*schema.Schema
 		if oldResource, ok := oldResourceMap[resource]; ok {
-			flattenedOldSchema = flattenSchema("", oldResource.Schema)
+			flattenedOldSchema = flattenSchema("", oldResource.SchemaMap())
 			resourceDiff.FlattenedSchema.Old = flattenedOldSchema
 			resourceDiff.ResourceConfig.Old = &schema.Resource{}
 		}
 
 		var flattenedNewSchema map[string]*schema.Schema
 		if newResource, ok := newResourceMap[resource]; ok {
-			flattenedNewSchema = flattenSchema("", newResource.Schema)
+			flattenedNewSchema = flattenSchema("", newResource.SchemaMap())
 			resourceDiff.FlattenedSchema.New = flattenedNewSchema
 			resourceDiff.ResourceConfig.New = &schema.Resource{}
 		}
@@ -99,7 +99,7 @@ func flattenSchema(parentKey string, schemaObj map[string]*schema.Schema) map[st
 		flattened[key] = field
 		childResource, hasNestedFields := field.Elem.(*schema.Resource)
 		if field.Elem != nil && hasNestedFields {
-			for childKey, childField := range flattenSchema(key, childResource.Schema) {
+			for childKey, childField := range flattenSchema(key, childResource.SchemaMap()) {
 				flattened[childKey] = childField
 			}
 		}

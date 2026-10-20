@@ -129,152 +129,154 @@ func ResourceDnsRecordSet() *schema.Resource {
 			MutableIdentity: true,
 		},
 
-		Schema: map[string]*schema.Schema{
-			"managed_zone": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The name of the zone in which this record set will reside.`,
-			},
-
-			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				ValidateFunc: validateRecordNameTrailingDot,
-				Description:  `The DNS name this record set will apply to.`,
-			},
-
-			"rrdatas": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"managed_zone": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      `The name of the zone in which this record set will reside.`,
 				},
-				DiffSuppressFunc: rrdatasDnsDiffSuppress,
-				Description:      `The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \"\" inside the Terraform configuration string (e.g. "first255characters\"\"morecharacters").`,
-				ExactlyOneOf:     []string{"rrdatas", "routing_policy"},
-			},
 
-			"routing_policy": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: "The configuration for steering traffic based on query. You can specify either Weighted Round Robin(WRR) type or Geolocation(GEO) type.",
-				MaxItems:    1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"wrr": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Description: `The configuration for Weighted Round Robin based routing policy.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"weight": {
-										Type:        schema.TypeFloat,
-										Required:    true,
-										Description: `The ratio of traffic routed to the target.`,
-									},
-									"rrdatas": {
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
+				"name": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					ValidateFunc: validateRecordNameTrailingDot,
+					Description:  `The DNS name this record set will apply to.`,
+				},
+
+				"rrdatas": {
+					Type:     schema.TypeList,
+					Optional: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+					DiffSuppressFunc: rrdatasDnsDiffSuppress,
+					Description:      `The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \"\" inside the Terraform configuration string (e.g. "first255characters\"\"morecharacters").`,
+					ExactlyOneOf:     []string{"rrdatas", "routing_policy"},
+				},
+
+				"routing_policy": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: "The configuration for steering traffic based on query. You can specify either Weighted Round Robin(WRR) type or Geolocation(GEO) type.",
+					MaxItems:    1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"wrr": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								Description: `The configuration for Weighted Round Robin based routing policy.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"weight": {
+											Type:        schema.TypeFloat,
+											Required:    true,
+											Description: `The ratio of traffic routed to the target.`,
+										},
+										"rrdatas": {
+											Type:     schema.TypeList,
+											Optional: true,
+											Elem: &schema.Schema{
+												Type: schema.TypeString,
+											},
+										},
+										"health_checked_targets": {
+											Type:        schema.TypeList,
+											Optional:    true,
+											Description: "The list of targets to be health checked. Note that if DNSSEC is enabled for this zone, only one of `rrdatas` or `health_checked_targets` can be set.",
+											MaxItems:    1,
+											Elem:        healthCheckedTargetSchema,
 										},
 									},
-									"health_checked_targets": {
-										Type:        schema.TypeList,
-										Optional:    true,
-										Description: "The list of targets to be health checked. Note that if DNSSEC is enabled for this zone, only one of `rrdatas` or `health_checked_targets` can be set.",
-										MaxItems:    1,
-										Elem:        healthCheckedTargetSchema,
+								},
+								ExactlyOneOf:  []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
+								ConflictsWith: []string{"routing_policy.0.enable_geo_fencing"},
+							},
+							"geo": {
+								Type:         schema.TypeList,
+								Optional:     true,
+								Description:  `The configuration for Geo location based routing policy.`,
+								Elem:         geoPolicySchema,
+								ExactlyOneOf: []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
+							},
+							"enable_geo_fencing": {
+								Type:          schema.TypeBool,
+								Optional:      true,
+								Description:   "Specifies whether to enable fencing for geo queries.",
+								ConflictsWith: []string{"routing_policy.0.wrr", "routing_policy.0.primary_backup"},
+							},
+							"primary_backup": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								Description: "The configuration for a failover policy with global to regional failover. Queries are responded to with the global primary targets, but if none of the primary targets are healthy, then we fallback to a regional failover policy.",
+								MaxItems:    1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"primary": {
+											Type:        schema.TypeList,
+											Required:    true,
+											Description: "The list of global primary targets to be health checked.",
+											MaxItems:    1,
+											Elem:        healthCheckedTargetSchema,
+										},
+										"backup_geo": {
+											Type:        schema.TypeList,
+											Required:    true,
+											Description: "The backup geo targets, which provide a regional failover policy for the otherwise global primary targets.",
+											Elem:        geoPolicySchema,
+										},
+										"enable_geo_fencing_for_backups": {
+											Type:        schema.TypeBool,
+											Optional:    true,
+											Description: "Specifies whether to enable fencing for backup geo queries.",
+										},
+										"trickle_ratio": {
+											Type:        schema.TypeFloat,
+											Optional:    true,
+											Description: "Specifies the percentage of traffic to send to the backup targets even when the primary targets are healthy.",
+										},
 									},
 								},
+								ExactlyOneOf:  []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
+								ConflictsWith: []string{"routing_policy.0.enable_geo_fencing"},
 							},
-							ExactlyOneOf:  []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
-							ConflictsWith: []string{"routing_policy.0.enable_geo_fencing"},
-						},
-						"geo": {
-							Type:         schema.TypeList,
-							Optional:     true,
-							Description:  `The configuration for Geo location based routing policy.`,
-							Elem:         geoPolicySchema,
-							ExactlyOneOf: []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
-						},
-						"enable_geo_fencing": {
-							Type:          schema.TypeBool,
-							Optional:      true,
-							Description:   "Specifies whether to enable fencing for geo queries.",
-							ConflictsWith: []string{"routing_policy.0.wrr", "routing_policy.0.primary_backup"},
-						},
-						"primary_backup": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Description: "The configuration for a failover policy with global to regional failover. Queries are responded to with the global primary targets, but if none of the primary targets are healthy, then we fallback to a regional failover policy.",
-							MaxItems:    1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"primary": {
-										Type:        schema.TypeList,
-										Required:    true,
-										Description: "The list of global primary targets to be health checked.",
-										MaxItems:    1,
-										Elem:        healthCheckedTargetSchema,
-									},
-									"backup_geo": {
-										Type:        schema.TypeList,
-										Required:    true,
-										Description: "The backup geo targets, which provide a regional failover policy for the otherwise global primary targets.",
-										Elem:        geoPolicySchema,
-									},
-									"enable_geo_fencing_for_backups": {
-										Type:        schema.TypeBool,
-										Optional:    true,
-										Description: "Specifies whether to enable fencing for backup geo queries.",
-									},
-									"trickle_ratio": {
-										Type:        schema.TypeFloat,
-										Optional:    true,
-										Description: "Specifies the percentage of traffic to send to the backup targets even when the primary targets are healthy.",
-									},
-								},
+							"health_check": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								ForceNew:    true,
+								Description: "Specifies the health check.",
 							},
-							ExactlyOneOf:  []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
-							ConflictsWith: []string{"routing_policy.0.enable_geo_fencing"},
-						},
-						"health_check": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							ForceNew:    true,
-							Description: "Specifies the health check.",
 						},
 					},
+					ExactlyOneOf: []string{"rrdatas", "routing_policy"},
 				},
-				ExactlyOneOf: []string{"rrdatas", "routing_policy"},
-			},
 
-			"ttl": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Description: `The time-to-live of this record set (seconds).`,
-			},
+				"ttl": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Description: `The time-to-live of this record set (seconds).`,
+				},
 
-			"type": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The DNS record set type.`,
-			},
+				"type": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The DNS record set type.`,
+				},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

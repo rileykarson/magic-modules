@@ -35,27 +35,29 @@ func ResourceComputeSharedVpcServiceProject() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"host_project": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The ID of a host project to associate.`,
-			},
-			"service_project": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The ID of the project that will serve as a Shared VPC service project.`,
-			},
-			"deletion_policy": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: false,
-				Description: `The deletion policy for the shared VPC service. Setting ABANDON allows the resource
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"host_project": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The ID of a host project to associate.`,
+				},
+				"service_project": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The ID of the project that will serve as a Shared VPC service project.`,
+				},
+				"deletion_policy": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: false,
+					Description: `The deletion policy for the shared VPC service. Setting ABANDON allows the resource
 				to be abandoned rather than deleted. Possible values are: "ABANDON".`,
-				ValidateFunc: validation.StringInSlice([]string{"ABANDON", ""}, false),
-			},
+					ValidateFunc: validation.StringInSlice([]string{"ABANDON", ""}, false),
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

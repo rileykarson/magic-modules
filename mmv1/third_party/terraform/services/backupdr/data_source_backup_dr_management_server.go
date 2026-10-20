@@ -11,13 +11,13 @@ import (
 )
 
 func DataSourceGoogleCloudBackupDRService() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRManagementServer().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudBackupDRServiceRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCloudBackupDRServiceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRManagementServer().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			return dsSchema
+		},
 	}
 }
 

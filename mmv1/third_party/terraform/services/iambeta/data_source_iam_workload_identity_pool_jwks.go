@@ -22,57 +22,59 @@ func DataSourceIAMBetaWorkloadIdentityPoolJwks() *schema.Resource {
 		Timeouts: &schema.ResourceTimeout{
 			Read: schema.DefaultTimeout(transport_tpg.DefaultRequestTimeout),
 		},
-		Schema: map[string]*schema.Schema{
-			"resource_name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ValidateFunc: validation.IsURLWithHTTPorHTTPS,
-				Description:  "The JWKS URI to retrieve the public keys from (e.g. from google_iam_workload_identity_pool_openid_config.jwks_uri).",
-			},
-			"jwks_json": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The raw JSON string representation of the JWKS response.",
-			},
-			"keys": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "The list of public keys in the JSON Web Key Set.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"kty": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The key type.",
-						},
-						"use": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The intended use of the public key.",
-						},
-						"kid": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The unique identifier for the key.",
-						},
-						"n": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The modulus for the RSA public key.",
-						},
-						"e": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The exponent for the RSA public key.",
-						},
-						"alg": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The algorithm intended for use with the key.",
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"resource_name": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+					Description:  "The JWKS URI to retrieve the public keys from (e.g. from google_iam_workload_identity_pool_openid_config.jwks_uri).",
+				},
+				"jwks_json": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The raw JSON string representation of the JWKS response.",
+				},
+				"keys": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "The list of public keys in the JSON Web Key Set.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"kty": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The key type.",
+							},
+							"use": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The intended use of the public key.",
+							},
+							"kid": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The unique identifier for the key.",
+							},
+							"n": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The modulus for the RSA public key.",
+							},
+							"e": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The exponent for the RSA public key.",
+							},
+							"alg": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The algorithm intended for use with the key.",
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

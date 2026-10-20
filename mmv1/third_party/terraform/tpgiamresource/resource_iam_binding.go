@@ -88,9 +88,11 @@ func ResourceIamBinding(parentSpecificSchema map[string]*schema.Schema, newUpdat
 		// if non-empty, this will be used to send a deprecation message when the
 		// resource is used.
 		DeprecationMessage: settings.DeprecationMessage,
-		Schema:             tpgresource.MergeSchemas(iamBindingSchema, parentSpecificSchema),
-		SchemaVersion:      settings.SchemaVersion,
-		StateUpgraders:     settings.StateUpgraders,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(iamBindingSchema, parentSpecificSchema)
+		},
+		SchemaVersion:  settings.SchemaVersion,
+		StateUpgraders: settings.StateUpgraders,
 		Importer: &schema.ResourceImporter{
 			State: iamBindingImport(newUpdaterFunc, resourceIdParser, settings.ParentResourceIdentityParser),
 		},

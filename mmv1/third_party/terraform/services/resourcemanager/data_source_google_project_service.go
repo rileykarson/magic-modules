@@ -10,14 +10,14 @@ import (
 )
 
 func DataSourceGoogleProjectService() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectService().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "service")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleProjectServiceRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleProjectServiceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleProjectService().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "service")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

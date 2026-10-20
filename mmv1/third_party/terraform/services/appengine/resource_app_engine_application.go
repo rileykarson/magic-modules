@@ -37,155 +37,157 @@ func ResourceAppEngineApplication() *schema.Resource {
 			appEngineApplicationLocationIDCustomizeDiff,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ForceNew:     true,
-				ValidateFunc: verify.ValidateProjectID(),
-				Description:  `The project ID to create the application under.`,
-			},
-			"auth_domain": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The domain to authenticate users with when using App Engine's User API.`,
-			},
-			"location_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The location to serve the app from.`,
-			},
-			"serving_status": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"UNSPECIFIED",
-					"SERVING",
-					"USER_DISABLED",
-					"SYSTEM_DISABLED",
-				}, false),
-				Computed:    true,
-				Description: `The serving status of the app.`,
-			},
-			"ssl_policy": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"SSL_POLICY_UNSPECIFIED",
-					"DEFAULT",
-					"MODERN",
-				}, false),
-				Computed:    true,
-				Description: `The SSL policy that will be applied to the application. If set to Modern it will restrict traffic with TLS \u003c 1.2 and allow only Modern Ciphers suite`,
-			},
-			"database_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"CLOUD_FIRESTORE",
-					"CLOUD_DATASTORE_COMPATIBILITY",
-					// NOTE: this is provided for compatibility with instances from
-					// before CLOUD_DATASTORE_COMPATIBILITY - it cannot be set
-					// for new instances.
-					"CLOUD_DATASTORE",
-				}, false),
-				Computed: true,
-			},
-			"feature_settings": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: `A block of optional settings to configure specific App Engine features:`,
-				Elem:        appEngineApplicationFeatureSettingsResource(),
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Unique name of the app.`,
-			},
-			"app_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Identifier of the app.`,
-			},
-			"url_dispatch_rule": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `A list of dispatch rule blocks. Each block has a domain, path, and service field.`,
-				Elem:        appEngineApplicationURLDispatchRuleResource(),
-			},
-			"code_bucket": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The GCS bucket code is being stored in for this app.`,
-			},
-			"default_hostname": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The default hostname for this app.`,
-			},
-			"default_bucket": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The GCS bucket content is being stored in for this app.`,
-			},
-			"gcr_domain": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The GCR domain used for storing managed Docker images for this app.`,
-			},
-			"iap": {
-				Type:             schema.TypeList,
-				Optional:         true,
-				MaxItems:         1,
-				DiffSuppressFunc: suppressAppEngineApplicationIapDiffWhenUnset,
-				Description:      `Settings for enabling Cloud Identity Aware Proxy`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"enabled": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     false,
-							Description: `Adapted for use with the app`,
-						},
-						"oauth2_client_id": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `OAuth2 client ID to use for the authentication flow.`,
-						},
-						"oauth2_client_secret": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Sensitive:    true,
-							ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
-							Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
-						},
-						"oauth2_client_secret_wo": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							WriteOnly:    true,
-							ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
-							RequiredWith: []string{"iap.0.oauth2_client_secret_wo_version"},
-							Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
-						},
-						"oauth2_client_secret_wo_version": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							RequiredWith: []string{"iap.0.oauth2_client_secret_wo"},
-							Description:  "Triggers update of `oauth2_client_secret_wo` write-only. Increment this value when an update to `oauth2_client_secret_wo` is needed. For more info see [updating write-only arguments](/docs/providers/google/guides/using_write_only_arguments.html#updating-write-only-arguments)",
-						},
-						"oauth2_client_secret_sha256": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Sensitive:   true,
-							Description: `Hex-encoded SHA-256 hash of the client secret.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ForceNew:     true,
+					ValidateFunc: verify.ValidateProjectID(),
+					Description:  `The project ID to create the application under.`,
+				},
+				"auth_domain": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The domain to authenticate users with when using App Engine's User API.`,
+				},
+				"location_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The location to serve the app from.`,
+				},
+				"serving_status": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ValidateFunc: validation.StringInSlice([]string{
+						"UNSPECIFIED",
+						"SERVING",
+						"USER_DISABLED",
+						"SYSTEM_DISABLED",
+					}, false),
+					Computed:    true,
+					Description: `The serving status of the app.`,
+				},
+				"ssl_policy": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ValidateFunc: validation.StringInSlice([]string{
+						"SSL_POLICY_UNSPECIFIED",
+						"DEFAULT",
+						"MODERN",
+					}, false),
+					Computed:    true,
+					Description: `The SSL policy that will be applied to the application. If set to Modern it will restrict traffic with TLS \u003c 1.2 and allow only Modern Ciphers suite`,
+				},
+				"database_type": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ValidateFunc: validation.StringInSlice([]string{
+						"CLOUD_FIRESTORE",
+						"CLOUD_DATASTORE_COMPATIBILITY",
+						// NOTE: this is provided for compatibility with instances from
+						// before CLOUD_DATASTORE_COMPATIBILITY - it cannot be set
+						// for new instances.
+						"CLOUD_DATASTORE",
+					}, false),
+					Computed: true,
+				},
+				"feature_settings": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Computed:    true,
+					MaxItems:    1,
+					Description: `A block of optional settings to configure specific App Engine features:`,
+					Elem:        appEngineApplicationFeatureSettingsResource(),
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Unique name of the app.`,
+				},
+				"app_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Identifier of the app.`,
+				},
+				"url_dispatch_rule": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `A list of dispatch rule blocks. Each block has a domain, path, and service field.`,
+					Elem:        appEngineApplicationURLDispatchRuleResource(),
+				},
+				"code_bucket": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The GCS bucket code is being stored in for this app.`,
+				},
+				"default_hostname": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The default hostname for this app.`,
+				},
+				"default_bucket": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The GCS bucket content is being stored in for this app.`,
+				},
+				"gcr_domain": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The GCR domain used for storing managed Docker images for this app.`,
+				},
+				"iap": {
+					Type:             schema.TypeList,
+					Optional:         true,
+					MaxItems:         1,
+					DiffSuppressFunc: suppressAppEngineApplicationIapDiffWhenUnset,
+					Description:      `Settings for enabling Cloud Identity Aware Proxy`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"enabled": {
+								Type:        schema.TypeBool,
+								Optional:    true,
+								Default:     false,
+								Description: `Adapted for use with the app`,
+							},
+							"oauth2_client_id": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `OAuth2 client ID to use for the authentication flow.`,
+							},
+							"oauth2_client_secret": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Sensitive:    true,
+								ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
+								Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
+							},
+							"oauth2_client_secret_wo": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								WriteOnly:    true,
+								ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
+								RequiredWith: []string{"iap.0.oauth2_client_secret_wo_version"},
+								Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
+							},
+							"oauth2_client_secret_wo_version": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								RequiredWith: []string{"iap.0.oauth2_client_secret_wo"},
+								Description:  "Triggers update of `oauth2_client_secret_wo` write-only. Increment this value when an update to `oauth2_client_secret_wo` is needed. For more info see [updating write-only arguments](/docs/providers/google/guides/using_write_only_arguments.html#updating-write-only-arguments)",
+							},
+							"oauth2_client_secret_sha256": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Sensitive:   true,
+								Description: `Hex-encoded SHA-256 hash of the client secret.`,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 		UseJSONNumber: true,
 	}

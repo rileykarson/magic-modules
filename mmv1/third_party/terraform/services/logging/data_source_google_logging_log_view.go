@@ -10,13 +10,14 @@ import (
 )
 
 func DataSourceGoogleLoggingLogView() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceLoggingLogView().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "location", "bucket", "name")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleLoggingLogViewRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleLoggingLogViewRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceLoggingLogView().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "location", "bucket", "name")
+			return dsSchema
+		},
 	}
 }
 

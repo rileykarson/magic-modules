@@ -12,24 +12,26 @@ import (
 func DataSourceGoogleStorageTransferProjectServiceAccount() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleStorageTransferProjectServiceAccountRead,
-		Schema: map[string]*schema.Schema{
-			"email": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"subject_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"member": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"email": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"subject_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"member": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

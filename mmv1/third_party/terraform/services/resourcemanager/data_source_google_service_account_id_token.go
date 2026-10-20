@@ -22,46 +22,47 @@ const (
 )
 
 func DataSourceGoogleServiceAccountIdToken() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceGoogleServiceAccountIdTokenRead,
-		Schema: map[string]*schema.Schema{
-			"target_audience": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"target_service_account": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
-			},
-			"delegates": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type:         schema.TypeString,
-					ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"target_audience": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-			},
-			"include_email": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-			// Not used currently
-			// https://github.com/googleapis/google-api-go-client/issues/542
-			// "format": {
-			// 	Type:     schema.TypeString,
-			// 	Optional: true,
-			// 	ValidateFunc: validation.StringInSlice([]string{
-			// 		"FULL", "STANDARD"}, true),
-			// 	Default: "STANDARD",
-			// },
-			"id_token": {
-				Type:      schema.TypeString,
-				Sensitive: true,
-				Computed:  true,
-			},
+				"target_service_account": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
+				},
+				"delegates": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Elem: &schema.Schema{
+						Type:         schema.TypeString,
+						ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
+					},
+				},
+				"include_email": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+				// Not used currently
+				// https://github.com/googleapis/google-api-go-client/issues/542
+				// "format": {
+				// 	Type:     schema.TypeString,
+				// 	Optional: true,
+				// 	ValidateFunc: validation.StringInSlice([]string{
+				// 		"FULL", "STANDARD"}, true),
+				// 	Default: "STANDARD",
+				// },
+				"id_token": {
+					Type:      schema.TypeString,
+					Sensitive: true,
+					Computed:  true,
+				},
+			}
 		},
 	}
 }

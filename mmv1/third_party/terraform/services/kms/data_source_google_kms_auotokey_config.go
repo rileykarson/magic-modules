@@ -9,14 +9,14 @@ import (
 )
 
 func DataSourceGoogleKmsAutokeyConfig() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSAutokeyConfig().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "folder")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleKmsAutokeyConfigRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleKmsAutokeyConfigRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSAutokeyConfig().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "folder")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceGoogleKmsAutokeyConfigRead(d *schema.ResourceData, meta interface{}) error {

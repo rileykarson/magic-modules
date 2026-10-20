@@ -11,32 +11,34 @@ import (
 )
 
 func DataSourceSecretManagerRegionalRegionalSecrets() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerRegionalRegionalSecret().Schema)
 	return &schema.Resource{
 		Read: dataSourceSecretManagerRegionalRegionalSecretsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"filter": {
-				Type: schema.TypeString,
-				Description: `Filter string, adhering to the rules in List-operation filtering (https://cloud.google.com/secret-manager/docs/filtering).
-List only secrets matching the filter. If filter is empty, all regional secrets are listed from the specified location.`,
-				Optional: true,
-			},
-			"secrets": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: dsSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerRegionalRegionalSecret().SchemaMap())
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
 				},
-			},
+				"location": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"filter": {
+					Type: schema.TypeString,
+					Description: `Filter string, adhering to the rules in List-operation filtering (https://cloud.google.com/secret-manager/docs/filtering).
+List only secrets matching the filter. If filter is empty, all regional secrets are listed from the specified location.`,
+					Optional: true,
+				},
+				"secrets": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+			}
 		},
 	}
 }

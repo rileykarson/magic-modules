@@ -215,7 +215,7 @@ func DeletionPolicyReadDefault(d *schema.ResourceData, config *transport_tpg.Con
 func DeletionPolicyPreUpdate(d *schema.ResourceData, resourceSchema func() *schema.Resource) bool {
 	clientSideFields := map[string]bool{"deletion_policy": true}
 	clientSideOnly := true
-	for field := range resourceSchema().Schema {
+	for field := range resourceSchema().SchemaMap() {
 		if d.HasChange(field) && !clientSideFields[field] {
 			return false
 		}
@@ -669,7 +669,7 @@ func ChangeFieldSchemaToForceNew(sch *schema.Schema) {
 	case schema.TypeList:
 	case schema.TypeSet:
 		if nestedR, ok := sch.Elem.(*schema.Resource); ok {
-			for _, nestedSch := range nestedR.Schema {
+			for _, nestedSch := range nestedR.SchemaMap() {
 				ChangeFieldSchemaToForceNew(nestedSch)
 			}
 		}

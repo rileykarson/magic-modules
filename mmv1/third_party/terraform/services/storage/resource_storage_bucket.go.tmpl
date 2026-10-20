@@ -114,7 +114,8 @@ func ResourceStorageBucket() *schema.Resource {
 			},
 		},
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
@@ -726,6 +727,7 @@ func ResourceStorageBucket() *schema.Resource {
       		//UDP schema start
       		"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
       		//UDP schema end
+		}
 		},
 		UseJSONNumber: true,
 	}

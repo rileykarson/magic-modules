@@ -18,25 +18,27 @@ func ResourceGoogleProjectIamMemberRemove() *schema.Resource {
 		Read:   resourceGoogleProjectIamMemberRemoveRead,
 		Delete: resourceGoogleProjectIamMemberRemoveDelete,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Required:    true,
-				Description: `The project id of the target project.`,
-			},
-			"role": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Required:    true,
-				Description: `The target role that should be removed.`,
-			},
-			"member": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Required:    true,
-				Description: `The IAM principal that should not have the target role.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Required:    true,
+					Description: `The project id of the target project.`,
+				},
+				"role": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Required:    true,
+					Description: `The target role that should be removed.`,
+				},
+				"member": {
+					Type:        schema.TypeString,
+					ForceNew:    true,
+					Required:    true,
+					Description: `The IAM principal that should not have the target role.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

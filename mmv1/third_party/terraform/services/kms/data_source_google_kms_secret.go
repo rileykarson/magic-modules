@@ -17,24 +17,26 @@ import (
 func DataSourceGoogleKmsSecret() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsSecretRead,
-		Schema: map[string]*schema.Schema{
-			"crypto_key": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"ciphertext": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"plaintext": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"additional_authenticated_data": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"crypto_key": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"ciphertext": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"plaintext": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"additional_authenticated_data": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

@@ -40,174 +40,176 @@ func ResourceClouddeployTarget() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The location for the resource",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The location for the resource",
+				},
 
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "Name of the `Target`. Format is `[a-z]([a-z0-9-]{0,61}[a-z0-9])?`.",
-			},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "Name of the `Target`. Format is `[a-z]([a-z0-9-]{0,61}[a-z0-9])?`.",
+				},
 
-			"anthos_cluster": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Information specifying an Anthos Cluster.",
-				MaxItems:      1,
-				Elem:          ClouddeployTargetAnthosClusterSchema(),
-				ConflictsWith: []string{"gke", "run", "multi_target", "custom_target"},
-			},
+				"anthos_cluster": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Information specifying an Anthos Cluster.",
+					MaxItems:      1,
+					Elem:          ClouddeployTargetAnthosClusterSchema(),
+					ConflictsWith: []string{"gke", "run", "multi_target", "custom_target"},
+				},
 
-			"associated_entities": {
-				Type:        schema.TypeSet,
-				Optional:    true,
-				Description: "Optional. Map of entity IDs to their associated entities. Associated entities allows specifying places other than the deployment target for specific features. For example, the Gateway API canary can be configured to deploy the HTTPRoute to a different cluster(s) than the deployment cluster using associated entities. An entity ID must consist of lower-case letters, numbers, and hyphens, start with a letter and end with a letter or a number, and have a max length of 63 characters. In other words, it must match the following regex: `^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`.",
-				Elem:        ClouddeployTargetAssociatedEntitiesSchema(),
-				Set:         schema.HashResource(ClouddeployTargetAssociatedEntitiesSchema()),
-			},
+				"associated_entities": {
+					Type:        schema.TypeSet,
+					Optional:    true,
+					Description: "Optional. Map of entity IDs to their associated entities. Associated entities allows specifying places other than the deployment target for specific features. For example, the Gateway API canary can be configured to deploy the HTTPRoute to a different cluster(s) than the deployment cluster using associated entities. An entity ID must consist of lower-case letters, numbers, and hyphens, start with a letter and end with a letter or a number, and have a max length of 63 characters. In other words, it must match the following regex: `^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`.",
+					Elem:        ClouddeployTargetAssociatedEntitiesSchema(),
+					Set:         schema.HashResource(ClouddeployTargetAssociatedEntitiesSchema()),
+				},
 
-			"custom_target": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Optional. Information specifying a Custom Target.",
-				MaxItems:      1,
-				Elem:          ClouddeployTargetCustomTargetSchema(),
-				ConflictsWith: []string{"gke", "anthos_cluster", "run", "multi_target"},
-			},
+				"custom_target": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Optional. Information specifying a Custom Target.",
+					MaxItems:      1,
+					Elem:          ClouddeployTargetCustomTargetSchema(),
+					ConflictsWith: []string{"gke", "anthos_cluster", "run", "multi_target"},
+				},
 
-			"deploy_parameters": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "Optional. The deploy parameters to use for this target.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"deploy_parameters": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "Optional. The deploy parameters to use for this target.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Optional. Description of the `Target`. Max length is 255 characters.",
-			},
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Optional. Description of the `Target`. Max length is 255 characters.",
+				},
 
-			"effective_annotations": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "All of annotations (key/value pairs) present on the resource in GCP, including the annotations configured through Terraform, other clients and services.",
-			},
+				"effective_annotations": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "All of annotations (key/value pairs) present on the resource in GCP, including the annotations configured through Terraform, other clients and services.",
+				},
 
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
-			},
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
+				},
 
-			"execution_configs": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Optional:    true,
-				Description: "Configurations for all execution that relates to this `Target`. Each `ExecutionEnvironmentUsage` value may only be used in a single configuration; using the same value multiple times is an error. When one or more configurations are specified, they must include the `RENDER` and `DEPLOY` `ExecutionEnvironmentUsage` values. When no configurations are specified, execution will use the default specified in `DefaultPool`.",
-				Elem:        ClouddeployTargetExecutionConfigsSchema(),
-			},
+				"execution_configs": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Optional:    true,
+					Description: "Configurations for all execution that relates to this `Target`. Each `ExecutionEnvironmentUsage` value may only be used in a single configuration; using the same value multiple times is an error. When one or more configurations are specified, they must include the `RENDER` and `DEPLOY` `ExecutionEnvironmentUsage` values. When no configurations are specified, execution will use the default specified in `DefaultPool`.",
+					Elem:        ClouddeployTargetExecutionConfigsSchema(),
+				},
 
-			"gke": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Information specifying a GKE Cluster.",
-				MaxItems:      1,
-				Elem:          ClouddeployTargetGkeSchema(),
-				ConflictsWith: []string{"anthos_cluster", "run", "multi_target", "custom_target"},
-			},
+				"gke": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Information specifying a GKE Cluster.",
+					MaxItems:      1,
+					Elem:          ClouddeployTargetGkeSchema(),
+					ConflictsWith: []string{"anthos_cluster", "run", "multi_target", "custom_target"},
+				},
 
-			"multi_target": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Information specifying a multiTarget.",
-				MaxItems:      1,
-				Elem:          ClouddeployTargetMultiTargetSchema(),
-				ConflictsWith: []string{"gke", "anthos_cluster", "run", "custom_target"},
-			},
+				"multi_target": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Information specifying a multiTarget.",
+					MaxItems:      1,
+					Elem:          ClouddeployTargetMultiTargetSchema(),
+					ConflictsWith: []string{"gke", "anthos_cluster", "run", "custom_target"},
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"require_approval": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: "Optional. Whether or not the `Target` requires approval.",
-			},
+				"require_approval": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Optional. Whether or not the `Target` requires approval.",
+				},
 
-			"run": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Description:   "Information specifying a Cloud Run deployment target.",
-				MaxItems:      1,
-				Elem:          ClouddeployTargetRunSchema(),
-				ConflictsWith: []string{"gke", "anthos_cluster", "multi_target", "custom_target"},
-			},
+				"run": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Description:   "Information specifying a Cloud Run deployment target.",
+					MaxItems:      1,
+					Elem:          ClouddeployTargetRunSchema(),
+					ConflictsWith: []string{"gke", "anthos_cluster", "multi_target", "custom_target"},
+				},
 
-			"annotations": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "Optional. User annotations. These attributes can only be set and used by the user, and not by Google Cloud Deploy. See https://google.aip.dev/128#annotations for more details such as format and size limitations.\n\n**Note**: This field is non-authoritative, and will only manage the annotations present in your configuration.\nPlease refer to the field `effective_annotations` for all of the annotations present on the resource.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"annotations": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "Optional. User annotations. These attributes can only be set and used by the user, and not by Google Cloud Deploy. See https://google.aip.dev/128#annotations for more details such as format and size limitations.\n\n**Note**: This field is non-authoritative, and will only manage the annotations present in your configuration.\nPlease refer to the field `effective_annotations` for all of the annotations present on the resource.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time at which the `Target` was created.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time at which the `Target` was created.",
+				},
 
-			"etag": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Optional. This checksum is computed by the server based on the value of other fields, and may be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
-			},
+				"etag": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Optional. This checksum is computed by the server based on the value of other fields, and may be sent on update and delete requests to ensure the client has an up-to-date value before proceeding.",
+				},
 
-			"labels": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"labels": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"target_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Resource id of the `Target`.",
-			},
+				"target_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Resource id of the `Target`.",
+				},
 
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
-			},
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
+				},
 
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Unique identifier of the `Target`.",
-			},
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Unique identifier of the `Target`.",
+				},
 
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Most recent time at which the `Target` was updated.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Most recent time at which the `Target` was updated.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

@@ -52,98 +52,100 @@ func ResourceApigeeApi() *schema.Resource {
 			Delete: schema.DefaultTimeout(20 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Name of the API proxy. This field only accepts the following characters: A-Za-z0-9._-.`,
-			},
-			"org_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The Apigee Organization name associated with the Apigee instance.`,
-			},
-			"latest_revision_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The id of the most recently created revision for this API proxy.`,
-			},
-			"meta_data": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `Metadata describing the API proxy.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"created_at": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `Time at which the API proxy was created, in milliseconds since epoch.`,
-						},
-						"last_modified_at": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `Time at which the API proxy was most recently modified, in milliseconds since epoch.`,
-						},
-						"sub_type": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The type of entity described`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Name of the API proxy. This field only accepts the following characters: A-Za-z0-9._-.`,
+				},
+				"org_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The Apigee Organization name associated with the Apigee instance.`,
+				},
+				"latest_revision_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The id of the most recently created revision for this API proxy.`,
+				},
+				"meta_data": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `Metadata describing the API proxy.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"created_at": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `Time at which the API proxy was created, in milliseconds since epoch.`,
+							},
+							"last_modified_at": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `Time at which the API proxy was most recently modified, in milliseconds since epoch.`,
+							},
+							"sub_type": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The type of entity described`,
+							},
 						},
 					},
 				},
-			},
-			"revision": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `A list of revisions of this API proxy.`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"revision": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `A list of revisions of this API proxy.`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
 				},
-			},
-			"config_bundle": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `Path to the config zip bundle`,
-			},
-			"md5hash": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Base 64 MD5 hash of the uploaded config bundle.`,
-			},
-			"detect_md5hash": {
-				Type:     schema.TypeString,
-				Optional: true,
-				// Computed (not Default) so that when the user does not set this
-				// field, the provider-managed value from the previous apply (the
-				// uploaded bundle hash) is retained in state instead of reverting
-				// to the empty string. That keeps an unchanged bundle diff-free
-				// while still triggering an update when the bundle changes -- and,
-				// unlike adding a schema Default, it is not a breaking change.
-				Computed:    true,
-				Description: `A hash of local config bundle in string, user needs to use a Terraform Hash function of their choice. A change in hash will trigger an update.`,
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					localMd5Hash := ""
-					if config_bundle, ok := d.GetOkExists("config_bundle"); ok {
-						localMd5Hash = tpgresource.GetFileMd5Hash(config_bundle.(string))
-					}
-					if localMd5Hash == "" {
-						return false
-					}
-
-					// `old` is the md5 hash we speculated from server responses,
-					// when apply responded with succeed, hash is set to the hash of uploaded bundle
-					if old != localMd5Hash {
-						return false
-					}
-
-					return true
+				"config_bundle": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `Path to the config zip bundle`,
 				},
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"md5hash": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Base 64 MD5 hash of the uploaded config bundle.`,
+				},
+				"detect_md5hash": {
+					Type:     schema.TypeString,
+					Optional: true,
+					// Computed (not Default) so that when the user does not set this
+					// field, the provider-managed value from the previous apply (the
+					// uploaded bundle hash) is retained in state instead of reverting
+					// to the empty string. That keeps an unchanged bundle diff-free
+					// while still triggering an update when the bundle changes -- and,
+					// unlike adding a schema Default, it is not a breaking change.
+					Computed:    true,
+					Description: `A hash of local config bundle in string, user needs to use a Terraform Hash function of their choice. A change in hash will trigger an update.`,
+					DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+						localMd5Hash := ""
+						if config_bundle, ok := d.GetOkExists("config_bundle"); ok {
+							localMd5Hash = tpgresource.GetFileMd5Hash(config_bundle.(string))
+						}
+						if localMd5Hash == "" {
+							return false
+						}
+
+						// `old` is the md5 hash we speculated from server responses,
+						// when apply responded with succeed, hash is set to the hash of uploaded bundle
+						if old != localMd5Hash {
+							return false
+						}
+
+						return true
+					},
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

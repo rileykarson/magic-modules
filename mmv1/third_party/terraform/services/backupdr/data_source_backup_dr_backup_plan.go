@@ -10,16 +10,17 @@ import (
 )
 
 func DataSourceGoogleCloudBackupDRBackupPlan() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRBackupPlan().Schema)
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "backup_plan_id", "location")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudBackupDRBackupPlanRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleCloudBackupDRBackupPlanRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBackupDRBackupPlan().SchemaMap())
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "backup_plan_id", "location")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

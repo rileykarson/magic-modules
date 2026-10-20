@@ -39,68 +39,70 @@ func ResourceGoogleFolder() *schema.Resource {
 			Delete: schema.DefaultTimeout(4 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			// Format is either folders/{folder_id} or organizations/{org_id}.
-			"parent": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The resource name of the parent Folder or Organization. Must be of the form folders/{folder_id} or organizations/{org_id}.`,
-			},
-			// Must be unique amongst its siblings.
-			"display_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The folder's display name. A folder's display name must be unique amongst its siblings, e.g. no two folders with the same parent can share the same display name. The display name must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be no longer than 30 characters.`,
-			},
-			"folder_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The folder id from the name "folders/{folder_id}"`,
-			},
-			// Format is 'folders/{folder_id}.
-			// The terraform id holds the same value.
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The resource name of the Folder. Its format is folders/{folder_id}.`,
-			},
-			"lifecycle_state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The lifecycle state of the folder such as ACTIVE or DELETE_REQUESTED.`,
-			},
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Timestamp when the Folder was created. Assigned by the server. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
-			},
-			"deletion_protection": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     true,
-				Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
-			},
-			"tags": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				ForceNew:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the google_tags_tag_value resource.`,
-			},
-			"configured_capabilities": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A list of capabilities that are configured for this folder.`,
-			},
-			"management_project": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The Management Project associated with the folder's configured capabilities.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				// Format is either folders/{folder_id} or organizations/{org_id}.
+				"parent": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The resource name of the parent Folder or Organization. Must be of the form folders/{folder_id} or organizations/{org_id}.`,
+				},
+				// Must be unique amongst its siblings.
+				"display_name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The folder's display name. A folder's display name must be unique amongst its siblings, e.g. no two folders with the same parent can share the same display name. The display name must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be no longer than 30 characters.`,
+				},
+				"folder_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The folder id from the name "folders/{folder_id}"`,
+				},
+				// Format is 'folders/{folder_id}.
+				// The terraform id holds the same value.
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The resource name of the Folder. Its format is folders/{folder_id}.`,
+				},
+				"lifecycle_state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The lifecycle state of the folder such as ACTIVE or DELETE_REQUESTED.`,
+				},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Timestamp when the Folder was created. Assigned by the server. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+				},
+				"deletion_protection": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     true,
+					Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
+				},
+				"tags": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					ForceNew:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the google_tags_tag_value resource.`,
+				},
+				"configured_capabilities": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `A list of capabilities that are configured for this folder.`,
+				},
+				"management_project": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The Management Project associated with the folder's configured capabilities.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}
@@ -225,7 +227,7 @@ func resourceGoogleFolderUpdate(d *schema.ResourceData, meta interface{}) error 
 
 	clientSideFields := map[string]bool{"deletion_protection": true, "deletion_policy": true}
 	clientSideOnly := true
-	for field := range ResourceGoogleFolder().Schema {
+	for field := range ResourceGoogleFolder().SchemaMap() {
 		if d.HasChange(field) && !clientSideFields[field] {
 			clientSideOnly = false
 			break

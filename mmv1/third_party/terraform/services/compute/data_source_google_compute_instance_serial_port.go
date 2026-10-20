@@ -13,29 +13,31 @@ import (
 func DataSourceGoogleComputeInstanceSerialPort() *schema.Resource {
 	return &schema.Resource{
 		Read: computeInstanceSerialPortRead,
-		Schema: map[string]*schema.Schema{
-			"port": {
-				Type:     schema.TypeInt,
-				Required: true,
-			},
-			"instance": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"contents": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"port": {
+					Type:     schema.TypeInt,
+					Required: true,
+				},
+				"instance": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"contents": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

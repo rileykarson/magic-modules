@@ -10,28 +10,29 @@ import (
 )
 
 func DataSourceOracleDatabaseExascaleDbStorageVaults() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "location",
-		},
-		"exascale_db_storage_vaults": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseExascaleDbStorageVault().Schema),
-			},
-		},
-	}
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseExascaleDbStorageVaultsRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseExascaleDbStorageVaultsRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the dataset is located. If it is not provided, the provider project is used.",
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "location",
+				},
+				"exascale_db_storage_vaults": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseExascaleDbStorageVault().SchemaMap()),
+					},
+				},
+			}
+		},
 	}
 }
 

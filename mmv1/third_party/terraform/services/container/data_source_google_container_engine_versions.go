@@ -14,56 +14,58 @@ import (
 func DataSourceGoogleContainerEngineVersions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleContainerEngineVersionsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"version_prefix": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"default_cluster_version": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"latest_master_version": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"latest_node_version": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"valid_master_versions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"valid_node_versions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"release_channel_default_version": {
-				Type:     schema.TypeMap,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"release_channel_latest_version": {
-				Type:     schema.TypeMap,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"release_channel_upgrade_target_version": {
-				Type:     schema.TypeMap,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"version_prefix": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"default_cluster_version": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"latest_master_version": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"latest_node_version": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"valid_master_versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"valid_node_versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"release_channel_default_version": {
+					Type:     schema.TypeMap,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"release_channel_latest_version": {
+					Type:     schema.TypeMap,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"release_channel_upgrade_target_version": {
+					Type:     schema.TypeMap,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

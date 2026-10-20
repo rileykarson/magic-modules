@@ -11,17 +11,17 @@ import (
 )
 
 func DataSourceSpannerInstance() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSpannerInstance().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "config")       // not sure why this is configurable
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "display_name") // not sure why this is configurable
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceSpannerInstanceRead,
-		Schema: dsSchema,
+		Read: dataSourceSpannerInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSpannerInstance().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "config")       // not sure why this is configurable
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "display_name") // not sure why this is configurable
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

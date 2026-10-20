@@ -558,7 +558,7 @@ func TestBigQueryTableSchemaDiffSuppress_WithIgnore(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			// Create a real ResourceData object with the ignore flag set.
 			// This simulates `ignore_schema_changes = ["dataPolicies"]` in HCL.
-			d := schema.TestResourceDataRaw(t, ResourceBigQueryTable().Schema, map[string]interface{}{
+			d := schema.TestResourceDataRaw(t, ResourceBigQueryTable().SchemaMap(), map[string]interface{}{
 				"ignore_schema_changes": []interface{}{"dataPolicies"},
 			})
 

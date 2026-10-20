@@ -24,30 +24,32 @@ func ResourceContainerRegistry() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
-				StateFunc: func(s interface{}) string {
-					return strings.ToUpper(s.(string))
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:     schema.TypeString,
+					Optional: true,
+					ForceNew: true,
+					StateFunc: func(s interface{}) string {
+						return strings.ToUpper(s.(string))
+					},
+					Description: `The location of the registry. One of ASIA, EU, US or not specified. See the official documentation for more information on registry locations.`,
 				},
-				Description: `The location of the registry. One of ASIA, EU, US or not specified. See the official documentation for more information on registry locations.`,
-			},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
 
-			"bucket_self_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The URI of the created resource.`,
-			},
+				"bucket_self_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The URI of the created resource.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

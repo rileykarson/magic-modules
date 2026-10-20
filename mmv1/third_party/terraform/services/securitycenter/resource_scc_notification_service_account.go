@@ -37,30 +37,32 @@ func ResourceSecurityCenterNotificationServiceAccount() *schema.Resource {
 			resourceSecurityCenterNotificationServiceAccountCustomizeDiff,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"organization": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ForceNew:     true,
-				ExactlyOneOf: []string{"organization", "project"},
-			},
-			"project": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ForceNew:     true,
-				ExactlyOneOf: []string{"organization", "project"},
-			},
-			"email": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The email address of the Cloud Security Command Center Notification service account.`,
-			},
-			"member": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The Identity of the Cloud Security Command Center Notification service account in the form 'serviceAccount:{email}'. This value is often used to refer to the service account in order to grant IAM permissions.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"organization": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ForceNew:     true,
+					ExactlyOneOf: []string{"organization", "project"},
+				},
+				"project": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ForceNew:     true,
+					ExactlyOneOf: []string{"organization", "project"},
+				},
+				"email": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The email address of the Cloud Security Command Center Notification service account.`,
+				},
+				"member": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The Identity of the Cloud Security Command Center Notification service account in the form 'serviceAccount:{email}'. This value is often used to refer to the service account in order to grant IAM permissions.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

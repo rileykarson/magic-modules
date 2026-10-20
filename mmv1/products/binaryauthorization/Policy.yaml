@@ -118,7 +118,7 @@ properties:
           copy["require_attestations_by"] = schema.NewSet(tpgresource.SelfLinkNameHash, tpgresource.ConvertStringArrToInterface(t))
         }
         var buf bytes.Buffer
-        schema.SerializeResourceForHash(&buf, copy, ResourceBinaryAuthorizationPolicy().Schema["cluster_admission_rules"].Elem.(*schema.Resource))
+        schema.SerializeResourceForHash(&buf, copy, ResourceBinaryAuthorizationPolicy().SchemaMap()["cluster_admission_rules"].Elem.(*schema.Resource))
         return tpgresource.Hashcode(buf.String())
       }
     key_name: 'cluster'

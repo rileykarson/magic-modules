@@ -13,34 +13,36 @@ import (
 func DataSourceGoogleComposerImageVersions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComposerImageVersionsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"image_versions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"image_version_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"supported_python_versions": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"image_versions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"image_version_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"supported_python_versions": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Elem:     &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

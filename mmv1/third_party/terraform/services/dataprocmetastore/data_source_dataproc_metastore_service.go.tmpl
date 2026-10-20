@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceDataprocMetastoreService() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDataprocMetastoreService().Schema)
+	return &schema.Resource{
+		Read:   dataSourceDataprocMetastoreServiceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDataprocMetastoreService().SchemaMap())
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "service_id")
 	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
 	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
-	return &schema.Resource{
-		Read:   dataSourceDataprocMetastoreServiceRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 

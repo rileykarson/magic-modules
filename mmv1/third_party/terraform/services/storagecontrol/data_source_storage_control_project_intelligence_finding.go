@@ -11,31 +11,33 @@ import (
 )
 
 func DataSourceGoogleStorageControlProjectIntelligenceFinding() *schema.Resource {
-	s := map[string]*schema.Schema{
-		"finding_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: `The ID of the intelligence finding.`,
-		},
-		"location": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Default:     "global",
-			Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
-		},
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Computed:    true,
-			Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-		},
-	}
-	for k, v := range storageControlIntelligenceFindingSchema() {
-		s[k] = v
-	}
 	return &schema.Resource{
-		Read:   dataSourceGoogleStorageControlProjectIntelligenceFindingRead,
-		Schema: s,
+		Read: dataSourceGoogleStorageControlProjectIntelligenceFindingRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			s := map[string]*schema.Schema{
+				"finding_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The ID of the intelligence finding.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The location of the intelligence finding. Currently default value is global and users cannot use for input for now.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+			}
+			for k, v := range storageControlIntelligenceFindingSchema() {
+				s[k] = v
+			}
+			return s
+		},
 	}
 }
 

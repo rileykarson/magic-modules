@@ -1069,7 +1069,7 @@ func TestUnitContainerCluster_managedOpenTelemetryConfigPlan(t *testing.T) {
 	// Use only this field's schema so the cluster's CustomizeDiff functions,
 	// which need provider config, don't run.
 	r := &schema.Resource{Schema: map[string]*schema.Schema{
-		"managed_opentelemetry_config": ResourceContainerCluster().Schema["managed_opentelemetry_config"],
+		"managed_opentelemetry_config": ResourceContainerCluster().SchemaMap()["managed_opentelemetry_config"],
 	}}
 
 	for _, tc := range cases {
@@ -1244,7 +1244,7 @@ func TestUnitContainerCluster_dnsConfigPlan(t *testing.T) {
 	}
 
 	r := &schema.Resource{Schema: map[string]*schema.Schema{
-		"dns_config": ResourceContainerCluster().Schema["dns_config"],
+		"dns_config": ResourceContainerCluster().SchemaMap()["dns_config"],
 	}}
 
 	for _, tc := range cases {

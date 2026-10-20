@@ -18,24 +18,26 @@ func DataSourceSqlDatabases() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceSqlDatabasesRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project that contains the instance.`,
-			},
-			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The name of the Cloud SQL database instance in which the database belongs.`,
-			},
-			"databases": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceSQLDatabase().Schema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project that contains the instance.`,
 				},
-			},
+				"instance": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The name of the Cloud SQL database instance in which the database belongs.`,
+				},
+				"databases": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceSQLDatabase().SchemaMap()),
+					},
+				},
+			}
 		},
 	}
 }

@@ -11,17 +11,16 @@ import (
 )
 
 func DataSourceGoogleCloudbuildWorkerPool() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudbuildWorkerPool().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleCloudbuildWorkerPoolRead,
-		Schema: dsSchema,
-	}
+		Read: dataSourceGoogleCloudbuildWorkerPoolRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceCloudbuildWorkerPool().SchemaMap())
 
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
+	}
 }
 
 func dataSourceGoogleCloudbuildWorkerPoolRead(d *schema.ResourceData, meta interface{}) error {

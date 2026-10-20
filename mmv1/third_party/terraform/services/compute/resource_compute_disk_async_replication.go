@@ -35,40 +35,42 @@ func ResourceComputeDiskAsyncReplication() *schema.Resource {
 			Delete: schema.DefaultTimeout(5 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"primary_disk": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				Description:      `Primary disk for asynchronous replication.`,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"secondary_disk": {
-				Type:        schema.TypeList,
-				Required:    true,
-				ForceNew:    true,
-				MaxItems:    1,
-				Description: `Secondary disk for asynchronous replication.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"disk": {
-							Type:             schema.TypeString,
-							Required:         true,
-							ForceNew:         true,
-							Description:      `Secondary disk for asynchronous replication.`,
-							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-						},
-						"state": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `Output-only. Status of replication on the secondary disk.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"primary_disk": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					Description:      `Primary disk for asynchronous replication.`,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"secondary_disk": {
+					Type:        schema.TypeList,
+					Required:    true,
+					ForceNew:    true,
+					MaxItems:    1,
+					Description: `Secondary disk for asynchronous replication.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"disk": {
+								Type:             schema.TypeString,
+								Required:         true,
+								ForceNew:         true,
+								Description:      `Secondary disk for asynchronous replication.`,
+								DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+							},
+							"state": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `Output-only. Status of replication on the secondary disk.`,
+							},
 						},
 					},
 				},
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -15,51 +15,52 @@ import (
 func DataSourceGoogleKmsKeyHandles() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsKeyHandlesRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The canonical id for the location. For example: "us-east1".`,
-			},
-			"resource_type_selector": {
-				Type:     schema.TypeString,
-				Required: true,
-				Description: `
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `The canonical id for the location. For example: "us-east1".`,
+				},
+				"resource_type_selector": {
+					Type:     schema.TypeString,
+					Required: true,
+					Description: `
 					The resource_type_selector argument is used to add a filter query parameter that limits which key handles are retrieved by the data source: ?filter=resource_type_selector="{{resource_type_selector}}".
 					Example values:
 					* resource_type_selector="{SERVICE}.googleapis.com/{TYPE}".
 					[See the documentation about using filters](https://cloud.google.com/kms/docs/reference/rest/v1/projects.locations.keyHandles/list)
 				`,
-			},
-			"key_handles": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "A list of all the retrieved key handles",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"kms_key": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"resource_type_selector": {
-							Type:     schema.TypeString,
-							Computed: true,
+				},
+				"key_handles": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "A list of all the retrieved key handles",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"kms_key": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"resource_type_selector": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
-
 }
 
 func dataSourceGoogleKmsKeyHandlesRead(d *schema.ResourceData, meta interface{}) error {

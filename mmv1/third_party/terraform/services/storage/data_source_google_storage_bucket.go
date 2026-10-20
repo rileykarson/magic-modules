@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceGoogleStorageBucket() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageBucket().Schema)
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleStorageBucketRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleStorageBucketRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceStorageBucket().SchemaMap())
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			return dsSchema
+		},
 	}
 }
 

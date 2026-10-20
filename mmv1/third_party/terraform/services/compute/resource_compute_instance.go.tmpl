@@ -262,7 +262,8 @@ func ResourceComputeInstance() *schema.Resource {
 		// A compute instance is more or less a superset of a compute instance
 		// template. Please attempt to maintain consistency with the
 		// resource_compute_instance_template schema when updating this one.
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"boot_disk": {
 				Type:        schema.TypeList,
 				Required:    true,
@@ -1775,6 +1776,7 @@ be from 0 to 999,999,999 inclusive.`,
 //UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 //UDP schema end
+		}
 		},
 		CustomizeDiff: customdiff.All(
             tpgresource.DefaultProviderDeletionPolicy("DELETE"),

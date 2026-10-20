@@ -11,32 +11,33 @@ import (
 )
 
 func DataSourceDnsManagedZones() *schema.Resource {
-
-	mzSchema := DataSourceDnsManagedZone().Schema
-	tpgresource.AddOptionalFieldsToSchema(mzSchema, "name")
-
 	return &schema.Resource{
 		Read: dataSourceDnsManagedZonesRead,
 
-		Schema: map[string]*schema.Schema{
-			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			mzSchema := DataSourceDnsManagedZone().SchemaMap()
+			tpgresource.AddOptionalFieldsToSchema(mzSchema, "name")
 
-			"managed_zones": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: mzSchema,
+			return map[string]*schema.Schema{
+				"id": {
+					Type:     schema.TypeString,
+					Computed: true,
 				},
-			},
 
-			// Google Cloud DNS ManagedZone resources do not have a SelfLink attribute.
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"managed_zones": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: mzSchema,
+					},
+				},
+
+				// Google Cloud DNS ManagedZone resources do not have a SelfLink attribute.
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

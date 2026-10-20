@@ -60,72 +60,74 @@ func ResourceBigtableAuthorizedView() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the authorized view. Must be 1-50 characters and must only contain hyphens, underscores, periods, letters and numbers.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the authorized view. Must be 1-50 characters and must only contain hyphens, underscores, periods, letters and numbers.`,
+				},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
 
-			"instance_name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareResourceNames,
-				Description:      `The name of the Bigtable instance in which the authorized view belongs.`,
-			},
+				"instance_name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareResourceNames,
+					Description:      `The name of the Bigtable instance in which the authorized view belongs.`,
+				},
 
-			"table_name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareResourceNames,
-				Description:      `The name of the Bigtable table in which the authorized view belongs.`,
-			},
+				"table_name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareResourceNames,
+					Description:      `The name of the Bigtable table in which the authorized view belongs.`,
+				},
 
-			"deletion_protection": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
-				Description: `A field to make the authorized view protected against data loss i.e. when set to PROTECTED, deleting the authorized view, the table containing the authorized view, and the instance containing the authorized view would be prohibited.
+				"deletion_protection": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Computed:     true,
+					ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
+					Description: `A field to make the authorized view protected against data loss i.e. when set to PROTECTED, deleting the authorized view, the table containing the authorized view, and the instance containing the authorized view would be prohibited.
 If not provided, currently deletion protection will be set to UNPROTECTED as it is the API default value. Note this field configs the deletion protection provided by the API in the backend, and should not be confused with Terraform-side deletion protection.`,
-			},
+				},
 
-			"subset_view": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: `An AuthorizedView permitting access to an explicit subset of a Table.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"row_prefixes": {
-							Type:        schema.TypeSet,
-							Optional:    true,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: `Base64-encoded row prefixes to be included in the authorized view. To provide access to all rows, include the empty string as a prefix ("").`,
-						},
-						"family_subsets": {
-							Type:        schema.TypeSet,
-							Optional:    true,
-							Description: `Subsets of column families to be included in the authorized view.`,
-							Elem:        familySubsetSchemaElem,
+				"subset_view": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					MaxItems:    1,
+					Description: `An AuthorizedView permitting access to an explicit subset of a Table.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"row_prefixes": {
+								Type:        schema.TypeSet,
+								Optional:    true,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+								Description: `Base64-encoded row prefixes to be included in the authorized view. To provide access to all rows, include the empty string as a prefix ("").`,
+							},
+							"family_subsets": {
+								Type:        schema.TypeSet,
+								Optional:    true,
+								Description: `Subsets of column families to be included in the authorized view.`,
+								Elem:        familySubsetSchemaElem,
+							},
 						},
 					},
 				},
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -15,131 +15,133 @@ import (
 func DataSourceGoogleNetworkManagementTestRun() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleNetworkManagementTestRun,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Unique name for the connectivity test.`,
-			},
-			"reachability_details": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `Connectivity test reachability details.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"result": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `Status of the connectivity test: RESULT_UNSPECIFIED, REACHABLE, UNREACHABLE, AMBIGUOUS or UNDETERMINED.`,
-						},
-						"traces": {
-							Type:        schema.TypeList,
-							Computed:    true,
-							Description: `List of connectivity test traces.`,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"endpoint_info": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Description: `Derived from the source and destination endpoints definition specified by user request, and validated by the data plane model.`,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"destination_ip": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `Destination IP address.`,
-												},
-												"destination_network_uri": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `URI of the network where this packet is sent to.`,
-												},
-												"destination_port": {
-													Type:        schema.TypeInt,
-													Computed:    true,
-													Description: `Destination port. Only valid when protocol is TCP or UDP.`,
-												},
-												"protocol": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `IP protocol in string format, for example: "TCP", "UDP", "ICMP".`,
-												},
-												"source_agent_uri": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `URI of the source telemetry agent this packet originates from.`,
-												},
-												"source_ip": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `Source IP address.`,
-												},
-												"source_network_uri": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `URI of the network where this packet originates from.`,
-												},
-												"source_port": {
-													Type:        schema.TypeInt,
-													Computed:    true,
-													Description: `Source port. Only valid when protocol is TCP or UDP.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Unique name for the connectivity test.`,
+				},
+				"reachability_details": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `Connectivity test reachability details.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"result": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `Status of the connectivity test: RESULT_UNSPECIFIED, REACHABLE, UNREACHABLE, AMBIGUOUS or UNDETERMINED.`,
+							},
+							"traces": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: `List of connectivity test traces.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"endpoint_info": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Description: `Derived from the source and destination endpoints definition specified by user request, and validated by the data plane model.`,
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"destination_ip": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `Destination IP address.`,
+													},
+													"destination_network_uri": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `URI of the network where this packet is sent to.`,
+													},
+													"destination_port": {
+														Type:        schema.TypeInt,
+														Computed:    true,
+														Description: `Destination port. Only valid when protocol is TCP or UDP.`,
+													},
+													"protocol": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `IP protocol in string format, for example: "TCP", "UDP", "ICMP".`,
+													},
+													"source_agent_uri": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `URI of the source telemetry agent this packet originates from.`,
+													},
+													"source_ip": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `Source IP address.`,
+													},
+													"source_network_uri": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `URI of the network where this packet originates from.`,
+													},
+													"source_port": {
+														Type:        schema.TypeInt,
+														Computed:    true,
+														Description: `Source port. Only valid when protocol is TCP or UDP.`,
+													},
 												},
 											},
 										},
-									},
-									"forward_trace_id": {
-										Type:        schema.TypeInt,
-										Computed:    true,
-										Description: `ID of the trace.`,
-									},
-									"steps": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Description: `A trace of a test contains multiple steps from the initial state to the final state (delivered, dropped, forwarded, or aborted).`,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"causes_drop": {
-													Type:        schema.TypeBool,
-													Computed:    true,
-													Description: `If this step leads to the final state Drop.`,
-												},
-												"description": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `Description of the connectivity test step.`,
-												},
-												"project_id": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `Project ID of the connectivity test step.`,
-												},
-												"state": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: `State of the connectivity test step.`,
+										"forward_trace_id": {
+											Type:        schema.TypeInt,
+											Computed:    true,
+											Description: `ID of the trace.`,
+										},
+										"steps": {
+											Type:        schema.TypeList,
+											Computed:    true,
+											Description: `A trace of a test contains multiple steps from the initial state to the final state (delivered, dropped, forwarded, or aborted).`,
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"causes_drop": {
+														Type:        schema.TypeBool,
+														Computed:    true,
+														Description: `If this step leads to the final state Drop.`,
+													},
+													"description": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `Description of the connectivity test step.`,
+													},
+													"project_id": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `Project ID of the connectivity test step.`,
+													},
+													"state": {
+														Type:        schema.TypeString,
+														Computed:    true,
+														Description: `State of the connectivity test step.`,
+													},
 												},
 											},
 										},
 									},
 								},
 							},
-						},
-						"verify_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `Time when reachability details were determined. An RFC3339 timestamp in UTC time. 
+							"verify_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `Time when reachability details were determined. An RFC3339 timestamp in UTC time. 
 This in the format of yyyy-MM-ddTHH:mm:ss.SSSZ.`,
+							},
 						},
 					},
 				},
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

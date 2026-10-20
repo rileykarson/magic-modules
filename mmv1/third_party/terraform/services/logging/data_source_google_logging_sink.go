@@ -10,16 +10,17 @@ import (
 )
 
 func DataSourceGoogleLoggingSink() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(resourceLoggingSinkSchema())
-	dsSchema["id"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Required:    true,
-		Description: `Required. An identifier for the resource in format: "projects/[PROJECT_ID]/sinks/[SINK_NAME]", "organizations/[ORGANIZATION_ID]/sinks/[SINK_NAME]", "billingAccounts/[BILLING_ACCOUNT_ID]/sinks/[SINK_NAME]", "folders/[FOLDER_ID]/sinks/[SINK_NAME]"`,
-	}
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleLoggingSinkRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleLoggingSinkRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(resourceLoggingSinkSchema())
+			dsSchema["id"] = &schema.Schema{
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: `Required. An identifier for the resource in format: "projects/[PROJECT_ID]/sinks/[SINK_NAME]", "organizations/[ORGANIZATION_ID]/sinks/[SINK_NAME]", "billingAccounts/[BILLING_ACCOUNT_ID]/sinks/[SINK_NAME]", "folders/[FOLDER_ID]/sinks/[SINK_NAME]"`,
+			}
+			return dsSchema
+		},
 	}
 }
 

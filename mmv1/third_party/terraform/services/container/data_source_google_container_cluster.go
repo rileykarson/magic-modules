@@ -10,21 +10,22 @@ import (
 )
 
 func DataSourceGoogleContainerCluster() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceContainerCluster().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
-	// skip_node_pool_refresh is an input to the read path (flattenClusterNodePools),
-	// so it must be settable instead of computed-only. See resource_container_cluster.go.
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "skip_node_pool_refresh")
-
 	return &schema.Resource{
-		Read:   datasourceContainerClusterRead,
-		Schema: dsSchema,
+		Read: datasourceContainerClusterRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceContainerCluster().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location")
+			// skip_node_pool_refresh is an input to the read path (flattenClusterNodePools),
+			// so it must be settable instead of computed-only. See resource_container_cluster.go.
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "skip_node_pool_refresh")
+			return dsSchema
+		},
 	}
 }
 

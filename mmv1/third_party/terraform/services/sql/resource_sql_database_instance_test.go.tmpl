@@ -5142,7 +5142,7 @@ func TestEnhancedBackupManagerDiffSuppressFunc(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			// Build real *schema.ResourceData using the resource schema and TestResourceDataRaw
 			// Put backup_tier into the nested settings->backup_configuration block (state)
-			rd := schema.TestResourceDataRaw(t, sql.ResourceSqlDatabaseInstance().Schema, map[string]interface{}{
+			rd := schema.TestResourceDataRaw(t, sql.ResourceSqlDatabaseInstance().SchemaMap(), map[string]interface{}{
 				"name": "test-instance",
 				"settings": []interface{}{
 					map[string]interface{}{

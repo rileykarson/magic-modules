@@ -38,60 +38,62 @@ func ResourceApigeeEnvironmentDebugmask() *schema.Resource {
 			Delete: schema.DefaultTimeout(20 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"env_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The Apigee environment group associated with the Apigee environment, in the format organizations/{{org_name}}/environments/{{env_name}}.`,
-			},
-			"request_x_paths": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for request messages.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"response_x_paths": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for response messages.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"fault_x_paths": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for fault messages.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"request_json_paths": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of JSONPath expressions that specify the JSON elements or attributes that the debug mask applies to for request messages.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"response_json_paths": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of JSONPath expressions that specify the JSON elements or attributes that the debug mask applies to for response messages.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"variables": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `List of variables that the debug mask applies to.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"namespaces": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: `Map of namespaces to URIs.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Name of the debug mask.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"env_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The Apigee environment group associated with the Apigee environment, in the format organizations/{{org_name}}/environments/{{env_name}}.`,
+				},
+				"request_x_paths": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for request messages.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"response_x_paths": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for response messages.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"fault_x_paths": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of XPath expressions that specify the XML elements or attributes that the debug mask applies to for fault messages.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"request_json_paths": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of JSONPath expressions that specify the JSON elements or attributes that the debug mask applies to for request messages.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"response_json_paths": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of JSONPath expressions that specify the JSON elements or attributes that the debug mask applies to for response messages.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"variables": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: `List of variables that the debug mask applies to.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"namespaces": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: `Map of namespaces to URIs.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Name of the debug mask.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

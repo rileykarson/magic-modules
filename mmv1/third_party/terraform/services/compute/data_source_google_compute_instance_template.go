@@ -13,33 +13,34 @@ import (
 )
 
 func DataSourceGoogleComputeInstanceTemplate() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceTemplate().Schema)
-
-	dsSchema["filter"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Optional: true,
-	}
-	dsSchema["self_link_unique"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Optional: true,
-	}
-	dsSchema["most_recent"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-	}
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "filter", "most_recent", "project", "self_link_unique")
-
-	mutuallyExclusive := []string{"name", "filter", "self_link_unique"}
-	for _, n := range mutuallyExclusive {
-		dsSchema[n].ExactlyOneOf = mutuallyExclusive
-	}
-
 	return &schema.Resource{
-		Read:   datasourceComputeInstanceTemplateRead,
-		Schema: dsSchema,
+		Read: datasourceComputeInstanceTemplateRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceTemplate().SchemaMap())
+
+			dsSchema["filter"] = &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			}
+			dsSchema["self_link_unique"] = &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			}
+			dsSchema["most_recent"] = &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			}
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "filter", "most_recent", "project", "self_link_unique")
+
+			mutuallyExclusive := []string{"name", "filter", "self_link_unique"}
+			for _, n := range mutuallyExclusive {
+				dsSchema[n].ExactlyOneOf = mutuallyExclusive
+			}
+			return dsSchema
+		},
 	}
 }
 

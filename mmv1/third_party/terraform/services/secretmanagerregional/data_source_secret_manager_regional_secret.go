@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceSecretManagerRegionalRegionalSecret() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerRegionalRegionalSecret().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "secret_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceSecretManagerRegionalRegionalSecretRead,
-		Schema: dsSchema,
+		Read: dataSourceSecretManagerRegionalRegionalSecretRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceSecretManagerRegionalRegionalSecret().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "secret_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

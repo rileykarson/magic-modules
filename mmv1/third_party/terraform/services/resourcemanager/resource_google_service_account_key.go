@@ -39,82 +39,84 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			// Required
-			"service_account_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The ID of the parent service account of the key. This can be a string in the format {ACCOUNT} or projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}, where {ACCOUNT} is the email address or unique id of the service account. If the {ACCOUNT} syntax is used, the project will be inferred from the provider's configuration.`,
-			},
-			// Optional
-			"key_algorithm": {
-				Type:         schema.TypeString,
-				Default:      "KEY_ALG_RSA_2048",
-				Optional:     true,
-				ForceNew:     true,
-				ValidateFunc: validation.StringInSlice([]string{"KEY_ALG_UNSPECIFIED", "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048"}, false),
-				Description:  `The algorithm used to generate the key, used only on create. KEY_ALG_RSA_2048 is the default algorithm. Valid values are: "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048".`,
-			},
-			"private_key_type": {
-				Type:         schema.TypeString,
-				Default:      "TYPE_GOOGLE_CREDENTIALS_FILE",
-				Optional:     true,
-				ForceNew:     true,
-				ValidateFunc: validation.StringInSlice([]string{"TYPE_UNSPECIFIED", "TYPE_PKCS12_FILE", "TYPE_GOOGLE_CREDENTIALS_FILE"}, false),
-			},
-			"public_key_type": {
-				Type:         schema.TypeString,
-				Default:      "TYPE_X509_PEM_FILE",
-				Optional:     true,
-				ForceNew:     true,
-				ValidateFunc: validation.StringInSlice([]string{"TYPE_NONE", "TYPE_X509_PEM_FILE", "TYPE_RAW_PUBLIC_KEY"}, false),
-			},
-			"public_key_data": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"key_algorithm", "private_key_type"},
-				Description:   `A field that allows clients to upload their own public key. If set, use this public key data to create a service account key for given service account. Please note, the expected format for this field is a base64 encoded X509_PEM.`,
-			},
-			"keepers": {
-				Description: "Arbitrary map of values that, when changed, will trigger recreation of resource.",
-				Type:        schema.TypeMap,
-				Optional:    true,
-				ForceNew:    true,
-			},
-			// Computed
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The name used for this key pair`,
-			},
-			"public_key": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The public key, base64 encoded`,
-			},
-			"private_key": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Sensitive:   true,
-				Description: `The private key in JSON format, base64 encoded. This is what you normally get as a file when creating service account keys through the CLI or web console. This is only populated when creating a new key.`,
-			},
-			"valid_after": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The key can be used after this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
-			},
-			"valid_before": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The key can be used before this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				// Required
+				"service_account_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The ID of the parent service account of the key. This can be a string in the format {ACCOUNT} or projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}, where {ACCOUNT} is the email address or unique id of the service account. If the {ACCOUNT} syntax is used, the project will be inferred from the provider's configuration.`,
+				},
+				// Optional
+				"key_algorithm": {
+					Type:         schema.TypeString,
+					Default:      "KEY_ALG_RSA_2048",
+					Optional:     true,
+					ForceNew:     true,
+					ValidateFunc: validation.StringInSlice([]string{"KEY_ALG_UNSPECIFIED", "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048"}, false),
+					Description:  `The algorithm used to generate the key, used only on create. KEY_ALG_RSA_2048 is the default algorithm. Valid values are: "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048".`,
+				},
+				"private_key_type": {
+					Type:         schema.TypeString,
+					Default:      "TYPE_GOOGLE_CREDENTIALS_FILE",
+					Optional:     true,
+					ForceNew:     true,
+					ValidateFunc: validation.StringInSlice([]string{"TYPE_UNSPECIFIED", "TYPE_PKCS12_FILE", "TYPE_GOOGLE_CREDENTIALS_FILE"}, false),
+				},
+				"public_key_type": {
+					Type:         schema.TypeString,
+					Default:      "TYPE_X509_PEM_FILE",
+					Optional:     true,
+					ForceNew:     true,
+					ValidateFunc: validation.StringInSlice([]string{"TYPE_NONE", "TYPE_X509_PEM_FILE", "TYPE_RAW_PUBLIC_KEY"}, false),
+				},
+				"public_key_data": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"key_algorithm", "private_key_type"},
+					Description:   `A field that allows clients to upload their own public key. If set, use this public key data to create a service account key for given service account. Please note, the expected format for this field is a base64 encoded X509_PEM.`,
+				},
+				"keepers": {
+					Description: "Arbitrary map of values that, when changed, will trigger recreation of resource.",
+					Type:        schema.TypeMap,
+					Optional:    true,
+					ForceNew:    true,
+				},
+				// Computed
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The name used for this key pair`,
+				},
+				"public_key": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The public key, base64 encoded`,
+				},
+				"private_key": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Sensitive:   true,
+					Description: `The private key in JSON format, base64 encoded. This is what you normally get as a file when creating service account keys through the CLI or web console. This is only populated when creating a new key.`,
+				},
+				"valid_after": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The key can be used after this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+				},
+				"valid_before": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The key can be used before this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

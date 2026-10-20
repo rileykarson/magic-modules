@@ -10,38 +10,39 @@ import (
 )
 
 func DataSourceGoogleComputeInstanceGroups() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceGroup().Schema)
-
-	// instances field is not returned by the list API and would require an extra call per group.
-	// We omit it for performance reasons in the plural datasource.
-	delete(dsSchema, "instances")
-
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeInstanceGroupsRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeInstanceGroup().SchemaMap())
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
-			"instance_groups": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: dsSchema,
+			// instances field is not returned by the list API and would require an extra call per group.
+			// We omit it for performance reasons in the plural datasource.
+			delete(dsSchema, "instances")
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+
+				"instance_groups": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: dsSchema,
+					},
+				},
+			}
 		},
 	}
 }

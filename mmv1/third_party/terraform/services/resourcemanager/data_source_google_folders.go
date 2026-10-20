@@ -12,51 +12,53 @@ import (
 func DataSourceGoogleFolders() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleFoldersRead,
-		Schema: map[string]*schema.Schema{
-			"parent_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"folders": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"parent": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"display_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"state": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"update_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"delete_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"etag": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"folders": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"parent": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"display_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"state": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"update_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"delete_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"etag": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

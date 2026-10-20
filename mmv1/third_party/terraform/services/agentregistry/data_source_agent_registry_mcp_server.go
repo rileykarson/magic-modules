@@ -16,139 +16,141 @@ import (
 func DataSourceAgentRegistryMcpServer() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAgentRegistryMcpServerRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The location of the resource.`,
-			},
-			"mcp_server_id": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"filter"},
-				Description:   `The unique identifier for the MCP server.`,
-			},
-			"filter": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"mcp_server_id"},
-				Description:   `A filter string that identifies a unique MCP server.`,
-			},
-			"urn": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The URN of the MCP Server.`,
-			},
-			"display_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The display name of the MCP Server.`,
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The description of the MCP Server.`,
-			},
-			"interfaces": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The connection details for the MCP Server.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"url": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The destination URL.`,
-						},
-						"protocol_binding": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The protocol binding of the interface.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The location of the resource.`,
+				},
+				"mcp_server_id": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"filter"},
+					Description:   `The unique identifier for the MCP server.`,
+				},
+				"filter": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"mcp_server_id"},
+					Description:   `A filter string that identifies a unique MCP server.`,
+				},
+				"urn": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The URN of the MCP Server.`,
+				},
+				"display_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The display name of the MCP Server.`,
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The description of the MCP Server.`,
+				},
+				"interfaces": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The connection details for the MCP Server.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"url": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The destination URL.`,
+							},
+							"protocol_binding": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The protocol binding of the interface.`,
+							},
 						},
 					},
 				},
-			},
-			"tools": {
-				Type:        schema.TypeList, // Object
-				Computed:    true,
-				Description: `A list of tools available with the MCP Server.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The name of the tool",
-						},
-						"description": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "The description of the tool",
-						},
-						"annotations": {
-							Type:        schema.TypeList, // Object
-							Computed:    true,
-							Description: "Additional tool information.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"title": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "A human-readable title for the tool",
-									},
-									"destructive_hint": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: "If true, the tool may perform destructive updates to its environment. If false, the tool performs only additive updates.",
-									},
-									"idempotent_hint": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: "If true, calling the tool repeatedly with the same arguments will have no additional effect on the its environment",
-									},
-									"open_world_hint": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: "If true, this tool may interact with an “open world” of external entities. If false, the tool’s domain of interaction is closed. For example, the world of a web search tool is open, whereas that of a memory tool is not",
-									},
-									"read_only_hint": {
-										Type:        schema.TypeBool,
-										Computed:    true,
-										Description: "If true, the tool does not modify its environment.",
+				"tools": {
+					Type:        schema.TypeList, // Object
+					Computed:    true,
+					Description: `A list of tools available with the MCP Server.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The name of the tool",
+							},
+							"description": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The description of the tool",
+							},
+							"annotations": {
+								Type:        schema.TypeList, // Object
+								Computed:    true,
+								Description: "Additional tool information.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"title": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "A human-readable title for the tool",
+										},
+										"destructive_hint": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: "If true, the tool may perform destructive updates to its environment. If false, the tool performs only additive updates.",
+										},
+										"idempotent_hint": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: "If true, calling the tool repeatedly with the same arguments will have no additional effect on the its environment",
+										},
+										"open_world_hint": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: "If true, this tool may interact with an “open world” of external entities. If false, the tool’s domain of interaction is closed. For example, the world of a web search tool is open, whereas that of a memory tool is not",
+										},
+										"read_only_hint": {
+											Type:        schema.TypeBool,
+											Computed:    true,
+											Description: "If true, the tool does not modify its environment.",
+										},
 									},
 								},
 							},
 						},
 					},
 				},
-			},
-			"attributes": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `Attributes of the MCP Server.`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"attributes": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `Attributes of the MCP Server.`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
 				},
-			},
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Create time.`,
-			},
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Update time.`,
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Create time.`,
+				},
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Update time.`,
+				},
+			}
 		},
 	}
 }

@@ -14,38 +14,40 @@ import (
 func DataSourceGoogleStorageControlProjectIntelligenceFindings() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleStorageControlProjectIntelligenceFindingsRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The filter expression to apply. Supports filtering by type and associated_resources.`,
-			},
-			"page_size": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Default:     100,
-				Description: `The maximum number of IntelligenceFinding resources to return. The maximum value is 100; values greater than 100 become 100. The default value is 100.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "global",
-				Description: `The location of the intelligence findings. Currently default value is global and users cannot use for input for now.`,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			"findings": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The list of intelligence findings.`,
-				Elem: &schema.Resource{
-					Schema: storageControlIntelligenceFindingSchema(),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The filter expression to apply. Supports filtering by type and associated_resources.`,
 				},
-			},
+				"page_size": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Default:     100,
+					Description: `The maximum number of IntelligenceFinding resources to return. The maximum value is 100; values greater than 100 become 100. The default value is 100.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The location of the intelligence findings. Currently default value is global and users cannot use for input for now.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				"findings": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The list of intelligence findings.`,
+					Elem: &schema.Resource{
+						Schema: storageControlIntelligenceFindingSchema(),
+					},
+				},
+			}
 		},
 	}
 }

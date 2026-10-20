@@ -24,30 +24,32 @@ var (
 func DataSourceGoogleKmsSecretAsymmetric() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceGoogleKmsSecretAsymmetricReadContext,
-		Schema: map[string]*schema.Schema{
-			"crypto_key_version": {
-				Type:         schema.TypeString,
-				Description:  "The fully qualified KMS crypto key version name",
-				ValidateFunc: verify.ValidateRegexp(cryptoKeyVersionRegexp.String()),
-				Required:     true,
-			},
-			"ciphertext": {
-				Type:         schema.TypeString,
-				Description:  "The public key encrypted ciphertext in base64 encoding",
-				ValidateFunc: validateBase64WithWhitespaces,
-				Required:     true,
-			},
-			"crc32": {
-				Type:         schema.TypeString,
-				Description:  "The crc32 checksum of the ciphertext, hexadecimal encoding. If not specified, it will be computed",
-				ValidateFunc: validateHexadecimalUint32,
-				Optional:     true,
-			},
-			"plaintext": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"crypto_key_version": {
+					Type:         schema.TypeString,
+					Description:  "The fully qualified KMS crypto key version name",
+					ValidateFunc: verify.ValidateRegexp(cryptoKeyVersionRegexp.String()),
+					Required:     true,
+				},
+				"ciphertext": {
+					Type:         schema.TypeString,
+					Description:  "The public key encrypted ciphertext in base64 encoding",
+					ValidateFunc: validateBase64WithWhitespaces,
+					Required:     true,
+				},
+				"crc32": {
+					Type:         schema.TypeString,
+					Description:  "The crc32 checksum of the ciphertext, hexadecimal encoding. If not specified, it will be computed",
+					ValidateFunc: validateHexadecimalUint32,
+					Optional:     true,
+				},
+				"plaintext": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+			}
 		},
 	}
 }

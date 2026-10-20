@@ -10,16 +10,16 @@ import (
 )
 
 func DataSourceGoogleKmsKeyHandle() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSKeyHandle().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleKmsKeyHandleRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleKmsKeyHandleRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceKMSKeyHandle().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceGoogleKmsKeyHandleRead(d *schema.ResourceData, meta interface{}) error {

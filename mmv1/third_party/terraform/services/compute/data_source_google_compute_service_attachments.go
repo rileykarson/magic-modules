@@ -13,26 +13,28 @@ import (
 func DataSourceGoogleComputeServiceAttachments() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleComputeServiceAttachmentsRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"filter": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"service_attachments": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeServiceAttachment().Schema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
 				},
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"filter": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"service_attachments": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeServiceAttachment().SchemaMap()),
+					},
+				},
+			}
 		},
 	}
 }

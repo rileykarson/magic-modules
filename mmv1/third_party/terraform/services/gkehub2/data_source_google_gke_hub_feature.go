@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceGoogleGkeHubFeature() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHub2Feature().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleGkeHubFeatureRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleGkeHubFeatureRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGKEHub2Feature().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			return dsSchema
+		},
 	}
 }
 

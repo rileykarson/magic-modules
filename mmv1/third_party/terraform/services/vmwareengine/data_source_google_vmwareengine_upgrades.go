@@ -12,27 +12,29 @@ import (
 func DataSourceVmwareengineUpgrades() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceVmwareengineUpgradesRead,
-		Schema: map[string]*schema.Schema{
-			"parent": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-				Description: `The resource name of the private cloud for which upgrades will be listed.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"parent": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+					Description: `The resource name of the private cloud for which upgrades will be listed.
 Resource names are schemeless URIs that follow the conventions in https://cloud.google.com/apis/design/resource_names.
 For example: projects/my-project/locations/us-west1-a/privateClouds/my-cloud`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `The resource name of the specific Upgrade to retrieve. If provided, the 'upgrades' list will contain only this upgrade.`,
-			},
-			"upgrades": {
-				Type:        schema.TypeList,
-				Description: "A list of VMware Engine upgrades. Contains one element if 'name' is specified in the arguments, otherwise all upgrades for the private cloud.",
-				Computed:    true,
-				Elem:        dataSourceVmwareengineUpgrade(),
-			},
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					ForceNew:    true,
+					Description: `The resource name of the specific Upgrade to retrieve. If provided, the 'upgrades' list will contain only this upgrade.`,
+				},
+				"upgrades": {
+					Type:        schema.TypeList,
+					Description: "A list of VMware Engine upgrades. Contains one element if 'name' is specified in the arguments, otherwise all upgrades for the private cloud.",
+					Computed:    true,
+					Elem:        dataSourceVmwareengineUpgrade(),
+				},
+			}
 		},
 	}
 }

@@ -18,15 +18,6 @@ import (
 )
 
 func ResourceApikeysKey() *schema.Resource {
-	deletionPolicySchema := tpgresource.DeletionPolicySchemaEntry("DELETE")
-	deletionPolicySchema.Description = `Whether Terraform will be prevented from destroying the resource. Defaults to "DELETE".
-When a 'terraform destroy' or 'terraform apply' would delete the resource,
-the command will fail if this field is set to "PREVENT" in Terraform state.
-When set to "ABANDON", the command will remove the resource from Terraform
-management without updating or deleting the resource in the API.
-When set to "DELETE", deleting the resource is allowed, and existing traffic usage will be checked. If active usage was detected in the last 7 days, the request fails.
-When set to "FORCE", deleting the resource will bypass the active traffic usage check.`
-
 	return &schema.Resource{
 		Create: resourceApikeysKeyCreate,
 		Read:   resourceApikeysKeyRead,
@@ -47,68 +38,78 @@ When set to "FORCE", deleting the resource will bypass the active traffic usage 
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The resource name of the key. The name must be unique within the project, must conform with RFC-1034, is restricted to lower-cased letters, and has a maximum length of 63 characters. In another word, the name must match the regular expression: `[a-z]([a-z0-9-]{0,61}[a-z0-9])?`.",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			deletionPolicySchema := tpgresource.DeletionPolicySchemaEntry("DELETE")
+			deletionPolicySchema.Description = `Whether Terraform will be prevented from destroying the resource. Defaults to "DELETE".
+When a 'terraform destroy' or 'terraform apply' would delete the resource,
+the command will fail if this field is set to "PREVENT" in Terraform state.
+When set to "ABANDON", the command will remove the resource from Terraform
+management without updating or deleting the resource in the API.
+When set to "DELETE", deleting the resource is allowed, and existing traffic usage will be checked. If active usage was detected in the last 7 days, the request fails.
+When set to "FORCE", deleting the resource will bypass the active traffic usage check.`
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The resource name of the key. The name must be unique within the project, must conform with RFC-1034, is restricted to lower-cased letters, and has a maximum length of 63 characters. In another word, the name must match the regular expression: `[a-z]([a-z0-9-]{0,61}[a-z0-9])?`.",
+				},
 
-			"display_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Human-readable display name of this API key. Modifiable by user.",
-			},
+				"display_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Human-readable display name of this API key. Modifiable by user.",
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"restrictions": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: "Key restrictions.",
-				MaxItems:    1,
-				Elem:        ApikeysKeyRestrictionsSchema(),
-			},
+				"restrictions": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: "Key restrictions.",
+					MaxItems:    1,
+					Elem:        ApikeysKeyRestrictionsSchema(),
+				},
 
-			"service_account_email": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The email of the service account the key is bound to. If this field is specified, the key is a service account bound key and auth enabled. See [Documentation](https://cloud.google.com/docs/authentication/api-keys?#api-keys-bound-sa) for more details.",
-			},
+				"service_account_email": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The email of the service account the key is bound to. If this field is specified, the key is a service account bound key and auth enabled. See [Documentation](https://cloud.google.com/docs/authentication/api-keys?#api-keys-bound-sa) for more details.",
+				},
 
-			"key_string": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Sensitive:   true,
-				Description: "Output only. An encrypted and signed value held by this key. This field can be accessed only through the `GetKeyString` method.",
-			},
+				"key_string": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Sensitive:   true,
+					Description: "Output only. An encrypted and signed value held by this key. This field can be accessed only through the `GetKeyString` method.",
+				},
 
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Unique id in UUID4 format.",
-			},
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Unique id in UUID4 format.",
+				},
 
-			"check_existing_usage": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"SKIP", "CHECK"}, false),
-				Description:  "Defines the behavior for checking existing usage when updating a key. Possible values: 'SKIP', 'CHECK'.",
-			},
+				"check_existing_usage": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.StringInSlice([]string{"SKIP", "CHECK"}, false),
+					Description:  "Defines the behavior for checking existing usage when updating a key. Possible values: 'SKIP', 'CHECK'.",
+				},
 
-			//UDP schema start
-			"deletion_policy": deletionPolicySchema,
-			//UDP schema end
+				//UDP schema start
+				"deletion_policy": deletionPolicySchema,
+				//UDP schema end
+			}
 		},
 	}
 }

@@ -10,17 +10,18 @@ import (
 )
 
 func DataSourceGoogleComputeRegionSecurityPolicy() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionSecurityPolicy().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeRegionSecurityPolicyRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeRegionSecurityPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionSecurityPolicy().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
+			return dsSchema
+		},
 	}
 }
 

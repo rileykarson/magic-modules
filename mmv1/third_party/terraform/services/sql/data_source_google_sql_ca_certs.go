@@ -15,50 +15,52 @@ func DataSourceGoogleSQLCaCerts() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleSQLCaCertsRead,
 
-		Schema: map[string]*schema.Schema{
-			"instance": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-				ForceNew: true,
-			},
-			"active_version": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"certs": {
-				Type: schema.TypeList,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"cert": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"common_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"create_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"expiration_time": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"sha1_fingerprint": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"instance": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+					ForceNew: true,
+				},
+				"active_version": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"certs": {
+					Type: schema.TypeList,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"cert": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"common_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"create_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"expiration_time": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"sha1_fingerprint": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
+					Computed: true,
 				},
-				Computed: true,
-			},
+			}
 		},
 	}
 }

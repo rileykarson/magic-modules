@@ -13,91 +13,93 @@ func DataSourceGoogleProviderConfigSdk() *schema.Resource {
 	return &schema.Resource{
 		DeprecationMessage: "Data source google_provider_config_sdk is intended to be used only in acceptance tests for the provider. Instead, please use the google_client_config data source to access provider configuration details, or open a GitHub issue requesting new features in that datasource. Please go to: https://github.com/hashicorp/terraform-provider-google/issues/new/choose",
 		Read:               dataSourceClientConfigRead,
-		Schema: map[string]*schema.Schema{
-			// Start of user inputs
-			"access_token": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"credentials": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-			},
-			"impersonate_service_account": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"impersonate_service_account_delegates": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"billing_project": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"zone": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"universe_domain": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"scopes": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"user_project_override": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"request_reason": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"request_timeout": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"poll_interval": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"default_labels": {
-				Type:     schema.TypeMap,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
-			"add_terraform_attribution_label": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"terraform_attribution_label_addition_strategy": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			// End of user inputs
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				// Start of user inputs
+				"access_token": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"credentials": {
+					Type:      schema.TypeString,
+					Computed:  true,
+					Sensitive: true,
+				},
+				"impersonate_service_account": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"impersonate_service_account_delegates": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"billing_project": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"zone": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"universe_domain": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"scopes": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"user_project_override": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"request_reason": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"request_timeout": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"poll_interval": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"default_labels": {
+					Type:     schema.TypeMap,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+				"add_terraform_attribution_label": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"terraform_attribution_label_addition_strategy": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				// End of user inputs
 
-			// Note - this data source excludes the default and custom endpoints for individual services
+				// Note - this data source excludes the default and custom endpoints for individual services
 
-			// Start of values set during provider configuration
-			"user_agent": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			// End of values set during provider configuration
+				// Start of values set during provider configuration
+				"user_agent": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				// End of values set during provider configuration
+			}
 		},
 	}
 }

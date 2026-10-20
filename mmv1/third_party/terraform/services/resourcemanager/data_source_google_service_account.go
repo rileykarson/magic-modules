@@ -14,39 +14,41 @@ import (
 func DataSourceGoogleServiceAccount() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleServiceAccountRead,
-		Schema: map[string]*schema.Schema{
-			"account_id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"email": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"unique_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"display_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"member": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"disabled": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"account_id": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"email": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"unique_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"display_name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"member": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"disabled": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

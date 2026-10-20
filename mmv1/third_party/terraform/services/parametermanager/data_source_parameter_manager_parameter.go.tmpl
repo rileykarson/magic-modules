@@ -10,14 +10,14 @@ import (
 )
 
 func DataSourceParameterManagerParameter() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerParameter().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parameter_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
 		Read:   dataSourceParameterManagerParameterRead,
-		Schema: dsSchema,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerParameter().SchemaMap())
+	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parameter_id")
+	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

@@ -17,32 +17,34 @@ import (
 func DataSourceGoogleStorageControlProjectIntelligenceFindingsSummary() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleStorageControlProjectIntelligenceFindingsSummaryRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The filter expression. Supports filtering by FindingType.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "global",
-				Description: `The location of the intelligence findings summary. Currently default value is global and users cannot use for input for now.`,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			"resource_scope": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "PARENT",
-				ValidateFunc: validation.StringInSlice([]string{"PARENT", "PROJECT"}, false),
-				Description:  `Determines the granularity of the findings when the parent is an organization or folder. Possible values are PARENT and PROJECT. Default value is PARENT.`,
-			},
-			"finding_summaries": storageControlFindingSummariesSchema(),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The filter expression. Supports filtering by FindingType.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "global",
+					Description: `The location of the intelligence findings summary. Currently default value is global and users cannot use for input for now.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				"resource_scope": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "PARENT",
+					ValidateFunc: validation.StringInSlice([]string{"PARENT", "PROJECT"}, false),
+					Description:  `Determines the granularity of the findings when the parent is an organization or folder. Possible values are PARENT and PROJECT. Default value is PARENT.`,
+				},
+				"finding_summaries": storageControlFindingSummariesSchema(),
+			}
 		},
 	}
 }

@@ -9,14 +9,15 @@ import (
 )
 
 func DataSourceGoogleOrganizationIamCustomRole() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleOrganizationIamCustomRole().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "org_id")
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "role_id")
-
 	return &schema.Resource{
-		Read:   dataSourceOrganizationIamCustomRoleRead,
-		Schema: dsSchema,
+		Read: dataSourceOrganizationIamCustomRoleRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceGoogleOrganizationIamCustomRole().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "org_id")
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "role_id")
+			return dsSchema
+		},
 	}
 }
 

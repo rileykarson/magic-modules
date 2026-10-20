@@ -54,7 +54,9 @@ func ResourceIamAuditConfig(parentSpecificSchema map[string]*schema.Schema, newU
 		Read:   resourceIamAuditConfigRead(newUpdaterFunc),
 		Update: resourceIamAuditConfigCreateUpdate(newUpdaterFunc, settings.EnableBatching),
 		Delete: resourceIamAuditConfigDelete(newUpdaterFunc, settings.EnableBatching),
-		Schema: tpgresource.MergeSchemas(iamAuditConfigSchema, parentSpecificSchema),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(iamAuditConfigSchema, parentSpecificSchema)
+		},
 		Importer: &schema.ResourceImporter{
 			State: iamAuditConfigImport(resourceIdParser),
 		},

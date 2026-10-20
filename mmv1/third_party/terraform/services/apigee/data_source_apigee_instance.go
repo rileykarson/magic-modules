@@ -9,14 +9,15 @@ import (
 )
 
 func DataSourceApigeeInstance() *schema.Resource {
-	// Inherit schema from the resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceApigeeInstance().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "org_id")
-
 	return &schema.Resource{
-		Read:   dataSourceApigeeInstanceRead,
-		Schema: dsSchema,
+		Read: dataSourceApigeeInstanceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Inherit schema from the resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceApigeeInstance().SchemaMap())
+
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "org_id")
+			return dsSchema
+		},
 	}
 }
 

@@ -28,39 +28,41 @@ func ResourceStorageBucketAcl() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the bucket it applies to.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the bucket it applies to.`,
+				},
 
-			"default_acl": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Configure this ACL to be the default ACL.`,
-			},
+				"default_acl": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Configure this ACL to be the default ACL.`,
+				},
 
-			"predefined_acl": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"role_entity"},
-				Description:   `The canned GCS ACL to apply. Must be set if role_entity is not.`,
-			},
+				"predefined_acl": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"role_entity"},
+					Description:   `The canned GCS ACL to apply. Must be set if role_entity is not.`,
+				},
 
-			"role_entity": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				Computed:      true,
-				Elem:          &schema.Schema{Type: schema.TypeString},
-				ConflictsWith: []string{"predefined_acl"},
-				Description:   `List of role/entity pairs in the form ROLE:entity. See GCS Bucket ACL documentation  for more details. Must be set if predefined_acl is not.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"role_entity": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					Computed:      true,
+					Elem:          &schema.Schema{Type: schema.TypeString},
+					ConflictsWith: []string{"predefined_acl"},
+					Description:   `List of role/entity pairs in the form ROLE:entity. See GCS Bucket ACL documentation  for more details. Must be set if predefined_acl is not.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}

@@ -10,16 +10,17 @@ import (
 )
 
 func DataSourceGoogleDiscoveryEngineDataStore() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDiscoveryEngineDataStore().Schema)
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location", "data_store_id", "display_name")
-	dsSchema["location"].Default = "global"
-	dsSchema["data_store_id"].ExactlyOneOf = []string{"data_store_id", "display_name"}
-	dsSchema["display_name"].ExactlyOneOf = []string{"data_store_id", "display_name"}
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleDiscoveryEngineDataStoreRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleDiscoveryEngineDataStoreRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDiscoveryEngineDataStore().SchemaMap())
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "location", "data_store_id", "display_name")
+			dsSchema["location"].Default = "global"
+			dsSchema["data_store_id"].ExactlyOneOf = []string{"data_store_id", "display_name"}
+			dsSchema["display_name"].ExactlyOneOf = []string{"data_store_id", "display_name"}
+			return dsSchema
+		},
 	}
 }
 

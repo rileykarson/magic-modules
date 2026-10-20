@@ -16,86 +16,88 @@ import (
 func DataSourceAgentRegistryEndpoint() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceAgentRegistryEndpointRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The location of the resource.`,
-			},
-			"endpoint_id": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"filter"},
-				Description:   `The unique identifier for the Endpoint.`,
-			},
-			"filter": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ForceNew:      true,
-				ConflictsWith: []string{"endpoint_id"},
-				Description:   `A filter string that identifies a unique endpoint.`,
-			},
-			"urn": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The URN of the Endpoint.`,
-			},
-			"display_name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The display name of the endpoint.`,
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The description of the endpoint.`,
-			},
-			"interfaces": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The connection details for the Endpoint.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"url": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The destination URL.`,
-						},
-						"protocol_binding": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The protocol binding of the interface.`,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The location of the resource.`,
+				},
+				"endpoint_id": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"filter"},
+					Description:   `The unique identifier for the Endpoint.`,
+				},
+				"filter": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ForceNew:      true,
+					ConflictsWith: []string{"endpoint_id"},
+					Description:   `A filter string that identifies a unique endpoint.`,
+				},
+				"urn": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The URN of the Endpoint.`,
+				},
+				"display_name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The display name of the endpoint.`,
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The description of the endpoint.`,
+				},
+				"interfaces": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The connection details for the Endpoint.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"url": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The destination URL.`,
+							},
+							"protocol_binding": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The protocol binding of the interface.`,
+							},
 						},
 					},
 				},
-			},
-			"attributes": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `Attributes of the Endpoint.`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"attributes": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `Attributes of the Endpoint.`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
 				},
-			},
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Create time.`,
-			},
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Update time.`,
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Create time.`,
+				},
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Update time.`,
+				},
+			}
 		},
 	}
 }

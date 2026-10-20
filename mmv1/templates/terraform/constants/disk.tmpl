@@ -6,7 +6,7 @@ var _ = errors.New
 // diffsuppress for hyperdisk provisioned_iops
 func hyperDiskIopsUpdateDiffSuppress(_ context.Context, d *schema.ResourceDiff, meta interface{}) error {
 	if !strings.Contains(d.Get("type").(string), "hyperdisk") {
-		resourceSchema := ResourceComputeDisk().Schema
+		resourceSchema := ResourceComputeDisk().SchemaMap()
 		for field := range resourceSchema {
 			if field == "provisioned_iops" && d.HasChange(field) {
 				if err := d.ForceNew(field); err != nil {

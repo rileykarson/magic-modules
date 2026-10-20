@@ -37,7 +37,8 @@ func ResourceGkeHubFeatureMembership() *schema.Resource {
 		),
 {{- end }}
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"feature": {
 				Type:             schema.TypeString,
 				Required:         true,
@@ -103,6 +104,7 @@ func ResourceGkeHubFeatureMembership() *schema.Resource {
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
+		}
 		},
 	}
 }

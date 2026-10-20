@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceOracleDatabaseOdbNetwork() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseOdbNetwork().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "odb_network_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseOdbNetworkRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseOdbNetworkRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseOdbNetwork().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "odb_network_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceOracleDatabaseOdbNetworkRead(d *schema.ResourceData, meta interface{}) error {

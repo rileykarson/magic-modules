@@ -14,83 +14,85 @@ func DataSourceGoogleComputeSubnetwork() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeSubnetworkRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"self_link": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"subnetwork_id": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
-			"ip_cidr_range": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"external_ipv6_prefix": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"internal_ipv6_prefix": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"private_ip_google_access": {
-				Type:     schema.TypeBool,
-				Computed: true,
-			},
-			"stack_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"ipv6_access_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"secondary_ip_range": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"range_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"ip_cidr_range": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"self_link": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"subnetwork_id": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
+				"ip_cidr_range": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"external_ipv6_prefix": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"internal_ipv6_prefix": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"private_ip_google_access": {
+					Type:     schema.TypeBool,
+					Computed: true,
+				},
+				"stack_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"ipv6_access_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"secondary_ip_range": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"range_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"ip_cidr_range": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
-			"network": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"gateway_address": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"region": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-			},
+				"network": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"gateway_address": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"region": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

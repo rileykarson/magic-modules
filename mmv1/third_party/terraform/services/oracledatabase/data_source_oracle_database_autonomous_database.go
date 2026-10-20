@@ -10,14 +10,15 @@ import (
 )
 
 func DataSourceOracleDatabaseAutonomousDatabase() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseAutonomousDatabase().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "autonomous_database_id")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceOracleDatabaseAutonomousDatabaseRead,
-		Schema: dsSchema,
+		Read: dataSourceOracleDatabaseAutonomousDatabaseRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceOracleDatabaseAutonomousDatabase().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "autonomous_database_id")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
-
 }
 
 func dataSourceOracleDatabaseAutonomousDatabaseRead(d *schema.ResourceData, meta interface{}) error {

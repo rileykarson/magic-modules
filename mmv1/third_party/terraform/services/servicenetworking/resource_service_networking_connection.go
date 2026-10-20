@@ -93,45 +93,47 @@ func ResourceServiceNetworkingConnection() *schema.Resource {
 			Delete: schema.DefaultTimeout(10 * time.Minute),
 		},
 
-		Schema: map[string]*schema.Schema{
-			"network": {
-				Type:             schema.TypeString,
-				Required:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `Name of VPC network connected with service producers using VPC peering.`,
-			},
-			// TODO: This field is weird, it's required to make the Insert/List calls as a parameter
-			// named "parent", however it's also defined in the response as an output field called "peering", which
-			// uses "-" as a delimiter instead of ".". To alleviate user confusion I've opted to model the gcloud
-			// CLI's approach, calling the field "service" and accepting the same format as the CLI with the "."
-			// delimiter.
-			// See: https://cloud.google.com/vpc/docs/configure-private-services-access#creating-connection
-			"service": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Provider peering service that is managing peering connectivity for a service provider organization. For Google services that support this functionality it is 'servicenetworking.googleapis.com'.`,
-			},
-			"reserved_peering_ranges": {
-				Type:             schema.TypeList,
-				Required:         true,
-				Elem:             &schema.Schema{Type: schema.TypeString},
-				DiffSuppressFunc: stringListDiffSuppress,
-				Description:      `Named IP address range(s) of PEERING type reserved for this service provider. Note that invoking this method with a different range when connection is already established will not reallocate already provisioned service producer subnetworks.`,
-			},
-			//UDP schema start
-			"deletion_policy": deletionPolicySchema(),
-			//UDP schema end
-			"peering": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"update_on_creation_fail": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `When set to true, enforce an update of the reserved peering ranges on the existing service networking connection in case of a new connection creation failure.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"network": {
+					Type:             schema.TypeString,
+					Required:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      `Name of VPC network connected with service producers using VPC peering.`,
+				},
+				// TODO: This field is weird, it's required to make the Insert/List calls as a parameter
+				// named "parent", however it's also defined in the response as an output field called "peering", which
+				// uses "-" as a delimiter instead of ".". To alleviate user confusion I've opted to model the gcloud
+				// CLI's approach, calling the field "service" and accepting the same format as the CLI with the "."
+				// delimiter.
+				// See: https://cloud.google.com/vpc/docs/configure-private-services-access#creating-connection
+				"service": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Provider peering service that is managing peering connectivity for a service provider organization. For Google services that support this functionality it is 'servicenetworking.googleapis.com'.`,
+				},
+				"reserved_peering_ranges": {
+					Type:             schema.TypeList,
+					Required:         true,
+					Elem:             &schema.Schema{Type: schema.TypeString},
+					DiffSuppressFunc: stringListDiffSuppress,
+					Description:      `Named IP address range(s) of PEERING type reserved for this service provider. Note that invoking this method with a different range when connection is already established will not reallocate already provisioned service producer subnetworks.`,
+				},
+				//UDP schema start
+				"deletion_policy": deletionPolicySchema(),
+				//UDP schema end
+				"peering": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"update_on_creation_fail": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: `When set to true, enforce an update of the reserved peering ranges on the existing service networking connection in case of a new connection creation failure.`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}

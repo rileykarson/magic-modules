@@ -39,115 +39,117 @@ func ResourceDataplexLake() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The location for the resource",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The location for the resource",
+				},
 
-			"name": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The name of the lake.",
-			},
+				"name": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The name of the lake.",
+				},
 
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Optional. Description of the lake.",
-			},
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Optional. Description of the lake.",
+				},
 
-			"display_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Optional. User friendly display name.",
-			},
+				"display_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Optional. User friendly display name.",
+				},
 
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
-			},
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.",
+				},
 
-			"metastore": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: "Optional. Settings to manage lake and Dataproc Metastore service instance association.",
-				MaxItems:    1,
-				Elem:        DataplexLakeMetastoreSchema(),
-			},
+				"metastore": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Description: "Optional. Settings to manage lake and Dataproc Metastore service instance association.",
+					MaxItems:    1,
+					Elem:        DataplexLakeMetastoreSchema(),
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"asset_status": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Output only. Aggregated status of the underlying assets of the lake.",
-				Elem:        DataplexLakeAssetStatusSchema(),
-			},
+				"asset_status": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "Output only. Aggregated status of the underlying assets of the lake.",
+					Elem:        DataplexLakeAssetStatusSchema(),
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. The time when the lake was created.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. The time when the lake was created.",
+				},
 
-			"labels": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "Optional. User-defined labels for the lake.\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"labels": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "Optional. User-defined labels for the lake.\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"metastore_status": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Output only. Metastore status of the lake.",
-				Elem:        DataplexLakeMetastoreStatusSchema(),
-			},
+				"metastore_status": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "Output only. Metastore status of the lake.",
+					Elem:        DataplexLakeMetastoreStatusSchema(),
+				},
 
-			"service_account": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Service account associated with this lake. This service account must be authorized to access or operate on resources managed by the lake.",
-			},
+				"service_account": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Service account associated with this lake. This service account must be authorized to access or operate on resources managed by the lake.",
+				},
 
-			"state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Current state of the lake. Possible values: STATE_UNSPECIFIED, ACTIVE, CREATING, DELETING, ACTION_REQUIRED",
-			},
+				"state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Current state of the lake. Possible values: STATE_UNSPECIFIED, ACTIVE, CREATING, DELETING, ACTION_REQUIRED",
+				},
 
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
-			},
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "The combination of labels configured directly on the resource and default labels configured on the provider.",
+				},
 
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. System generated globally unique ID for the lake. This ID will be different if the lake is deleted and re-created with the same name.",
-			},
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. System generated globally unique ID for the lake. This ID will be different if the lake is deleted and re-created with the same name.",
+				},
 
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. The time when the lake was last updated.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. The time when the lake was last updated.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

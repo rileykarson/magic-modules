@@ -276,7 +276,10 @@ var singleDataSourceSchema = map[string]*schema.Schema{
 
 // Data source for getting a single BackupDR DataSource
 func DataSourceGoogleCloudBackupDRDataSource() *schema.Resource {
-	// Add the input fields required to look up the single DataSource
+	return &schema.Resource{
+		Read:   DataSourceGoogleCloudBackupDRDataSourceRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Add the input fields required to look up the single DataSource
 	dsSchema := copySchemaMap(singleDataSourceSchema)
 	dsSchema["location"] = &schema.Schema{
 		Type:     schema.TypeString,
@@ -295,10 +298,8 @@ func DataSourceGoogleCloudBackupDRDataSource() *schema.Resource {
 		Type:     schema.TypeString,
 		Required: true,
 	}
-
-	return &schema.Resource{
-		Read:   DataSourceGoogleCloudBackupDRDataSourceRead,
-		Schema: dsSchema,
+			return dsSchema
+		},
 	}
 }
 
@@ -399,7 +400,8 @@ func flattenDataSourceIntoResourceData(d *schema.ResourceData, res map[string]in
 func DataSourceGoogleCloudBackupDRDataSources() *schema.Resource {
 	return &schema.Resource{
 		Read: DataSourceGoogleCloudBackupDRDataSourcesRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -431,6 +433,7 @@ func DataSourceGoogleCloudBackupDRDataSources() *schema.Resource {
 					Schema: singleDataSourceSchema,
 				},
 			},
+		}
 		},
 	}
 }

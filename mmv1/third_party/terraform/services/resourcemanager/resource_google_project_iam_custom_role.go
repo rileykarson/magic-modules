@@ -31,59 +31,61 @@ func ResourceGoogleProjectIamCustomRole() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"role_id": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-				Description:  `The camel case role id to use for this role. Cannot contain - characters.`,
-				ValidateFunc: verify.ValidateIAMCustomRoleID,
-			},
-			"title": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `A human-readable title for the role.`,
-			},
-			"permissions": {
-				Type:        schema.TypeSet,
-				Required:    true,
-				MinItems:    1,
-				Description: `The names of the permissions this role grants when bound in an IAM policy. At least one permission must be specified.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The project that the service account will be created in. Defaults to the provider project configuration.`,
-			},
-			"stage": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				Default:          "GA",
-				Description:      `The current launch stage of the role. Defaults to GA.`,
-				ValidateFunc:     validation.StringInSlice([]string{"ALPHA", "BETA", "GA", "DEPRECATED", "DISABLED", "EAP"}, false),
-				DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("ALPHA"),
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `A human-readable description for the role.`,
-			},
-			"deleted": {
-				Type:        schema.TypeBool,
-				Computed:    true,
-				Description: `The current deleted state of the role.`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The name of the role in the format projects/{{project}}/roles/{{role_id}}. Like id, this field can be used as a reference in other resources such as IAM role bindings.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"role_id": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ForceNew:     true,
+					Description:  `The camel case role id to use for this role. Cannot contain - characters.`,
+					ValidateFunc: verify.ValidateIAMCustomRoleID,
+				},
+				"title": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `A human-readable title for the role.`,
+				},
+				"permissions": {
+					Type:        schema.TypeSet,
+					Required:    true,
+					MinItems:    1,
+					Description: `The names of the permissions this role grants when bound in an IAM policy. At least one permission must be specified.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The project that the service account will be created in. Defaults to the provider project configuration.`,
+				},
+				"stage": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					Default:          "GA",
+					Description:      `The current launch stage of the role. Defaults to GA.`,
+					ValidateFunc:     validation.StringInSlice([]string{"ALPHA", "BETA", "GA", "DEPRECATED", "DISABLED", "EAP"}, false),
+					DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("ALPHA"),
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `A human-readable description for the role.`,
+				},
+				"deleted": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: `The current deleted state of the role.`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The name of the role in the format projects/{{project}}/roles/{{role_id}}. Like id, this field can be used as a reference in other resources such as IAM role bindings.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 		Identity: &schema.ResourceIdentity{

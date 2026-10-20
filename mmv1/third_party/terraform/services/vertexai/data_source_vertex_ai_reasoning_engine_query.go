@@ -16,38 +16,40 @@ import (
 func DataSourceVertexAIReasoningEngineQuery() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceVertexAIReasoningEngineQueryRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "The project of the resource. If not provided, the provider default project is used.",
-			},
-			"region": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The location of the resource.",
-			},
-			"reasoning_engine_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The id of the Vertex Agent Engine to query.",
-			},
-			"class_method": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Class method to be used for the query. It is optional and defaults to \"query\" if unspecified.",
-			},
-			"input": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: validation.StringIsJSON,
-				Description:  "Input content provided by users in JSON object format. Examples include text query, function calling parameters, media bytes, etc..",
-			},
-			"output": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "The output of the query.",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The project of the resource. If not provided, the provider default project is used.",
+				},
+				"region": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The location of the resource.",
+				},
+				"reasoning_engine_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The id of the Vertex Agent Engine to query.",
+				},
+				"class_method": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Class method to be used for the query. It is optional and defaults to \"query\" if unspecified.",
+				},
+				"input": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.StringIsJSON,
+					Description:  "Input content provided by users in JSON object format. Examples include text query, function calling parameters, media bytes, etc..",
+				},
+				"output": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The output of the query.",
+				},
+			}
 		},
 	}
 }

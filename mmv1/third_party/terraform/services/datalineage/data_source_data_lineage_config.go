@@ -10,12 +10,13 @@ import (
 )
 
 func DataSourceDataLineageConfig() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDataLineageConfig().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "location")
-
 	return &schema.Resource{
-		Read:   dataSourceDataLineageConfigRead,
-		Schema: dsSchema,
+		Read: dataSourceDataLineageConfigRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceDataLineageConfig().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "parent", "location")
+			return dsSchema
+		},
 	}
 }
 

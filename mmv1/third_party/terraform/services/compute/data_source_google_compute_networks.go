@@ -13,23 +13,25 @@ func DataSourceGoogleComputeNetworks() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeNetworksRead,
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 
-			"self_link": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"self_link": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
 
-			"networks": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-			},
+				"networks": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
+			}
 		},
 	}
 }

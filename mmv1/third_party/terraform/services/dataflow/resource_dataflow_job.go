@@ -106,182 +106,184 @@ func ResourceDataflowJob() *schema.Resource {
 				Version: 0,
 			},
 		},
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				// ForceNew applies to both stream and batch jobs
-				ForceNew:    true,
-				Description: `A unique name for the resource, required by Dataflow.`,
-			},
-
-			"template_gcs_path": {
-				Type:             schema.TypeString,
-				Required:         true,
-				DiffSuppressFunc: ResourceDataflowJobTemplateGcsPathDiffSuppress,
-				Description:      `The Google Cloud Storage path to the Dataflow job template.`,
-			},
-
-			"temp_gcs_location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `A writeable location on Google Cloud Storage for the Dataflow job to dump its temporary data.`,
-			},
-
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-				// ForceNew applies to both stream and batch jobs
-				ForceNew:    true,
-				Description: `The zone in which the created job should run. If it is not provided, the provider zone is used.`,
-			},
-
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				// ForceNew applies to both stream and batch jobs
-				ForceNew:    true,
-				Description: `The region in which the created job should run.`,
-			},
-
-			"max_workers": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				// ForceNew applies to both stream and batch jobs
-				ForceNew:    true,
-				Description: `The number of workers permitted to work on the job. More workers may improve processing speed at additional cost.`,
-			},
-
-			"parameters": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: `Key/Value pairs to be passed to the Dataflow job (as used in the template).`,
-			},
-
-			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Description: `User labels to be specified for the job. Keys and values should follow the restrictions specified in the labeling restrictions page. NOTE: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
-			},
-
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-
-			"transform_name_mapping": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.`,
-			},
-
-			"on_delete": {
-				Type:         schema.TypeString,
-				ValidateFunc: validation.StringInSlice([]string{"cancel", "drain"}, false),
-				Optional:     true,
-				Default:      "drain",
-				Description:  `One of "drain" or "cancel". Specifies behavior of deletion during terraform destroy.`,
-			},
-
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				// ForceNew applies to both stream and batch jobs
-				ForceNew:    true,
-				Description: `The project in which the resource belongs.`,
-			},
-
-			"state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The current state of the resource, selected from the JobState enum.`,
-			},
-			"type": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The type of this job, selected from the JobType enum.`,
-			},
-			"service_account_email": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The Service Account email used to create the job.`,
-			},
-
-			"network": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The network to which VMs will be assigned. If it is not provided, "default" will be used.`,
-			},
-
-			"subnetwork": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The subnetwork to which VMs will be assigned. Should be of the form "regions/REGION/subnetworks/SUBNETWORK".`,
-			},
-
-			"machine_type": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The machine type to use for the job.`,
-			},
-
-			"kms_key_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The name for the Cloud KMS key for the job. Key format is: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`,
-			},
-
-			"ip_configuration": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Description:  `The configuration for VM IPs. Options are "WORKER_IP_PUBLIC" or "WORKER_IP_PRIVATE".`,
-				ValidateFunc: validation.StringInSlice([]string{"WORKER_IP_PUBLIC", "WORKER_IP_PRIVATE", ""}, false),
-			},
-
-			"additional_experiments": {
-				Type:        schema.TypeSet,
-				Optional:    true,
-				Computed:    true,
-				Description: `List of experiments that should be used by the job. An example value is ["enable_stackdriver_agent_metrics"].`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+					// ForceNew applies to both stream and batch jobs
+					ForceNew:    true,
+					Description: `A unique name for the resource, required by Dataflow.`,
 				},
-			},
 
-			"job_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The unique ID of this job.`,
-			},
+				"template_gcs_path": {
+					Type:             schema.TypeString,
+					Required:         true,
+					DiffSuppressFunc: ResourceDataflowJobTemplateGcsPathDiffSuppress,
+					Description:      `The Google Cloud Storage path to the Dataflow job template.`,
+				},
 
-			"enable_streaming_engine": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `Indicates if the job should use the streaming engine feature.`,
-			},
+				"temp_gcs_location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `A writeable location on Google Cloud Storage for the Dataflow job to dump its temporary data.`,
+				},
 
-			"skip_wait_on_job_termination": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-				Description: `If true, treat DRAINING and CANCELLING as terminal job states and do not wait for further changes before removing from terraform state and moving on. WARNING: this will lead to job name conflicts if you do not ensure that the job names are different, e.g. by embedding a release ID or by using a random_id.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+					// ForceNew applies to both stream and batch jobs
+					ForceNew:    true,
+					Description: `The zone in which the created job should run. If it is not provided, the provider zone is used.`,
+				},
+
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					// ForceNew applies to both stream and batch jobs
+					ForceNew:    true,
+					Description: `The region in which the created job should run.`,
+				},
+
+				"max_workers": {
+					Type:     schema.TypeInt,
+					Optional: true,
+					// ForceNew applies to both stream and batch jobs
+					ForceNew:    true,
+					Description: `The number of workers permitted to work on the job. More workers may improve processing speed at additional cost.`,
+				},
+
+				"parameters": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: `Key/Value pairs to be passed to the Dataflow job (as used in the template).`,
+				},
+
+				"labels": {
+					Type:     schema.TypeMap,
+					Optional: true,
+					Description: `User labels to be specified for the job. Keys and values should follow the restrictions specified in the labeling restrictions page. NOTE: This field is non-authoritative, and will only manage the labels present in your configuration.
+				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				},
+
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
+
+				"transform_name_mapping": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.`,
+				},
+
+				"on_delete": {
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{"cancel", "drain"}, false),
+					Optional:     true,
+					Default:      "drain",
+					Description:  `One of "drain" or "cancel". Specifies behavior of deletion during terraform destroy.`,
+				},
+
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					// ForceNew applies to both stream and batch jobs
+					ForceNew:    true,
+					Description: `The project in which the resource belongs.`,
+				},
+
+				"state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The current state of the resource, selected from the JobState enum.`,
+				},
+				"type": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The type of this job, selected from the JobType enum.`,
+				},
+				"service_account_email": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The Service Account email used to create the job.`,
+				},
+
+				"network": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      `The network to which VMs will be assigned. If it is not provided, "default" will be used.`,
+				},
+
+				"subnetwork": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      `The subnetwork to which VMs will be assigned. Should be of the form "regions/REGION/subnetworks/SUBNETWORK".`,
+				},
+
+				"machine_type": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The machine type to use for the job.`,
+				},
+
+				"kms_key_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `The name for the Cloud KMS key for the job. Key format is: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`,
+				},
+
+				"ip_configuration": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Description:  `The configuration for VM IPs. Options are "WORKER_IP_PUBLIC" or "WORKER_IP_PRIVATE".`,
+					ValidateFunc: validation.StringInSlice([]string{"WORKER_IP_PUBLIC", "WORKER_IP_PRIVATE", ""}, false),
+				},
+
+				"additional_experiments": {
+					Type:        schema.TypeSet,
+					Optional:    true,
+					Computed:    true,
+					Description: `List of experiments that should be used by the job. An example value is ["enable_stackdriver_agent_metrics"].`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+
+				"job_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The unique ID of this job.`,
+				},
+
+				"enable_streaming_engine": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: `Indicates if the job should use the streaming engine feature.`,
+				},
+
+				"skip_wait_on_job_termination": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     false,
+					Description: `If true, treat DRAINING and CANCELLING as terminal job states and do not wait for further changes before removing from terraform state and moving on. WARNING: this will lead to job name conflicts if you do not ensure that the job names are different, e.g. by embedding a release ID or by using a random_id.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 		UseJSONNumber: true,
 	}
@@ -290,7 +292,7 @@ func ResourceDataflowJob() *schema.Resource {
 func resourceDataflowJobTypeCustomizeDiff(_ context.Context, d *schema.ResourceDiff, meta interface{}) error {
 	// All non-virtual fields are ForceNew for batch jobs
 	if d.Get("type") == "JOB_TYPE_BATCH" {
-		resourceSchema := ResourceDataflowJob().Schema
+		resourceSchema := ResourceDataflowJob().SchemaMap()
 		for field := range resourceSchema {
 			if field == "on_delete" {
 				continue
@@ -459,7 +461,7 @@ func resourceDataflowJobRead(d *schema.ResourceData, meta interface{}) error {
 // Stream update method. Batch job changes should have been set to ForceNew via custom diff
 func resourceDataflowJobUpdateByReplacement(d *schema.ResourceData, meta interface{}) error {
 	// Don't send an update request if only virtual fields have changes
-	if resourceDataflowJobIsVirtualUpdate(d, ResourceDataflowJob().Schema) {
+	if resourceDataflowJobIsVirtualUpdate(d, ResourceDataflowJob().SchemaMap()) {
 		return nil
 	}
 
@@ -467,7 +469,7 @@ func resourceDataflowJobUpdateByReplacement(d *schema.ResourceData, meta interfa
 		return ResourceDataflowJob().Read(d, meta)
 	}
 
-	if jobHasUpdate(d, ResourceDataflowJob().Schema) {
+	if jobHasUpdate(d, ResourceDataflowJob().SchemaMap()) {
 		config := meta.(*transport_tpg.Config)
 		userAgent, err := tpgresource.GenerateUserAgentString(d, config.UserAgent)
 		if err != nil {

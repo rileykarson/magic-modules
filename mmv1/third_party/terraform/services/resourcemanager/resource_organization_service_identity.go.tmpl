@@ -31,7 +31,8 @@ func ResourceOrganizationServiceIdentity() *schema.Resource {
 			tpgresource.DefaultProviderProject,
 		),
 
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
 			"service": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -51,6 +52,7 @@ func ResourceOrganizationServiceIdentity() *schema.Resource {
 				Computed:    true,
 				Description: `The Identity of the Google managed service account in the form 'serviceAccount:{email}'. This value is often used to refer to the service account in order to grant IAM permissions.`,
 			},
+		}
 		},
 		UseJSONNumber: true,
 	}

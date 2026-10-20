@@ -18,56 +18,58 @@ import (
 func DataSourceGoogleServiceAccounts() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleServiceAccountsRead,
-		Schema: map[string]*schema.Schema{
-			"prefix": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"regex": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: verify.ValidateRegexCompiles(),
-			},
-			"accounts": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"account_id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"disabled": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-						"display_name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"email": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"member": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"unique_id": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"prefix": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+				"regex": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: verify.ValidateRegexCompiles(),
+				},
+				"accounts": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"account_id": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"disabled": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
+							"display_name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"email": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"member": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"unique_id": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

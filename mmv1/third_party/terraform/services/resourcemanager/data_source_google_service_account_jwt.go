@@ -20,35 +20,37 @@ import (
 func DataSourceGoogleServiceAccountJwt() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleServiceAccountJwtRead,
-		Schema: map[string]*schema.Schema{
-			"payload": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `A JSON-encoded JWT claims set that will be included in the signed JWT.`,
-			},
-			"expires_in": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Description: "Number of seconds until the JWT expires. If set and non-zero an `exp` claim will be added to the payload derived from the current timestamp plus expires_in seconds.",
-			},
-			"target_service_account": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
-			},
-			"delegates": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type:         schema.TypeString,
-					ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"payload": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `A JSON-encoded JWT claims set that will be included in the signed JWT.`,
 				},
-			},
-			"jwt": {
-				Type:      schema.TypeString,
-				Sensitive: true,
-				Computed:  true,
-			},
+				"expires_in": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Description: "Number of seconds until the JWT expires. If set and non-zero an `exp` claim will be added to the payload derived from the current timestamp plus expires_in seconds.",
+				},
+				"target_service_account": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
+				},
+				"delegates": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Elem: &schema.Schema{
+						Type:         schema.TypeString,
+						ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
+					},
+				},
+				"jwt": {
+					Type:      schema.TypeString,
+					Sensitive: true,
+					Computed:  true,
+				},
+			}
 		},
 	}
 }

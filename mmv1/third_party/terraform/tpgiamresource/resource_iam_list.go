@@ -82,11 +82,12 @@ func buildIamListCore(typeName string, iamResource *schema.Resource, newUpdater 
 
 	// Auto-expose target-scope dimensions (project/region/zone/location) when the
 	// member resource declares them and they are not  already the parent field.
+	iamFullSchema := iamResource.SchemaMap()
 	for _, sf := range supportedScopeFields {
 		if sf.Name == listCallConfig.ParentResourceField {
 			continue // scope dimension is itself the parent (e.g. project-iam-member)
 		}
-		if _, ok := iamResource.Schema[sf.Name]; ok {
+		if _, ok := iamFullSchema[sf.Name]; ok {
 			listConfigFields = append(listConfigFields, sf)
 		}
 	}
@@ -112,7 +113,7 @@ func buildIamListCore(typeName string, iamResource *schema.Resource, newUpdater 
 		if field.Name == "role" || field.Name == "member" {
 			continue
 		}
-		if schemaField, ok := iamResource.Schema[field.Name]; ok {
+		if schemaField, ok := iamFullSchema[field.Name]; ok {
 			iamResourceSchema[field.Name] = schemaField
 		}
 	}

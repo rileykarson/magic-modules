@@ -10,18 +10,19 @@ import (
 )
 
 func DataSourceGoogleComputeHaVpnGateway() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeHaVpnGateway().Schema)
-
-	// Set 'Required' schema elements
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeHaVpnGatewayRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeHaVpnGatewayRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeHaVpnGateway().SchemaMap())
+
+			// Set 'Required' schema elements
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name")
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
+			return dsSchema
+		},
 	}
 }
 

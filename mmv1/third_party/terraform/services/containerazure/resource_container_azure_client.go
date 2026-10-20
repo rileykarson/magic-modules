@@ -37,64 +37,66 @@ func ResourceContainerAzureClient() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"application_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The Azure Active Directory Application ID.",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"application_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The Azure Active Directory Application ID.",
+				},
 
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The location for the resource",
-			},
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The location for the resource",
+				},
 
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The name of this resource.",
-			},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The name of this resource.",
+				},
 
-			"tenant_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The Azure Active Directory Tenant ID.",
-			},
+				"tenant_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The Azure Active Directory Tenant ID.",
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"certificate": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. The PEM encoded x509 certificate.",
-			},
+				"certificate": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. The PEM encoded x509 certificate.",
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. The time at which this resource was created.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. The time at which this resource was created.",
+				},
 
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. A globally unique identifier for the client.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. A globally unique identifier for the client.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

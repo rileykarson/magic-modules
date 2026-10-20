@@ -10,17 +10,16 @@ import (
 )
 
 func DataSourceGoogleComputeRouterNat() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRouterNat().Schema)
-
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "router")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeRouterNatRead,
-		Schema: dsSchema,
-	}
+		Read: dataSourceGoogleComputeRouterNatRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRouterNat().SchemaMap())
 
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "name", "router")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project", "region")
+			return dsSchema
+		},
+	}
 }
 
 func dataSourceGoogleComputeRouterNatRead(d *schema.ResourceData, meta interface{}) error {

@@ -13,67 +13,69 @@ import (
 func DataSourceGoogleComputeInstanceGuestAttributes() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeInstanceGuestAttributesRead,
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"zone": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"zone": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"query_path": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"variable_key"},
-			},
+				"query_path": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"variable_key"},
+				},
 
-			"variable_key": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"query_path"},
-			},
+				"variable_key": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"query_path"},
+				},
 
-			"variable_value": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"variable_value": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"query_value": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"key": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"value": {
-							Type:     schema.TypeString,
-							Computed: true,
+				"query_value": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"key": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"namespace": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"value": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

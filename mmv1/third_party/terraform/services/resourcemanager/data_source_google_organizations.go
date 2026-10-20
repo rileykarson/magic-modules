@@ -17,39 +17,41 @@ import (
 func DataSourceGoogleOrganizations() *schema.Resource {
 	return &schema.Resource{
 		Read: datasourceGoogleOrganizationsRead,
-		Schema: map[string]*schema.Schema{
-			"filter": {
-				Optional: true,
-				Type:     schema.TypeString,
-			},
-			"organizations": {
-				Computed: true,
-				Type:     schema.TypeList,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"directory_customer_id": {
-							Computed: true,
-							Type:     schema.TypeString,
-						},
-						"display_name": {
-							Computed: true,
-							Type:     schema.TypeString,
-						},
-						"lifecycle_state": {
-							Computed: true,
-							Type:     schema.TypeString,
-						},
-						"name": {
-							Computed: true,
-							Type:     schema.TypeString,
-						},
-						"org_id": {
-							Computed: true,
-							Type:     schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"filter": {
+					Optional: true,
+					Type:     schema.TypeString,
+				},
+				"organizations": {
+					Computed: true,
+					Type:     schema.TypeList,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"directory_customer_id": {
+								Computed: true,
+								Type:     schema.TypeString,
+							},
+							"display_name": {
+								Computed: true,
+								Type:     schema.TypeString,
+							},
+							"lifecycle_state": {
+								Computed: true,
+								Type:     schema.TypeString,
+							},
+							"name": {
+								Computed: true,
+								Type:     schema.TypeString,
+							},
+							"org_id": {
+								Computed: true,
+								Type:     schema.TypeString,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

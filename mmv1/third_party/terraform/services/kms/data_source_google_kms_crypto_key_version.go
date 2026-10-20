@@ -15,49 +15,51 @@ import (
 func DataSourceGoogleKmsCryptoKeyVersion() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleKmsCryptoKeyVersionRead,
-		Schema: map[string]*schema.Schema{
-			"crypto_key": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"version": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				Default:  1,
-			},
-			"algorithm": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"protection_level": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"state": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"public_key": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"algorithm": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"pem": {
-							Type:     schema.TypeString,
-							Computed: true,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"crypto_key": {
+					Type:     schema.TypeString,
+					Required: true,
+					ForceNew: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"version": {
+					Type:     schema.TypeInt,
+					Optional: true,
+					Default:  1,
+				},
+				"algorithm": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"protection_level": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"state": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"public_key": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"algorithm": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"pem": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

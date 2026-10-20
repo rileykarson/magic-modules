@@ -12,48 +12,49 @@ import (
 )
 
 func DataSourceSqlBackupRun() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceSqlBackupRunRead,
 
-		Schema: map[string]*schema.Schema{
-			"backup_id": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Computed:    true,
-				Description: `The identifier for this backup run. Unique only for a specific Cloud SQL instance. If left empty and multiple backups exist for the instance, most_recent must be set to true.`,
-			},
-			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `Name of the database instance.`,
-			},
-			"location": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Location of the backups.`,
-			},
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `Project ID of the project that contains the instance.`,
-			},
-			"start_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time the backup operation actually started in UTC timezone in RFC 3339 format, for example 2012-11-15T16:19:00.094Z.`,
-			},
-			"status": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The status of this run.`,
-			},
-			"most_recent": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `Toggles use of the most recent backup run if multiple backups exist for a Cloud SQL instance.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"backup_id": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Computed:    true,
+					Description: `The identifier for this backup run. Unique only for a specific Cloud SQL instance. If left empty and multiple backups exist for the instance, most_recent must be set to true.`,
+				},
+				"instance": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: `Name of the database instance.`,
+				},
+				"location": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Location of the backups.`,
+				},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `Project ID of the project that contains the instance.`,
+				},
+				"start_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The time the backup operation actually started in UTC timezone in RFC 3339 format, for example 2012-11-15T16:19:00.094Z.`,
+				},
+				"status": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `The status of this run.`,
+				},
+				"most_recent": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: `Toggles use of the most recent backup run if multiple backups exist for a Cloud SQL instance.`,
+				},
+			}
 		},
 	}
 }

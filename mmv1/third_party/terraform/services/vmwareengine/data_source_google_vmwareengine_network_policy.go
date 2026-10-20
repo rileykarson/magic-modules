@@ -10,13 +10,14 @@ import (
 )
 
 func DataSourceVmwareengineNetworkPolicy() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetworkPolicy().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
 	return &schema.Resource{
-		Read:   dataSourceVmwareengineNetworkPolicyRead,
-		Schema: dsSchema,
+		Read: dataSourceVmwareengineNetworkPolicyRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceVmwareengineNetworkPolicy().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "location", "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

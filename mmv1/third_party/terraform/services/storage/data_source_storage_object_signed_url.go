@@ -37,51 +37,53 @@ func DataSourceGoogleSignedUrl() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleSignedUrlRead,
 
-		Schema: map[string]*schema.Schema{
-			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"content_md5": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
-			},
-			"content_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
-			},
-			"credentials": {
-				Type:      schema.TypeString,
-				Sensitive: true,
-				Optional:  true,
-			},
-			"duration": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "1h",
-			},
-			"extension_headers": {
-				Type:         schema.TypeMap,
-				Optional:     true,
-				Elem:         &schema.Schema{Type: schema.TypeString},
-				ValidateFunc: validateExtensionHeaders,
-			},
-			"http_method": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "GET",
-				ValidateFunc: validation.StringInSlice([]string{"GET", "HEAD", "PUT", "DELETE"}, true),
-			},
-			"path": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"signed_url": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"bucket": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"content_md5": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "",
+				},
+				"content_type": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "",
+				},
+				"credentials": {
+					Type:      schema.TypeString,
+					Sensitive: true,
+					Optional:  true,
+				},
+				"duration": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Default:  "1h",
+				},
+				"extension_headers": {
+					Type:         schema.TypeMap,
+					Optional:     true,
+					Elem:         &schema.Schema{Type: schema.TypeString},
+					ValidateFunc: validateExtensionHeaders,
+				},
+				"http_method": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "GET",
+					ValidateFunc: validation.StringInSlice([]string{"GET", "HEAD", "PUT", "DELETE"}, true),
+				},
+				"path": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"signed_url": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

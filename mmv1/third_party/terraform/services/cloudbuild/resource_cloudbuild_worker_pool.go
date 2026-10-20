@@ -39,110 +39,112 @@ func ResourceCloudbuildWorkerPool() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: map[string]*schema.Schema{
-			"location": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "The location for the resource",
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"location": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "The location for the resource",
+				},
 
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: "User-defined name of the `WorkerPool`.",
-			},
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: "User-defined name of the `WorkerPool`.",
+				},
 
-			"display_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "A user-specified, human-readable name for the `WorkerPool`. If provided, this value must be 1-63 characters.",
-			},
+				"display_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "A user-specified, human-readable name for the `WorkerPool`. If provided, this value must be 1-63 characters.",
+				},
 
-			"effective_annotations": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: "All of annotations (key/value pairs) present on the resource in GCP, including the annotations configured through Terraform, other clients and services.",
-			},
+				"effective_annotations": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: "All of annotations (key/value pairs) present on the resource in GCP, including the annotations configured through Terraform, other clients and services.",
+				},
 
-			"network_config": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				ForceNew:      true,
-				Description:   "Network configuration for the `WorkerPool`.",
-				MaxItems:      1,
-				Elem:          CloudbuildWorkerPoolNetworkConfigSchema(),
-				ConflictsWith: []string{"private_service_connect"},
-			},
+				"network_config": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					ForceNew:      true,
+					Description:   "Network configuration for the `WorkerPool`.",
+					MaxItems:      1,
+					Elem:          CloudbuildWorkerPoolNetworkConfigSchema(),
+					ConflictsWith: []string{"private_service_connect"},
+				},
 
-			"private_service_connect": {
-				Type:          schema.TypeList,
-				Optional:      true,
-				ForceNew:      true,
-				Description:   "Private Service Connect configuration for the pool.",
-				MaxItems:      1,
-				Elem:          CloudbuildWorkerPoolPrivateServiceConnectSchema(),
-				ConflictsWith: []string{"network_config"},
-			},
+				"private_service_connect": {
+					Type:          schema.TypeList,
+					Optional:      true,
+					ForceNew:      true,
+					Description:   "Private Service Connect configuration for the pool.",
+					MaxItems:      1,
+					Elem:          CloudbuildWorkerPoolPrivateServiceConnectSchema(),
+					ConflictsWith: []string{"network_config"},
+				},
 
-			"project": {
-				Type:             schema.TypeString,
-				Computed:         true,
-				Optional:         true,
-				ForceNew:         true,
-				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
-			},
+				"project": {
+					Type:             schema.TypeString,
+					Computed:         true,
+					Optional:         true,
+					ForceNew:         true,
+					DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
+					Description:      "The project for the resource",
+				},
 
-			"worker_config": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Optional:    true,
-				Description: "Configuration to be used for a creating workers in the `WorkerPool`.",
-				MaxItems:    1,
-				Elem:        CloudbuildWorkerPoolWorkerConfigSchema(),
-			},
+				"worker_config": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Optional:    true,
+					Description: "Configuration to be used for a creating workers in the `WorkerPool`.",
+					MaxItems:    1,
+					Elem:        CloudbuildWorkerPoolWorkerConfigSchema(),
+				},
 
-			"annotations": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: "User specified annotations. See https://google.aip.dev/128#annotations for more details such as format and size limitations.\n\n**Note**: This field is non-authoritative, and will only manage the annotations present in your configuration.\nPlease refer to the field `effective_annotations` for all of the annotations present on the resource.",
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"annotations": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					Description: "User specified annotations. See https://google.aip.dev/128#annotations for more details such as format and size limitations.\n\n**Note**: This field is non-authoritative, and will only manage the annotations present in your configuration.\nPlease refer to the field `effective_annotations` for all of the annotations present on the resource.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time at which the request to create the `WorkerPool` was received.",
-			},
+				"create_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time at which the request to create the `WorkerPool` was received.",
+				},
 
-			"delete_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time at which the request to delete the `WorkerPool` was received.",
-			},
+				"delete_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time at which the request to delete the `WorkerPool` was received.",
+				},
 
-			"state": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. `WorkerPool` state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED",
-			},
+				"state": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. `WorkerPool` state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED",
+				},
 
-			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. A unique identifier for the `WorkerPool`.",
-			},
+				"uid": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. A unique identifier for the `WorkerPool`.",
+				},
 
-			"update_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Output only. Time at which the request to update the `WorkerPool` was received.",
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+				"update_time": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Output only. Time at which the request to update the `WorkerPool` was received.",
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

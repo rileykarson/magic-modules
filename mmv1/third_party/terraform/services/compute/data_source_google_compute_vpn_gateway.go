@@ -13,38 +13,40 @@ func DataSourceGoogleComputeVpnGateway() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeVpnGatewayRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
 
-			"region": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+				},
 
-			"description": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"description": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"self_link": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"self_link": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"network": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"network": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

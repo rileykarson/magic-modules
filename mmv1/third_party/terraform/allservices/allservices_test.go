@@ -39,7 +39,7 @@ func buildProviderResources(pluginSdk map[string]*schema.Resource, pluginFramewo
 			Name:   resourceName,
 			Fields: map[string]bool{},
 		}
-		flattened := flattenSchema("", resource.Schema)
+		flattened := flattenSchema("", resource.SchemaMap())
 		for f := range flattened {
 			r.Fields[f] = true
 		}
@@ -81,8 +81,8 @@ func flattenSchema(parentKey string, schemaObj map[string]*schema.Schema) map[st
 	for fieldName, field := range schemaObj {
 		key := parentKey + fieldName
 		childResource, hasNestedFields := field.Elem.(*schema.Resource)
-		if field.Elem != nil && hasNestedFields && len(childResource.Schema) > 0 {
-			for childKey, childField := range flattenSchema(key, childResource.Schema) {
+		if field.Elem != nil && hasNestedFields && len(childResource.SchemaMap()) > 0 {
+			for childKey, childField := range flattenSchema(key, childResource.SchemaMap()) {
 				flattened[childKey] = childField
 			}
 		} else {

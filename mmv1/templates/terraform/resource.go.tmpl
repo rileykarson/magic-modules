@@ -212,7 +212,8 @@ func Resource{{ $.ResourceName -}}() *schema.Resource {
         },
 {{- end }}
 
-        Schema: map[string]*schema.Schema{
+        SchemaFunc: func() map[string]*schema.Schema {
+            return map[string]*schema.Schema{
 			{{- range $prop := $.OrderProperties $.AllUserProperties }}
 {{template "SchemaFields" $prop -}}
 			{{- end }}
@@ -256,6 +257,7 @@ When set to "DELETE", deleting the resource is allowed.
     {{- end}}
             },
 {{- end}}
+            }
         },
         UseJSONNumber: true,
     }
@@ -880,7 +882,7 @@ func resource{{ $.ResourceName -}}Update(d *schema.ResourceData, meta interface{
 {{-     if and (and (not $.ExcludeDelete) (not $.DeletionPolicyExclude)) (not $.BypassClientsideUpdateCheck)}}
     clientSideFields := map[string]bool{"deletion_policy": true}
     clientSideOnly := true
-    for field := range Resource{{ $.ResourceName -}}().Schema {
+    for field := range Resource{{ $.ResourceName -}}().SchemaMap() {
         if d.HasChange(field) && !clientSideFields[field] {
             clientSideOnly = false
             break

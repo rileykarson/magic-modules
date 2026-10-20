@@ -10,15 +10,15 @@ import (
 )
 
 func DataSourceGoogleBeyondcorpSecurityGateway() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBeyondcorpSecurityGateway().Schema)
-	tpgresource.AddRequiredFieldsToSchema(dsSchema, "security_gateway_id")
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleBeyondcorpSecurityGatewayRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleBeyondcorpSecurityGatewayRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceBeyondcorpSecurityGateway().SchemaMap())
+			tpgresource.AddRequiredFieldsToSchema(dsSchema, "security_gateway_id")
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			return dsSchema
+		},
 	}
 }
 

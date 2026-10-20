@@ -21,73 +21,75 @@ func DataSourceGoogleComputeAddress() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeAddressRead,
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
 
-			"address": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"address": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"address_type": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"address_type": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"network": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"network": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"network_tier": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"network_tier": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"prefix_length": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
+				"prefix_length": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
 
-			"purpose": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"purpose": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"subnetwork": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"subnetwork": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"users": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"users": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"status": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"status": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"self_link": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+				"self_link": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
 
-			"region": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-			},
+				"region": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-			},
+				"project": {
+					Type:     schema.TypeString,
+					Computed: true,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

@@ -10,56 +10,57 @@ import (
 )
 
 func DataSourceAlloydbLocations() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceAlloydbLocationsRead,
 
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `Project ID of the project.`,
-			},
-			"locations": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `Resource name for the location, which may vary between implementations. For example: "projects/example-project/locations/us-east1`,
-						},
-						"location_id": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The canonical id for this location. For example: "us-east1".`,
-						},
-						"display_name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The friendly name for this location, typically a nearby city name. For example, "Tokyo".`,
-						},
-						"labels": {
-							Type:        schema.TypeMap,
-							Computed:    true,
-							Optional:    true,
-							Description: `Cross-service attributes for the location. For example {"cloud.googleapis.com/region": "us-east1"}`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-						},
-						"metadata": {
-							Type:        schema.TypeMap,
-							Computed:    true,
-							Optional:    true,
-							Description: `Service-specific metadata. For example the available capacity at the given location.`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: `Project ID of the project.`,
+				},
+				"locations": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `Resource name for the location, which may vary between implementations. For example: "projects/example-project/locations/us-east1`,
+							},
+							"location_id": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `The canonical id for this location. For example: "us-east1".`,
+							},
+							"display_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `The friendly name for this location, typically a nearby city name. For example, "Tokyo".`,
+							},
+							"labels": {
+								Type:        schema.TypeMap,
+								Computed:    true,
+								Optional:    true,
+								Description: `Cross-service attributes for the location. For example {"cloud.googleapis.com/region": "us-east1"}`,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+							},
+							"metadata": {
+								Type:        schema.TypeMap,
+								Computed:    true,
+								Optional:    true,
+								Description: `Service-specific metadata. For example the available capacity at the given location.`,
+								Elem:        &schema.Schema{Type: schema.TypeString},
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

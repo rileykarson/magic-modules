@@ -10,34 +10,36 @@ import (
 func DataSourceGoogleServiceNetworkingPeeredDNSDomain() *schema.Resource {
 	return &schema.Resource{
 		Read: resourceGoogleServiceNetworkingPeeredDNSDomainRead,
-		Schema: map[string]*schema.Schema{
-			"project": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"network": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"service": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"dns_suffix": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"parent": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"project": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"network": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"service": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+				"dns_suffix": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"parent": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+			}
 		},
 	}
 }

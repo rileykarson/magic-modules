@@ -13,39 +13,41 @@ func DataSourceDnsRecordSet() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceDnsRecordSetRead,
 
-		Schema: map[string]*schema.Schema{
-			"managed_zone": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-
-			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-
-			"rrdatas": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"managed_zone": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-			},
 
-			"ttl": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
+				"name": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
 
-			"type": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+				"rrdatas": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
 
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
+				"ttl": {
+					Type:     schema.TypeInt,
+					Computed: true,
+				},
+
+				"type": {
+					Type:     schema.TypeString,
+					Required: true,
+				},
+
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+				},
+			}
 		},
 	}
 }

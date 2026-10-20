@@ -14,53 +14,55 @@ import (
 func DataSourceGoogleIamTestablePermissions() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleIamTestablePermissionsRead,
-		Schema: map[string]*schema.Schema{
-			"full_resource_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"stages": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type:         schema.TypeString,
-					ValidateFunc: validation.StringInSlice([]string{"ALPHA", "BETA", "GA", "DEPRECATED"}, true),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"full_resource_name": {
+					Type:     schema.TypeString,
+					Required: true,
 				},
-			},
-			"custom_support_level": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "SUPPORTED",
-				ValidateFunc: validation.StringInSlice([]string{"NOT_SUPPORTED", "SUPPORTED", "TESTING"}, true),
-			},
-			"permissions": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"title": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"custom_support_level": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"stage": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"api_disabled": {
-							Type:     schema.TypeBool,
-							Computed: true,
+				"stages": {
+					Type:     schema.TypeList,
+					Optional: true,
+					Elem: &schema.Schema{
+						Type:         schema.TypeString,
+						ValidateFunc: validation.StringInSlice([]string{"ALPHA", "BETA", "GA", "DEPRECATED"}, true),
+					},
+				},
+				"custom_support_level": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "SUPPORTED",
+					ValidateFunc: validation.StringInSlice([]string{"NOT_SUPPORTED", "SUPPORTED", "TESTING"}, true),
+				},
+				"permissions": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"name": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"title": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"custom_support_level": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"stage": {
+								Type:     schema.TypeString,
+								Computed: true,
+							},
+							"api_disabled": {
+								Type:     schema.TypeBool,
+								Computed: true,
+							},
 						},
 					},
 				},
-			},
+			}
 		},
 	}
 }

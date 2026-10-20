@@ -10,48 +10,49 @@ import (
 )
 
 func DataSourceGoogleBigqueryDatasets() *schema.Resource {
-	dsSchema := map[string]*schema.Schema{
-		"project": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The ID of the project in which the datasets are located. If it is not provided, the provider project is used.",
-		},
-		"datasets": {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"labels": {
-						Type:     schema.TypeMap,
-						Computed: true,
-						Elem: &schema.Schema{
-							Type: schema.TypeString,
+	return &schema.Resource{
+		Read: DataSourceGoogleBigQueryDatasetsRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := map[string]*schema.Schema{
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The ID of the project in which the datasets are located. If it is not provided, the provider project is used.",
+				},
+				"datasets": {
+					Type:     schema.TypeList,
+					Computed: true,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"labels": {
+								Type:     schema.TypeMap,
+								Computed: true,
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
+								Description: "The labels associated with this dataset. You can use these to organize and group your datasets.",
+							},
+							"friendly_name": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "A user-friendly name for the dataset.",
+							},
+							"dataset_id": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_).",
+							},
+							"location": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The geographic location where the dataset resides.",
+							},
 						},
-						Description: "The labels associated with this dataset. You can use these to organize and group your datasets.",
-					},
-					"friendly_name": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "A user-friendly name for the dataset.",
-					},
-					"dataset_id": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_).",
-					},
-					"location": {
-						Type:        schema.TypeString,
-						Computed:    true,
-						Description: "The geographic location where the dataset resides.",
 					},
 				},
-			},
+			}
+			return dsSchema
 		},
-	}
-
-	return &schema.Resource{
-		Read:   DataSourceGoogleBigQueryDatasetsRead,
-		Schema: dsSchema,
 	}
 }
 

@@ -17,45 +17,46 @@ import (
 )
 
 func DataSourceGoogleServiceAccountAccessToken() *schema.Resource {
-
 	return &schema.Resource{
 		Read: dataSourceGoogleServiceAccountAccessTokenRead,
-		Schema: map[string]*schema.Schema{
-			"target_service_account": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
-			},
-			"access_token": {
-				Type:      schema.TypeString,
-				Sensitive: true,
-				Computed:  true,
-			},
-			"scopes": {
-				Type:     schema.TypeSet,
-				Required: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-					StateFunc: func(v interface{}) string {
-						return tpgresource.CanonicalizeServiceScope(v.(string))
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"target_service_account": {
+					Type:         schema.TypeString,
+					Required:     true,
+					ValidateFunc: verify.ValidateRegexp("^(" + strings.Join(verify.PossibleServiceAccountNames, "|") + ")$"),
+				},
+				"access_token": {
+					Type:      schema.TypeString,
+					Sensitive: true,
+					Computed:  true,
+				},
+				"scopes": {
+					Type:     schema.TypeSet,
+					Required: true,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+						StateFunc: func(v interface{}) string {
+							return tpgresource.CanonicalizeServiceScope(v.(string))
+						},
+					},
+					// ValidateFunc is not yet supported on lists or sets.
+				},
+				"delegates": {
+					Type:     schema.TypeSet,
+					Optional: true,
+					Elem: &schema.Schema{
+						Type:         schema.TypeString,
+						ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
 					},
 				},
-				// ValidateFunc is not yet supported on lists or sets.
-			},
-			"delegates": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Schema{
+				"lifetime": {
 					Type:         schema.TypeString,
-					ValidateFunc: verify.ValidateRegexp("^" + verify.ServiceAccountLinkRegex + "$"),
+					Optional:     true,
+					ValidateFunc: verify.ValidateDuration(), // duration <=3600s; TODO: support validateDuration(min,max)
+					Default:      "3600s",
 				},
-			},
-			"lifetime": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ValidateFunc: verify.ValidateDuration(), // duration <=3600s; TODO: support validateDuration(min,max)
-				Default:      "3600s",
-			},
+			}
 		},
 	}
 }

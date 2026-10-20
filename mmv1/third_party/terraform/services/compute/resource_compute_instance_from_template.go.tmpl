@@ -26,7 +26,7 @@ func ResourceComputeInstanceFromTemplate() *schema.Resource {
 
 		Timeouts: ResourceComputeInstance().Timeouts,
 
-		Schema:        computeInstanceFromTemplateSchema(),
+		SchemaFunc: computeInstanceFromTemplateSchema,
 		CustomizeDiff: customdiff.All(
 			tpgresource.DefaultProviderProject,
 			ResourceComputeInstance().CustomizeDiff,
@@ -36,7 +36,7 @@ func ResourceComputeInstanceFromTemplate() *schema.Resource {
 }
 
 func computeInstanceFromTemplateSchema() map[string]*schema.Schema {
-	s := ResourceComputeInstance().Schema
+	s := ResourceComputeInstance().SchemaMap()
 
 	for _, field := range []string{"boot_disk", "machine_type", "network_interface"} {
 		// The user can set these fields as an override, but doesn't need to -
@@ -79,7 +79,7 @@ func recurseOnSchema(s map[string]*schema.Schema, f func(*schema.Schema)) {
 		f(field)
 		if e := field.Elem; e != nil {
 			if r, ok := e.(*schema.Resource); ok {
-				recurseOnSchema(r.Schema, f)
+				recurseOnSchema(r.SchemaMap(), f)
 			}
 		}
 	}

@@ -70,178 +70,180 @@ func ResourceBigtableInstance() *schema.Resource {
 			},
 		},
 
-		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name (also called Instance Id in the Cloud Console) of the Cloud Bigtable instance. Must be 6-33 characters and must only contain hyphens, lowercase letters and numbers.`,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name (also called Instance Id in the Cloud Console) of the Cloud Bigtable instance. Must be 6-33 characters and must only contain hyphens, lowercase letters and numbers.`,
+				},
 
-			"cluster": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				Description: `A block of cluster configuration options. This can be specified at least once.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"cluster_id": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `The ID of the Cloud Bigtable cluster. Must be 6-30 characters and must only contain hyphens, lowercase letters and numbers.`,
-						},
-						"zone": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The zone to create the Cloud Bigtable cluster in. Each cluster must have a different zone in the same region. Zones that support Bigtable instances are noted on the Cloud Bigtable locations page.`,
-						},
-						"num_nodes": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							// DEVELOPMENT instances could get returned with either zero or one node,
-							// so mark as computed.
-							Computed:     true,
-							ValidateFunc: validation.IntAtLeast(1),
-							Description:  `The number of nodes in the cluster. If no value is set, Cloud Bigtable automatically allocates nodes based on your data footprint and optimized for 50% storage utilization.`,
-						},
-						"storage_type": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Default:      "SSD",
-							ValidateFunc: validation.StringInSlice([]string{"SSD", "HDD"}, false),
-							Description:  `The storage type to use. One of "SSD" or "HDD". Defaults to "SSD".`,
-						},
-						"kms_key_name": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Computed:    true,
-							Description: `Describes the Cloud KMS encryption key that will be used to protect the destination Bigtable cluster. The requirements for this key are: 1) The Cloud Bigtable service account associated with the project that contains this cluster must be granted the cloudkms.cryptoKeyEncrypterDecrypter role on the CMEK key. 2) Only regional keys can be used and the region of the CMEK key must match the region of the cluster. 3) All clusters within an instance must use the same CMEK key. Values are of the form projects/{project}/locations/{location}/keyRings/{keyring}/cryptoKeys/{key}`,
-						},
-						"autoscaling_config": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: "A list of Autoscaling configurations. Only one element is used and allowed.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"min_nodes": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: `The minimum number of nodes for autoscaling.`,
-									},
-									"max_nodes": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: `The maximum number of nodes for autoscaling.`,
-									},
-									"cpu_target": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: `The target CPU utilization for autoscaling. Value must be between 10 and 80.`,
-									},
-									"storage_target": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Computed:    true,
-										Description: `The target storage utilization for autoscaling, in GB, for each node in a cluster. This number is limited between 2560 (2.5TiB) and 5120 (5TiB) for a SSD cluster and between 8192 (8TiB) and 16384 (16 TiB) for an HDD cluster. If not set, whatever is already set for the cluster will not change, or if the cluster is just being created, it will use the default value of 2560 for SSD clusters and 8192 for HDD clusters.`,
+				"cluster": {
+					Type:        schema.TypeList,
+					Optional:    true,
+					Computed:    true,
+					Description: `A block of cluster configuration options. This can be specified at least once.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"cluster_id": {
+								Type:        schema.TypeString,
+								Required:    true,
+								Description: `The ID of the Cloud Bigtable cluster. Must be 6-30 characters and must only contain hyphens, lowercase letters and numbers.`,
+							},
+							"zone": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Optional:    true,
+								Description: `The zone to create the Cloud Bigtable cluster in. Each cluster must have a different zone in the same region. Zones that support Bigtable instances are noted on the Cloud Bigtable locations page.`,
+							},
+							"num_nodes": {
+								Type:     schema.TypeInt,
+								Optional: true,
+								// DEVELOPMENT instances could get returned with either zero or one node,
+								// so mark as computed.
+								Computed:     true,
+								ValidateFunc: validation.IntAtLeast(1),
+								Description:  `The number of nodes in the cluster. If no value is set, Cloud Bigtable automatically allocates nodes based on your data footprint and optimized for 50% storage utilization.`,
+							},
+							"storage_type": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Default:      "SSD",
+								ValidateFunc: validation.StringInSlice([]string{"SSD", "HDD"}, false),
+								Description:  `The storage type to use. One of "SSD" or "HDD". Defaults to "SSD".`,
+							},
+							"kms_key_name": {
+								Type:        schema.TypeString,
+								Optional:    true,
+								Computed:    true,
+								Description: `Describes the Cloud KMS encryption key that will be used to protect the destination Bigtable cluster. The requirements for this key are: 1) The Cloud Bigtable service account associated with the project that contains this cluster must be granted the cloudkms.cryptoKeyEncrypterDecrypter role on the CMEK key. 2) Only regional keys can be used and the region of the CMEK key must match the region of the cluster. 3) All clusters within an instance must use the same CMEK key. Values are of the form projects/{project}/locations/{location}/keyRings/{keyring}/cryptoKeys/{key}`,
+							},
+							"autoscaling_config": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								MaxItems:    1,
+								Description: "A list of Autoscaling configurations. Only one element is used and allowed.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"min_nodes": {
+											Type:        schema.TypeInt,
+											Required:    true,
+											Description: `The minimum number of nodes for autoscaling.`,
+										},
+										"max_nodes": {
+											Type:        schema.TypeInt,
+											Required:    true,
+											Description: `The maximum number of nodes for autoscaling.`,
+										},
+										"cpu_target": {
+											Type:        schema.TypeInt,
+											Required:    true,
+											Description: `The target CPU utilization for autoscaling. Value must be between 10 and 80.`,
+										},
+										"storage_target": {
+											Type:        schema.TypeInt,
+											Optional:    true,
+											Computed:    true,
+											Description: `The target storage utilization for autoscaling, in GB, for each node in a cluster. This number is limited between 2560 (2.5TiB) and 5120 (5TiB) for a SSD cluster and between 8192 (8TiB) and 16384 (16 TiB) for an HDD cluster. If not set, whatever is already set for the cluster will not change, or if the cluster is just being created, it will use the default value of 2560 for SSD clusters and 8192 for HDD clusters.`,
+										},
 									},
 								},
 							},
-						},
-						"state": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: `The state of the cluster`,
-						},
-						"node_scaling_factor": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Default:      "NodeScalingFactor1X",
-							ValidateFunc: validation.StringInSlice([]string{"NodeScalingFactor1X", "NodeScalingFactor2X"}, false),
-							Description:  `The node scaling factor of this cluster. One of "NodeScalingFactor1X" or "NodeScalingFactor2X". Defaults to "NodeScalingFactor1X".`,
+							"state": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: `The state of the cluster`,
+							},
+							"node_scaling_factor": {
+								Type:         schema.TypeString,
+								Optional:     true,
+								Default:      "NodeScalingFactor1X",
+								ValidateFunc: validation.StringInSlice([]string{"NodeScalingFactor1X", "NodeScalingFactor2X"}, false),
+								Description:  `The node scaling factor of this cluster. One of "NodeScalingFactor1X" or "NodeScalingFactor2X". Defaults to "NodeScalingFactor1X".`,
+							},
 						},
 					},
 				},
-			},
-			"display_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The human-readable display name of the Bigtable instance. Defaults to the instance name.`,
-			},
+				"display_name": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					Description: `The human-readable display name of the Bigtable instance. Defaults to the instance name.`,
+				},
 
-			"instance_type": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "PRODUCTION",
-				ValidateFunc: validation.StringInSlice([]string{"DEVELOPMENT", "PRODUCTION"}, false),
-				Description:  `The instance type to create. One of "DEVELOPMENT" or "PRODUCTION". Defaults to "PRODUCTION".`,
-				Deprecated:   `It is recommended to leave this field unspecified since the distinction between "DEVELOPMENT" and "PRODUCTION" instances is going away, and all instances will become "PRODUCTION" instances. This means that new and existing "DEVELOPMENT" instances will be converted to "PRODUCTION" instances. It is recommended for users to use "PRODUCTION" instances in any case, since a 1-node "PRODUCTION" instance is functionally identical to a "DEVELOPMENT" instance, but without the accompanying restrictions.`,
-			},
+				"instance_type": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "PRODUCTION",
+					ValidateFunc: validation.StringInSlice([]string{"DEVELOPMENT", "PRODUCTION"}, false),
+					Description:  `The instance type to create. One of "DEVELOPMENT" or "PRODUCTION". Defaults to "PRODUCTION".`,
+					Deprecated:   `It is recommended to leave this field unspecified since the distinction between "DEVELOPMENT" and "PRODUCTION" instances is going away, and all instances will become "PRODUCTION" instances. This means that new and existing "DEVELOPMENT" instances will be converted to "PRODUCTION" instances. It is recommended for users to use "PRODUCTION" instances in any case, since a 1-node "PRODUCTION" instance is functionally identical to a "DEVELOPMENT" instance, but without the accompanying restrictions.`,
+				},
 
-			"force_destroy": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-				Description: `When deleting a BigTable instance, this boolean option will delete all backups within the instance.`,
-			},
+				"force_destroy": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     false,
+					Description: `When deleting a BigTable instance, this boolean option will delete all backups within the instance.`,
+				},
 
-			"deletion_protection": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     true,
-				Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
-			},
+				"deletion_protection": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Default:     true,
+					Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
+				},
 
-			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Description: `A mapping of labels to assign to the resource.
+				"labels": {
+					Type:     schema.TypeMap,
+					Optional: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Description: `A mapping of labels to assign to the resource.
 				
 				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
 				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
-			},
+				},
 
-			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"terraform_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"effective_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
+				"effective_labels": {
+					Type:        schema.TypeMap,
+					Computed:    true,
+					Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+				},
 
-			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
-			},
-			//UDP schema start
-			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-			//UDP schema end
-			"tags": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				ForceNew:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A map of Resource Manager Tags. Keys can be either the numeric tag key ID (tagKeys/123) or the namespaced name (project/tag-key). Values can be the numeric tag value ID (tagValues/456) or the namespaced value (project/tag-key/tag-value). The field is ignored when empty.`,
-			},
-			"edition": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				Default:      "ENTERPRISE",
-				ValidateFunc: validation.StringInSlice([]string{"ENTERPRISE", "ENTERPRISE_PLUS"}, false),
-				Description:  `The edition of the instance. One of "ENTERPRISE" or "ENTERPRISE_PLUS". Defaults to "ENTERPRISE".`,
-			},
+				"project": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Computed:    true,
+					ForceNew:    true,
+					Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				},
+				//UDP schema start
+				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+				//UDP schema end
+				"tags": {
+					Type:        schema.TypeMap,
+					Optional:    true,
+					ForceNew:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: `A map of Resource Manager Tags. Keys can be either the numeric tag key ID (tagKeys/123) or the namespaced name (project/tag-key). Values can be the numeric tag value ID (tagValues/456) or the namespaced value (project/tag-key/tag-value). The field is ignored when empty.`,
+				},
+				"edition": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					Default:      "ENTERPRISE",
+					ValidateFunc: validation.StringInSlice([]string{"ENTERPRISE", "ENTERPRISE_PLUS"}, false),
+					Description:  `The edition of the instance. One of "ENTERPRISE" or "ENTERPRISE_PLUS". Defaults to "ENTERPRISE".`,
+				},
+			}
 		},
 		UseJSONNumber: true,
 	}
@@ -494,7 +496,7 @@ func resourceBigtableInstanceUpdate(d *schema.ResourceData, meta interface{}) er
 	log.Printf("[DEBUG] Updating BigTable instance %q: %#v", d.Id(), conf)
 
 	// Handle scenario where the update includes only updating force_destroy
-	if resourceBigtableInstanceVirtualUpdate(d, ResourceBigtableInstance().Schema) {
+	if resourceBigtableInstanceVirtualUpdate(d, ResourceBigtableInstance().SchemaMap()) {
 		if d.Get("force_destroy") != nil {
 			if err := d.Set("force_destroy", d.Get("force_destroy")); err != nil {
 				return fmt.Errorf("error reading Instance: %s", err)

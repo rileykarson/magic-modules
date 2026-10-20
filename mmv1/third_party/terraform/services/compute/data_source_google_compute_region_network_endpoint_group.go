@@ -11,17 +11,18 @@ import (
 )
 
 func DataSourceGoogleComputeRegionNetworkEndpointGroup() *schema.Resource {
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionNetworkEndpointGroup().Schema)
-
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "self_link")
-
 	return &schema.Resource{
-		Read:   dataSourceComputeRegionNetworkEndpointGroupRead,
-		Schema: dsSchema,
+		Read: dataSourceComputeRegionNetworkEndpointGroupRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeRegionNetworkEndpointGroup().SchemaMap())
+
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "region")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "self_link")
+			return dsSchema
+		},
 	}
 }
 

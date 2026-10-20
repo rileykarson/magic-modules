@@ -170,18 +170,20 @@ func ResourceGoogleOrganizationPolicy() *schema.Resource {
 			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 		),
 
-		Schema: tpgresource.MergeSchemas(
-			schemaOrganizationPolicy,
-			map[string]*schema.Schema{
-				"org_id": {
-					Type:     schema.TypeString,
-					Required: true,
-					ForceNew: true,
-				},
-				//UDP schema start
-				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
-				//UDP schema end
-			}),
+		SchemaFunc: func() map[string]*schema.Schema {
+			return tpgresource.MergeSchemas(
+				schemaOrganizationPolicy,
+				map[string]*schema.Schema{
+					"org_id": {
+						Type:     schema.TypeString,
+						Required: true,
+						ForceNew: true,
+					},
+					//UDP schema start
+					"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
+					//UDP schema end
+				})
+		},
 		UseJSONNumber: true,
 	}
 }

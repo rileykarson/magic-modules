@@ -12,140 +12,142 @@ import (
 func DataSourceGoogleComputeStoragePoolTypes() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeStoragePoolTypesRead,
-		Schema: map[string]*schema.Schema{
-			"storage_pool_type": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Name of the storage pool type.`,
-			},
-			"zone": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the zone.`,
-			},
-			"creation_timestamp": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Creation timestamp in RFC3339 text format.`,
-			},
-			"deprecated": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The deprecation status associated with this storage pool type.`,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"deleted": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DELETED.
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"storage_pool_type": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Name of the storage pool type.`,
+				},
+				"zone": {
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The name of the zone.`,
+				},
+				"creation_timestamp": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Creation timestamp in RFC3339 text format.`,
+				},
+				"deprecated": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The deprecation status associated with this storage pool type.`,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"deleted": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DELETED.
 This is only informational and the status will not change unless the client explicitly changes it.`,
-						},
-						"deprecated": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DEPRECATED.
+							},
+							"deprecated": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to DEPRECATED.
 This is only informational and the status will not change unless the client explicitly changes it.`,
-						},
-						"obsolete": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to OBSOLETE.
+							},
+							"obsolete": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `An optional RFC3339 timestamp on or after which the state of this resource is intended to change to OBSOLETE.
 This is only informational and the status will not change unless the client explicitly changes it.`,
-						},
-						"replacement": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `The URL of the suggested replacement for a deprecated resource.
+							},
+							"replacement": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `The URL of the suggested replacement for a deprecated resource.
 The suggested replacement resource must be the same kind of resource as the deprecated resource.`,
-						},
-						"state": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: `The deprecation state of this resource. This can be ACTIVE, DEPRECATED, OBSOLETE, or DELETED.
+							},
+							"state": {
+								Type:     schema.TypeString,
+								Computed: true,
+								Description: `The deprecation state of this resource. This can be ACTIVE, DEPRECATED, OBSOLETE, or DELETED.
 Operations which communicate the end of life date for an image, can use ACTIVE.
 Operations which create a new resource using a DEPRECATED resource will return successfully,
 but with a warning indicating the deprecated resource and recommending its replacement.
 Operations which use OBSOLETE or DELETED resources will be rejected and result in an error.`,
+							},
 						},
 					},
 				},
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `An optional description of this resource.`,
-			},
-			"id": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `The unique identifier for the resource. This identifier is defined by the server.`,
-			},
-			"kind": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Type of the resource. Always compute#storagePoolType for storage pool types.`,
-			},
-			"max_pool_provisioned_capacity_gb": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Maximum storage pool size in GB.`,
-			},
-			"max_pool_provisioned_iops": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Maximum provisioned IOPS.`,
-			},
-			"max_pool_provisioned_throughput": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Maximum provisioned throughput.`,
-			},
-			"min_pool_provisioned_capacity_gb": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Minimum storage pool size in GB.`,
-			},
-			"min_pool_provisioned_iops": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Minimum provisioned IOPS.`,
-			},
-			"min_pool_provisioned_throughput": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: `Minimum provisioned throughput.`,
-			},
-			"name": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Name of the resource.`,
-			},
-			"self_link": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Server-defined URL for the resource.`,
-			},
-			"self_link_with_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Server-defined URL for this resource with the resource id.`,
-			},
-			"supported_disk_types": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: `The list of disk types supported in this storage pool type.`,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `An optional description of this resource.`,
 				},
-			},
-			"project": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
-			},
+				"id": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `The unique identifier for the resource. This identifier is defined by the server.`,
+				},
+				"kind": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Type of the resource. Always compute#storagePoolType for storage pool types.`,
+				},
+				"max_pool_provisioned_capacity_gb": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Maximum storage pool size in GB.`,
+				},
+				"max_pool_provisioned_iops": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Maximum provisioned IOPS.`,
+				},
+				"max_pool_provisioned_throughput": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Maximum provisioned throughput.`,
+				},
+				"min_pool_provisioned_capacity_gb": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Minimum storage pool size in GB.`,
+				},
+				"min_pool_provisioned_iops": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Minimum provisioned IOPS.`,
+				},
+				"min_pool_provisioned_throughput": {
+					Type:        schema.TypeInt,
+					Computed:    true,
+					Description: `Minimum provisioned throughput.`,
+				},
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Name of the resource.`,
+				},
+				"self_link": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Server-defined URL for the resource.`,
+				},
+				"self_link_with_id": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: `Server-defined URL for this resource with the resource id.`,
+				},
+				"supported_disk_types": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: `The list of disk types supported in this storage pool type.`,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+				"project": {
+					Type:     schema.TypeString,
+					Optional: true,
+					Computed: true,
+					ForceNew: true,
+				},
+			}
 		},
 	}
 }

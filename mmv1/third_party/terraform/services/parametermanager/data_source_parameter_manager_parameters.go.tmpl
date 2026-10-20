@@ -11,12 +11,11 @@ import (
 )
 
 func DataSourceParameterManagerParameters() *schema.Resource {
-
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerParameter().Schema)
-
 	return &schema.Resource{
 		Read: dataSourceParameterManagerParametersRead,
-		Schema: map[string]*schema.Schema{
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceParameterManagerParameter().SchemaMap())
+			return map[string]*schema.Schema{
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -35,6 +34,7 @@ If filter is empty, all parameters are listed.`,
 					Schema: dsSchema,
 				},
 			},
+		}
 		},
 	}
 }

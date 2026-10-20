@@ -50,7 +50,7 @@ func TestSecurityCenterNotificationServiceAccount_importIdParsing(t *testing.T) 
 
 	for _, tc := range cases {
 		t.Run(tc.id, func(t *testing.T) {
-			d := schema.TestResourceDataRaw(t, securitycenter.ResourceSecurityCenterNotificationServiceAccount().Schema, map[string]interface{}{})
+			d := schema.TestResourceDataRaw(t, securitycenter.ResourceSecurityCenterNotificationServiceAccount().SchemaMap(), map[string]interface{}{})
 			d.SetId(tc.id)
 
 			res, err := securitycenter.ResourceSecurityCenterNotificationServiceAccountImport(context.Background(), d, nil)

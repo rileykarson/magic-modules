@@ -12,28 +12,28 @@ import (
 )
 
 func DataSourceGoogleComputeSnapshot() *schema.Resource {
-
-	// Generate datasource schema from resource
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeSnapshot().Schema)
-
-	dsSchema["filter"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Optional: true,
-	}
-	dsSchema["most_recent"] = &schema.Schema{
-		Type:     schema.TypeBool,
-		Optional: true,
-	}
-
-	// Set 'Optional' schema elements
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "filter", "most_recent", "project")
-
-	dsSchema["name"].ExactlyOneOf = []string{"name", "filter"}
-	dsSchema["filter"].ExactlyOneOf = []string{"name", "filter"}
-
 	return &schema.Resource{
-		Read:   dataSourceGoogleComputeSnapshotRead,
-		Schema: dsSchema,
+		Read: dataSourceGoogleComputeSnapshotRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			// Generate datasource schema from resource
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourceComputeSnapshot().SchemaMap())
+
+			dsSchema["filter"] = &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			}
+			dsSchema["most_recent"] = &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			}
+
+			// Set 'Optional' schema elements
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "name", "filter", "most_recent", "project")
+
+			dsSchema["name"].ExactlyOneOf = []string{"name", "filter"}
+			dsSchema["filter"].ExactlyOneOf = []string{"name", "filter"}
+			return dsSchema
+		},
 	}
 }
 

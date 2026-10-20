@@ -16,38 +16,40 @@ import (
 func DataSourceGoogleOrganization() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceOrganizationRead,
-		Schema: map[string]*schema.Schema{
-			"domain": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"organization"},
-			},
-			"organization": {
-				Type:          schema.TypeString,
-				Optional:      true,
-				ConflictsWith: []string{"domain"},
-			},
-			"org_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"directory_customer_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"create_time": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"lifecycle_state": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
+		SchemaFunc: func() map[string]*schema.Schema {
+			return map[string]*schema.Schema{
+				"domain": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					Computed:      true,
+					ConflictsWith: []string{"organization"},
+				},
+				"organization": {
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{"domain"},
+				},
+				"org_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"name": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"directory_customer_id": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"create_time": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+				"lifecycle_state": {
+					Type:     schema.TypeString,
+					Computed: true,
+				},
+			}
 		},
 	}
 }

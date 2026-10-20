@@ -10,20 +10,21 @@ import (
 )
 
 func DataSourcePrivatecaCertificateAuthority() *schema.Resource {
-	dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourcePrivatecaCertificateAuthority().Schema)
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "location")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "pool")
-	tpgresource.AddOptionalFieldsToSchema(dsSchema, "certificate_authority_id")
-
-	dsSchema["pem_csr"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Computed: true,
-	}
-
 	return &schema.Resource{
-		Read:   dataSourcePrivatecaCertificateAuthorityRead,
-		Schema: dsSchema,
+		Read: dataSourcePrivatecaCertificateAuthorityRead,
+		SchemaFunc: func() map[string]*schema.Schema {
+			dsSchema := tpgresource.DatasourceSchemaFromResourceSchema(ResourcePrivatecaCertificateAuthority().SchemaMap())
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "project")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "location")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "pool")
+			tpgresource.AddOptionalFieldsToSchema(dsSchema, "certificate_authority_id")
+
+			dsSchema["pem_csr"] = &schema.Schema{
+				Type:     schema.TypeString,
+				Computed: true,
+			}
+			return dsSchema
+		},
 	}
 }
 
