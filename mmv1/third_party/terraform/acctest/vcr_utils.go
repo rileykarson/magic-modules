@@ -49,6 +49,11 @@ func IsVcrEnabled() bool {
 	return envPath != "" && vcrMode != ""
 }
 
+// IsVcrReplaying returns true if VCR is enabled and running in REPLAYING mode.
+func IsVcrReplaying() bool {
+	return IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING"
+}
+
 var configsLock = sync.RWMutex{}
 var sourcesLock = sync.RWMutex{}
 
@@ -141,6 +146,9 @@ func vcrFileName(name string) string {
 	return strings.ReplaceAll(name, "/", "_")
 }
 
+var createDurationRegex = regexp.MustCompile(`create_duration\s*=\s*"\d+[smh]"`)
+var destroyDurationRegex = regexp.MustCompile(`destroy_duration\s*=\s*"\d+[smh]"`)
+
 // VcrTest is a wrapper for resource.Test to swap out providers for VCR providers and handle VCR specific things
 // Can be called when VCR is not enabled, and it will behave as normal
 func VcrTest(t *testing.T, c resource.TestCase) {
@@ -173,11 +181,9 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 		if s.ImportStateVerify && !slices.Contains(s.ImportStateVerifyIgnore, "terraform_labels") {
 			s.ImportStateVerifyIgnore = append(s.ImportStateVerifyIgnore, "terraform_labels")
 		}
-		if IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING" {
-			re := regexp.MustCompile(`create_duration = "\d+[sm]"`)
-			s.Config = re.ReplaceAllString(s.Config, `create_duration = "1s"`)
-			re = regexp.MustCompile(`destroy_duration = "\d+[sm]"`)
-			s.Config = re.ReplaceAllString(s.Config, `destroy_duration = "1s"`)
+		if IsVcrReplaying() {
+			s.Config = createDurationRegex.ReplaceAllString(s.Config, `create_duration = "1ms"`)
+			s.Config = destroyDurationRegex.ReplaceAllString(s.Config, `destroy_duration = "1ms"`)
 			// During RECORDING, extendWithTGCData attaches a non-nil Check function to steps
 			// containing resources, which causes terraform-plugin-testing to run a pre-destroy
 			// refresh on Destroy: true steps. Since extendWithTGCData is skipped in REPLAYING
@@ -258,7 +264,7 @@ func HandleVCRConfiguration(ctx context.Context, testName string, rndTripper htt
 	case "REPLAYING":
 		vcrMode = recorder.ModeReplaying
 		// When replaying, set the poll interval and sleep unit low to speed up tests
-		pollInterval = 10 * time.Millisecond
+		pollInterval = 1 * time.Millisecond
 		sleepUnit = time.Millisecond
 	default:
 		tflog.Debug(ctx, fmt.Sprintf("No valid environment var set for VCR_MODE, expected RECORDING or REPLAYING, skipping VCR. VCR_MODE: %s", vcrEnv))

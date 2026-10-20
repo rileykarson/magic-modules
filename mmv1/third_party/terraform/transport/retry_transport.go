@@ -38,6 +38,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
@@ -96,6 +97,10 @@ func (t *retryTransport) RoundTrip(req *http.Request) (resp *http.Response, resp
 	attempts := 0
 	backoff := time.Millisecond * 500
 	nextBackoff := time.Millisecond * 500
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		backoff = time.Millisecond
+		nextBackoff = 0
+	}
 
 	// VCR depends on the original request body being consumed, so
 	// consume here. Since this won't affect the request itself,

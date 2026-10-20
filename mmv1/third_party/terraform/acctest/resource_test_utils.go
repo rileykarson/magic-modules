@@ -96,7 +96,7 @@ func SkipIfVcr(t *testing.T) {
 
 func Sleep(d time.Duration) {
 	// Assume we never want to sleep when we're in replaying mode.
-	if IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING" {
+	if IsVcrReplaying() {
 		return
 	}
 	time.Sleep(d)

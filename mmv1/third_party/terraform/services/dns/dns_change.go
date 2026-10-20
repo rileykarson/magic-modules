@@ -1,6 +1,7 @@
 package dns
 
 import (
+	"os"
 	"time"
 
 	"google.golang.org/api/dns/v1"
@@ -32,11 +33,18 @@ func (w *DnsChangeWaiter) RefreshFunc() retry.StateRefreshFunc {
 }
 
 func (w *DnsChangeWaiter) Conf() *retry.StateChangeConf {
+	minTimeout := 2 * time.Second
+	var pollInterval time.Duration
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		minTimeout = time.Millisecond
+		pollInterval = time.Millisecond
+	}
 	return &retry.StateChangeConf{
-		Pending:    []string{"pending"},
-		Target:     []string{"done"},
-		Refresh:    w.RefreshFunc(),
-		Timeout:    10 * time.Minute,
-		MinTimeout: 2 * time.Second,
+		Pending:      []string{"pending"},
+		Target:       []string{"done"},
+		Refresh:      w.RefreshFunc(),
+		Timeout:      10 * time.Minute,
+		MinTimeout:   minTimeout,
+		PollInterval: pollInterval,
 	}
 }
