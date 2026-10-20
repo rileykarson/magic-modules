@@ -1,6 +1,7 @@
 package acctest
 
 import (
+	"archive/zip"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -140,6 +141,76 @@ func vcrFileName(name string) string {
 	return strings.ReplaceAll(name, "/", "_")
 }
 
+var sourceArchiveRegex = regexp.MustCompile(`[^\s"]*sourceArchivePrefix[0-9]+`)
+
+// syncRecordedZipArchives ensures temporary zip archives created by CreateZIPArchiveForCloudFunctionSource
+// match the exact compressed bytes recorded in the VCR cassette across Go versions with differing deflate output.
+func syncRecordedZipArchives(t *testing.T, steps []resource.TestStep) {
+	var paths []string
+	seen := make(map[string]struct{})
+	for _, s := range steps {
+		if !strings.Contains(s.Config, "sourceArchivePrefix") {
+			continue
+		}
+		for _, m := range sourceArchiveRegex.FindAllString(s.Config, -1) {
+			if _, ok := seen[m]; !ok {
+				seen[m] = struct{}{}
+				paths = append(paths, m)
+			}
+		}
+	}
+	if len(paths) == 0 {
+		return
+	}
+	envPath := os.Getenv("VCR_PATH")
+	if envPath == "" {
+		return
+	}
+	cas, err := cassette.Load(filepath.Join(envPath, vcrFileName(t.Name())))
+	if err != nil {
+		return
+	}
+	readIndexJS := func(zipBytes []byte) ([]byte, bool) {
+		zr, err := zip.NewReader(bytes.NewReader(zipBytes), int64(len(zipBytes)))
+		if err != nil || len(zr.File) != 1 || zr.File[0].Name != "index.js" {
+			return nil, false
+		}
+		rc, err := zr.File[0].Open()
+		if err != nil {
+			return nil, false
+		}
+		defer rc.Close()
+		b, err := ioutil.ReadAll(rc)
+		if err != nil {
+			return nil, false
+		}
+		return b, true
+	}
+	for _, p := range paths {
+		localZip, err := ioutil.ReadFile(p)
+		if err != nil {
+			continue
+		}
+		localJS, ok := readIndexJS(localZip)
+		if !ok {
+			continue
+		}
+		for _, inter := range cas.Interactions {
+			idx := strings.Index(inter.Request.Body, "PK\x03\x04")
+			end := strings.LastIndex(inter.Request.Body, "\r\n--")
+			if idx >= 0 && end > idx {
+				recZip := []byte(inter.Request.Body[idx:end])
+				if recJS, ok := readIndexJS(recZip); ok && bytes.Equal(localJS, recJS) {
+					if !bytes.Equal(localZip, recZip) {
+						_ = os.WriteFile(p, recZip, 0600)
+					}
+					break
+				}
+			}
+		}
+	}
+}
+
 // VcrTest is a wrapper for resource.Test to swap out providers for VCR providers and handle VCR specific things
 // Can be called when VCR is not enabled, and it will behave as normal
 func VcrTest(t *testing.T, c resource.TestCase) {
@@ -184,6 +255,9 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 		steps = append(steps, s)
 	}
 	c.Steps = steps
+	if IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING" {
+		syncRecordedZipArchives(t, c.Steps)
+	}
 
 	resource.Test(t, c)
 }
