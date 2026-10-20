@@ -24,6 +24,7 @@ func init() {
 	TestAccProviders = map[string]*schema.Provider{
 		"google": testAccProvider,
 	}
+	transport_tpg.ConfigureTestProvider = configureTestProvider
 }
 
 // GoogleProviderConfig returns a configured SDKv2 provider.
@@ -37,6 +38,18 @@ func GoogleProviderConfig(t *testing.T) *transport_tpg.Config {
 		return config
 	}
 
+	return configureTestProvider(t)
+}
+
+func configureTestProvider(t *testing.T) *transport_tpg.Config {
+	if v := os.Getenv("GOOGLE_CREDENTIALS_FILE"); v != "" {
+		creds, err := os.ReadFile(v)
+		if err != nil {
+			t.Fatalf("Error reading GOOGLE_CREDENTIALS_FILE path: %s", err)
+		}
+		os.Setenv("GOOGLE_CREDENTIALS", string(creds))
+	}
+
 	sdkProvider := provider.Provider()
 	rc := terraform.ResourceConfig{}
 
@@ -47,7 +60,11 @@ func GoogleProviderConfig(t *testing.T) *transport_tpg.Config {
 		rc.Config = make(map[string]interface{})
 		rc.Config["universe_domain"] = universeDomain
 	}
-	sdkProvider.Configure(context.Background(), &rc)
+
+	diags := sdkProvider.Configure(context.Background(), &rc)
+	if diags.HasError() {
+		t.Fatalf("Bootstrapping failed. Unable to load test config: %v", diags)
+	}
 	return sdkProvider.Meta().(*transport_tpg.Config)
 }
 

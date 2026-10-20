@@ -8,10 +8,14 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
+	"github.com/dnaeon/go-vcr/recorder"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/hashicorp/terraform-provider-google/google/acctest"
+	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
 func TestNewVcrMatcherFunc_canDetectMatches(t *testing.T) {
@@ -480,4 +484,95 @@ func TestRunVcrSubtest(t *testing.T) {
 		}()
 		t.Parallel()
 	})
+}
+
+func TestBootstrapConfig_usesProviderConfiguration(t *testing.T) {
+	t.Setenv("TF_ACC", "1")
+	t.Setenv("GOOGLE_CREDENTIALS", "")
+	t.Setenv("GOOGLE_CREDENTIALS_FILE", transport_tpg.TestFakeCredentialsPath)
+	t.Setenv("GOOGLE_PROJECT", "my-bootstrap-project")
+	t.Setenv("GOOGLE_REGION", "us-central1")
+	t.Setenv("GOOGLE_ZONE", "us-central1-a")
+	t.Setenv("GOOGLE_BILLING_PROJECT", "my-billing-project")
+	t.Setenv("USER_PROJECT_OVERRIDE", "true")
+	t.Setenv("CLOUDSDK_CORE_REQUEST_REASON", "bootstrap-reason")
+	t.Setenv("GOOGLE_TERRAFORM_USERAGENT_EXTENSION", "bootstrap-ua-ext")
+	t.Setenv("GOOGLE_COMPUTE_CUSTOM_ENDPOINT", "https://custom.compute.googleapis.com/compute/v1/")
+
+	config := transport_tpg.BootstrapConfig(t)
+	if config == nil {
+		t.Fatalf("expected non-nil config from BootstrapConfig")
+	}
+
+	if config.Project != "my-bootstrap-project" {
+		t.Errorf("expected Project %q, got %q", "my-bootstrap-project", config.Project)
+	}
+	if config.Region != "us-central1" {
+		t.Errorf("expected Region %q, got %q", "us-central1", config.Region)
+	}
+	if config.Zone != "us-central1-a" {
+		t.Errorf("expected Zone %q, got %q", "us-central1-a", config.Zone)
+	}
+	if config.BillingProject != "my-billing-project" {
+		t.Errorf("expected BillingProject %q, got %q", "my-billing-project", config.BillingProject)
+	}
+	if !config.UserProjectOverride {
+		t.Errorf("expected UserProjectOverride to be true")
+	}
+	if config.RequestReason != "bootstrap-reason" {
+		t.Errorf("expected RequestReason %q, got %q", "bootstrap-reason", config.RequestReason)
+	}
+	if !strings.Contains(config.UserAgent, "terraform-provider-google") || !strings.Contains(config.UserAgent, "bootstrap-ua-ext") {
+		t.Errorf("expected UserAgent to contain provider prefix and extension, got %q", config.UserAgent)
+	}
+	if got := config.CustomEndpoints["compute_custom_endpoint"]; got != "https://custom.compute.googleapis.com/compute/v1/" {
+		t.Errorf("expected compute_custom_endpoint %q, got %q", "https://custom.compute.googleapis.com/compute/v1/", got)
+	}
+	if config.BatchingConfig == nil || config.RequestBatcherServiceUsage == nil || config.RequestBatcherIam == nil {
+		t.Errorf("expected non-nil BatchingConfig and request batchers")
+	}
+}
+
+func TestBootstrapConfig_vcrIsolation(t *testing.T) {
+	vcrDir := t.TempDir()
+	t.Setenv("TF_ACC", "1")
+	t.Setenv("GOOGLE_CREDENTIALS", transport_tpg.TestFakeCredentialsPath)
+	t.Setenv("GOOGLE_PROJECT", "my-vcr-project")
+	t.Setenv("GOOGLE_REGION", "us-central1")
+	t.Setenv("GOOGLE_ZONE", "us-central1-a")
+	t.Setenv("VCR_MODE", "RECORDING")
+	t.Setenv("VCR_PATH", vcrDir)
+
+	// 1. BootstrapConfig called before VCR provider configuration must NOT attach a VCR recorder
+	// and must NOT populate acctest's VCR configs cache.
+	bootstrapCfg := transport_tpg.BootstrapConfig(t)
+	if bootstrapCfg == nil || bootstrapCfg.Client == nil {
+		t.Fatalf("expected non-nil bootstrap config and HTTP client")
+	}
+	if _, ok := bootstrapCfg.Client.Transport.(*recorder.Recorder); ok {
+		t.Fatalf("expected BootstrapConfig transport NOT to be a *recorder.Recorder")
+	}
+
+	// 2. Configuring the VCR SDK provider for this test must still attach a *recorder.Recorder
+	// (proving BootstrapConfig did not pollute configs[t.Name()]).
+	sdkProv := acctest.GetSDKProvider(t.Name())
+	diags := sdkProv.Configure(context.Background(), &terraform.ResourceConfig{})
+	if diags.HasError() {
+		t.Fatalf("unexpected error configuring SDK provider: %v", diags)
+	}
+	vcrCfg := acctest.GoogleProviderConfig(t)
+	rec, ok := vcrCfg.Client.Transport.(*recorder.Recorder)
+	if !ok {
+		t.Fatalf("expected VCR provider transport to be *recorder.Recorder, got %T", vcrCfg.Client.Transport)
+	}
+	defer func() {
+		_ = rec.Stop()
+	}()
+
+	// 3. Calling BootstrapConfig again while VCR config is cached for t.Name() must STILL
+	// return a non-VCR config (not the cached VCR config).
+	bootstrapCfgDuringVcr := transport_tpg.BootstrapConfig(t)
+	if _, ok := bootstrapCfgDuringVcr.Client.Transport.(*recorder.Recorder); ok {
+		t.Fatalf("expected BootstrapConfig called during VCR test NOT to use *recorder.Recorder")
+	}
 }
