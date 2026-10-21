@@ -1127,6 +1127,8 @@ The `master_authorized_networks_config.cidr_blocks` block supports:
 
 <a name="nested_node_config"></a>The `node_config` block supports:
 
+* `effective_cgroup_mode` - (Computed) The effective cgroup mode for the node.
+
 * `boot_disk` - (Optional) Configuration of the node pool boot disk. Structure is [documented below](#nested_boot_disk)
 
 * `confidential_nodes` - (Optional) Configuration for Confidential Nodes feature. Structure is [documented below](#nested_confidential_nodes).
