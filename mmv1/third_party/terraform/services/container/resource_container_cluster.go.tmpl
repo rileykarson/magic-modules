@@ -824,7 +824,7 @@ func ResourceContainerCluster() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
-							ValidateFunc: validation.StringInSlice([]string{"AUTOPILOT_GENERAL_PROFILE_UNSPECIFIED", "NO_PERFORMANCE", "NONE"}, false),
+							ValidateFunc: validation.StringInSlice([]string{"NO_PERFORMANCE", "NONE"}, false),
 							Description:  `Contains the autopilot general profile default.`,
 						},
 						"auto_provisioning_defaults": {
