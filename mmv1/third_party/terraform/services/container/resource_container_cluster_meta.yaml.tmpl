@@ -866,6 +866,9 @@ fields:
     api_field: 'nodePools.upgradeSettings.strategy'
   - field: 'node_pool.version'
     api_field: 'nodePools.version'
+{{- if ne $.TargetVersionName "ga" }}
+  - api_field: 'nodePoolUpgradeConcurrencyConfig.maxCount'
+{{- end }}
   - api_field: 'nodePoolAutoConfig.linuxNodeConfig.cgroupMode'
   - api_field: 'nodePoolAutoConfig.linuxNodeConfig.nodeKernelModuleLoading.policy'
   - api_field: 'nodePoolAutoConfig.networkTags.tags'

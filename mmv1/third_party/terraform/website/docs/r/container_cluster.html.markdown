@@ -339,8 +339,9 @@ region are guaranteed to support the same version.
 
 * `node_pool_defaults` - (Optional) Default NodePool settings for the entire cluster. These settings are overridden if specified on the specific NodePool object. Structure is [documented below](#nested_node_pool_defaults).
 
-
+{{- if ne $.TargetVersionName "ga" }}
 * `node_pool_upgrade_concurrency_config` - (Optional, Beta) Node pool upgrade concurrency configuration for the cluster. Structure is [documented below](#nested_node_pool_upgrade_concurrency_config).
+{{- end }}
 
 * `node_version` - (Optional) The Kubernetes version on the nodes. Must either be unset
     or set to the same value as `min_master_version` on create. Defaults to the default
@@ -1519,9 +1520,10 @@ node_pool_auto_config {
 }
 ```
 
+{{- if ne $.TargetVersionName "ga" }}
 <a name="nested_node_pool_upgrade_concurrency_config"></a>The `node_pool_upgrade_concurrency_config` block supports:
 * `max_count` - (Optional) Maximum number of concurrently upgrading node pools in the cluster.
-
+{{- end }}
 
 <a name="nested_node_pool_defaults"></a>The `node_pool_defaults` block supports:
 * `node_config_defaults` (Optional) - Subset of NodeConfig message that has defaults.
