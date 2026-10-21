@@ -34,28 +34,31 @@ jobs:
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
           go-version: '1.26.9'
-          cache-dependency-path: |
-            tgc/go.mod
-            tgc/go.sum
-            tpgb/go.mod
-            tpgb/go.sum
-            tpgb/google-beta/acctest/**
-            tpgb/google-beta/envvar/**
-            tpgb/google-beta/functions/**
-            tpgb/google-beta/fwmodels/**
-            tpgb/google-beta/fwprovider/**
-            tpgb/google-beta/fwresource/**
-            tpgb/google-beta/fwtransport/**
-            tpgb/google-beta/fwutils/**
-            tpgb/google-beta/fwvalidators/**
-            tpgb/google-beta/provider/**
-            tpgb/google-beta/registry/**
-            tpgb/google-beta/sweeper/**
-            tpgb/google-beta/tpgdclresource/**
-            tpgb/google-beta/tpgiamresource/**
-            tpgb/google-beta/tpgresource/**
-            tpgb/google-beta/transport/**
-            tpgb/google-beta/verify/**
+          cache: false
+
+      - name: Restore Go cache
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        if: github.event_name != 'push'
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-terraform-google-conversion-${{ hashFiles('tgc/go.mod', 'tgc/go.sum', 'tpgb/go.mod', 'tpgb/go.sum') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-go-terraform-google-conversion-${{ hashFiles('tgc/go.mod', 'tgc/go.sum', 'tpgb/go.mod', 'tpgb/go.sum') }}-
+            ${{ runner.os }}-go-terraform-google-conversion-
+
+      - name: Cache Go on main
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        if: github.event_name == 'push'
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-terraform-google-conversion-${{ hashFiles('tgc/go.mod', 'tgc/go.sum', 'tpgb/go.mod', 'tpgb/go.sum') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-go-terraform-google-conversion-${{ hashFiles('tgc/go.mod', 'tgc/go.sum', 'tpgb/go.mod', 'tpgb/go.sum') }}-
+            ${{ runner.os }}-go-terraform-google-conversion-
 
       - name: Get dependencies
         run: |
