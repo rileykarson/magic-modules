@@ -1,0 +1,38 @@
+--- mmv1/third_party/terraform/services/container/node_config.go.tmpl
++++ mmv1/third_party/terraform/services/container/node_config.go.tmpl
+@@ -5303,6 +5303,9 @@
+ 	if evictionMinimumReclaim, ok := cfg["eviction_minimum_reclaim"]; ok {
+ 		kConfig.EvictionMinimumReclaim = expandEvictionMinimumReclaim(evictionMinimumReclaim)
+ 	}
++	if reservedResourcesConfig, ok := cfg["reserved_resources_config"]; ok {
++		kConfig.ReservedResourcesConfig = expandReservedResourcesConfig(reservedResourcesConfig)
++	}
+ 	if crashLoopBackOff, ok := cfg["crash_loop_back_off"]; ok {
+ 		kConfig.CrashLoopBackOff = expandCrashLoopBackOffConfig(crashLoopBackOff)
+ 	}
+@@ -6283,6 +6286,22 @@
+ 	return result
+ }
+ 
++func expandReservedResourcesConfig(v interface{}) *container.ReservedResourcesConfig {
++	if v == nil {
++		return nil
++	}
++	ls := v.([]interface{})
++	if len(ls) == 0 || ls[0] == nil {
++		return nil
++	}
++	cfg := ls[0].(map[string]interface{})
++	result := &container.ReservedResourcesConfig{}
++	if val, ok := cfg["cpu_reserved_millicore"]; ok && val != nil {
++		result.CpuReservedMillicore = int64(val.(int))
++	}
++	if val, ok := cfg["memory_reserved_mib"]; ok && val != nil {
++		result.MemoryReservedMib = int64(val.(int))
++	}
++	return result
++}
++
+ func expandLocalSsdEncryptionMode(v interface{}) string {
+ 	if v == nil || !v.(bool) {
+ 		return "STANDARD_ENCRYPTION"

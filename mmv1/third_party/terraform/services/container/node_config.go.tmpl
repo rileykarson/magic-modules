@@ -4830,10 +4830,31 @@ func flattenReservedResourcesConfig(c *container.ReservedResourcesConfig) []map[
 	if c == nil {
 		return nil
 	}
-	return []map[string]interface{}{{
+	return []map[string]interface{}{ {
 		"cpu_reserved_millicore":           c.CpuReservedMillicore,
 		"memory_reserved_mib":              c.MemoryReservedMib,
 		"effective_cpu_reserved_millicore": c.EffectiveCpuReservedMillicore,
 		"effective_memory_reserved_mib":    c.EffectiveMemoryReservedMib,
 	}}
+}
+
+func expandReservedResourcesConfig(v interface{}) *container.ReservedResourcesConfig {
+	if v == nil {
+		return nil
+	}
+	ls := v.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	cfg := ls[0].(map[string]interface{})
+	result := &container.ReservedResourcesConfig{}
+	if val, ok := cfg["cpu_reserved_millicore"]; ok && val != nil {
+		result.CpuReservedMillicore = int64(val.(int))
+		result.ForceSendFields = append(result.ForceSendFields, "CpuReservedMillicore")
+	}
+	if val, ok := cfg["memory_reserved_mib"]; ok && val != nil {
+		result.MemoryReservedMib = int64(val.(int))
+		result.ForceSendFields = append(result.ForceSendFields, "MemoryReservedMib")
+	}
+	return result
 }
