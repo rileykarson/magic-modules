@@ -13,9 +13,7 @@ import (
 func TestAccIAMWorkforcePoolOauthClientCredential_full(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -23,7 +21,11 @@ func TestAccIAMWorkforcePoolOauthClientCredential_full(t *testing.T) {
 		CheckDestroy:             testAccCheckIAMWorkforcePoolOauthClientCredentialDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIAMWorkforcePoolOauthClientCredential_full(context),
+				Config: testAccIAMWorkforcePoolOauthClientCredential_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"disabled":      true,
+					"display_name":  "Display Name of credential",
+				}),
 			},
 			{
 				ResourceName:            "google_iam_oauth_client_credential.example",
@@ -32,7 +34,11 @@ func TestAccIAMWorkforcePoolOauthClientCredential_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "oauth_client_credential_id", "oauthclient"},
 			},
 			{
-				Config: testAccIAMWorkforcePoolOauthClientCredential_full_update(context),
+				Config: testAccIAMWorkforcePoolOauthClientCredential_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"disabled":      true,
+					"display_name":  "Updated displayName",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_oauth_client_credential.example", plancheck.ResourceActionUpdate),
@@ -46,7 +52,11 @@ func TestAccIAMWorkforcePoolOauthClientCredential_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "oauth_client_credential_id", "oauthclient"},
 			},
 			{
-				Config: testAccIAMWorkforcePoolOauthClientCredential_full_cleanOptionalFields(context),
+				Config: testAccIAMWorkforcePoolOauthClientCredential_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"disabled":      nil,
+					"display_name":  nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_oauth_client_credential.example", plancheck.ResourceActionUpdate),
@@ -61,7 +71,11 @@ func TestAccIAMWorkforcePoolOauthClientCredential_full(t *testing.T) {
 			},
 			// Set disabled to `true` so the client credential can be deleted
 			{
-				Config: testAccIAMWorkforcePoolOauthClientCredential_full_update(context),
+				Config: testAccIAMWorkforcePoolOauthClientCredential_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"disabled":      true,
+					"display_name":  "Updated displayName",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_oauth_client_credential.example", plancheck.ResourceActionUpdate),
@@ -87,48 +101,8 @@ resource "google_iam_oauth_client_credential" "example" {
   oauthclient	                = google_iam_oauth_client.oauth_client.oauth_client_id
   location                      = google_iam_oauth_client.oauth_client.location
   oauth_client_credential_id    = "tf-test-cred-id%{random_suffix}"
-  disabled                      = true
-  display_name                  = "Display Name of credential"
-}
-`, context)
-}
-
-func testAccIAMWorkforcePoolOauthClientCredential_full_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_oauth_client" "oauth_client" {
-  oauth_client_id           = "tf-test-example-client-id%{random_suffix}"
-  location                  = "global"
-  allowed_grant_types       = ["AUTHORIZATION_CODE_GRANT"]
-  allowed_redirect_uris     = ["https://www.example.com"]
-  allowed_scopes            = ["https://www.googleapis.com/auth/cloud-platform"]
-  client_type               = "CONFIDENTIAL_CLIENT"
-}
-
-resource "google_iam_oauth_client_credential" "example" {
-  oauthclient	                = google_iam_oauth_client.oauth_client.oauth_client_id
-  location                      = google_iam_oauth_client.oauth_client.location
-  oauth_client_credential_id    = "tf-test-cred-id%{random_suffix}"
-  disabled                      = true
-  display_name                  = "Updated displayName"
-}
-`, context)
-}
-
-func testAccIAMWorkforcePoolOauthClientCredential_full_cleanOptionalFields(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_oauth_client" "oauth_client" {
-  oauth_client_id           = "tf-test-example-client-id%{random_suffix}"
-  location                  = "global"
-  allowed_grant_types       = ["AUTHORIZATION_CODE_GRANT"]
-  allowed_redirect_uris     = ["https://www.example.com"]
-  allowed_scopes            = ["https://www.googleapis.com/auth/cloud-platform"]
-  client_type               = "CONFIDENTIAL_CLIENT"
-}
-
-resource "google_iam_oauth_client_credential" "example" {
-  oauthclient	                = google_iam_oauth_client.oauth_client.oauth_client_id
-  location                      = google_iam_oauth_client.oauth_client.location
-  oauth_client_credential_id    = "tf-test-cred-id%{random_suffix}"
+  disabled                      = %{disabled}
+  display_name                  = "%{display_name}"
 }
 `, context)
 }
