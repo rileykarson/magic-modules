@@ -12,9 +12,7 @@ import (
 func TestAccHealthcareWorkspace_update(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -22,7 +20,10 @@ func TestAccHealthcareWorkspace_update(t *testing.T) {
 		CheckDestroy:             testAccCheckHealthcareWorkspaceDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccHealthcareWorkspace_basic(context),
+				Config: testAccHealthcareWorkspace_basic(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"labels":        `{ label1 = "labelvalue1" }`,
+				}),
 			},
 			{
 				ResourceName:            "google_healthcare_workspace.default",
@@ -31,7 +32,10 @@ func TestAccHealthcareWorkspace_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"dataset", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccHealthcareWorkspace_update(context),
+				Config: testAccHealthcareWorkspace_basic(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_healthcare_workspace.default",
@@ -53,28 +57,7 @@ resource "google_healthcare_workspace" "default" {
     data_project_ids = ["tf-test-example-data-source-project-id%{random_suffix}"]
   }
   
-  labels = {
-    label1 = "labelvalue1"
-  }
-}
-
-
-resource "google_healthcare_dataset" "dataset" {
-  name     = "tf-test-example-dataset%{random_suffix}"
-  location = "us-central1"
-}
-`, context)
-}
-
-func testAccHealthcareWorkspace_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_healthcare_workspace" "default" {
-  name    = "tf-test-example-dm-workspace%{random_suffix}"
-  dataset = google_healthcare_dataset.dataset.id
-
-  settings {
-    data_project_ids = ["tf-test-example-data-source-project-id%{random_suffix}"]
-  }
+  labels = %{labels}
 }
 
 
