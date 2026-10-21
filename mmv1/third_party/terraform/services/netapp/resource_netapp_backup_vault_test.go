@@ -16,16 +16,18 @@ import (
 )
 
 func TestAccNetappBackupVault_NetappBackupVaultExample_update(t *testing.T) {
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappBackupVault_NetappBackupVaultExample_basic(context),
+				Config: testAccNetappBackupVault_NetappBackupVaultExample_basic(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_backup_vault.test_backup_vault",
@@ -34,7 +36,11 @@ func TestAccNetappBackupVault_NetappBackupVaultExample_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappBackupVault_NetappBackupVaultExample_update(context),
+				Config: testAccNetappBackupVault_NetappBackupVaultExample_basic(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Terraform created vault",
+					"labels":        `{"creator" = "testuser", "foo" = "bar"}`,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_backup_vault.test_backup_vault",
@@ -51,20 +57,8 @@ func testAccNetappBackupVault_NetappBackupVaultExample_basic(context map[string]
 resource "google_netapp_backup_vault" "test_backup_vault" {
   name = "tf-test-test-backup-vault%{random_suffix}"
   location = "us-east4"
-}
-`, context)
-}
-
-func testAccNetappBackupVault_NetappBackupVaultExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_netapp_backup_vault" "test_backup_vault" {
-  name = "tf-test-test-backup-vault%{random_suffix}"
-  location = "us-east4"
-  description = "Terraform created vault"
-  labels = { 
-    "creator": "testuser",
-	"foo": "bar",
-  }
+  description = "%{description}"
+  labels = %{labels}
 }
 `, context)
 }
