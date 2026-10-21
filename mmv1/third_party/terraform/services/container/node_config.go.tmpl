@@ -3565,7 +3565,7 @@ func flattenKubeletConfig(c *container.NodeKubeletConfig) []map[string]interface
 			"eviction_soft":                          flattenEvictionSignals(c.EvictionSoft),
 			"eviction_soft_grace_period":             flattenEvictionGracePeriod(c.EvictionSoftGracePeriod),
 			"eviction_minimum_reclaim":               flattenEvictionMinimumReclaim(c.EvictionMinimumReclaim),
-				"reserved_resources_config":              flattenReservedResourcesConfig(c.ReservedResourcesConfig),
+			"reserved_resources_config":              flattenReservedResourcesConfig(c.ReservedResourcesConfig),
 			"crash_loop_back_off":                    flattenCrashLoopBackOffConfig(c.CrashLoopBackOff),
 		})
 	}
@@ -4827,14 +4827,13 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 }
 
 func flattenReservedResourcesConfig(c *container.ReservedResourcesConfig) []map[string]interface{} {
-	result := []map[string]interface{}{}
-	if c != nil {
-		result = append(result, map[string]interface{}{
-			"cpu_reserved_millicore":           c.CpuReservedMillicore,
-			"memory_reserved_mib":              c.MemoryReservedMib,
-			"effective_cpu_reserved_millicore": c.EffectiveCpuReservedMillicore,
-			"effective_memory_reserved_mib":    c.EffectiveMemoryReservedMib,
-		})
+	if c == nil {
+		return nil
 	}
-	return result
+	return []map[string]interface{}{{
+		"cpu_reserved_millicore":           c.CpuReservedMillicore,
+		"memory_reserved_mib":              c.MemoryReservedMib,
+		"effective_cpu_reserved_millicore": c.EffectiveCpuReservedMillicore,
+		"effective_memory_reserved_mib":    c.EffectiveMemoryReservedMib,
+	}}
 }

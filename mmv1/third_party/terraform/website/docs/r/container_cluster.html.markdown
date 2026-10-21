@@ -1775,7 +1775,7 @@ One of `"none"` or `"static"`. If unset (or set to the empty string `""`), the A
 Prior to the 6.4.0 this field was marked as required. The workaround for the required field
 is setting the empty string `""`, which will function identically to not setting this field.
 
-* `reserved_resources_config` - (Optional) Defines the amount of resources to reserve for the kubelet. Structure is documented below.
+* `reserved_resources_config` - (Optional) Defines the amount of resources to reserve for the kubelet. Structure is [documented below](#nested_reserved_resources_config).
 
 * `cpu_cfs_quota` - (Optional) If true, enables CPU CFS quota enforcement for
 containers that specify CPU limits.
@@ -1874,6 +1874,16 @@ those in the Guaranteed QoS class, by influencing NUMA affinity. Structure is [d
 <a name="nested_crash_loop_back_off"></a>The `crash_loop_back_off` block supports:
 
 * `max_container_restart_period` - (Optional) The maximum duration the backoff delay can accrue to for container restarts. If not set, defaults to the internal crashloopbackoff maximum. The value must be a positive duration string no more than `"5m"` and no less than `"1s"`, such as `"30s"`, `"1m30s"`, `"2.5m"`. Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h". See [Configurable container restart delay](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#configurable-container-restart-delay) for more details.
+
+<a name="nested_reserved_resources_config"></a>The `reserved_resources_config` block supports:
+
+* `cpu_reserved_millicore` - (Optional) The amount of CPU to reserve for the kubelet, in millicores.
+
+* `memory_reserved_mib` - (Optional) The amount of memory to reserve for the kubelet, in MiB.
+
+* `effective_cpu_reserved_millicore` - (Computed) The actual effective amount of CPU to reserve for the kubelet, in millicores, which is calculated and computed by the server based on the specified amount, or the default value if unset.
+
+* `effective_memory_reserved_mib` - (Computed) The actual effective amount of memory to reserve for the kubelet, in MiB, which is calculated and computed by the server based on the specified amount, or the default value if unset.
 
 <a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
 
