@@ -1483,6 +1483,8 @@ workload_identity_config {
 
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
+* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
+
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_pool_node_config_taint_config).
 
 <a name="nested_node_pool_node_config_taint_config"></a>The `taint_config` block supports:

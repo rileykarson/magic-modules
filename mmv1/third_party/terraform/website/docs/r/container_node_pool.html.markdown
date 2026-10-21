@@ -361,6 +361,8 @@ cluster.
 
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
+* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
+
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_config_taint_config).
 
 * `host_maintenance_policy` - (Optional, [Beta](../guides/provider_versions.html.markdown)) The maintenance policy for the hosts on which the GKE VMs run on. Structure is [documented below](#nested_host_maintenance_policy).
@@ -382,9 +384,6 @@ cluster.
 <a name="nested_node_config_taint_config"></a>The `taint_config` block supports:
 
 * `architecture_taint_behavior` - (Optional) Specifies the behavior for applying architecture taints to node pool nodes. Valid values are `ARCHITECTURE_TAINT_BEHAVIOR_UNSPECIFIED`, `NONE`, or `ARM`.
-
-
-* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
 
 <a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
 

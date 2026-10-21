@@ -256,3 +256,39 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestCustomNodeInitArgsExpandFlatten(t *testing.T) {
+	t.Parallel()
+
+	input := []interface{}{
+		map[string]interface{}{
+			"init_script": []interface{}{
+				map[string]interface{}{
+					"gcs_uri":        "gs://my-bucket/script.sh",
+					"gcs_generation": 12345,
+					"args":           []interface{}{"arg1", "arg2"},
+				},
+			},
+		},
+	}
+
+	expanded := expandCustomNodeInit(input)
+	if expanded == nil || expanded.InitScript == nil {
+		t.Fatalf("expandCustomNodeInit returned nil")
+	}
+	if diff := cmp.Diff(expanded.InitScript.Args, []string{"arg1", "arg2"}); diff != "" {
+		t.Errorf("expandCustomNodeInit Args mismatch (-got +want):\n%s", diff)
+	}
+
+	flattened := flattenCustomNodeInit(expanded)
+	if len(flattened) != 1 {
+		t.Fatalf("expected 1 flattened CustomNodeInit, got %d", len(flattened))
+	}
+	initScripts, ok := flattened[0]["init_script"].([]map[string]interface{})
+	if !ok || len(initScripts) != 1 {
+		t.Fatalf("expected 1 flattened init_script, got %#v", flattened[0]["init_script"])
+	}
+	if diff := cmp.Diff(initScripts[0]["args"], []string{"arg1", "arg2"}); diff != "" {
+		t.Errorf("flattenCustomNodeInit args mismatch (-got +want):\n%s", diff)
+	}
+}
