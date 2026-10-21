@@ -15,9 +15,7 @@ import (
 func TestAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -25,7 +23,11 @@ func TestAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateE
 		CheckDestroy:             testAccCheckNetworkServicesMulticastDomainDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample_full(context),
+				Config: testAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_network_services_multicast_domain.md_test",
@@ -34,7 +36,13 @@ func TestAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateE
 				ImportStateVerifyIgnore: []string{"labels", "location", "multicast_domain_id", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample_diff(context),
+				Config: testAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "A sample domain",
+					"labels": `{
+    label-one = "value-one"
+  }`,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_services_multicast_domain.md_test", plancheck.ResourceActionUpdate),
@@ -60,28 +68,8 @@ resource "google_compute_network" "network" {
 resource "google_network_services_multicast_domain" md_test {
   multicast_domain_id = "tf-test-test-md-domain%{random_suffix}"
   location = "global"
-  admin_network = google_compute_network.network.id
-  connection_config  {
-    connection_type="SAME_VPC"
-  }
-  depends_on = [google_compute_network.network]
-}
-`, context)
-}
-
-func testAccNetworkServicesMulticastDomain_networkServicesMulticastDomainUpdateExample_diff(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_network" "network" {
-  name                    = "tf-test-test-md-network%{random_suffix}"
-  auto_create_subnetworks = false
-}
-resource "google_network_services_multicast_domain" md_test {
-  multicast_domain_id = "tf-test-test-md-domain%{random_suffix}"
-  location = "global"
-  description = "A sample domain"
-  labels = {
-    label-one = "value-one"
-  }
+  description = "%{description}"
+  labels = %{labels}
   admin_network = google_compute_network.network.id
   connection_config  {
     connection_type="SAME_VPC"
