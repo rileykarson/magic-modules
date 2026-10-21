@@ -820,6 +820,13 @@ func ResourceContainerCluster() *schema.Resource {
 								},
 							},
 						},
+						"autopilot_general_profile": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.StringInSlice([]string{"AUTOPILOT_GENERAL_PROFILE_UNSPECIFIED", "NO_PERFORMANCE", "NONE"}, false),
+							Description:  `Contains the autopilot general profile default.`,
+						},
 						"auto_provisioning_defaults": {
 							Type:        schema.TypeList,
 							MaxItems:    1,
@@ -6360,6 +6367,7 @@ func expandClusterAutoscaling(configured interface{}, d *schema.ResourceData) *c
 		ResourceLimits:                   resourceLimits,
 		DefaultComputeClassConfig:        defaultCCConfig,
 		AutoscalingProfile:               config["autoscaling_profile"].(string),
+		AutopilotGeneralProfile:          config["autopilot_general_profile"].(string),
 		AutoprovisioningNodePoolDefaults: defaults,
 		AutoprovisioningLocations:        tpgresource.ConvertStringArr(config["auto_provisioning_locations"].([]interface{})),
 	}
@@ -8343,6 +8351,7 @@ func flattenClusterAutoscaling(a *container.ClusterAutoscaling) []map[string]int
 	}
 	r["resource_limits"] = resourceLimits
 	r["autoscaling_profile"] = a.AutoscalingProfile
+	r["autopilot_general_profile"] = a.AutopilotGeneralProfile
 	if a.AutoprovisioningNodePoolDefaults != nil {
 		r["auto_provisioning_defaults"] = flattenAutoProvisioningDefaults(a.AutoprovisioningNodePoolDefaults)
 	}
