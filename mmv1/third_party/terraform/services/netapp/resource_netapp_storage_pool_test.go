@@ -184,10 +184,8 @@ resource "google_netapp_storage_pool" "test_pool" {
 }
 
 func TestAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(t *testing.T) {
-	context := map[string]interface{}{
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-2", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog")),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	networkName := servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-2", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -198,7 +196,12 @@ func TestAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(t *tes
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_full(context),
+				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_full(map[string]interface{}{
+					"network_name":                networkName,
+					"random_suffix":               randomSuffix,
+					"hot_tier_size_gib":           "1024",
+					"enable_hot_tier_auto_resize": false,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -207,7 +210,12 @@ func TestAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(t *tes
 				ImportStateVerifyIgnore: []string{"enable_hot_tier_auto_resize", "location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(context),
+				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_full(map[string]interface{}{
+					"network_name":                networkName,
+					"random_suffix":               randomSuffix,
+					"hot_tier_size_gib":           "1500",
+					"enable_hot_tier_auto_resize": true,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -217,7 +225,12 @@ func TestAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(t *tes
 			},
 
 			{
-				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update_2(context),
+				Config: testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_full(map[string]interface{}{
+					"network_name":                networkName,
+					"random_suffix":               randomSuffix,
+					"hot_tier_size_gib":           "1500",
+					"enable_hot_tier_auto_resize": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -253,67 +266,8 @@ resource "google_netapp_storage_pool" "test_pool" {
   custom_performance_enabled = true
   total_throughput_mibps = "64"
   total_iops = "1024"
-  hot_tier_size_gib = "1024"
-  enable_hot_tier_auto_resize = false
-}
-`, context)
-}
-
-func testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-
-resource "google_netapp_storage_pool" "test_pool" {
-  name = "tf-test-pool%{random_suffix}"
-  location = "us-south1-a"
-  service_level = "FLEX"
-  capacity_gib = "2048"
-  network = data.google_compute_network.default.id
-  active_directory      = ""
-  description           = "this is a test description"
-  kms_config            = ""
-  labels                = {
-    key= "test"
-    value= "pool"
-  }
-  ldap_enabled          = false
-  allow_auto_tiering = true
-  custom_performance_enabled = true
-  total_throughput_mibps = "64"
-  total_iops = "1024"
-  hot_tier_size_gib = "1500"
-  enable_hot_tier_auto_resize = true
-}
-`, context)
-}
-
-func testAccNetappStoragePool_flexAutoTierStoragePoolCreateExample_update_2(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-
-resource "google_netapp_storage_pool" "test_pool" {
-  name = "tf-test-pool%{random_suffix}"
-  location = "us-south1-a"
-  service_level = "FLEX"
-  capacity_gib = "2048"
-  network = data.google_compute_network.default.id
-  active_directory      = ""
-  description           = "this is a test description"
-  kms_config            = ""
-  labels                = {
-    key= "test"
-    value= "pool"
-  }
-  ldap_enabled          = false
-  allow_auto_tiering = true
-  custom_performance_enabled = true
-  total_throughput_mibps = "64"
-  total_iops = "1024"
-  hot_tier_size_gib = "1500"
+  hot_tier_size_gib = "%{hot_tier_size_gib}"
+  enable_hot_tier_auto_resize = %{enable_hot_tier_auto_resize}
 }
 `, context)
 }
