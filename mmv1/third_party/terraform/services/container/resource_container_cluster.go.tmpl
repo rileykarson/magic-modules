@@ -1578,7 +1578,6 @@ func ResourceContainerCluster() *schema.Resource {
 					},
 				},
 			},
-{{- if ne $.TargetVersionName "ga" }}
 			"managed_machine_learning_diagnostics_config": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -1595,7 +1594,6 @@ func ResourceContainerCluster() *schema.Resource {
 					},
 				},
 			},
-{{- end }}
 			"monitoring_config": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -3256,9 +3254,7 @@ func resourceContainerClusterCreate(d *schema.ResourceData, meta interface{}) er
 		MonitoringService:       d.Get("monitoring_service").(string),
 		NetworkPolicy:           expandNetworkPolicy(d.Get("network_policy")),
 		AddonsConfig:            expandClusterAddonsConfig(d.Get("addons_config")),
-{{- if ne $.TargetVersionName "ga" }}
 		ManagedMachineLearningDiagnosticsConfig: expandManagedMachineLearningDiagnosticsConfig(d.Get("managed_machine_learning_diagnostics_config")),
-{{- end }}
 		ManagedOpentelemetryConfig: expandManagedOpenTelemetryConfig(d.Get("managed_opentelemetry_config")),
 		EnableKubernetesAlpha:   d.Get("enable_kubernetes_alpha").(bool),
 		IpAllocationPolicy:      ipAllocationBlock,
@@ -4064,11 +4060,9 @@ func resourceContainerClusterRead(d *schema.ResourceData, meta interface{}) erro
 		return err
 	}
 
-{{ if ne $.TargetVersionName "ga" }}
 	if err := d.Set("managed_machine_learning_diagnostics_config", flattenManagedMachineLearningDiagnosticsConfig(cluster.ManagedMachineLearningDiagnosticsConfig)); err != nil {
 		return err
 	}
-{{- end }}
 
 	if err := d.Set("managed_opentelemetry_config", flattenManagedOpenTelemetryConfig(cluster.ManagedOpentelemetryConfig)); err != nil {
 		return err
@@ -5190,7 +5184,6 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 		log.Printf("[INFO] GKE cluster %s monitoring config has been updated", d.Id())
 	}
 
-{{ if ne $.TargetVersionName `ga` -}}
 	if d.HasChange("managed_machine_learning_diagnostics_config") {
 		req := &container.UpdateClusterRequest{
 			Update: &container.ClusterUpdate{
@@ -5205,7 +5198,6 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 
 		log.Printf("[INFO] GKE cluster %s managed machine learning diagnostics config has been updated", d.Id())
 	}
-{{- end }}
 
 	if d.HasChange("managed_opentelemetry_config") {
 		req := &container.UpdateClusterRequest{
@@ -6832,7 +6824,6 @@ func expandManCidrBlocks(configured interface{}) []*container.CidrBlock {
 	return result
 }
 
-{{- if ne $.TargetVersionName "ga" }}
 func expandManagedMachineLearningDiagnosticsConfig(configured interface{}) *container.ManagedMachineLearningDiagnosticsConfig {
 	l := configured.([]interface{})
 	if len(l) == 0 || l[0] == nil {
@@ -6854,7 +6845,6 @@ func flattenManagedMachineLearningDiagnosticsConfig(c *container.ManagedMachineL
 		},
 	}
 }
-{{- end }}
 
 func expandManagedOpenTelemetryConfig(configured interface{}) *container.ManagedOpenTelemetryConfig {
 	l := configured.([]interface{})

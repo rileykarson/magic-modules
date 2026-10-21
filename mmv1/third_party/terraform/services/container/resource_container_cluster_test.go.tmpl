@@ -1948,7 +1948,6 @@ resource "google_container_cluster" "with_managed_opentelemetry" {
 `, clusterName, networkName, subnetworkName, scope)
 }
 
-{{- if ne $.TargetVersionName "ga" }}
 func TestAccContainerCluster_withManagedMLDiagnosticsConfig(t *testing.T) {
 	t.Parallel()
 
@@ -2057,7 +2056,6 @@ resource "google_container_cluster" "managed_ml_diagnostics" {
 }
 `, clusterName, networkName, subnetworkName)
 }
-{{- end }}
 
 
 func TestAccContainerCluster_withMasterAuthorizedNetworksConfig(t *testing.T) {
