@@ -12,15 +12,16 @@ import (
 
 func TestAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_update(t *testing.T) {
 	t.Parallel()
-	context := map[string]interface{}{
-		"setting_id": fmt.Sprintf("tf-test-ls-%s", acctest.RandString(t, 10)),
-	}
+	settingId := fmt.Sprintf("tf-test-ls-%s", acctest.RandString(t, 10))
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_basic(context),
+				Config: testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_basic(map[string]interface{}{
+					"setting_id": settingId,
+					"labels":     nil,
+				}),
 			},
 			{
 				ResourceName:            "google_gemini_code_tools_setting.example",
@@ -29,7 +30,10 @@ func TestAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_update(t *
 				ImportStateVerifyIgnore: []string{"labels", "location", "code_tools_setting_id", "terraform_labels"},
 			},
 			{
-				Config: testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_update(context),
+				Config: testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_basic(map[string]interface{}{
+					"setting_id": settingId,
+					"labels":     `{"my_key" = "my_value"}`,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_gemini_code_tools_setting.example", plancheck.ResourceActionUpdate),
@@ -50,25 +54,7 @@ func testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_basic(cont
 resource "google_gemini_code_tools_setting" "example" {
     code_tools_setting_id = "%{setting_id}"
     location = "global"
-    enabled_tool {
-        handle = "my_handle"
-        tool = "my_tool"
-        account_connector = "my_con"
-        config {
-            key = "my_key"
-            value = "my_value"
-        }
-        uri_override = "my_uri_override"
-    }
-}
-`, context)
-}
-func testAccGeminiCodeToolsSetting_geminiCodeToolsSettingBasicExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_gemini_code_tools_setting" "example" {
-    code_tools_setting_id = "%{setting_id}"
-    location = "global"
-    labels = {"my_key" = "my_value"}
+    labels = %{labels}
     enabled_tool {
         handle = "my_handle"
         tool = "my_tool"
