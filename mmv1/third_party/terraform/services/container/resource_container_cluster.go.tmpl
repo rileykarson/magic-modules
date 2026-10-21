@@ -1108,6 +1108,18 @@ func ResourceContainerCluster() *schema.Resource {
 					},
 			},
 
+			"alpha_cluster_feature_gates": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				ForceNew:    true,
+				MaxItems:    500,
+				Description: `Configuration for the alpha feature gates. alpha_cluster_feature_gates are the feature gates to be enabled or disabled on the cluster. Requires enable_kubernetes_alpha to be true.`,
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringMatch(regexp.MustCompile(`^[A-Za-z0-9]{1,63}=(true|false)$`), "alpha feature gate must be in the format `featureX=true` or `featureX=false` and 63 characters or less"),
+				},
+			},
+
 			"enable_kubernetes_alpha": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -3261,6 +3273,7 @@ func resourceContainerClusterCreate(d *schema.ResourceData, meta interface{}) er
 {{- end }}
 		ManagedOpentelemetryConfig: expandManagedOpenTelemetryConfig(d.Get("managed_opentelemetry_config")),
 		EnableKubernetesAlpha:   d.Get("enable_kubernetes_alpha").(bool),
+		AlphaClusterFeatureGates: tpgresource.ConvertStringArr(d.Get("alpha_cluster_feature_gates").([]interface{})),
 		IpAllocationPolicy:      ipAllocationBlock,
 {{- if ne $.TargetVersionName "ga" }}
 		PodSecurityPolicyConfig: expandPodSecurityPolicyConfig(d.Get("pod_security_policy_config")),
@@ -3828,6 +3841,9 @@ func resourceContainerClusterRead(d *schema.ResourceData, meta interface{}) erro
 	}
 	if err := d.Set("description", cluster.Description); err != nil {
 		return fmt.Errorf("Error setting description: %s", err)
+	}
+	if err := d.Set("alpha_cluster_feature_gates", cluster.AlphaClusterFeatureGates); err != nil {
+		return fmt.Errorf("Error setting alpha_cluster_feature_gates: %s", err)
 	}
 	if err := d.Set("enable_kubernetes_alpha", cluster.EnableKubernetesAlpha); err != nil {
 		return fmt.Errorf("Error setting enable_kubernetes_alpha: %s", err)
