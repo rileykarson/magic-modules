@@ -93,13 +93,6 @@ func GetProject(d TerraformResourceData, config *transport_tpg.Config) (string, 
 	return GetProjectFromSchema("project", d, config)
 }
 
-// GetUniverse reads the "universe_domain" field from the given resource data and falls
-// back to the provider's value if not given. If the provider's value is not
-// given, an error is returned.
-func GetUniverseDomain(d TerraformResourceData, config *transport_tpg.Config) (string, error) {
-	return GetUniverseDomainFromSchema("universe_domain", d, config)
-}
-
 // GetBillingProject reads the "billing_project" field from the given resource data and falls
 // back to the provider's value if not given. If no value is found, an error is returned.
 func GetBillingProject(d TerraformResourceData, config *transport_tpg.Config) (string, error) {
@@ -663,19 +656,6 @@ func ExpandString(v interface{}, d TerraformResourceData, config *transport_tpg.
 	return v.(string), nil
 }
 
-func ChangeFieldSchemaToForceNew(sch *schema.Schema) {
-	sch.ForceNew = true
-	switch sch.Type {
-	case schema.TypeList:
-	case schema.TypeSet:
-		if nestedR, ok := sch.Elem.(*schema.Resource); ok {
-			for _, nestedSch := range nestedR.Schema {
-				ChangeFieldSchemaToForceNew(nestedSch)
-			}
-		}
-	}
-}
-
 func GenerateUserAgentString(d TerraformResourceData, currentUserAgent string) (string, error) {
 	var m transport_tpg.ProviderMeta
 
@@ -689,14 +669,6 @@ func GenerateUserAgentString(d TerraformResourceData, currentUserAgent string) (
 	}
 
 	return currentUserAgent, nil
-}
-
-func SnakeToPascalCase(s string) string {
-	split := strings.Split(s, "_")
-	for i := range split {
-		split[i] = strings.Title(split[i])
-	}
-	return strings.Join(split, "")
 }
 
 func CheckStringMap(v interface{}) map[string]string {

@@ -41,28 +41,6 @@ func ExpectNoDelete() plancheck.PlanCheck {
 	return expectNoDelete{}
 }
 
-// TestExtractResourceAttr navigates a test's state to find the specified resource (or data source) attribute and makes the value
-// accessible via the attributeValue string pointer.
-func TestExtractResourceAttr(resourceName string, attributeName string, attributeValue *string) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-		rs, ok := s.RootModule().Resources[resourceName] // To find a datasource, include `data.` at the start of the resourceName value
-
-		if !ok {
-			return fmt.Errorf("resource name %s not found in state", resourceName)
-		}
-
-		attrValue, ok := rs.Primary.Attributes[attributeName]
-
-		if !ok {
-			return fmt.Errorf("attribute %s not found in resource %s state", attributeName, resourceName)
-		}
-
-		*attributeValue = attrValue
-
-		return nil
-	}
-}
-
 // GetTestRegion has the same logic as the provider's GetRegion, to be used in tests.
 func GetTestRegion(is *terraform.InstanceState, config *transport_tpg.Config) (string, error) {
 	if res, ok := is.Attributes["region"]; ok {
@@ -121,17 +99,6 @@ func SleepTestCheckFunc(d time.Duration) resource.TestCheckFunc {
 	}
 }
 
-// TestCheckAttributeValuesEqual compares two string pointers, which have been used to retrieve attribute values from the test's state.
-func TestCheckAttributeValuesEqual(i *string, j *string) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-		if testStringValue(i) != testStringValue(j) {
-			return fmt.Errorf("attribute values are different, got %s and %s", testStringValue(i), testStringValue(j))
-		}
-
-		return nil
-	}
-}
-
 // ConditionTitleIfPresent returns empty string if condition is not preset and " {condition.0.title}" if it is.
 func BuildIAMImportId(name, role, member, condition string) string {
 	ret := name
@@ -145,15 +112,6 @@ func BuildIAMImportId(name, role, member, condition string) string {
 		ret += " " + condition
 	}
 	return ret
-}
-
-// testStringValue returns string values from string pointers, handling nil pointers.
-func testStringValue(sPtr *string) string {
-	if sPtr == nil {
-		return ""
-	}
-
-	return *sPtr
 }
 
 func TestAccCheckNetworkServicesWasmPlugin_uploadCompiledCode(t *testing.T, resourceName string, packageName string, version string, packageFilePath string, packageFileName string) resource.TestCheckFunc {

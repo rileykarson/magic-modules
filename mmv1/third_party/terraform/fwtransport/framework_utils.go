@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"reflect"
 	"regexp"
 	"strings"
@@ -26,22 +25,6 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 	"google.golang.org/api/googleapi"
 )
-
-const uaEnvVar = "TF_APPEND_USER_AGENT"
-
-func CompileUserAgentString(ctx context.Context, name, tfVersion, provVersion string) string {
-	ua := fmt.Sprintf("Terraform/%s (+https://www.terraform.io) Terraform-Plugin-SDK/%s %s/%s", tfVersion, "terraform-plugin-framework", name, provVersion)
-
-	if add := os.Getenv(uaEnvVar); add != "" {
-		add = strings.TrimSpace(add)
-		if len(add) > 0 {
-			ua += " " + add
-			tflog.Debug(ctx, fmt.Sprintf("Using modified User-Agent: %s", ua))
-		}
-	}
-
-	return ua
-}
 
 func GenerateFrameworkUserAgentString(metaData *fwmodels.ProviderMetaModel, currUserAgent string) string {
 	if metaData != nil && !metaData.ModuleName.IsNull() && metaData.ModuleName.ValueString() != "" {
@@ -173,18 +156,6 @@ type DefaultVars struct {
 
 func ReplaceVars(ctx context.Context, req interface{}, diags *diag.Diagnostics, data DefaultVars, config *transport_tpg.Config, linkTmpl string) string {
 	return ReplaceVarsRecursive(ctx, req, diags, data, config, linkTmpl, false, 0)
-}
-
-// relaceVarsForId shortens variables by running them through GetResourceNameFromSelfLink
-// this allows us to use long forms of variables from configs without needing
-// custom id formats. For instance:
-// accessPolicies/{{access_policy}}/accessLevels/{{access_level}}
-// with values:
-// access_policy: accessPolicies/foo
-// access_level: accessPolicies/foo/accessLevels/bar
-// becomes accessPolicies/foo/accessLevels/bar
-func ReplaceVarsForId(ctx context.Context, req interface{}, diags *diag.Diagnostics, data DefaultVars, config *transport_tpg.Config, linkTmpl string) string {
-	return ReplaceVarsRecursive(ctx, req, diags, data, config, linkTmpl, true, 0)
 }
 
 // ReplaceVars must be done recursively because there are baseUrls that can contain references to regions

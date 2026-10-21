@@ -548,32 +548,6 @@ func GetFieldOrDefault(d *tpgresource.ResourceDataMock, key, defaultValue string
 	return defaultValue
 }
 
-// GetStringValue tries to get a string representation of a value
-func GetStringValue(v interface{}) (string, bool) {
-	if v == nil {
-		return "", false
-	}
-
-	switch val := v.(type) {
-	case string:
-		return val, true
-	case fmt.Stringer:
-		return val.String(), true
-	default:
-		return "", false
-	}
-}
-
-// ReplaceTemplateVars replaces all {{key}} occurrences in template with values from replacements map
-func ReplaceTemplateVars(template string, replacements map[string]string) string {
-	result := template
-	for key, value := range replacements {
-		placeholder := fmt.Sprintf("{{%s}}", key)
-		result = strings.Replace(result, placeholder, value, -1)
-	}
-	return result
-}
-
 // HasAnyPrefix checks if the input string begins with any prefix from the given slice.
 // Returns true if a match is found, false otherwise.
 func HasAnyPrefix(input string, prefixes []string) bool {

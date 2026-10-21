@@ -171,7 +171,6 @@ type LocationType int
 const (
 	Zonal LocationType = iota
 	Regional
-	Global
 )
 
 func GetZonalResourcePropertiesFromSelfLinkOrSchema(d *schema.ResourceData, config *transport_tpg.Config) (string, string, string, error) {

@@ -31,21 +31,6 @@ func (m *MutexKV) Unlock(key string) {
 	log.Printf("[DEBUG] Unlocked %q", key)
 }
 
-// Acquires a read-lock on the mutex for the given key. Caller is responsible for calling RUnlock
-// for the same key
-func (m *MutexKV) RLock(key string) {
-	log.Printf("[DEBUG] RLocking %q", key)
-	m.get(key).RLock()
-	log.Printf("[DEBUG] RLocked %q", key)
-}
-
-// Releases a read-lock on the mutex for the given key. Caller must have called RLock for the same key first
-func (m *MutexKV) RUnlock(key string) {
-	log.Printf("[DEBUG] RUnlocking %q", key)
-	m.get(key).RUnlock()
-	log.Printf("[DEBUG] RUnlocked %q", key)
-}
-
 // Returns a mutex for the given key, no guarantee of its lock status
 func (m *MutexKV) get(key string) *sync.RWMutex {
 	m.lock.Lock()
