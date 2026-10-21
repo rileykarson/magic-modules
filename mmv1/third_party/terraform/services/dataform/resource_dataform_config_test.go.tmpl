@@ -55,7 +55,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataformConfig_full(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": `google_kms_crypto_key.key_1.id`,
+				})),
 			},
 			{
 				ResourceName:            "google_dataform_config.config",
@@ -64,7 +66,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region"},
 			},
 			{
-				Config: testAccDataformConfig_update(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": `google_kms_crypto_key.key_2.id`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_dataform_config.config", plancheck.ResourceActionUpdate),
@@ -78,7 +82,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region"},
 			},
 			{
-				Config: testAccDataformConfig_updateToZeroValue(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": nil,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_dataform_config.config", plancheck.ResourceActionUpdate),
@@ -97,290 +103,157 @@ func TestAccDataformConfig_update(t *testing.T) {
 
 func testAccDataformConfig_full(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_project" "project" {
-  provider        = google-beta
-  name            = "tf-test-project-1%{random_suffix}"
-  project_id      = "tf-test-project-1%{random_suffix}"
-  org_id          = "%{org_id}"
-  billing_account = "%{billing_account}"
-  deletion_policy = "DELETE"
+resource "google_sourcerepo_repository" "git_repository" {
+  name = "tf-test-my-repository%{random_suffix}"
 }
 
-# Enable Cloud Key KMS API
-resource "google_project_service" "cloudkms_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "cloudkms.googleapis.com"
-  disable_on_destroy = false
+resource "google_secret_manager_secret" "secret" {
+  secret_id = "tf-test-my-secret%{random_suffix}"
+
+  replication {
+    auto {}
+  }
 }
 
-# Enable Dataform API
-resource "google_project_service" "dataform_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "dataform.googleapis.com"
-  disable_on_destroy = false
-}
+resource "google_secret_manager_secret_version" "secret_version" {
+  secret = google_secret_manager_secret.secret.id
 
-# Add a sleep to wait for IAM propagation after API enablement
-resource "time_sleep" "wait_for_dataform_api" {
-  create_duration = "30s"
-  depends_on      = [
-    google_project_service.dataform_api
-  ]
-}
-
-# Retrieve the Dataform service identity
-resource "google_project_service_identity" "dataform_sa" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "dataform.googleapis.com"
+  secret_data = "secret-data"
 }
 
 resource "google_kms_key_ring" "keyring" {
-  provider = google-beta
-  project = google_project.project.project_id
-  name       = "tf-test-example-key-ring%{random_suffix}"
-  location   = "us-central1"
+  name     = "tf-test-my-keyring%{random_suffix}"
+  location = "us-central1"
+}
+
+resource "google_kms_crypto_key" "key_1" {
+  name            = "tf-test-my-crypto-key-1%{random_suffix}"
+  key_ring        = google_kms_key_ring.keyring.id
+  purpose         = "ENCRYPT_DECRYPT"
+}
+
+resource "google_kms_crypto_key" "key_2" {
+  name            = "tf-test-my-crypto-key-2%{random_suffix}"
+  key_ring        = google_kms_key_ring.keyring.id
+  purpose         = "ENCRYPT_DECRYPT"
+}
+
+data "google_project" "project" {}
+
+resource "google_project_iam_member" "kms_crypto_key_binding" {
+  project  = data.google_project.project.project_id
+  role     = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member   = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
+}
+
+resource "google_dataform_repository" "dataform_res" {
+  name = "tf-test-dataform-res%{random_suffix}"
+  region = "us-central1"
+  git_remote_settings {
+    url = google_sourcerepo_repository.git_repository.url
+    default_branch = "main"
+    authentication_token_secret_version = google_secret_manager_secret_version.secret_version.id
+  }
+}
+
+resource "google_dataform_repository_release_config" "release" {
+  project = google_dataform_repository.dataform_res.project
+  region = google_dataform_repository.dataform_res.region
+  repository = google_dataform_repository.dataform_res.name
+
+  name = "tf-test-my-release%{random_suffix}"
+  git_commitish = "main"
+  cron_schedule = "0 7 * * *"
+  time_zone = "America/New_York"
+  code_compilation_config {
+    default_database = "gcp-example-project"
+    default_schema = "example-dataset"
+    default_location = "us-central1"
+    assertion_schema = "example-assertion-dataset"
+    database_suffix = ""
+    schema_suffix = ""
+    table_prefix = ""
+    vars = {
+      var1 = "value2"
+    }
+  }
+}
+
+resource "google_dataform_repository_workflow_config" "workflow" {
+  project = google_dataform_repository.dataform_res.project
+  region = google_dataform_repository.dataform_res.region
+  repository = google_dataform_repository.dataform_res.name
+
+  name = "tf-test-my-workflow%{random_suffix}"
+  release_config = google_dataform_repository_release_config.release.id
+  invocation_config {
+    included_targets {
+      database = "gcp-example-project"
+      schema = "example-dataset"
+      name = "target1"
+    }
+    included_targets {
+      database = "gcp-example-project"
+      schema = "example-dataset"
+      name = "target2"
+    }
+    included_tags = ["tag1"]
+    transitive_dependencies_included = true
+    transitive_dependents_included = true
+    fully_refresh_incremental_tables_enabled = false
+  }
+  cron_schedule = "0 7 * * *"
+  time_zone = "America/New_York"
+}
+
+resource "google_dataform_repository_workspace" "workspace" {
+  project = google_dataform_repository.dataform_res.project
+  region = google_dataform_repository.dataform_res.region
+  repository = google_dataform_repository.dataform_res.name
+  name = "tf-test-my-workspace%{random_suffix}"
+}
+
+resource "google_dataform_repository_workflow_config" "workflow2" {
+  project = google_dataform_repository.dataform_res.project
+  region = google_dataform_repository.dataform_res.region
+  repository = google_dataform_repository.dataform_res.name
+
+  name = "tf-test-my-workflow2%{random_suffix}"
+  release_config = google_dataform_repository_release_config.release.id
+  invocation_config {
+    included_targets {
+      database = "gcp-example-project"
+      schema = "example-dataset"
+      name = "target1"
+    }
+    included_targets {
+      database = "gcp-example-project"
+      schema = "example-dataset"
+      name = "target2"
+    }
+    included_tags = ["tag1"]
+    transitive_dependencies_included = true
+    transitive_dependents_included = true
+    fully_refresh_incremental_tables_enabled = false
+  }
+  cron_schedule = "0 7 * * *"
+  time_zone = "America/New_York"
+}
+
+resource "google_dataform_repository_workspace" "workspace2" {
+  project = google_dataform_repository.dataform_res.project
+  region = google_dataform_repository.dataform_res.region
+  repository = google_dataform_repository.dataform_res.name
+  name = "tf-test-my-workspace2%{random_suffix}"
+}
+
+resource "google_dataform_config" "project_config" {
+  project = data.google_project.project.project_id
+  region = "us-central1"
+  default_kms_key_name = %{default_kms_key_name}
+
   depends_on = [
-    google_project_service.cloudkms_api
-  ]
-}
-
-resource "google_kms_crypto_key" "example_key_1" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-1-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-resource "google_kms_crypto_key" "example_key_2" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-2-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_1_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_2.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Config with KMS key provided
-resource "google_dataform_config" "config" {
-  provider             = google-beta
-  region               = "us-central1"
-  default_kms_key_name = google_kms_crypto_key.example_key_1.id
-  project              = google_project.project.project_id
-
-  # Ensure IAM binding is created before the Dataform Config
-  depends_on = [
-    google_kms_crypto_key_iam_member.crypto_key_1_binding,
-    google_kms_crypto_key_iam_member.crypto_key_2_binding,
-    time_sleep.wait_for_dataform_api
-  ]
-}
-`, context)
-}
-
-func testAccDataformConfig_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "project" {
-  provider        = google-beta
-  name            = "tf-test-project-1%{random_suffix}"
-  project_id      = "tf-test-project-1%{random_suffix}"
-  org_id          = "%{org_id}"
-  billing_account = "%{billing_account}"
-  deletion_policy = "DELETE"
-}
-
-# Enable Cloud Key KMS API
-resource "google_project_service" "cloudkms_api" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "cloudkms.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Enable Dataform API
-resource "google_project_service" "dataform_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "dataform.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Add a sleep to wait for IAM propagation after API enablement
-resource "time_sleep" "wait_for_dataform_api" {
-  create_duration = "30s"
-  depends_on      = [
-    google_project_service.dataform_api
-  ]
-}
-
-# Retrieve the Dataform service identity
-resource "google_project_service_identity" "dataform_sa" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "dataform.googleapis.com"
-}
-
-resource "google_kms_key_ring" "keyring" {
-  provider   = google-beta
-  project    = google_project.project.project_id
-  name       = "tf-test-example-key-ring%{random_suffix}"
-  location   = "us-central1"
-  depends_on = [
-    google_project_service.cloudkms_api
-  ]
-}
-
-resource "google_kms_crypto_key" "example_key_1" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-1-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-resource "google_kms_crypto_key" "example_key_2" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-2-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_1_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_2.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Config with KMS key provided
-resource "google_dataform_config" "config" {
-  provider             = google-beta
-  region               = "us-central1"
-  default_kms_key_name = google_kms_crypto_key.example_key_2.id
-  project              = google_project.project.project_id
-
-  # Ensure IAM binding is created before the Dataform Config
-  depends_on = [
-    google_kms_crypto_key_iam_member.crypto_key_1_binding,
-    google_kms_crypto_key_iam_member.crypto_key_2_binding,
-    time_sleep.wait_for_dataform_api
-  ]
-}
-`, context)
-}
-
-func testAccDataformConfig_updateToZeroValue(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "project" {
-  provider        = google-beta
-  name            = "tf-test-project-1%{random_suffix}"
-  project_id      = "tf-test-project-1%{random_suffix}"
-  org_id          = "%{org_id}"
-  billing_account = "%{billing_account}"
-  deletion_policy = "DELETE"
-}
-
-# Enable Cloud Key KMS API
-resource "google_project_service" "cloudkms_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "cloudkms.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Enable Dataform API
-resource "google_project_service" "dataform_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "dataform.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Add a sleep to wait for IAM propagation after API enablement
-resource "time_sleep" "wait_for_dataform_api" {
-  create_duration = "30s"
-  depends_on      = [
-    google_project_service.dataform_api
-  ]
-}
-
-# Retrieve the Dataform service identity
-resource "google_project_service_identity" "dataform_sa" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "dataform.googleapis.com"
-}
-
-resource "google_kms_key_ring" "keyring" {
-  provider = google-beta
-  project = google_project.project.project_id
-  name       = "tf-test-example-key-ring%{random_suffix}"
-  location   = "us-central1"
-  depends_on = [
-    google_project_service.cloudkms_api
-  ]
-}
-
-resource "google_kms_crypto_key" "example_key_1" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-1-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-resource "google_kms_crypto_key" "example_key_2" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-2-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_1_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_2.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Config with KMS key provided
-resource "google_dataform_config" "config" {
-  provider             = google-beta
-  region               = "us-central1"
-  project              = google_project.project.project_id
-  # KMS key intentionally not set
-
-  # Ensure IAM binding is created before the Dataform Config
-  depends_on = [
-    google_kms_crypto_key_iam_member.crypto_key_1_binding,
-    google_kms_crypto_key_iam_member.crypto_key_2_binding,
-    time_sleep.wait_for_dataform_api
+    google_project_iam_member.kms_crypto_key_binding
   ]
 }
 `, context)
