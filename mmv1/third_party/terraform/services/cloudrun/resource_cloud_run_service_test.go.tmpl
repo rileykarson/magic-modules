@@ -1275,7 +1275,11 @@ func TestAccCloudRunService_withCreationOnlyAttribution(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCloudRunService_withAttributionLabelUpdate(context),
+				Config: testAccCloudRunService_withAttributionLabelUpdate(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+      user_label = "bar"
+    }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_cloud_run_service.default", "metadata.0.labels.%", "1"),
 					resource.TestCheckResourceAttr("google_cloud_run_service.default", "metadata.0.labels.user_label", "bar"),
@@ -1290,7 +1294,9 @@ func TestAccCloudRunService_withCreationOnlyAttribution(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCloudRunService_withAttributionLabelClear(context),
+				Config: testAccCloudRunService_withAttributionLabelUpdate(acctest.MergeMap(context, map[string]interface{}{
+					"labels": nil,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("google_cloud_run_service.default", "metadata.0.labels.%"),
 
@@ -1432,40 +1438,7 @@ resource "google_cloud_run_service" "default" {
 
   metadata {
     namespace = "%{project}"
-    labels = {
-      user_label = "bar"
-    }
-  }
-
-  traffic {
-    percent         = 100
-    latest_revision = true
-  }
-}
-`, context)
-}
-
-func testAccCloudRunService_withAttributionLabelClear(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-provider "google" {
-  add_terraform_attribution_label               = %{add_attribution}
-  terraform_attribution_label_addition_strategy = "%{attribution_strategy}"
-}
-
-resource "google_cloud_run_service" "default" {
-  name     = "tf-test-cloudrun-srv%{random_suffix}"
-  location = "us-central1"
-
-  template {
-    spec {
-      containers {
-        image = "us-docker.pkg.dev/cloudrun/container/hello"
-      }
-    }
-  }
-
-  metadata {
-    namespace = "%{project}"
+    labels = %{labels}
   }
 
   traffic {
