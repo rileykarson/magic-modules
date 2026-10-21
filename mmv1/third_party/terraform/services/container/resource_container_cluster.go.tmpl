@@ -2087,6 +2087,15 @@ func ResourceContainerCluster() *schema.Resource {
 				Description:   `Configuration of cluster IP allocation for VPC-native clusters. Adding this block enables IP aliasing, making the cluster VPC-native instead of routes-based.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						{{- if ne $.TargetVersionName "ga" }}
+						"allow_route_overlap": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							ForceNew:    true,
+							Description: `When true, allows the cluster to have an overlapping cluster or services range, when they are not in the same VPC as the cluster.`,
+						},
+						{{- end }}
+
 						// GKE creates/deletes secondary ranges in VPC
 						"cluster_ipv4_cidr_block": {
 							Type:             schema.TypeString,
@@ -6132,6 +6141,9 @@ func expandIPAllocationPolicy(configured interface{}, d *schema.ResourceData, ne
 		ServicesIpv4CidrBlock: config["services_ipv4_cidr_block"].(string),
 		ClusterSecondaryRangeName:  config["cluster_secondary_range_name"].(string),
 		ServicesSecondaryRangeName: config["services_secondary_range_name"].(string),
+		{{- if ne $.TargetVersionName "ga" }}
+		AllowRouteOverlap:          config["allow_route_overlap"].(bool),
+		{{- end }}
 		ForceSendFields:            []string{"UseIpAliases"},
 		UseRoutes:              networkingMode == "ROUTES",
 		StackType:              stackType,
@@ -8146,6 +8158,9 @@ func flattenIPAllocationPolicy(c *container.Cluster, d *schema.ResourceData, con
 			"services_ipv4_cidr_block":      p.ServicesIpv4CidrBlock,
 			"cluster_secondary_range_name":  p.ClusterSecondaryRangeName,
 			"services_secondary_range_name": p.ServicesSecondaryRangeName,
+			{{- if ne $.TargetVersionName "ga" }}
+			"allow_route_overlap":           p.AllowRouteOverlap,
+			{{- end }}
 			"stack_type":                    p.StackType,
 			"pod_cidr_overprovision_config": flattenPodCidrOverprovisionConfig(p.PodCidrOverprovisionConfig),
 			"additional_pod_ranges_config":  flattenAdditionalPodRangesConfig(c.IpAllocationPolicy),

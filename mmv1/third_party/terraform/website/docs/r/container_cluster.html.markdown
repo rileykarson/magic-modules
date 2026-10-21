@@ -1012,6 +1012,10 @@ maintenance_policy {
 
 <a name="nested_ip_allocation_policy"></a>The `ip_allocation_policy` block supports:
 
+{{- if ne $.TargetVersionName "ga" }}
+* `allow_route_overlap` - (Optional, Beta) When true, allows the cluster to have an overlapping cluster or services range, when they are not in the same VPC as the cluster.
+{{- end }}
+
 * `cluster_secondary_range_name` - (Optional) The name of the existing secondary
 range in the cluster's subnetwork to use for pod IP addresses. Alternatively,
 `cluster_ipv4_cidr_block` can be used to automatically create a GKE-managed one.

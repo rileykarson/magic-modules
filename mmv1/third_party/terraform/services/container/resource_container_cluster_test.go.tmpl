@@ -21224,3 +21224,65 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+{{- if ne $.TargetVersionName "ga" }}
+func TestAccContainerCluster_allowRouteOverlap(t *testing.T) {
+	t.Parallel()
+
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := fmt.Sprintf("tf-test-network-%s", acctest.RandString(t, 10))
+	subnetName := fmt.Sprintf("tf-test-subnet-%s", acctest.RandString(t, 10))
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_allowRouteOverlap(clusterName, networkName, subnetName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "ip_allocation_policy.0.allow_route_overlap", "true"),
+				),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_allowRouteOverlap(clusterName, networkName, subnetName string) string {
+	return fmt.Sprintf(`
+resource "google_compute_network" "default" {
+  name                    = "%s"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "default" {
+  name          = "%s"
+  ip_cidr_range = "10.0.0.0/16"
+  region        = "us-central1"
+  network       = google_compute_network.default.id
+  secondary_ip_range {
+    range_name    = "services-range"
+    ip_cidr_range = "192.168.1.0/24"
+  }
+  secondary_ip_range {
+    range_name    = "pod-ranges"
+    ip_cidr_range = "192.168.64.0/22"
+  }
+}
+
+resource "google_container_cluster" "primary" {
+  name               = "%s"
+  location           = "us-central1-a"
+  initial_node_count = 1
+  network            = google_compute_network.default.id
+  subnetwork         = google_compute_subnetwork.default.id
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = "pod-ranges"
+    services_secondary_range_name = "services-range"
+    allow_route_overlap           = true
+  }
+  deletion_protection = false
+}
+`, networkName, subnetName, clusterName)
+}
+{{- end }}
