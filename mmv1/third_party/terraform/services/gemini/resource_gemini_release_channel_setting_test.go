@@ -12,15 +12,17 @@ import (
 
 func TestAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_update(t *testing.T) {
 	t.Parallel()
-	context := map[string]interface{}{
-		"setting_id": fmt.Sprintf("tf-test-ls-%s", acctest.RandString(t, 10)),
-	}
+	settingId := fmt.Sprintf("tf-test-ls-%s", acctest.RandString(t, 10))
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_basic(context),
+				Config: testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_basic(map[string]interface{}{
+					"setting_id":      settingId,
+					"labels":          nil,
+					"release_channel": "EXPERIMENTAL",
+				}),
 			},
 			{
 				ResourceName:            "google_gemini_release_channel_setting.example",
@@ -29,7 +31,11 @@ func TestAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_
 				ImportStateVerifyIgnore: []string{"labels", "location", "release_channel_setting_id", "terraform_labels"},
 			},
 			{
-				Config: testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_update(context),
+				Config: testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_basic(map[string]interface{}{
+					"setting_id":      settingId,
+					"labels":          `{"my_key" = "my_value"}`,
+					"release_channel": "STABLE",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_gemini_release_channel_setting.example", plancheck.ResourceActionUpdate),
@@ -50,17 +56,8 @@ func testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_
 resource "google_gemini_release_channel_setting" "example" {
     release_channel_setting_id = "%{setting_id}"
     location = "global"
-    release_channel = "EXPERIMENTAL"
-}
-`, context)
-}
-func testAccGeminiReleaseChannelSetting_geminiReleaseChannelSettingBasicExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_gemini_release_channel_setting" "example" {
-    release_channel_setting_id = "%{setting_id}"
-    location = "global"
-    labels = {"my_key" = "my_value"}
-    release_channel = "STABLE"
+    labels = %{labels}
+    release_channel = "%{release_channel}"
 }
 `, context)
 }
