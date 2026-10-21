@@ -16245,6 +16245,7 @@ resource "google_container_cluster" "with_autopilot" {
   location           = "us-east1"
   min_master_version = data.google_container_engine_versions.uscentral1a.release_channel_latest_version["REGULAR"]
   enable_autopilot   = true
+  deletion_protection = false
 
   deletion_protection = false
   network             = google_compute_network.container_network.name
@@ -16349,6 +16350,7 @@ resource "google_container_cluster" "with_autopilot" {
   location           = "us-east1"
   min_master_version = data.google_container_engine_versions.uscentral1a.release_channel_latest_version["REGULAR"]
   enable_autopilot   = true
+  deletion_protection = false
 
   deletion_protection = false
   network             = google_compute_network.container_network.name
@@ -16454,6 +16456,7 @@ resource "google_container_cluster" "with_autopilot" {
   location           = "us-east1"
   min_master_version = data.google_container_engine_versions.uscentral1a.release_channel_latest_version["REGULAR"]
   enable_autopilot   = true
+  deletion_protection = false
 
   deletion_protection = false
   network             = google_compute_network.container_network.name
@@ -20843,6 +20846,7 @@ resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-east1"
   enable_autopilot   = true
+  deletion_protection = false
   min_master_version = data.google_container_engine_versions.base.latest_master_version
   deletion_protection = false
   network    = "%s"
@@ -20885,6 +20889,7 @@ resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-east1"
   enable_autopilot   = true
+  deletion_protection = false
   min_master_version = data.google_container_engine_versions.target.latest_master_version
   deletion_protection = false
   network    = "%s"
@@ -20931,6 +20936,7 @@ resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-east1"
   enable_autopilot   = true
+  deletion_protection = false
   min_master_version = data.google_container_engine_versions.target.latest_master_version
   deletion_protection = false
   network    = "%s"
@@ -21274,6 +21280,7 @@ resource "google_container_cluster" "primary" {
   network            = "%s"
   subnetwork         = "%s"
   enable_autopilot   = true
+  deletion_protection = false
 
   cluster_autoscaling {
     autopilot_general_profile = "%s"
