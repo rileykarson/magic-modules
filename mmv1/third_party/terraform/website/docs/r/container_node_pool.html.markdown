@@ -359,6 +359,8 @@ cluster.
 
 <a name="nested_node_config"></a>The `node_config` block supports:
 
+* `consolidation_delay` - (Optional) The consolidation delay for this node pool. This is the delay between when the node pool meets the conditions for consolidation and when it is actually consolidated. This field is supported only when cluster autoscaling is enabled.
+
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_config_taint_config).

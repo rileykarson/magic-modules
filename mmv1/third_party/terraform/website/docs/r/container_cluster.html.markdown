@@ -1216,6 +1216,7 @@ gvnic {
     for how these labels are applied to clusters, node pools and nodes.
 
 * `max_run_duration` - (Optional) The runtime of each node in the node pool in seconds, terminated by 's'. Example: "3600s".
+* `consolidation_delay` - (Optional) The consolidation delay to use for this node pool to consolidate nodes. The minimum duration is 60s. The maximum duration is 86400s. Note: Requires autoscaling enabled on the node pool.
 
 * `flex_start` - (Optional) Enables Flex Start provisioning model for the node pool.
 
