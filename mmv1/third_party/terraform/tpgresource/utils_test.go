@@ -1012,16 +1012,6 @@ func TestIsNotFoundGrpcErrort(t *testing.T) {
 	}
 }
 
-func TestSnakeToPascalCase(t *testing.T) {
-	input := "boot_disk"
-	expected := "BootDisk"
-	actual := tpgresource.SnakeToPascalCase(input)
-
-	if actual != expected {
-		t.Fatalf("(%s) did not match expected value: %s", actual, expected)
-	}
-}
-
 func TestCheckGoogleIamPolicy(t *testing.T) {
 	cases := []struct {
 		valid bool

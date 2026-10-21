@@ -41,10 +41,6 @@ func ParseSubnetworkFieldValueWithProjectField(subnetwork, projectField string, 
 	return ParseRegionalFieldValue("subnetworks", subnetwork, projectField, "region", "zone", d, config, true)
 }
 
-func ParseSslCertificateFieldValue(sslCertificate string, d TerraformResourceData, config *transport_tpg.Config) (*GlobalFieldValue, error) {
-	return ParseGlobalFieldValue("sslCertificates", sslCertificate, "project", d, config, false)
-}
-
 func ParseHttpHealthCheckFieldValue(healthCheck string, d TerraformResourceData, config *transport_tpg.Config) (*GlobalFieldValue, error) {
 	return ParseGlobalFieldValue("httpHealthChecks", healthCheck, "project", d, config, false)
 }
@@ -67,10 +63,6 @@ func ParseAcceleratorFieldValue(accelerator string, d TerraformResourceData, con
 
 func ParseMachineTypesFieldValue(machineType string, d TerraformResourceData, config *transport_tpg.Config) (*ZonalFieldValue, error) {
 	return ParseZonalFieldValue("machineTypes", machineType, "project", "zone", d, config, false)
-}
-
-func ParseInstanceFieldValue(instance string, d TerraformResourceData, config *transport_tpg.Config) (*ZonalFieldValue, error) {
-	return ParseZonalFieldValue("instances", instance, "project", "zone", d, config, false)
 }
 
 func ParseInstanceGroupFieldValue(instanceGroup string, d TerraformResourceData, config *transport_tpg.Config) (*ZonalFieldValue, error) {
@@ -310,20 +302,6 @@ func GetProjectFromSchema(projectSchemaField string, d TerraformResourceData, co
 	return "", fmt.Errorf("%s: required field is not set", projectSchemaField)
 }
 
-func GetUniverseDomainFromSchema(universeSchemaField string, d TerraformResourceData, config *transport_tpg.Config) (string, error) {
-	res, ok := d.GetOk(universeSchemaField)
-	if ok && universeSchemaField != "" {
-		return res.(string), nil
-	}
-	if config.UniverseDomain != "" {
-		return config.UniverseDomain, nil
-	}
-	if config.UniverseDomain == "" {
-		return "googleapis.com", nil
-	}
-	return "", fmt.Errorf("%s: Error getting the provider field ", universeSchemaField)
-}
-
 func GetBillingProjectFromSchema(billingProjectSchemaField string, d TerraformResourceData, config *transport_tpg.Config) (string, error) {
 	res, ok := d.GetOk(billingProjectSchemaField)
 	if ok && billingProjectSchemaField != "" {
@@ -340,14 +318,6 @@ type OrganizationFieldValue struct {
 	Name  string
 
 	resourceType string
-}
-
-func (f OrganizationFieldValue) RelativeLink() string {
-	if len(f.Name) == 0 {
-		return ""
-	}
-
-	return fmt.Sprintf(OrganizationLinkTemplate, f.OrgId, f.resourceType, f.Name)
 }
 
 // Parses an organization field with the following formats:

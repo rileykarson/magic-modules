@@ -2,8 +2,6 @@ package acctest
 
 import (
 	"context"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-provider-google/google/envvar"
@@ -56,33 +54,4 @@ func GoogleProviderConfig(t *testing.T) *transport_tpg.Config {
 // depends on should call envvar.AccTestPreCheck directly to avoid import cycles.
 func AccTestPreCheck(t *testing.T) {
 	envvar.AccTestPreCheck(t)
-}
-
-// AccTestPreCheck_AdcCredentialsOnly is a PreCheck function for acceptance tests that use ADCs when
-func AccTestPreCheck_AdcCredentialsOnly(t *testing.T) {
-	if v := os.Getenv("GOOGLE_CREDENTIALS_FILE"); v != "" {
-		t.Log("Ignoring GOOGLE_CREDENTIALS_FILE; acceptance test doesn't use credentials other than ADCs")
-	}
-
-	// Fail on set creds
-	if v := envvar.MultiEnvSearch(envvar.CredsEnvVarsExcludingAdcs()); v != "" {
-		t.Fatalf("This acceptance test only uses ADCs, so all of %s must be unset", strings.Join(envvar.CredsEnvVarsExcludingAdcs(), ", "))
-	}
-
-	// Fail on ADC ENV not set
-	if v := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"); v == "" {
-		t.Fatalf("GOOGLE_APPLICATION_CREDENTIALS must be set for acceptance tests that are dependent on ADCs")
-	}
-
-	if v := envvar.MultiEnvSearch(envvar.ProjectEnvVars); v == "" {
-		t.Fatalf("One of %s must be set for acceptance tests", strings.Join(envvar.ProjectEnvVars, ", "))
-	}
-
-	if v := envvar.MultiEnvSearch(envvar.RegionEnvVars); v == "" {
-		t.Fatalf("One of %s must be set for acceptance tests", strings.Join(envvar.RegionEnvVars, ", "))
-	}
-
-	if v := envvar.MultiEnvSearch(envvar.ZoneEnvVars); v == "" {
-		t.Fatalf("One of %s must be set for acceptance tests", strings.Join(envvar.ZoneEnvVars, ", "))
-	}
 }

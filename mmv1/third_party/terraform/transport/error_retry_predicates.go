@@ -394,15 +394,6 @@ func IsPeeringOperationInProgress(err error) (bool, string) {
 	return false, ""
 }
 
-func DatastoreIndex409Contention(err error) (bool, string) {
-	if gerr, ok := err.(*googleapi.Error); ok {
-		if gerr.Code == 409 && strings.Contains(gerr.Body, "too much contention") {
-			return true, "too much contention - waiting for less activity"
-		}
-	}
-	return false, ""
-}
-
 // relevant for firestore in datastore mode
 func FirestoreField409RetryUnderlyingDataChanged(err error) (bool, string) {
 	if gerr, ok := err.(*googleapi.Error); ok {
@@ -610,21 +601,6 @@ func IsSwgAutogenRouterRetryable(err error) (bool, string) {
 	}
 
 	return false, ""
-}
-
-// Retry if getting a resource/operation returns a 403 for specific IAM Admin API Service Account operations.
-// opType should describe the operation for which it can be retryable.
-// IAM API is eventually consistent and returns 403 Forbidden (instead of 404 Not found) for some operations
-// when a newly created resource is attempted to be read right after the creation and not found.
-func IsForbiddenIamServiceAccountRetryableError(opType string) RetryErrorPredicateFunc {
-	return func(err error) (bool, string) {
-		if gerr, ok := err.(*googleapi.Error); ok {
-			if gerr.Code == 403 && strings.Contains(gerr.Body, "Permission 'iam.serviceAccounts.get' denied on resource (or it may not exist)") {
-				return true, fmt.Sprintf("Retry 403s for %s", opType)
-			}
-		}
-		return false, ""
-	}
 }
 
 // Retry the creation of `google_vmwareengine_external_address` resource if the network policy's

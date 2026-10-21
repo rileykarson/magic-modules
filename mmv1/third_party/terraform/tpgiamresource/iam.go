@@ -179,7 +179,7 @@ func (k conditionKey) Empty() bool {
 }
 
 func (k conditionKey) String() string {
-	return fmt.Sprintf("%s/%s/%s",  k.Title, k.Description, k.Expression)
+	return fmt.Sprintf("%s/%s/%s", k.Title, k.Description, k.Expression)
 }
 
 type iamBindingKey struct {
@@ -217,7 +217,6 @@ func subtractFromBindings(bindings []*cloudresourcemanager.Binding, toRemove ...
 
 	return listFromIamBindingMap(currMap)
 }
-
 
 // Construct map of role to set of members from list of bindings.
 func createIamBindingsMap(bindings []*cloudresourcemanager.Binding) map[iamBindingKey]map[string]struct{} {
@@ -423,28 +422,20 @@ func IamWithParentResourceIdentity(parser ParentResourceIdFromIdentityParserFunc
 	}
 }
 
-func IamWithGAResourceDeprecation() func (s *IamSettings) {
-	{{- if eq $.TargetVersionName "ga" }}
-	return IamWithDeprecationMessage("This resource has been deprecated in the google (GA) provider, and will only be available in the google-beta provider in a future release.")
-	{{- else }}
-	return IamWithDeprecationMessage("")
-	{{- end }}
-}
-
-func IamWithBatching (s *IamSettings) {
+func IamWithBatching(s *IamSettings) {
 	s.EnableBatching = true
 }
 
 func IamWithStateUpgraders(upgraders []schema.StateUpgrader) func(*IamSettings) {
-    return func(s *IamSettings) {
-        s.StateUpgraders = upgraders
-    }
+	return func(s *IamSettings) {
+		s.StateUpgraders = upgraders
+	}
 }
 
 func IamWithSchemaVersion(version int) func(*IamSettings) {
-    return func(s *IamSettings) {
-        s.SchemaVersion = version
-    }
+	return func(s *IamSettings) {
+		s.SchemaVersion = version
+	}
 }
 
 func IamCreateTimeOut(createTimeout int64) func(s *IamSettings) {
@@ -463,65 +454,6 @@ func DebugPrintAuditConfigs(bs []*cloudresourcemanager.AuditConfig) string {
 func DebugPrintBindings(bs []*cloudresourcemanager.Binding) string {
 	v, _ := json.MarshalIndent(bs, "", "\t")
 	return string(v)
-}
-
-// Returns a map representing iam bindings that are in the first map but not the second.
-func missingBindingsMap(aMap, bMap map[iamBindingKey]map[string]struct{}) map[iamBindingKey]map[string]struct{} {
-	results := make(map[iamBindingKey]map[string]struct{})
-	for key, aMembers := range aMap {
-		if bMembers, ok := bMap[key]; ok {
-			// The key is in both maps.
-			resultMembers := make(map[string]struct{})
-
-			for aMember := range aMembers {
-				if _, ok := bMembers[aMember]; !ok {
-					// The member is in a but not in b.
-					resultMembers[aMember] = struct{}{}
-				}
-			}
-			for bMember := range bMembers {
-				if _, ok := aMembers[bMember]; !ok {
-					// The member is in b but not in a.
-					resultMembers[bMember] = struct{}{}
-				}
-			}
-
-			if len(resultMembers) > 0 {
-				results[key] = resultMembers
-			}
-		} else {
-			// The key is in map a but not map b.
-			results[key] = aMembers
-		}
-	}
-
-	for key, bMembers := range bMap {
-		if _, ok := aMap[key]; !ok {
-			// The key is in map b but not map a.
-			results[key] = bMembers
-		}
-	}
-
-	return results
-}
-
-// Returns the bindings that are in the first set of bindings but not the second.
-func MissingBindings(a, b []*cloudresourcemanager.Binding) []*cloudresourcemanager.Binding {
-	aMap := createIamBindingsMap(a)
-	bMap := createIamBindingsMap(b)
-
-	var results []*cloudresourcemanager.Binding
-	for key, membersSet := range missingBindingsMap(aMap, bMap) {
-		members := make([]string, 0, len(membersSet))
-		for member := range membersSet {
-			members = append(members, member)
-		}
-		results = append(results, &cloudresourcemanager.Binding{
-			Role:    key.Role,
-			Members: members,
-		})
-	}
-	return results
 }
 
 // Converts an IAM parent resource schema to identity schema

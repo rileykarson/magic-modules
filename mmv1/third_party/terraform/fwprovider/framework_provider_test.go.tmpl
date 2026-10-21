@@ -168,19 +168,6 @@ resource "google_compute_address" "default" {
 }`, endpoint, name)
 }
 
-func testAccProviderMeta_setModuleName(key, name string) string {
-	return fmt.Sprintf(`
-terraform {
-  provider_meta "google" {
-    module_name = "%s"
-  }
-}
-
-resource "google_compute_address" "default" {
-	name = "tf-test-address-%s"
-}`, key, name)
-}
-
 // Copy the function testAccCheckComputeAddressDestroyProducer from the dns_test package to here,
 // as that function is in the _test.go file and not importable.
 //

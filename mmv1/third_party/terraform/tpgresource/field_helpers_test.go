@@ -223,8 +223,11 @@ func TestParseOrganizationFieldValue(t *testing.T) {
 				t.Errorf("bad: %s, did not expect an error. Error: %s", tn, err)
 			}
 		} else {
-			if v.RelativeLink() != tc.ExpectedRelativeLink {
-				t.Errorf("bad: %s, expected relative link to be '%s' but got '%s'", tn, tc.ExpectedRelativeLink, v.RelativeLink())
+			if v.OrgId != tc.ExpectedOrgId {
+				t.Errorf("bad: %s, expected org id to be '%s' but got '%s'", tn, tc.ExpectedOrgId, v.OrgId)
+			}
+			if v.Name != tc.ExpectedName {
+				t.Errorf("bad: %s, expected name to be '%s' but got '%s'", tn, tc.ExpectedName, v.Name)
 			}
 		}
 	}

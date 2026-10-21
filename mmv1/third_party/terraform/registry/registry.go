@@ -128,38 +128,12 @@ var schemas = &registeredSchemas{
 	d: make(map[string]Schema),
 }
 
-// Resource returns the Terraform schema for the requested resource. The function panics
-// if the requested resource is not registered. This function is called during provider
-// intitialization when the absence of a resource is an unrecoverable error.
-func Resource(name string) *schema.Resource {
-	schemas.RLock()
-	defer schemas.RUnlock()
-	r, ok := schemas.r[name]
-	if !ok {
-		log.Fatalf("No resource schema for %q registered", name)
-	}
-	return r.Schema
-}
-
 func ResourceMap() map[string]*schema.Resource {
 	ret := map[string]*schema.Resource{}
 	for k, v := range schemas.r {
 		ret[k] = v.Schema
 	}
 	return ret
-}
-
-// DataSource returns the Terraform schema for the requested data source. The function panics
-// if the requested data source is not registered. This function is called during provider
-// intitialization when the absence of a data source is an unrecoverable error.
-func DataSource(name string) *schema.Resource {
-	schemas.RLock()
-	defer schemas.RUnlock()
-	d, ok := schemas.d[name]
-	if !ok {
-		log.Fatalf("No data source schema for %q registered", name)
-	}
-	return d.Schema
 }
 
 func DatasourceMap() map[string]*schema.Resource {

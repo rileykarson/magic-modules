@@ -354,32 +354,6 @@ func testAccCheckComputeAddressDestroyProducer(t *testing.T) func(s *terraform.S
 	}
 }
 
-func testAccProviderCredentials_actWithCredsFromEnv(name string) string {
-	return fmt.Sprintf(`
-provider "google" {
-  alias       = "testing_credentials"
-
-}
-
-resource "google_compute_address" "default" {
-  provider = google.testing_credentials
-  name     = "%s"
-}`, name)
-}
-
-func testAccProviderCredentials_actWithCredsFromEnv_emptyString(name string) string {
-	return fmt.Sprintf(`
-provider "google" {
-  alias       = "testing_credentials"
-  credentials = ""
-}
-
-resource "google_compute_address" "default" {
-  provider = google.testing_credentials
-  name     = "%s"
-}`, name)
-}
-
 func testAccProvider_checkPlanTimeErrors(providerArgument, randString string) string {
 	return fmt.Sprintf(`
 provider "google" {

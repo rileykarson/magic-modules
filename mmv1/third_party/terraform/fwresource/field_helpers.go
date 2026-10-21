@@ -42,40 +42,6 @@ func getProviderDefaultFromFrameworkSchema(schemaField string, rVal, pVal types.
 	return types.String{}
 }
 
-// Parses a project field with the following formats:
-// - projects/{my_projects}/{resource_type}/{resource_name}
-func ParseProjectFieldValueFramework(resourceType, fieldValue, projectSchemaField string, rVal, pVal types.String, isEmptyValid bool, diags *diag.Diagnostics) *tpgresource.ProjectFieldValue {
-	if len(fieldValue) == 0 {
-		if isEmptyValid {
-			return &tpgresource.ProjectFieldValue{ResourceType: resourceType}
-		}
-		diags.AddError("field can not be empty", fmt.Sprintf("The project field for resource %s cannot be empty", resourceType))
-		return nil
-	}
-
-	r := regexp.MustCompile(fmt.Sprintf(tpgresource.ProjectBasePattern, resourceType))
-	if parts := r.FindStringSubmatch(fieldValue); parts != nil {
-		return &tpgresource.ProjectFieldValue{
-			Project: parts[1],
-			Name:    parts[2],
-
-			ResourceType: resourceType,
-		}
-	}
-
-	project := getProviderDefaultFromFrameworkSchema(projectSchemaField, rVal, pVal, diags)
-	if diags.HasError() {
-		return nil
-	}
-
-	return &tpgresource.ProjectFieldValue{
-		Project: project.ValueString(),
-		Name:    tpgresource.GetResourceNameFromSelfLink(fieldValue),
-
-		ResourceType: resourceType,
-	}
-}
-
 // This function isn't a test of transport.go; instead, it is used as an alternative
 // to ReplaceVars inside tests.
 func ReplaceVarsForFrameworkTest(config *transport_tpg.Config, rs *terraform.ResourceState, linkTmpl string) (string, error) {
