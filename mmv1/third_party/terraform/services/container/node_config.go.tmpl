@@ -1274,6 +1274,14 @@ func schemaNodeConfig() *schema.Schema {
 														Computed:    true,
 														Description: `The GCS generation of the init script.`,
 													},
+													"args": {
+														Type:        schema.TypeList,
+														Optional:    true,
+														Description: `Optional arguments to pass to the init script.`,
+														Elem: &schema.Schema{
+															Type: schema.TypeString,
+														},
+													},
 													"gcp_secret_manager_secret_uri": {
 														Type:        schema.TypeString,
 														Optional:    true,
@@ -2553,6 +2561,9 @@ func expandInitScript(v interface{}) *container.InitScript {
 	if v, ok := cfg["gcs_generation"]; ok {
 		initScript.GcsGeneration = int64(v.(int))
 	}
+	if v, ok := cfg["args"]; ok {
+		initScript.Args = tpgresource.ConvertStringArr(v.([]interface{}))
+	}
 	if v, ok := cfg["gcp_secret_manager_secret_uri"]; ok {
 		initScript.GcpSecretManagerSecretUri = v.(string)
 	}
@@ -3657,6 +3668,7 @@ func flattenInitScript(c *container.InitScript) []map[string]interface{} {
 			"gcs_uri":                       c.GcsUri,
 			"gcs_generation":                c.GcsGeneration,
 			"gcp_secret_manager_secret_uri": c.GcpSecretManagerSecretUri,
+			"args":                          c.Args,
 		})
 	}
 	return result

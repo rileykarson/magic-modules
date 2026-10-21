@@ -8015,6 +8015,9 @@ func TestAccContainerNodePool_withCustomNodeInit(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_uri", fmt.Sprintf("gs://%s/script.sh", bucketName)),
 					resource.TestCheckResourceAttrSet("google_container_node_pool.np_with_custom_node_init", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_generation"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 				),
 			},
 			{
@@ -8070,6 +8073,7 @@ resource "google_container_node_pool" "np_with_custom_node_init" {
         init_script {
           gcs_uri = "gs://${google_storage_bucket.bucket.name}/${google_storage_bucket_object.script.name}"
           gcs_generation = google_storage_bucket_object.script.generation
+          args = ["arg1", "arg2"]
         }
       }
     }
@@ -8099,6 +8103,9 @@ func TestAccContainerNodePool_withCustomNodeInitSecret(t *testing.T) {
 				Config: testAccContainerNodePool_withCustomNodeInitSecret(cluster, nodePool, secretId, networkName, subnetworkName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("google_container_node_pool.np_with_custom_node_init_secret", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcp_secret_manager_secret_uri"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init_secret", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init_secret", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np_with_custom_node_init_secret", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 				),
 			},
 			{
@@ -8168,6 +8175,7 @@ resource "google_container_node_pool" "np_with_custom_node_init_secret" {
       custom_node_init {
         init_script {
           gcp_secret_manager_secret_uri = google_secret_manager_secret_version.version.name
+          args = ["arg1", "arg2"]
         }
       }
     }

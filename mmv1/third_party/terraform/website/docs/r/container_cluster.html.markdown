@@ -1983,6 +1983,8 @@ linux_node_config {
 
 * `gcp_secret_manager_secret_uri` - (Optional) The Google Cloud Secret Manager secret version URI for storing the init script. Format: `projects/PROJECT_ID/secrets/SECRET_NAME/versions/VERSION`. The service account on the nodepool must have access to the secret version. Conflicts with `gcs_uri`.
 
+* `args` - (Optional) Optional arguments to pass to the init script.
+
 <a name="nested_windows_node_config"></a>The `windows_node_config` block supports:
 
 * `osversion` - (Optional) OSVersion [attribute](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/NodeConfig#osversion). The value must be one of `OS_VERSION_UNSPECIFIED`, `OS_VERSION_LTSC2019`, or `OS_VERSION_LTSC2022`.

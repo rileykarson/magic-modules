@@ -19829,6 +19829,9 @@ func TestAccContainerCluster_withCustomNodeInitGcs(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_uri", fmt.Sprintf("gs://%s/script.sh", bucketName)),
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_generation"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 				),
 			},
 			{
@@ -19861,6 +19864,9 @@ func TestAccContainerCluster_withCustomNodeInitSecret(t *testing.T) {
 				Config: testAccContainerCluster_withCustomNodeInitSecret(cluster, secretId, networkName, subnetworkName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcp_secret_manager_secret_uri"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 				),
 			},
 			{
@@ -19895,7 +19901,13 @@ func TestAccContainerCluster_withCustomNodeInitInline(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_uri", fmt.Sprintf("gs://%s/script.sh", bucketName)),
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_generation"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_pool.1.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcp_secret_manager_secret_uri"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.1.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.#", "2"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.1.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.0", "arg1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.1.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.args.1", "arg2"),
 				),
 			},
 			{
@@ -19961,6 +19973,7 @@ resource "google_container_cluster" "primary" {
         init_script {
           gcs_uri = "gs://${google_storage_bucket.bucket.name}/${google_storage_bucket_object.script.name}"
           gcs_generation = google_storage_bucket_object.script.generation
+          args = ["arg1", "arg2"]
         }
       }
     }
@@ -20020,6 +20033,7 @@ resource "google_container_cluster" "primary" {
       custom_node_init {
         init_script {
           gcp_secret_manager_secret_uri = google_secret_manager_secret_version.version.name
+          args = ["arg1", "arg2"]
         }
       }
     }
@@ -20098,6 +20112,7 @@ resource "google_container_cluster" "primary" {
           init_script {
             gcs_uri = "gs://${google_storage_bucket.bucket.name}/${google_storage_bucket_object.script.name}"
             gcs_generation = google_storage_bucket_object.script.generation
+          args = ["arg1", "arg2"]
           }
         }
       }
@@ -20116,6 +20131,7 @@ resource "google_container_cluster" "primary" {
         custom_node_init {
           init_script {
             gcp_secret_manager_secret_uri = google_secret_manager_secret_version.version.name
+          args = ["arg1", "arg2"]
           }
         }
       }
