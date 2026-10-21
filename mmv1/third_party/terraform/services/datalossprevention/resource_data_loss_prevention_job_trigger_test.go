@@ -24,7 +24,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerUpdateExample(t *testing.T
 		CheckDestroy:             testAccCheckDataLossPreventionJobTriggerDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(acctest.MergeMap(context, map[string]interface{}{
+					"inspect_template_name": `"fake"`,
+					"file_types":            nil,
+				})),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -406,7 +409,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerActionsOptionalExample(t *
 				ImportStateVerifyIgnore: []string{"parent"},
 			},
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(acctest.MergeMap(context, map[string]interface{}{
+					"inspect_template_name": `"fake"`,
+					"file_types":            nil,
+				})),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -441,7 +447,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 		CheckDestroy:             testAccCheckDataLossPreventionJobTriggerDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(acctest.MergeMap(context, map[string]interface{}{
+					"inspect_template_name": nil,
+					"file_types":            `["TEXT_FILE", "IMAGE", "WORD_DOCUMENT", "PDF", "AVRO", "CSV", "TSV"]`,
+				})),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -450,7 +459,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 				ImportStateVerifyIgnore: []string{"parent"},
 			},
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(acctest.MergeMap(context, map[string]interface{}{
+					"inspect_template_name": `"fake"`,
+					"file_types":            nil,
+				})),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -459,7 +471,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 				ImportStateVerifyIgnore: []string{"parent"},
 			},
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(acctest.MergeMap(context, map[string]interface{}{
+					"inspect_template_name": nil,
+					"file_types":            `["TEXT_FILE", "IMAGE", "WORD_DOCUMENT", "PDF", "AVRO", "CSV", "TSV"]`,
+				})),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -578,37 +593,37 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerSaveToCloudStorage(t *test
 func testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_data_loss_prevention_job_trigger" "basic" {
-	parent = "projects/%{project}"
-	description = "Starting description"
-	display_name = "display"
+  parent = "projects/%{project}"
+  description = "Description"
+  display_name = "Displayname"
 
-	triggers {
-		schedule {
-			recurrence_period_duration = "86400s"
-		}
-	}
+  triggers {
+    schedule {
+      recurrence_period_duration = "86400s"
+    }
+  }
 
-	inspect_job {
-		inspect_template_name = "fake"
-		actions {
-			save_findings {
-				output_config {
-					table {
-						project_id = "project"
-						dataset_id = "dataset123"
-					}
-				}
-			}
-		}
-		storage_config {
-			cloud_storage_options {
-				file_set {
-					url = "gs://mybucket/directory/"
-				}
-				file_types = ["POWERPOINT", "EXCEL", "CSV", "TSV"]
-			}
-		}
-	}
+  inspect_job {
+    inspect_template_name = %{inspect_template_name}
+    actions {
+      save_findings {
+        output_config {
+          table {
+            project_id = "%{project}"
+            dataset_id = "dataset"
+          }
+        }
+      }
+    }
+    storage_config {
+      cloud_storage_options {
+        file_set {
+          url = "gs://mybucket/directory/"
+        }
+        file_types = %{file_types}
+      }
+    }
+  }
 }
 `, context)
 }
@@ -2440,42 +2455,6 @@ resource "google_data_loss_prevention_job_trigger" "basic" {
 
 	inspect_job {
 		inspect_template_name = "fake"
-		storage_config {
-			cloud_storage_options {
-				file_set {
-					url = "gs://mybucket/directory/"
-				}
-			}
-		}
-	}
-}
-`, context)
-}
-
-func testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_job_trigger" "basic" {
-	parent = "projects/%{project}"
-	description = "Starting description"
-	display_name = "display"
-
-	triggers {
-		schedule {
-			recurrence_period_duration = "86400s"
-		}
-	}
-
-	inspect_job {
-		actions {
-			save_findings {
-				output_config {
-					table {
-						project_id = "project"
-						dataset_id = "dataset123"
-					}
-				}
-			}
-		}
 		storage_config {
 			cloud_storage_options {
 				file_set {
