@@ -1402,6 +1402,7 @@ sole_tenant_config {
 
 
 
+{{- if ne $.TargetVersionName "ga" }}
 <a name="nested_host_maintenance_policy"></a>The `host_maintenance_policy` block supports:
 
 * `maintenance_interval` - (Required) Specifies the frequency of planned maintenance events. One of: `MAINTENANCE_INTERVAL_UNSPECIFIED`, `AS_NEEDED`, `PERIODIC`.
@@ -1415,6 +1416,7 @@ sole_tenant_config {
 * `maintenance_availability_window` - (Required) The window of time that opportunistic maintenance can run. Example: A setting of 14 days implies that opportunistic maintenance can only be ran in the 2 weeks leading up to the scheduled maintenance date. Setting 28 days allows opportunistic maintenance to run at any time in the scheduled maintenance window (all PERIODIC maintenance is set 28 days in advance).
 
 * `min_nodes_per_pool` - (Required) The minimum nodes required to be available in a pool. Blocks maintenance if it would cause the number of running nodes to dip below this value.
+{{- end }}
 
 <a name="nested_gcfs_config"></a>The `gcfs_config` block supports:
 

@@ -5531,6 +5531,17 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 				return err
 			}
 			log.Printf("[INFO] GKE cluster %s host maintenance policy config has been updated", d.Id())
+		} else {
+			req := &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredHostMaintenancePolicy: &container.HostMaintenancePolicy{},
+				},
+			}
+			updateF := updateFunc(req, "clearing GKE cluster host maintenance policy config")
+			if err := updateF(); err != nil {
+				return err
+			}
+			log.Printf("[INFO] GKE cluster %s host maintenance policy config has been cleared", d.Id())
 		}
 	}
 {{- end }}
