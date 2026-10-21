@@ -21,7 +21,10 @@ func TestAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_basic(context),
+				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_basic(acctest.MergeMap(context, map[string]interface{}{
+					"license_count":         `100`,
+					"last_user_update_time": nil,
+				})),
 			},
 			{
 				ResourceName:            "google_discovery_engine_license_config.basic",
@@ -30,7 +33,10 @@ func TestAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 				ImportStateVerifyIgnore: []string{"location"},
 			},
 			{
-				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_update(context),
+				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_basic(acctest.MergeMap(context, map[string]interface{}{
+					"license_count":         `200`,
+					"last_user_update_time": `"2026-08-19T20:00:00Z"`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_discovery_engine_license_config.basic", "last_user_update_time", "2026-08-19T20:00:00Z"),
 				),
@@ -47,45 +53,10 @@ func TestAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 
 func testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_basic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_discovery_engine_license_config" "basic" {
-  location = "global"
-  license_config_id = "tf-test-license-config-id%{random_suffix}"
-  license_count = 50
-  subscription_tier = "SUBSCRIPTION_TIER_SEARCH_AND_ASSISTANT"
-  start_date {
-    year = 2099
-    month = 1
-    day = 1
-  }
-  end_date {
-    year = 2100
-    month = 1
-    day = 1
-  }
-  subscription_term = "SUBSCRIPTION_TERM_ONE_YEAR"
-}
-`, context)
-}
-
-func testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_discovery_engine_license_config" "basic" {
-  location = "global"
-  license_config_id = "tf-test-license-config-id%{random_suffix}"
-  license_count = 51
-  subscription_tier = "SUBSCRIPTION_TIER_SEARCH_AND_ASSISTANT"
-  start_date {
-    year = 2099
-    month = 1
-    day = 1
-  }
-  end_date {
-    year = 2100
-    month = 1
-    day = 1
-  }
-  subscription_term = "SUBSCRIPTION_TERM_ONE_YEAR"
-  last_user_update_time = "2026-08-19T20:00:00Z"
+resource "google_discovery_engine_license_config" "license" {
+  location              = "global"
+  license_count         = %{license_count}
+  last_user_update_time = %{last_user_update_time}
 }
 `, context)
 }
