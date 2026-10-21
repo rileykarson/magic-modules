@@ -87,7 +87,11 @@ func TestAccContainerNodePool_resourceManagerTags(t *testing.T) {
 		CheckDestroy: testAccCheckContainerClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerNodePool_resourceManagerTags(context),
+				Config: testAccContainerNodePool_resourceManagerTags(acctest.MergeMap(context, map[string]interface{}{
+					"resource_manager_tags": `{
+      "${google_tags_tag_key.key.id}" = google_tags_tag_value.value.id
+    }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("google_container_node_pool.primary_nodes", "node_config.0.resource_manager_tags.%"),
 				),
