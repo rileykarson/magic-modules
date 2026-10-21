@@ -1405,7 +1405,7 @@ sole_tenant_config {
 {{- if ne $.TargetVersionName "ga" }}
 <a name="nested_host_maintenance_policy"></a>The `host_maintenance_policy` block supports:
 
-* `maintenance_interval` - (Required) Specifies the frequency of planned maintenance events. One of: `MAINTENANCE_INTERVAL_UNSPECIFIED`, `AS_NEEDED`, `PERIODIC`.
+* `maintenance_interval` - (Required) Specifies the frequency of planned maintenance events. One of: `AS_NEEDED`, `PERIODIC`.
 
 * `opportunistic_maintenance_strategy` - (Optional) Strategy that will trigger maintenance on behalf of the customer. Structure is [documented below](#nested_opportunistic_maintenance_strategy).
 

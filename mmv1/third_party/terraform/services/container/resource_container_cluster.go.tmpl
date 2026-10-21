@@ -203,10 +203,10 @@ func clusterSchemaNodePoolDefaults() *schema.Schema {
 								Elem: &schema.Resource{
 									Schema: map[string]*schema.Schema{
 										"maintenance_interval": {
-											Type: schema.TypeString,
+											Type:         schema.TypeString,
 											Required:     true,
-											Description:  `Specifies the frequency of planned maintenance events. One of: "MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC".`,
-											ValidateFunc: validation.StringInSlice([]string{"MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC"}, false),
+											Description:  `Specifies the frequency of planned maintenance events. One of: "AS_NEEDED", "PERIODIC".`,
+											ValidateFunc: validation.StringInSlice([]string{"AS_NEEDED", "PERIODIC"}, false),
 										},
 										"opportunistic_maintenance_strategy": {
 											Type:        schema.TypeList,
