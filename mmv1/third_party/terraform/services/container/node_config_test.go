@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-provider-google/google/acctest"
 	tpgcompute "github.com/hashicorp/terraform-provider-google/google/services/compute"
 )
@@ -17,8 +17,8 @@ func TestAccContainerNodeConfig_effectiveCgroupMode(t *testing.T) {
 	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	context := map[string]interface{}{
-		"cluster_name":   clusterName,
-		"network_name":   networkName,
+		"cluster_name":    clusterName,
+		"network_name":    networkName,
 		"subnetwork_name": subnetworkName,
 	}
 
