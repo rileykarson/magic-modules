@@ -383,6 +383,27 @@ cluster.
 
 * `architecture_taint_behavior` - (Optional) Specifies the behavior for applying architecture taints to node pool nodes. Valid values are `ARCHITECTURE_TAINT_BEHAVIOR_UNSPECIFIED`, `NONE`, or `ARM`.
 
+
+* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
+
+<a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
+
+* `custom_node_init` - (Optional) Custom node init settings. Structure is [documented below](#nested_custom_node_init).
+
+<a name="nested_custom_node_init"></a>The `custom_node_init` block supports:
+
+* `init_script` - (Optional) The init script configuration. Structure is [documented below](#nested_init_script).
+
+<a name="nested_init_script"></a>The `init_script` block supports:
+
+* `gcs_uri` - (Optional) The Google Cloud Storage URI for storing the init script. Format: `gs://BUCKET_NAME/OBJECT_NAME`. The service account on the nodepool must have read access to the object. Conflicts with `gcp_secret_manager_secret_uri`. If `gcs_uri` is used, `gcs_generation` is required.
+
+* `gcs_generation` - (Optional) The generation of the init script in Google Cloud Storage. If `gcs_uri` is used, `gcs_generation` is required.
+
+* `gcp_secret_manager_secret_uri` - (Optional) The Google Cloud Secret Manager secret version URI for storing the init script. Format: `projects/PROJECT_ID/secrets/SECRET_NAME/versions/VERSION`. The service account on the nodepool must have access to the secret version. Conflicts with `gcs_uri`.
+
+* `args` - (Optional) Optional arguments to pass to the init script.
+
 <a name="nested_taint_config"></a>The `taint_config` block supports:
 
 * `architecture_taint_behavior` - (Optional) The taint behavior to be applied to the nodes based on the architecture.
