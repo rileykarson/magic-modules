@@ -38,8 +38,9 @@ var (
 func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T) {
 	t.Parallel()
 
+	randomSuffix := acctest.RandString(t, 10)
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix": randomSuffix,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -94,7 +95,11 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "name", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_removeService(context),
+				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_removeService(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "A config for update tests",
+					"labels":        nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_connectivity_multicloud_data_transfer_config.example", plancheck.ResourceActionUpdate),
@@ -111,7 +116,11 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "name", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_updateDescription(context),
+				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_removeService(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Update config for update tests",
+					"labels":        nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_connectivity_multicloud_data_transfer_config.example", plancheck.ResourceActionUpdate),
@@ -125,7 +134,11 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "name", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_updateLabels(context),
+				Config: testAccNetworkConnectivityMulticloudDataTransferConfig_removeService(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Update config for update tests",
+					"labels":        `{ foo = "bar" }`,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_connectivity_multicloud_data_transfer_config.example", plancheck.ResourceActionUpdate),
@@ -182,42 +195,8 @@ func testAccNetworkConnectivityMulticloudDataTransferConfig_removeService(contex
 resource "google_network_connectivity_multicloud_data_transfer_config" "example" {
   name        = "tf-test-update-config%{random_suffix}"
   location    = "europe-west2"
-  description = "A config for update tests"
-  services {
-    service_name = "big-query"
-  }
-  services {
-    service_name = "cloud-run"
-  }
-}
-`, context)
-}
-
-func testAccNetworkConnectivityMulticloudDataTransferConfig_updateDescription(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_network_connectivity_multicloud_data_transfer_config" "example" {
-  name        = "tf-test-update-config%{random_suffix}"
-  location    = "europe-west2"
-  description = "Update config for update tests"
-  services {
-    service_name = "big-query"
-  }
-  services {
-    service_name = "cloud-run"
-  }
-}
-`, context)
-}
-
-func testAccNetworkConnectivityMulticloudDataTransferConfig_updateLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_network_connectivity_multicloud_data_transfer_config" "example" {
-  name        = "tf-test-update-config%{random_suffix}"
-  location    = "europe-west2"
-  description = "Update config for update tests"
-  labels = {
-    foo = "bar"
-  }
+  description = "%{description}"
+  labels      = %{labels}
   services {
     service_name = "big-query"
   }
