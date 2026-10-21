@@ -5534,7 +5534,7 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 		} else {
 			req := &container.UpdateClusterRequest{
 				Update: &container.ClusterUpdate{
-					DesiredHostMaintenancePolicy: &container.HostMaintenancePolicy{},
+					DesiredHostMaintenancePolicy: &container.HostMaintenancePolicy{MaintenanceInterval: "MAINTENANCE_INTERVAL_UNSPECIFIED"},
 						ForceSendFields: []string{"DesiredHostMaintenancePolicy"},
 				},
 			}
