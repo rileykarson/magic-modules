@@ -8451,24 +8451,12 @@ data "google_container_engine_versions" "central1a" {
   location = "us-central1-a"
 }
 
-resource "google_compute_network" "network" {
-  name                    = "%s"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "subnetwork" {
-  name          = "%s"
-  network       = google_compute_network.network.self_link
-  ip_cidr_range = "10.0.0.0/24"
-  region        = "us-central1"
-}
-
 resource "google_container_cluster" "cluster" {
   name               = "%s"
   location           = "us-central1-a"
   initial_node_count = 1
-  network            = google_compute_network.network.name
-  subnetwork         = google_compute_subnetwork.subnetwork.name
+  network            = "%s"
+  subnetwork         = "%s"
   deletion_protection = false
 }
 
