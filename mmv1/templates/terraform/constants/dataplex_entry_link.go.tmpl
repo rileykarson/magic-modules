@@ -1,27 +1,3 @@
-var (
-	entryLinkProjectNumberRegex = regexp.MustCompile(`^projects\/[1-9]\d*\/.+$`)
-)
-
-// EntryLinkProjectNumberValidation checks if the input string conforms to the pattern:
-// "projects/<project-number>/<anything>"
-func EntryLinkProjectNumberValidation(i interface{}, k string) (warnings []string, errors []error) {
-	v, ok := i.(string)
-
-	if !ok {
-		errors = append(errors, fmt.Errorf("expected type of field %q to be string, but got %T", k, i))
-		return warnings, errors
-	}
-
-	if !entryLinkProjectNumberRegex.MatchString(v) {
-		errors = append(errors, fmt.Errorf(
-			"field %q has an invalid format: %q. Expected format: 'projects/<project-number>/<anything>'. Please note that project IDs are not supported.",
-			k, v,
-		))
-	}
-
-	return warnings, errors
-}
-
 // FilterEntryLinkAspects filters the aspects in res based on aspectKeySet.
 // It returns an error if type assertions fail.
 func FilterEntryLinkAspects(aspectKeySet map[string]struct{}, res map[string]interface{}) error {

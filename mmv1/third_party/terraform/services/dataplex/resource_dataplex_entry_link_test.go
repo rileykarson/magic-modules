@@ -13,54 +13,6 @@ import (
 	dataplex "github.com/hashicorp/terraform-provider-google/google/services/dataplex"
 )
 
-func TestEntryLinkProjectNumberValidation(t *testing.T) {
-	fieldName := "some_field"
-	testCases := []struct {
-		name        string
-		input       interface{}
-		expectError bool
-		errorMsg    string
-	}{
-		{"valid input", "projects/1234567890/locations/us-central1", false, ""},
-		{"valid input with only number", "projects/987/stuff", false, ""},
-		{"valid input with trailing slash content", "projects/1/a/b/c", false, ""},
-		{"valid input minimal", "projects/1/a", false, ""},
-		{"invalid input trailing slash only", "projects/555/", true, "has an invalid format"},
-		{"invalid type - int", 123, true, `to be string, but got int`},
-		{"invalid type - nil", nil, true, `to be string, but got <nil>`},
-		{"invalid format - missing 'projects/' prefix", "12345/locations/us", true, "has an invalid format"},
-		{"invalid format - project number starts with 0", "projects/0123/data", true, "has an invalid format"},
-		{"invalid format - no project number", "projects//data", true, "has an invalid format"},
-		{"invalid format - letters instead of number", "projects/abc/data", true, "has an invalid format"},
-		{"invalid format - missing content after number/", "projects/123", true, "has an invalid format"},
-		{"invalid format - empty string", "", true, "has an invalid format"},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			_, errors := dataplex.EntryLinkProjectNumberValidation(tc.input, fieldName)
-			hasError := len(errors) > 0
-
-			if hasError != tc.expectError {
-				t.Fatalf("%s: EntryLinkProjectNumberValidation() error expectation mismatch: got error = %v (%v), want error = %v", tc.name, hasError, errors, tc.expectError)
-			}
-
-			if tc.expectError && tc.errorMsg != "" {
-				found := false
-				for _, err := range errors {
-					if strings.Contains(err.Error(), tc.errorMsg) { // Check if error message contains the expected substring
-						found = true
-						break
-					}
-				}
-				if !found {
-					t.Errorf("%s: EntryLinkProjectNumberValidation() expected error containing %q, but got: %v", tc.name, tc.errorMsg, errors)
-				}
-			}
-		})
-	}
-}
-
 func TestFilterEntryLinkAspects(t *testing.T) {
 	testCases := []struct {
 		name            string

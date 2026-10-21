@@ -1543,8 +1543,10 @@ func resource{{ $.ResourceName }}Import(d *schema.ResourceData, meta interface{}
     {{- end }}
 }
 {{ end }}
+{{- if or (not $.ExcludeRead) $.HasPostCreateComputedFields $.CustomCode.PostCreate }}
 {{- range $prop := $.GettableProperties }}
     {{ template "flattenPropertyMethod" $prop -}}
+{{- end }}
 {{- end }}
 {{- range $prop := $.SettableProperties }}
     {{- template "expandPropertyMethod" $prop -}}

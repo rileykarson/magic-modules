@@ -150,9 +150,11 @@ func flatten{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d *schema.Reso
   return v
 {{- end }}
 }
-{{- if $.NestedProperties }}
+{{- if and $.NestedProperties (not (or $.IgnoreRead $.ClientSide)) }}
     {{- range $prop := $.NestedProperties }}
+      {{- if not (and ($.IsA "Array") ($.ItemType.IsA "NestedObject") $prop.IgnoreRead) }}
       {{ template "flattenPropertyMethod" $prop -}}
+      {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}

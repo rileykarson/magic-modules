@@ -1,26 +1,6 @@
+{{- if contains $.ResourceName "EgressPolicy" }}
 func {{$.ResourceName}}EgressToResourcesDiffSuppressFunc(_, _, _ string, d *schema.ResourceData) bool {
     old, new := d.GetChange("egress_to.0.resources")
-
-    oldResources, err := tpgresource.InterfaceSliceToStringSlice(old)
-    if err != nil {
-        log.Printf("[ERROR] Failed to convert config value: %s", err)
-        return false
-    }
-
-    newResources, err := tpgresource.InterfaceSliceToStringSlice(new)
-    if err != nil {
-        log.Printf("[ERROR] Failed to convert config value: %s", err)
-        return false
-    }
-
-    sort.Strings(oldResources)
-    sort.Strings(newResources)
-
-    return slices.Equal(oldResources, newResources)
-}
-
-func {{$.ResourceName}}IngressToResourcesDiffSuppressFunc(_, _, _ string, d *schema.ResourceData) bool {
-    old, new := d.GetChange("ingress_to.0.resources")
 
     oldResources, err := tpgresource.InterfaceSliceToStringSlice(old)
     if err != nil {
@@ -70,6 +50,28 @@ func {{$.ResourceName}}EgressFromIdentitiesDiffSuppressFunc(_, _, _ string, d *s
 
     return slices.Equal(oldIdentities, newIdentities)
 }
+{{- end }}
+{{- if contains $.ResourceName "IngressPolicy" }}
+func {{$.ResourceName}}IngressToResourcesDiffSuppressFunc(_, _, _ string, d *schema.ResourceData) bool {
+    old, new := d.GetChange("ingress_to.0.resources")
+
+    oldResources, err := tpgresource.InterfaceSliceToStringSlice(old)
+    if err != nil {
+        log.Printf("[ERROR] Failed to convert config value: %s", err)
+        return false
+    }
+
+    newResources, err := tpgresource.InterfaceSliceToStringSlice(new)
+    if err != nil {
+        log.Printf("[ERROR] Failed to convert config value: %s", err)
+        return false
+    }
+
+    sort.Strings(oldResources)
+    sort.Strings(newResources)
+
+    return slices.Equal(oldResources, newResources)
+}
 
 func {{$.ResourceName}}IngressFromIdentitiesDiffSuppressFunc(_, _, _ string, d *schema.ResourceData) bool {
     old, new := d.GetChange("ingress_from.0.identities")
@@ -101,7 +103,8 @@ func {{$.ResourceName}}IngressFromIdentitiesDiffSuppressFunc(_, _, _ string, d *
 
     return slices.Equal(oldIdentities, newIdentities)
 }
-
+{{- end }}
+{{- if eq $.ResourceName "AccessContextManagerServicePerimeter" }}
 func {{$.ResourceName}}IdentityTypeDiffSuppressFunc(_, old, new string, _ *schema.ResourceData) bool {
     if old == "" && new == "IDENTITY_TYPE_UNSPECIFIED" {
        return true
@@ -109,3 +112,4 @@ func {{$.ResourceName}}IdentityTypeDiffSuppressFunc(_, old, new string, _ *schem
 
     return old == new
 }
+{{- end }}
