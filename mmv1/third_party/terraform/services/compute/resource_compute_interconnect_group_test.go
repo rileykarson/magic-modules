@@ -36,11 +36,10 @@ func TestAccComputeInterconnectGroup_basic(t *testing.T) {
 
 func testAccComputeInterconnectGroup_basic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_compute_interconnect_group" "example-interconnect-group" {
-  name   = "tf-test-example-interconnect-group%{random_suffix}"
-  intent {
-    topology_capability = "NO_SLA"
-  }
+resource "google_compute_interconnect_group" "group" {
+  name        = "tf-test-interconnect-group%{random_suffix}"
+  topology    = "INTERCONNECT_TOPOLOGY_SINGLE"
+  description = %{description}
 }
 `, context)
 }
@@ -59,7 +58,9 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 		CheckDestroy:             testAccCheckComputeInterconnectGroupDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccComputeInterconnectGroup_basic(context),
+				Config: testAccComputeInterconnectGroup_basic(acctest.MergeMap(context, map[string]interface{}{
+					"description": nil,
+				})),
 			},
 			{
 				ResourceName:      "google_compute_interconnect_group.example-interconnect-group",
@@ -67,7 +68,9 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccComputeInterconnectGroup_update(context),
+				Config: testAccComputeInterconnectGroup_basic(acctest.MergeMap(context, map[string]interface{}{
+					"description": `"New description"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_compute_interconnect_group.example-interconnect-group", plancheck.ResourceActionUpdate),
@@ -81,16 +84,4 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccComputeInterconnectGroup_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_interconnect_group" "example-interconnect-group" {
-  name   	  = "tf-test-example-interconnect-group%{random_suffix}"
-  intent {
-    topology_capability = "NO_SLA"
-  }
-  description = "New description"
-}
-`, context)
 }
