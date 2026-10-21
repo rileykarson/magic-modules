@@ -4045,10 +4045,7 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 				}
 				return ContainerOperationWait(config, op, nodePoolInfo.project, nodePoolInfo.location, "updating GKE node pool consolidation_delay", userAgent, timeout)
 			}
-			transport_tpg.MutexStore.Lock(npLockKey)
-			err = retryTimeDuration(updateF, timeout, isNodePoolConflictRetryable)
-			transport_tpg.MutexStore.Unlock(npLockKey)
-			if err != nil {
+			if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
 				return fmt.Errorf("Error updating consolidation_delay in Node Pool %s: %s", name, err)
 			}
 		}

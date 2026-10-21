@@ -1482,6 +1482,8 @@ workload_identity_config {
 
 <a name="nested_node_pool_node_config"></a>The `node_config` block supports:
 
+* `consolidation_delay` - (Optional) Consolidation delay defines duration after which the Cluster Autoscaler can scale down underutilized nodes. If not set, nodes are scaled down by default behavior, i.e. after 10 minutes.
+
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_pool_node_config_taint_config).

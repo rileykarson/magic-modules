@@ -21224,3 +21224,93 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+
+func TestAccContainerCluster_withConsolidationDelay(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	np := fmt.Sprintf("tf-test-nodepool-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.78.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_consolidationDelay(cluster, np, networkName, subnetworkName, "60s"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.consolidation_delay", "60s"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
+			},
+			{
+				Config: testAccContainerCluster_consolidationDelay(cluster, np, networkName, subnetworkName, "300s"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.consolidation_delay", "300s"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
+			},
+			{
+				Config: testAccContainerCluster_defaultNodeConfigConsolidationDelay(cluster, networkName, subnetworkName, "60s"),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_consolidationDelay(cluster, np, networkName, subnetworkName, delay string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  name                = "%s"
+  location            = "us-central1-c"
+  deletion_protection = false
+  network             = "%s"
+  subnetwork          = "%s"
+
+  node_pool {
+    name               = "%s"
+    initial_node_count = 1
+    autoscaling {
+      min_node_count = 1
+      max_node_count = 3
+    }
+    node_config {
+      consolidation_delay = "%s"
+    }
+  }
+}
+`, cluster, networkName, subnetworkName, np, delay)
+}
+
+func testAccContainerCluster_defaultNodeConfigConsolidationDelay(cluster, networkName, subnetworkName, delay string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "default_np" {
+  name                = "%s-def"
+  location            = "us-central1-c"
+  initial_node_count  = 1
+  deletion_protection = false
+  network             = "%s"
+  subnetwork          = "%s"
+
+  node_config {
+    consolidation_delay = "%s"
+  }
+}
+`, cluster, networkName, subnetworkName, delay)
+}
