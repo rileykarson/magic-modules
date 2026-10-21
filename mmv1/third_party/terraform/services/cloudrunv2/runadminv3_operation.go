@@ -1,7 +1,6 @@
 package cloudrunv2
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -43,17 +42,6 @@ func createRunAdminV2Waiter(config *transport_tpg.Config, op *run.GoogleLongrunn
 		return nil, err
 	}
 	return w, nil
-}
-
-func RunAdminV2OperationWaitTimeWithResponse(config *transport_tpg.Config, op *run.GoogleLongrunningOperation, response *map[string]interface{}, project, activity, userAgent string, timeout time.Duration) error {
-	w, err := createRunAdminV2Waiter(config, op, project, activity, userAgent)
-	if err != nil {
-		return err
-	}
-	if err := tpgresource.OperationWait(w, activity, timeout, config.PollInterval); err != nil {
-		return err
-	}
-	return json.Unmarshal([]byte(w.CommonOperationWaiter.Op.Response), response)
 }
 
 func RunAdminV2OperationWaitTime(config *transport_tpg.Config, op *run.GoogleLongrunningOperation, project, activity, userAgent string, timeout time.Duration) error {

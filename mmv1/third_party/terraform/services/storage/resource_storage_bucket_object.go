@@ -688,14 +688,6 @@ func setEncryptionHeaders(customerEncryption map[string]string, headers http.Hea
 	headers.Set("x-goog-encryption-key-sha256", base64.StdEncoding.EncodeToString(keyHash[:]))
 }
 
-func getFileMd5Hash(filename string) string {
-	return tpgresource.GetFileMd5Hash(filename)
-}
-
-func getContentMd5Hash(content []byte) string {
-	return tpgresource.GetContentMd5Hash(content)
-}
-
 func expandCustomerEncryption(input []interface{}) map[string]string {
 	expanded := make(map[string]string)
 	if input == nil {

@@ -12,37 +12,7 @@ import (
 	"sort"
 
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
-	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
-
-// Since the google compute API uses optimistic locking, there is a chance
-// we need to resubmit our updated metadata. To do this, you need to provide
-// an update function that attempts to submit your metadata
-func MetadataRetryWrapper(update func() error) error {
-	return transport_tpg.MetadataRetryWrapper(update)
-}
-
-// MetadataUpdate merges the diff between oldMDMap and newMDMap into serverMD.
-// Keys present in oldMDMap but absent from newMDMap are removed from serverMD.
-// Keys present in newMDMap are inserted or overwritten in serverMD.
-// serverMD is modified in place.
-func MetadataUpdate(oldMDMap map[string]interface{}, newMDMap map[string]interface{}, serverMD map[string]interface{}) {
-	for key := range serverMD {
-		_, okOld := oldMDMap[key]
-		_, okNew := newMDMap[key]
-		if okOld && !okNew {
-			delete(serverMD, key)
-		}
-	}
-	for key, val := range newMDMap {
-		serverMD[key] = val.(string)
-	}
-}
-
-// BetaMetadataUpdate is equivalent to MetadataUpdate.
-func BetaMetadataUpdate(oldMDMap map[string]interface{}, newMDMap map[string]interface{}, serverMD map[string]interface{}) {
-	MetadataUpdate(oldMDMap, newMDMap, serverMD)
-}
 
 func expandComputeMetadata(m map[string]interface{}) []interface{} {
 	metadata := make([]interface{}, 0, len(m))

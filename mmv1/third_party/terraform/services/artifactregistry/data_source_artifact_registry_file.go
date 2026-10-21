@@ -270,11 +270,6 @@ func parseHashes(v interface{}) map[string]string {
 	return out
 }
 
-func sha256Hashes(b []byte) (hexStr, b64Str string) {
-	sum := sha256.Sum256(b)
-	return hex.EncodeToString(sum[:]), base64.StdEncoding.EncodeToString(sum[:])
-}
-
 // hashLocalFile opens outputPath, streams it through SHA-256, and returns the
 // hex and base64 digests. Returns an error if the file does not exist.
 func hashLocalFile(outputPath string) (hexStr, b64Str string, err error) {

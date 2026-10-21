@@ -21,26 +21,22 @@ func TestHealthcareHl7V2StoreIdParsing(t *testing.T) {
 	cases := map[string]struct {
 		ImportId             string
 		ExpectedError        bool
-		ExpectedTerraformId  string
 		ExpectedHl7V2StoreId string
 		Config               *transport_tpg.Config
 	}{
 		"id is in project/location/datasetName/hl7V2StoreName format": {
 			ImportId:             "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedHl7V2StoreId: "projects/test-project/locations/us-central1/datasets/test-dataset/hl7V2Stores/test-store-name",
 		},
 		"id is in domain:project/location/datasetName/hl7V2StoreName format": {
 			ImportId:             "example.com:test-project/us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "example.com:test-project/us-central1/test-dataset/test-store-name",
 			ExpectedHl7V2StoreId: "projects/example.com:test-project/locations/us-central1/datasets/test-dataset/hl7V2Stores/test-store-name",
 		},
 		"id is in location/datasetName/hl7V2StoreName format": {
 			ImportId:             "us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedHl7V2StoreId: "projects/test-project/locations/us-central1/datasets/test-dataset/hl7V2Stores/test-store-name",
 			Config:               &transport_tpg.Config{Project: "test-project"},
 		},
@@ -63,10 +59,6 @@ func TestHealthcareHl7V2StoreIdParsing(t *testing.T) {
 				continue
 			}
 			t.Fatalf("bad: %s, err: %#v", tn, err)
-		}
-
-		if hl7V2StoreId.TerraformId() != tc.ExpectedTerraformId {
-			t.Fatalf("bad: %s, expected Terraform ID to be `%s` but is `%s`", tn, tc.ExpectedTerraformId, hl7V2StoreId.TerraformId())
 		}
 
 		if hl7V2StoreId.Hl7V2StoreId() != tc.ExpectedHl7V2StoreId {

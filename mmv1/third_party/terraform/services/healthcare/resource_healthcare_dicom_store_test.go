@@ -21,26 +21,22 @@ func TestHealthcareDicomStoreIdParsing(t *testing.T) {
 	cases := map[string]struct {
 		ImportId             string
 		ExpectedError        bool
-		ExpectedTerraformId  string
 		ExpectedDicomStoreId string
 		Config               *transport_tpg.Config
 	}{
 		"id is in project/location/datasetName/dicomStoreName format": {
 			ImportId:             "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedDicomStoreId: "projects/test-project/locations/us-central1/datasets/test-dataset/dicomStores/test-store-name",
 		},
 		"id is in domain:project/location/datasetName/dicomStoreName format": {
 			ImportId:             "example.com:test-project/us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "example.com:test-project/us-central1/test-dataset/test-store-name",
 			ExpectedDicomStoreId: "projects/example.com:test-project/locations/us-central1/datasets/test-dataset/dicomStores/test-store-name",
 		},
 		"id is in location/datasetName/dicomStoreName format": {
 			ImportId:             "us-central1/test-dataset/test-store-name",
 			ExpectedError:        false,
-			ExpectedTerraformId:  "test-project/us-central1/test-dataset/test-store-name",
 			ExpectedDicomStoreId: "projects/test-project/locations/us-central1/datasets/test-dataset/dicomStores/test-store-name",
 			Config:               &transport_tpg.Config{Project: "test-project"},
 		},
@@ -63,10 +59,6 @@ func TestHealthcareDicomStoreIdParsing(t *testing.T) {
 				continue
 			}
 			t.Fatalf("bad: %s, err: %#v", tn, err)
-		}
-
-		if dicomStoreId.TerraformId() != tc.ExpectedTerraformId {
-			t.Fatalf("bad: %s, expected Terraform ID to be `%s` but is `%s`", tn, tc.ExpectedTerraformId, dicomStoreId.TerraformId())
 		}
 
 		if dicomStoreId.DicomStoreId() != tc.ExpectedDicomStoreId {

@@ -426,36 +426,6 @@ func expandSourceMachineImageEncryptionKey(d tpgresource.TerraformResourceData) 
 	return encryptionKey
 }
 
-func flattenSourceMachineImageEncryptionKey(key map[string]interface{}) []map[string]interface{} {
-	if key == nil {
-		return nil
-	}
-
-	m := map[string]interface{}{}
-
-	if rawKey, ok := key["rawKey"].(string); ok && rawKey != "" {
-		m["raw_key"] = rawKey
-	}
-
-	if rsaKey, ok := key["rsaEncryptedKey"].(string); ok && rsaKey != "" {
-		m["rsa_encrypted_key"] = rsaKey
-	}
-
-	if kmsKey, ok := key["kmsKeyName"].(string); ok && kmsKey != "" {
-		m["kms_key_name"] = kmsKey
-	}
-
-	if kmsKeyServiceAccount, ok := key["kmsKeyServiceAccount"].(string); ok && kmsKeyServiceAccount != "" {
-		m["kms_key_service_account"] = kmsKeyServiceAccount
-	}
-
-	if sha256, ok := key["sha256"].(string); ok && sha256 != "" {
-		m["sha256"] = sha256
-	}
-
-	return []map[string]interface{}{m}
-}
-
 func init() {
 	registry.Schema{
 		Name: "google_compute_instance_from_machine_image",

@@ -340,10 +340,6 @@ func buildTagBindingCollectionUrl(d *schema.ResourceData, config *transport_tpg.
 	return tpgresource.ReplaceVars(d, config, fmt.Sprintf("%slocations/%s/tagBindingCollections/%s", basePath, location, encodedResourceName))
 }
 
-func flattenTagsTagBindingCollectionTags(v interface{}, d *schema.ResourceData, config *transport_tpg.Config) interface{} {
-	return v
-}
-
 // Helper to fetch the current state of the TagBindingCollection from GCP
 func getCurrentTagBindingCollectionState(d *schema.ResourceData, config *transport_tpg.Config, userAgent, location, encodedResourceName string) (currentRes map[string]interface{}, currentTags map[string]string, currentEtag string, err error) {
 	readUrl, err := buildTagBindingCollectionUrl(d, config, location, encodedResourceName)

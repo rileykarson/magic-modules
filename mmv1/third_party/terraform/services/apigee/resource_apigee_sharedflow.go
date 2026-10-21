@@ -405,10 +405,6 @@ func flattenApigeeSharedFlowLatestRevisionId(v interface{}, d *schema.ResourceDa
 	return v
 }
 
-func expandApigeeSharedFlowName(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
-	return v, nil
-}
-
 func apigeeSharedflowDetectBundleUpdate(_ context.Context, diff *schema.ResourceDiff, v interface{}) bool {
 	tmp, _ := diff.GetChange("detect_md5hash")
 	oldBundleHash := tmp.(string)

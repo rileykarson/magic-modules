@@ -412,10 +412,6 @@ func flattenApigeeApiLatestRevisionId(v interface{}, d *schema.ResourceData, con
 	return v
 }
 
-func expandApigeeApiName(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
-	return v, nil
-}
-
 func apigeeApiDetectBundleUpdate(_ context.Context, diff *schema.ResourceDiff, v interface{}) bool {
 	tmp, _ := diff.GetChange("detect_md5hash")
 	oldBundleHash := tmp.(string)

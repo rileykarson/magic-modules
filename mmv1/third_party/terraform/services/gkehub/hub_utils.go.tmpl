@@ -253,11 +253,6 @@ func (op *deleteFeatureMembershipOperation) do(ctx context.Context, r *FeatureMe
 	return sendFeatureUpdate(ctx, req, c, u)
 }
 
-// CompareFeatureMembershipConfigmanagementHierarchyControllerNewStyle exists only for unit-testing the diff library.
-func CompareFeatureMembershipConfigmanagementHierarchyControllerNewStyle(d, a any, fn dcl.FieldName) ([]*dcl.FieldDiff, error) {
-	return compareFeatureMembershipConfigmanagementHierarchyControllerNewStyle(d, a, fn)
-}
-
 // This function behaves the same way as the generated diff function, except that it explicitly
 // checks for emptiness as well.
 func emptyHNCSameAsAllFalse(d, a any) bool {

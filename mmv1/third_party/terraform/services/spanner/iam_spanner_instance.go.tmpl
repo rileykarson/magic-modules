@@ -176,10 +176,6 @@ func (s SpannerInstanceId) instanceUri() string {
 	return fmt.Sprintf("%s/instances/%s", s.parentProjectUri(), s.Instance)
 }
 
-func (s SpannerInstanceId) instanceConfigUri(c string) string {
-	return fmt.Sprintf("%s/instanceConfigs/%s", s.parentProjectUri(), c)
-}
-
 func extractSpannerInstanceId(id string) (*SpannerInstanceId, error) {
 	if !regexp.MustCompile("^" + verify.ProjectRegex + "/[a-z0-9-]+$").Match([]byte(id)) {
 		return nil, fmt.Errorf("Invalid spanner id format, expecting {projectId}/{instanceId}")
