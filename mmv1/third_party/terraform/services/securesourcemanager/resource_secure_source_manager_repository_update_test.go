@@ -12,17 +12,18 @@ import (
 func TestAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_update(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"deletion_policy": "DELETE",
-		"random_suffix":   acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_basic(context),
+				Config: testAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_basic(map[string]interface{}{
+					"deletion_policy": "DELETE",
+					"random_suffix":   randomSuffix,
+					"description":     nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secure_source_manager_repository.default",
@@ -31,7 +32,11 @@ func TestAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExam
 				ImportStateVerifyIgnore: []string{"initial_config", "location", "repository_id", "deletion_policy"},
 			},
 			{
-				Config: testAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_update(context),
+				Config: testAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_basic(map[string]interface{}{
+					"deletion_policy": "DELETE",
+					"random_suffix":   randomSuffix,
+					"description":     "new description",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_secure_source_manager_repository.default", plancheck.ResourceActionUpdate),
@@ -63,28 +68,7 @@ resource "google_secure_source_manager_repository" "default" {
     repository_id = "tf-test-my-repository%{random_suffix}"
     instance = google_secure_source_manager_instance.instance.name
 
-    # Prevent accidental deletions.
-    deletion_policy = "%{deletion_policy}"
-}
-`, context)
-}
-
-func testAccSecureSourceManagerRepository_secureSourceManagerRepositoryBasicExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secure_source_manager_instance" "instance" {
-    location = "us-central1"
-    instance_id = "tf-test-my-instance%{random_suffix}"
-
-    # Prevent accidental deletions.
-    deletion_policy = "%{deletion_policy}"
-}
-
-resource "google_secure_source_manager_repository" "default" {
-    location = "us-central1"
-    repository_id = "tf-test-my-repository%{random_suffix}"
-    instance = google_secure_source_manager_instance.instance.name
-
-    description = "new description"
+    description = "%{description}"
 
     # Prevent accidental deletions.
     deletion_policy = "%{deletion_policy}"
