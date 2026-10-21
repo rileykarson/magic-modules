@@ -31,7 +31,9 @@ func TestAccContainerAttachedCluster_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "annotations"},
 			},
 			{
-				Config: testAccContainerAttachedCluster_containerAttachedCluster_update(context),
+				Config: testAccContainerAttachedCluster_containerAttachedCluster_update(acctest.MergeMap(context, map[string]interface{}{
+					"admin_users": `["user2@example.com", "user3@example.com"]`,
+				})),
 			},
 			{
 				ResourceName:            "google_container_attached_cluster.primary",
@@ -40,7 +42,9 @@ func TestAccContainerAttachedCluster_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "annotations"},
 			},
 			{
-				Config: testAccContainerAttachedCluster_containerAttachedCluster_removeAuthorizationUsers(context),
+				Config: testAccContainerAttachedCluster_containerAttachedCluster_update(acctest.MergeMap(context, map[string]interface{}{
+					"admin_users": nil,
+				})),
 			},
 			{
 				ResourceName:            "google_container_attached_cluster.primary",
@@ -129,97 +133,31 @@ func testAccContainerAttachedCluster_containerAttachedCluster_update(context map
 data "google_project" "project" {
 }
 
-data "google_container_attached_versions" "versions" {
-	location       = "us-west1"
-	project        = data.google_project.project.project_id
-}
-
 resource "google_container_attached_cluster" "primary" {
-  name     = "update%{random_suffix}"
-  project = data.google_project.project.project_id
+  name = "tf-test-basic%{random_suffix}"
   location = "us-west1"
-  description = "Test cluster updated"
-  distribution = "aks"
-  annotations = {
-    label-one = "value-one"
-  label-two = "value-two"
-  }
-  authorization {
-    admin_users = [ "user2@example.com", "user3@example.com"]
-    admin_groups = [ "group3@example.com"]
-  }
+  project = data.google_project.project.project_id
+  description = "Test cluster"
+  distribution = "eks"
   oidc_config {
-      issuer_url = "https://oidc.issuer.url"
-      jwks = base64encode("{\"keys\":[{\"use\":\"sig\",\"kty\":\"RSA\",\"kid\":\"testid\",\"alg\":\"RS256\",\"n\":\"somedata\",\"e\":\"AQAB\"}]}")
+    issuer_url = "https://oidc.eks.us-west-2.amazonaws.com/id/D07EA0AA425F82CC0BE5CEE2DDF86187"
   }
-  platform_version = data.google_container_attached_versions.versions.valid_versions[0]
+  platform_version = "%{platform_version}"
   fleet {
     project = "projects/${data.google_project.project.number}"
   }
-  monitoring_config {
-    managed_prometheus_config {}
-  }
-  binary_authorization {
-    evaluation_mode = "DISABLED"
-  }
-  proxy_config {
-    kubernetes_secret {
-      name = "new-proxy-config"
-      namespace = "custom-ns"
-    }
-  }
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-`, context)
-}
-
-func testAccContainerAttachedCluster_containerAttachedCluster_removeAuthorizationUsers(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-data "google_project" "project" {
-}
-
-data "google_container_attached_versions" "versions" {
-	location       = "us-west1"
-	project        = data.google_project.project.project_id
-}
-
-resource "google_container_attached_cluster" "primary" {
-  name     = "update%{random_suffix}"
-  project = data.google_project.project.project_id
-  location = "us-west1"
-  description = "Test cluster updated"
-  distribution = "aks"
-  annotations = {
-    label-one = "value-one"
-  label-two = "value-two"
-  }
   authorization {
-    admin_groups = [ "group3@example.com"]
+    admin_users = %{admin_users}
   }
-  oidc_config {
-      issuer_url = "https://oidc.issuer.url"
-      jwks = base64encode("{\"keys\":[{\"use\":\"sig\",\"kty\":\"RSA\",\"kid\":\"testid\",\"alg\":\"RS256\",\"n\":\"somedata\",\"e\":\"AQAB\"}]}")
-  }
-  platform_version = data.google_container_attached_versions.versions.valid_versions[0]
-  fleet {
-    project = "projects/${data.google_project.project.number}"
-  }
-  monitoring_config {
-    managed_prometheus_config {}
-  }
-  binary_authorization {
-    evaluation_mode = "DISABLED"
-  }
-  proxy_config {
-    kubernetes_secret {
-      name = "new-proxy-config"
-      namespace = "custom-ns"
+  logging_config {
+    component_config {
+      enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
     }
   }
-  lifecycle {
-    prevent_destroy = true
+  monitoring_config {
+    managed_prometheus_config {
+      enabled = true
+    }
   }
 }
 `, context)
