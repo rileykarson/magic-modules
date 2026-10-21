@@ -370,6 +370,14 @@ var schemaNodePool = map[string]*schema.Schema{
 		Description: `Configuration required by cluster autoscaler to adjust the size of the node pool to the current cluster usage.`,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
+				
+				"autoprovisioned": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Computed: true,
+					Description: `Whether the node pool is autoprovisioned or not.`,
+				},
+
 				"min_node_count": {
 					Type:         schema.TypeInt,
 					Optional:     true,
@@ -1288,8 +1296,9 @@ func expandNodePool(d *schema.ResourceData, prefix string) (*container.NodePool,
 				MaxNodeCount:      int64(autoscaling["max_node_count"].(int)),
 				TotalMinNodeCount: int64(autoscaling["total_min_node_count"].(int)),
 				TotalMaxNodeCount: int64(autoscaling["total_max_node_count"].(int)),
+				Autoprovisioned: autoscaling["autoprovisioned"].(bool),
 				LocationPolicy:    autoscaling["location_policy"].(string),
-				ForceSendFields:   []string{"MinNodeCount", "MaxNodeCount", "TotalMinNodeCount", "TotalMaxNodeCount"},
+				ForceSendFields:   []string{"MinNodeCount", "MaxNodeCount", "TotalMinNodeCount", "TotalMaxNodeCount", "Autoprovisioned"},
 			}
 		}
 	}
@@ -1640,6 +1649,7 @@ func flattenNodePool(d *schema.ResourceData, config *transport_tpg.Config, np *c
 					"total_min_node_count": np.Autoscaling.TotalMinNodeCount,
 					"total_max_node_count": np.Autoscaling.TotalMaxNodeCount,
 					"location_policy":      np.Autoscaling.LocationPolicy,
+					"autoprovisioned":      np.Autoscaling.Autoprovisioned,
 				},
 			}
 		} else {
@@ -1886,8 +1896,9 @@ func nodePoolUpdate(d *schema.ResourceData, meta interface{}, nodePoolInfo *Node
 				MaxNodeCount:      int64(autoscaling["max_node_count"].(int)),
 				TotalMinNodeCount: int64(autoscaling["total_min_node_count"].(int)),
 				TotalMaxNodeCount: int64(autoscaling["total_max_node_count"].(int)),
+				Autoprovisioned: autoscaling["autoprovisioned"].(bool),
 				LocationPolicy:    autoscaling["location_policy"].(string),
-				ForceSendFields:   []string{"MinNodeCount", "TotalMinNodeCount"},
+				ForceSendFields:   []string{"MinNodeCount", "TotalMinNodeCount", "Autoprovisioned"},
 			}
 		} else {
 			update.DesiredNodePoolAutoscaling = &container.NodePoolAutoscaling{

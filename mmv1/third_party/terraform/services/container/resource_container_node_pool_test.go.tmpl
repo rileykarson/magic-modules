@@ -3855,7 +3855,7 @@ resource "google_container_node_pool" "np" {
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-    min_node_count = 1
+    min_node_count = 0
     max_node_count = 3
   }
 }
@@ -3962,7 +3962,7 @@ resource "google_container_node_pool" "np" {
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-    min_node_count = 1
+    min_node_count = 0
     max_node_count = 3
   }
 }
@@ -5326,7 +5326,7 @@ resource "google_container_node_pool" "with_upgrade_settings" {
   cluster = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-	  min_node_count = 1
+	  min_node_count = 0
 	  max_node_count = 3
   }
   %s
@@ -8409,4 +8409,89 @@ resource "google_container_node_pool" "np" {
   }
 }
 `, clusterName, networkName, subnetworkName, poolName)
+}
+
+func TestAccContainerNodePool_autoscalingAutoprovisioned(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	np := fmt.Sprintf("tf-test-nodepool-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerNodePoolDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerNodePool_autoscalingAutoprovisioned(cluster, np, networkName, subnetworkName, false),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "autoscaling.0.autoprovisioned", "false"),
+				),
+			},
+			{
+				ResourceName:      "google_container_node_pool.np",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: testAccContainerNodePool_autoscalingAutoprovisioned(cluster, np, networkName, subnetworkName, true),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "autoscaling.0.autoprovisioned", "true"),
+				),
+			},
+			{
+				ResourceName:      "google_container_node_pool.np",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func testAccContainerNodePool_autoscalingAutoprovisioned(cluster, np, networkName, subnetworkName string, autoprovisioned bool) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "cluster" {
+  name               = "%s"
+  location           = "us-east1-b"
+  initial_node_count = 1
+  deletion_protection = false
+  network    = "%s"
+  subnetwork    = "%s"
+
+  cluster_autoscaling {
+    enabled = true
+
+    resource_limits {
+      resource_type = "cpu"
+      minimum       = 1
+      maximum       = 5
+    }
+
+    resource_limits {
+      resource_type = "memory"
+      minimum       = 1
+      maximum       = 5
+    }
+  }
+}
+
+resource "google_container_node_pool" "np" {
+  name               = "%s"
+  location           = "us-east1-b"
+  cluster            = google_container_cluster.cluster.name
+  initial_node_count = 1
+  autoscaling {
+    min_node_count = 0
+    max_node_count = 3
+    autoprovisioned = %t
+  }
+}
+`, cluster, networkName, subnetworkName, np, autoprovisioned)
 }
