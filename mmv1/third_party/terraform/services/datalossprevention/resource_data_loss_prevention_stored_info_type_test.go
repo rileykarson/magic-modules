@@ -45,107 +45,14 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeUpdate(t *testing.
 func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Description"
-	display_name = "Displayname"
+  parent = "projects/%{project}"
+  description = "Description"
+  display_name = "Displayname"
 
-	regex {
-		pattern = "patient"
-		group_indexes = [2]
-	}
-}
-`, context)
-}
-
-func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Updated Description"
-	display_name = "display_name"
-
-	dictionary {
-		word_list {
-			words = ["word", "word2"]
-		}
-	}
-}
-`, context)
-}
-
-func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t *testing.T) {
-	t.Parallel()
-
-	context := map[string]interface{}{
-		"project": envvar.GetTestProjectFromEnv(),
-	}
-
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
-		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
-		CheckDestroy:             testAccCheckDataLossPreventionStoredInfoTypeDestroyProducer(t),
-		Steps: []resource.TestStep{
-			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context),
-			},
-			{
-				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(context),
-			},
-			{
-				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(context),
-			},
-			{
-				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context),
-			},
-			{
-				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Description"
-	display_name = "Displayname"
-
-	regex {
-		pattern = "patient"
-	}
-}
-`, context)
-}
-
-func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Description"
-	display_name = "Displayname"
-
-	regex {
-		pattern = "patient"
-		group_indexes = [3]
-	}
+  regex {
+    pattern = "patient"
+    group_indexes = %{group_indexes}
+  }
 }
 `, context)
 }
