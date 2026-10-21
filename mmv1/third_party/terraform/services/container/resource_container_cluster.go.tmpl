@@ -4586,7 +4586,9 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 
 		updateF := updateFunc(req, "updating control plane egress")
 		// Call update serially.
-		updateFuncs = append(updateFuncs, updateF)
+		if err := updateF(); err != nil {
+			return err
+		}
 	}
 
 	if d.HasChange("cost_management_config") {
