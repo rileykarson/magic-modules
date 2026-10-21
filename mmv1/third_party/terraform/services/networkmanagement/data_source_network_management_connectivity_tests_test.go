@@ -16,9 +16,7 @@ import (
 func TestAccNetworkManagementConnectivityTests_basic(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -26,7 +24,10 @@ func TestAccNetworkManagementConnectivityTests_basic(t *testing.T) {
 		CheckDestroy:             testAccCheckNetworkManagementConnectivityTestDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetworkManagementConnectivityTests_withoutFilter(context),
+				Config: testAccNetworkManagementConnectivityTests_withoutFilter(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"filter":        nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					checkListDataSourceStateMatchesResourceStateWithIgnores(
 						"data.google_network_management_connectivity_tests.conn-tests",
@@ -42,7 +43,10 @@ func TestAccNetworkManagementConnectivityTests_basic(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccNetworkManagementConnectivityTests_withFilter(context),
+				Config: testAccNetworkManagementConnectivityTests_withoutFilter(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"filter":        fmt.Sprintf("description:%s", randomSuffix),
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					checkListDataSourceStateMatchesResourceStateWithIgnores(
 						"data.google_network_management_connectivity_tests.conn-tests",
@@ -64,21 +68,7 @@ func TestAccNetworkManagementConnectivityTests_basic(t *testing.T) {
 func testAccNetworkManagementConnectivityTests_withoutFilter(context map[string]interface{}) string {
 	connTestCfg := acctest.Nprintf(`
 data "google_network_management_connectivity_tests" "conn-tests" {
-  depends_on = [
-  	google_network_management_connectivity_test.conn-test-1,
-  	google_network_management_connectivity_test.conn-test-2
-  ]
-}
-
-
-`, context)
-	return fmt.Sprintf("%s\n\n%s\n\n", connTestCfg, testAccNetworkManagementConnectivityTests_baseResources(context))
-}
-
-func testAccNetworkManagementConnectivityTests_withFilter(context map[string]interface{}) string {
-	connTestCfg := acctest.Nprintf(`
-data "google_network_management_connectivity_tests" "conn-tests" {
-  filter = "description:%{random_suffix}"
+  filter = "%{filter}"
   depends_on = [
   	google_network_management_connectivity_test.conn-test-1,
   	google_network_management_connectivity_test.conn-test-2
