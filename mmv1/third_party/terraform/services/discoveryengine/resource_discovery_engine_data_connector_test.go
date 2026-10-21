@@ -40,7 +40,15 @@ func TestAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBas
 				ImportStateVerifyIgnore: []string{"auto_run_disabled", "collection_display_name", "collection_id", "incremental_sync_disabled", "location", "params", "state", "update_time"},
 			},
 			{
-				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_update(context),
+				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_update(acctest.MergeMap(context, map[string]interface{}{
+					"params": `{
+    auth_type                  = "OAUTH"
+    client_id                  = "client_id_1"
+    client_secret              = "client_secret_1"
+    tenant_id                  = "tenant_id_2"
+  }`,
+					"json_params": nil,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_discovery_engine_data_connector.onedrive-basic", plancheck.ResourceActionUpdate),
@@ -70,7 +78,15 @@ func TestAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBas
 				ImportStateVerifyIgnore: []string{"auto_run_disabled", "collection_display_name", "collection_id", "incremental_sync_disabled", "location", "params", "update_time"},
 			},
 			{
-				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_updateJsonParams(context, "tenant_id_3"),
+				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_update(acctest.MergeMap(context, map[string]interface{}{
+					"params": nil,
+					"json_params": `jsonencode({
+    auth_type                  = "OAUTH"
+    client_id                  = "client_id_1"
+    client_secret              = "client_secret_1"
+    tenant_id                  = "tenant_id_3"
+  })`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_discovery_engine_data_connector.onedrive-basic", plancheck.ResourceActionUpdate),
@@ -95,7 +111,15 @@ func TestAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBas
 				ImportStateVerifyIgnore: []string{"auto_run_disabled", "collection_display_name", "collection_id", "incremental_sync_disabled", "json_params", "location", "params", "update_time"},
 			},
 			{
-				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_updateJsonParams(context, "tenant_id_4"),
+				Config: testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_update(acctest.MergeMap(context, map[string]interface{}{
+					"params": nil,
+					"json_params": `jsonencode({
+    auth_type                  = "OAUTH"
+    client_id                  = "client_id_1"
+    client_secret              = "client_secret_1"
+    tenant_id                  = "tenant_id_4"
+  })`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_discovery_engine_data_connector.onedrive-basic", plancheck.ResourceActionUpdate),
@@ -203,48 +227,8 @@ resource "google_discovery_engine_data_connector" "onedrive-basic" {
   collection_display_name      = "tf-test-dataconnector-onedrive"
   data_source                  = "onedrive_federated_search"
   tag                          = "tf-test-tag-%{random_suffix}"
-  params = {
-    auth_type                  = "OAUTH"
-    client_id                  = "client_id_1"
-    client_secret              = "client_secret_1"
-    tenant_id                  = "tenant_id_2"
-  }
-  refresh_interval             = "172800s"
-  entities {
-    entity_name                = "file"
-    params                     = jsonencode({
-      "custom_id": "456"
-    })
-  }
-  static_ip_enabled            = false
-  incremental_refresh_interval = "21600s"
-  connector_modes              = ["FEDERATED"]
-  auto_run_disabled            = true
-  incremental_sync_disabled    = true
-}
-`, context)
-}
-
-func testAccDiscoveryEngineDataConnector_discoveryengineDataconnectorOnedriveBasicExample_updateJsonParams(context map[string]interface{}, tenantId string) string {
-	context["tenant_id"] = tenantId
-	return acctest.Nprintf(`
-resource "time_sleep" "wait_1_minute" {
-  create_duration = "60s"
-}
-
-resource "google_discovery_engine_data_connector" "onedrive-basic" {
-  depends_on                   = [time_sleep.wait_1_minute]
-  location                     = "global"
-  collection_id                = "tf-test-collection-id%{random_suffix}"
-  collection_display_name      = "tf-test-dataconnector-onedrive"
-  data_source                  = "onedrive_federated_search"
-  tag                          = "tf-test-tag-%{random_suffix}"
-  json_params = jsonencode({
-    auth_type                  = "OAUTH"
-    client_id                  = "client_id_1"
-    client_secret              = "client_secret_1"
-    tenant_id                  = "%{tenant_id}"
-  })
+  params                       = %{params}
+  json_params                  = %{json_params}
   refresh_interval             = "172800s"
   entities {
     entity_name                = "file"
