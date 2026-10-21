@@ -91,18 +91,30 @@ func TestAccBigQueryJob_validationErrors(t *testing.T) {
 		"project":       envvar.GetTestProjectFromEnv(),
 	}
 
+	contextMissingProject := map[string]interface{}{
+		"random_suffix": context["random_suffix"],
+		"project_id":    nil,
+		"dataset_id":    "example_dataset",
+	}
+
+	contextMissingDataset := map[string]interface{}{
+		"random_suffix": context["random_suffix"],
+		"project_id":    context["project"],
+		"dataset_id":    nil,
+	}
+
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccBigQueryJob_missingProjectId(context),
+				Config: testAccBigQueryJob_missingField(contextMissingProject),
 				ExpectError: regexp.MustCompile(
 					`(?s)Invalid BigQuery job destination_table configuration\. You must either:.*Missing or empty projectId`,
 				),
 			},
 			{
-				Config: testAccBigQueryJob_missingDatasetId(context),
+				Config: testAccBigQueryJob_missingField(contextMissingDataset),
 				ExpectError: regexp.MustCompile(
 					`(?s)Invalid BigQuery job destination_table configuration\. You must either:.*Missing or empty datasetId`,
 				),
@@ -111,7 +123,7 @@ func TestAccBigQueryJob_validationErrors(t *testing.T) {
 	})
 }
 
-func testAccBigQueryJob_missingProjectId(context map[string]interface{}) string {
+func testAccBigQueryJob_missingField(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_bigquery_job" "job" {
   job_id     = "tf-test-job-%{random_suffix}"
@@ -119,26 +131,9 @@ resource "google_bigquery_job" "job" {
   query {
     query = "SELECT state FROM [lookerdata:cdc.project_tycho_reports]"
     destination_table {
-      dataset_id = "example_dataset"
+      project_id = "%{project_id}"
+      dataset_id = "%{dataset_id}"
       table_id   = "example_table"
-      # project_id intentionally omitted
-    }
-  }
-}
-`, context)
-}
-
-func testAccBigQueryJob_missingDatasetId(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_bigquery_job" "job" {
-  job_id     = "tf-test-job-%{random_suffix}"
-
-  query {
-    query = "SELECT state FROM [lookerdata:cdc.project_tycho_reports]"
-    destination_table {
-      project_id = "%{project}"
-      table_id   = "example_table"
-      # dataset_id intentionally omitted
     }
   }
 }
