@@ -630,10 +630,12 @@ fields:
     api_field: 'nodePools.config.kubeletConfig.containerLogMaxFiles'
   - field: 'node_pool.node_config.kubelet_config.container_log_max_size'
     api_field: 'nodePools.config.kubeletConfig.containerLogMaxSize'
+{{- if ne $.TargetVersionName "ga" }}
   - field: 'node_pool.node_config.kubelet_config.reserved_resources_config.cpu_reserved_millicore'
   - field: 'node_pool.node_config.kubelet_config.reserved_resources_config.memory_reserved_mib'
   - field: 'node_pool.node_config.kubelet_config.reserved_resources_config.effective_cpu_reserved_millicore'
   - field: 'node_pool.node_config.kubelet_config.reserved_resources_config.effective_memory_reserved_mib'
+{{- end }}
   - field: 'node_pool.node_config.kubelet_config.cpu_cfs_quota'
     api_field: 'nodePools.config.kubeletConfig.cpuCfsQuota'
   - field: 'node_pool.node_config.kubelet_config.cpu_cfs_quota_period'

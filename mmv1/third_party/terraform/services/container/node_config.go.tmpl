@@ -1057,6 +1057,7 @@ func schemaNodeConfig() *schema.Schema {
                                                                         },
                                                                 },
                                                         },
+{{ if ne $.TargetVersionName `ga` -}}
 							"reserved_resources_config": {
 								Type:        schema.TypeList,
 								Optional:    true,
@@ -1090,6 +1091,7 @@ func schemaNodeConfig() *schema.Schema {
 									},
 								},
 							},
+{{- end }}
 							"crash_loop_back_off": {
 								Type:        schema.TypeList,
 								Optional:    true,
@@ -2303,18 +2305,11 @@ func expandKubeletConfig(v interface{}) *container.NodeKubeletConfig {
                 }
                 kConfig.EvictionMinimumReclaim = reclaim
         }
-	if v, ok := cfg["reserved_resources_config"]; ok && len(v.([]interface{})) > 0 {
-		es := v.([]interface{})[0].(map[string]interface{})
-		reserved := &container.ReservedResourcesConfig{}
-		if val, ok := es["cpu_reserved_millicore"]; ok {
-			reserved.CpuReservedMillicore = int64(val.(int))
-		}
-		if val, ok := es["memory_reserved_mib"]; ok {
-			reserved.MemoryReservedMib = int64(val.(int))
-		}
-		// effective fields are computed only
-		kConfig.ReservedResourcesConfig = reserved
+{{ if ne $.TargetVersionName `ga` -}}
+	if v, ok := cfg["reserved_resources_config"]; ok {
+		kConfig.ReservedResourcesConfig = expandReservedResourcesConfig(v)
 	}
+{{- end }}
 	if v, ok := cfg["crash_loop_back_off"]; ok && len(v.([]interface{})) > 0 {
 		clb := v.([]interface{})[0].(map[string]interface{})
 		crashLoopBackOff := &container.CrashLoopBackOffConfig{}
@@ -3565,7 +3560,9 @@ func flattenKubeletConfig(c *container.NodeKubeletConfig) []map[string]interface
 			"eviction_soft":                          flattenEvictionSignals(c.EvictionSoft),
 			"eviction_soft_grace_period":             flattenEvictionGracePeriod(c.EvictionSoftGracePeriod),
 			"eviction_minimum_reclaim":               flattenEvictionMinimumReclaim(c.EvictionMinimumReclaim),
+{{- if ne $.TargetVersionName "ga" }}
 			"reserved_resources_config":              flattenReservedResourcesConfig(c.ReservedResourcesConfig),
+{{- end }}
 			"crash_loop_back_off":                    flattenCrashLoopBackOffConfig(c.CrashLoopBackOff),
 		})
 	}
@@ -4826,6 +4823,7 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 	return nil
 }
 
+{{ if ne $.TargetVersionName `ga` -}}
 func flattenReservedResourcesConfig(c *container.ReservedResourcesConfig) []map[string]interface{} {
 	if c == nil {
 		return nil
@@ -4858,3 +4856,4 @@ func expandReservedResourcesConfig(v interface{}) *container.ReservedResourcesCo
 	}
 	return result
 }
+{{- end }}

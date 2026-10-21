@@ -419,7 +419,7 @@ In addition to the arguments listed above, the following computed attributes are
 
 * `shutdown_grace_period_critical_pods_seconds` - (Optional) The grace period (in seconds) to use during a graceful node shutdown for critical pods. This value must be less than or equal to `shutdown_grace_period_seconds`. This field can only be configured if the node pool uses Spot VMs or Preemptible VMs.
 
-* `reserved_resources_config` - (Optional) The Reserved Resources config limits the maximum amount of resource allocations. Structure is [documented below](#nested_reserved_resources_config).
+* `reserved_resources_config` - (Optional, Beta) The Reserved Resources config limits the maximum amount of resource allocations. Structure is [documented below](#nested_reserved_resources_config).
 
 <a name="nested_reserved_resources_config"></a>The `reserved_resources_config` block supports:
 

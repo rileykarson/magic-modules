@@ -153,10 +153,12 @@ fields:
     api_field: 'config.kubeletConfig.containerLogMaxFiles'
   - field: 'node_config.kubelet_config.container_log_max_size'
     api_field: 'config.kubeletConfig.containerLogMaxSize'
+{{- if ne $.TargetVersionName "ga" }}
   - field: 'node_config.kubelet_config.reserved_resources_config.cpu_reserved_millicore'
   - field: 'node_config.kubelet_config.reserved_resources_config.memory_reserved_mib'
   - field: 'node_config.kubelet_config.reserved_resources_config.effective_cpu_reserved_millicore'
   - field: 'node_config.kubelet_config.reserved_resources_config.effective_memory_reserved_mib'
+{{- end }}
   - field: 'node_config.kubelet_config.cpu_cfs_quota'
     api_field: 'config.kubeletConfig.cpuCfsQuota'
   - field: 'node_config.kubelet_config.cpu_cfs_quota_period'
