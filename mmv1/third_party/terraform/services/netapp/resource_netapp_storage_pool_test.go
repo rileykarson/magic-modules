@@ -673,17 +673,19 @@ data "google_compute_network" "default" {
 func TestAccNetappStoragePool_unifiedStoragePoolCreate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog")),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	networkName := servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappStoragePool_unifiedStoragePoolCreate(context),
+				Config: testAccNetappStoragePool_unifiedStoragePoolCreate(map[string]interface{}{
+					"network_name":           networkName,
+					"random_suffix":          randomSuffix,
+					"total_throughput_mibps": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -692,7 +694,11 @@ func TestAccNetappStoragePool_unifiedStoragePoolCreate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappStoragePool_unifiedStoragePoolCreate_update(context),
+				Config: testAccNetappStoragePool_unifiedStoragePoolCreate(map[string]interface{}{
+					"network_name":           networkName,
+					"random_suffix":          randomSuffix,
+					"total_throughput_mibps": "200",
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -723,30 +729,7 @@ resource "google_netapp_storage_pool" "test_pool" {
         key = "test"
         value = "pool"
     }
-}
-`, context)
-}
-
-func testAccNetappStoragePool_unifiedStoragePoolCreate_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-
-data "google_compute_network" "default" {
-    name = "%{network_name}"
-}
-
-resource "google_netapp_storage_pool" "test_pool" {
-    name = "tf-test-pool%{random_suffix}"
-    location = "us-central1-a"
-    service_level = "FLEX"
-    type = "UNIFIED"
-    capacity_gib = "2048"
-    network = data.google_compute_network.default.id
-    description           = "this is a test description"
-    labels                = {
-        key = "test"
-        value = "pool"
-    }
-	total_throughput_mibps = "200"
+    total_throughput_mibps = "%{total_throughput_mibps}"
 }
 `, context)
 }
