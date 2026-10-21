@@ -37,11 +37,10 @@ func TestAccComputeInterconnectAttachmentGroup_basic(t *testing.T) {
 
 func testAccComputeInterconnectAttachmentGroup_basic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_compute_interconnect_attachment_group" "example-interconnect-attachment-group" {
-  name   = "tf-test-example-interconnect-attachment-group%{random_suffix}"
-  intent {
-    availability_sla = "NO_SLA"
-  }
+resource "google_compute_interconnect_attachment_group" "group" {
+  name        = "tf-test-interconnect-group%{random_suffix}"
+  topology    = "INTERCONNECT_ATTACHMENT_TOPOLOGY_SINGLE"
+  description = %{description}
 }
 `, context)
 }
@@ -59,7 +58,9 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccComputeInterconnectAttachmentGroup_basic(context),
+				Config: testAccComputeInterconnectAttachmentGroup_basic(acctest.MergeMap(context, map[string]interface{}{
+					"description": nil,
+				})),
 			},
 			{
 				ResourceName:      "google_compute_interconnect_attachment_group.example-interconnect-attachment-group",
@@ -67,7 +68,9 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccComputeInterconnectAttachmentGroup_update(context),
+				Config: testAccComputeInterconnectAttachmentGroup_basic(acctest.MergeMap(context, map[string]interface{}{
+					"description": `"New description"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_compute_interconnect_attachment_group.example-interconnect-attachment-group", plancheck.ResourceActionUpdate),
@@ -81,16 +84,4 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccComputeInterconnectAttachmentGroup_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_interconnect_attachment_group" "example-interconnect-attachment-group" {
-  name   	  = "tf-test-example-interconnect-attachment-group%{random_suffix}"
-  intent {
-    availability_sla = "NO_SLA"
-  }
-  description = "New description"
-}
-`, context)
 }
