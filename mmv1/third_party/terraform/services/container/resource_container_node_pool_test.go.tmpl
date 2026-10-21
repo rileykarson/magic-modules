@@ -8410,6 +8410,7 @@ resource "google_container_node_pool" "np" {
 }
 `, clusterName, networkName, subnetworkName, poolName)
 }
+{{ if ne $.TargetVersionName `ga` -}}
 func TestAccContainerNodePool_withKubeletConfigReservedResources(t *testing.T) {
 	t.Parallel()
 
@@ -8479,3 +8480,4 @@ resource "google_container_node_pool" "with_kubelet_config" {
 }
 `, cluster, networkName, subnetworkName, np, cpu, memory)
 }
+{{- end }}
