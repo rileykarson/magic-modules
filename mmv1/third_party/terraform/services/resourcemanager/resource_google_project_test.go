@@ -286,14 +286,11 @@ func TestAccProject_tags(t *testing.T) {
 	t.Parallel()
 
 	pid := fmt.Sprintf("%s-%d", TestPrefix, acctest.RandInt(t))
+	org := envvar.GetTestOrgFromEnv(t)
 	tagKey := tags.BootstrapSharedTestOrganizationTagKey(t, "crm-projects-tagkey", nil)
-	context := map[string]interface{}{
-		"pid":           pid,
-		"org":           envvar.GetTestOrgFromEnv(t),
-		"tagKey":        tagKey,
-		"tagValue":      tags.BootstrapSharedTestOrganizationTagValue(t, "crm-projects-tagvalue", tagKey),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	tagValue := tags.BootstrapSharedTestOrganizationTagValue(t, "crm-projects-tagvalue", tagKey)
+	tagsMap := fmt.Sprintf("{\n\t\"%s/%s\" = \"%s\"\n  }", org, tagKey, tagValue)
+
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck: func() { acctest.AccTestPreCheck(t) },
 		ExternalProviders: map[string]resource.ExternalProvider{
@@ -302,7 +299,12 @@ func TestAccProject_tags(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccProject_tags(context),
+				Config: testAccProject_tags(map[string]interface{}{
+					"pid":             pid,
+					"org":             org,
+					"deletion_policy": nil,
+					"tags":            tagsMap,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGoogleProjectExists("google_project.acceptance", pid),
 				),
@@ -316,11 +318,21 @@ func TestAccProject_tags(t *testing.T) {
 			},
 			// Update tags tries to replace project but fails due to deletion policy
 			{
-				Config:      testAccProject_withoutTags(context),
+				Config: testAccProject_tags(map[string]interface{}{
+					"pid":             pid,
+					"org":             org,
+					"deletion_policy": nil,
+					"tags":            nil,
+				}),
 				ExpectError: regexp.MustCompile("deletion_policy"),
 			},
 			{
-				Config: testAccProject_tagsAllowDestroy(context),
+				Config: testAccProject_tags(map[string]interface{}{
+					"pid":             pid,
+					"org":             org,
+					"deletion_policy": "DELETE",
+					"tags":            tagsMap,
+				}),
 			},
 		},
 	})
@@ -644,36 +656,11 @@ resource "google_folder" "folder1" {
 func testAccProject_tags(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_project" "acceptance" {
-  project_id = "%{pid}"
-  name       = "%{pid}"
-  org_id     = "%{org}"
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
-}
-`, context)
-}
-
-func testAccProject_withoutTags(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "acceptance" {
-  project_id = "%{pid}"
-  name       = "%{pid}"
-  org_id     = "%{org}"
-}
-`, context)
-}
-
-func testAccProject_tagsAllowDestroy(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "acceptance" {
   project_id      = "%{pid}"
   name            = "%{pid}"
   org_id          = "%{org}"
-  deletion_policy = "DELETE"
-  tags            = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
+  deletion_policy = "%{deletion_policy}"
+  tags            = %{tags}
 }
 `, context)
 }
