@@ -100,7 +100,12 @@ func TestAccAlloydbCluster_upgrade(t *testing.T) {
 		CheckDestroy:             testAccCheckAlloydbClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccAlloydbCluster_beforeUpgrade(context),
+				Config: testAccAlloydbCluster_upgradeConfig(map[string]interface{}{
+					"network_name":     context["network_name"],
+					"random_suffix":    context["random_suffix"],
+					"database_version": "POSTGRES_14",
+					"labels":           nil,
+				}),
 			},
 			{
 				ResourceName:            "google_alloydb_cluster.default",
@@ -109,7 +114,12 @@ func TestAccAlloydbCluster_upgrade(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"deletion_protection", "initial_user", "cluster_id", "location", "labels", "terraform_labels", "skip_await_major_version_upgrade"},
 			},
 			{
-				Config: testAccAlloydbCluster_afterUpgrade(context),
+				Config: testAccAlloydbCluster_upgradeConfig(map[string]interface{}{
+					"network_name":     context["network_name"],
+					"random_suffix":    context["random_suffix"],
+					"database_version": "POSTGRES_15",
+					"labels":           nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_alloydb_cluster.default", "database_version", "POSTGRES_15"),
 				),
@@ -124,7 +134,7 @@ func TestAccAlloydbCluster_upgrade(t *testing.T) {
 	})
 }
 
-func testAccAlloydbCluster_beforeUpgrade(context map[string]interface{}) string {
+func testAccAlloydbCluster_upgradeConfig(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_alloydb_cluster" "default" {
   skip_await_major_version_upgrade = false
@@ -133,41 +143,9 @@ resource "google_alloydb_cluster" "default" {
   network_config {
     network = data.google_compute_network.default.id
   }
-  database_version = "POSTGRES_14"
+  database_version = "%{database_version}"
 
-  initial_user {
-    password = "tf_test_cluster_secret%{random_suffix}"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "default" {
-  cluster       = google_alloydb_cluster.default.name
-  instance_id   = "tf-test-alloydb-instance%{random_suffix}"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 8
-  }
-}
-
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-`, context)
-}
-
-func testAccAlloydbCluster_afterUpgrade(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_alloydb_cluster" "default" {
-  skip_await_major_version_upgrade = false
-  cluster_id = "tf-test-alloydb-cluster%{random_suffix}"
-  location   = "us-central1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-  database_version = "POSTGRES_15"
+  labels = %{labels}
 
   initial_user {
     password = "tf_test_cluster_secret%{random_suffix}"
@@ -214,7 +192,12 @@ func TestAccAlloydbCluster_upgradeWithSimultaneousUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckAlloydbClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccAlloydbCluster_beforeUpgrade(context),
+				Config: testAccAlloydbCluster_upgradeConfig(map[string]interface{}{
+					"network_name":     context["network_name"],
+					"random_suffix":    context["random_suffix"],
+					"database_version": "POSTGRES_14",
+					"labels":           nil,
+				}),
 			},
 			{
 				ResourceName:            "google_alloydb_cluster.default",
@@ -227,7 +210,12 @@ func TestAccAlloydbCluster_upgradeWithSimultaneousUpdate(t *testing.T) {
 				// This triggers the bug: after the upgrade block removes databaseVersion from
 				// updateMask, the remaining [labels] is non-empty, so regular UpdateCluster runs.
 				// With the bug, the outer url still carries databaseVersion in updateMask → 400.
-				Config: testAccAlloydbCluster_afterUpgradeWithLabel(context),
+				Config: testAccAlloydbCluster_upgradeConfig(map[string]interface{}{
+					"network_name":     context["network_name"],
+					"random_suffix":    context["random_suffix"],
+					"database_version": "POSTGRES_15",
+					"labels":           `{ env = "test" }`,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_alloydb_cluster.default", "database_version", "POSTGRES_15"),
 					resource.TestCheckResourceAttr("google_alloydb_cluster.default", "labels.env", "test"),
@@ -241,44 +229,6 @@ func TestAccAlloydbCluster_upgradeWithSimultaneousUpdate(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccAlloydbCluster_afterUpgradeWithLabel(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_alloydb_cluster" "default" {
-  skip_await_major_version_upgrade = false
-  cluster_id = "tf-test-alloydb-cluster%{random_suffix}"
-  location   = "us-central1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-  database_version = "POSTGRES_15"
-
-  labels = {
-    env = "test"
-  }
-
-  initial_user {
-    password = "tf_test_cluster_secret%{random_suffix}"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "default" {
-  cluster       = google_alloydb_cluster.default.name
-  instance_id   = "tf-test-alloydb-instance%{random_suffix}"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 8
-  }
-}
-
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-`, context)
 }
 
 // Trial cluster creation should succeed with subscription type field set to Trial.
