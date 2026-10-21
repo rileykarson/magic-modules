@@ -554,6 +554,13 @@ func schemaNodeConfig() *schema.Schema {
 					},
 				},
 
+				"consolidation_delay": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validateDuration,
+					Description:  `The consolidation delay for this node pool. This is the delay between when the node pool meets the conditions for consolidation and when it is actually consolidated. This field is supported only when cluster autoscaling is enabled.`,
+				},
+
 				"machine_type": {
 					Type:     schema.TypeString,
 					Optional: true,
