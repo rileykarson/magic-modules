@@ -18,7 +18,10 @@ func TestAccSecretManagerSecret_import(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":       acctest.RandString(t, 10),
+		"ttl":                 "3600s",
+		"version_destroy_ttl": nil,
+		"expire_time":         nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -114,9 +117,7 @@ func TestAccSecretManagerSecret_annotationsUpdate(t *testing.T) {
 func TestAccSecretManagerSecret_versionAliasesUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -124,7 +125,10 @@ func TestAccSecretManagerSecret_versionAliasesUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerSecret_basicWithSecretVersions(context),
+				Config: testAccSecretManagerSecret_basicWithSecretVersions(map[string]interface{}{
+					"random_suffix":   randomSuffix,
+					"version_aliases": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -133,7 +137,16 @@ func TestAccSecretManagerSecret_versionAliasesUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_versionAliasesBasic(context),
+				Config: testAccSecretManagerSecret_basicWithSecretVersions(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"version_aliases": `{
+    firstalias = "1",
+    secondalias = "2",
+    thirdalias = "3",
+    otheralias = "2",
+    somealias = "3"
+  }`,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -142,7 +155,16 @@ func TestAccSecretManagerSecret_versionAliasesUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_versionAliasesUpdate(context),
+				Config: testAccSecretManagerSecret_basicWithSecretVersions(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"version_aliases": `{
+    firstalias = "1",
+    secondaliasupdated = "2",
+    otheralias = "1",
+    somealias = "3",
+    fourthalias = "4"
+  }`,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -151,7 +173,10 @@ func TestAccSecretManagerSecret_versionAliasesUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_basicWithSecretVersions(context),
+				Config: testAccSecretManagerSecret_basicWithSecretVersions(map[string]interface{}{
+					"random_suffix":   randomSuffix,
+					"version_aliases": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -334,9 +359,7 @@ func TestAccSecretManagerSecret_rotationPeriodUpdate(t *testing.T) {
 func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -344,7 +367,12 @@ func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerSecret_withoutTtl(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -353,7 +381,12 @@ func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_basic(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 "3600s",
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -362,7 +395,12 @@ func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_ttlUpdate(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 "7200s",
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -371,7 +409,12 @@ func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_withoutTtl(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -386,9 +429,7 @@ func TestAccSecretManagerSecret_ttlUpdate(t *testing.T) {
 func TestAccSecretManagerSecret_versionDestroyTtlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -396,7 +437,12 @@ func TestAccSecretManagerSecret_versionDestroyTtlUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -405,7 +451,12 @@ func TestAccSecretManagerSecret_versionDestroyTtlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_versionDestroyTtlUpdate(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": "86400s",
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -414,7 +465,12 @@ func TestAccSecretManagerSecret_versionDestroyTtlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -429,9 +485,7 @@ func TestAccSecretManagerSecret_versionDestroyTtlUpdate(t *testing.T) {
 func TestAccSecretManagerSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -439,7 +493,12 @@ func TestAccSecretManagerSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerSecret_basic(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 "3600s",
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -448,7 +507,12 @@ func TestAccSecretManagerSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_expireTime(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 nil,
+					"version_destroy_ttl": nil,
+					"expire_time":         "2122-09-26T10:55:55.163240682Z",
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -457,7 +521,12 @@ func TestAccSecretManagerSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerSecret_basic(context),
+				Config: testAccSecretManagerSecret_basic(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"ttl":                 "3600s",
+					"version_destroy_ttl": nil,
+					"expire_time":         nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-basic",
@@ -499,14 +568,10 @@ func TestAccSecretManagerSecret_DeletionProtection(t *testing.T) {
 func TestAccSecretManagerSecret_tags(t *testing.T) {
 	t.Parallel()
 
+	org := envvar.GetTestOrgFromEnv(t)
 	tagKey := tags.BootstrapSharedTestOrganizationTagKey(t, "secret_manager_secret-tagkey", map[string]interface{}{})
-
-	context := map[string]interface{}{
-		"org":           envvar.GetTestOrgFromEnv(t),
-		"tagKey":        tagKey,
-		"tagValue":      tags.BootstrapSharedTestOrganizationTagValue(t, "secret_manager_secret-tagvalue", tagKey),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	tagValue := tags.BootstrapSharedTestOrganizationTagValue(t, "secret_manager_secret-tagvalue", tagKey)
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -514,7 +579,13 @@ func TestAccSecretManagerSecret_tags(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerSecretTags(context),
+				Config: testAccSecretManagerSecretTags(map[string]interface{}{
+					"org":                 org,
+					"tagKey":              tagKey,
+					"tagValue":            tagValue,
+					"random_suffix":       randomSuffix,
+					"deletion_protection": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_secret.secret-tags",
@@ -523,7 +594,13 @@ func TestAccSecretManagerSecret_tags(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "labels", "terraform_labels", "deletion_protection", "tags"},
 			},
 			{
-				Config: testAccSecretManagerSecretTagsDeletionProtection(context),
+				Config: testAccSecretManagerSecretTags(map[string]interface{}{
+					"org":                 org,
+					"tagKey":              tagKey,
+					"tagValue":            tagValue,
+					"random_suffix":       randomSuffix,
+					"deletion_protection": false,
+				}),
 			},
 		},
 	})
@@ -549,7 +626,9 @@ resource "google_secret_manager_secret" "secret-basic" {
     }
   }
 
-  ttl = "3600s"
+  ttl = "%{ttl}"
+  version_destroy_ttl = "%{version_destroy_ttl}"
+  expire_time = "%{expire_time}"
 
 }
 `, context)
@@ -649,115 +728,7 @@ resource "google_secret_manager_secret" "secret-basic" {
     label = "my-label"
   }
 
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-}
-
-resource "google_secret_manager_secret_version" "secret-version-1" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-1"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-2" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-2"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-3" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-3"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-4" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-4"
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_versionAliasesBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-  
-  labels = {
-    label = "my-label"
-  }
-
-  version_aliases = {
-    firstalias = "1",
-    secondalias = "2",
-    thirdalias = "3",
-    otheralias = "2",
-    somealias = "3"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-}
-
-resource "google_secret_manager_secret_version" "secret-version-1" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-1"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-2" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-2"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-3" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-3"
-}
-
-resource "google_secret_manager_secret_version" "secret-version-4" {
-  secret = google_secret_manager_secret.secret-basic.id
-
-  secret_data = "some-secret-data-%{random_suffix}-4"
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_versionAliasesUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-  
-  labels = {
-    label = "my-label"
-  }
-
-  version_aliases = {
-    firstalias = "1",
-    secondaliasupdated = "2",
-    otheralias = "1",
-    somealias = "3",
-    fourthalias = "4"
-  }
+  version_aliases = %{version_aliases}
 
   replication {
     user_managed {
@@ -1162,130 +1133,6 @@ resource "google_secret_manager_secret" "secret-basic" {
 `, context)
 }
 
-func testAccSecretManagerSecret_withoutTtl(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-
-  labels = {
-    label = "my-label"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_ttlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-
-  labels = {
-    label = "my-label"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-
-  ttl = "7200s"
-
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_withoutVersionDestroyTtl(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-
-  labels = {
-    label = "my-label"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_versionDestroyTtlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-
-  labels = {
-    label = "my-label"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-
-  version_destroy_ttl = "86400s"
-
-}
-`, context)
-}
-
-func testAccSecretManagerSecret_expireTime(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-basic" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-
-  labels = {
-    label = "my-label"
-  }
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-
-  expire_time = "2122-09-26T10:55:55.163240682Z"
-
-}
-`, context)
-}
-
 func testAccSecretManagerSecret_deletionprotectionTrue(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_secret" "secret-deletionprotection" {
@@ -1361,32 +1208,7 @@ resource "google_secret_manager_secret" "secret-tags" {
   tags = {
 	"%{org}/%{tagKey}" = "%{tagValue}"
   }
-}
-`, context)
-}
-
-func testAccSecretManagerSecretTagsDeletionProtection(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_secret" "secret-tags" {
-  secret_id = "tf-test-secret-%{random_suffix}"
-  labels = {
-    label = "my-label"
-  }
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-  ttl = "3600s"
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
-  deletion_protection = false
+  deletion_protection = %{deletion_protection}
 }
 `, context)
 }
