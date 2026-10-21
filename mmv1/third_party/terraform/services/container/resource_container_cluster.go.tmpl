@@ -5535,6 +5535,7 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 			req := &container.UpdateClusterRequest{
 				Update: &container.ClusterUpdate{
 					DesiredHostMaintenancePolicy: &container.HostMaintenancePolicy{},
+						ForceSendFields: []string{"DesiredHostMaintenancePolicy"},
 				},
 			}
 			updateF := updateFunc(req, "clearing GKE cluster host maintenance policy config")
