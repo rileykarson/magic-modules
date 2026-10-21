@@ -514,10 +514,8 @@ data "google_compute_network" "default" {
 }
 
 func TestAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_update(t *testing.T) {
-	context := map[string]interface{}{
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog")),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	networkName := servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -525,7 +523,12 @@ func TestAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_u
 		CheckDestroy:             testAccCheckNetappStoragePoolDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_full(context),
+				Config: testAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_full(map[string]interface{}{
+					"network_name":  networkName,
+					"random_suffix": randomSuffix,
+					"description":   "this is a test description",
+					"total_iops":    nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -534,7 +537,12 @@ func TestAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_u
 				ImportStateVerifyIgnore: []string{"location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_update(context),
+				Config: testAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_full(map[string]interface{}{
+					"network_name":  networkName,
+					"random_suffix": randomSuffix,
+					"description":   "this is updated test description",
+					"total_iops":    "3500",
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -554,29 +562,10 @@ resource "google_netapp_storage_pool" "test_pool" {
   service_level = "FLEX"
   capacity_gib = "2048"
   network = data.google_compute_network.default.id
-  description = "this is a test description"
+  description = "%{description}"
   custom_performance_enabled = true
   total_throughput_mibps = "200"
-}
-
-data "google_compute_network" "default" {
-    name = "%{network_name}"
-}
-`, context)
-}
-
-func testAccNetappStoragePool_customPerformanceEnabledStoragePoolCreateExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_netapp_storage_pool" "test_pool" {
-  name = "tf-test-pool%{random_suffix}"
-  location = "us-east4-a"
-  service_level = "FLEX"
-  capacity_gib = "2048"
-  network = data.google_compute_network.default.id
-  description = "this is updated test description"
-  custom_performance_enabled = true
-  total_throughput_mibps = "200"
-  total_iops = "3500"
+  total_iops = "%{total_iops}"
 }
 
 data "google_compute_network" "default" {
