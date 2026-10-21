@@ -6744,14 +6744,14 @@ func expandBinaryAuthorization(configured interface{}) *container.BinaryAuthoriz
 	}
 	config := l[0].(map[string]interface{})
 	{{- if ne $.TargetVersionName "ga" }}
-	var policyBindings []*container.BinaryAuthorizationPolicyBinding
+	var policyBindings []*container.PolicyBinding
 	if v, ok := config["policy_bindings"].([]interface{}); ok && len(v) > 0 {
 		for _, v := range v {
 			if v == nil {
 				continue
 			}
 			obj := v.(map[string]interface{})
-			policyBindings = append(policyBindings, &container.BinaryAuthorizationPolicyBinding{
+			policyBindings = append(policyBindings, &container.PolicyBinding{
 				Name: obj["name"].(string),
 			})
 		}

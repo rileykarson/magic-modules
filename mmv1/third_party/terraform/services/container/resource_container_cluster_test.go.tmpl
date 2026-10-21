@@ -21229,8 +21229,8 @@ func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T)
 	t.Parallel()
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
-	networkName := fmt.Sprintf("tf-test-network-%s", acctest.RandString(t, 10))
-	subnetName := fmt.Sprintf("tf-test-subnet-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.82.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21250,33 +21250,23 @@ func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T)
 
 func testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName string) string {
 	return fmt.Sprintf(`
-resource "google_compute_network" "default" {
-  name                    = "%s"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "default" {
-  name          = "%s"
-  ip_cidr_range = "10.0.0.0/16"
-  region        = "us-central1"
-  network       = google_compute_network.default.id
-}
+data "google_project" "project" {}
 
 resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-central1-a"
   initial_node_count = 1
-  network            = google_compute_network.default.id
-  subnetwork         = google_compute_subnetwork.default.id
+  network            = "%s"
+  subnetwork         = "%s"
 
   binary_authorization {
     evaluation_mode = "POLICY_BINDINGS"
     policy_bindings {
-      name = "projects/${google_compute_network.default.project}/platforms/gke/policies/my-policy"
+      name = "projects/${data.google_project.project.project_id}/platforms/gke/policies/my-policy"
     }
   }
   deletion_protection = false
 }
-`, networkName, subnetName, clusterName)
+`, clusterName, networkName, subnetName)
 }
 {{- end }}
