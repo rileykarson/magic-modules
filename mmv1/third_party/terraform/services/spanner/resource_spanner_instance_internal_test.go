@@ -16,16 +16,6 @@ func TestSpannerInstanceId_instanceUri(t *testing.T) {
 	expectEquals(t, expected, actual)
 }
 
-func TestSpannerInstanceId_instanceConfigUri(t *testing.T) {
-	id := SpannerInstanceId{
-		Project:  "project123",
-		Instance: "instance456",
-	}
-	actual := id.instanceConfigUri("conf987")
-	expected := "projects/project123/instanceConfigs/conf987"
-	expectEquals(t, expected, actual)
-}
-
 func TestSpannerInstanceId_parentProjectUri(t *testing.T) {
 	id := SpannerInstanceId{
 		Project:  "project123",

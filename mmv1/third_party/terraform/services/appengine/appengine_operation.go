@@ -1,7 +1,6 @@
 package appengine
 
 import (
-	"encoding/json"
 	"fmt"
 	"regexp"
 	"time"
@@ -32,27 +31,6 @@ func (w *AppEngineOperationWaiter) QueryOp() (interface{}, error) {
 		return nil, fmt.Errorf("Expected %d results of parsing operation name, got %d from %s", 2, len(matches), w.Op.Name)
 	}
 	return w.Service.Apps.Operations.Get(w.AppId, matches[1]).Do()
-}
-
-func AppEngineOperationWaitTimeWithResponse(config *transport_tpg.Config, res interface{}, response *map[string]interface{}, appId, activity, userAgent string, timeout time.Duration) error {
-	op := &appengine.Operation{}
-	err := tpgresource.Convert(res, op)
-	if err != nil {
-		return err
-	}
-
-	w := &AppEngineOperationWaiter{
-		Service: NewClient(config, userAgent),
-		AppId:   appId,
-	}
-
-	if err := w.SetOp(op); err != nil {
-		return err
-	}
-	if err := tpgresource.OperationWait(w, activity, timeout, config.PollInterval); err != nil {
-		return err
-	}
-	return json.Unmarshal([]byte(w.CommonOperationWaiter.Op.Response), response)
 }
 
 func AppEngineOperationWaitTime(config *transport_tpg.Config, res interface{}, appId, activity, userAgent string, timeout time.Duration) error {

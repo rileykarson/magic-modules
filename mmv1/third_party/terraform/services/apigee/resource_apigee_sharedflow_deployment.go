@@ -287,10 +287,6 @@ func resourceApigeeSharedflowDeploymentImport(d *schema.ResourceData, meta inter
 	return []*schema.ResourceData{d}, nil
 }
 
-func flattenApigeeSharedflowDeploymentOrgId(v interface{}, d *schema.ResourceData, config *transport_tpg.Config) interface{} {
-	return v
-}
-
 func flattenApigeeSharedflowDeploymentEnvironment(v interface{}, d *schema.ResourceData, config *transport_tpg.Config) interface{} {
 	return v
 }

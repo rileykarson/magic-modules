@@ -674,32 +674,6 @@ func resourceDataflowJobSetupEnv(d *schema.ResourceData, config *transport_tpg.C
 	return env, nil
 }
 
-func resourceDataflowJobIterateMapForceNew(mapKey string, d *schema.ResourceDiff) error {
-	obj := d.Get(mapKey).(map[string]interface{})
-	for k := range obj {
-		entrySchemaKey := mapKey + "." + k
-		if d.HasChange(entrySchemaKey) {
-			// ForceNew must be called on the parent map to trigger
-			if err := d.ForceNew(mapKey); err != nil {
-				return err
-			}
-			break
-		}
-	}
-	return nil
-}
-
-func resourceDataflowJobIterateMapHasChange(mapKey string, d *schema.ResourceData) bool {
-	obj := d.Get(mapKey).(map[string]interface{})
-	for k := range obj {
-		entrySchemaKey := mapKey + "." + k
-		if d.HasChange(entrySchemaKey) {
-			return true
-		}
-	}
-	return false
-}
-
 func resourceDataflowJobIsVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
 	// on_delete is the only virtual field
 	if d.HasChange("on_delete") {

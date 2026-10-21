@@ -69,10 +69,6 @@ func (s *healthcareFhirStoreId) FhirStoreId() string {
 	return fmt.Sprintf("%s/fhirStores/%s", s.DatasetId.DatasetId(), s.Name)
 }
 
-func (s *healthcareFhirStoreId) TerraformId() string {
-	return fmt.Sprintf("%s/%s", s.DatasetId.TerraformId(), s.Name)
-}
-
 func ParseHealthcareFhirStoreId(id string, config *transport_tpg.Config) (*healthcareFhirStoreId, error) {
 	parts := strings.Split(id, "/")
 	fhirStoreIdRegex := regexp.MustCompile("^(" + verify.ProjectRegex + ")/([a-z0-9-])+/([a-zA-Z0-9_-]{1,256})/([a-zA-Z0-9_-]{1,256})$")
@@ -127,10 +123,6 @@ func (s *healthcareHl7V2StoreId) Hl7V2StoreId() string {
 	return fmt.Sprintf("%s/hl7V2Stores/%s", s.DatasetId.DatasetId(), s.Name)
 }
 
-func (s *healthcareHl7V2StoreId) TerraformId() string {
-	return fmt.Sprintf("%s/%s", s.DatasetId.TerraformId(), s.Name)
-}
-
 func ParseHealthcareHl7V2StoreId(id string, config *transport_tpg.Config) (*healthcareHl7V2StoreId, error) {
 	parts := strings.Split(id, "/")
 	hl7V2StoreIdRegex := regexp.MustCompile("^(" + verify.ProjectRegex + ")/([a-z0-9-])+/([a-zA-Z0-9_-]{1,256})/([a-zA-Z0-9_-]{1,256})$")
@@ -183,10 +175,6 @@ type healthcareDicomStoreId struct {
 
 func (s *healthcareDicomStoreId) DicomStoreId() string {
 	return fmt.Sprintf("%s/dicomStores/%s", s.DatasetId.DatasetId(), s.Name)
-}
-
-func (s *healthcareDicomStoreId) TerraformId() string {
-	return fmt.Sprintf("%s/%s", s.DatasetId.TerraformId(), s.Name)
 }
 
 func ParseHealthcareDicomStoreId(id string, config *transport_tpg.Config) (*healthcareDicomStoreId, error) {

@@ -2804,10 +2804,6 @@ func flattenOSConfigOSPolicyAssignmentUid(v interface{}, d *schema.ResourceData,
 	return v
 }
 
-func expandOSConfigOSPolicyAssignmentName(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
-	return v, nil
-}
-
 func expandOSConfigOSPolicyAssignmentDescription(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
 	return v, nil
 }

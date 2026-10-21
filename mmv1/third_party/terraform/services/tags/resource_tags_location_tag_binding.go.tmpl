@@ -408,10 +408,6 @@ func flattenNestedTagsLocationTagBindingParent(v interface{}, d *schema.Resource
 	return v
 }
 
-func flattenNestedTagsLocationTagBindingTagValue(v interface{}, d *schema.ResourceData, config *transport_tpg.Config) interface{} {
-	return v
-}
-
 func expandNestedTagsLocationTagBindingParent(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
 	return v, nil
 }

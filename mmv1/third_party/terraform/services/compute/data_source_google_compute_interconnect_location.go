@@ -2,8 +2,6 @@ package compute
 
 import (
 	"fmt"
-	"regexp"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-google/google/registry"
@@ -11,51 +9,6 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
-var (
-	computeInterconnectLocationIdTemplate = "projects/%s/global/interconnectlocations/%s"
-	computeInterconnectLocationLinkRegex  = regexp.MustCompile(`projects/(.+)/global/interconnectlocations/(.+)$`)
-)
-
-type ComputeInterconnectLocationId struct {
-	Project string
-	Name    string
-}
-
-func (s ComputeInterconnectLocationId) CanonicalId() string {
-	return fmt.Sprintf(computeInterconnectLocationIdTemplate, s.Project, s.Name)
-}
-
-// ParseComputeInterconnectLocationId parses IDs of the form:
-// - projects/{project}/global/interconnectlocations/{name}
-// - {project}/{name}
-// - {name} (requires config.Project)
-func ParseComputeInterconnectLocationId(id string, config *transport_tpg.Config) (*ComputeInterconnectLocationId, error) {
-	var parts []string
-	if computeInterconnectLocationLinkRegex.MatchString(id) {
-		parts = computeInterconnectLocationLinkRegex.FindStringSubmatch(id)
-		return &ComputeInterconnectLocationId{
-			Project: parts[1],
-			Name:    parts[2],
-		}, nil
-	} else {
-		parts = strings.Split(id, "/")
-	}
-	if len(parts) == 2 {
-		return &ComputeInterconnectLocationId{
-			Project: parts[0],
-			Name:    parts[1],
-		}, nil
-	} else if len(parts) == 1 {
-		if config.Project == "" {
-			return nil, fmt.Errorf("The default project for the provider must be set when using the `{name}` id format.")
-		}
-		return &ComputeInterconnectLocationId{
-			Project: config.Project,
-			Name:    parts[0],
-		}, nil
-	}
-	return nil, fmt.Errorf("Invalid interconnect location id. Expecting resource link, `{project}/{name}` or `{name}` format.")
-}
 func DataSourceGoogleComputeInterconnectLocation() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceGoogleComputeInterconnectLocationRead,

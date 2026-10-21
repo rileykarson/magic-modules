@@ -111,14 +111,6 @@ type kmsCryptoKeyVersionId struct {
 	Name        string
 }
 
-func (s *kmsCryptoKeyVersionId) cryptoKeyVersionId() string {
-	return s.Name
-}
-
-func (s *kmsCryptoKeyVersionId) TerraformId() string {
-	return fmt.Sprintf("%s/%s", s.CryptoKeyId.TerraformId(), s.Name)
-}
-
 func validateKmsCryptoKeyRotationPeriod(value interface{}, _ string) (ws []string, errors []error) {
 	period := value.(string)
 	pattern := regexp.MustCompile(`^([0-9.]*\d)s$`)

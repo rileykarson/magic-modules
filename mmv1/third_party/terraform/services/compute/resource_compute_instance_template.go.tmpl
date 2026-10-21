@@ -2417,31 +2417,6 @@ func expandNetworkInterfacesTyped(d tpgresource.TerraformResourceData, config *t
 	return ifaces, nil
 }
 
-func expandAccessConfigsTyped(configs []interface{}) ([]*compute.AccessConfig, error) {
-	return accessConfigsToTyped(expandAccessConfigs(configs))
-}
-
-func expandIpv6AccessConfigsTyped(configs []interface{}) ([]*compute.AccessConfig, error) {
-	return accessConfigsToTyped(expandIpv6AccessConfigs(configs))
-}
-
-func accessConfigsToTyped(expanded []interface{}) ([]*compute.AccessConfig, error) {
-	acs := make([]*compute.AccessConfig, 0, len(expanded))
-	if err := convertViaJSON(expanded, &acs); err != nil {
-		return nil, fmt.Errorf("Error converting access configs: %s", err)
-	}
-	return acs, nil
-}
-
-func expandAliasIpRangesTyped(ranges []interface{}) ([]*compute.AliasIpRange, error) {
-	expanded := expandAliasIpRanges(ranges)
-	out := make([]*compute.AliasIpRange, 0, len(expanded))
-	if err := convertViaJSON(expanded, &out); err != nil {
-		return nil, fmt.Errorf("Error converting alias ip ranges: %s", err)
-	}
-	return out, nil
-}
-
 func expandServiceAccountsTyped(configs []interface{}) []*compute.ServiceAccount {
 	expanded := expandServiceAccounts(configs)
 	accounts := make([]*compute.ServiceAccount, len(expanded))

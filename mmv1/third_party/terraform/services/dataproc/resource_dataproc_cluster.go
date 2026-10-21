@@ -95,15 +95,6 @@ var (
 		"cluster_config.0.software_config.0.optional_components",
 	}
 
-	dataprocMetricConfigKeys = []string{
-		"cluster_config.0.dataproc_metric_config.0.metrics",
-	}
-
-	metricKeys = []string{
-		"cluster_config.0.dataproc_metric_config.0.metrics.0.metric_source",
-		"cluster_config.0.dataproc_metric_config.0.metrics.0.metric_overrides",
-	}
-
 	clusterConfigKeys = []string{
 		"cluster_config.0.cluster_tier",
 		"cluster_config.0.engine",

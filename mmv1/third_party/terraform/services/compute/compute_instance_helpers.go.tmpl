@@ -54,42 +54,6 @@ func expandAliasIpRanges(ranges []interface{}) []interface{} {
 	return ipRanges
 }
 
-func flattenAliasIpRange(d *schema.ResourceData, ranges []interface{}, i int) []map[string]interface{} {
-	prefix := fmt.Sprintf("network_interface.%d", i)
-
-	configData := []map[string]interface{}{}
-	for _, item := range d.Get(prefix + ".alias_ip_range").([]interface{}) {
-		configData = append(configData, item.(map[string]interface{}))
-	}
-
-	apiData := make([]map[string]interface{}, 0, len(ranges))
-	for _, raw := range ranges {
-		ipRange, ok := raw.(map[string]interface{})
-		if !ok {
-			continue
-		}
-		ipCidrRange, ok := ipRange["ipCidrRange"].(string)
-		if !ok && ipRange["ipCidrRange"] != nil {
-			log.Printf("[WARN] flattenAliasIpRange: unexpected type for ipCidrRange: %T", ipRange["ipCidrRange"])
-		}
-		subnetworkRangeName, ok := ipRange["subnetworkRangeName"].(string)
-		if !ok && ipRange["subnetworkRangeName"] != nil {
-			log.Printf("[WARN] flattenAliasIpRange: unexpected type for subnetworkRangeName: %T", ipRange["subnetworkRangeName"])
-		}
-		apiData = append(apiData, map[string]interface{}{
-			"ip_cidr_range":         ipCidrRange,
-			"subnetwork_range_name": subnetworkRangeName,
-		})
-	}
-
-	//permadiff fix
-	sorted, err := tpgresource.SortMapsByConfigOrder(configData, apiData, "ip_cidr_range")
-	if err != nil {
-		return apiData
-	}
-	return sorted
-}
-
 {{ if ne $.TargetVersionName `ga` -}}
 func flattenIpv6AliasRange(d *schema.ResourceData, ranges []interface{}, i int) []map[string]interface{} {
 	prefix := fmt.Sprintf("network_interface.%d", i)
@@ -1679,21 +1643,6 @@ func expandComputeInstanceSourceEncryptionKey(d tpgresource.TerraformResourceDat
 		result["kmsKeyServiceAccount"] = v
 	}
 	return result
-}
-
-func flattenComputeInstanceSourceEncryptionKey(v map[string]interface{}) []map[string]interface{} {
-	if v == nil {
-		return nil
-	}
-	return []map[string]interface{}{
-		{
-			"rsa_encrypted_key":       v["rsaEncryptedKey"],
-			"raw_key":                 v["rawKey"],
-			"kms_key_self_link":       v["kmsKeyName"],
-			"sha256":                  v["sha256"],
-			"kms_key_service_account": v["kmsKeyServiceAccount"],
-		},
-	}
 }
 
 func stripInitializeParams(instanceMap map[string]interface{}) {

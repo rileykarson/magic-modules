@@ -877,23 +877,6 @@ func flattenRecaptchaEnterpriseKeyWebSettingsChallengeSettingsDefaultSettings(ob
 	return []interface{}{transformed}
 }
 
-func expandRecaptchaEnterpriseKeyWebSettingsChallengeSettingsActionSettings(o interface{}) *KeyWebSettingsChallengeSettingsActionSettings {
-	if o == nil {
-		return EmptyKeyWebSettingsChallengeSettingsActionSettings
-	}
-	obj := o.(map[string]interface{})
-	return &KeyWebSettingsChallengeSettingsActionSettings{
-		ScoreThreshold: dcl.Float64(obj["score_threshold"].(float64)),
-	}
-}
-
-func flattenRecaptchaEnterpriseKeyWebSettingsChallengeSettingsActionSettings(obj KeyWebSettingsChallengeSettingsActionSettings) interface{} {
-	transformed := map[string]interface{}{
-		"score_threshold": obj.ScoreThreshold,
-	}
-	return transformed
-}
-
 func expandRecaptchaEnterpriseKeyWebSettingsChallengeSettingsActionSettingsMap(o interface{}) map[string]KeyWebSettingsChallengeSettingsActionSettings {
 	if o == nil {
 		return nil

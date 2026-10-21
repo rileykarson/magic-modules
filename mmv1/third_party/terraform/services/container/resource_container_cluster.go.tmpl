@@ -9498,28 +9498,6 @@ func clusterAcceleratorNetworkProfileCustomizeDiff(_ context.Context, diff *sche
 	return nil
 }
 
-func expandAgentSandboxConfig(v interface{}) *container.AgentSandboxConfig {
-    l := v.([]interface{})
-    if len(l) == 0 || l[0] == nil {
-        return nil
-    }
-    raw := l[0].(map[string]interface{})
-    return &container.AgentSandboxConfig{
-        Enabled: raw["enabled"].(bool),
-    }
-}
-
-func flattenAgentSandboxConfig(v *container.AgentSandboxConfig) []interface{} {
-    if v == nil {
-        return nil
-    }
-    return []interface{}{
-        map[string]interface{}{
-            "enabled": v.Enabled,
-        },
-    }
-}
-
 func init() {
 	registry.Schema{
 		Name: "google_container_cluster",
