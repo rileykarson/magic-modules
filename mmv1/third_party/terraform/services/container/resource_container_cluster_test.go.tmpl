@@ -21261,6 +21261,7 @@ resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "%s"
   initial_node_count = 1
+  deletion_protection = false
 
   network    = "%s"
   subnetwork = "%s"
