@@ -14,7 +14,7 @@ func TestAccContainerNodeConfig_effectiveCgroupMode(t *testing.T) {
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
 
 	context := map[string]interface{}{
 		"cluster_name":    clusterName,
@@ -41,7 +41,7 @@ func testAccContainerNodeConfig_effectiveCgroupMode(context map[string]interface
 	return acctest.Nprintf(`
 resource "google_container_cluster" "primary" {
   name               = "%{cluster_name}"
-  location           = "us-central1-c"
+  location           = "us-east1-a"
   initial_node_count = 1
   deletion_policy    = "DELETE"
   network            = "%{network_name}"
