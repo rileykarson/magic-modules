@@ -81,6 +81,8 @@ resource "google_alloydb_cluster" "secondary" {
     primary_cluster_name = google_alloydb_cluster.primary.name
   }
 
+  %{labels}
+
   deletion_protection = false
 
   depends_on = [google_alloydb_instance.primary]
@@ -335,6 +337,15 @@ func TestAccAlloydbCluster_secondaryClusterUpdate(t *testing.T) {
 	context := map[string]interface{}{
 		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
 		"random_suffix": acctest.RandString(t, 10),
+		"labels":        nil,
+	}
+
+	contextUpdate := map[string]interface{}{
+		"network_name":  context["network_name"],
+		"random_suffix": context["random_suffix"],
+		"labels": `labels = {
+    foo = "bar"
+  }`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -352,7 +363,7 @@ func TestAccAlloydbCluster_secondaryClusterUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"deletion_protection", "initial_user", "restore_backup_source", "restore_continuous_backup_source", "cluster_id", "location", "labels", "annotations", "terraform_labels", "reconciling"},
 			},
 			{
-				Config: testAccAlloydbCluster_secondaryClusterUpdate(context),
+				Config: testAccAlloydbCluster_secondaryClusterMandatoryFields(contextUpdate),
 			},
 			{
 				ResourceName:            "google_alloydb_cluster.secondary",
@@ -362,65 +373,6 @@ func TestAccAlloydbCluster_secondaryClusterUpdate(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccAlloydbCluster_secondaryClusterUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_alloydb_cluster" "primary" {
-  cluster_id = "tf-test-alloydb-primary-cluster%{random_suffix}"
-  location   = "us-east1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-
-  initial_user {
-    password = "tf-test-alloydb-cluster%{random_suffix}"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "primary" {
-  cluster       = google_alloydb_cluster.primary.name
-  instance_id   = "tf-test-alloydb-primary-instance%{random_suffix}"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 2
-  }
-}
-
-resource "google_alloydb_cluster" "secondary" {
-  cluster_id   = "tf-test-alloydb-secondary-cluster%{random_suffix}"
-  location     = "us-east1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-  cluster_type = "SECONDARY"
-
-  continuous_backup_config {
-    enabled = false
-  }
-
-  secondary_config {
-    primary_cluster_name = google_alloydb_cluster.primary.name
-  }
-
-  labels = {
-    foo = "bar"
-  }
-
-  deletion_protection = false
-
-  depends_on = [google_alloydb_instance.primary]
-}
-
-data "google_project" "project" {}
-
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-`, context)
 }
 
 func TestAccAlloydbCluster_secondaryClusterUsingCMEK(t *testing.T) {
