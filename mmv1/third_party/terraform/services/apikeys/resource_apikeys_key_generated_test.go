@@ -203,7 +203,15 @@ func TestAccApikeysKey_CheckExistingUsage(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]any{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":        acctest.RandString(t, 10),
+		"display_name":         "sample-key",
+		"check_existing_usage": nil,
+	}
+
+	contextUpdate := map[string]any{
+		"random_suffix":        context["random_suffix"],
+		"display_name":         "sample-key-updated",
+		"check_existing_usage": "CHECK",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -221,7 +229,7 @@ func TestAccApikeysKey_CheckExistingUsage(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"check_existing_usage"},
 			},
 			{
-				Config: testAccApikeysKey_CheckExistingUsageUpdate(context),
+				Config: testAccApikeysKey_CheckExistingUsage(contextUpdate),
 			},
 			{
 				ResourceName:            "google_apikeys_key.primary",
@@ -478,18 +486,9 @@ resource "google_service_account" "key_service_account" {
 func testAccApikeysKey_CheckExistingUsage(context map[string]any) string {
 	return acctest.Nprintf(`
 resource "google_apikeys_key" "primary" {
-  name         = "tf-test-key%{random_suffix}"
-  display_name = "sample-key"
-}
-`, context)
-}
-
-func testAccApikeysKey_CheckExistingUsageUpdate(context map[string]any) string {
-	return acctest.Nprintf(`
-resource "google_apikeys_key" "primary" {
   name                 = "tf-test-key%{random_suffix}"
-  display_name         = "sample-key-updated"
-  check_existing_usage = "CHECK"
+  display_name         = "%{display_name}"
+  check_existing_usage = "%{check_existing_usage}"
 }
 `, context)
 }
