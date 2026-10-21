@@ -697,6 +697,7 @@ func TestAccAlloydbCluster_secondaryClusterPromote(t *testing.T) {
 		"random_suffix":              acctest.RandString(t, 10),
 		"secondary_cluster_location": "us-east1",
 		"network_name":               servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"labels":                     nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -834,6 +835,8 @@ resource "google_alloydb_cluster" "secondary" {
   continuous_backup_config {
     enabled = false
   }
+
+  %{labels}
 
   deletion_protection = false
 }
@@ -1061,6 +1064,16 @@ func TestAccAlloydbCluster_secondaryClusterPromoteAndUpdate(t *testing.T) {
 		"random_suffix":              acctest.RandString(t, 10),
 		"secondary_cluster_location": "us-east1",
 		"network_name":               servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"labels":                     nil,
+	}
+
+	contextUpdate := map[string]interface{}{
+		"random_suffix":              context["random_suffix"],
+		"secondary_cluster_location": context["secondary_cluster_location"],
+		"network_name":               context["network_name"],
+		"labels": `labels = {
+    foo = "bar"
+  }`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -1087,7 +1100,7 @@ func TestAccAlloydbCluster_secondaryClusterPromoteAndUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"deletion_protection", "initial_user", "restore_backup_source", "restore_continuous_backup_source", "cluster_id", "location", "deletion_policy", "labels", "annotations", "terraform_labels", "reconciling"},
 			},
 			{
-				Config: testAccAlloydbCluster_secondaryClusterPromoteAndUpdate(context),
+				Config: testAccAlloydbCluster_secondaryClusterPromote(contextUpdate),
 			},
 			{
 				ResourceName:            "google_alloydb_cluster.secondary",
@@ -1097,73 +1110,6 @@ func TestAccAlloydbCluster_secondaryClusterPromoteAndUpdate(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccAlloydbCluster_secondaryClusterPromoteAndUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_alloydb_cluster" "primary" {
-  cluster_id = "tf-test-alloydb-primary-cluster%{random_suffix}"
-  location   = "us-central1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-
-  initial_user {
-    password = "tf-test-alloydb-cluster%{random_suffix}"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "primary" {
-  cluster       = google_alloydb_cluster.primary.name
-  instance_id   = "tf-test-alloydb-primary-instance%{random_suffix}"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 2
-  }
-}
-
-resource "google_alloydb_cluster" "secondary" {
-  cluster_id   = "tf-test-alloydb-secondary-cluster%{random_suffix}"
-  location     = "%{secondary_cluster_location}"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-  cluster_type = "PRIMARY"
-
-  continuous_backup_config {
-    enabled = false
-  }
-
-  labels = {
-    foo = "bar"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "secondary" {
-  cluster       = google_alloydb_cluster.secondary.name
-  instance_id   = "tf-test-alloydb-secondary-instance%{random_suffix}"
-  instance_type = google_alloydb_cluster.secondary.cluster_type
-
-  machine_config {
-    cpu_count = 2
-  }
-
-  lifecycle {
-    ignore_changes = [instance_type]
-  }
-}
-
-data "google_project" "project" {}
-
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-`, context)
 }
 
 // This test passes if secondary cluster can be promoted with networkConfig and a specified allocated IP range
