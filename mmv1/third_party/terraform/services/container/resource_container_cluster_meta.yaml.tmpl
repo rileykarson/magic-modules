@@ -203,6 +203,9 @@ fields:
   - field: 'ip_allocation_policy.additional_ip_ranges_config.pod_ipv4_range_names'
   - field: 'ip_allocation_policy.additional_ip_ranges_config.status'
   - api_field: 'ipAllocationPolicy.autoIpamConfig.enabled'
+{{- if ne $.TargetVersionName "ga" }}
+  - api_field: 'ipAllocationPolicy.allowRouteOverlap'
+{{- end }}
   - api_field: 'ipAllocationPolicy.clusterIpv4CidrBlock'
   - api_field: 'ipAllocationPolicy.clusterSecondaryRangeName'
   - api_field: 'ipAllocationPolicy.networkTierConfig.networkTier'
