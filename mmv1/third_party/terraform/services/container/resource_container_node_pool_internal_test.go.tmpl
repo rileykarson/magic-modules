@@ -256,3 +256,19 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestEffectiveCgroupModeFlatten(t *testing.T) {
+	t.Parallel()
+
+	flattened := flattenNodeConfig(&container.NodeConfig{
+		MachineType:         "e2-medium",
+		EffectiveCgroupMode: "EFFECTIVE_CGROUP_MODE_V2",
+	}, []interface{}{})
+
+	if len(flattened) != 1 {
+		t.Fatalf("expected 1 flattened NodeConfig, got %d", len(flattened))
+	}
+	if got := flattened[0]["effective_cgroup_mode"]; got != "EFFECTIVE_CGROUP_MODE_V2" {
+		t.Errorf("effective_cgroup_mode = %v, want EFFECTIVE_CGROUP_MODE_V2", got)
+	}
+}

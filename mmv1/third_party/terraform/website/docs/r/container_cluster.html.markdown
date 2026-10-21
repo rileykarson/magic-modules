@@ -1483,6 +1483,8 @@ workload_identity_config {
 
 <a name="nested_node_pool_node_config"></a>The `node_config` block supports:
 
+* `effective_cgroup_mode` - (Computed) The effective cgroup mode for the node.
+
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_pool_node_config_taint_config).
