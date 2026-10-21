@@ -2029,14 +2029,6 @@ func expandNodeConfig(d *schema.ResourceData, prefix string, v interface{}) *con
 		nc.LocalSsdEncryptionMode = v.(string)
 	}
 
-	if v,ok := nodeConfig["consolidation_delay"]; ok {
-		nc.ConsolidationDelay = v.(string)
-	}
-
-	if v,ok := nodeConfig["consolidation_delay"]; ok {
-		nc.ConsolidationDelay = v.(string)
-	}
-
 	if v,ok := nodeConfig["max_run_duration"]; ok {
 		nc.MaxRunDuration = v.(string)
 	}
