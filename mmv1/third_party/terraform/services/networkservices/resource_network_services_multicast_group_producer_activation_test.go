@@ -13,9 +13,7 @@ import (
 func TestAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -23,7 +21,13 @@ func TestAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulti
 		CheckDestroy:             testAccCheckNetworkServicesMulticastGroupProducerActivationDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample_full(context),
+				Config: testAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "my description",
+					"labels": `{
+    "test-label" = "test-value"
+  }`,
+				}),
 			},
 			{
 				ResourceName:            "google_network_services_multicast_group_producer_activation.mgpa_test",
@@ -32,7 +36,11 @@ func TestAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulti
 				ImportStateVerifyIgnore: []string{"labels", "location", "multicast_group_producer_activation_id", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample_diff(context),
+				Config: testAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"labels":        nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_services_multicast_group_producer_activation.mgpa_test", plancheck.ResourceActionUpdate),
@@ -104,71 +112,8 @@ resource "google_network_services_multicast_group_range_activation" "group_range
 resource "google_network_services_multicast_group_producer_activation" mgpa_test {
   multicast_group_producer_activation_id                   = "tf-test-test-mgpa-mgpa%{random_suffix}"
   location = "us-central1-b"
-  description = "my description"
-  labels = {
-    "test-label" = "test-value"
-  }
-  multicast_group_range_activation = google_network_services_multicast_group_range_activation.group_range_activation.id
-  multicast_producer_association = google_network_services_multicast_producer_association.producer_association.id
-}
-`, context)
-}
-
-func testAccNetworkServicesMulticastGroupProducerActivation_networkServicesMulticastGroupProducerActivationUpdateExample_diff(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_network" "network" {
-  name                    = "tf-test-test-network-mgpa%{random_suffix}"
-  auto_create_subnetworks = false
-}
-
-resource "google_network_services_multicast_domain" "multicast_domain" {
-  multicast_domain_id                    = "tf-test-test-domain-mgpa%{random_suffix}"
-  location = "global"
-  admin_network = google_compute_network.network.id
-  connection_config  { connection_type="SAME_VPC"}
-  depends_on = [google_compute_network.network]
-}
-
-resource "google_network_services_multicast_domain_activation" "multicast_domain_activation" {
-  multicast_domain_activation_id                    = "tf-test-test-domain-activation-mgpa%{random_suffix}"
-  location = "us-central1-b"
-  multicast_domain = google_network_services_multicast_domain.multicast_domain.id
-}
-
-resource "google_network_services_multicast_producer_association" "producer_association" {
-  multicast_producer_association_id              = "tf-test-test-producer-association-mgpa%{random_suffix}"
-  location = "us-central1-b"
-  network = google_compute_network.network.id
-  multicast_domain_activation = google_network_services_multicast_domain_activation.multicast_domain_activation.id
-  depends_on = [google_compute_network.network]
-}
-
-
-resource "google_network_connectivity_internal_range" "internal_range" {
-  name    = "tf-test-test-internal-range-mgpa%{random_suffix}"
-  network = google_compute_network.network.self_link
-  usage   = "FOR_VPC"
-  peering = "FOR_SELF"
-  ip_cidr_range = "224.2.0.2/32"
-}
-
-resource "google_network_services_multicast_group_range" "group_range" {
-  multicast_group_range_id                   = "tf-test-test-group-range-mgpa%{random_suffix}"
-  location = "global"
-  reserved_internal_range = google_network_connectivity_internal_range.internal_range.id
-  multicast_domain = google_network_services_multicast_domain.multicast_domain.id
-}
-
-resource "google_network_services_multicast_group_range_activation" "group_range_activation" {
-  multicast_group_range_activation_id                   = "tf-test-test-mgra-mgpa%{random_suffix}"
-  location = "us-central1-b"
-  multicast_group_range = google_network_services_multicast_group_range.group_range.id
-  multicast_domain_activation = google_network_services_multicast_domain_activation.multicast_domain_activation.id
-}
-
-resource "google_network_services_multicast_group_producer_activation" mgpa_test {
-  multicast_group_producer_activation_id                   = "tf-test-test-mgpa-mgpa%{random_suffix}"
-  location = "us-central1-b"
+  description = "%{description}"
+  labels = %{labels}
   multicast_group_range_activation = google_network_services_multicast_group_range_activation.group_range_activation.id
   multicast_producer_association = google_network_services_multicast_producer_association.producer_association.id
 }
