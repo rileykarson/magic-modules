@@ -20,6 +20,13 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 		"project_name":  envvar.GetTestProjectFromEnv(),
 		"region":        envvar.GetTestRegionFromEnv(),
 		"random_suffix": acctest.RandString(t, 10),
+		"default_labels": `{
+    default_key1 = "default_value1"
+  }`,
+		"labels": `{
+    my_first_label = "example-label-1"
+    my_second_label = "example-label-2"
+  }`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -49,7 +56,13 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_resourceLabelsOverridesProviderDefaultLabels(context),
+				Config: testAccClouddeployTarget_withProviderDefaultLabels(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+    my_first_label = "example-label-1"
+    my_second_label = "example-label-2"
+    default_key1 = "value1"
+  }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.%", "3"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.my_first_label", "example-label-1"),
@@ -71,7 +84,15 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_moveResourceLabelToProviderDefaultLabels(context),
+				Config: testAccClouddeployTarget_withProviderDefaultLabels(acctest.MergeMap(context, map[string]interface{}{
+					"default_labels": `{
+    default_key1 = "default_value1"
+    my_second_label = "example-label-2"
+  }`,
+					"labels": `{
+    my_first_label = "example-label-1"
+  }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.%", "2"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.my_first_label", "example-label-1"),
@@ -92,7 +113,13 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_resourceLabelsOverridesProviderDefaultLabels(context),
+				Config: testAccClouddeployTarget_withProviderDefaultLabels(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+    my_first_label = "example-label-1"
+    my_second_label = "example-label-2"
+    default_key1 = "value1"
+  }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.%", "3"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.my_first_label", "example-label-1"),
@@ -114,7 +141,10 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_withoutLabels(context),
+				Config: testAccClouddeployTarget_withProviderDefaultLabels(acctest.MergeMap(context, map[string]interface{}{
+					"default_labels": nil,
+					"labels":         nil,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "labels.%"),
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "terraform_labels.%"),
@@ -134,9 +164,7 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 func testAccClouddeployTarget_withProviderDefaultLabels(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 provider "google" {
-  default_labels = {
-    default_key1 = "default_value1"
-  }
+  default_labels = %{default_labels}
   add_terraform_attribution_label = false
 }
 
@@ -163,124 +191,7 @@ resource "google_clouddeploy_target" "primary" {
     my_second_annotation = "example-annotation-2"
   }
 
-  labels = {
-    my_first_label = "example-label-1"
-    my_second_label = "example-label-2"
-  }
-}
-`, context)
-}
-
-func testAccClouddeployTarget_resourceLabelsOverridesProviderDefaultLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-provider "google" {
-  default_labels = {
-    default_key1 = "default_value1"
-  }
-  add_terraform_attribution_label = false
-}
-
-resource "google_clouddeploy_target" "primary" {
-  location = "%{region}"
-  name     = "tf-test-target%{random_suffix}"
-
-  deploy_parameters = {
-    deployParameterKey = "deployParameterValue"
-  }
-
-  description = "basic description"
-
-  gke {
-    cluster = "projects/%{project_name}/locations/%{region}/clusters/example-cluster-name"
-  }
-
-  project          = "%{project_name}"
-  require_approval = false
-
-  annotations = {
-    my_first_annotation = "example-annotation-1"
-
-    my_second_annotation = "example-annotation-2"
-  }
-
-  labels = {
-    my_first_label = "example-label-1"
-    my_second_label = "example-label-2"
-    default_key1 = "value1"
-  }
-}
-`, context)
-}
-
-func testAccClouddeployTarget_moveResourceLabelToProviderDefaultLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-provider "google" {
-  default_labels = {
-    default_key1 = "default_value1"
-    my_second_label = "example-label-2"
-  }
-  add_terraform_attribution_label = false
-}
-
-resource "google_clouddeploy_target" "primary" {
-  location = "%{region}"
-  name     = "tf-test-target%{random_suffix}"
-
-  deploy_parameters = {
-    deployParameterKey = "deployParameterValue"
-  }
-
-  description = "basic description"
-
-  gke {
-    cluster = "projects/%{project_name}/locations/%{region}/clusters/example-cluster-name"
-  }
-
-  project          = "%{project_name}"
-  require_approval = false
-
-  annotations = {
-    my_first_annotation = "example-annotation-1"
-
-    my_second_annotation = "example-annotation-2"
-  }
-
-  labels = {
-    my_first_label = "example-label-1"
-    default_key1 = "value1"
-  }
-}
-`, context)
-}
-
-func testAccClouddeployTarget_withoutLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-provider "google" {
-  add_terraform_attribution_label = false
-}
-
-resource "google_clouddeploy_target" "primary" {
-  location = "%{region}"
-  name     = "tf-test-target%{random_suffix}"
-
-  deploy_parameters = {
-    deployParameterKey = "deployParameterValue"
-  }
-
-  description = "basic description"
-
-  gke {
-    cluster = "projects/%{project_name}/locations/%{region}/clusters/example-cluster-name"
-  }
-
-  project          = "%{project_name}"
-  require_approval = false
-
-  annotations = {
-    my_first_annotation = "example-annotation-1"
-
-    my_second_annotation = "example-annotation-2"
-  }
+  labels = %{labels}
 }
 `, context)
 }
