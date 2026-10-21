@@ -3855,7 +3855,7 @@ resource "google_container_node_pool" "np" {
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-    min_node_count = 0
+    min_node_count = 1
     max_node_count = 3
   }
 }
@@ -3962,7 +3962,7 @@ resource "google_container_node_pool" "np" {
   cluster            = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-    min_node_count = 0
+    min_node_count = 1
     max_node_count = 3
   }
 }
@@ -5326,7 +5326,7 @@ resource "google_container_node_pool" "with_upgrade_settings" {
   cluster = google_container_cluster.cluster.name
   initial_node_count = 1
   autoscaling {
-	  min_node_count = 0
+	  min_node_count = 1
 	  max_node_count = 3
   }
   %s
@@ -8471,13 +8471,13 @@ resource "google_container_cluster" "cluster" {
     resource_limits {
       resource_type = "cpu"
       minimum       = 1
-      maximum       = 5
+      maximum       = 20
     }
 
     resource_limits {
       resource_type = "memory"
       minimum       = 1
-      maximum       = 5
+      maximum       = 2048
     }
   }
 }

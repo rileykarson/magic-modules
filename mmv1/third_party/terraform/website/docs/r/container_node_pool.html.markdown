@@ -204,7 +204,7 @@ cluster.
 * `max_node_count` - (Optional) Maximum number of nodes per zone in the NodePool.
     Must be >= min_node_count. Cannot be used with total limits.
 
-* `autoprovisioned` - (Optional) Boolean routing indicating whether the nodepool is being autoprovisioned. The compiler might restrict setting this field.
+* `autoprovisioned` - (Optional) Can this node pool be deleted automatically.
 
 * `total_min_node_count` - (Optional) Total minimum number of nodes in the NodePool.
     Must be >=0 and <= `total_max_node_count`. Cannot be used with per zone limits.

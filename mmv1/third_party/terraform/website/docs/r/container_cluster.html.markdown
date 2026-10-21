@@ -1471,7 +1471,13 @@ workload_identity_config {
 
 * `node_config` - (Optional) The node configuration of the pool. Structure is [documented below](#nested_node_pool_node_config).
 
+* `autoscaling` - (Optional) Configuration required by cluster autoscaler to adjust the size of the node pool to the current cluster usage. Structure is [documented below](#nested_node_pool_autoscaling).
+
 * `best_effort_provisioning` - (Optional) Best-effort provisioning allows node pool creations to automatically ignore stockout errors once the minimum number of nodes have been provisioned. Structure is [documented below](#nested_node_pool_best_effort_provisioning).
+
+<a name="nested_node_pool_autoscaling"></a>The `autoscaling` block supports:
+
+* `autoprovisioned` - (Optional) Can this node pool be deleted automatically.
 
 <a name="nested_node_pool_best_effort_provisioning"></a>The `best_effort_provisioning` block supports:
 
