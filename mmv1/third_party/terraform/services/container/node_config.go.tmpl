@@ -1249,6 +1249,28 @@ func schemaNodeConfig() *schema.Schema {
 									},
 								},
 							},
+														"disk_io_scheduler": {
+								Type:             schema.TypeList,
+								Optional:         true,
+								MaxItems: 1,
+								Description:      `Configuration for the disk IO scheduler.`,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"node_system_io_scheduler": {
+											Type:             schema.TypeString,
+											Optional:         true,
+											ValidateFunc:     validation.StringInSlice([]string{"bfq", "kyber", "mq-deadline", "none"}, false),
+											Description:      `Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are bfq, kyber, mq-deadline, none.`,
+										},
+										"node_attached_disk_io_scheduler": {
+											Type:             schema.TypeString,
+											Optional:         true,
+											ValidateFunc:     validation.StringInSlice([]string{"bfq", "kyber", "mq-deadline", "none"}, false),
+											Description:      `Configures the IO scheduler for the attached disks. Supported values are bfq, kyber, mq-deadline, none.`,
+										},
+									},
+								},
+							},
 							"custom_node_init": {
 								Type:             schema.TypeList,
 								Optional:         true,
@@ -2375,6 +2397,9 @@ func expandLinuxNodeConfig(v interface{}) *container.LinuxNodeConfig {
 		linuxNodeConfig.AccurateTimeConfig = expandAccurateTimeConfig(v)
 	}
 
+		if v, ok := cfg["disk_io_scheduler"]; ok {
+		linuxNodeConfig.DiskIoScheduler = expandDiskIoScheduler(v)
+	}
 	if v, ok := cfg["custom_node_init"]; ok {
 		linuxNodeConfig.CustomNodeInit = expandCustomNodeInit(v)
 	}
@@ -3624,7 +3649,40 @@ func flattenLinuxNodeConfig(c *container.LinuxNodeConfig) []map[string]interface
 			"node_kernel_module_loading":   flattenNodeKernelModuleLoading(c.NodeKernelModuleLoading),
 			"swap_config":                  flattenSwapConfig(c.SwapConfig),
 			"accurate_time_config":         flattenAccurateTimeConfig(c.AccurateTimeConfig),
+						"disk_io_scheduler":             flattenDiskIoScheduler(c.DiskIoScheduler),
 			"custom_node_init":             flattenCustomNodeInit(c.CustomNodeInit),
+		})
+	}
+	return result
+}
+
+
+func expandDiskIoScheduler(v interface{}) *container.DiskIoScheduler {
+	if v == nil {
+		return nil
+	}
+	ls := v.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	cfg := ls[0].(map[string]interface{})
+
+	res := &container.DiskIoScheduler{}
+	if v, ok := cfg["node_system_io_scheduler"]; ok {
+		res.NodeSystemIoScheduler = v.(string)
+	}
+	if v, ok := cfg["node_attached_disk_io_scheduler"]; ok {
+		res.NodeAttachedDiskIoScheduler = v.(string)
+	}
+	return res
+}
+
+func flattenDiskIoScheduler(c *container.DiskIoScheduler) []map[string]interface{} {
+	result := []map[string]interface{}{}
+	if c != nil {
+		result = append(result, map[string]interface{}{
+			"node_system_io_scheduler":          c.NodeSystemIoScheduler,
+			"node_attached_disk_io_scheduler":   c.NodeAttachedDiskIoScheduler,
 		})
 	}
 	return result

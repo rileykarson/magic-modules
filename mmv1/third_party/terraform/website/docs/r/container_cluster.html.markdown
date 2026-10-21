@@ -1875,6 +1875,15 @@ those in the Guaranteed QoS class, by influencing NUMA affinity. Structure is [d
 
 <a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
 
+* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler.
+  Structure is documented below.
+
+The `disk_io_scheduler` block supports:
+
+* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are bfq, kyber, mq-deadline, none.
+
+* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are bfq, kyber, mq-deadline, none.
+
 * `sysctls` - (Optional) The Linux kernel parameters to be applied to the nodes
 and all pods running on the nodes. Specified as a map from the key, such as
 `net.core.wmem_max`, to a string value. Currently supported attributes can be found [here](https://cloud.google.com/sdk/gcloud/reference/beta/container/node-pools/create#--system-config-from-file).

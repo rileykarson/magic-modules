@@ -8410,3 +8410,81 @@ resource "google_container_node_pool" "np" {
 }
 `, clusterName, networkName, subnetworkName, poolName)
 }
+
+func TestAccContainerNodePool_withDiskIoScheduler(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	np := fmt.Sprintf("tf-test-np-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			// Create a node pool with disk_io_scheduler.
+			{
+				Config: testAccContainerNodePool_withDiskIoScheduler(cluster, np, networkName, subnetworkName, "none", "none"),
+			},
+			{
+				ResourceName:      "google_container_node_pool.with_linux_node_config",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			// Update the values
+			{
+				Config: testAccContainerNodePool_withDiskIoScheduler(cluster, np, networkName, subnetworkName, "mq-deadline", "bfq"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_node_pool.with_linux_node_config", plancheck.ResourceActionUpdate),
+					},
+				},
+			},
+			{
+				ResourceName:      "google_container_node_pool.with_linux_node_config",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}
+
+func testAccContainerNodePool_withDiskIoScheduler(cluster, np, networkName, subnetworkName, systemScheduler, attachedScheduler string) string {
+	return fmt.Sprintf(`
+data "google_container_engine_versions" "central1a" {
+  location = "us-east1-b"
+}
+
+resource "google_container_cluster" "cluster" {
+  name               = "%s"
+  location           = "us-east1-b"
+  initial_node_count = 1
+  min_master_version = data.google_container_engine_versions.central1a.latest_master_version
+  deletion_protection = false
+  network    = "%s"
+  subnetwork    = "%s"
+}
+
+resource "google_container_node_pool" "with_linux_node_config" {
+  name               = "%s"
+  location           = "us-east1-b"
+  cluster            = google_container_cluster.cluster.name
+  initial_node_count = 1
+  node_config {
+    image_type = "UBUNTU_CONTAINERD"
+    linux_node_config {
+        disk_io_scheduler {
+            node_system_io_scheduler = "%s"
+            node_attached_disk_io_scheduler = "%s"
+        }
+    }
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+    ]
+  }
+}
+`, cluster, networkName, subnetworkName, np, systemScheduler, attachedScheduler)
+}
