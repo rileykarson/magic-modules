@@ -359,6 +359,8 @@ cluster.
 
 <a name="nested_node_config"></a>The `node_config` block supports:
 
+* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
+
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_config_taint_config).
@@ -382,6 +384,18 @@ cluster.
 <a name="nested_node_config_taint_config"></a>The `taint_config` block supports:
 
 * `architecture_taint_behavior` - (Optional) Specifies the behavior for applying architecture taints to node pool nodes. Valid values are `ARCHITECTURE_TAINT_BEHAVIOR_UNSPECIFIED`, `NONE`, or `ARM`.
+
+
+<a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
+
+* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler.
+  Structure is documented below.
+
+The `disk_io_scheduler` block supports:
+
+* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are bfq, kyber, mq-deadline, none.
+
+* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are bfq, kyber, mq-deadline, none.
 
 <a name="nested_taint_config"></a>The `taint_config` block supports:
 
