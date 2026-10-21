@@ -35,7 +35,10 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				// Create one endpoint
-				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(context),
+				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(acctest.MergeMap(context, map[string]interface{}{
+					"region": nil,
+					"name":   `"tf-test-rigm%{random_suffix}-1"`,
+				})),
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
@@ -45,7 +48,10 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 			},
 			{
 				// Force-recreate old config
-				Config: testAccComputeRegionPerInstanceConfig_statefulModified(context),
+				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(acctest.MergeMap(context, map[string]interface{}{
+					"region": `google_compute_region_instance_group_manager.rigm.region`,
+					"name":   `"tf-test-rigm%{random_suffix}-2"`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeRegionPerInstanceConfigDestroyed(t, rigmId, context["config_name"].(string)),
 				),
@@ -106,7 +112,10 @@ func TestAccComputeRegionPerInstanceConfig_update(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				// Create one config
-				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(context),
+				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(acctest.MergeMap(context, map[string]interface{}{
+					"region": nil,
+					"name":   `"tf-test-rigm%{random_suffix}-1"`,
+				})),
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
@@ -232,140 +241,13 @@ func TestAccComputeRegionPerInstanceConfig_removeInstanceOnDestroy(t *testing.T)
 
 func testAccComputeRegionPerInstanceConfig_statefulBasic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_compute_region_per_instance_config" "default" {
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "asdf"
-		}
-	}
-}
-`, context) + testAccComputeRegionPerInstanceConfig_rigm(context)
-}
-
-func testAccComputeRegionPerInstanceConfig_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_region_per_instance_config" "default" {
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "foo"
-			updated = "12345"
-		}
-	}
-}
-`, context) + testAccComputeRegionPerInstanceConfig_rigm(context)
-}
-
-func testAccComputeRegionPerInstanceConfig_statefulModified(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_region_per_instance_config" "default" {
-	region = google_compute_region_instance_group_manager.rigm.region
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name2}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "asdf"
-		}
-	}
-}
-`, context) + testAccComputeRegionPerInstanceConfig_rigm(context)
-}
-
-func testAccComputeRegionPerInstanceConfig_statefulAdditional(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_region_per_instance_config" "default" {
-	region = google_compute_region_instance_group_manager.rigm.region
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name2}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "asdf"
-		}
-	}
-}
-
-resource "google_compute_region_per_instance_config" "with_disks" {
-	region = google_compute_region_instance_group_manager.rigm.region
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name3}"
-	most_disruptive_allowed_action = "REFRESH"
-	minimal_action = "REFRESH"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			meta = "123"
-		}
-
-		disk {
-			device_name = "my-stateful-disk1"
-			source      = google_compute_disk.disk.id
-		}
-
-		disk {
-			device_name = "my-stateful-disk2"
-			source      = google_compute_disk.disk1.id
-		}
-
-		disk {
-			device_name = "my-stateful-disk3"
-			source      = google_compute_disk.disk2.id
-		}
-	}
-}
-
-resource "google_compute_region_per_instance_config" "add2" {
-	region = google_compute_region_instance_group_manager.rigm.region
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name4}"
-	preserved_state {
-		metadata = {
-			foo = "abc"
-		}
-	}
-}
-
-resource "google_compute_disk" "disk" {
-  name  = "tf-test-test-disk-%{random_suffix}"
-  type  = "pd-ssd"
-  zone  = "us-central1-c"
-  image = "debian-8-jessie-v20170523"
-  physical_block_size_bytes = 4096
-}
-
-resource "google_compute_disk" "disk1" {
-  name  = "tf-test-test-disk2-%{random_suffix}"
-  type  = "pd-ssd"
-  zone  = "us-central1-c"
-  image = "debian-cloud/debian-13"
-  physical_block_size_bytes = 4096
-}
-
-resource "google_compute_disk" "disk2" {
-  name  = "tf-test-test-disk3-%{random_suffix}"
-  type  = "pd-ssd"
-  zone  = "us-central1-c"
-  image = "https://www.googleapis.com/compute/v1/projects/centos-cloud/global/images/centos-7-v20210217"
-  physical_block_size_bytes = 4096
-}
-`, context) + testAccComputeRegionPerInstanceConfig_rigm(context)
-}
-
-func testAccComputeRegionPerInstanceConfig_rigm(context map[string]interface{}) string {
-	return acctest.Nprintf(`
 data "google_compute_image" "my_image" {
-  family  = "debian-13"
+  family  = "debian-11"
   project = "debian-cloud"
 }
 
 resource "google_compute_instance_template" "rigm-basic" {
-  name           = "tf-test-rigm-%{random_suffix}"
+  name           = "tf-test-rigm%{random_suffix}"
   machine_type   = "e2-medium"
   can_ip_forward = false
   tags           = ["foo", "bar"]
@@ -374,7 +256,6 @@ resource "google_compute_instance_template" "rigm-basic" {
     source_image = data.google_compute_image.my_image.self_link
     auto_delete  = true
     boot         = true
-    device_name  = "my-stateful-disk"
   }
 
   network_interface {
@@ -388,21 +269,25 @@ resource "google_compute_instance_template" "rigm-basic" {
 
 resource "google_compute_region_instance_group_manager" "rigm" {
   description = "Terraform test instance group manager"
-  name        = "%{rigm_name}"
-
+  name        = "tf-test-rigm%{random_suffix}"
   version {
-    name              = "prod"
     instance_template = google_compute_instance_template.rigm-basic.self_link
+    name              = "primary"
   }
+  base_instance_name = "tf-test-rigm%{random_suffix}"
+  region             = "us-central1"
+  target_size        = 2
+}
 
-  base_instance_name = "tf-test-rigm-no-tp"
-
-  update_policy {
-    instance_redistribution_type = "NONE"
-    type                         = "OPPORTUNISTIC"
-    minimal_action               = "REPLACE"
-    max_surge_fixed              = 0
-    max_unavailable_fixed        = 6
+resource "google_compute_region_per_instance_config" "default" {
+  region = %{region}
+  region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
+  name = %{name}
+  preserved_state {
+    metadata = {
+      foo = "bar"
+      instance_template = google_compute_instance_template.rigm-basic.self_link
+    }
   }
 }
 `, context)
