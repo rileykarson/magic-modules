@@ -737,17 +737,20 @@ resource "google_netapp_storage_pool" "test_pool" {
 func TestAccNetappStoragePool_ontapMode(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog")),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	networkName := servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "gcnv-network-config-3", servicenetworking.ServiceNetworkWithParentService("netapp.servicenetworking.goog"))
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappStoragePool_ontapMode(context),
+				Config: testAccNetappStoragePool_ontapMode(map[string]interface{}{
+					"network_name":           networkName,
+					"random_suffix":          randomSuffix,
+					"description":            "testing ontap mode",
+					"total_throughput_mibps": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -756,7 +759,12 @@ func TestAccNetappStoragePool_ontapMode(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappStoragePool_ontapModeUpdate(context),
+				Config: testAccNetappStoragePool_ontapMode(map[string]interface{}{
+					"network_name":           networkName,
+					"random_suffix":          randomSuffix,
+					"description":            "updated description",
+					"total_throughput_mibps": "200",
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_storage_pool.test_pool",
@@ -772,30 +780,6 @@ func testAccNetappStoragePool_ontapMode(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 
 data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-
-resource "google_netapp_storage_pool" "test_pool" {
-  	name           = "tf-test-pool%{random_suffix}"
-  	location       = "us-central1-a"
-	service_level  = "FLEX"
-	type           = "UNIFIED"
-	mode           = "ONTAP"
-	capacity_gib   = "2048"
-	network        = data.google_compute_network.default.id
-	description    = "testing ontap mode"
-	labels         = {
-	    key = "test"
-	    value = "pool"
-	}
-}
-`, context)
-}
-
-func testAccNetappStoragePool_ontapModeUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-
-data "google_compute_network" "default" {
 	name = "%{network_name}"
 }
 
@@ -807,12 +791,12 @@ resource "google_netapp_storage_pool" "test_pool" {
 	mode           = "ONTAP"
 	capacity_gib   = "2048"
 	network        = data.google_compute_network.default.id
-	description    = "updated description"
-	labels                = {
-        key = "test"
-        value = "pool"
-    }
-	total_throughput_mibps = "200"
+	description    = "%{description}"
+	labels         = {
+	    key = "test"
+	    value = "pool"
+	}
+	total_throughput_mibps = "%{total_throughput_mibps}"
 }
 `, context)
 }
