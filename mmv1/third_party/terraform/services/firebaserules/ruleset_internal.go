@@ -37,15 +37,6 @@ func (r *RulesetSource) validate() error {
 	}
 	return nil
 }
-func (r *RulesetSourceFiles) validate() error {
-	if err := dcl.Required(r, "content"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "name"); err != nil {
-		return err
-	}
-	return nil
-}
 func (r *RulesetMetadata) validate() error {
 	return nil
 }
@@ -417,34 +408,6 @@ func canonicalizeRulesetSource(des, initial *RulesetSource, opts ...dcl.ApplyOpt
 	return cDes
 }
 
-func canonicalizeRulesetSourceSlice(des, initial []RulesetSource, opts ...dcl.ApplyOption) []RulesetSource {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]RulesetSource, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeRulesetSource(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]RulesetSource, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeRulesetSource(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewRulesetSource(c *Client, des, nw *RulesetSource) *RulesetSource {
 
 	if des == nil {
@@ -462,52 +425,6 @@ func canonicalizeNewRulesetSource(c *Client, des, nw *RulesetSource) *RulesetSou
 	nw.Files = canonicalizeNewRulesetSourceFilesSlice(c, des.Files, nw.Files)
 
 	return nw
-}
-
-func canonicalizeNewRulesetSourceSet(c *Client, des, nw []RulesetSource) []RulesetSource {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []RulesetSource
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareRulesetSourceNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewRulesetSource(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewRulesetSourceSlice(c *Client, des, nw []RulesetSource) []RulesetSource {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []RulesetSource
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewRulesetSource(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeRulesetSourceFiles(des, initial *RulesetSourceFiles, opts ...dcl.ApplyOption) *RulesetSourceFiles {
@@ -598,32 +515,6 @@ func canonicalizeNewRulesetSourceFiles(c *Client, des, nw *RulesetSourceFiles) *
 	return nw
 }
 
-func canonicalizeNewRulesetSourceFilesSet(c *Client, des, nw []RulesetSourceFiles) []RulesetSourceFiles {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []RulesetSourceFiles
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareRulesetSourceFilesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewRulesetSourceFiles(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewRulesetSourceFilesSlice(c *Client, des, nw []RulesetSourceFiles) []RulesetSourceFiles {
 	if des == nil {
 		return nw
@@ -667,34 +558,6 @@ func canonicalizeRulesetMetadata(des, initial *RulesetMetadata, opts ...dcl.Appl
 	return cDes
 }
 
-func canonicalizeRulesetMetadataSlice(des, initial []RulesetMetadata, opts ...dcl.ApplyOption) []RulesetMetadata {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]RulesetMetadata, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeRulesetMetadata(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]RulesetMetadata, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeRulesetMetadata(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewRulesetMetadata(c *Client, des, nw *RulesetMetadata) *RulesetMetadata {
 
 	if des == nil {
@@ -714,52 +577,6 @@ func canonicalizeNewRulesetMetadata(c *Client, des, nw *RulesetMetadata) *Rulese
 	}
 
 	return nw
-}
-
-func canonicalizeNewRulesetMetadataSet(c *Client, des, nw []RulesetMetadata) []RulesetMetadata {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []RulesetMetadata
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareRulesetMetadataNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewRulesetMetadata(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewRulesetMetadataSlice(c *Client, des, nw []RulesetMetadata) []RulesetMetadata {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []RulesetMetadata
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewRulesetMetadata(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -938,10 +755,6 @@ func (r *Ruleset) urlNormalized() *Ruleset {
 	return &normalized
 }
 
-func (r *Ruleset) updateURL(userBasePath, updateName string) (string, error) {
-	return "", fmt.Errorf("unknown update name: %s", updateName)
-}
-
 // marshal encodes the Ruleset resource into JSON for a Create request, and
 // performs transformations from the resource schema to the API schema if
 // necessary.
@@ -1017,87 +830,6 @@ func flattenRuleset(c *Client, i interface{}, res *Ruleset) *Ruleset {
 	return resultRes
 }
 
-// expandRulesetSourceMap expands the contents of RulesetSource into a JSON
-// request object.
-func expandRulesetSourceMap(c *Client, f map[string]RulesetSource, res *Ruleset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandRulesetSource(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandRulesetSourceSlice expands the contents of RulesetSource into a JSON
-// request object.
-func expandRulesetSourceSlice(c *Client, f []RulesetSource, res *Ruleset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandRulesetSource(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenRulesetSourceMap flattens the contents of RulesetSource from a JSON
-// response object.
-func flattenRulesetSourceMap(c *Client, i interface{}, res *Ruleset) map[string]RulesetSource {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]RulesetSource{}
-	}
-
-	if len(a) == 0 {
-		return map[string]RulesetSource{}
-	}
-
-	items := make(map[string]RulesetSource)
-	for k, item := range a {
-		items[k] = *flattenRulesetSource(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenRulesetSourceSlice flattens the contents of RulesetSource from a JSON
-// response object.
-func flattenRulesetSourceSlice(c *Client, i interface{}, res *Ruleset) []RulesetSource {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []RulesetSource{}
-	}
-
-	if len(a) == 0 {
-		return []RulesetSource{}
-	}
-
-	items := make([]RulesetSource, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenRulesetSource(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandRulesetSource expands an instance of RulesetSource into a JSON
 // request object.
 func expandRulesetSource(c *Client, f *RulesetSource, res *Ruleset) (map[string]interface{}, error) {
@@ -1137,27 +869,6 @@ func flattenRulesetSource(c *Client, i interface{}, res *Ruleset) *RulesetSource
 	return r
 }
 
-// expandRulesetSourceFilesMap expands the contents of RulesetSourceFiles into a JSON
-// request object.
-func expandRulesetSourceFilesMap(c *Client, f map[string]RulesetSourceFiles, res *Ruleset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandRulesetSourceFiles(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandRulesetSourceFilesSlice expands the contents of RulesetSourceFiles into a JSON
 // request object.
 func expandRulesetSourceFilesSlice(c *Client, f []RulesetSourceFiles, res *Ruleset) ([]map[string]interface{}, error) {
@@ -1176,26 +887,6 @@ func expandRulesetSourceFilesSlice(c *Client, f []RulesetSourceFiles, res *Rules
 	}
 
 	return items, nil
-}
-
-// flattenRulesetSourceFilesMap flattens the contents of RulesetSourceFiles from a JSON
-// response object.
-func flattenRulesetSourceFilesMap(c *Client, i interface{}, res *Ruleset) map[string]RulesetSourceFiles {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]RulesetSourceFiles{}
-	}
-
-	if len(a) == 0 {
-		return map[string]RulesetSourceFiles{}
-	}
-
-	items := make(map[string]RulesetSourceFiles)
-	for k, item := range a {
-		items[k] = *flattenRulesetSourceFiles(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenRulesetSourceFilesSlice flattens the contents of RulesetSourceFiles from a JSON
@@ -1259,102 +950,6 @@ func flattenRulesetSourceFiles(c *Client, i interface{}, res *Ruleset) *RulesetS
 	return r
 }
 
-// expandRulesetMetadataMap expands the contents of RulesetMetadata into a JSON
-// request object.
-func expandRulesetMetadataMap(c *Client, f map[string]RulesetMetadata, res *Ruleset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandRulesetMetadata(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandRulesetMetadataSlice expands the contents of RulesetMetadata into a JSON
-// request object.
-func expandRulesetMetadataSlice(c *Client, f []RulesetMetadata, res *Ruleset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandRulesetMetadata(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenRulesetMetadataMap flattens the contents of RulesetMetadata from a JSON
-// response object.
-func flattenRulesetMetadataMap(c *Client, i interface{}, res *Ruleset) map[string]RulesetMetadata {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]RulesetMetadata{}
-	}
-
-	if len(a) == 0 {
-		return map[string]RulesetMetadata{}
-	}
-
-	items := make(map[string]RulesetMetadata)
-	for k, item := range a {
-		items[k] = *flattenRulesetMetadata(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenRulesetMetadataSlice flattens the contents of RulesetMetadata from a JSON
-// response object.
-func flattenRulesetMetadataSlice(c *Client, i interface{}, res *Ruleset) []RulesetMetadata {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []RulesetMetadata{}
-	}
-
-	if len(a) == 0 {
-		return []RulesetMetadata{}
-	}
-
-	items := make([]RulesetMetadata, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenRulesetMetadata(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
-// expandRulesetMetadata expands an instance of RulesetMetadata into a JSON
-// request object.
-func expandRulesetMetadata(c *Client, f *RulesetMetadata, res *Ruleset) (map[string]interface{}, error) {
-	if dcl.IsEmptyValueIndirect(f) {
-		return nil, nil
-	}
-
-	m := make(map[string]interface{})
-	if v := f.Services; v != nil {
-		m["services"] = v
-	}
-
-	return m, nil
-}
-
 // flattenRulesetMetadata flattens an instance of RulesetMetadata from a JSON
 // response object.
 func flattenRulesetMetadata(c *Client, i interface{}, res *Ruleset) *RulesetMetadata {
@@ -1373,46 +968,6 @@ func flattenRulesetMetadata(c *Client, i interface{}, res *Ruleset) *RulesetMeta
 	return r
 }
 
-// flattenRulesetSourceLanguageEnumMap flattens the contents of RulesetSourceLanguageEnum from a JSON
-// response object.
-func flattenRulesetSourceLanguageEnumMap(c *Client, i interface{}, res *Ruleset) map[string]RulesetSourceLanguageEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]RulesetSourceLanguageEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]RulesetSourceLanguageEnum{}
-	}
-
-	items := make(map[string]RulesetSourceLanguageEnum)
-	for k, item := range a {
-		items[k] = *flattenRulesetSourceLanguageEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenRulesetSourceLanguageEnumSlice flattens the contents of RulesetSourceLanguageEnum from a JSON
-// response object.
-func flattenRulesetSourceLanguageEnumSlice(c *Client, i interface{}, res *Ruleset) []RulesetSourceLanguageEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []RulesetSourceLanguageEnum{}
-	}
-
-	if len(a) == 0 {
-		return []RulesetSourceLanguageEnum{}
-	}
-
-	items := make([]RulesetSourceLanguageEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenRulesetSourceLanguageEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenRulesetSourceLanguageEnum asserts that an interface is a string, and returns a
 // pointer to a *RulesetSourceLanguageEnum with the same value as that string.
 func flattenRulesetSourceLanguageEnum(i interface{}) *RulesetSourceLanguageEnum {
@@ -1422,40 +977,6 @@ func flattenRulesetSourceLanguageEnum(i interface{}) *RulesetSourceLanguageEnum 
 	}
 
 	return RulesetSourceLanguageEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Ruleset) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalRuleset(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type rulesetDiff struct {
@@ -1534,9 +1055,6 @@ func extractRulesetFields(r *Ruleset) error {
 func extractRulesetSourceFields(r *Ruleset, o *RulesetSource) error {
 	return nil
 }
-func extractRulesetSourceFilesFields(r *Ruleset, o *RulesetSourceFiles) error {
-	return nil
-}
 func extractRulesetMetadataFields(r *Ruleset, o *RulesetMetadata) error {
 	return nil
 }
@@ -1567,9 +1085,6 @@ func postReadExtractRulesetFields(r *Ruleset) error {
 	return nil
 }
 func postReadExtractRulesetSourceFields(r *Ruleset, o *RulesetSource) error {
-	return nil
-}
-func postReadExtractRulesetSourceFilesFields(r *Ruleset, o *RulesetSourceFiles) error {
 	return nil
 }
 func postReadExtractRulesetMetadataFields(r *Ruleset, o *RulesetMetadata) error {

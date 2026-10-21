@@ -71,23 +71,8 @@ func (r *KeyRestrictionsAndroidKeyRestrictions) validate() error {
 	}
 	return nil
 }
-func (r *KeyRestrictionsAndroidKeyRestrictionsAllowedApplications) validate() error {
-	if err := dcl.Required(r, "sha1Fingerprint"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "packageName"); err != nil {
-		return err
-	}
-	return nil
-}
 func (r *KeyRestrictionsIosKeyRestrictions) validate() error {
 	if err := dcl.Required(r, "allowedBundleIds"); err != nil {
-		return err
-	}
-	return nil
-}
-func (r *KeyRestrictionsApiTargets) validate() error {
-	if err := dcl.Required(r, "service"); err != nil {
 		return err
 	}
 	return nil
@@ -599,34 +584,6 @@ func canonicalizeKeyRestrictions(des, initial *KeyRestrictions, opts ...dcl.Appl
 	return cDes
 }
 
-func canonicalizeKeyRestrictionsSlice(des, initial []KeyRestrictions, opts ...dcl.ApplyOption) []KeyRestrictions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyRestrictions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyRestrictions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyRestrictions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyRestrictions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyRestrictions(c *Client, des, nw *KeyRestrictions) *KeyRestrictions {
 
 	if des == nil {
@@ -648,52 +605,6 @@ func canonicalizeNewKeyRestrictions(c *Client, des, nw *KeyRestrictions) *KeyRes
 	nw.ApiTargets = canonicalizeNewKeyRestrictionsApiTargetsSlice(c, des.ApiTargets, nw.ApiTargets)
 
 	return nw
-}
-
-func canonicalizeNewKeyRestrictionsSet(c *Client, des, nw []KeyRestrictions) []KeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyRestrictionsSlice(c *Client, des, nw []KeyRestrictions) []KeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyRestrictions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyRestrictions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyRestrictionsBrowserKeyRestrictions(des, initial *KeyRestrictionsBrowserKeyRestrictions, opts ...dcl.ApplyOption) *KeyRestrictionsBrowserKeyRestrictions {
@@ -719,34 +630,6 @@ func canonicalizeKeyRestrictionsBrowserKeyRestrictions(des, initial *KeyRestrict
 	return cDes
 }
 
-func canonicalizeKeyRestrictionsBrowserKeyRestrictionsSlice(des, initial []KeyRestrictionsBrowserKeyRestrictions, opts ...dcl.ApplyOption) []KeyRestrictionsBrowserKeyRestrictions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyRestrictionsBrowserKeyRestrictions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyRestrictionsBrowserKeyRestrictions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyRestrictionsBrowserKeyRestrictions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyRestrictionsBrowserKeyRestrictions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyRestrictionsBrowserKeyRestrictions(c *Client, des, nw *KeyRestrictionsBrowserKeyRestrictions) *KeyRestrictionsBrowserKeyRestrictions {
 
 	if des == nil {
@@ -766,52 +649,6 @@ func canonicalizeNewKeyRestrictionsBrowserKeyRestrictions(c *Client, des, nw *Ke
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyRestrictionsBrowserKeyRestrictionsSet(c *Client, des, nw []KeyRestrictionsBrowserKeyRestrictions) []KeyRestrictionsBrowserKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsBrowserKeyRestrictions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsBrowserKeyRestrictionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsBrowserKeyRestrictions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyRestrictionsBrowserKeyRestrictionsSlice(c *Client, des, nw []KeyRestrictionsBrowserKeyRestrictions) []KeyRestrictionsBrowserKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyRestrictionsBrowserKeyRestrictions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyRestrictionsBrowserKeyRestrictions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyRestrictionsServerKeyRestrictions(des, initial *KeyRestrictionsServerKeyRestrictions, opts ...dcl.ApplyOption) *KeyRestrictionsServerKeyRestrictions {
@@ -837,34 +674,6 @@ func canonicalizeKeyRestrictionsServerKeyRestrictions(des, initial *KeyRestricti
 	return cDes
 }
 
-func canonicalizeKeyRestrictionsServerKeyRestrictionsSlice(des, initial []KeyRestrictionsServerKeyRestrictions, opts ...dcl.ApplyOption) []KeyRestrictionsServerKeyRestrictions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyRestrictionsServerKeyRestrictions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyRestrictionsServerKeyRestrictions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyRestrictionsServerKeyRestrictions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyRestrictionsServerKeyRestrictions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyRestrictionsServerKeyRestrictions(c *Client, des, nw *KeyRestrictionsServerKeyRestrictions) *KeyRestrictionsServerKeyRestrictions {
 
 	if des == nil {
@@ -886,52 +695,6 @@ func canonicalizeNewKeyRestrictionsServerKeyRestrictions(c *Client, des, nw *Key
 	return nw
 }
 
-func canonicalizeNewKeyRestrictionsServerKeyRestrictionsSet(c *Client, des, nw []KeyRestrictionsServerKeyRestrictions) []KeyRestrictionsServerKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsServerKeyRestrictions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsServerKeyRestrictionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsServerKeyRestrictions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyRestrictionsServerKeyRestrictionsSlice(c *Client, des, nw []KeyRestrictionsServerKeyRestrictions) []KeyRestrictionsServerKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyRestrictionsServerKeyRestrictions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyRestrictionsServerKeyRestrictions(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeKeyRestrictionsAndroidKeyRestrictions(des, initial *KeyRestrictionsAndroidKeyRestrictions, opts ...dcl.ApplyOption) *KeyRestrictionsAndroidKeyRestrictions {
 	if des == nil {
 		return initial
@@ -951,34 +714,6 @@ func canonicalizeKeyRestrictionsAndroidKeyRestrictions(des, initial *KeyRestrict
 	return cDes
 }
 
-func canonicalizeKeyRestrictionsAndroidKeyRestrictionsSlice(des, initial []KeyRestrictionsAndroidKeyRestrictions, opts ...dcl.ApplyOption) []KeyRestrictionsAndroidKeyRestrictions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyRestrictionsAndroidKeyRestrictions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyRestrictionsAndroidKeyRestrictions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyRestrictionsAndroidKeyRestrictions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyRestrictionsAndroidKeyRestrictions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyRestrictionsAndroidKeyRestrictions(c *Client, des, nw *KeyRestrictionsAndroidKeyRestrictions) *KeyRestrictionsAndroidKeyRestrictions {
 
 	if des == nil {
@@ -996,52 +731,6 @@ func canonicalizeNewKeyRestrictionsAndroidKeyRestrictions(c *Client, des, nw *Ke
 	nw.AllowedApplications = canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice(c, des.AllowedApplications, nw.AllowedApplications)
 
 	return nw
-}
-
-func canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsSet(c *Client, des, nw []KeyRestrictionsAndroidKeyRestrictions) []KeyRestrictionsAndroidKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsAndroidKeyRestrictions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsAndroidKeyRestrictionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsAndroidKeyRestrictions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsSlice(c *Client, des, nw []KeyRestrictionsAndroidKeyRestrictions) []KeyRestrictionsAndroidKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyRestrictionsAndroidKeyRestrictions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyRestrictionsAndroidKeyRestrictions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(des, initial *KeyRestrictionsAndroidKeyRestrictionsAllowedApplications, opts ...dcl.ApplyOption) *KeyRestrictionsAndroidKeyRestrictionsAllowedApplications {
@@ -1124,32 +813,6 @@ func canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(c *
 	return nw
 }
 
-func canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSet(c *Client, des, nw []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications) []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice(c *Client, des, nw []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications) []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications {
 	if des == nil {
 		return nw
@@ -1193,34 +856,6 @@ func canonicalizeKeyRestrictionsIosKeyRestrictions(des, initial *KeyRestrictions
 	return cDes
 }
 
-func canonicalizeKeyRestrictionsIosKeyRestrictionsSlice(des, initial []KeyRestrictionsIosKeyRestrictions, opts ...dcl.ApplyOption) []KeyRestrictionsIosKeyRestrictions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyRestrictionsIosKeyRestrictions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyRestrictionsIosKeyRestrictions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyRestrictionsIosKeyRestrictions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyRestrictionsIosKeyRestrictions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyRestrictionsIosKeyRestrictions(c *Client, des, nw *KeyRestrictionsIosKeyRestrictions) *KeyRestrictionsIosKeyRestrictions {
 
 	if des == nil {
@@ -1240,52 +875,6 @@ func canonicalizeNewKeyRestrictionsIosKeyRestrictions(c *Client, des, nw *KeyRes
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyRestrictionsIosKeyRestrictionsSet(c *Client, des, nw []KeyRestrictionsIosKeyRestrictions) []KeyRestrictionsIosKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsIosKeyRestrictions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsIosKeyRestrictionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsIosKeyRestrictions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyRestrictionsIosKeyRestrictionsSlice(c *Client, des, nw []KeyRestrictionsIosKeyRestrictions) []KeyRestrictionsIosKeyRestrictions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyRestrictionsIosKeyRestrictions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyRestrictionsIosKeyRestrictions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyRestrictionsApiTargets(des, initial *KeyRestrictionsApiTargets, opts ...dcl.ApplyOption) *KeyRestrictionsApiTargets {
@@ -1366,32 +955,6 @@ func canonicalizeNewKeyRestrictionsApiTargets(c *Client, des, nw *KeyRestriction
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyRestrictionsApiTargetsSet(c *Client, des, nw []KeyRestrictionsApiTargets) []KeyRestrictionsApiTargets {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyRestrictionsApiTargets
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyRestrictionsApiTargetsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyRestrictionsApiTargets(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
 }
 
 func canonicalizeNewKeyRestrictionsApiTargetsSlice(c *Client, des, nw []KeyRestrictionsApiTargets) []KeyRestrictionsApiTargets {
@@ -1842,87 +1405,6 @@ func flattenKey(c *Client, i interface{}, res *Key) *Key {
 	return resultRes
 }
 
-// expandKeyRestrictionsMap expands the contents of KeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsMap(c *Client, f map[string]KeyRestrictions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyRestrictionsSlice expands the contents of KeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsSlice(c *Client, f []KeyRestrictions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyRestrictionsMap flattens the contents of KeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictions{}
-	}
-
-	items := make(map[string]KeyRestrictions)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyRestrictionsSlice flattens the contents of KeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsSlice(c *Client, i interface{}, res *Key) []KeyRestrictions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyRestrictions{}
-	}
-
-	items := make([]KeyRestrictions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyRestrictions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyRestrictions expands an instance of KeyRestrictions into a JSON
 // request object.
 func expandKeyRestrictions(c *Client, f *KeyRestrictions, res *Key) (map[string]interface{}, error) {
@@ -1982,87 +1464,6 @@ func flattenKeyRestrictions(c *Client, i interface{}, res *Key) *KeyRestrictions
 	return r
 }
 
-// expandKeyRestrictionsBrowserKeyRestrictionsMap expands the contents of KeyRestrictionsBrowserKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsBrowserKeyRestrictionsMap(c *Client, f map[string]KeyRestrictionsBrowserKeyRestrictions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsBrowserKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyRestrictionsBrowserKeyRestrictionsSlice expands the contents of KeyRestrictionsBrowserKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsBrowserKeyRestrictionsSlice(c *Client, f []KeyRestrictionsBrowserKeyRestrictions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyRestrictionsBrowserKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyRestrictionsBrowserKeyRestrictionsMap flattens the contents of KeyRestrictionsBrowserKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsBrowserKeyRestrictionsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsBrowserKeyRestrictions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsBrowserKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsBrowserKeyRestrictions{}
-	}
-
-	items := make(map[string]KeyRestrictionsBrowserKeyRestrictions)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsBrowserKeyRestrictions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyRestrictionsBrowserKeyRestrictionsSlice flattens the contents of KeyRestrictionsBrowserKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsBrowserKeyRestrictionsSlice(c *Client, i interface{}, res *Key) []KeyRestrictionsBrowserKeyRestrictions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyRestrictionsBrowserKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyRestrictionsBrowserKeyRestrictions{}
-	}
-
-	items := make([]KeyRestrictionsBrowserKeyRestrictions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyRestrictionsBrowserKeyRestrictions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyRestrictionsBrowserKeyRestrictions expands an instance of KeyRestrictionsBrowserKeyRestrictions into a JSON
 // request object.
 func expandKeyRestrictionsBrowserKeyRestrictions(c *Client, f *KeyRestrictionsBrowserKeyRestrictions, res *Key) (map[string]interface{}, error) {
@@ -2096,87 +1497,6 @@ func flattenKeyRestrictionsBrowserKeyRestrictions(c *Client, i interface{}, res 
 	return r
 }
 
-// expandKeyRestrictionsServerKeyRestrictionsMap expands the contents of KeyRestrictionsServerKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsServerKeyRestrictionsMap(c *Client, f map[string]KeyRestrictionsServerKeyRestrictions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsServerKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyRestrictionsServerKeyRestrictionsSlice expands the contents of KeyRestrictionsServerKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsServerKeyRestrictionsSlice(c *Client, f []KeyRestrictionsServerKeyRestrictions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyRestrictionsServerKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyRestrictionsServerKeyRestrictionsMap flattens the contents of KeyRestrictionsServerKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsServerKeyRestrictionsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsServerKeyRestrictions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsServerKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsServerKeyRestrictions{}
-	}
-
-	items := make(map[string]KeyRestrictionsServerKeyRestrictions)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsServerKeyRestrictions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyRestrictionsServerKeyRestrictionsSlice flattens the contents of KeyRestrictionsServerKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsServerKeyRestrictionsSlice(c *Client, i interface{}, res *Key) []KeyRestrictionsServerKeyRestrictions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyRestrictionsServerKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyRestrictionsServerKeyRestrictions{}
-	}
-
-	items := make([]KeyRestrictionsServerKeyRestrictions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyRestrictionsServerKeyRestrictions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyRestrictionsServerKeyRestrictions expands an instance of KeyRestrictionsServerKeyRestrictions into a JSON
 // request object.
 func expandKeyRestrictionsServerKeyRestrictions(c *Client, f *KeyRestrictionsServerKeyRestrictions, res *Key) (map[string]interface{}, error) {
@@ -2208,87 +1528,6 @@ func flattenKeyRestrictionsServerKeyRestrictions(c *Client, i interface{}, res *
 	r.AllowedIps = dcl.FlattenStringSlice(m["allowedIps"])
 
 	return r
-}
-
-// expandKeyRestrictionsAndroidKeyRestrictionsMap expands the contents of KeyRestrictionsAndroidKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsAndroidKeyRestrictionsMap(c *Client, f map[string]KeyRestrictionsAndroidKeyRestrictions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsAndroidKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyRestrictionsAndroidKeyRestrictionsSlice expands the contents of KeyRestrictionsAndroidKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsAndroidKeyRestrictionsSlice(c *Client, f []KeyRestrictionsAndroidKeyRestrictions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyRestrictionsAndroidKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyRestrictionsAndroidKeyRestrictionsMap flattens the contents of KeyRestrictionsAndroidKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsAndroidKeyRestrictionsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsAndroidKeyRestrictions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsAndroidKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsAndroidKeyRestrictions{}
-	}
-
-	items := make(map[string]KeyRestrictionsAndroidKeyRestrictions)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsAndroidKeyRestrictions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyRestrictionsAndroidKeyRestrictionsSlice flattens the contents of KeyRestrictionsAndroidKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsAndroidKeyRestrictionsSlice(c *Client, i interface{}, res *Key) []KeyRestrictionsAndroidKeyRestrictions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyRestrictionsAndroidKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyRestrictionsAndroidKeyRestrictions{}
-	}
-
-	items := make([]KeyRestrictionsAndroidKeyRestrictions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyRestrictionsAndroidKeyRestrictions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandKeyRestrictionsAndroidKeyRestrictions expands an instance of KeyRestrictionsAndroidKeyRestrictions into a JSON
@@ -2326,27 +1565,6 @@ func flattenKeyRestrictionsAndroidKeyRestrictions(c *Client, i interface{}, res 
 	return r
 }
 
-// expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsMap expands the contents of KeyRestrictionsAndroidKeyRestrictionsAllowedApplications into a JSON
-// request object.
-func expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsMap(c *Client, f map[string]KeyRestrictionsAndroidKeyRestrictionsAllowedApplications, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice expands the contents of KeyRestrictionsAndroidKeyRestrictionsAllowedApplications into a JSON
 // request object.
 func expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice(c *Client, f []KeyRestrictionsAndroidKeyRestrictionsAllowedApplications, res *Key) ([]map[string]interface{}, error) {
@@ -2365,26 +1583,6 @@ func expandKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice(c *Clie
 	}
 
 	return items, nil
-}
-
-// flattenKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsMap flattens the contents of KeyRestrictionsAndroidKeyRestrictionsAllowedApplications from a JSON
-// response object.
-func flattenKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsAndroidKeyRestrictionsAllowedApplications {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsAndroidKeyRestrictionsAllowedApplications{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsAndroidKeyRestrictionsAllowedApplications{}
-	}
-
-	items := make(map[string]KeyRestrictionsAndroidKeyRestrictionsAllowedApplications)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsSlice flattens the contents of KeyRestrictionsAndroidKeyRestrictionsAllowedApplications from a JSON
@@ -2444,87 +1642,6 @@ func flattenKeyRestrictionsAndroidKeyRestrictionsAllowedApplications(c *Client, 
 	return r
 }
 
-// expandKeyRestrictionsIosKeyRestrictionsMap expands the contents of KeyRestrictionsIosKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsIosKeyRestrictionsMap(c *Client, f map[string]KeyRestrictionsIosKeyRestrictions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsIosKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyRestrictionsIosKeyRestrictionsSlice expands the contents of KeyRestrictionsIosKeyRestrictions into a JSON
-// request object.
-func expandKeyRestrictionsIosKeyRestrictionsSlice(c *Client, f []KeyRestrictionsIosKeyRestrictions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyRestrictionsIosKeyRestrictions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyRestrictionsIosKeyRestrictionsMap flattens the contents of KeyRestrictionsIosKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsIosKeyRestrictionsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsIosKeyRestrictions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsIosKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsIosKeyRestrictions{}
-	}
-
-	items := make(map[string]KeyRestrictionsIosKeyRestrictions)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsIosKeyRestrictions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyRestrictionsIosKeyRestrictionsSlice flattens the contents of KeyRestrictionsIosKeyRestrictions from a JSON
-// response object.
-func flattenKeyRestrictionsIosKeyRestrictionsSlice(c *Client, i interface{}, res *Key) []KeyRestrictionsIosKeyRestrictions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyRestrictionsIosKeyRestrictions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyRestrictionsIosKeyRestrictions{}
-	}
-
-	items := make([]KeyRestrictionsIosKeyRestrictions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyRestrictionsIosKeyRestrictions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyRestrictionsIosKeyRestrictions expands an instance of KeyRestrictionsIosKeyRestrictions into a JSON
 // request object.
 func expandKeyRestrictionsIosKeyRestrictions(c *Client, f *KeyRestrictionsIosKeyRestrictions, res *Key) (map[string]interface{}, error) {
@@ -2558,27 +1675,6 @@ func flattenKeyRestrictionsIosKeyRestrictions(c *Client, i interface{}, res *Key
 	return r
 }
 
-// expandKeyRestrictionsApiTargetsMap expands the contents of KeyRestrictionsApiTargets into a JSON
-// request object.
-func expandKeyRestrictionsApiTargetsMap(c *Client, f map[string]KeyRestrictionsApiTargets, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyRestrictionsApiTargets(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandKeyRestrictionsApiTargetsSlice expands the contents of KeyRestrictionsApiTargets into a JSON
 // request object.
 func expandKeyRestrictionsApiTargetsSlice(c *Client, f []KeyRestrictionsApiTargets, res *Key) ([]map[string]interface{}, error) {
@@ -2597,26 +1693,6 @@ func expandKeyRestrictionsApiTargetsSlice(c *Client, f []KeyRestrictionsApiTarge
 	}
 
 	return items, nil
-}
-
-// flattenKeyRestrictionsApiTargetsMap flattens the contents of KeyRestrictionsApiTargets from a JSON
-// response object.
-func flattenKeyRestrictionsApiTargetsMap(c *Client, i interface{}, res *Key) map[string]KeyRestrictionsApiTargets {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyRestrictionsApiTargets{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyRestrictionsApiTargets{}
-	}
-
-	items := make(map[string]KeyRestrictionsApiTargets)
-	for k, item := range a {
-		items[k] = *flattenKeyRestrictionsApiTargets(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenKeyRestrictionsApiTargetsSlice flattens the contents of KeyRestrictionsApiTargets from a JSON
@@ -2674,40 +1750,6 @@ func flattenKeyRestrictionsApiTargets(c *Client, i interface{}, res *Key) *KeyRe
 	r.Methods = dcl.FlattenStringSlice(m["methods"])
 
 	return r
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Key) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalKey(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type keyDiff struct {
@@ -2831,16 +1873,9 @@ func extractKeyRestrictionsServerKeyRestrictionsFields(r *Key, o *KeyRestriction
 func extractKeyRestrictionsAndroidKeyRestrictionsFields(r *Key, o *KeyRestrictionsAndroidKeyRestrictions) error {
 	return nil
 }
-func extractKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsFields(r *Key, o *KeyRestrictionsAndroidKeyRestrictionsAllowedApplications) error {
-	return nil
-}
 func extractKeyRestrictionsIosKeyRestrictionsFields(r *Key, o *KeyRestrictionsIosKeyRestrictions) error {
 	return nil
 }
-func extractKeyRestrictionsApiTargetsFields(r *Key, o *KeyRestrictionsApiTargets) error {
-	return nil
-}
-
 func postReadExtractKeyFields(r *Key) error {
 	vRestrictions := r.Restrictions
 	if vRestrictions == nil {
@@ -2900,23 +1935,5 @@ func postReadExtractKeyRestrictionsFields(r *Key, o *KeyRestrictions) error {
 	if !dcl.IsEmptyValueIndirect(vIosKeyRestrictions) {
 		o.IosKeyRestrictions = vIosKeyRestrictions
 	}
-	return nil
-}
-func postReadExtractKeyRestrictionsBrowserKeyRestrictionsFields(r *Key, o *KeyRestrictionsBrowserKeyRestrictions) error {
-	return nil
-}
-func postReadExtractKeyRestrictionsServerKeyRestrictionsFields(r *Key, o *KeyRestrictionsServerKeyRestrictions) error {
-	return nil
-}
-func postReadExtractKeyRestrictionsAndroidKeyRestrictionsFields(r *Key, o *KeyRestrictionsAndroidKeyRestrictions) error {
-	return nil
-}
-func postReadExtractKeyRestrictionsAndroidKeyRestrictionsAllowedApplicationsFields(r *Key, o *KeyRestrictionsAndroidKeyRestrictionsAllowedApplications) error {
-	return nil
-}
-func postReadExtractKeyRestrictionsIosKeyRestrictionsFields(r *Key, o *KeyRestrictionsIosKeyRestrictions) error {
-	return nil
-}
-func postReadExtractKeyRestrictionsApiTargetsFields(r *Key, o *KeyRestrictionsApiTargets) error {
 	return nil
 }

@@ -59,15 +59,6 @@ func (r *TargetGke) validate() error {
 func (r *TargetAnthosCluster) validate() error {
 	return nil
 }
-func (r *TargetExecutionConfigs) validate() error {
-	if err := dcl.Required(r, "usages"); err != nil {
-		return err
-	}
-	if err := dcl.ValidateAtMostOneOfFieldsSet([]string(nil)); err != nil {
-		return err
-	}
-	return nil
-}
 func (r *TargetRun) validate() error {
 	if err := dcl.Required(r, "location"); err != nil {
 		return err
@@ -84,15 +75,6 @@ func (r *TargetCustomTarget) validate() error {
 	if err := dcl.Required(r, "customTargetType"); err != nil {
 		return err
 	}
-	return nil
-}
-func (r *TargetAssociatedEntities) validate() error {
-	return nil
-}
-func (r *TargetAssociatedEntitiesGkeClusters) validate() error {
-	return nil
-}
-func (r *TargetAssociatedEntitiesAnthosClusters) validate() error {
 	return nil
 }
 func (r *Target) basePath() string {
@@ -867,34 +849,6 @@ func canonicalizeTargetGke(des, initial *TargetGke, opts ...dcl.ApplyOption) *Ta
 	return cDes
 }
 
-func canonicalizeTargetGkeSlice(des, initial []TargetGke, opts ...dcl.ApplyOption) []TargetGke {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetGke, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetGke(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetGke, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetGke(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewTargetGke(c *Client, des, nw *TargetGke) *TargetGke {
 
 	if des == nil {
@@ -922,52 +876,6 @@ func canonicalizeNewTargetGke(c *Client, des, nw *TargetGke) *TargetGke {
 	return nw
 }
 
-func canonicalizeNewTargetGkeSet(c *Client, des, nw []TargetGke) []TargetGke {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetGke
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetGkeNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetGke(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetGkeSlice(c *Client, des, nw []TargetGke) []TargetGke {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetGke
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetGke(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeTargetAnthosCluster(des, initial *TargetAnthosCluster, opts ...dcl.ApplyOption) *TargetAnthosCluster {
 	if des == nil {
 		return initial
@@ -992,34 +900,6 @@ func canonicalizeTargetAnthosCluster(des, initial *TargetAnthosCluster, opts ...
 	return cDes
 }
 
-func canonicalizeTargetAnthosClusterSlice(des, initial []TargetAnthosCluster, opts ...dcl.ApplyOption) []TargetAnthosCluster {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetAnthosCluster, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetAnthosCluster(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetAnthosCluster, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetAnthosCluster(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewTargetAnthosCluster(c *Client, des, nw *TargetAnthosCluster) *TargetAnthosCluster {
 
 	if des == nil {
@@ -1035,52 +915,6 @@ func canonicalizeNewTargetAnthosCluster(c *Client, des, nw *TargetAnthosCluster)
 	}
 
 	return nw
-}
-
-func canonicalizeNewTargetAnthosClusterSet(c *Client, des, nw []TargetAnthosCluster) []TargetAnthosCluster {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetAnthosCluster
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetAnthosClusterNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetAnthosCluster(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetAnthosClusterSlice(c *Client, des, nw []TargetAnthosCluster) []TargetAnthosCluster {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetAnthosCluster
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetAnthosCluster(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeTargetExecutionConfigs(des, initial *TargetExecutionConfigs, opts ...dcl.ApplyOption) *TargetExecutionConfigs {
@@ -1191,32 +1025,6 @@ func canonicalizeNewTargetExecutionConfigs(c *Client, des, nw *TargetExecutionCo
 	return nw
 }
 
-func canonicalizeNewTargetExecutionConfigsSet(c *Client, des, nw []TargetExecutionConfigs) []TargetExecutionConfigs {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetExecutionConfigs
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetExecutionConfigsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetExecutionConfigs(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewTargetExecutionConfigsSlice(c *Client, des, nw []TargetExecutionConfigs) []TargetExecutionConfigs {
 	if des == nil {
 		return nw
@@ -1260,34 +1068,6 @@ func canonicalizeTargetRun(des, initial *TargetRun, opts ...dcl.ApplyOption) *Ta
 	return cDes
 }
 
-func canonicalizeTargetRunSlice(des, initial []TargetRun, opts ...dcl.ApplyOption) []TargetRun {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetRun, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetRun(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetRun, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetRun(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewTargetRun(c *Client, des, nw *TargetRun) *TargetRun {
 
 	if des == nil {
@@ -1307,52 +1087,6 @@ func canonicalizeNewTargetRun(c *Client, des, nw *TargetRun) *TargetRun {
 	}
 
 	return nw
-}
-
-func canonicalizeNewTargetRunSet(c *Client, des, nw []TargetRun) []TargetRun {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetRun
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetRunNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetRun(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetRunSlice(c *Client, des, nw []TargetRun) []TargetRun {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetRun
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetRun(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeTargetMultiTarget(des, initial *TargetMultiTarget, opts ...dcl.ApplyOption) *TargetMultiTarget {
@@ -1378,34 +1112,6 @@ func canonicalizeTargetMultiTarget(des, initial *TargetMultiTarget, opts ...dcl.
 	return cDes
 }
 
-func canonicalizeTargetMultiTargetSlice(des, initial []TargetMultiTarget, opts ...dcl.ApplyOption) []TargetMultiTarget {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetMultiTarget, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetMultiTarget(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetMultiTarget, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetMultiTarget(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewTargetMultiTarget(c *Client, des, nw *TargetMultiTarget) *TargetMultiTarget {
 
 	if des == nil {
@@ -1425,52 +1131,6 @@ func canonicalizeNewTargetMultiTarget(c *Client, des, nw *TargetMultiTarget) *Ta
 	}
 
 	return nw
-}
-
-func canonicalizeNewTargetMultiTargetSet(c *Client, des, nw []TargetMultiTarget) []TargetMultiTarget {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetMultiTarget
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetMultiTargetNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetMultiTarget(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetMultiTargetSlice(c *Client, des, nw []TargetMultiTarget) []TargetMultiTarget {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetMultiTarget
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetMultiTarget(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeTargetCustomTarget(des, initial *TargetCustomTarget, opts ...dcl.ApplyOption) *TargetCustomTarget {
@@ -1497,34 +1157,6 @@ func canonicalizeTargetCustomTarget(des, initial *TargetCustomTarget, opts ...dc
 	return cDes
 }
 
-func canonicalizeTargetCustomTargetSlice(des, initial []TargetCustomTarget, opts ...dcl.ApplyOption) []TargetCustomTarget {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetCustomTarget, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetCustomTarget(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetCustomTarget, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetCustomTarget(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewTargetCustomTarget(c *Client, des, nw *TargetCustomTarget) *TargetCustomTarget {
 
 	if des == nil {
@@ -1540,413 +1172,6 @@ func canonicalizeNewTargetCustomTarget(c *Client, des, nw *TargetCustomTarget) *
 	}
 
 	return nw
-}
-
-func canonicalizeNewTargetCustomTargetSet(c *Client, des, nw []TargetCustomTarget) []TargetCustomTarget {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetCustomTarget
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetCustomTargetNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetCustomTarget(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetCustomTargetSlice(c *Client, des, nw []TargetCustomTarget) []TargetCustomTarget {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetCustomTarget
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetCustomTarget(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeTargetAssociatedEntities(des, initial *TargetAssociatedEntities, opts ...dcl.ApplyOption) *TargetAssociatedEntities {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &TargetAssociatedEntities{}
-
-	cDes.GkeClusters = canonicalizeTargetAssociatedEntitiesGkeClustersSlice(des.GkeClusters, initial.GkeClusters, opts...)
-	cDes.AnthosClusters = canonicalizeTargetAssociatedEntitiesAnthosClustersSlice(des.AnthosClusters, initial.AnthosClusters, opts...)
-
-	return cDes
-}
-
-func canonicalizeTargetAssociatedEntitiesSlice(des, initial []TargetAssociatedEntities, opts ...dcl.ApplyOption) []TargetAssociatedEntities {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetAssociatedEntities, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetAssociatedEntities(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetAssociatedEntities, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetAssociatedEntities(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewTargetAssociatedEntities(c *Client, des, nw *TargetAssociatedEntities) *TargetAssociatedEntities {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for TargetAssociatedEntities while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	nw.GkeClusters = canonicalizeNewTargetAssociatedEntitiesGkeClustersSlice(c, des.GkeClusters, nw.GkeClusters)
-	nw.AnthosClusters = canonicalizeNewTargetAssociatedEntitiesAnthosClustersSlice(c, des.AnthosClusters, nw.AnthosClusters)
-
-	return nw
-}
-
-func canonicalizeNewTargetAssociatedEntitiesSet(c *Client, des, nw []TargetAssociatedEntities) []TargetAssociatedEntities {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetAssociatedEntities
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetAssociatedEntitiesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetAssociatedEntities(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetAssociatedEntitiesSlice(c *Client, des, nw []TargetAssociatedEntities) []TargetAssociatedEntities {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetAssociatedEntities
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetAssociatedEntities(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeTargetAssociatedEntitiesGkeClusters(des, initial *TargetAssociatedEntitiesGkeClusters, opts ...dcl.ApplyOption) *TargetAssociatedEntitiesGkeClusters {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &TargetAssociatedEntitiesGkeClusters{}
-
-	if dcl.IsZeroValue(des.Cluster) || (dcl.IsEmptyValueIndirect(des.Cluster) && dcl.IsEmptyValueIndirect(initial.Cluster)) {
-		// Desired and initial values are equivalent, so set canonical desired value to initial value.
-		cDes.Cluster = initial.Cluster
-	} else {
-		cDes.Cluster = des.Cluster
-	}
-	if dcl.BoolCanonicalize(des.InternalIP, initial.InternalIP) || dcl.IsZeroValue(des.InternalIP) {
-		cDes.InternalIP = initial.InternalIP
-	} else {
-		cDes.InternalIP = des.InternalIP
-	}
-	if dcl.StringCanonicalize(des.ProxyUrl, initial.ProxyUrl) || dcl.IsZeroValue(des.ProxyUrl) {
-		cDes.ProxyUrl = initial.ProxyUrl
-	} else {
-		cDes.ProxyUrl = des.ProxyUrl
-	}
-
-	return cDes
-}
-
-func canonicalizeTargetAssociatedEntitiesGkeClustersSlice(des, initial []TargetAssociatedEntitiesGkeClusters, opts ...dcl.ApplyOption) []TargetAssociatedEntitiesGkeClusters {
-	if des == nil {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetAssociatedEntitiesGkeClusters, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetAssociatedEntitiesGkeClusters(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetAssociatedEntitiesGkeClusters, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetAssociatedEntitiesGkeClusters(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewTargetAssociatedEntitiesGkeClusters(c *Client, des, nw *TargetAssociatedEntitiesGkeClusters) *TargetAssociatedEntitiesGkeClusters {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for TargetAssociatedEntitiesGkeClusters while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	if dcl.BoolCanonicalize(des.InternalIP, nw.InternalIP) {
-		nw.InternalIP = des.InternalIP
-	}
-	if dcl.StringCanonicalize(des.ProxyUrl, nw.ProxyUrl) {
-		nw.ProxyUrl = des.ProxyUrl
-	}
-
-	return nw
-}
-
-func canonicalizeNewTargetAssociatedEntitiesGkeClustersSet(c *Client, des, nw []TargetAssociatedEntitiesGkeClusters) []TargetAssociatedEntitiesGkeClusters {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetAssociatedEntitiesGkeClusters
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetAssociatedEntitiesGkeClustersNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetAssociatedEntitiesGkeClusters(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetAssociatedEntitiesGkeClustersSlice(c *Client, des, nw []TargetAssociatedEntitiesGkeClusters) []TargetAssociatedEntitiesGkeClusters {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetAssociatedEntitiesGkeClusters
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetAssociatedEntitiesGkeClusters(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeTargetAssociatedEntitiesAnthosClusters(des, initial *TargetAssociatedEntitiesAnthosClusters, opts ...dcl.ApplyOption) *TargetAssociatedEntitiesAnthosClusters {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &TargetAssociatedEntitiesAnthosClusters{}
-
-	if dcl.IsZeroValue(des.Membership) || (dcl.IsEmptyValueIndirect(des.Membership) && dcl.IsEmptyValueIndirect(initial.Membership)) {
-		// Desired and initial values are equivalent, so set canonical desired value to initial value.
-		cDes.Membership = initial.Membership
-	} else {
-		cDes.Membership = des.Membership
-	}
-
-	return cDes
-}
-
-func canonicalizeTargetAssociatedEntitiesAnthosClustersSlice(des, initial []TargetAssociatedEntitiesAnthosClusters, opts ...dcl.ApplyOption) []TargetAssociatedEntitiesAnthosClusters {
-	if des == nil {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]TargetAssociatedEntitiesAnthosClusters, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeTargetAssociatedEntitiesAnthosClusters(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]TargetAssociatedEntitiesAnthosClusters, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeTargetAssociatedEntitiesAnthosClusters(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewTargetAssociatedEntitiesAnthosClusters(c *Client, des, nw *TargetAssociatedEntitiesAnthosClusters) *TargetAssociatedEntitiesAnthosClusters {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for TargetAssociatedEntitiesAnthosClusters while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	return nw
-}
-
-func canonicalizeNewTargetAssociatedEntitiesAnthosClustersSet(c *Client, des, nw []TargetAssociatedEntitiesAnthosClusters) []TargetAssociatedEntitiesAnthosClusters {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []TargetAssociatedEntitiesAnthosClusters
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareTargetAssociatedEntitiesAnthosClustersNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewTargetAssociatedEntitiesAnthosClusters(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewTargetAssociatedEntitiesAnthosClustersSlice(c *Client, des, nw []TargetAssociatedEntitiesAnthosClusters) []TargetAssociatedEntitiesAnthosClusters {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []TargetAssociatedEntitiesAnthosClusters
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewTargetAssociatedEntitiesAnthosClusters(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -2620,87 +1845,6 @@ func flattenTarget(c *Client, i interface{}, res *Target) *Target {
 	return resultRes
 }
 
-// expandTargetGkeMap expands the contents of TargetGke into a JSON
-// request object.
-func expandTargetGkeMap(c *Client, f map[string]TargetGke, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetGke(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandTargetGkeSlice expands the contents of TargetGke into a JSON
-// request object.
-func expandTargetGkeSlice(c *Client, f []TargetGke, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetGke(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenTargetGkeMap flattens the contents of TargetGke from a JSON
-// response object.
-func flattenTargetGkeMap(c *Client, i interface{}, res *Target) map[string]TargetGke {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetGke{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetGke{}
-	}
-
-	items := make(map[string]TargetGke)
-	for k, item := range a {
-		items[k] = *flattenTargetGke(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetGkeSlice flattens the contents of TargetGke from a JSON
-// response object.
-func flattenTargetGkeSlice(c *Client, i interface{}, res *Target) []TargetGke {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetGke{}
-	}
-
-	if len(a) == 0 {
-		return []TargetGke{}
-	}
-
-	items := make([]TargetGke, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetGke(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandTargetGke expands an instance of TargetGke into a JSON
 // request object.
 func expandTargetGke(c *Client, f *TargetGke, res *Target) (map[string]interface{}, error) {
@@ -2746,87 +1890,6 @@ func flattenTargetGke(c *Client, i interface{}, res *Target) *TargetGke {
 	return r
 }
 
-// expandTargetAnthosClusterMap expands the contents of TargetAnthosCluster into a JSON
-// request object.
-func expandTargetAnthosClusterMap(c *Client, f map[string]TargetAnthosCluster, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetAnthosCluster(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandTargetAnthosClusterSlice expands the contents of TargetAnthosCluster into a JSON
-// request object.
-func expandTargetAnthosClusterSlice(c *Client, f []TargetAnthosCluster, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetAnthosCluster(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenTargetAnthosClusterMap flattens the contents of TargetAnthosCluster from a JSON
-// response object.
-func flattenTargetAnthosClusterMap(c *Client, i interface{}, res *Target) map[string]TargetAnthosCluster {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetAnthosCluster{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetAnthosCluster{}
-	}
-
-	items := make(map[string]TargetAnthosCluster)
-	for k, item := range a {
-		items[k] = *flattenTargetAnthosCluster(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetAnthosClusterSlice flattens the contents of TargetAnthosCluster from a JSON
-// response object.
-func flattenTargetAnthosClusterSlice(c *Client, i interface{}, res *Target) []TargetAnthosCluster {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetAnthosCluster{}
-	}
-
-	if len(a) == 0 {
-		return []TargetAnthosCluster{}
-	}
-
-	items := make([]TargetAnthosCluster, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetAnthosCluster(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandTargetAnthosCluster expands an instance of TargetAnthosCluster into a JSON
 // request object.
 func expandTargetAnthosCluster(c *Client, f *TargetAnthosCluster, res *Target) (map[string]interface{}, error) {
@@ -2860,27 +1923,6 @@ func flattenTargetAnthosCluster(c *Client, i interface{}, res *Target) *TargetAn
 	return r
 }
 
-// expandTargetExecutionConfigsMap expands the contents of TargetExecutionConfigs into a JSON
-// request object.
-func expandTargetExecutionConfigsMap(c *Client, f map[string]TargetExecutionConfigs, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetExecutionConfigs(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandTargetExecutionConfigsSlice expands the contents of TargetExecutionConfigs into a JSON
 // request object.
 func expandTargetExecutionConfigsSlice(c *Client, f []TargetExecutionConfigs, res *Target) ([]map[string]interface{}, error) {
@@ -2899,26 +1941,6 @@ func expandTargetExecutionConfigsSlice(c *Client, f []TargetExecutionConfigs, re
 	}
 
 	return items, nil
-}
-
-// flattenTargetExecutionConfigsMap flattens the contents of TargetExecutionConfigs from a JSON
-// response object.
-func flattenTargetExecutionConfigsMap(c *Client, i interface{}, res *Target) map[string]TargetExecutionConfigs {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetExecutionConfigs{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetExecutionConfigs{}
-	}
-
-	items := make(map[string]TargetExecutionConfigs)
-	for k, item := range a {
-		items[k] = *flattenTargetExecutionConfigs(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenTargetExecutionConfigsSlice flattens the contents of TargetExecutionConfigs from a JSON
@@ -3062,87 +2084,6 @@ func flattenTargetExecutionConfigs(c *Client, i interface{}, res *Target) *Targe
 	return r
 }
 
-// expandTargetRunMap expands the contents of TargetRun into a JSON
-// request object.
-func expandTargetRunMap(c *Client, f map[string]TargetRun, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetRun(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandTargetRunSlice expands the contents of TargetRun into a JSON
-// request object.
-func expandTargetRunSlice(c *Client, f []TargetRun, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetRun(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenTargetRunMap flattens the contents of TargetRun from a JSON
-// response object.
-func flattenTargetRunMap(c *Client, i interface{}, res *Target) map[string]TargetRun {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetRun{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetRun{}
-	}
-
-	items := make(map[string]TargetRun)
-	for k, item := range a {
-		items[k] = *flattenTargetRun(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetRunSlice flattens the contents of TargetRun from a JSON
-// response object.
-func flattenTargetRunSlice(c *Client, i interface{}, res *Target) []TargetRun {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetRun{}
-	}
-
-	if len(a) == 0 {
-		return []TargetRun{}
-	}
-
-	items := make([]TargetRun, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetRun(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandTargetRun expands an instance of TargetRun into a JSON
 // request object.
 func expandTargetRun(c *Client, f *TargetRun, res *Target) (map[string]interface{}, error) {
@@ -3176,87 +2117,6 @@ func flattenTargetRun(c *Client, i interface{}, res *Target) *TargetRun {
 	return r
 }
 
-// expandTargetMultiTargetMap expands the contents of TargetMultiTarget into a JSON
-// request object.
-func expandTargetMultiTargetMap(c *Client, f map[string]TargetMultiTarget, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetMultiTarget(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandTargetMultiTargetSlice expands the contents of TargetMultiTarget into a JSON
-// request object.
-func expandTargetMultiTargetSlice(c *Client, f []TargetMultiTarget, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetMultiTarget(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenTargetMultiTargetMap flattens the contents of TargetMultiTarget from a JSON
-// response object.
-func flattenTargetMultiTargetMap(c *Client, i interface{}, res *Target) map[string]TargetMultiTarget {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetMultiTarget{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetMultiTarget{}
-	}
-
-	items := make(map[string]TargetMultiTarget)
-	for k, item := range a {
-		items[k] = *flattenTargetMultiTarget(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetMultiTargetSlice flattens the contents of TargetMultiTarget from a JSON
-// response object.
-func flattenTargetMultiTargetSlice(c *Client, i interface{}, res *Target) []TargetMultiTarget {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetMultiTarget{}
-	}
-
-	if len(a) == 0 {
-		return []TargetMultiTarget{}
-	}
-
-	items := make([]TargetMultiTarget, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetMultiTarget(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandTargetMultiTarget expands an instance of TargetMultiTarget into a JSON
 // request object.
 func expandTargetMultiTarget(c *Client, f *TargetMultiTarget, res *Target) (map[string]interface{}, error) {
@@ -3288,87 +2148,6 @@ func flattenTargetMultiTarget(c *Client, i interface{}, res *Target) *TargetMult
 	r.TargetIds = dcl.FlattenStringSlice(m["targetIds"])
 
 	return r
-}
-
-// expandTargetCustomTargetMap expands the contents of TargetCustomTarget into a JSON
-// request object.
-func expandTargetCustomTargetMap(c *Client, f map[string]TargetCustomTarget, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetCustomTarget(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandTargetCustomTargetSlice expands the contents of TargetCustomTarget into a JSON
-// request object.
-func expandTargetCustomTargetSlice(c *Client, f []TargetCustomTarget, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetCustomTarget(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenTargetCustomTargetMap flattens the contents of TargetCustomTarget from a JSON
-// response object.
-func flattenTargetCustomTargetMap(c *Client, i interface{}, res *Target) map[string]TargetCustomTarget {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetCustomTarget{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetCustomTarget{}
-	}
-
-	items := make(map[string]TargetCustomTarget)
-	for k, item := range a {
-		items[k] = *flattenTargetCustomTarget(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetCustomTargetSlice flattens the contents of TargetCustomTarget from a JSON
-// response object.
-func flattenTargetCustomTargetSlice(c *Client, i interface{}, res *Target) []TargetCustomTarget {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetCustomTarget{}
-	}
-
-	if len(a) == 0 {
-		return []TargetCustomTarget{}
-	}
-
-	items := make([]TargetCustomTarget, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetCustomTarget(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandTargetCustomTarget expands an instance of TargetCustomTarget into a JSON
@@ -3425,26 +2204,6 @@ func expandTargetAssociatedEntitiesMap(c *Client, f map[string]TargetAssociatedE
 	return items, nil
 }
 
-// expandTargetAssociatedEntitiesSlice expands the contents of TargetAssociatedEntities into a JSON
-// request object.
-func expandTargetAssociatedEntitiesSlice(c *Client, f []TargetAssociatedEntities, res *Target) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandTargetAssociatedEntities(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
 // flattenTargetAssociatedEntitiesMap flattens the contents of TargetAssociatedEntities from a JSON
 // response object.
 func flattenTargetAssociatedEntitiesMap(c *Client, i interface{}, res *Target) map[string]TargetAssociatedEntities {
@@ -3460,26 +2219,6 @@ func flattenTargetAssociatedEntitiesMap(c *Client, i interface{}, res *Target) m
 	items := make(map[string]TargetAssociatedEntities)
 	for k, item := range a {
 		items[k] = *flattenTargetAssociatedEntities(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenTargetAssociatedEntitiesSlice flattens the contents of TargetAssociatedEntities from a JSON
-// response object.
-func flattenTargetAssociatedEntitiesSlice(c *Client, i interface{}, res *Target) []TargetAssociatedEntities {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []TargetAssociatedEntities{}
-	}
-
-	if len(a) == 0 {
-		return []TargetAssociatedEntities{}
-	}
-
-	items := make([]TargetAssociatedEntities, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenTargetAssociatedEntities(c, item.(map[string]interface{}), res))
 	}
 
 	return items
@@ -3526,27 +2265,6 @@ func flattenTargetAssociatedEntities(c *Client, i interface{}, res *Target) *Tar
 	return r
 }
 
-// expandTargetAssociatedEntitiesGkeClustersMap expands the contents of TargetAssociatedEntitiesGkeClusters into a JSON
-// request object.
-func expandTargetAssociatedEntitiesGkeClustersMap(c *Client, f map[string]TargetAssociatedEntitiesGkeClusters, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetAssociatedEntitiesGkeClusters(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandTargetAssociatedEntitiesGkeClustersSlice expands the contents of TargetAssociatedEntitiesGkeClusters into a JSON
 // request object.
 func expandTargetAssociatedEntitiesGkeClustersSlice(c *Client, f []TargetAssociatedEntitiesGkeClusters, res *Target) ([]map[string]interface{}, error) {
@@ -3565,26 +2283,6 @@ func expandTargetAssociatedEntitiesGkeClustersSlice(c *Client, f []TargetAssocia
 	}
 
 	return items, nil
-}
-
-// flattenTargetAssociatedEntitiesGkeClustersMap flattens the contents of TargetAssociatedEntitiesGkeClusters from a JSON
-// response object.
-func flattenTargetAssociatedEntitiesGkeClustersMap(c *Client, i interface{}, res *Target) map[string]TargetAssociatedEntitiesGkeClusters {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetAssociatedEntitiesGkeClusters{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetAssociatedEntitiesGkeClusters{}
-	}
-
-	items := make(map[string]TargetAssociatedEntitiesGkeClusters)
-	for k, item := range a {
-		items[k] = *flattenTargetAssociatedEntitiesGkeClusters(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenTargetAssociatedEntitiesGkeClustersSlice flattens the contents of TargetAssociatedEntitiesGkeClusters from a JSON
@@ -3648,27 +2346,6 @@ func flattenTargetAssociatedEntitiesGkeClusters(c *Client, i interface{}, res *T
 	return r
 }
 
-// expandTargetAssociatedEntitiesAnthosClustersMap expands the contents of TargetAssociatedEntitiesAnthosClusters into a JSON
-// request object.
-func expandTargetAssociatedEntitiesAnthosClustersMap(c *Client, f map[string]TargetAssociatedEntitiesAnthosClusters, res *Target) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandTargetAssociatedEntitiesAnthosClusters(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandTargetAssociatedEntitiesAnthosClustersSlice expands the contents of TargetAssociatedEntitiesAnthosClusters into a JSON
 // request object.
 func expandTargetAssociatedEntitiesAnthosClustersSlice(c *Client, f []TargetAssociatedEntitiesAnthosClusters, res *Target) ([]map[string]interface{}, error) {
@@ -3687,26 +2364,6 @@ func expandTargetAssociatedEntitiesAnthosClustersSlice(c *Client, f []TargetAsso
 	}
 
 	return items, nil
-}
-
-// flattenTargetAssociatedEntitiesAnthosClustersMap flattens the contents of TargetAssociatedEntitiesAnthosClusters from a JSON
-// response object.
-func flattenTargetAssociatedEntitiesAnthosClustersMap(c *Client, i interface{}, res *Target) map[string]TargetAssociatedEntitiesAnthosClusters {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetAssociatedEntitiesAnthosClusters{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetAssociatedEntitiesAnthosClusters{}
-	}
-
-	items := make(map[string]TargetAssociatedEntitiesAnthosClusters)
-	for k, item := range a {
-		items[k] = *flattenTargetAssociatedEntitiesAnthosClusters(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenTargetAssociatedEntitiesAnthosClustersSlice flattens the contents of TargetAssociatedEntitiesAnthosClusters from a JSON
@@ -3762,26 +2419,6 @@ func flattenTargetAssociatedEntitiesAnthosClusters(c *Client, i interface{}, res
 	return r
 }
 
-// flattenTargetExecutionConfigsUsagesEnumMap flattens the contents of TargetExecutionConfigsUsagesEnum from a JSON
-// response object.
-func flattenTargetExecutionConfigsUsagesEnumMap(c *Client, i interface{}, res *Target) map[string]TargetExecutionConfigsUsagesEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]TargetExecutionConfigsUsagesEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]TargetExecutionConfigsUsagesEnum{}
-	}
-
-	items := make(map[string]TargetExecutionConfigsUsagesEnum)
-	for k, item := range a {
-		items[k] = *flattenTargetExecutionConfigsUsagesEnum(item.(interface{}))
-	}
-
-	return items
-}
-
 // flattenTargetExecutionConfigsUsagesEnumSlice flattens the contents of TargetExecutionConfigsUsagesEnum from a JSON
 // response object.
 func flattenTargetExecutionConfigsUsagesEnumSlice(c *Client, i interface{}, res *Target) []TargetExecutionConfigsUsagesEnum {
@@ -3811,48 +2448,6 @@ func flattenTargetExecutionConfigsUsagesEnum(i interface{}) *TargetExecutionConf
 	}
 
 	return TargetExecutionConfigsUsagesEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Target) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalTarget(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type targetDiff struct {
@@ -3970,9 +2565,6 @@ func extractTargetGkeFields(r *Target, o *TargetGke) error {
 func extractTargetAnthosClusterFields(r *Target, o *TargetAnthosCluster) error {
 	return nil
 }
-func extractTargetExecutionConfigsFields(r *Target, o *TargetExecutionConfigs) error {
-	return nil
-}
 func extractTargetRunFields(r *Target, o *TargetRun) error {
 	return nil
 }
@@ -3982,16 +2574,6 @@ func extractTargetMultiTargetFields(r *Target, o *TargetMultiTarget) error {
 func extractTargetCustomTargetFields(r *Target, o *TargetCustomTarget) error {
 	return nil
 }
-func extractTargetAssociatedEntitiesFields(r *Target, o *TargetAssociatedEntities) error {
-	return nil
-}
-func extractTargetAssociatedEntitiesGkeClustersFields(r *Target, o *TargetAssociatedEntitiesGkeClusters) error {
-	return nil
-}
-func extractTargetAssociatedEntitiesAnthosClustersFields(r *Target, o *TargetAssociatedEntitiesAnthosClusters) error {
-	return nil
-}
-
 func postReadExtractTargetFields(r *Target) error {
 	vGke := r.Gke
 	if vGke == nil {
@@ -4056,9 +2638,6 @@ func postReadExtractTargetGkeFields(r *Target, o *TargetGke) error {
 func postReadExtractTargetAnthosClusterFields(r *Target, o *TargetAnthosCluster) error {
 	return nil
 }
-func postReadExtractTargetExecutionConfigsFields(r *Target, o *TargetExecutionConfigs) error {
-	return nil
-}
 func postReadExtractTargetRunFields(r *Target, o *TargetRun) error {
 	return nil
 }
@@ -4066,14 +2645,5 @@ func postReadExtractTargetMultiTargetFields(r *Target, o *TargetMultiTarget) err
 	return nil
 }
 func postReadExtractTargetCustomTargetFields(r *Target, o *TargetCustomTarget) error {
-	return nil
-}
-func postReadExtractTargetAssociatedEntitiesFields(r *Target, o *TargetAssociatedEntities) error {
-	return nil
-}
-func postReadExtractTargetAssociatedEntitiesGkeClustersFields(r *Target, o *TargetAssociatedEntitiesGkeClusters) error {
-	return nil
-}
-func postReadExtractTargetAssociatedEntitiesAnthosClustersFields(r *Target, o *TargetAssociatedEntitiesAnthosClusters) error {
 	return nil
 }

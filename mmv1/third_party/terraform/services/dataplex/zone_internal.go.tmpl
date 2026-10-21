@@ -702,34 +702,6 @@ func canonicalizeZoneDiscoverySpec(des, initial *ZoneDiscoverySpec, opts ...dcl.
 	return cDes
 }
 
-func canonicalizeZoneDiscoverySpecSlice(des, initial []ZoneDiscoverySpec, opts ...dcl.ApplyOption) []ZoneDiscoverySpec {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]ZoneDiscoverySpec, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeZoneDiscoverySpec(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]ZoneDiscoverySpec, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeZoneDiscoverySpec(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewZoneDiscoverySpec(c *Client, des, nw *ZoneDiscoverySpec) *ZoneDiscoverySpec {
 
 	if des == nil {
@@ -760,52 +732,6 @@ func canonicalizeNewZoneDiscoverySpec(c *Client, des, nw *ZoneDiscoverySpec) *Zo
 	}
 
 	return nw
-}
-
-func canonicalizeNewZoneDiscoverySpecSet(c *Client, des, nw []ZoneDiscoverySpec) []ZoneDiscoverySpec {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []ZoneDiscoverySpec
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareZoneDiscoverySpecNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewZoneDiscoverySpec(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewZoneDiscoverySpecSlice(c *Client, des, nw []ZoneDiscoverySpec) []ZoneDiscoverySpec {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []ZoneDiscoverySpec
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewZoneDiscoverySpec(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeZoneDiscoverySpecCsvOptions(des, initial *ZoneDiscoverySpecCsvOptions, opts ...dcl.ApplyOption) *ZoneDiscoverySpecCsvOptions {
@@ -847,34 +773,6 @@ func canonicalizeZoneDiscoverySpecCsvOptions(des, initial *ZoneDiscoverySpecCsvO
 	return cDes
 }
 
-func canonicalizeZoneDiscoverySpecCsvOptionsSlice(des, initial []ZoneDiscoverySpecCsvOptions, opts ...dcl.ApplyOption) []ZoneDiscoverySpecCsvOptions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]ZoneDiscoverySpecCsvOptions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeZoneDiscoverySpecCsvOptions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]ZoneDiscoverySpecCsvOptions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeZoneDiscoverySpecCsvOptions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewZoneDiscoverySpecCsvOptions(c *Client, des, nw *ZoneDiscoverySpecCsvOptions) *ZoneDiscoverySpecCsvOptions {
 
 	if des == nil {
@@ -900,52 +798,6 @@ func canonicalizeNewZoneDiscoverySpecCsvOptions(c *Client, des, nw *ZoneDiscover
 	}
 
 	return nw
-}
-
-func canonicalizeNewZoneDiscoverySpecCsvOptionsSet(c *Client, des, nw []ZoneDiscoverySpecCsvOptions) []ZoneDiscoverySpecCsvOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []ZoneDiscoverySpecCsvOptions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareZoneDiscoverySpecCsvOptionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewZoneDiscoverySpecCsvOptions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewZoneDiscoverySpecCsvOptionsSlice(c *Client, des, nw []ZoneDiscoverySpecCsvOptions) []ZoneDiscoverySpecCsvOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []ZoneDiscoverySpecCsvOptions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewZoneDiscoverySpecCsvOptions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeZoneDiscoverySpecJsonOptions(des, initial *ZoneDiscoverySpecJsonOptions, opts ...dcl.ApplyOption) *ZoneDiscoverySpecJsonOptions {
@@ -976,34 +828,6 @@ func canonicalizeZoneDiscoverySpecJsonOptions(des, initial *ZoneDiscoverySpecJso
 	return cDes
 }
 
-func canonicalizeZoneDiscoverySpecJsonOptionsSlice(des, initial []ZoneDiscoverySpecJsonOptions, opts ...dcl.ApplyOption) []ZoneDiscoverySpecJsonOptions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]ZoneDiscoverySpecJsonOptions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeZoneDiscoverySpecJsonOptions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]ZoneDiscoverySpecJsonOptions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeZoneDiscoverySpecJsonOptions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewZoneDiscoverySpecJsonOptions(c *Client, des, nw *ZoneDiscoverySpecJsonOptions) *ZoneDiscoverySpecJsonOptions {
 
 	if des == nil {
@@ -1026,52 +850,6 @@ func canonicalizeNewZoneDiscoverySpecJsonOptions(c *Client, des, nw *ZoneDiscove
 	}
 
 	return nw
-}
-
-func canonicalizeNewZoneDiscoverySpecJsonOptionsSet(c *Client, des, nw []ZoneDiscoverySpecJsonOptions) []ZoneDiscoverySpecJsonOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []ZoneDiscoverySpecJsonOptions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareZoneDiscoverySpecJsonOptionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewZoneDiscoverySpecJsonOptions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewZoneDiscoverySpecJsonOptionsSlice(c *Client, des, nw []ZoneDiscoverySpecJsonOptions) []ZoneDiscoverySpecJsonOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []ZoneDiscoverySpecJsonOptions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewZoneDiscoverySpecJsonOptions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeZoneResourceSpec(des, initial *ZoneResourceSpec, opts ...dcl.ApplyOption) *ZoneResourceSpec {
@@ -1098,34 +876,6 @@ func canonicalizeZoneResourceSpec(des, initial *ZoneResourceSpec, opts ...dcl.Ap
 	return cDes
 }
 
-func canonicalizeZoneResourceSpecSlice(des, initial []ZoneResourceSpec, opts ...dcl.ApplyOption) []ZoneResourceSpec {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]ZoneResourceSpec, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeZoneResourceSpec(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]ZoneResourceSpec, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeZoneResourceSpec(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewZoneResourceSpec(c *Client, des, nw *ZoneResourceSpec) *ZoneResourceSpec {
 
 	if des == nil {
@@ -1141,52 +891,6 @@ func canonicalizeNewZoneResourceSpec(c *Client, des, nw *ZoneResourceSpec) *Zone
 	}
 
 	return nw
-}
-
-func canonicalizeNewZoneResourceSpecSet(c *Client, des, nw []ZoneResourceSpec) []ZoneResourceSpec {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []ZoneResourceSpec
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareZoneResourceSpecNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewZoneResourceSpec(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewZoneResourceSpecSlice(c *Client, des, nw []ZoneResourceSpec) []ZoneResourceSpec {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []ZoneResourceSpec
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewZoneResourceSpec(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeZoneAssetStatus(des, initial *ZoneAssetStatus, opts ...dcl.ApplyOption) *ZoneAssetStatus {
@@ -1225,34 +929,6 @@ func canonicalizeZoneAssetStatus(des, initial *ZoneAssetStatus, opts ...dcl.Appl
 	return cDes
 }
 
-func canonicalizeZoneAssetStatusSlice(des, initial []ZoneAssetStatus, opts ...dcl.ApplyOption) []ZoneAssetStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]ZoneAssetStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeZoneAssetStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]ZoneAssetStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeZoneAssetStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewZoneAssetStatus(c *Client, des, nw *ZoneAssetStatus) *ZoneAssetStatus {
 
 	if des == nil {
@@ -1268,52 +944,6 @@ func canonicalizeNewZoneAssetStatus(c *Client, des, nw *ZoneAssetStatus) *ZoneAs
 	}
 
 	return nw
-}
-
-func canonicalizeNewZoneAssetStatusSet(c *Client, des, nw []ZoneAssetStatus) []ZoneAssetStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []ZoneAssetStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareZoneAssetStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewZoneAssetStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewZoneAssetStatusSlice(c *Client, des, nw []ZoneAssetStatus) []ZoneAssetStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []ZoneAssetStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewZoneAssetStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -1809,87 +1439,6 @@ func flattenZone(c *Client, i interface{}, res *Zone) *Zone {
 	return resultRes
 }
 
-// expandZoneDiscoverySpecMap expands the contents of ZoneDiscoverySpec into a JSON
-// request object.
-func expandZoneDiscoverySpecMap(c *Client, f map[string]ZoneDiscoverySpec, res *Zone) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandZoneDiscoverySpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandZoneDiscoverySpecSlice expands the contents of ZoneDiscoverySpec into a JSON
-// request object.
-func expandZoneDiscoverySpecSlice(c *Client, f []ZoneDiscoverySpec, res *Zone) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandZoneDiscoverySpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenZoneDiscoverySpecMap flattens the contents of ZoneDiscoverySpec from a JSON
-// response object.
-func flattenZoneDiscoverySpecMap(c *Client, i interface{}, res *Zone) map[string]ZoneDiscoverySpec {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneDiscoverySpec{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneDiscoverySpec{}
-	}
-
-	items := make(map[string]ZoneDiscoverySpec)
-	for k, item := range a {
-		items[k] = *flattenZoneDiscoverySpec(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenZoneDiscoverySpecSlice flattens the contents of ZoneDiscoverySpec from a JSON
-// response object.
-func flattenZoneDiscoverySpecSlice(c *Client, i interface{}, res *Zone) []ZoneDiscoverySpec {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneDiscoverySpec{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneDiscoverySpec{}
-	}
-
-	items := make([]ZoneDiscoverySpec, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneDiscoverySpec(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandZoneDiscoverySpec expands an instance of ZoneDiscoverySpec into a JSON
 // request object.
 func expandZoneDiscoverySpec(c *Client, f *ZoneDiscoverySpec, res *Zone) (map[string]interface{}, error) {
@@ -1947,87 +1496,6 @@ func flattenZoneDiscoverySpec(c *Client, i interface{}, res *Zone) *ZoneDiscover
 	return r
 }
 
-// expandZoneDiscoverySpecCsvOptionsMap expands the contents of ZoneDiscoverySpecCsvOptions into a JSON
-// request object.
-func expandZoneDiscoverySpecCsvOptionsMap(c *Client, f map[string]ZoneDiscoverySpecCsvOptions, res *Zone) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandZoneDiscoverySpecCsvOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandZoneDiscoverySpecCsvOptionsSlice expands the contents of ZoneDiscoverySpecCsvOptions into a JSON
-// request object.
-func expandZoneDiscoverySpecCsvOptionsSlice(c *Client, f []ZoneDiscoverySpecCsvOptions, res *Zone) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandZoneDiscoverySpecCsvOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenZoneDiscoverySpecCsvOptionsMap flattens the contents of ZoneDiscoverySpecCsvOptions from a JSON
-// response object.
-func flattenZoneDiscoverySpecCsvOptionsMap(c *Client, i interface{}, res *Zone) map[string]ZoneDiscoverySpecCsvOptions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneDiscoverySpecCsvOptions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneDiscoverySpecCsvOptions{}
-	}
-
-	items := make(map[string]ZoneDiscoverySpecCsvOptions)
-	for k, item := range a {
-		items[k] = *flattenZoneDiscoverySpecCsvOptions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenZoneDiscoverySpecCsvOptionsSlice flattens the contents of ZoneDiscoverySpecCsvOptions from a JSON
-// response object.
-func flattenZoneDiscoverySpecCsvOptionsSlice(c *Client, i interface{}, res *Zone) []ZoneDiscoverySpecCsvOptions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneDiscoverySpecCsvOptions{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneDiscoverySpecCsvOptions{}
-	}
-
-	items := make([]ZoneDiscoverySpecCsvOptions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneDiscoverySpecCsvOptions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandZoneDiscoverySpecCsvOptions expands an instance of ZoneDiscoverySpecCsvOptions into a JSON
 // request object.
 func expandZoneDiscoverySpecCsvOptions(c *Client, f *ZoneDiscoverySpecCsvOptions, res *Zone) (map[string]interface{}, error) {
@@ -2073,87 +1541,6 @@ func flattenZoneDiscoverySpecCsvOptions(c *Client, i interface{}, res *Zone) *Zo
 	return r
 }
 
-// expandZoneDiscoverySpecJsonOptionsMap expands the contents of ZoneDiscoverySpecJsonOptions into a JSON
-// request object.
-func expandZoneDiscoverySpecJsonOptionsMap(c *Client, f map[string]ZoneDiscoverySpecJsonOptions, res *Zone) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandZoneDiscoverySpecJsonOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandZoneDiscoverySpecJsonOptionsSlice expands the contents of ZoneDiscoverySpecJsonOptions into a JSON
-// request object.
-func expandZoneDiscoverySpecJsonOptionsSlice(c *Client, f []ZoneDiscoverySpecJsonOptions, res *Zone) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandZoneDiscoverySpecJsonOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenZoneDiscoverySpecJsonOptionsMap flattens the contents of ZoneDiscoverySpecJsonOptions from a JSON
-// response object.
-func flattenZoneDiscoverySpecJsonOptionsMap(c *Client, i interface{}, res *Zone) map[string]ZoneDiscoverySpecJsonOptions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneDiscoverySpecJsonOptions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneDiscoverySpecJsonOptions{}
-	}
-
-	items := make(map[string]ZoneDiscoverySpecJsonOptions)
-	for k, item := range a {
-		items[k] = *flattenZoneDiscoverySpecJsonOptions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenZoneDiscoverySpecJsonOptionsSlice flattens the contents of ZoneDiscoverySpecJsonOptions from a JSON
-// response object.
-func flattenZoneDiscoverySpecJsonOptionsSlice(c *Client, i interface{}, res *Zone) []ZoneDiscoverySpecJsonOptions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneDiscoverySpecJsonOptions{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneDiscoverySpecJsonOptions{}
-	}
-
-	items := make([]ZoneDiscoverySpecJsonOptions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneDiscoverySpecJsonOptions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandZoneDiscoverySpecJsonOptions expands an instance of ZoneDiscoverySpecJsonOptions into a JSON
 // request object.
 func expandZoneDiscoverySpecJsonOptions(c *Client, f *ZoneDiscoverySpecJsonOptions, res *Zone) (map[string]interface{}, error) {
@@ -2191,87 +1578,6 @@ func flattenZoneDiscoverySpecJsonOptions(c *Client, i interface{}, res *Zone) *Z
 	return r
 }
 
-// expandZoneResourceSpecMap expands the contents of ZoneResourceSpec into a JSON
-// request object.
-func expandZoneResourceSpecMap(c *Client, f map[string]ZoneResourceSpec, res *Zone) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandZoneResourceSpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandZoneResourceSpecSlice expands the contents of ZoneResourceSpec into a JSON
-// request object.
-func expandZoneResourceSpecSlice(c *Client, f []ZoneResourceSpec, res *Zone) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandZoneResourceSpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenZoneResourceSpecMap flattens the contents of ZoneResourceSpec from a JSON
-// response object.
-func flattenZoneResourceSpecMap(c *Client, i interface{}, res *Zone) map[string]ZoneResourceSpec {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneResourceSpec{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneResourceSpec{}
-	}
-
-	items := make(map[string]ZoneResourceSpec)
-	for k, item := range a {
-		items[k] = *flattenZoneResourceSpec(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenZoneResourceSpecSlice flattens the contents of ZoneResourceSpec from a JSON
-// response object.
-func flattenZoneResourceSpecSlice(c *Client, i interface{}, res *Zone) []ZoneResourceSpec {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneResourceSpec{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneResourceSpec{}
-	}
-
-	items := make([]ZoneResourceSpec, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneResourceSpec(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandZoneResourceSpec expands an instance of ZoneResourceSpec into a JSON
 // request object.
 func expandZoneResourceSpec(c *Client, f *ZoneResourceSpec, res *Zone) (map[string]interface{}, error) {
@@ -2303,87 +1609,6 @@ func flattenZoneResourceSpec(c *Client, i interface{}, res *Zone) *ZoneResourceS
 	r.LocationType = flattenZoneResourceSpecLocationTypeEnum(m["locationType"])
 
 	return r
-}
-
-// expandZoneAssetStatusMap expands the contents of ZoneAssetStatus into a JSON
-// request object.
-func expandZoneAssetStatusMap(c *Client, f map[string]ZoneAssetStatus, res *Zone) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandZoneAssetStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandZoneAssetStatusSlice expands the contents of ZoneAssetStatus into a JSON
-// request object.
-func expandZoneAssetStatusSlice(c *Client, f []ZoneAssetStatus, res *Zone) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandZoneAssetStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenZoneAssetStatusMap flattens the contents of ZoneAssetStatus from a JSON
-// response object.
-func flattenZoneAssetStatusMap(c *Client, i interface{}, res *Zone) map[string]ZoneAssetStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneAssetStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneAssetStatus{}
-	}
-
-	items := make(map[string]ZoneAssetStatus)
-	for k, item := range a {
-		items[k] = *flattenZoneAssetStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenZoneAssetStatusSlice flattens the contents of ZoneAssetStatus from a JSON
-// response object.
-func flattenZoneAssetStatusSlice(c *Client, i interface{}, res *Zone) []ZoneAssetStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneAssetStatus{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneAssetStatus{}
-	}
-
-	items := make([]ZoneAssetStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneAssetStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandZoneAssetStatus expands an instance of ZoneAssetStatus into a JSON
@@ -2427,46 +1652,6 @@ func flattenZoneAssetStatus(c *Client, i interface{}, res *Zone) *ZoneAssetStatu
 	return r
 }
 
-// flattenZoneStateEnumMap flattens the contents of ZoneStateEnum from a JSON
-// response object.
-func flattenZoneStateEnumMap(c *Client, i interface{}, res *Zone) map[string]ZoneStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneStateEnum{}
-	}
-
-	items := make(map[string]ZoneStateEnum)
-	for k, item := range a {
-		items[k] = *flattenZoneStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenZoneStateEnumSlice flattens the contents of ZoneStateEnum from a JSON
-// response object.
-func flattenZoneStateEnumSlice(c *Client, i interface{}, res *Zone) []ZoneStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneStateEnum{}
-	}
-
-	items := make([]ZoneStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenZoneStateEnum asserts that an interface is a string, and returns a
 // pointer to a *ZoneStateEnum with the same value as that string.
 func flattenZoneStateEnum(i interface{}) *ZoneStateEnum {
@@ -2476,46 +1661,6 @@ func flattenZoneStateEnum(i interface{}) *ZoneStateEnum {
 	}
 
 	return ZoneStateEnumRef(s)
-}
-
-// flattenZoneTypeEnumMap flattens the contents of ZoneTypeEnum from a JSON
-// response object.
-func flattenZoneTypeEnumMap(c *Client, i interface{}, res *Zone) map[string]ZoneTypeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneTypeEnum{}
-	}
-
-	items := make(map[string]ZoneTypeEnum)
-	for k, item := range a {
-		items[k] = *flattenZoneTypeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenZoneTypeEnumSlice flattens the contents of ZoneTypeEnum from a JSON
-// response object.
-func flattenZoneTypeEnumSlice(c *Client, i interface{}, res *Zone) []ZoneTypeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneTypeEnum{}
-	}
-
-	items := make([]ZoneTypeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneTypeEnum(item.(interface{})))
-	}
-
-	return items
 }
 
 // flattenZoneTypeEnum asserts that an interface is a string, and returns a
@@ -2529,46 +1674,6 @@ func flattenZoneTypeEnum(i interface{}) *ZoneTypeEnum {
 	return ZoneTypeEnumRef(s)
 }
 
-// flattenZoneResourceSpecLocationTypeEnumMap flattens the contents of ZoneResourceSpecLocationTypeEnum from a JSON
-// response object.
-func flattenZoneResourceSpecLocationTypeEnumMap(c *Client, i interface{}, res *Zone) map[string]ZoneResourceSpecLocationTypeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]ZoneResourceSpecLocationTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]ZoneResourceSpecLocationTypeEnum{}
-	}
-
-	items := make(map[string]ZoneResourceSpecLocationTypeEnum)
-	for k, item := range a {
-		items[k] = *flattenZoneResourceSpecLocationTypeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenZoneResourceSpecLocationTypeEnumSlice flattens the contents of ZoneResourceSpecLocationTypeEnum from a JSON
-// response object.
-func flattenZoneResourceSpecLocationTypeEnumSlice(c *Client, i interface{}, res *Zone) []ZoneResourceSpecLocationTypeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []ZoneResourceSpecLocationTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []ZoneResourceSpecLocationTypeEnum{}
-	}
-
-	items := make([]ZoneResourceSpecLocationTypeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenZoneResourceSpecLocationTypeEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenZoneResourceSpecLocationTypeEnum asserts that an interface is a string, and returns a
 // pointer to a *ZoneResourceSpecLocationTypeEnum with the same value as that string.
 func flattenZoneResourceSpecLocationTypeEnum(i interface{}) *ZoneResourceSpecLocationTypeEnum {
@@ -2578,56 +1683,6 @@ func flattenZoneResourceSpecLocationTypeEnum(i interface{}) *ZoneResourceSpecLoc
 	}
 
 	return ZoneResourceSpecLocationTypeEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Zone) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalZone(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Lake == nil && ncr.Lake == nil {
-			c.Config.Logger.Info("Both Lake fields null - considering equal.")
-		} else if nr.Lake == nil || ncr.Lake == nil {
-			c.Config.Logger.Info("Only one Lake field is null - considering unequal.")
-			return false
-		} else if *nr.Lake != *ncr.Lake {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type zoneDiff struct {
@@ -2814,12 +1869,6 @@ func postReadExtractZoneDiscoverySpecFields(r *Zone, o *ZoneDiscoverySpec) error
 	if !dcl.IsEmptyValueIndirect(vJsonOptions) {
 		o.JsonOptions = vJsonOptions
 	}
-	return nil
-}
-func postReadExtractZoneDiscoverySpecCsvOptionsFields(r *Zone, o *ZoneDiscoverySpecCsvOptions) error {
-	return nil
-}
-func postReadExtractZoneDiscoverySpecJsonOptionsFields(r *Zone, o *ZoneDiscoverySpecJsonOptions) error {
 	return nil
 }
 func postReadExtractZoneResourceSpecFields(r *Zone, o *ZoneResourceSpec) error {

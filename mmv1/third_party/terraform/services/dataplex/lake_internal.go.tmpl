@@ -640,34 +640,6 @@ func canonicalizeLakeMetastore(des, initial *LakeMetastore, opts ...dcl.ApplyOpt
 	return cDes
 }
 
-func canonicalizeLakeMetastoreSlice(des, initial []LakeMetastore, opts ...dcl.ApplyOption) []LakeMetastore {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]LakeMetastore, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeLakeMetastore(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]LakeMetastore, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeLakeMetastore(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewLakeMetastore(c *Client, des, nw *LakeMetastore) *LakeMetastore {
 
 	if des == nil {
@@ -687,52 +659,6 @@ func canonicalizeNewLakeMetastore(c *Client, des, nw *LakeMetastore) *LakeMetast
 	}
 
 	return nw
-}
-
-func canonicalizeNewLakeMetastoreSet(c *Client, des, nw []LakeMetastore) []LakeMetastore {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []LakeMetastore
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareLakeMetastoreNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewLakeMetastore(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewLakeMetastoreSlice(c *Client, des, nw []LakeMetastore) []LakeMetastore {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []LakeMetastore
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewLakeMetastore(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeLakeAssetStatus(des, initial *LakeAssetStatus, opts ...dcl.ApplyOption) *LakeAssetStatus {
@@ -771,34 +697,6 @@ func canonicalizeLakeAssetStatus(des, initial *LakeAssetStatus, opts ...dcl.Appl
 	return cDes
 }
 
-func canonicalizeLakeAssetStatusSlice(des, initial []LakeAssetStatus, opts ...dcl.ApplyOption) []LakeAssetStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]LakeAssetStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeLakeAssetStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]LakeAssetStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeLakeAssetStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewLakeAssetStatus(c *Client, des, nw *LakeAssetStatus) *LakeAssetStatus {
 
 	if des == nil {
@@ -814,52 +712,6 @@ func canonicalizeNewLakeAssetStatus(c *Client, des, nw *LakeAssetStatus) *LakeAs
 	}
 
 	return nw
-}
-
-func canonicalizeNewLakeAssetStatusSet(c *Client, des, nw []LakeAssetStatus) []LakeAssetStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []LakeAssetStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareLakeAssetStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewLakeAssetStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewLakeAssetStatusSlice(c *Client, des, nw []LakeAssetStatus) []LakeAssetStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []LakeAssetStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewLakeAssetStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeLakeMetastoreStatus(des, initial *LakeMetastoreStatus, opts ...dcl.ApplyOption) *LakeMetastoreStatus {
@@ -902,34 +754,6 @@ func canonicalizeLakeMetastoreStatus(des, initial *LakeMetastoreStatus, opts ...
 	return cDes
 }
 
-func canonicalizeLakeMetastoreStatusSlice(des, initial []LakeMetastoreStatus, opts ...dcl.ApplyOption) []LakeMetastoreStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]LakeMetastoreStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeLakeMetastoreStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]LakeMetastoreStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeLakeMetastoreStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewLakeMetastoreStatus(c *Client, des, nw *LakeMetastoreStatus) *LakeMetastoreStatus {
 
 	if des == nil {
@@ -952,52 +776,6 @@ func canonicalizeNewLakeMetastoreStatus(c *Client, des, nw *LakeMetastoreStatus)
 	}
 
 	return nw
-}
-
-func canonicalizeNewLakeMetastoreStatusSet(c *Client, des, nw []LakeMetastoreStatus) []LakeMetastoreStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []LakeMetastoreStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareLakeMetastoreStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewLakeMetastoreStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewLakeMetastoreStatusSlice(c *Client, des, nw []LakeMetastoreStatus) []LakeMetastoreStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []LakeMetastoreStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewLakeMetastoreStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -1371,87 +1149,6 @@ func flattenLake(c *Client, i interface{}, res *Lake) *Lake {
 	return resultRes
 }
 
-// expandLakeMetastoreMap expands the contents of LakeMetastore into a JSON
-// request object.
-func expandLakeMetastoreMap(c *Client, f map[string]LakeMetastore, res *Lake) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandLakeMetastore(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandLakeMetastoreSlice expands the contents of LakeMetastore into a JSON
-// request object.
-func expandLakeMetastoreSlice(c *Client, f []LakeMetastore, res *Lake) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandLakeMetastore(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenLakeMetastoreMap flattens the contents of LakeMetastore from a JSON
-// response object.
-func flattenLakeMetastoreMap(c *Client, i interface{}, res *Lake) map[string]LakeMetastore {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]LakeMetastore{}
-	}
-
-	if len(a) == 0 {
-		return map[string]LakeMetastore{}
-	}
-
-	items := make(map[string]LakeMetastore)
-	for k, item := range a {
-		items[k] = *flattenLakeMetastore(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenLakeMetastoreSlice flattens the contents of LakeMetastore from a JSON
-// response object.
-func flattenLakeMetastoreSlice(c *Client, i interface{}, res *Lake) []LakeMetastore {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []LakeMetastore{}
-	}
-
-	if len(a) == 0 {
-		return []LakeMetastore{}
-	}
-
-	items := make([]LakeMetastore, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenLakeMetastore(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandLakeMetastore expands an instance of LakeMetastore into a JSON
 // request object.
 func expandLakeMetastore(c *Client, f *LakeMetastore, res *Lake) (map[string]interface{}, error) {
@@ -1483,87 +1180,6 @@ func flattenLakeMetastore(c *Client, i interface{}, res *Lake) *LakeMetastore {
 	r.Service = dcl.FlattenString(m["service"])
 
 	return r
-}
-
-// expandLakeAssetStatusMap expands the contents of LakeAssetStatus into a JSON
-// request object.
-func expandLakeAssetStatusMap(c *Client, f map[string]LakeAssetStatus, res *Lake) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandLakeAssetStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandLakeAssetStatusSlice expands the contents of LakeAssetStatus into a JSON
-// request object.
-func expandLakeAssetStatusSlice(c *Client, f []LakeAssetStatus, res *Lake) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandLakeAssetStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenLakeAssetStatusMap flattens the contents of LakeAssetStatus from a JSON
-// response object.
-func flattenLakeAssetStatusMap(c *Client, i interface{}, res *Lake) map[string]LakeAssetStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]LakeAssetStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]LakeAssetStatus{}
-	}
-
-	items := make(map[string]LakeAssetStatus)
-	for k, item := range a {
-		items[k] = *flattenLakeAssetStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenLakeAssetStatusSlice flattens the contents of LakeAssetStatus from a JSON
-// response object.
-func flattenLakeAssetStatusSlice(c *Client, i interface{}, res *Lake) []LakeAssetStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []LakeAssetStatus{}
-	}
-
-	if len(a) == 0 {
-		return []LakeAssetStatus{}
-	}
-
-	items := make([]LakeAssetStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenLakeAssetStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandLakeAssetStatus expands an instance of LakeAssetStatus into a JSON
@@ -1605,87 +1221,6 @@ func flattenLakeAssetStatus(c *Client, i interface{}, res *Lake) *LakeAssetStatu
 	r.SecurityPolicyApplyingAssets = dcl.FlattenInteger(m["securityPolicyApplyingAssets"])
 
 	return r
-}
-
-// expandLakeMetastoreStatusMap expands the contents of LakeMetastoreStatus into a JSON
-// request object.
-func expandLakeMetastoreStatusMap(c *Client, f map[string]LakeMetastoreStatus, res *Lake) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandLakeMetastoreStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandLakeMetastoreStatusSlice expands the contents of LakeMetastoreStatus into a JSON
-// request object.
-func expandLakeMetastoreStatusSlice(c *Client, f []LakeMetastoreStatus, res *Lake) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandLakeMetastoreStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenLakeMetastoreStatusMap flattens the contents of LakeMetastoreStatus from a JSON
-// response object.
-func flattenLakeMetastoreStatusMap(c *Client, i interface{}, res *Lake) map[string]LakeMetastoreStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]LakeMetastoreStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]LakeMetastoreStatus{}
-	}
-
-	items := make(map[string]LakeMetastoreStatus)
-	for k, item := range a {
-		items[k] = *flattenLakeMetastoreStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenLakeMetastoreStatusSlice flattens the contents of LakeMetastoreStatus from a JSON
-// response object.
-func flattenLakeMetastoreStatusSlice(c *Client, i interface{}, res *Lake) []LakeMetastoreStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []LakeMetastoreStatus{}
-	}
-
-	if len(a) == 0 {
-		return []LakeMetastoreStatus{}
-	}
-
-	items := make([]LakeMetastoreStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenLakeMetastoreStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandLakeMetastoreStatus expands an instance of LakeMetastoreStatus into a JSON
@@ -1733,46 +1268,6 @@ func flattenLakeMetastoreStatus(c *Client, i interface{}, res *Lake) *LakeMetast
 	return r
 }
 
-// flattenLakeStateEnumMap flattens the contents of LakeStateEnum from a JSON
-// response object.
-func flattenLakeStateEnumMap(c *Client, i interface{}, res *Lake) map[string]LakeStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]LakeStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]LakeStateEnum{}
-	}
-
-	items := make(map[string]LakeStateEnum)
-	for k, item := range a {
-		items[k] = *flattenLakeStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenLakeStateEnumSlice flattens the contents of LakeStateEnum from a JSON
-// response object.
-func flattenLakeStateEnumSlice(c *Client, i interface{}, res *Lake) []LakeStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []LakeStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []LakeStateEnum{}
-	}
-
-	items := make([]LakeStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenLakeStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenLakeStateEnum asserts that an interface is a string, and returns a
 // pointer to a *LakeStateEnum with the same value as that string.
 func flattenLakeStateEnum(i interface{}) *LakeStateEnum {
@@ -1784,46 +1279,6 @@ func flattenLakeStateEnum(i interface{}) *LakeStateEnum {
 	return LakeStateEnumRef(s)
 }
 
-// flattenLakeMetastoreStatusStateEnumMap flattens the contents of LakeMetastoreStatusStateEnum from a JSON
-// response object.
-func flattenLakeMetastoreStatusStateEnumMap(c *Client, i interface{}, res *Lake) map[string]LakeMetastoreStatusStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]LakeMetastoreStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]LakeMetastoreStatusStateEnum{}
-	}
-
-	items := make(map[string]LakeMetastoreStatusStateEnum)
-	for k, item := range a {
-		items[k] = *flattenLakeMetastoreStatusStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenLakeMetastoreStatusStateEnumSlice flattens the contents of LakeMetastoreStatusStateEnum from a JSON
-// response object.
-func flattenLakeMetastoreStatusStateEnumSlice(c *Client, i interface{}, res *Lake) []LakeMetastoreStatusStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []LakeMetastoreStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []LakeMetastoreStatusStateEnum{}
-	}
-
-	items := make([]LakeMetastoreStatusStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenLakeMetastoreStatusStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenLakeMetastoreStatusStateEnum asserts that an interface is a string, and returns a
 // pointer to a *LakeMetastoreStatusStateEnum with the same value as that string.
 func flattenLakeMetastoreStatusStateEnum(i interface{}) *LakeMetastoreStatusStateEnum {
@@ -1833,48 +1288,6 @@ func flattenLakeMetastoreStatusStateEnum(i interface{}) *LakeMetastoreStatusStat
 	}
 
 	return LakeMetastoreStatusStateEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Lake) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalLake(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type lakeDiff struct {
