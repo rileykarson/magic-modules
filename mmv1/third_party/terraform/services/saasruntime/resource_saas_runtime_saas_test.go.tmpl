@@ -143,12 +143,23 @@ func TestAccSaasRuntimeSaas_applicationTemplateUpdate(t *testing.T) {
 		"project":       project,
 		"template":      template,
 		"revision":      template + "/revisions/r-1",
+		"labels":        nil,
 	}
 	contextUpdate := map[string]interface{}{
 		"random_suffix": suffix,
 		"project":       project,
 		"template":      template,
 		"revision":      template + "/revisions/r-2",
+		"labels":        nil,
+	}
+	contextUpdateLabels := map[string]interface{}{
+		"random_suffix": suffix,
+		"project":       project,
+		"template":      template,
+		"revision":      template + "/revisions/r-2",
+		"labels": `{
+    "label-one" = "foo"
+  }`,
 	}
 
 	importStateVerifyIgnore := []string{
@@ -194,7 +205,7 @@ func TestAccSaasRuntimeSaas_applicationTemplateUpdate(t *testing.T) {
 			{
 				// A labels-only update of a STATE_ACTIVE Saas doesn't restart the
 				// import, so the provider doesn't wait for one.
-				Config: testAccSaasRuntimeSaas_applicationTemplateLabels(contextUpdate),
+				Config: testAccSaasRuntimeSaas_applicationTemplate(contextUpdateLabels),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_saas_runtime_saas.example", plancheck.ResourceActionUpdate),
@@ -275,30 +286,8 @@ resource "google_saas_runtime_saas" "example" {
     application_template = "%{template}"
     revision             = "%{revision}"
   }
-}
-`, context)
-}
 
-func testAccSaasRuntimeSaas_applicationTemplateLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_saas_runtime_saas" "example" {
-  provider = google-beta
-  project  = "%{project}"
-  saas_id  = "tf-test-app-saas%{random_suffix}"
-  location = "us-central1"
-
-  locations {
-    name = "us-central1"
-  }
-
-  application_template {
-    application_template = "%{template}"
-    revision             = "%{revision}"
-  }
-
-  labels = {
-    "label-one" = "foo"
-  }
+  labels = %{labels}
 }
 `, context)
 }
