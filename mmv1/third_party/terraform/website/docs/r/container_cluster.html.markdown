@@ -216,6 +216,8 @@ for more information.
     this cluster. Note that when this option is enabled, the cluster cannot be upgraded
     and will be automatically deleted after 30 days.
 
+* `alpha_cluster_feature_gates` - (Optional) Configuration for the alpha feature gates. `alpha_cluster_feature_gates` are the feature gates to be enabled or disabled on the cluster. Requires `enable_kubernetes_alpha` to be `true`.
+
 * `enable_k8s_beta_apis` - (Optional) Configuration for Kubernetes Beta APIs.
     Structure is [documented below](#nested_enable_k8s_beta_apis).
 
