@@ -8,6 +8,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"runtime"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	listschema "github.com/hashicorp/terraform-plugin-framework/list/schema"
@@ -97,27 +99,57 @@ var (
 	stubProtoV5IdentitySchema = &tfprotov5.ResourceIdentitySchema{}
 )
 
+func isListResourceFuncsCaller() bool {
+	var pcs [6]uintptr
+	n := runtime.Callers(2, pcs[:])
+	frames := runtime.CallersFrames(pcs[:n])
+	for {
+		frame, more := frames.Next()
+		if strings.HasSuffix(frame.Function, ".(*Server).ListResourceFuncs") {
+			return true
+		}
+		if !more {
+			return false
+		}
+	}
+}
+
 func (listR *ListResourceMetadata) RawV5Schemas(ctx context.Context, _ list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
+	metadataCalled := listR.metadataCalled
+	listR.metadataCalled = false
+
+	if listR.SDKv2Resource == nil {
+		return
+	}
+
 	// fwserver.Server.ListResourceFuncs calls Metadata() immediately before
 	// RawV5Schemas() on a temporary ListResource instance solely to check that
 	// ProtoV5Schema != nil && ProtoV5IdentitySchema != nil, and then discards
 	// both schemas. Satisfy that non-nil check without converting all SDKv2
 	// schemas to tfprotov5.Schema on every GetMetadata / GetProviderSchema RPC.
-	if listR.metadataCalled {
-		listR.metadataCalled = false
-		resp.ProtoV5Schema = stubProtoV5Schema
-		resp.ProtoV5IdentitySchema = stubProtoV5IdentitySchema
+	if metadataCalled && isListResourceFuncsCaller() {
+		if listR.SDKv2Resource.Identity != nil {
+			resp.ProtoV5Schema = stubProtoV5Schema
+			resp.ProtoV5IdentitySchema = stubProtoV5IdentitySchema
+		}
 		return
 	}
-	resp.ProtoV5Schema = listR.SDKv2Resource.ProtoSchema(ctx)()
-	resp.ProtoV5IdentitySchema = listR.SDKv2Resource.ProtoIdentitySchema(ctx)()
+
+	if fn := listR.SDKv2Resource.ProtoSchema(ctx); fn != nil {
+		resp.ProtoV5Schema = fn()
+	}
+	if fn := listR.SDKv2Resource.ProtoIdentitySchema(ctx); fn != nil {
+		resp.ProtoV5IdentitySchema = fn()
+	}
 }
 
 func (listR *ListResourceMetadata) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	listR.metadataCalled = false
 	listR.Defaults(req, resp)
 }
 
 func (listR *ListResourceMetadata) ListResourceConfigSchema(_ context.Context, _ list.ListResourceSchemaRequest, resp *list.ListResourceSchemaResponse) {
+	listR.metadataCalled = false
 	s, err := NewListConfigSchema(listR.ListConfigFields...)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid list resource configuration", err.Error())
@@ -128,6 +160,7 @@ func (listR *ListResourceMetadata) ListResourceConfigSchema(_ context.Context, _
 }
 
 func (listR *ListResourceMetadata) Defaults(request resource.ConfigureRequest, response *resource.ConfigureResponse) {
+	listR.metadataCalled = false
 	if request.ProviderData == nil {
 		return
 	}
