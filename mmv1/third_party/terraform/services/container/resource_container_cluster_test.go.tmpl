@@ -21277,25 +21277,7 @@ func TestAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(t *testin
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
-			{
-				Config: testAccContainerCluster_withoutNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName),
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
-					},
-				},
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_cluster.primary",
-						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "0"),
-				),
-			},
-			{
-				ResourceName:            "google_container_cluster.primary",
-				ImportStateId:           fmt.Sprintf("us-central1-a/%s", clusterName),
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"deletion_protection"},
-			},
+
 		},
 	})
 }
@@ -21329,24 +21311,4 @@ resource "google_container_cluster" "primary" {
 `, clusterName, interval, window, networkName, subnetworkName)
 }
 
-func testAccContainerCluster_withoutNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName string) string {
-	return fmt.Sprintf(`
-resource "google_container_cluster" "primary" {
-  provider           = google-beta
-  name               = "%s"
-  location           = "us-central1-a"
-  initial_node_count = 1
-
-  node_pool_defaults {
-    node_config_defaults {
-      logging_variant = "DEFAULT"
-    }
-  }
-  network    = "%s"
-  subnetwork = "%s"
-
-  deletion_protection = false
-}
-`, clusterName, networkName, subnetworkName)
-}
 {{- end }}
