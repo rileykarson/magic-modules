@@ -162,18 +162,21 @@ func TestAccStorageInsightsDatasetConfigExample_update_filters(t *testing.T) {
 func TestAccStorageInsightsDatasetConfigExample_update_link(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"org_id":        envvar.GetTestOrgFromEnv(t),
-		"project_id":    envvar.GetTestProjectFromEnv(),
-	}
+	randomSuffix := acctest.RandString(t, 10)
+	orgId := envvar.GetTestOrgFromEnv(t)
+	projectId := envvar.GetTestProjectFromEnv()
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccStorageInsightsDatasetConfigExample_full_link(context),
+				Config: testAccStorageInsightsDatasetConfigExample_full_link(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"project_id":          projectId,
+					"link_dataset":        true,
+					"organization_number": orgId,
+				}),
 			},
 			{
 				ResourceName:            "google_storage_insights_dataset_config.config",
@@ -182,7 +185,12 @@ func TestAccStorageInsightsDatasetConfigExample_update_link(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"dataset_config_id", "location", "link_dataset"},
 			},
 			{
-				Config: testAccStorageInsightsDatasetConfigExample_update_unlink(context),
+				Config: testAccStorageInsightsDatasetConfigExample_full_link(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"project_id":          projectId,
+					"link_dataset":        false,
+					"organization_number": nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_storage_insights_dataset_config.config", plancheck.ResourceActionUpdate),
@@ -257,24 +265,8 @@ resource "google_storage_insights_dataset_config" "config" {
   identity {
     type = "IDENTITY_TYPE_PER_CONFIG"
   }
-  link_dataset = true
-  organization_number = "%{org_id}"
-  project = "%{project_id}"
-}
-`, context)
-}
-
-func testAccStorageInsightsDatasetConfigExample_update_unlink(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_storage_insights_dataset_config" "config" {
-  location = "us-central1"
-  dataset_config_id = "tf_test_my_config%{random_suffix}"
-  retention_period_days = 1
-  organization_scope = true
-  identity {
-    type = "IDENTITY_TYPE_PER_CONFIG"
-  }
-  link_dataset = false
+  link_dataset = %{link_dataset}
+  organization_number = "%{organization_number}"
   project = "%{project_id}"
 }
 `, context)
