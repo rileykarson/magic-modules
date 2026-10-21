@@ -21,12 +21,8 @@ func TestAccActiveDirectoryDomain_update(t *testing.T) {
 	t.Parallel()
 
 	domain := fmt.Sprintf("tf-test%s.org1.com", acctest.RandString(t, 5))
-	context := map[string]interface{}{
-		"domain":        domain,
-		"resource_name": "ad-domain",
-	}
 
-	resourceName := acctest.Nprintf("google_active_directory_domain.%{resource_name}", context)
+	resourceName := acctest.Nprintf("google_active_directory_domain.ad-domain", nil)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -34,7 +30,12 @@ func TestAccActiveDirectoryDomain_update(t *testing.T) {
 		CheckDestroy:             testAccCheckActiveDirectoryDomainDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccADDomainBasic(context),
+				Config: testAccADDomainBasic(map[string]interface{}{
+					"domain":        domain,
+					"resource_name": "ad-domain",
+					"locations":     `["us-central1"]`,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            resourceName,
@@ -43,7 +44,12 @@ func TestAccActiveDirectoryDomain_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"domain_name", "labels", "terraform_labels", "deletion_protection"},
 			},
 			{
-				Config: testAccADDomainUpdate(context),
+				Config: testAccADDomainBasic(map[string]interface{}{
+					"domain":        domain,
+					"resource_name": "ad-domain",
+					"locations":     `["us-central1", "us-west1"]`,
+					"labels":        `{ env = "test" }`,
+				}),
 			},
 			{
 				ResourceName:            resourceName,
@@ -52,7 +58,12 @@ func TestAccActiveDirectoryDomain_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"domain_name", "labels", "terraform_labels", "deletion_protection"},
 			},
 			{
-				Config: testAccADDomainBasic(context),
+				Config: testAccADDomainBasic(map[string]interface{}{
+					"domain":        domain,
+					"resource_name": "ad-domain",
+					"locations":     `["us-central1"]`,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            resourceName,
@@ -65,30 +76,15 @@ func TestAccActiveDirectoryDomain_update(t *testing.T) {
 }
 
 func testAccADDomainBasic(context map[string]interface{}) string {
-
 	return acctest.Nprintf(`
 	resource "google_active_directory_domain" "%{resource_name}" {
 	  domain_name       = "%{domain}"
-	  locations         = ["us-central1"]
+	  locations         = %{locations}
 	  reserved_ip_range = "192.168.255.0/24" 
 	  deletion_protection = false
+	  labels = %{labels}
 	}
 	`, context)
-}
-
-func testAccADDomainUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-	resource "google_active_directory_domain" "%{resource_name}" {
-	  domain_name       = "%{domain}"	
-	  locations         = ["us-central1", "us-west1"]
-	  reserved_ip_range = "192.168.255.0/24" 
-	  deletion_protection = false
-	  labels = {
-		  env = "test"
-	  }
-	}
-	`, context)
-
 }
 
 func testAccCheckActiveDirectoryDomainDestroyProducer(t *testing.T) func(s *terraform.State) error {
