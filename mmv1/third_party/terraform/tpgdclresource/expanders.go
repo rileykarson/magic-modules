@@ -1,8 +1,6 @@
 package tpgdclresource
 
 import (
-	"strings"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 )
@@ -50,26 +48,4 @@ func convertIntegerArr(v []interface{}) []int64 {
 		vi = append(vi, int64(vs.(int)))
 	}
 	return vi
-}
-
-// Returns the DCL representation of a three-state boolean value represented by a string in terraform.
-func ExpandEnumBool(v interface{}) *bool {
-	s, ok := v.(string)
-	if !ok {
-		return nil
-	}
-
-	switch {
-	case strings.EqualFold(s, "true"):
-		return boolPtr(true)
-	case strings.EqualFold(s, "false"):
-		return boolPtr(false)
-	default:
-		return nil
-	}
-}
-
-// boolPtr returns a pointer to the given boolean.
-func boolPtr(b bool) *bool {
-	return &b
 }

@@ -88,19 +88,6 @@ func TopLevelUpdateMask(ds []*FieldDiff) string {
 	return strings.Join(dupesRemoved, ",")
 }
 
-// SnakeCaseUpdateMask returns the update mask, but all fields are snake case.
-func SnakeCaseUpdateMask(ds []*FieldDiff) string {
-	var ss []string
-	for _, v := range ds {
-		ss = append(ss, TitleToSnakeCase(convertUpdateMaskVal(v.FieldName)))
-	}
-	dupesRemoved := removeDuplicates(ss)
-
-	// Sorting the entries is optional, but makes it easier to read + test.
-	sort.Strings(dupesRemoved)
-	return strings.Join(dupesRemoved, ",")
-}
-
 // UpdateMaskWithPrefix returns a Standard Update Mask with a prefix attached.
 func UpdateMaskWithPrefix(ds []*FieldDiff, prefix string) string {
 	um := UpdateMask(ds)

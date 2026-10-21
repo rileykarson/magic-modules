@@ -2,11 +2,9 @@ package tpgdclresource
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"reflect"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -223,105 +221,6 @@ func PartialSelfLinkToSelfLink(l, r *string) bool {
 	return true
 }
 
-// PartialSelfLinkToSelfLinkArray returns true if left and right are all equivalent for SelfLinks.
-func PartialSelfLinkToSelfLinkArray(l, r []string) bool {
-	if len(l) != len(r) {
-		return false
-	}
-	for i := range l {
-		if !PartialSelfLinkToSelfLink(&l[i], &r[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-func WithoutTrailingDotArrayInterface(l, r any) bool {
-	lVal, _ := l.([]string)
-	rVal, _ := r.([]string)
-	return WithoutTrailingDotArray(lVal, rVal)
-}
-
-// WithoutTrailingDotArray returns true if WithoutTrailingDot returns true for each
-// pair of elements in the lists.
-func WithoutTrailingDotArray(l, r []string) bool {
-	if len(l) != len(r) {
-		return false
-	}
-	for i, lv := range l {
-		if !WithoutTrailingDot(lv, r[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-// WithoutTrailingDot returns true if the arguments are equivalent ignoring a final period.
-// This is useful for comparing absolute & relative domain names.
-func WithoutTrailingDot(l, r string) bool {
-	return strings.TrimSuffix(l, ".") == strings.TrimSuffix(r, ".")
-}
-
-// QuoteAndCaseInsensitiveString returns true if the arguments are considered equal ignoring case
-// and quotedness (e.g. "foo" and foo are equivalent).
-func QuoteAndCaseInsensitiveString(l, r *string) bool {
-	if l == nil && r == nil {
-		return true
-	}
-	if l == nil || r == nil {
-		return false
-	}
-	if uq, err := strconv.Unquote(*l); err == nil {
-		l = &uq
-	}
-	if uq, err := strconv.Unquote(*r); err == nil {
-		r = &uq
-	}
-	return CaseInsensitiveString(l, r)
-}
-
-// QuoteAndCaseInsensitiveStringArray returns true if the arguments are considered equal ignoring case
-// and quotedness (e.g. "foo" and foo are equivalent), but including ordering.
-func QuoteAndCaseInsensitiveStringArray(l, r []string) bool {
-	if len(l) != len(r) {
-		return false
-	}
-	for i := range l {
-		if uq, err := strconv.Unquote(l[i]); err == nil {
-			l[i] = uq
-		}
-		if uq, err := strconv.Unquote(r[i]); err == nil {
-			r[i] = uq
-		}
-	}
-	return CaseInsensitiveStringArray(l, r)
-}
-
-// CaseInsensitiveStringArray returns true if the arguments are considered equal ignoring case,
-// but including ordering.
-func CaseInsensitiveStringArray(l, r []string) bool {
-	if len(l) != len(r) {
-		return false
-	}
-	for i, lv := range l {
-		if !strings.EqualFold(lv, r[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-// CaseInsensitiveString returns true if the arguments are considered equal ignoring case.
-func CaseInsensitiveString(l, r *string) bool {
-	if l == nil && r == nil {
-		return true
-	}
-	if l == nil || r == nil {
-		return false
-	}
-	return strings.EqualFold(*l, *r)
-}
-
 // IsZeroValue returns true if the argument is considered empty/unset.
 func IsZeroValue(v any) bool {
 	if t, ok := v.(time.Time); ok {
@@ -336,64 +235,6 @@ func IsZeroValue(v any) bool {
 		val.Kind() == reflect.Slice) && val.IsNil())
 }
 
-// SliceEquals takes in two slices of strings and checks their equality
-func SliceEquals(v []string, q []string) bool {
-	if len(v) != len(q) {
-		return false
-	}
-
-	for i := 0; i < len(v); i++ {
-		if v[i] != q[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// MapEquals returns if two maps are equal, while ignoring any keys with ignorePrefixes.
-func MapEquals(di, ai any, ignorePrefixes []string) bool {
-	d, ok := di.(map[string]string)
-	if !ok {
-		return false
-	}
-
-	a, ok := ai.(map[string]string)
-	if !ok {
-		return false
-	}
-
-	for k, v := range d {
-		if isIgnored(k, ignorePrefixes) {
-			continue
-		}
-
-		av, ok := a[k]
-		if !ok {
-			return false
-		}
-		if !reflect.DeepEqual(v, av) {
-			return false
-		}
-	}
-
-	for k, v := range a {
-		if isIgnored(k, ignorePrefixes) {
-			continue
-		}
-
-		dv, ok := d[k]
-		if !ok {
-			return false
-		}
-		if !reflect.DeepEqual(v, dv) {
-			return false
-		}
-	}
-
-	return true
-
-}
-
 // isIgnored returns true if this prefix should be ignored.
 func isIgnored(v string, ignoredPrefixes []string) bool {
 	for _, p := range ignoredPrefixes {
@@ -402,156 +243,6 @@ func isIgnored(v string, ignoredPrefixes []string) bool {
 		}
 	}
 	return false
-}
-
-// CompareStringSets returns two slices of strings,
-// one of strings in set a but not b, and one of strings in set b but not a.
-func CompareStringSets(a, b []string) (toAdd, toRemove []string) {
-	for _, item := range a {
-		inB := false
-		for _, i2 := range b {
-			if i2 == item {
-				inB = true
-			}
-		}
-		if !inB {
-			toAdd = append(toAdd, item)
-		}
-	}
-	for _, item := range b {
-		inA := false
-		for _, i2 := range a {
-			if i2 == item {
-				inA = true
-			}
-		}
-		if !inA {
-			toRemove = append(toRemove, item)
-		}
-	}
-	return
-}
-
-// WrapStringsWithKey returns a slice of maps with one key (the 'key' argument)
-// and one value (each value in 'values').
-// e.g. ("foo", ["bar", "baz", "qux"]) => [{"foo": "bar"}, {"foo": "baz"}, {"foo": "qux"}].
-// Useful for, for instance,
-// https://cloud.google.com/compute/docs/reference/rest/v1/targetPools/addHealthCheck
-func WrapStringsWithKey(key string, values []string) ([]map[string]string, error) {
-	r := make([]map[string]string, len(values))
-	for i, v := range values {
-		r[i] = map[string]string{key: v}
-	}
-	return r, nil
-}
-
-// FloatSliceEquals takes in two slices of float64s and checks their equality
-func FloatSliceEquals(v []float64, q []float64) bool {
-	if len(v) != len(q) {
-		return false
-	}
-
-	for i := 0; i < len(v); i++ {
-		if v[i] != q[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// IntSliceEquals takes in two slices of int64s and checks their equality
-func IntSliceEquals(v []int64, q []int64) bool {
-	if len(v) != len(q) {
-		return false
-	}
-
-	for i := 0; i < len(v); i++ {
-		if v[i] != q[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// StringSliceEquals returns true if v, q arrays of strings are equal according to StringEquals.
-func StringSliceEquals(v, q []string) bool {
-	if len(v) != len(q) {
-		return false
-	}
-
-	for i := 0; i < len(v); i++ {
-		if !StringEquals(&v[i], &q[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-// UnorderedStringSliceEquals returns true if a, b contains same set of elements irrespective of their ordering.
-func UnorderedStringSliceEquals(a, b []string) bool {
-	aMap := make(map[string]int)
-	bMap := make(map[string]int)
-
-	for _, val := range a {
-		aMap[val]++
-	}
-	for _, val := range b {
-		bMap[val]++
-	}
-
-	if len(aMap) != len(bMap) {
-		return false
-	}
-
-	for k, v := range aMap {
-		bv, ok := bMap[k]
-		if !ok {
-			return false
-		}
-		if v != bv {
-			return false
-		}
-	}
-
-	return true
-}
-
-// StringSliceEqualsWithSelfLink returns true if v, q arrays of strings are equal according to StringEqualsWithSelfLink
-func StringSliceEqualsWithSelfLink(v, q []string) bool {
-	if len(v) != len(q) {
-		return false
-	}
-
-	for i := 0; i < len(v); i++ {
-		if !StringEqualsWithSelfLink(&v[i], &q[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-// DeriveFieldArray calls DeriveField on each entry in the provided slice.  The final
-// entry in the input variadic argument can be a slice, and those values will be replaced
-// by the values in the provided current value.
-func DeriveFieldArray(pattern string, cVal []string, fs ...any) ([]string, error) {
-	var s []string
-	var allFs []*string
-	for _, f := range fs[:len(fs)-1] {
-		allFs = append(allFs, f.(*string))
-	}
-	for _, cv := range cVal {
-		log.Printf("[INFO] deriving %q from %q, %v", pattern, cv, append(allFs, &cv))
-		sval, err := DeriveField(pattern, &cv, append(allFs, &cv)...)
-		if err != nil {
-			return nil, err
-		}
-		if sval == nil {
-			return nil, fmt.Errorf("got nil back from DeriveField for %q", cv)
-		}
-		s = append(s, *sval)
-		log.Printf("[INFO] derived %q", *sval)
-	}
-	return s, nil
 }
 
 // DeriveField deals with the outgoing portion of derived fields.  The derived fields'
@@ -681,62 +372,6 @@ func hasEmptyStructField(i any) bool {
 	return false
 }
 
-// MatchingSemverInterface matches two interfaces according to MatchingSemver
-func MatchingSemverInterface(lp, rp any) bool {
-	if lp == nil && rp == nil {
-		return true
-	}
-	if lp == nil || rp == nil {
-		return false
-	}
-
-	lpVal, _ := lp.(*string)
-	rpVal, _ := rp.(*string)
-	return MatchingSemver(lpVal, rpVal)
-}
-
-// MatchingSemver returns whether the two strings should be considered equivalent
-// according to semver rules.  If one provides more detail than the other, this is
-// acceptable, as long as both are consistent in the detail they do provide.
-// For instance, 1.16 == 1.16.4 != 1.15.
-func MatchingSemver(lp, rp *string) bool {
-	if lp == nil && rp == nil {
-		return true
-	}
-	if lp == nil || rp == nil {
-		return false
-	}
-	l := *lp
-	r := *rp
-	if l == "latest" || r == "latest" {
-		return true
-	}
-
-	// If default version chosen, we should assume API returned the default version.
-	if l == "-" {
-		return true
-	}
-
-	ld := strings.Split(l, "-")
-	rd := strings.Split(r, "-")
-	if ld[0] == rd[0] {
-		return true
-	}
-	if len(ld) == 2 && len(rd) == 2 {
-		// nonmatching post-dash version.
-		return false
-	}
-	ldo := strings.Split(ld[0], ".")
-	rdo := strings.Split(rd[0], ".")
-
-	for i := 0; i < len(ldo) && i < len(rdo); i++ {
-		if ldo[i] != rdo[i] {
-			return false
-		}
-	}
-	return true
-}
-
 // DeriveFromPattern attempts to achieve the same end goal as DeriveField
 // but by using regular expressions rather than assumptions about the
 // format of the inputs based on the number of `/`. This is important for fields that allow `/`
@@ -795,16 +430,6 @@ func regexFromPattern(pattern string) (*regexp.Regexp, error) {
 	return regexp.Compile(re)
 }
 
-// NameFromSelfLink takes in a self link string and returns the name.
-func NameFromSelfLink(sl *string) (*string, error) {
-	if sl == nil {
-		return nil, nil
-	}
-	curNameParts := strings.Split(*sl, "/")
-	val := curNameParts[len(curNameParts)-1]
-	return &val, nil
-}
-
 // StringEqualsWithSelfLink returns true if these two strings are equal.
 // If these functions are self links, they'll do self-link comparisons.
 func StringEqualsWithSelfLink(l, r *string) bool {
@@ -826,22 +451,6 @@ func StringEqualsWithSelfLink(l, r *string) bool {
 	} else {
 		return left == right
 	}
-}
-
-// StringEquals returns true if these two strings are equal.
-func StringEquals(l, r *string) bool {
-	if l == nil && r == nil {
-		return true
-	}
-
-	if l == nil || r == nil {
-		return false
-	}
-
-	left := *l
-	right := *r
-
-	return left == right
 }
 
 // IsPartialSelfLink returns true if this string represents a partial self link.

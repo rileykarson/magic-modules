@@ -47,14 +47,6 @@ func ValidateAtMostOneOfFieldsSet(fieldNames []string, v ...any) error {
 	return nil
 }
 
-// ValidateAtLeastOneOfFieldsSet returns an error if none of the provided values is nonempty.
-func ValidateAtLeastOneOfFieldsSet(fieldNames []string, v ...any) error {
-	if countOfNonempty(v...) == 0 {
-		return fmt.Errorf("zero values set: %v", fieldNames)
-	}
-	return nil
-}
-
 // ValidateExactlyOneOfFieldsSet returns an error if 0 or 2+ of the provided values is nonempty.
 func ValidateExactlyOneOfFieldsSet(fieldNames []string, v ...any) error {
 	if countOfNonempty(v...) != 1 {

@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )
 
@@ -236,13 +235,6 @@ func FetchStateHint(c []ApplyOption) Resource {
 	return o.stateHint
 }
 
-// WithRetryProvider allows a user to override default exponential backoff retry behavior.
-func WithRetryProvider(r RetryProvider) ConfigOption {
-	return func(c *Config) {
-		c.RetryProvider = r
-	}
-}
-
 // WithCodeRetryability allows a user to add additional retryable or non-retryable error codes.
 // Each error code is mapped to a regexp which must match the error message to be retryable.
 func WithCodeRetryability(cr map[int]Retryability) ConfigOption {
@@ -281,13 +273,6 @@ func WithLogger(l Logger) ConfigOption {
 	}
 }
 
-// WithContextLogger allows a user to specify a custom context logger.
-func WithContextLogger(l ContextLogger) ConfigOption {
-	return func(c *Config) {
-		c.Logger = l
-	}
-}
-
 // WithBasePath allows a base path to be overridden.
 func WithBasePath(b string) ConfigOption {
 	return func(c *Config) {
@@ -295,70 +280,10 @@ func WithBasePath(b string) ConfigOption {
 	}
 }
 
-// WithHeader allows aribitrary HTTP headers to be addded to requests. Not all headers
-// (e.g., "Content-Type") can be overridden. To set the User-Agent header, use WithUserAgent().
-func WithHeader(header, value string) ConfigOption {
-	return func(c *Config) {
-		if c.header == nil {
-			c.header = make(http.Header)
-		}
-		c.header.Add(header, value)
-	}
-}
-
 // WithUserAgent allows a user to specify a custom user-agent.
 func WithUserAgent(ua string) ConfigOption {
 	return func(c *Config) {
 		c.userAgent = ua
-	}
-}
-
-// WithContentType allows a user to override the default Content-Type header.
-func WithContentType(ct string) ConfigOption {
-	return func(c *Config) {
-		c.contentType = ct
-	}
-}
-
-// WithQueryParams allows a user to override the default query parameters.
-func WithQueryParams(ps map[string]string) ConfigOption {
-	return func(c *Config) {
-		c.queryParams = ps
-	}
-}
-
-// WithAPIKey returns a ConfigOption that specifies an API key to be used as the basis for authentication.
-func WithAPIKey(apiKey string) ConfigOption {
-	return func(c *Config) {
-		c.clientOptions = append(c.clientOptions, option.WithAPIKey(apiKey))
-	}
-}
-
-// WithClientCertSource returns a ConfigOption that specifies a callback function for obtaining a TLS client certificate.
-func WithClientCertSource(s option.ClientCertSource) ConfigOption {
-	return func(c *Config) {
-		c.clientOptions = append(c.clientOptions, option.WithClientCertSource(s))
-	}
-}
-
-// WithCredentials returns a ConfigOption that authenticates API calls using a caller-supplier Credentials struct.
-func WithCredentials(creds *google.Credentials) ConfigOption {
-	return func(c *Config) {
-		c.clientOptions = append(c.clientOptions, option.WithCredentials(creds))
-	}
-}
-
-// WithCredentialsFile returns a ConfigOption that authenticates API calls with the given service account or refresh token JSON credentials file.
-func WithCredentialsFile(filename string) ConfigOption {
-	return func(c *Config) {
-		c.clientOptions = append(c.clientOptions, option.WithCredentialsFile(filename))
-	}
-}
-
-// WithCredentialsJSON returns a ConfigOption that authenticates API calls with the given service account or refresh token JSON credentials.
-func WithCredentialsJSON(p []byte) ConfigOption {
-	return func(c *Config) {
-		c.clientOptions = append(c.clientOptions, option.WithCredentialsJSON(p))
 	}
 }
 

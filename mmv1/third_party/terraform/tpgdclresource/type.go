@@ -10,14 +10,6 @@ func Float64(f float64) *float64 {
 	return &f
 }
 
-// Float64OrNil converts a float64 to *float64, returning nil if it's empty (0.0).
-func Float64OrNil(f float64) *float64 {
-	if f == 0.0 {
-		return nil
-	}
-	return &f
-}
-
 // Int64 converts an int64 to *int64
 func Int64(i int64) *int64 {
 	return &i
@@ -34,12 +26,6 @@ func Int64OrNil(i int64) *int64 {
 // String converts a string to a *string
 func String(s string) *string {
 	return &s
-}
-
-// StringWithError converts a string to a *string, returning a nil error to
-// satisfy type signatures that expect one.
-func StringWithError(s string) (*string, error) {
-	return &s, nil
 }
 
 // StringOrNil converts a string to a *string, returning nil if it's empty ("").
