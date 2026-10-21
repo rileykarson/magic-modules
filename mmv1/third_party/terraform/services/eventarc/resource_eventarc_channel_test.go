@@ -63,24 +63,9 @@ func testAccEventarcChannel_setCryptoKey(context map[string]interface{}) string 
 resource "google_eventarc_channel" "primary" {
   location             = "%{region}"
   name                 = "tf-test-name%{random_suffix}"
-  crypto_key_name      = "%{key1}"
+  crypto_key_name      = "%{crypto_key_name}"
   third_party_provider = "projects/%{project_name}/locations/%{region}/providers/datadog"
-
-  labels = {
-    "foo" = "bar"
-  }
-}
-`, context)
-}
-
-func testAccEventarcChannel_cryptoKeyUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_eventarc_channel" "primary" {
-  location             = "%{region}"
-  name                 = "tf-test-name%{random_suffix}"
-  crypto_key_name      = "%{key2}"
-  third_party_provider = "projects/%{project_name}/locations/%{region}/providers/datadog"
-
+  labels               = %{labels}
 }
 `, context)
 }
