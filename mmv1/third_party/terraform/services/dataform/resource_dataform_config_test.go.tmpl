@@ -55,7 +55,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataformConfig_full(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": `google_kms_crypto_key.example_key_1.id`,
+				})),
 			},
 			{
 				ResourceName:            "google_dataform_config.config",
@@ -64,7 +66,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region"},
 			},
 			{
-				Config: testAccDataformConfig_update(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": `google_kms_crypto_key.example_key_2.id`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_dataform_config.config", plancheck.ResourceActionUpdate),
@@ -78,7 +82,9 @@ func TestAccDataformConfig_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region"},
 			},
 			{
-				Config: testAccDataformConfig_updateToZeroValue(context),
+				Config: testAccDataformConfig_full(acctest.MergeMap(context, map[string]interface{}{
+					"default_kms_key_name": nil,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_dataform_config.config", plancheck.ResourceActionUpdate),
@@ -185,214 +191,8 @@ resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
 resource "google_dataform_config" "config" {
   provider             = google-beta
   region               = "us-central1"
-  default_kms_key_name = google_kms_crypto_key.example_key_1.id
+  default_kms_key_name = %{default_kms_key_name}
   project              = google_project.project.project_id
-
-  # Ensure IAM binding is created before the Dataform Config
-  depends_on = [
-    google_kms_crypto_key_iam_member.crypto_key_1_binding,
-    google_kms_crypto_key_iam_member.crypto_key_2_binding,
-    time_sleep.wait_for_dataform_api
-  ]
-}
-`, context)
-}
-
-func testAccDataformConfig_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "project" {
-  provider        = google-beta
-  name            = "tf-test-project-1%{random_suffix}"
-  project_id      = "tf-test-project-1%{random_suffix}"
-  org_id          = "%{org_id}"
-  billing_account = "%{billing_account}"
-  deletion_policy = "DELETE"
-}
-
-# Enable Cloud Key KMS API
-resource "google_project_service" "cloudkms_api" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "cloudkms.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Enable Dataform API
-resource "google_project_service" "dataform_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "dataform.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [
-    google_project_service.cloudkms_api
-  ]
-}
-
-# Add a sleep to wait for IAM propagation after API enablement
-resource "time_sleep" "wait_for_dataform_api" {
-  create_duration = "30s"
-  depends_on      = [
-    google_project_service.dataform_api
-  ]
-}
-
-# Retrieve the Dataform service identity
-resource "google_project_service_identity" "dataform_sa" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "dataform.googleapis.com"
-  depends_on = [
-    time_sleep.wait_for_dataform_api
-  ]
-}
-
-resource "google_kms_key_ring" "keyring" {
-  provider   = google-beta
-  project    = google_project.project.project_id
-  name       = "tf-test-example-key-ring%{random_suffix}"
-  location   = "us-central1"
-  depends_on = [
-    time_sleep.wait_for_dataform_api
-  ]
-}
-
-resource "google_kms_crypto_key" "example_key_1" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-1-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-resource "google_kms_crypto_key" "example_key_2" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-2-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_1_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_2.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Config with KMS key provided
-resource "google_dataform_config" "config" {
-  provider             = google-beta
-  region               = "us-central1"
-  default_kms_key_name = google_kms_crypto_key.example_key_2.id
-  project              = google_project.project.project_id
-
-  # Ensure IAM binding is created before the Dataform Config
-  depends_on = [
-    google_kms_crypto_key_iam_member.crypto_key_1_binding,
-    google_kms_crypto_key_iam_member.crypto_key_2_binding,
-    time_sleep.wait_for_dataform_api
-  ]
-}
-`, context)
-}
-
-func testAccDataformConfig_updateToZeroValue(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "project" {
-  provider        = google-beta
-  name            = "tf-test-project-1%{random_suffix}"
-  project_id      = "tf-test-project-1%{random_suffix}"
-  org_id          = "%{org_id}"
-  billing_account = "%{billing_account}"
-  deletion_policy = "DELETE"
-}
-
-# Enable Cloud Key KMS API
-resource "google_project_service" "cloudkms_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "cloudkms.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Enable Dataform API
-resource "google_project_service" "dataform_api" {
-  provider           = google-beta
-  project            = google_project.project.project_id
-  service            = "dataform.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [
-    google_project_service.cloudkms_api
-  ]
-}
-
-# Add a sleep to wait for IAM propagation after API enablement
-resource "time_sleep" "wait_for_dataform_api" {
-  create_duration = "30s"
-  depends_on      = [
-    google_project_service.dataform_api
-  ]
-}
-
-# Retrieve the Dataform service identity
-resource "google_project_service_identity" "dataform_sa" {
-  provider = google-beta
-  project  = google_project.project.project_id
-  service  = "dataform.googleapis.com"
-  depends_on = [
-    time_sleep.wait_for_dataform_api
-  ]
-}
-
-resource "google_kms_key_ring" "keyring" {
-  provider   = google-beta
-  project    = google_project.project.project_id
-  name       = "tf-test-example-key-ring%{random_suffix}"
-  location   = "us-central1"
-  depends_on = [
-    time_sleep.wait_for_dataform_api
-  ]
-}
-
-resource "google_kms_crypto_key" "example_key_1" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-1-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-resource "google_kms_crypto_key" "example_key_2" {
-  provider = google-beta
-  name     = "tf-test-example-crypto-key-name-2-%{random_suffix}"
-  key_ring = google_kms_key_ring.keyring.id
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_1_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_1.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Grant the Encrypter/Decrypter role to the Dataform service agent on the KMS key
-resource "google_kms_crypto_key_iam_member" "crypto_key_2_binding" {
-  provider      = google-beta
-  crypto_key_id = google_kms_crypto_key.example_key_2.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = google_project_service_identity.dataform_sa.member
-}
-
-# Config with KMS key provided
-resource "google_dataform_config" "config" {
-  provider             = google-beta
-  region               = "us-central1"
-  project              = google_project.project.project_id
-  # KMS key intentionally not set
 
   # Ensure IAM binding is created before the Dataform Config
   depends_on = [
