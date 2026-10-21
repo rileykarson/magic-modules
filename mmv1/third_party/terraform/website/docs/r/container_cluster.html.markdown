@@ -1401,23 +1401,6 @@ sole_tenant_config {
 * `mode` (Optional) - Mode for how the secondary boot disk is used. An example mode is `CONTAINER_IMAGE_CACHE`.
 
 
-
-{{- if ne $.TargetVersionName "ga" }}
-<a name="nested_host_maintenance_policy"></a>The `host_maintenance_policy` block supports:
-
-* `maintenance_interval` - (Required) Specifies the frequency of planned maintenance events. One of: `AS_NEEDED`, `PERIODIC`.
-
-* `opportunistic_maintenance_strategy` - (Optional) Strategy that will trigger maintenance on behalf of the customer. Structure is [documented below](#nested_opportunistic_maintenance_strategy).
-
-<a name="nested_opportunistic_maintenance_strategy"></a>The `opportunistic_maintenance_strategy` block supports:
-
-* `node_idle_time_window` - (Required) The amount of time that a node can remain idle (no customer owned workloads running), before triggering maintenance.
-
-* `maintenance_availability_window` - (Required) The window of time that opportunistic maintenance can run. Example: A setting of 14 days implies that opportunistic maintenance can only be ran in the 2 weeks leading up to the scheduled maintenance date. Setting 28 days allows opportunistic maintenance to run at any time in the scheduled maintenance window (all PERIODIC maintenance is set 28 days in advance).
-
-* `min_nodes_per_pool` - (Required) The minimum nodes required to be available in a pool. Blocks maintenance if it would cause the number of running nodes to dip below this value.
-{{- end }}
-
 <a name="nested_gcfs_config"></a>The `gcfs_config` block supports:
 
 * `enabled` (Required) - Whether or not the Google Container Filesystem (GCFS) is enabled
@@ -1534,15 +1517,17 @@ node_pool_auto_config {
 ```
 
 <a name="nested_node_pool_defaults"></a>The `node_pool_defaults` block supports:
-* `node_config_defaults` (Optional) - Subset of NodeConfig message that has defaults.
+* `node_config_defaults` (Optional) - Subset of NodeConfig message that has defaults. Structure is [documented below](#nested_node_config_defaults).
 
-The `node_config_defaults` block supports:
+<a name="nested_node_config_defaults"></a>The `node_config_defaults` block supports:
 
 * `insecure_kubelet_readonly_port_enabled` (Optional) Controls whether the kubelet read-only port is enabled for newly created node pools in the cluster. It is strongly recommended to set this to `FALSE`. Possible values: `TRUE`, `FALSE`.
 
 * `logging_variant` (Optional) The type of logging agent that is deployed by default for newly created node pools in the cluster. Valid values include DEFAULT and MAX_THROUGHPUT. See [Increasing logging agent throughput](https://cloud.google.com/stackdriver/docs/solutions/gke/managing-logs#throughput) for more information.
 
 * `gcfs_config` (Optional) The default Google Container Filesystem (GCFS) configuration at the cluster level. e.g. enable [image streaming](https://cloud.google.com/kubernetes-engine/docs/how-to/image-streaming) across all the node pools within the cluster. Structure is [documented below](#nested_gcfs_config).
+
+* `host_maintenance_policy` - (Optional, [Beta](../guides/provider_versions.html.markdown)) The maintenance policy for the hosts on which the GKE VMs run on. Structure is [documented below](#nested_host_maintenance_policy).
 
 <a name="nested_notification_config"></a>The `notification_config` block supports:
 

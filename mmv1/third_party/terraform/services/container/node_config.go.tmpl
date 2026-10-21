@@ -3986,7 +3986,7 @@ func flattenFastSocket(c *container.FastSocket) []map[string]interface{} {
 {{ if ne $.TargetVersionName `ga` -}}
 func flattenHostMaintenancePolicy(c *container.HostMaintenancePolicy) []map[string]interface{} {
 	result := []map[string]interface{}{}
-	if c != nil {
+	if c != nil && (c.MaintenanceInterval != "" || c.OpportunisticMaintenanceStrategy != nil) {
 		result = append(result, map[string]interface{}{
 			"maintenance_interval":               c.MaintenanceInterval,
 			"opportunistic_maintenance_strategy": flattenOpportunisticMaintenanceStrategy(c.OpportunisticMaintenanceStrategy),

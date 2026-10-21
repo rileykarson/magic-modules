@@ -21230,30 +21230,32 @@ func TestAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(t *testin
 	t.Parallel()
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:         func() { acctest.AccTestPreCheck(t) },
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
-		CheckDestroy: testAccCheckContainerClusterDestroyProducer(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "PERIODIC", "1209600s"),
+				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "AS_NEEDED", "1209600s"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary",
 						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "1"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary",
-						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "PERIODIC"),
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "AS_NEEDED"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.opportunistic_maintenance_strategy.0.maintenance_availability_window", "1209600s"),
 				),
 			},
 			{
-				ResourceName:      "google_container_cluster.primary",
-				ImportStateId:     fmt.Sprintf("us-east1-c/%s", clusterName),
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "google_container_cluster.primary",
+				ImportStateId:           fmt.Sprintf("us-central1-a/%s", clusterName),
+				ImportState:             true,
+				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
 			{
-				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "AS_NEEDED", "1296000s"),
+				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "PERIODIC", "1296000s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
@@ -21263,41 +21265,59 @@ func TestAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(t *testin
 					resource.TestCheckResourceAttr("google_container_cluster.primary",
 						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "1"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary",
-						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "AS_NEEDED"),
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "PERIODIC"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.opportunistic_maintenance_strategy.0.maintenance_availability_window", "1296000s"),
 				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportStateId:           fmt.Sprintf("us-central1-a/%s", clusterName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
+			},
+			{
+				Config: testAccContainerCluster_withoutNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "0"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportStateId:           fmt.Sprintf("us-central1-a/%s", clusterName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
 		},
 	})
 }
 
 func testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, interval, window string) string {
-        return fmt.Sprintf(`
+	return fmt.Sprintf(`
 resource "google_container_cluster" "primary" {
   provider           = google-beta
   name               = "%s"
-  location           = "us-east1-c"
+  location           = "us-central1-a"
   initial_node_count = 1
-
-  node_config {
-    machine_type = "n1-standard-2"
-    guest_accelerator {
-      type  = "nvidia-tesla-t4"
-      count = 1
-      gpu_driver_installation_config {
-        gpu_driver_version = "LATEST"
-      }
-    }
-  }
 
   node_pool_defaults {
     node_config_defaults {
+      logging_variant = "DEFAULT"
       host_maintenance_policy {
         maintenance_interval = "%s"
-		opportunistic_maintenance_strategy {
-			maintenance_availability_window = "%s"
-			min_nodes_per_pool = 1
-			node_idle_time_window = "1800s"
-		}
+        opportunistic_maintenance_strategy {
+          maintenance_availability_window = "%s"
+          min_nodes_per_pool              = 1
+          node_idle_time_window           = "1800s"
+        }
       }
     }
   }
@@ -21307,5 +21327,26 @@ resource "google_container_cluster" "primary" {
   deletion_protection = false
 }
 `, clusterName, interval, window, networkName, subnetworkName)
+}
+
+func testAccContainerCluster_withoutNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  provider           = google-beta
+  name               = "%s"
+  location           = "us-central1-a"
+  initial_node_count = 1
+
+  node_pool_defaults {
+    node_config_defaults {
+      logging_variant = "DEFAULT"
+    }
+  }
+  network    = "%s"
+  subnetwork = "%s"
+
+  deletion_protection = false
+}
+`, clusterName, networkName, subnetworkName)
 }
 {{- end }}
