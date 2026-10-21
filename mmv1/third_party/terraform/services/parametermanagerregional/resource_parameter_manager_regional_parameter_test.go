@@ -59,9 +59,7 @@ resource "google_parameter_manager_regional_parameter" "regional-parameter-impor
 func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -69,7 +67,10 @@ func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T)
 		CheckDestroy:             testAccCheckParameterManagerRegionalRegionalParameterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccParameterManagerRegionalRegionalParameter_withoutLabels(context),
+				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdate(map[string]interface{}{
+					"labels":        nil,
+					"random_suffix": randomSuffix,
+				}),
 			},
 			{
 				ResourceName:            "google_parameter_manager_regional_parameter.regional-parameter-with-labels",
@@ -78,7 +79,16 @@ func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "parameter_id", "terraform_labels"},
 			},
 			{
-				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdate(context),
+				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdate(map[string]interface{}{
+					"labels": `{
+    key1 = "val1"
+    key2 = "val2"
+    key3 = "val3"
+    key4 = "val4"
+    key5 = "val5"
+  }`,
+					"random_suffix": randomSuffix,
+				}),
 			},
 			{
 				ResourceName:            "google_parameter_manager_regional_parameter.regional-parameter-with-labels",
@@ -87,7 +97,16 @@ func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "parameter_id", "terraform_labels"},
 			},
 			{
-				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdateOther(context),
+				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdate(map[string]interface{}{
+					"labels": `{
+    key1 = "val1"
+    key2 = "updateval2"
+    updatekey3 = "val3"
+    updatekey4 = "updateval4"
+    key6 = "val6"
+  }`,
+					"random_suffix": randomSuffix,
+				}),
 			},
 			{
 				ResourceName:            "google_parameter_manager_regional_parameter.regional-parameter-with-labels",
@@ -96,7 +115,10 @@ func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T)
 				ImportStateVerifyIgnore: []string{"labels", "location", "parameter_id", "terraform_labels"},
 			},
 			{
-				Config: testAccParameterManagerRegionalRegionalParameter_withoutLabels(context),
+				Config: testAccParameterManagerRegionalRegionalParameter_labelsUpdate(map[string]interface{}{
+					"labels":        nil,
+					"random_suffix": randomSuffix,
+				}),
 			},
 			{
 				ResourceName:            "google_parameter_manager_regional_parameter.regional-parameter-with-labels",
@@ -108,16 +130,6 @@ func TestAccParameterManagerRegionalRegionalParameter_labelsUpdate(t *testing.T)
 	})
 }
 
-func testAccParameterManagerRegionalRegionalParameter_withoutLabels(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_parameter_manager_regional_parameter" "regional-parameter-with-labels" {
-  parameter_id = "tf_test_parameter%{random_suffix}"
-  location = "us-central1"
-  format = "JSON"
-}
-`, context)
-}
-
 func testAccParameterManagerRegionalRegionalParameter_labelsUpdate(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_parameter_manager_regional_parameter" "regional-parameter-with-labels" {
@@ -125,31 +137,7 @@ resource "google_parameter_manager_regional_parameter" "regional-parameter-with-
   location = "us-central1"
   format = "JSON"
 
-  labels = {
-    key1 = "val1"
-    key2 = "val2"
-    key3 = "val3"
-    key4 = "val4"
-    key5 = "val5"
-  }
-}
-`, context)
-}
-
-func testAccParameterManagerRegionalRegionalParameter_labelsUpdateOther(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_parameter_manager_regional_parameter" "regional-parameter-with-labels" {
-  parameter_id = "tf_test_parameter%{random_suffix}"
-  location = "us-central1"
-  format = "JSON"
-
-  labels = {
-    key1 = "val1"
-    key2 = "updateval2"
-    updatekey3 = "val3"
-    updatekey4 = "updateval4"
-    key6 = "val6"
-  }
+  labels = %{labels}
 }
 `, context)
 }
