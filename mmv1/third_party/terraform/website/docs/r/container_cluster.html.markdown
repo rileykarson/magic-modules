@@ -1775,6 +1775,8 @@ One of `"none"` or `"static"`. If unset (or set to the empty string `""`), the A
 Prior to the 6.4.0 this field was marked as required. The workaround for the required field
 is setting the empty string `""`, which will function identically to not setting this field.
 
+* `reserved_resources_config` - (Optional) Defines the amount of resources to reserve for the kubelet. Structure is documented below.
+
 * `cpu_cfs_quota` - (Optional) If true, enables CPU CFS quota enforcement for
 containers that specify CPU limits.
 

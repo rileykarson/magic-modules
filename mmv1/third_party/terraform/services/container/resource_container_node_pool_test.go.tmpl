@@ -8410,3 +8410,84 @@ resource "google_container_node_pool" "np" {
 }
 `, clusterName, networkName, subnetworkName, poolName)
 }
+func TestAccContainerNodePool_withKubeletConfigReservedResources(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	np := fmt.Sprintf("tf-test-np-%s", acctest.RandString(t, 10))
+	networkName := fmt.Sprintf("tf-test-net-%s", acctest.RandString(t, 10))
+	subnetworkName := fmt.Sprintf("tf-test-sub-%s", acctest.RandString(t, 10))
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerNodePoolDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerNodePool_withKubeletConfigReservedResources(cluster, np, networkName, subnetworkName, 100, 100),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
+						"node_config.0.kubelet_config.0.reserved_resources_config.0.cpu_reserved_millicore", "100"),
+					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
+						"node_config.0.kubelet_config.0.reserved_resources_config.0.memory_reserved_mib", "100"),
+				),
+			},
+			{
+				Config: testAccContainerNodePool_withKubeletConfigReservedResources(cluster, np, networkName, subnetworkName, 200, 200),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
+						"node_config.0.kubelet_config.0.reserved_resources_config.0.cpu_reserved_millicore", "200"),
+					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
+						"node_config.0.kubelet_config.0.reserved_resources_config.0.memory_reserved_mib", "200"),
+				),
+			},
+		},
+	})
+}
+
+func testAccContainerNodePool_withKubeletConfigReservedResources(cluster, np, networkName, subnetworkName string, cpu, memory int) string {
+	return fmt.Sprintf(`
+data "google_container_engine_versions" "central1a" {
+  location = "us-central1-a"
+}
+
+resource "google_compute_network" "network" {
+  name                    = "%s"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "subnetwork" {
+  name          = "%s"
+  network       = google_compute_network.network.self_link
+  ip_cidr_range = "10.0.0.0/24"
+  region        = "us-central1"
+}
+
+resource "google_container_cluster" "cluster" {
+  name               = "%s"
+  location           = "us-central1-a"
+  initial_node_count = 1
+  network            = google_compute_network.network.name
+  subnetwork         = google_compute_subnetwork.subnetwork.name
+  deletion_protection = false
+}
+
+resource "google_container_node_pool" "with_kubelet_config" {
+  name       = "%s"
+  location   = "us-central1-a"
+  cluster    = google_container_cluster.cluster.name
+  node_count = 1
+
+  node_config {
+    machine_type = "e2-medium"
+
+    kubelet_config {
+      reserved_resources_config {
+        cpu_reserved_millicore = %d
+        memory_reserved_mib    = %d
+      }
+    }
+  }
+}
+`, networkName, subnetworkName, cluster, np, cpu, memory)
+}
