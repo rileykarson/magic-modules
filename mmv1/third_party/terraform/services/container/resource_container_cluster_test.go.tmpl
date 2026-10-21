@@ -7608,7 +7608,7 @@ func TestAccContainerCluster_withEnableKubernetesAlpha(t *testing.T) {
 				Config: testAccContainerCluster_withEnableKubernetesAlpha(clusterName, npName, networkName, subnetworkName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "alpha_cluster_feature_gates.#", "1"),
-					resource.TestCheckResourceAttr("google_container_cluster.primary", "alpha_cluster_feature_gates.0", "AWSCredentialsRequest=true"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "alpha_cluster_feature_gates.0", "InPlacePodVerticalScaling=true"),
 				),
 			},
 			{
@@ -14592,7 +14592,7 @@ resource "google_container_cluster" "primary" {
   name                    = "%s"
   location                = "us-east1-b"
   enable_kubernetes_alpha = true
-  alpha_cluster_feature_gates = ["AWSCredentialsRequest=true"]
+  alpha_cluster_feature_gates = ["InPlacePodVerticalScaling=true"]
 
   node_pool {
     name               = "%s"
