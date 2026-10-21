@@ -43,9 +43,7 @@ func TestAccSecretManagerRegionalRegionalSecret_import(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -53,7 +51,7 @@ func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutLabels(context),
+				Config: testAccSecretManagerRegionalSecret_labelsUpdate(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-labels",
@@ -62,7 +60,13 @@ func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_labelsUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_labelsUpdate(randomSuffix, `{
+    key1 = "value1"
+    key2 = "value2"
+    key3 = "value3"
+    key4 = "value4"
+    key5 = "value5"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-labels",
@@ -71,7 +75,13 @@ func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_labelsUpdateOther(context),
+				Config: testAccSecretManagerRegionalSecret_labelsUpdate(randomSuffix, `{
+    key1 = "value1"
+    key2 = "updatevalue2"
+    updatekey3 = "value3"
+    updatekey4 = "updatevalue4"
+    key6 = "value6"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-labels",
@@ -80,7 +90,7 @@ func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutLabels(context),
+				Config: testAccSecretManagerRegionalSecret_labelsUpdate(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-labels",
@@ -95,9 +105,7 @@ func TestAccSecretManagerRegionalRegionalSecret_labelsUpdate(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_annotationsUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -105,7 +113,7 @@ func TestAccSecretManagerRegionalRegionalSecret_annotationsUpdate(t *testing.T) 
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutAnnotations(context),
+				Config: testAccSecretManagerRegionalSecret_annotationsUpdate(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-annotations",
@@ -114,7 +122,13 @@ func TestAccSecretManagerRegionalRegionalSecret_annotationsUpdate(t *testing.T) 
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_annotationsUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_annotationsUpdate(randomSuffix, `{
+    key1 = "value1"
+    key2 = "value2"
+    key3 = "value3"
+    key4 = "value4"
+    key5 = "value5"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-annotations",
@@ -123,7 +137,13 @@ func TestAccSecretManagerRegionalRegionalSecret_annotationsUpdate(t *testing.T) 
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_annotationsUpdateOther(context),
+				Config: testAccSecretManagerRegionalSecret_annotationsUpdate(randomSuffix, `{
+    key1 = "value1"
+    key2 = "updatevalue2"
+    updatekey3 = "value3"
+    updatekey4 = "updatevalue4"
+    key6 = "value6"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-annotations",
@@ -132,7 +152,7 @@ func TestAccSecretManagerRegionalRegionalSecret_annotationsUpdate(t *testing.T) 
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutAnnotations(context),
+				Config: testAccSecretManagerRegionalSecret_annotationsUpdate(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-annotations",
@@ -307,11 +327,7 @@ func TestAccSecretManagerRegionalRegionalSecret_rotationInfoUpdate(t *testing.T)
 func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"timestamp_1":   "2114-11-30T00:00:00Z",
-		"timestamp_2":   "2116-11-30T00:00:00Z",
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -319,7 +335,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -328,7 +344,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeBasic(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, "2114-11-30T00:00:00Z", nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -337,7 +353,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, "2116-11-30T00:00:00Z", nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -346,7 +362,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -361,9 +377,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -371,7 +385,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -380,7 +394,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, "360000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -389,7 +403,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, "720000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -398,7 +412,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -413,10 +427,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"timestamp_1":   "2114-11-30T00:00:00Z",
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -424,7 +435,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, "360000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -433,7 +444,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeBasic(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, "2114-11-30T00:00:00Z", nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -442,7 +453,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_expiration(randomSuffix, nil, "360000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -457,9 +468,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -467,7 +476,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerRegionalSecret_versionDestroyTtl(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -476,7 +485,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionDestroyTtlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_versionDestroyTtl(randomSuffix, "90000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -485,7 +494,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionDestroyTtlUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_versionDestroyTtl(randomSuffix, "360000s"),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -494,7 +503,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerRegionalSecret_versionDestroyTtl(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -509,9 +518,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 func TestAccSecretManagerRegionalRegionalSecret_versionAliasesUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -519,7 +526,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionAliasesUpdate(t *testing.
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_basicRegionalSecretWithVersions(context),
+				Config: testAccSecretManagerRegionalSecret_versionAliases(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-aliases",
@@ -528,7 +535,13 @@ func TestAccSecretManagerRegionalRegionalSecret_versionAliasesUpdate(t *testing.
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionAliasesBasic(context),
+				Config: testAccSecretManagerRegionalSecret_versionAliases(randomSuffix, `{
+    firstalias = "1",
+    secondalias = "2",
+    thirdalias = "3",
+    otheralias = "2",
+    somealias = "3"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-aliases",
@@ -537,7 +550,13 @@ func TestAccSecretManagerRegionalRegionalSecret_versionAliasesUpdate(t *testing.
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionAliasesUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_versionAliases(randomSuffix, `{
+    firstalias = "1",
+    secondaliasupdated = "2",
+    otheralias = "1",
+    somealias = "3",
+    fourthalias = "4"
+  }`),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-aliases",
@@ -546,7 +565,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionAliasesUpdate(t *testing.
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_basicRegionalSecretWithVersions(context),
+				Config: testAccSecretManagerRegionalSecret_versionAliases(randomSuffix, nil),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-aliases",
@@ -594,12 +613,9 @@ func TestAccSecretManagerRegionalRegionalSecret_tags(t *testing.T) {
 	t.Parallel()
 
 	tagKey := tags.BootstrapSharedTestOrganizationTagKey(t, "secretmanager_regional_regionalsecret-tagkey", map[string]interface{}{})
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"org":           envvar.GetTestOrgFromEnv(t),
-		"tagKey":        tagKey,
-		"tagValue":      tags.BootstrapSharedTestOrganizationTagValue(t, "secretmanager_regional_regionalsecret-tagvalue", tagKey),
-	}
+	randomSuffix := acctest.RandString(t, 10)
+	org := envvar.GetTestOrgFromEnv(t)
+	tagValue := tags.BootstrapSharedTestOrganizationTagValue(t, "secretmanager_regional_regionalsecret-tagvalue", tagKey)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -607,7 +623,13 @@ func TestAccSecretManagerRegionalRegionalSecret_tags(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecretTags(context),
+				Config: testAccSecretManagerRegionalSecretTags(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"org":                 org,
+					"tagKey":              tagKey,
+					"tagValue":            tagValue,
+					"deletion_protection": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-basic",
@@ -616,7 +638,13 @@ func TestAccSecretManagerRegionalRegionalSecret_tags(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels", "deletion_protection", "tags"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecretTagsDeletionProtection(context),
+				Config: testAccSecretManagerRegionalSecretTags(map[string]interface{}{
+					"random_suffix":       randomSuffix,
+					"org":                 org,
+					"tagKey":              tagKey,
+					"tagValue":            tagValue,
+					"deletion_protection": false,
+				}),
 			},
 		},
 	})
@@ -656,75 +684,25 @@ resource "google_secret_manager_regional_secret" "regional-secret-basic" {
 `, context)
 }
 
-func testAccSecretManagerRegionalSecret_withoutLabels(context map[string]interface{}) string {
+func testAccSecretManagerRegionalSecret_labelsUpdate(randomSuffix string, labels interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_regional_secret" "regional-secret-with-labels" {
   secret_id = "tf-test-reg-secret-%{random_suffix}"
   location = "us-central1"
 
-  annotations = {
-    annotationkey = "annotation-value"
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_labelsUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-labels" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    key1 = "value1"
-    key2 = "value2"
-    key3 = "value3"
-    key4 = "value4"
-    key5 = "value5"
-  }
+  labels = %{labels}
 
   annotations = {
     annotationkey = "annotation-value"
   }
 }
-`, context)
+`, map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"labels":        labels,
+	})
 }
 
-func testAccSecretManagerRegionalSecret_labelsUpdateOther(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-labels" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    key1 = "value1"
-    key2 = "updatevalue2"
-    updatekey3 = "value3"
-    updatekey4 = "updatevalue4"
-    key6 = "value6"
-  }
-
-  annotations = {
-    annotationkey = "annotation-value"
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_withoutAnnotations(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-annotations" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mykey = "myvalue"
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_annotationsUpdate(context map[string]interface{}) string {
+func testAccSecretManagerRegionalSecret_annotationsUpdate(randomSuffix string, annotations interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_regional_secret" "regional-secret-with-annotations" {
   secret_id = "tf-test-reg-secret-%{random_suffix}"
@@ -734,36 +712,12 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-annotatio
     mykey = "myvalue"
   }
 
-  annotations = {
-    key1 = "value1"
-    key2 = "value2"
-    key3 = "value3"
-    key4 = "value4"
-    key5 = "value5"
-  }
+  annotations = %{annotations}
 }
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_annotationsUpdateOther(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-annotations" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mykey = "myvalue"
-  }
-
-  annotations = {
-    key1 = "value1"
-    key2 = "updatevalue2"
-    updatekey3 = "value3"
-    updatekey4 = "updatevalue4"
-    key6 = "value6"
-  }
-}
-`, context)
+`, map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"annotations":   annotations,
+	})
 }
 
 func testAccSecretManagerRegionalSecret_withoutCmek(context map[string]interface{}) string {
@@ -1129,24 +1083,7 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-rotation-
 `, context)
 }
 
-func testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_expireTimeBasic(context map[string]interface{}) string {
+func testAccSecretManagerRegionalSecret_expiration(randomSuffix string, expireTime, ttl interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
   secret_id = "tf-test-reg-secret%{random_suffix}"
@@ -1160,86 +1097,17 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-expiratio
     myannot = "myannotkey"
   }
 
-  expire_time = "%{timestamp_1}"
+  expire_time = "%{expire_time}"
+  ttl = "%{ttl}"
 }
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_expireTimeUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  expire_time = "%{timestamp_2}"
-}
-`, context)
+`, map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   expireTime,
+		"ttl":           ttl,
+	})
 }
 
-func testAccSecretManagerRegionalSecret_ttlBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  ttl = "360000s"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_ttlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  ttl = "720000s"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-destroy-ttl" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_versionDestroyTtlBasic(context map[string]interface{}) string {
+func testAccSecretManagerRegionalSecret_versionDestroyTtl(randomSuffix string, versionDestroyTtl interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_regional_secret" "regional-secret-with-version-destroy-ttl" {
   secret_id = "tf-test-reg-secret%{random_suffix}"
@@ -1253,35 +1121,21 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-version-d
     myannot = "myannotkey"
   }
 
-  version_destroy_ttl = "90000s"
+  version_destroy_ttl = "%{version_destroy_ttl}"
 }
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_versionDestroyTtlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-destroy-ttl" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  version_destroy_ttl = "360000s"
-}
-`, context)
+`, map[string]interface{}{
+		"random_suffix":       randomSuffix,
+		"version_destroy_ttl": versionDestroyTtl,
+	})
 }
 
-func testAccSecretManagerRegionalSecret_basicRegionalSecretWithVersions(context map[string]interface{}) string {
+func testAccSecretManagerRegionalSecret_versionAliases(randomSuffix string, versionAliases interface{}) string {
 	return acctest.Nprintf(`
 resource "google_secret_manager_regional_secret" "regional-secret-with-version-aliases" {
   secret_id = "tf-test-reg-secret%{random_suffix}"
   location = "us-central1"
+
+  version_aliases = %{version_aliases}
 
   labels = {
     mylabel = "mykey"
@@ -1311,97 +1165,10 @@ resource "google_secret_manager_regional_secret_version" "reg-secret-version-4" 
 
   secret_data = "very secret data keep it down %{random_suffix}-4"
 }
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_versionAliasesBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-aliases" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  version_aliases = {
-    firstalias = "1",
-    secondalias = "2",
-    thirdalias = "3",
-    otheralias = "2",
-    somealias = "3"
-  }
-
-  labels = {
-    mylabel = "mykey"
-  }
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-1" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-1"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-2" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-2"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-3" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-3"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-4" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-4"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_versionAliasesUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-aliases" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  version_aliases = {
-    firstalias = "1",
-    secondaliasupdated = "2",
-    otheralias = "1",
-    somealias = "3",
-    fourthalias = "4"
-  }
-
-  labels = {
-    mylabel = "mykey"
-  }
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-1" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-1"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-2" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-2"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-3" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-3"
-}
-
-resource "google_secret_manager_regional_secret_version" "reg-secret-version-4" {
-  secret = google_secret_manager_regional_secret.regional-secret-with-version-aliases.id
-
-  secret_data = "very secret data keep it down %{random_suffix}-4"
-}
-`, context)
+`, map[string]interface{}{
+		"random_suffix":   randomSuffix,
+		"version_aliases": versionAliases,
+	})
 }
 
 func testAccSecretManagerRegionalSecretDeletionProtectionL1(context map[string]interface{}) string {
@@ -1442,19 +1209,7 @@ resource "google_secret_manager_regional_secret" "regional-secret-basic" {
   tags = {
 	"%{org}/%{tagKey}" = "%{tagValue}"
   }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecretTagsDeletionProtection(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-basic" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
-  deletion_protection = false  
+  deletion_protection = %{deletion_protection}
 }
 `, context)
 }
