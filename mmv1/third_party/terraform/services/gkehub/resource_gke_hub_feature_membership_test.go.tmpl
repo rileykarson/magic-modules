@@ -327,10 +327,13 @@ resource "google_gke_hub_feature_membership" "feature_member_3" {
 func TestAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(t *testing.T) {
 	t.Parallel()
 
+	randomSuffix := acctest.RandString(t, 10)
+	orgId := envvar.GetTestOrgFromEnv(t)
+	billingAccount := envvar.GetTestBillingAccountFromEnv(t)
 	context := map[string]interface{}{
-		"random_suffix":   acctest.RandString(t, 10),
-		"org_id":          envvar.GetTestOrgFromEnv(t),
-		"billing_account": envvar.GetTestBillingAccountFromEnv(t),
+		"random_suffix":   randomSuffix,
+		"org_id":          orgId,
+		"billing_account": billingAccount,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -353,7 +356,13 @@ func TestAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(context),
+				Config: testAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(map[string]interface{}{
+					"random_suffix":   randomSuffix,
+					"org_id":          orgId,
+					"billing_account": billingAccount,
+					"stop_syncing":    true,
+					"prevent_drift":   nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGkeHubFeatureMembershipPresent(t, fmt.Sprintf("tf-test-gkehub%s", context["random_suffix"]), "global", "configmanagement", fmt.Sprintf("tf-test1%s", context["random_suffix"])),
 				),
@@ -375,7 +384,13 @@ func TestAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccGKEHubFeatureMembership_gkehubFeatureWithPreventDriftField(context),
+				Config: testAccGKEHubFeatureMembership_gkehubFeatureAcmAllFields(map[string]interface{}{
+					"random_suffix":   randomSuffix,
+					"org_id":          orgId,
+					"billing_account": billingAccount,
+					"stop_syncing":    nil,
+					"prevent_drift":   true,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGkeHubFeatureMembershipPresent(t, fmt.Sprintf("tf-test-gkehub%s", context["random_suffix"]), "global", "configmanagement", fmt.Sprintf("tf-test1%s", context["random_suffix"])),
 				),
@@ -439,64 +454,8 @@ resource "google_gke_hub_feature_membership" "feature_member" {
         sync_rev       = "v3.60.0"
         sync_wait_secs = "30"
       }
-      stop_syncing = true
-    }
-  }
-}
-`, context)
-}
-
-func testAccGKEHubFeatureMembership_gkehubFeatureWithPreventDriftField(context map[string]interface{}) string {
-	return gkeHubFeatureProjectSetup(context) + acctest.Nprintf(`
-resource "google_container_cluster" "primary" {
-  project = google_project.project.project_id
-  name               = "tf-test-cl%{random_suffix}"
-  location           = "us-central1-a"
-  initial_node_count = 1
-  deletion_protection = false
-  depends_on = [time_sleep.wait_120s]
-}
-
-resource "google_gke_hub_membership" "membership" {
-  project = google_project.project.project_id
-  membership_id = "tf-test1%{random_suffix}"
-  endpoint {
-    gke_cluster {
-      resource_link = "//container.googleapis.com/${google_container_cluster.primary.id}"
-    }
-  }
-}
-
-resource "google_gke_hub_feature" "feature" {
-  project = google_project.project.project_id
-  name = "configmanagement"
-  location = "global"
-
-  labels = {
-    foo = "bar"
-  }
-  depends_on = [time_sleep.wait_120s]
-}
-
-resource "google_gke_hub_feature_membership" "feature_member" {
-  project = google_project.project.project_id
-  location = "global"
-  feature = google_gke_hub_feature.feature.name
-  membership = google_gke_hub_membership.membership.membership_id
-  configmanagement {
-    version = "1.23.1"
-    config_sync {
-      enabled = true
-      git {
-        sync_repo      = "https://github.com/hashicorp/terraform"
-        https_proxy    = "https://example.com"
-        policy_dir     = "google/"
-        secret_type    = "none"
-        sync_branch    = "some-branch"
-        sync_rev       = "v3.60.0"
-        sync_wait_secs = "30"
-      }
-      prevent_drift = true
+      stop_syncing = %{stop_syncing}
+      prevent_drift = %{prevent_drift}
     }
   }
 }
