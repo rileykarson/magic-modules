@@ -2718,7 +2718,7 @@ func ResourceContainerCluster() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
-							ValidateFunc: validation.StringInSlice([]string{"MODE_UNSPECIFIED", "VIA_CONTROL_PLANE", "NONE"}, false),
+							ValidateFunc: validation.StringInSlice([]string{"VIA_CONTROL_PLANE", "NONE"}, false),
 							Description:  `Which mode to use for Control Plane Egress.`,
 						},
 					},

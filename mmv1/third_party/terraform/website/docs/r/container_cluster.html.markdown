@@ -1715,7 +1715,7 @@ not.
 
 <a name="nested_control_plane_egress"></a>The `control_plane_egress` block supports:
 
-* `mode` - (Optional) Which mode to use for Control Plane Egress. Can be `MODE_UNSPECIFIED`, `VIA_CONTROL_PLANE`, or `NONE`.
+* `mode` - (Optional) Which mode to use for Control Plane Egress. Can be `VIA_CONTROL_PLANE` or `NONE`.
 
 <a name="nested_cost_management_config"></a>The `cost_management_config` block supports:
 
