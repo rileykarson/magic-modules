@@ -21230,7 +21230,7 @@ func TestAccContainerCluster_autopilotGeneralProfile(t *testing.T) {
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.79.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21269,7 +21269,7 @@ func testAccContainerCluster_autopilotGeneralProfile(cluster, networkName, subne
 	return fmt.Sprintf(`
 resource "google_container_cluster" "primary" {
   name               = "%s"
-  location           = "us-east1-b"
+  location           = "us-central1"
   initial_node_count = 1
   network            = "%s"
   subnetwork         = "%s"

@@ -720,6 +720,9 @@ Structure is [documented below](#nested_auto_provisioning_defaults).
 [zones](https://cloud.google.com/compute/docs/zones#available) in which the
 NodePool's nodes can be created by NAP.
 
+* `autopilot_general_profile` - (Optional) Contains the autopilot general profile default.
+Can be `AUTOPILOT_GENERAL_PROFILE_UNSPECIFIED`, `NO_PERFORMANCE`, or `NONE`.
+
 * `autoscaling_profile` - (Optional) Configuration
 options for the [Autoscaling profile](https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler#autoscaling_profiles)
 feature, which lets you choose whether the cluster autoscaler should optimize for resource utilization or resource availability
