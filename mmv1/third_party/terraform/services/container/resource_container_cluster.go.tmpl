@@ -3327,6 +3327,7 @@ func resourceContainerClusterCreate(d *schema.ResourceData, meta interface{}) er
 		ProtectConfig: expandProtectConfig(d.Get("protect_config")),
 {{- end }}
 		CostManagementConfig: expandCostManagementConfig(d.Get("cost_management_config")),
+		ControlPlaneEgress:   expandControlPlaneEgress(d.Get("control_plane_egress")),
 		EnableK8sBetaApis:   expandEnableK8sBetaApis(d.Get("enable_k8s_beta_apis"), nil),
 	}
 
