@@ -13,9 +13,7 @@ import (
 func TestAccIAMBetaWorkloadIdentityPoolNamespace_minimal(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -23,7 +21,11 @@ func TestAccIAMBetaWorkloadIdentityPoolNamespace_minimal(t *testing.T) {
 		CheckDestroy:             testAccCheckIAMBetaWorkloadIdentityPoolNamespaceDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_minimal(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"disabled":      nil,
+				}),
 			},
 			{
 				ResourceName:            "google_iam_workload_identity_pool_namespace.example",
@@ -32,7 +34,11 @@ func TestAccIAMBetaWorkloadIdentityPoolNamespace_minimal(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"workload_identity_pool_id", "workload_identity_pool_namespace_id"},
 			},
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_updated(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated Namespace in a Workload Identity Pool",
+					"disabled":      false,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_namespace.example", plancheck.ResourceActionUpdate),
@@ -52,9 +58,7 @@ func TestAccIAMBetaWorkloadIdentityPoolNamespace_minimal(t *testing.T) {
 func TestAccIAMBetaWorkloadIdentityPoolNamespace_full(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -62,7 +66,11 @@ func TestAccIAMBetaWorkloadIdentityPoolNamespace_full(t *testing.T) {
 		CheckDestroy:             testAccCheckIAMBetaWorkloadIdentityPoolNamespaceDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_full(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Example Namespace in a Workload Identity Pool",
+					"disabled":      true,
+				}),
 			},
 			{
 				ResourceName:            "google_iam_workload_identity_pool_namespace.example",
@@ -71,7 +79,11 @@ func TestAccIAMBetaWorkloadIdentityPoolNamespace_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"workload_identity_pool_id", "workload_identity_pool_namespace_id"},
 			},
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_updated(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolNamespace_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated Namespace in a Workload Identity Pool",
+					"disabled":      false,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_namespace.example", plancheck.ResourceActionUpdate),
@@ -98,38 +110,8 @@ resource "google_iam_workload_identity_pool" "pool" {
 resource "google_iam_workload_identity_pool_namespace" "example" {
   workload_identity_pool_id           = google_iam_workload_identity_pool.pool.workload_identity_pool_id
   workload_identity_pool_namespace_id = "tf-test-example-namespace%{random_suffix}"
-}
-`, context)
-}
-
-func testAccIAMBetaWorkloadIdentityPoolNamespace_full(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_workload_identity_pool" "pool" {
-  workload_identity_pool_id = "tf-test-example-pool%{random_suffix}"
-  mode                      = "TRUST_DOMAIN"
-}
-
-resource "google_iam_workload_identity_pool_namespace" "example" {
-  workload_identity_pool_id           = google_iam_workload_identity_pool.pool.workload_identity_pool_id
-  workload_identity_pool_namespace_id = "tf-test-example-namespace%{random_suffix}"
-  description                         = "Example Namespace in a Workload Identity Pool"
-  disabled                            = true
-}
-`, context)
-}
-
-func testAccIAMBetaWorkloadIdentityPoolNamespace_updated(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_workload_identity_pool" "pool" {
-  workload_identity_pool_id = "tf-test-example-pool%{random_suffix}"
-  mode                      = "TRUST_DOMAIN"
-}
-
-resource "google_iam_workload_identity_pool_namespace" "example" {
-  workload_identity_pool_id           = google_iam_workload_identity_pool.pool.workload_identity_pool_id
-  workload_identity_pool_namespace_id = "tf-test-example-namespace%{random_suffix}"
-  description                         = "Updated Namespace in a Workload Identity Pool"
-  disabled                            = false
+  description                         = "%{description}"
+  disabled                            = %{disabled}
 }
 `, context)
 }
