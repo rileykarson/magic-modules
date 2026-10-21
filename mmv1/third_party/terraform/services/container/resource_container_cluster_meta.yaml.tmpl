@@ -66,6 +66,9 @@ fields:
   - api_field: 'authenticatorGroupsConfig.securityGroup'
   - api_field: 'binaryAuthorization.enabled'
   - api_field: 'binaryAuthorization.evaluationMode'
+{{- if ne $.TargetVersionName "ga" }}
+  - api_field: 'binaryAuthorization.policyBindings.name'
+{{- end }}
   - field: 'cluster_autoscaling.auto_provisioning_defaults.boot_disk_kms_key'
     api_field: 'autoscaling.autoprovisioningNodePoolDefaults.bootDiskKmsKey'
   - field: 'cluster_autoscaling.auto_provisioning_defaults.disk_size'

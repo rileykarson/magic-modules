@@ -21230,7 +21230,7 @@ func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T)
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.82.0.0/20")
+	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.78.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21238,7 +21238,14 @@ func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T)
 		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName),
+				Config: testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName, "my-policy"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.evaluation_mode", "POLICY_BINDINGS"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.policy_bindings.#", "1"),
+				),
+			},
+			{
+				Config: testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName, "my-updated-policy"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.evaluation_mode", "POLICY_BINDINGS"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.policy_bindings.#", "1"),
@@ -21248,7 +21255,7 @@ func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T)
 	})
 }
 
-func testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName string) string {
+func testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName, policyName string) string {
 	return fmt.Sprintf(`
 data "google_project" "project" {}
 
@@ -21262,11 +21269,11 @@ resource "google_container_cluster" "primary" {
   binary_authorization {
     evaluation_mode = "POLICY_BINDINGS"
     policy_bindings {
-      name = "projects/${data.google_project.project.project_id}/platforms/gke/policies/my-policy"
+      name = "projects/${data.google_project.project.project_id}/platforms/gke/policies/%s"
     }
   }
   deletion_protection = false
 }
-`, clusterName, networkName, subnetName)
+`, clusterName, networkName, subnetName, policyName)
 }
 {{- end }}
