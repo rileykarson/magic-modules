@@ -167,9 +167,9 @@ state.
 * `addons_config` - (Optional) The configuration for addons supported by GKE.
     Structure is [documented below](#nested_addons_config).
 
-* `allow_net_admin` - (Optional) Enable NET_ADMIN for the cluster. Defaults to
-`false`. This field should only be enabled for Autopilot clusters (`enable_autopilot`
-set to `true`).
+* `workload_policy_config` - (Optional) Configuration for cluster workload policy.
+    Structure is [documented below](#nested_workload_policy_config).
+
 
 * `autopilot_privileged_admission` - (Optional) The customer
 allowlist Cloud Storage paths for the cluster. These paths are used with the
@@ -519,6 +519,12 @@ Fleet configuration for the cluster. Structure is [documented below](#nested_fle
 <a name="nested_cluster_telemetry"></a>The `cluster_telemetry` block supports
 * `type` - Telemetry integration for the cluster. Supported values (`ENABLED, DISABLED, SYSTEM_ONLY`);
    `SYSTEM_ONLY` (Only system components are monitored and logged) is only available in GKE versions 1.15 and later.
+
+<a name="nested_workload_policy_config"></a>The `workload_policy_config` block supports:
+
+* `allow_net_admin` - (Optional) Enable NET_ADMIN for the cluster. Defaults to `false`. This field should only be enabled for Autopilot clusters (`enable_autopilot` set to `true`).
+
+* `autopilot_compatibility_auditing_enabled` - (Optional) If true, enables the GCW Auditor that audits workloads on standard clusters.
 
 <a name="nested_addons_config"></a>The `addons_config` block supports:
 

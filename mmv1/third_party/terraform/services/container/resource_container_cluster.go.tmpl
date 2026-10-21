@@ -1200,11 +1200,26 @@ func ResourceContainerCluster() *schema.Resource {
 				// ConflictsWith: many fields, see https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#comparison. The conflict is only set one-way, on other fields w/ this field.
 			},
 
-			"allow_net_admin": {
-				Type: schema.TypeBool,
-				Optional: true,
-				Description: `Enable NET_ADMIN for this cluster.`,
-            },
+			"workload_policy_config": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: `Configuration for cluster workload policy.`,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"allow_net_admin": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: `If true, workloads can use NET_ADMIN capability.`,
+						},
+						"autopilot_compatibility_auditing_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: `If true, Autopilot compatibility auditing will be enabled for the cluster.`,
+						},
+					},
+				},
+			},
 
 			"autopilot_privileged_admission": {
 				Type:        schema.TypeList,
@@ -3218,10 +3233,8 @@ func resourceContainerClusterCreate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	var workloadPolicyConfig *container.WorkloadPolicyConfig
-	if allowed := d.Get("allow_net_admin").(bool); allowed {
-		workloadPolicyConfig = &container.WorkloadPolicyConfig{
-			AllowNetAdmin: allowed,
-		}
+	if v, ok := d.GetOk("workload_policy_config"); ok {
+		workloadPolicyConfig = expandWorkloadPolicyConfig(v)
 	}
 	var autopilotClusterPolicyConfig *container.ClusterPolicyConfig
 	if v, ok := d.GetOk("autopilot_cluster_policy_config"); ok {
@@ -3859,10 +3872,10 @@ func resourceContainerClusterRead(d *schema.ResourceData, meta interface{}) erro
 			return fmt.Errorf("Error setting enable_autopilot: %s", err)
 		}
 		if autopilot.WorkloadPolicyConfig != nil {
-            if err := d.Set("allow_net_admin", autopilot.WorkloadPolicyConfig.AllowNetAdmin); err != nil {
-                return fmt.Errorf("Error setting allow_net_admin: %s", err)
-            }
-        }
+			if err := d.Set("workload_policy_config", flattenWorkloadPolicyConfig(autopilot.WorkloadPolicyConfig)); err != nil {
+				return fmt.Errorf("Error setting workload_policy_config: %s", err)
+			}
+		}
 		if autopilot.PrivilegedAdmissionConfig != nil && len(autopilot.PrivilegedAdmissionConfig.AllowlistPaths) > 0 {
 			allowlistPaths = autopilot.PrivilegedAdmissionConfig.AllowlistPaths
 		}
@@ -4314,23 +4327,18 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 		log.Printf("[INFO] GKE cluster %s's DNSConfig has been updated", d.Id())
 	}
 
-	if d.HasChange("allow_net_admin") {
-		allowed := d.Get("allow_net_admin").(bool)
+	if d.HasChange("workload_policy_config") {
 		req := &container.UpdateClusterRequest{
 		    Update: &container.ClusterUpdate{
-		        DesiredAutopilotWorkloadPolicyConfig: &container.WorkloadPolicyConfig{
-					AllowNetAdmin: allowed,
-				},
+		        DesiredAutopilotWorkloadPolicyConfig: expandWorkloadPolicyConfig(d.Get("workload_policy_config")),
 		    },
 		}
 
-	    updateF := updateFunc(req, "updating net admin for GKE autopilot workload policy config")
-		// Call update serially.
+	    updateF := updateFunc(req, "updating workload policy config for GKE cluster")
 		if err := updateF(); err != nil {
 		    return err
 	    }
-
-		log.Printf("[INFO] GKE cluster %s's autopilot workload policy config allow_net_admin has been set to %v", d.Id(), allowed)
+		log.Printf("[INFO] GKE cluster %s's workload policy config has been updated", d.Id())
 	}
 
 	if d.HasChange("autopilot_privileged_admission") {
@@ -7097,6 +7105,19 @@ func expandDefaultSnatStatus(configured interface{}) *container.DefaultSnatStatu
 
 }
 
+
+func expandWorkloadPolicyConfig(v interface{}) *container.WorkloadPolicyConfig {
+	l := v.([]interface{})
+	if len(l) == 0 || l[0] == nil {
+		return nil
+	}
+	raw := l[0].(map[string]interface{})
+	return &container.WorkloadPolicyConfig{
+		AllowNetAdmin:                         raw["allow_net_admin"].(bool),
+		AutopilotCompatibilityAuditingEnabled: raw["autopilot_compatibility_auditing_enabled"].(bool),
+	}
+}
+
 func expandDataplaneV2Config(v interface{}) *container.DataplaneV2Config {
 	if v == nil {
 		return nil
@@ -9488,4 +9509,18 @@ func init() {
 		Type: registry.SchemaTypeResource,
 		Schema: ResourceContainerCluster(),
 	}.Register()
+}
+
+
+func flattenWorkloadPolicyConfig(c *container.WorkloadPolicyConfig) []map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{
+		"allow_net_admin":                          c.AllowNetAdmin,
+		"autopilot_compatibility_auditing_enabled": c.AutopilotCompatibilityAuditingEnabled,
+	}
+
+	return []map[string]interface{}{result}
 }

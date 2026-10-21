@@ -15543,7 +15543,9 @@ resource "google_container_cluster" "primary" {
   subnetwork       = "%s"
 
   enable_autopilot = true
-  allow_net_admin  = %t
+  workload_policy_config {
+    allow_net_admin = %t
+  }
 
   deletion_protection = false
 }
@@ -21223,4 +21225,58 @@ resource "google_container_cluster" "primary" {
   }
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
+}
+
+func TestAccContainerCluster_autopilotCompatibilityAuditing(t *testing.T) {
+	t.Parallel()
+
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_workloadPolicyConfig(clusterName, networkName, subnetworkName, false),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.autopilot_compatibility_auditing_enabled", "false"),
+				),
+			},
+			{
+				Config: testAccContainerCluster_workloadPolicyConfig(clusterName, networkName, subnetworkName, true),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.autopilot_compatibility_auditing_enabled", "true"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_workloadPolicyConfig(name, networkName, subnetworkName string, enabled bool) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  name             = "%s"
+  location         = "us-east1"
+
+  network          = "%s"
+  subnetwork       = "%s"
+  
+  initial_node_count = 1
+
+  workload_policy_config {
+    autopilot_compatibility_auditing_enabled = %t
+  }
+
+  deletion_protection = false
+}
+`, name, networkName, subnetworkName, enabled)
 }
