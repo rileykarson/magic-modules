@@ -323,7 +323,12 @@ func TestAccClouddeployTarget_withAttributionDisabled(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_updateWithAttribution(context),
+				Config: testAccClouddeployTarget_updateWithAttribution(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+    my_first_label = "example-label-updated-1"
+    my_second_label = "example-label-updated-2"
+  }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.%", "2"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.my_first_label", "example-label-updated-1"),
@@ -344,7 +349,9 @@ func TestAccClouddeployTarget_withAttributionDisabled(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_clearWithAttribution(context),
+				Config: testAccClouddeployTarget_updateWithAttribution(acctest.MergeMap(context, map[string]interface{}{
+					"labels": nil,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "labels.%"),
 
@@ -397,7 +404,12 @@ func TestAccClouddeployTarget_withCreationOnlyAttribution(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_updateWithAttribution(context),
+				Config: testAccClouddeployTarget_updateWithAttribution(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+    my_first_label = "example-label-updated-1"
+    my_second_label = "example-label-updated-2"
+  }`,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.%", "2"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "labels.my_first_label", "example-label-updated-1"),
@@ -419,7 +431,9 @@ func TestAccClouddeployTarget_withCreationOnlyAttribution(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels", "annotations"},
 			},
 			{
-				Config: testAccClouddeployTarget_clearWithAttribution(context),
+				Config: testAccClouddeployTarget_updateWithAttribution(acctest.MergeMap(context, map[string]interface{}{
+					"labels": nil,
+				})),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "labels.%"),
 
@@ -583,46 +597,7 @@ resource "google_clouddeploy_target" "primary" {
     my_second_annotation = "example-annotation-2"
   }
 
-  labels = {
-    my_first_label = "example-label-updated-1"
-    my_second_label = "example-label-updated-2"
-  }
-}
-`, context)
-}
-
-func testAccClouddeployTarget_clearWithAttribution(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-provider "google" {
-  default_labels = {
-    default_key1 = "default_value1"
-  }
-  add_terraform_attribution_label               = %{add_attribution}
-  terraform_attribution_label_addition_strategy = "%{attribution_strategy}"
-}
-
-resource "google_clouddeploy_target" "primary" {
-  location = "%{region}"
-  name     = "tf-test-target%{random_suffix}"
-
-  deploy_parameters = {
-    deployParameterKey = "deployParameterValue"
-  }
-
-  description = "basic description"
-
-  gke {
-    cluster = "projects/%{project_name}/locations/%{region}/clusters/example-cluster-name"
-  }
-
-  project          = "%{project_name}"
-  require_approval = false
-
-  annotations = {
-    my_first_annotation = "example-annotation-1"
-
-    my_second_annotation = "example-annotation-2"
-  }
+  labels = %{labels}
 }
 `, context)
 }
