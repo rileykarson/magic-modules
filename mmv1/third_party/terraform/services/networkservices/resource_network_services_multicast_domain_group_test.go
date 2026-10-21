@@ -11,9 +11,7 @@ import (
 func TestAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21,7 +19,11 @@ func TestAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGr
 		CheckDestroy:             testAccCheckNetworkServicesMulticastDomainGroupDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample_full(context),
+				Config: testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_network_services_multicast_domain_group.mdg_test",
@@ -30,7 +32,13 @@ func TestAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGr
 				ImportStateVerifyIgnore: []string{"labels", "location", "multicast_domain_group_id", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample_update(context),
+				Config: testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated description",
+					"labels": `{
+		"test" = "value-updated"
+	}`,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_services_multicast_domain_group.mdg_test", plancheck.ResourceActionUpdate),
@@ -52,18 +60,8 @@ func testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGr
 resource "google_network_services_multicast_domain_group" "mdg_test"{
   multicast_domain_group_id                    = "tf-test-test-mdg-resource%{random_suffix}"
   location = "global"
-}
-`, context)
-}
-func testAccNetworkServicesMulticastDomainGroup_networkServicesMulticastDomainGroupUpdateExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_network_services_multicast_domain_group" "mdg_test"{
-  multicast_domain_group_id                    = "tf-test-test-mdg-resource%{random_suffix}"
-  location = "global"
-	description = "Updated description"
-	labels = {
-		"test" = "value-updated"
-	}
+	description = "%{description}"
+	labels = %{labels}
 }
 `, context)
 }
