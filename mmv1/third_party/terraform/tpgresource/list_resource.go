@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"sync"
 
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	listschema "github.com/hashicorp/terraform-plugin-framework/list/schema"
@@ -93,80 +92,32 @@ func (listR *ListResourceMetadata) Metadata(_ context.Context, _ resource.Metada
 	resp.TypeName = listR.TypeName
 }
 
-// rawV5SchemaCache memoizes the full protocol-level schemas (ProtoV5Schema and
-// ProtoV5IdentitySchema) derived from an SDKv2 resource, keyed by resource
-// TypeName (or *schema.Resource when TypeName is unset in unit tests). When
-// RawV5Schemas is called directly (such as during ListResource RPC execution
-// across newly constructed ListResource instances), this avoids walking the
-// SDKv2 schema to rebuild protocol schemas on every call, while the
-// metadataCalled stub fast-path below short-circuits fwserver.Server.ListResourceFuncs's
-// Metadata() -> RawV5Schemas() non-nil registration check during GetMetadata
-// and GetProviderSchema.
-var rawV5SchemaCache sync.Map
-
 var (
 	stubProtoV5Schema         = &tfprotov5.Schema{}
 	stubProtoV5IdentitySchema = &tfprotov5.ResourceIdentitySchema{}
 )
 
-type rawV5Schemas struct {
-	schema   *tfprotov5.Schema
-	identity *tfprotov5.ResourceIdentitySchema
-}
-
 func (listR *ListResourceMetadata) RawV5Schemas(ctx context.Context, _ list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
-	metadataCalled := listR.metadataCalled
-	listR.metadataCalled = false
-
-	if listR.SDKv2Resource == nil {
-		return
-	}
-
 	// fwserver.Server.ListResourceFuncs calls Metadata() immediately before
 	// RawV5Schemas() on a temporary ListResource instance solely to check that
 	// ProtoV5Schema != nil && ProtoV5IdentitySchema != nil, and then discards
-	// both schemas. Satisfy that non-nil check without converting 152 SDKv2
+	// both schemas. Satisfy that non-nil check without converting all SDKv2
 	// schemas to tfprotov5.Schema on every GetMetadata / GetProviderSchema RPC.
-	if metadataCalled {
-		if listR.SDKv2Resource.Identity != nil {
-			resp.ProtoV5Schema = stubProtoV5Schema
-			resp.ProtoV5IdentitySchema = stubProtoV5IdentitySchema
-		}
+	if listR.metadataCalled {
+		listR.metadataCalled = false
+		resp.ProtoV5Schema = stubProtoV5Schema
+		resp.ProtoV5IdentitySchema = stubProtoV5IdentitySchema
 		return
 	}
-
-	cacheKey := any(listR.TypeName)
-	if listR.TypeName == "" {
-		cacheKey = listR.SDKv2Resource
-	}
-	if cached, ok := rawV5SchemaCache.Load(cacheKey); ok {
-		schemas := cached.(rawV5Schemas)
-		resp.ProtoV5Schema = schemas.schema
-		resp.ProtoV5IdentitySchema = schemas.identity
-		return
-	}
-
-	var identitySchema *tfprotov5.ResourceIdentitySchema
-	if fn := listR.SDKv2Resource.ProtoIdentitySchema(ctx); fn != nil {
-		identitySchema = fn()
-	}
-	schemas := rawV5Schemas{
-		schema:   listR.SDKv2Resource.ProtoSchema(ctx)(),
-		identity: identitySchema,
-	}
-	rawV5SchemaCache.Store(cacheKey, schemas)
-
-	resp.ProtoV5Schema = schemas.schema
-	resp.ProtoV5IdentitySchema = schemas.identity
+	resp.ProtoV5Schema = listR.SDKv2Resource.ProtoSchema(ctx)()
+	resp.ProtoV5IdentitySchema = listR.SDKv2Resource.ProtoIdentitySchema(ctx)()
 }
 
 func (listR *ListResourceMetadata) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	listR.metadataCalled = false
 	listR.Defaults(req, resp)
 }
 
 func (listR *ListResourceMetadata) ListResourceConfigSchema(_ context.Context, _ list.ListResourceSchemaRequest, resp *list.ListResourceSchemaResponse) {
-	listR.metadataCalled = false
 	s, err := NewListConfigSchema(listR.ListConfigFields...)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid list resource configuration", err.Error())
@@ -177,7 +128,6 @@ func (listR *ListResourceMetadata) ListResourceConfigSchema(_ context.Context, _
 }
 
 func (listR *ListResourceMetadata) Defaults(request resource.ConfigureRequest, response *resource.ConfigureResponse) {
-	listR.metadataCalled = false
 	if request.ProviderData == nil {
 		return
 	}

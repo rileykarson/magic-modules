@@ -129,10 +129,6 @@ func buildIamListCore(typeName string, iamResource *schema.Resource, newUpdater 
 	}
 }
 
-func (r *IamListCore) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	r.ListResourceMetadata.Metadata(ctx, req, resp)
-}
-
 func (r *IamListCore) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	r.Defaults(req, resp)
 
@@ -150,10 +146,6 @@ func (r *IamListCore) Configure(_ context.Context, req resource.ConfigureRequest
 		return
 	}
 	r.Client = config
-}
-
-func (r *IamListCore) RawV5Schemas(ctx context.Context, req list.RawV5SchemaRequest, resp *list.RawV5SchemaResponse) {
-	r.ListResourceMetadata.RawV5Schemas(ctx, req, resp)
 }
 
 func iamListResourceData(r *schema.Resource) *schema.ResourceData {
