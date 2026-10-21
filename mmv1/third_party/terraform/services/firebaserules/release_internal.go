@@ -443,10 +443,6 @@ func (r *Release) urlNormalized() *Release {
 	return &normalized
 }
 
-func (r *Release) updateURL(userBasePath, updateName string) (string, error) {
-	return "", fmt.Errorf("unknown update name: %s", updateName)
-}
-
 // marshal encodes the Release resource into JSON for a Create request, and
 // performs transformations from the resource schema to the API schema if
 // necessary.
@@ -521,40 +517,6 @@ func flattenRelease(c *Client, i interface{}, res *Release) *Release {
 	resultRes.Project = dcl.FlattenString(m["project"])
 
 	return resultRes
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Release) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalRelease(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type releaseDiff struct {

@@ -528,10 +528,6 @@ func (r *AzureClient) urlNormalized() *AzureClient {
 	return &normalized
 }
 
-func (r *AzureClient) updateURL(userBasePath, updateName string) (string, error) {
-	return "", fmt.Errorf("unknown update name: %s", updateName)
-}
-
 // marshal encodes the Client resource into JSON for a Create request, and
 // performs transformations from the resource schema to the API schema if
 // necessary.
@@ -614,48 +610,6 @@ func flattenClient(c *Client, i interface{}, res *AzureClient) *AzureClient {
 	resultRes.Location = dcl.FlattenString(m["location"])
 
 	return resultRes
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *AzureClient) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalClient(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type clientDiff struct {

@@ -87,12 +87,6 @@ func (r *KeyWebSettingsChallengeSettingsDefaultSettings) validate() error {
 	}
 	return nil
 }
-func (r *KeyWebSettingsChallengeSettingsActionSettings) validate() error {
-	if err := dcl.Required(r, "scoreThreshold"); err != nil {
-		return err
-	}
-	return nil
-}
 func (r *KeyAndroidSettings) validate() error {
 	return nil
 }
@@ -818,34 +812,6 @@ func canonicalizeKeyWebSettingsChallengeSettingsActionSettingsMap(des, initial m
 	return items
 }
 
-func canonicalizeKeyWebSettingsSlice(des, initial []KeyWebSettings, opts ...dcl.ApplyOption) []KeyWebSettings {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyWebSettings, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyWebSettings(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyWebSettings, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyWebSettings(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyWebSettings(c *Client, des, nw *KeyWebSettings) *KeyWebSettings {
 
 	if des == nil {
@@ -962,52 +928,6 @@ func canonicalizeNewKeyWebSettingsChallengeSettingsActionSettingsMap(c *Client, 
 	return items
 }
 
-func canonicalizeNewKeyWebSettingsSet(c *Client, des, nw []KeyWebSettings) []KeyWebSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyWebSettings
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyWebSettingsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyWebSettings(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyWebSettingsSlice(c *Client, des, nw []KeyWebSettings) []KeyWebSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyWebSettings
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyWebSettings(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeKeyAndroidSettings(des, initial *KeyAndroidSettings, opts ...dcl.ApplyOption) *KeyAndroidSettings {
 	if des == nil {
 		return initial
@@ -1036,34 +956,6 @@ func canonicalizeKeyAndroidSettings(des, initial *KeyAndroidSettings, opts ...dc
 	return cDes
 }
 
-func canonicalizeKeyAndroidSettingsSlice(des, initial []KeyAndroidSettings, opts ...dcl.ApplyOption) []KeyAndroidSettings {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyAndroidSettings, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyAndroidSettings(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyAndroidSettings, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyAndroidSettings(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyAndroidSettings(c *Client, des, nw *KeyAndroidSettings) *KeyAndroidSettings {
 
 	if des == nil {
@@ -1086,52 +978,6 @@ func canonicalizeNewKeyAndroidSettings(c *Client, des, nw *KeyAndroidSettings) *
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyAndroidSettingsSet(c *Client, des, nw []KeyAndroidSettings) []KeyAndroidSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyAndroidSettings
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyAndroidSettingsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyAndroidSettings(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyAndroidSettingsSlice(c *Client, des, nw []KeyAndroidSettings) []KeyAndroidSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyAndroidSettings
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyAndroidSettings(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyIosSettings(des, initial *KeyIosSettings, opts ...dcl.ApplyOption) *KeyIosSettings {
@@ -1162,34 +1008,6 @@ func canonicalizeKeyIosSettings(des, initial *KeyIosSettings, opts ...dcl.ApplyO
 	return cDes
 }
 
-func canonicalizeKeyIosSettingsSlice(des, initial []KeyIosSettings, opts ...dcl.ApplyOption) []KeyIosSettings {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyIosSettings, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyIosSettings(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyIosSettings, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyIosSettings(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyIosSettings(c *Client, des, nw *KeyIosSettings) *KeyIosSettings {
 
 	if des == nil {
@@ -1212,52 +1030,6 @@ func canonicalizeNewKeyIosSettings(c *Client, des, nw *KeyIosSettings) *KeyIosSe
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyIosSettingsSet(c *Client, des, nw []KeyIosSettings) []KeyIosSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyIosSettings
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyIosSettingsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyIosSettings(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyIosSettingsSlice(c *Client, des, nw []KeyIosSettings) []KeyIosSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyIosSettings
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyIosSettings(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyTestingOptions(des, initial *KeyTestingOptions, opts ...dcl.ApplyOption) *KeyTestingOptions {
@@ -1290,34 +1062,6 @@ func canonicalizeKeyTestingOptions(des, initial *KeyTestingOptions, opts ...dcl.
 	return cDes
 }
 
-func canonicalizeKeyTestingOptionsSlice(des, initial []KeyTestingOptions, opts ...dcl.ApplyOption) []KeyTestingOptions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyTestingOptions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyTestingOptions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyTestingOptions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyTestingOptions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyTestingOptions(c *Client, des, nw *KeyTestingOptions) *KeyTestingOptions {
 
 	if des == nil {
@@ -1333,52 +1077,6 @@ func canonicalizeNewKeyTestingOptions(c *Client, des, nw *KeyTestingOptions) *Ke
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyTestingOptionsSet(c *Client, des, nw []KeyTestingOptions) []KeyTestingOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyTestingOptions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyTestingOptionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyTestingOptions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyTestingOptionsSlice(c *Client, des, nw []KeyTestingOptions) []KeyTestingOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyTestingOptions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyTestingOptions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyWafSettings(des, initial *KeyWafSettings, opts ...dcl.ApplyOption) *KeyWafSettings {
@@ -1411,34 +1109,6 @@ func canonicalizeKeyWafSettings(des, initial *KeyWafSettings, opts ...dcl.ApplyO
 	return cDes
 }
 
-func canonicalizeKeyWafSettingsSlice(des, initial []KeyWafSettings, opts ...dcl.ApplyOption) []KeyWafSettings {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]KeyWafSettings, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeKeyWafSettings(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]KeyWafSettings, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeKeyWafSettings(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewKeyWafSettings(c *Client, des, nw *KeyWafSettings) *KeyWafSettings {
 
 	if des == nil {
@@ -1454,52 +1124,6 @@ func canonicalizeNewKeyWafSettings(c *Client, des, nw *KeyWafSettings) *KeyWafSe
 	}
 
 	return nw
-}
-
-func canonicalizeNewKeyWafSettingsSet(c *Client, des, nw []KeyWafSettings) []KeyWafSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []KeyWafSettings
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareKeyWafSettingsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewKeyWafSettings(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewKeyWafSettingsSlice(c *Client, des, nw []KeyWafSettings) []KeyWafSettings {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []KeyWafSettings
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewKeyWafSettings(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeKeyExpressSettings(des, initial *KeyExpressSettings, opts ...dcl.ApplyOption) *KeyExpressSettings {
@@ -2380,87 +2004,6 @@ func flattenKey(c *Client, i interface{}, res *Key) *Key {
 	return resultRes
 }
 
-// expandKeyWebSettingsMap expands the contents of KeyWebSettings into a JSON
-// request object.
-func expandKeyWebSettingsMap(c *Client, f map[string]KeyWebSettings, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyWebSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyWebSettingsSlice expands the contents of KeyWebSettings into a JSON
-// request object.
-func expandKeyWebSettingsSlice(c *Client, f []KeyWebSettings, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyWebSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyWebSettingsMap flattens the contents of KeyWebSettings from a JSON
-// response object.
-func flattenKeyWebSettingsMap(c *Client, i interface{}, res *Key) map[string]KeyWebSettings {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWebSettings{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWebSettings{}
-	}
-
-	items := make(map[string]KeyWebSettings)
-	for k, item := range a {
-		items[k] = *flattenKeyWebSettings(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyWebSettingsSlice flattens the contents of KeyWebSettings from a JSON
-// response object.
-func flattenKeyWebSettingsSlice(c *Client, i interface{}, res *Key) []KeyWebSettings {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWebSettings{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWebSettings{}
-	}
-
-	items := make([]KeyWebSettings, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWebSettings(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyWebSettings expands an instance of KeyWebSettings into a JSON
 // request object.
 func expandKeyWebSettings(c *Client, f *KeyWebSettings, res *Key) (map[string]interface{}, error) {
@@ -2648,87 +2191,6 @@ func flattenKeyWebSettingsChallengeSettingsActionSettingsMap(c *Client, i interf
 	return items
 }
 
-// expandKeyAndroidSettingsMap expands the contents of KeyAndroidSettings into a JSON
-// request object.
-func expandKeyAndroidSettingsMap(c *Client, f map[string]KeyAndroidSettings, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyAndroidSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyAndroidSettingsSlice expands the contents of KeyAndroidSettings into a JSON
-// request object.
-func expandKeyAndroidSettingsSlice(c *Client, f []KeyAndroidSettings, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyAndroidSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyAndroidSettingsMap flattens the contents of KeyAndroidSettings from a JSON
-// response object.
-func flattenKeyAndroidSettingsMap(c *Client, i interface{}, res *Key) map[string]KeyAndroidSettings {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyAndroidSettings{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyAndroidSettings{}
-	}
-
-	items := make(map[string]KeyAndroidSettings)
-	for k, item := range a {
-		items[k] = *flattenKeyAndroidSettings(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyAndroidSettingsSlice flattens the contents of KeyAndroidSettings from a JSON
-// response object.
-func flattenKeyAndroidSettingsSlice(c *Client, i interface{}, res *Key) []KeyAndroidSettings {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyAndroidSettings{}
-	}
-
-	if len(a) == 0 {
-		return []KeyAndroidSettings{}
-	}
-
-	items := make([]KeyAndroidSettings, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyAndroidSettings(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyAndroidSettings expands an instance of KeyAndroidSettings into a JSON
 // request object.
 func expandKeyAndroidSettings(c *Client, f *KeyAndroidSettings, res *Key) (map[string]interface{}, error) {
@@ -2764,87 +2226,6 @@ func flattenKeyAndroidSettings(c *Client, i interface{}, res *Key) *KeyAndroidSe
 	r.AllowedPackageNames = dcl.FlattenStringSlice(m["allowedPackageNames"])
 
 	return r
-}
-
-// expandKeyIosSettingsMap expands the contents of KeyIosSettings into a JSON
-// request object.
-func expandKeyIosSettingsMap(c *Client, f map[string]KeyIosSettings, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyIosSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyIosSettingsSlice expands the contents of KeyIosSettings into a JSON
-// request object.
-func expandKeyIosSettingsSlice(c *Client, f []KeyIosSettings, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyIosSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyIosSettingsMap flattens the contents of KeyIosSettings from a JSON
-// response object.
-func flattenKeyIosSettingsMap(c *Client, i interface{}, res *Key) map[string]KeyIosSettings {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyIosSettings{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyIosSettings{}
-	}
-
-	items := make(map[string]KeyIosSettings)
-	for k, item := range a {
-		items[k] = *flattenKeyIosSettings(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyIosSettingsSlice flattens the contents of KeyIosSettings from a JSON
-// response object.
-func flattenKeyIosSettingsSlice(c *Client, i interface{}, res *Key) []KeyIosSettings {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyIosSettings{}
-	}
-
-	if len(a) == 0 {
-		return []KeyIosSettings{}
-	}
-
-	items := make([]KeyIosSettings, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyIosSettings(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandKeyIosSettings expands an instance of KeyIosSettings into a JSON
@@ -2884,87 +2265,6 @@ func flattenKeyIosSettings(c *Client, i interface{}, res *Key) *KeyIosSettings {
 	return r
 }
 
-// expandKeyTestingOptionsMap expands the contents of KeyTestingOptions into a JSON
-// request object.
-func expandKeyTestingOptionsMap(c *Client, f map[string]KeyTestingOptions, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyTestingOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyTestingOptionsSlice expands the contents of KeyTestingOptions into a JSON
-// request object.
-func expandKeyTestingOptionsSlice(c *Client, f []KeyTestingOptions, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyTestingOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyTestingOptionsMap flattens the contents of KeyTestingOptions from a JSON
-// response object.
-func flattenKeyTestingOptionsMap(c *Client, i interface{}, res *Key) map[string]KeyTestingOptions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyTestingOptions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyTestingOptions{}
-	}
-
-	items := make(map[string]KeyTestingOptions)
-	for k, item := range a {
-		items[k] = *flattenKeyTestingOptions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyTestingOptionsSlice flattens the contents of KeyTestingOptions from a JSON
-// response object.
-func flattenKeyTestingOptionsSlice(c *Client, i interface{}, res *Key) []KeyTestingOptions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyTestingOptions{}
-	}
-
-	if len(a) == 0 {
-		return []KeyTestingOptions{}
-	}
-
-	items := make([]KeyTestingOptions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyTestingOptions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandKeyTestingOptions expands an instance of KeyTestingOptions into a JSON
 // request object.
 func expandKeyTestingOptions(c *Client, f *KeyTestingOptions, res *Key) (map[string]interface{}, error) {
@@ -3000,87 +2300,6 @@ func flattenKeyTestingOptions(c *Client, i interface{}, res *Key) *KeyTestingOpt
 	r.TestingChallenge = flattenKeyTestingOptionsTestingChallengeEnum(m["testingChallenge"])
 
 	return r
-}
-
-// expandKeyWafSettingsMap expands the contents of KeyWafSettings into a JSON
-// request object.
-func expandKeyWafSettingsMap(c *Client, f map[string]KeyWafSettings, res *Key) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandKeyWafSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandKeyWafSettingsSlice expands the contents of KeyWafSettings into a JSON
-// request object.
-func expandKeyWafSettingsSlice(c *Client, f []KeyWafSettings, res *Key) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandKeyWafSettings(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenKeyWafSettingsMap flattens the contents of KeyWafSettings from a JSON
-// response object.
-func flattenKeyWafSettingsMap(c *Client, i interface{}, res *Key) map[string]KeyWafSettings {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWafSettings{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWafSettings{}
-	}
-
-	items := make(map[string]KeyWafSettings)
-	for k, item := range a {
-		items[k] = *flattenKeyWafSettings(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenKeyWafSettingsSlice flattens the contents of KeyWafSettings from a JSON
-// response object.
-func flattenKeyWafSettingsSlice(c *Client, i interface{}, res *Key) []KeyWafSettings {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWafSettings{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWafSettings{}
-	}
-
-	items := make([]KeyWafSettings, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWafSettings(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandKeyWafSettings expands an instance of KeyWafSettings into a JSON
@@ -3332,46 +2551,6 @@ func flattenKeyUniversalSettings(c *Client, i interface{}, res *Key) *KeyUnivers
 	return r
 }
 
-// flattenKeyWebSettingsIntegrationTypeEnumMap flattens the contents of KeyWebSettingsIntegrationTypeEnum from a JSON
-// response object.
-func flattenKeyWebSettingsIntegrationTypeEnumMap(c *Client, i interface{}, res *Key) map[string]KeyWebSettingsIntegrationTypeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWebSettingsIntegrationTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWebSettingsIntegrationTypeEnum{}
-	}
-
-	items := make(map[string]KeyWebSettingsIntegrationTypeEnum)
-	for k, item := range a {
-		items[k] = *flattenKeyWebSettingsIntegrationTypeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenKeyWebSettingsIntegrationTypeEnumSlice flattens the contents of KeyWebSettingsIntegrationTypeEnum from a JSON
-// response object.
-func flattenKeyWebSettingsIntegrationTypeEnumSlice(c *Client, i interface{}, res *Key) []KeyWebSettingsIntegrationTypeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWebSettingsIntegrationTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWebSettingsIntegrationTypeEnum{}
-	}
-
-	items := make([]KeyWebSettingsIntegrationTypeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWebSettingsIntegrationTypeEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenKeyWebSettingsIntegrationTypeEnum asserts that an interface is a string, and returns a
 // pointer to a *KeyWebSettingsIntegrationTypeEnum with the same value as that string.
 func flattenKeyWebSettingsIntegrationTypeEnum(i interface{}) *KeyWebSettingsIntegrationTypeEnum {
@@ -3381,46 +2560,6 @@ func flattenKeyWebSettingsIntegrationTypeEnum(i interface{}) *KeyWebSettingsInte
 	}
 
 	return KeyWebSettingsIntegrationTypeEnumRef(s)
-}
-
-// flattenKeyWebSettingsChallengeSecurityPreferenceEnumMap flattens the contents of KeyWebSettingsChallengeSecurityPreferenceEnum from a JSON
-// response object.
-func flattenKeyWebSettingsChallengeSecurityPreferenceEnumMap(c *Client, i interface{}, res *Key) map[string]KeyWebSettingsChallengeSecurityPreferenceEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWebSettingsChallengeSecurityPreferenceEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWebSettingsChallengeSecurityPreferenceEnum{}
-	}
-
-	items := make(map[string]KeyWebSettingsChallengeSecurityPreferenceEnum)
-	for k, item := range a {
-		items[k] = *flattenKeyWebSettingsChallengeSecurityPreferenceEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenKeyWebSettingsChallengeSecurityPreferenceEnumSlice flattens the contents of KeyWebSettingsChallengeSecurityPreferenceEnum from a JSON
-// response object.
-func flattenKeyWebSettingsChallengeSecurityPreferenceEnumSlice(c *Client, i interface{}, res *Key) []KeyWebSettingsChallengeSecurityPreferenceEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWebSettingsChallengeSecurityPreferenceEnum{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWebSettingsChallengeSecurityPreferenceEnum{}
-	}
-
-	items := make([]KeyWebSettingsChallengeSecurityPreferenceEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWebSettingsChallengeSecurityPreferenceEnum(item.(interface{})))
-	}
-
-	return items
 }
 
 // flattenKeyWebSettingsChallengeSecurityPreferenceEnum asserts that an interface is a string, and returns a
@@ -3434,46 +2573,6 @@ func flattenKeyWebSettingsChallengeSecurityPreferenceEnum(i interface{}) *KeyWeb
 	return KeyWebSettingsChallengeSecurityPreferenceEnumRef(s)
 }
 
-// flattenKeyTestingOptionsTestingChallengeEnumMap flattens the contents of KeyTestingOptionsTestingChallengeEnum from a JSON
-// response object.
-func flattenKeyTestingOptionsTestingChallengeEnumMap(c *Client, i interface{}, res *Key) map[string]KeyTestingOptionsTestingChallengeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyTestingOptionsTestingChallengeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyTestingOptionsTestingChallengeEnum{}
-	}
-
-	items := make(map[string]KeyTestingOptionsTestingChallengeEnum)
-	for k, item := range a {
-		items[k] = *flattenKeyTestingOptionsTestingChallengeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenKeyTestingOptionsTestingChallengeEnumSlice flattens the contents of KeyTestingOptionsTestingChallengeEnum from a JSON
-// response object.
-func flattenKeyTestingOptionsTestingChallengeEnumSlice(c *Client, i interface{}, res *Key) []KeyTestingOptionsTestingChallengeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyTestingOptionsTestingChallengeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []KeyTestingOptionsTestingChallengeEnum{}
-	}
-
-	items := make([]KeyTestingOptionsTestingChallengeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyTestingOptionsTestingChallengeEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenKeyTestingOptionsTestingChallengeEnum asserts that an interface is a string, and returns a
 // pointer to a *KeyTestingOptionsTestingChallengeEnum with the same value as that string.
 func flattenKeyTestingOptionsTestingChallengeEnum(i interface{}) *KeyTestingOptionsTestingChallengeEnum {
@@ -3483,46 +2582,6 @@ func flattenKeyTestingOptionsTestingChallengeEnum(i interface{}) *KeyTestingOpti
 	}
 
 	return KeyTestingOptionsTestingChallengeEnumRef(s)
-}
-
-// flattenKeyWafSettingsWafServiceEnumMap flattens the contents of KeyWafSettingsWafServiceEnum from a JSON
-// response object.
-func flattenKeyWafSettingsWafServiceEnumMap(c *Client, i interface{}, res *Key) map[string]KeyWafSettingsWafServiceEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWafSettingsWafServiceEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWafSettingsWafServiceEnum{}
-	}
-
-	items := make(map[string]KeyWafSettingsWafServiceEnum)
-	for k, item := range a {
-		items[k] = *flattenKeyWafSettingsWafServiceEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenKeyWafSettingsWafServiceEnumSlice flattens the contents of KeyWafSettingsWafServiceEnum from a JSON
-// response object.
-func flattenKeyWafSettingsWafServiceEnumSlice(c *Client, i interface{}, res *Key) []KeyWafSettingsWafServiceEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWafSettingsWafServiceEnum{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWafSettingsWafServiceEnum{}
-	}
-
-	items := make([]KeyWafSettingsWafServiceEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWafSettingsWafServiceEnum(item.(interface{})))
-	}
-
-	return items
 }
 
 // flattenKeyWafSettingsWafServiceEnum asserts that an interface is a string, and returns a
@@ -3536,46 +2595,6 @@ func flattenKeyWafSettingsWafServiceEnum(i interface{}) *KeyWafSettingsWafServic
 	return KeyWafSettingsWafServiceEnumRef(s)
 }
 
-// flattenKeyWafSettingsWafFeatureEnumMap flattens the contents of KeyWafSettingsWafFeatureEnum from a JSON
-// response object.
-func flattenKeyWafSettingsWafFeatureEnumMap(c *Client, i interface{}, res *Key) map[string]KeyWafSettingsWafFeatureEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]KeyWafSettingsWafFeatureEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]KeyWafSettingsWafFeatureEnum{}
-	}
-
-	items := make(map[string]KeyWafSettingsWafFeatureEnum)
-	for k, item := range a {
-		items[k] = *flattenKeyWafSettingsWafFeatureEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenKeyWafSettingsWafFeatureEnumSlice flattens the contents of KeyWafSettingsWafFeatureEnum from a JSON
-// response object.
-func flattenKeyWafSettingsWafFeatureEnumSlice(c *Client, i interface{}, res *Key) []KeyWafSettingsWafFeatureEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []KeyWafSettingsWafFeatureEnum{}
-	}
-
-	if len(a) == 0 {
-		return []KeyWafSettingsWafFeatureEnum{}
-	}
-
-	items := make([]KeyWafSettingsWafFeatureEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenKeyWafSettingsWafFeatureEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenKeyWafSettingsWafFeatureEnum asserts that an interface is a string, and returns a
 // pointer to a *KeyWafSettingsWafFeatureEnum with the same value as that string.
 func flattenKeyWafSettingsWafFeatureEnum(i interface{}) *KeyWafSettingsWafFeatureEnum {
@@ -3585,40 +2604,6 @@ func flattenKeyWafSettingsWafFeatureEnum(i interface{}) *KeyWafSettingsWafFeatur
 	}
 
 	return KeyWafSettingsWafFeatureEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Key) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalKey(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type keyDiff struct {

@@ -2,7 +2,6 @@ package gkehub
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -74,12 +73,6 @@ func (r *FeatureMembershipConfigmanagementConfigSync) validate() error {
 	}
 	return nil
 }
-func (r *FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides) validate() error {
-	return nil
-}
-func (r *FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers) validate() error {
-	return nil
-}
 func (r *FeatureMembershipConfigmanagementConfigSyncGit) validate() error {
 	return nil
 }
@@ -138,42 +131,6 @@ func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent
 func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) validate() error {
 	return nil
 }
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) validate() error {
-	return nil
-}
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) validate() error {
-	if err := dcl.ValidateAtLeastOneOfFieldsSet([]string{"ReplicaCount", "ContainerResources", "PodAffinity", "PodTolerations"}, r.ReplicaCount, r.ContainerResources, r.PodAffinity, r.PodTolerations); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.ContainerResources) {
-		if err := r.ContainerResources.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) validate() error {
-	if !dcl.IsEmptyValueIndirect(r.Limits) {
-		if err := r.Limits.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.Requests) {
-		if err := r.Requests.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) validate() error {
-	return nil
-}
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) validate() error {
-	return nil
-}
-func (r *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) validate() error {
-	return nil
-}
 func (r *FeatureMembership) basePath() string {
 	params := map[string]interface{}{}
 {{- if ne $.TargetVersionName "ga" }}
@@ -191,17 +148,6 @@ func (r *FeatureMembership) getURL(userBasePath string) (string, error) {
 		"feature":  dcl.ValueOrEmptyString(nr.Feature),
 	}
 	return dcl.URL("projects/{{ "{{" }}project{{ "}}" }}/locations/{{ "{{" }}location{{ "}}" }}/features/{{ "{{" }}feature{{ "}}" }}", nr.basePath(), userBasePath, params), nil
-}
-
-func (r *FeatureMembership) listURL(userBasePath string) (string, error) {
-	nr := r.urlNormalized()
-	params := map[string]interface{}{
-		"project":  dcl.ValueOrEmptyString(nr.Project),
-		"location": dcl.ValueOrEmptyString(nr.Location),
-		"feature":  dcl.ValueOrEmptyString(nr.Feature),
-	}
-	return dcl.URL("projects/{{ "{{" }}project{{ "}}" }}/locations/{{ "{{" }}location{{ "}}" }}/features/{{ "{{" }}feature{{ "}}" }}", nr.basePath(), userBasePath, params), nil
-
 }
 
 func (r *FeatureMembership) createURL(userBasePath string) (string, error) {
@@ -229,39 +175,6 @@ func (r *FeatureMembership) deleteURL(userBasePath string) (string, error) {
 // API such as Create, Update, or Delete.
 type featureMembershipApiOperation interface {
 	do(context.Context, *FeatureMembership, *Client) error
-}
-
-// newUpdateFeatureMembershipUpdateFeatureMembershipRequest creates a request for an
-// FeatureMembership resource's UpdateFeatureMembership update type by filling in the update
-// fields based on the intended state of the resource.
-func newUpdateFeatureMembershipUpdateFeatureMembershipRequest(ctx context.Context, f *FeatureMembership, c *Client) (map[string]interface{}, error) {
-	req := map[string]interface{}{}
-	res := f
-	_ = res
-
-	if v, err := expandFeatureMembershipMesh(c, f.Mesh, res); err != nil {
-		return nil, fmt.Errorf("error expanding Mesh into mesh: %w", err)
-	} else if !dcl.IsEmptyValueIndirect(v) {
-		req["mesh"] = v
-	}
-	if v, err := expandFeatureMembershipConfigmanagement(c, f.Configmanagement, res); err != nil {
-		return nil, fmt.Errorf("error expanding Configmanagement into configmanagement: %w", err)
-	} else if !dcl.IsEmptyValueIndirect(v) {
-		req["configmanagement"] = v
-	}
-	if v, err := expandFeatureMembershipPolicycontroller(c, f.Policycontroller, res); err != nil {
-		return nil, fmt.Errorf("error expanding Policycontroller into policycontroller: %w", err)
-	} else if !dcl.IsEmptyValueIndirect(v) {
-		req["policycontroller"] = v
-	}
-	return req, nil
-}
-
-// marshalUpdateFeatureMembershipUpdateFeatureMembershipRequest converts the update into
-// the final JSON request body.
-func marshalUpdateFeatureMembershipUpdateFeatureMembershipRequest(c *Client, m map[string]interface{}) ([]byte, error) {
-
-	return json.Marshal(m)
 }
 
 type updateFeatureMembershipUpdateFeatureMembershipOperation struct {
@@ -479,34 +392,6 @@ func canonicalizeFeatureMembershipMesh(des, initial *FeatureMembershipMesh, opts
 	return cDes
 }
 
-func canonicalizeFeatureMembershipMeshSlice(des, initial []FeatureMembershipMesh, opts ...dcl.ApplyOption) []FeatureMembershipMesh {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipMesh, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipMesh(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipMesh, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipMesh(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipMesh(c *Client, des, nw *FeatureMembershipMesh) *FeatureMembershipMesh {
 
 	if des == nil {
@@ -522,52 +407,6 @@ func canonicalizeNewFeatureMembershipMesh(c *Client, des, nw *FeatureMembershipM
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipMeshSet(c *Client, des, nw []FeatureMembershipMesh) []FeatureMembershipMesh {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipMesh
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipMeshNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipMesh(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipMeshSlice(c *Client, des, nw []FeatureMembershipMesh) []FeatureMembershipMesh {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipMesh
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipMesh(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagement(des, initial *FeatureMembershipConfigmanagement, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagement {
@@ -602,34 +441,6 @@ func canonicalizeFeatureMembershipConfigmanagement(des, initial *FeatureMembersh
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementSlice(des, initial []FeatureMembershipConfigmanagement, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagement {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagement, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagement(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagement, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagement(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagement(c *Client, des, nw *FeatureMembershipConfigmanagement) *FeatureMembershipConfigmanagement {
 
 	if des == nil {
@@ -652,52 +463,6 @@ func canonicalizeNewFeatureMembershipConfigmanagement(c *Client, des, nw *Featur
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementSet(c *Client, des, nw []FeatureMembershipConfigmanagement) []FeatureMembershipConfigmanagement {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagement
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagement(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementSlice(c *Client, des, nw []FeatureMembershipConfigmanagement) []FeatureMembershipConfigmanagement {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagement
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagement(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagementConfigSync(des, initial *FeatureMembershipConfigmanagementConfigSync, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementConfigSync {
@@ -747,34 +512,6 @@ func canonicalizeFeatureMembershipConfigmanagementConfigSync(des, initial *Featu
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementConfigSyncSlice(des, initial []FeatureMembershipConfigmanagementConfigSync, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementConfigSync {
-	if des == nil {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementConfigSync, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementConfigSync(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSync, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementConfigSync(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementConfigSync(c *Client, des, nw *FeatureMembershipConfigmanagementConfigSync) *FeatureMembershipConfigmanagementConfigSync {
 
 	if des == nil {
@@ -806,52 +543,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementConfigSync(c *Client, des, 
 	nw.Oci = canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOci(c, des.Oci, nw.Oci)
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncSet(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSync) []FeatureMembershipConfigmanagementConfigSync {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementConfigSync
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementConfigSyncNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSync(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncSlice(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSync) []FeatureMembershipConfigmanagementConfigSync {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementConfigSync
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSync(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagementConfigSyncDeploymentOverrides(des, initial *FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides {
@@ -934,32 +625,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverrid
 	nw.Containers = canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSlice(c, des.Containers, nw.Containers)
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSet(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides) []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverrides(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
 }
 
 func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSlice(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides) []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides {
@@ -1086,32 +751,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverrid
 	return nw
 }
 
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSet(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers) []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSlice(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers) []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers {
 	if des == nil {
 		return nw
@@ -1191,34 +830,6 @@ func canonicalizeFeatureMembershipConfigmanagementConfigSyncGit(des, initial *Fe
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementConfigSyncGitSlice(des, initial []FeatureMembershipConfigmanagementConfigSyncGit, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementConfigSyncGit {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementConfigSyncGit, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementConfigSyncGit(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSyncGit, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementConfigSyncGit(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGit(c *Client, des, nw *FeatureMembershipConfigmanagementConfigSyncGit) *FeatureMembershipConfigmanagementConfigSyncGit {
 
 	if des == nil {
@@ -1256,52 +867,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGit(c *Client, de
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGitSet(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncGit) []FeatureMembershipConfigmanagementConfigSyncGit {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementConfigSyncGit
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementConfigSyncGitNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGit(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGitSlice(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncGit) []FeatureMembershipConfigmanagementConfigSyncGit {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementConfigSyncGit
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncGit(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagementConfigSyncOci(des, initial *FeatureMembershipConfigmanagementConfigSyncOci, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementConfigSyncOci {
@@ -1348,34 +913,6 @@ func canonicalizeFeatureMembershipConfigmanagementConfigSyncOci(des, initial *Fe
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementConfigSyncOciSlice(des, initial []FeatureMembershipConfigmanagementConfigSyncOci, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementConfigSyncOci {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementConfigSyncOci, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementConfigSyncOci(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSyncOci, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementConfigSyncOci(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOci(c *Client, des, nw *FeatureMembershipConfigmanagementConfigSyncOci) *FeatureMembershipConfigmanagementConfigSyncOci {
 
 	if des == nil {
@@ -1404,52 +941,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOci(c *Client, de
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOciSet(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncOci) []FeatureMembershipConfigmanagementConfigSyncOci {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementConfigSyncOci
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementConfigSyncOciNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOci(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOciSlice(c *Client, des, nw []FeatureMembershipConfigmanagementConfigSyncOci) []FeatureMembershipConfigmanagementConfigSyncOci {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementConfigSyncOci
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementConfigSyncOci(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagementPolicyController(des, initial *FeatureMembershipConfigmanagementPolicyController, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementPolicyController {
@@ -1506,34 +997,6 @@ func canonicalizeFeatureMembershipConfigmanagementPolicyController(des, initial 
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementPolicyControllerSlice(des, initial []FeatureMembershipConfigmanagementPolicyController, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementPolicyController {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementPolicyController, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementPolicyController(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementPolicyController, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementPolicyController(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementPolicyController(c *Client, des, nw *FeatureMembershipConfigmanagementPolicyController) *FeatureMembershipConfigmanagementPolicyController {
 
 	if des == nil {
@@ -1574,52 +1037,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementPolicyController(c *Client,
 	return nw
 }
 
-func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerSet(c *Client, des, nw []FeatureMembershipConfigmanagementPolicyController) []FeatureMembershipConfigmanagementPolicyController {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementPolicyController
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementPolicyControllerNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementPolicyController(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerSlice(c *Client, des, nw []FeatureMembershipConfigmanagementPolicyController) []FeatureMembershipConfigmanagementPolicyController {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementPolicyController
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementPolicyController(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeFeatureMembershipConfigmanagementPolicyControllerMonitoring(des, initial *FeatureMembershipConfigmanagementPolicyControllerMonitoring, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementPolicyControllerMonitoring {
 	if des == nil {
 		return initial
@@ -1644,34 +1061,6 @@ func canonicalizeFeatureMembershipConfigmanagementPolicyControllerMonitoring(des
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice(des, initial []FeatureMembershipConfigmanagementPolicyControllerMonitoring, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementPolicyControllerMonitoring {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementPolicyControllerMonitoring, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementPolicyControllerMonitoring(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementPolicyControllerMonitoring, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementPolicyControllerMonitoring(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoring(c *Client, des, nw *FeatureMembershipConfigmanagementPolicyControllerMonitoring) *FeatureMembershipConfigmanagementPolicyControllerMonitoring {
 
 	if des == nil {
@@ -1687,52 +1076,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoring(
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoringSet(c *Client, des, nw []FeatureMembershipConfigmanagementPolicyControllerMonitoring) []FeatureMembershipConfigmanagementPolicyControllerMonitoring {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementPolicyControllerMonitoring
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementPolicyControllerMonitoringNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice(c *Client, des, nw []FeatureMembershipConfigmanagementPolicyControllerMonitoring) []FeatureMembershipConfigmanagementPolicyControllerMonitoring {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementPolicyControllerMonitoring
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipConfigmanagementHierarchyController(des, initial *FeatureMembershipConfigmanagementHierarchyController, opts ...dcl.ApplyOption) *FeatureMembershipConfigmanagementHierarchyController {
@@ -1768,34 +1111,6 @@ func canonicalizeFeatureMembershipConfigmanagementHierarchyController(des, initi
 	return cDes
 }
 
-func canonicalizeFeatureMembershipConfigmanagementHierarchyControllerSlice(des, initial []FeatureMembershipConfigmanagementHierarchyController, opts ...dcl.ApplyOption) []FeatureMembershipConfigmanagementHierarchyController {
-	if des == nil {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipConfigmanagementHierarchyController, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipConfigmanagementHierarchyController(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipConfigmanagementHierarchyController, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipConfigmanagementHierarchyController(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipConfigmanagementHierarchyController(c *Client, des, nw *FeatureMembershipConfigmanagementHierarchyController) *FeatureMembershipConfigmanagementHierarchyController {
 
 	if des == nil {
@@ -1823,52 +1138,6 @@ func canonicalizeNewFeatureMembershipConfigmanagementHierarchyController(c *Clie
 	return nw
 }
 
-func canonicalizeNewFeatureMembershipConfigmanagementHierarchyControllerSet(c *Client, des, nw []FeatureMembershipConfigmanagementHierarchyController) []FeatureMembershipConfigmanagementHierarchyController {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipConfigmanagementHierarchyController
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipConfigmanagementHierarchyControllerNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementHierarchyController(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipConfigmanagementHierarchyControllerSlice(c *Client, des, nw []FeatureMembershipConfigmanagementHierarchyController) []FeatureMembershipConfigmanagementHierarchyController {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipConfigmanagementHierarchyController
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipConfigmanagementHierarchyController(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeFeatureMembershipPolicycontroller(des, initial *FeatureMembershipPolicycontroller, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontroller {
 	if des == nil {
 		return initial
@@ -1893,34 +1162,6 @@ func canonicalizeFeatureMembershipPolicycontroller(des, initial *FeatureMembersh
 	return cDes
 }
 
-func canonicalizeFeatureMembershipPolicycontrollerSlice(des, initial []FeatureMembershipPolicycontroller, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontroller {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontroller, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontroller(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontroller, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontroller(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipPolicycontroller(c *Client, des, nw *FeatureMembershipPolicycontroller) *FeatureMembershipPolicycontroller {
 
 	if des == nil {
@@ -1941,52 +1182,6 @@ func canonicalizeNewFeatureMembershipPolicycontroller(c *Client, des, nw *Featur
 	nw.PolicyControllerHubConfig = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, des.PolicyControllerHubConfig, nw.PolicyControllerHubConfig)
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerSet(c *Client, des, nw []FeatureMembershipPolicycontroller) []FeatureMembershipPolicycontroller {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontroller
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontroller(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerSlice(c *Client, des, nw []FeatureMembershipPolicycontroller) []FeatureMembershipPolicycontroller {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontroller
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontroller(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfig(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfig, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
@@ -2053,34 +1248,6 @@ func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfig(des,
 	return cDes
 }
 
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfig, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfig, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfig(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfig, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfig(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfig) *FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
 
 	if des == nil {
@@ -2113,52 +1280,6 @@ func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c
 	return nw
 }
 
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfig) []FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfig
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfig) []FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfig
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
 	if des == nil {
 		return initial
@@ -2183,34 +1304,6 @@ func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonit
 	return cDes
 }
 
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
 
 	if des == nil {
@@ -2226,52 +1319,6 @@ func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMo
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
@@ -2299,34 +1346,6 @@ func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolic
 	return cDes
 }
 
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
 
 	if des == nil {
@@ -2344,52 +1363,6 @@ func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPo
 	nw.TemplateLibrary = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, des.TemplateLibrary, nw.TemplateLibrary)
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
@@ -2416,34 +1389,6 @@ func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolic
 	return cDes
 }
 
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
 
 	if des == nil {
@@ -2459,844 +1404,6 @@ func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPo
 	}
 
 	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles{}
-
-	if dcl.StringArrayCanonicalize(des.ExemptedNamespaces, initial.ExemptedNamespaces) {
-		cDes.ExemptedNamespaces = initial.ExemptedNamespaces
-	} else {
-		cDes.ExemptedNamespaces = des.ExemptedNamespaces
-	}
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	if dcl.StringArrayCanonicalize(des.ExemptedNamespaces, nw.ExemptedNamespaces) {
-		nw.ExemptedNamespaces = des.ExemptedNamespaces
-	}
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if des.ReplicaCount != nil || (initial != nil && initial.ReplicaCount != nil) {
-		// Check if anything else is set.
-		if dcl.AnySet(des.ContainerResources, des.PodAffinity, des.PodTolerations) {
-			des.ReplicaCount = nil
-			if initial != nil {
-				initial.ReplicaCount = nil
-			}
-		}
-	}
-
-	if des.ContainerResources != nil || (initial != nil && initial.ContainerResources != nil) {
-		// Check if anything else is set.
-		if dcl.AnySet(des.ReplicaCount, des.PodAffinity, des.PodTolerations) {
-			des.ContainerResources = nil
-			if initial != nil {
-				initial.ContainerResources = nil
-			}
-		}
-	}
-
-	if des.PodAffinity != nil || (initial != nil && initial.PodAffinity != nil) {
-		// Check if anything else is set.
-		if dcl.AnySet(des.ReplicaCount, des.ContainerResources, des.PodTolerations) {
-			des.PodAffinity = nil
-			if initial != nil {
-				initial.PodAffinity = nil
-			}
-		}
-	}
-
-	if des.PodTolerations != nil || (initial != nil && initial.PodTolerations != nil) {
-		// Check if anything else is set.
-		if dcl.AnySet(des.ReplicaCount, des.ContainerResources, des.PodAffinity) {
-			des.PodTolerations = nil
-			if initial != nil {
-				initial.PodTolerations = nil
-			}
-		}
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs{}
-
-	if dcl.IsZeroValue(des.ReplicaCount) || (dcl.IsEmptyValueIndirect(des.ReplicaCount) && dcl.IsEmptyValueIndirect(initial.ReplicaCount)) {
-		// Desired and initial values are equivalent, so set canonical desired value to initial value.
-		cDes.ReplicaCount = initial.ReplicaCount
-	} else {
-		cDes.ReplicaCount = des.ReplicaCount
-	}
-	cDes.ContainerResources = canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(des.ContainerResources, initial.ContainerResources, opts...)
-	if dcl.IsZeroValue(des.PodAffinity) || (dcl.IsEmptyValueIndirect(des.PodAffinity) && dcl.IsEmptyValueIndirect(initial.PodAffinity)) {
-		// Desired and initial values are equivalent, so set canonical desired value to initial value.
-		cDes.PodAffinity = initial.PodAffinity
-	} else {
-		cDes.PodAffinity = des.PodAffinity
-	}
-	cDes.PodTolerations = canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice(des.PodTolerations, initial.PodTolerations, opts...)
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	nw.ContainerResources = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, des.ContainerResources, nw.ContainerResources)
-	nw.PodTolerations = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice(c, des.PodTolerations, nw.PodTolerations)
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-
-	cDes.Limits = canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(des.Limits, initial.Limits, opts...)
-	cDes.Requests = canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(des.Requests, initial.Requests, opts...)
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	nw.Limits = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, des.Limits, nw.Limits)
-	nw.Requests = canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, des.Requests, nw.Requests)
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-
-	if dcl.StringCanonicalize(des.Memory, initial.Memory) || dcl.IsZeroValue(des.Memory) {
-		cDes.Memory = initial.Memory
-	} else {
-		cDes.Memory = des.Memory
-	}
-	if dcl.StringCanonicalize(des.Cpu, initial.Cpu) || dcl.IsZeroValue(des.Cpu) {
-		cDes.Cpu = initial.Cpu
-	} else {
-		cDes.Cpu = des.Cpu
-	}
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	if dcl.StringCanonicalize(des.Memory, nw.Memory) {
-		nw.Memory = des.Memory
-	}
-	if dcl.StringCanonicalize(des.Cpu, nw.Cpu) {
-		nw.Cpu = des.Cpu
-	}
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-
-	if dcl.StringCanonicalize(des.Memory, initial.Memory) || dcl.IsZeroValue(des.Memory) {
-		cDes.Memory = initial.Memory
-	} else {
-		cDes.Memory = des.Memory
-	}
-	if dcl.StringCanonicalize(des.Cpu, initial.Cpu) || dcl.IsZeroValue(des.Cpu) {
-		cDes.Cpu = initial.Cpu
-	} else {
-		cDes.Cpu = des.Cpu
-	}
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	if dcl.StringCanonicalize(des.Memory, nw.Memory) {
-		nw.Memory = des.Memory
-	}
-	if dcl.StringCanonicalize(des.Cpu, nw.Cpu) {
-		nw.Cpu = des.Cpu
-	}
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, &d, &n))
-	}
-
-	return items
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(des, initial *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, opts ...dcl.ApplyOption) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-	if des == nil {
-		return initial
-	}
-	if des.empty {
-		return des
-	}
-
-	if initial == nil {
-		return des
-	}
-
-	cDes := &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations{}
-
-	if dcl.StringCanonicalize(des.Key, initial.Key) || dcl.IsZeroValue(des.Key) {
-		cDes.Key = initial.Key
-	} else {
-		cDes.Key = des.Key
-	}
-	if dcl.StringCanonicalize(des.Operator, initial.Operator) || dcl.IsZeroValue(des.Operator) {
-		cDes.Operator = initial.Operator
-	} else {
-		cDes.Operator = des.Operator
-	}
-	if dcl.StringCanonicalize(des.Value, initial.Value) || dcl.IsZeroValue(des.Value) {
-		cDes.Value = initial.Value
-	} else {
-		cDes.Value = des.Value
-	}
-	if dcl.StringCanonicalize(des.Effect, initial.Effect) || dcl.IsZeroValue(des.Effect) {
-		cDes.Effect = initial.Effect
-	} else {
-		cDes.Effect = des.Effect
-	}
-
-	return cDes
-}
-
-func canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice(des, initial []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, opts ...dcl.ApplyOption) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-	if des == nil {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(c *Client, des, nw *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-
-	if des == nil {
-		return nw
-	}
-
-	if nw == nil {
-		if dcl.IsEmptyValueIndirect(des) {
-			c.Config.Logger.Info("Found explicitly empty value for FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations while comparing non-nil desired to nil actual.  Returning desired object.")
-			return des
-		}
-		return nil
-	}
-
-	if dcl.StringCanonicalize(des.Key, nw.Key) {
-		nw.Key = des.Key
-	}
-	if dcl.StringCanonicalize(des.Operator, nw.Operator) {
-		nw.Operator = des.Operator
-	}
-	if dcl.StringCanonicalize(des.Value, nw.Value) {
-		nw.Value = des.Value
-	}
-	if dcl.StringCanonicalize(des.Effect, nw.Effect) {
-		nw.Effect = des.Effect
-	}
-
-	return nw
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSet(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice(c *Client, des, nw []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -4421,27 +2528,6 @@ func (r *FeatureMembership) updateURL(userBasePath, updateName string) (string, 
 	return "", fmt.Errorf("unknown update name: %s", updateName)
 }
 
-// marshal encodes the FeatureMembership resource into JSON for a Create request, and
-// performs transformations from the resource schema to the API schema if
-// necessary.
-func (r *FeatureMembership) marshal(c *Client) ([]byte, error) {
-	m, err := expandFeatureMembership(c, r)
-	if err != nil {
-		return nil, fmt.Errorf("error marshalling FeatureMembership: %w", err)
-	}
-
-	return json.Marshal(m)
-}
-
-// unmarshalFeatureMembership decodes JSON responses into the FeatureMembership resource schema.
-func unmarshalFeatureMembership(b []byte, c *Client, res *FeatureMembership) (*FeatureMembership, error) {
-	var m map[string]interface{}
-	if err := json.Unmarshal(b, &m); err != nil {
-		return nil, err
-	}
-	return unmarshalMapFeatureMembership(m, c, res)
-}
-
 func unmarshalMapFeatureMembership(m map[string]interface{}, c *Client, res *FeatureMembership) (*FeatureMembership, error) {
 
 	flattened := flattenFeatureMembership(c, m, res)
@@ -4524,87 +2610,6 @@ func flattenFeatureMembership(c *Client, i interface{}, res *FeatureMembership) 
 	return resultRes
 }
 
-// expandFeatureMembershipMeshMap expands the contents of FeatureMembershipMesh into a JSON
-// request object.
-func expandFeatureMembershipMeshMap(c *Client, f map[string]FeatureMembershipMesh, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipMesh(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipMeshSlice expands the contents of FeatureMembershipMesh into a JSON
-// request object.
-func expandFeatureMembershipMeshSlice(c *Client, f []FeatureMembershipMesh, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipMesh(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipMeshMap flattens the contents of FeatureMembershipMesh from a JSON
-// response object.
-func flattenFeatureMembershipMeshMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipMesh {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipMesh{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipMesh{}
-	}
-
-	items := make(map[string]FeatureMembershipMesh)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipMesh(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipMeshSlice flattens the contents of FeatureMembershipMesh from a JSON
-// response object.
-func flattenFeatureMembershipMeshSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipMesh {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipMesh{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipMesh{}
-	}
-
-	items := make([]FeatureMembershipMesh, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipMesh(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipMesh expands an instance of FeatureMembershipMesh into a JSON
 // request object.
 func expandFeatureMembershipMesh(c *Client, f *FeatureMembershipMesh, res *FeatureMembership) (map[string]interface{}, error) {
@@ -4640,87 +2645,6 @@ func flattenFeatureMembershipMesh(c *Client, i interface{}, res *FeatureMembersh
 	r.ControlPlane = flattenFeatureMembershipMeshControlPlaneEnum(m["controlPlane"])
 
 	return r
-}
-
-// expandFeatureMembershipConfigmanagementMap expands the contents of FeatureMembershipConfigmanagement into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementMap(c *Client, f map[string]FeatureMembershipConfigmanagement, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagement(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementSlice expands the contents of FeatureMembershipConfigmanagement into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementSlice(c *Client, f []FeatureMembershipConfigmanagement, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagement(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementMap flattens the contents of FeatureMembershipConfigmanagement from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagement {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagement{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagement{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagement)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagement(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementSlice flattens the contents of FeatureMembershipConfigmanagement from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagement {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagement{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagement{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagement, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagement(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipConfigmanagement expands an instance of FeatureMembershipConfigmanagement into a JSON
@@ -4776,87 +2700,6 @@ func flattenFeatureMembershipConfigmanagement(c *Client, i interface{}, res *Fea
 	r.Management = flattenFeatureMembershipConfigmanagementManagementEnum(m["management"])
 
 	return r
-}
-
-// expandFeatureMembershipConfigmanagementConfigSyncMap expands the contents of FeatureMembershipConfigmanagementConfigSync into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncMap(c *Client, f map[string]FeatureMembershipConfigmanagementConfigSync, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSync(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementConfigSyncSlice expands the contents of FeatureMembershipConfigmanagementConfigSync into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncSlice(c *Client, f []FeatureMembershipConfigmanagementConfigSync, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSync(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncMap flattens the contents of FeatureMembershipConfigmanagementConfigSync from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementConfigSync {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementConfigSync{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementConfigSync{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementConfigSync)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementConfigSync(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncSlice flattens the contents of FeatureMembershipConfigmanagementConfigSync from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementConfigSync {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementConfigSync{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementConfigSync{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSync, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementConfigSync(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipConfigmanagementConfigSync expands an instance of FeatureMembershipConfigmanagementConfigSync into a JSON
@@ -4926,27 +2769,6 @@ func flattenFeatureMembershipConfigmanagementConfigSync(c *Client, i interface{}
 	return r
 }
 
-// expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesMap expands the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesMap(c *Client, f map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverrides(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSlice expands the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides into a JSON
 // request object.
 func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSlice(c *Client, f []FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides, res *FeatureMembership) ([]map[string]interface{}, error) {
@@ -4965,26 +2787,6 @@ func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSlice(c
 	}
 
 	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesMap flattens the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverrides(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSlice flattens the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides from a JSON
@@ -5050,27 +2852,6 @@ func flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverrides(c *Cl
 	return r
 }
 
-// expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersMap expands the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersMap(c *Client, f map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSlice expands the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers into a JSON
 // request object.
 func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSlice(c *Client, f []FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers, res *FeatureMembership) ([]map[string]interface{}, error) {
@@ -5089,26 +2870,6 @@ func expandFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContain
 	}
 
 	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersMap flattens the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersSlice flattens the contents of FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers from a JSON
@@ -5180,87 +2941,6 @@ func flattenFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContai
 	return r
 }
 
-// expandFeatureMembershipConfigmanagementConfigSyncGitMap expands the contents of FeatureMembershipConfigmanagementConfigSyncGit into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncGitMap(c *Client, f map[string]FeatureMembershipConfigmanagementConfigSyncGit, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncGit(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementConfigSyncGitSlice expands the contents of FeatureMembershipConfigmanagementConfigSyncGit into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncGitSlice(c *Client, f []FeatureMembershipConfigmanagementConfigSyncGit, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncGit(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncGitMap flattens the contents of FeatureMembershipConfigmanagementConfigSyncGit from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncGitMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementConfigSyncGit {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncGit{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncGit{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementConfigSyncGit)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementConfigSyncGit(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncGitSlice flattens the contents of FeatureMembershipConfigmanagementConfigSyncGit from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncGitSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementConfigSyncGit {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementConfigSyncGit{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementConfigSyncGit{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSyncGit, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementConfigSyncGit(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipConfigmanagementConfigSyncGit expands an instance of FeatureMembershipConfigmanagementConfigSyncGit into a JSON
 // request object.
 func expandFeatureMembershipConfigmanagementConfigSyncGit(c *Client, f *FeatureMembershipConfigmanagementConfigSyncGit, res *FeatureMembership) (map[string]interface{}, error) {
@@ -5322,87 +3002,6 @@ func flattenFeatureMembershipConfigmanagementConfigSyncGit(c *Client, i interfac
 	return r
 }
 
-// expandFeatureMembershipConfigmanagementConfigSyncOciMap expands the contents of FeatureMembershipConfigmanagementConfigSyncOci into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncOciMap(c *Client, f map[string]FeatureMembershipConfigmanagementConfigSyncOci, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncOci(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementConfigSyncOciSlice expands the contents of FeatureMembershipConfigmanagementConfigSyncOci into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementConfigSyncOciSlice(c *Client, f []FeatureMembershipConfigmanagementConfigSyncOci, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementConfigSyncOci(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncOciMap flattens the contents of FeatureMembershipConfigmanagementConfigSyncOci from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncOciMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementConfigSyncOci {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncOci{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementConfigSyncOci{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementConfigSyncOci)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementConfigSyncOci(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementConfigSyncOciSlice flattens the contents of FeatureMembershipConfigmanagementConfigSyncOci from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementConfigSyncOciSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementConfigSyncOci {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementConfigSyncOci{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementConfigSyncOci{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementConfigSyncOci, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementConfigSyncOci(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipConfigmanagementConfigSyncOci expands an instance of FeatureMembershipConfigmanagementConfigSyncOci into a JSON
 // request object.
 func expandFeatureMembershipConfigmanagementConfigSyncOci(c *Client, f *FeatureMembershipConfigmanagementConfigSyncOci, res *FeatureMembership) (map[string]interface{}, error) {
@@ -5450,87 +3049,6 @@ func flattenFeatureMembershipConfigmanagementConfigSyncOci(c *Client, i interfac
 	r.GcpServiceAccountEmail = dcl.FlattenString(m["gcpServiceAccountEmail"])
 
 	return r
-}
-
-// expandFeatureMembershipConfigmanagementPolicyControllerMap expands the contents of FeatureMembershipConfigmanagementPolicyController into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementPolicyControllerMap(c *Client, f map[string]FeatureMembershipConfigmanagementPolicyController, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementPolicyController(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementPolicyControllerSlice expands the contents of FeatureMembershipConfigmanagementPolicyController into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementPolicyControllerSlice(c *Client, f []FeatureMembershipConfigmanagementPolicyController, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementPolicyController(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementPolicyControllerMap flattens the contents of FeatureMembershipConfigmanagementPolicyController from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementPolicyControllerMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementPolicyController {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementPolicyController{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementPolicyController{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementPolicyController)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementPolicyController(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementPolicyControllerSlice flattens the contents of FeatureMembershipConfigmanagementPolicyController from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementPolicyControllerSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementPolicyController {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementPolicyController{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementPolicyController{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementPolicyController, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementPolicyController(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipConfigmanagementPolicyController expands an instance of FeatureMembershipConfigmanagementPolicyController into a JSON
@@ -5596,87 +3114,6 @@ func flattenFeatureMembershipConfigmanagementPolicyController(c *Client, i inter
 	return r
 }
 
-// expandFeatureMembershipConfigmanagementPolicyControllerMonitoringMap expands the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoring into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementPolicyControllerMonitoringMap(c *Client, f map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoring, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice expands the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoring into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice(c *Client, f []FeatureMembershipConfigmanagementPolicyControllerMonitoring, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringMap flattens the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoring from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoring {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoring{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoring{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoring)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice flattens the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoring from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementPolicyControllerMonitoring {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementPolicyControllerMonitoring{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementPolicyControllerMonitoring{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementPolicyControllerMonitoring, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementPolicyControllerMonitoring(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipConfigmanagementPolicyControllerMonitoring expands an instance of FeatureMembershipConfigmanagementPolicyControllerMonitoring into a JSON
 // request object.
 func expandFeatureMembershipConfigmanagementPolicyControllerMonitoring(c *Client, f *FeatureMembershipConfigmanagementPolicyControllerMonitoring, res *FeatureMembership) (map[string]interface{}, error) {
@@ -5708,209 +3145,6 @@ func flattenFeatureMembershipConfigmanagementPolicyControllerMonitoring(c *Clien
 	r.Backends = flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnumSlice(c, m["backends"], res)
 
 	return r
-}
-
-// expandFeatureMembershipConfigmanagementHierarchyControllerMap expands the contents of FeatureMembershipConfigmanagementHierarchyController into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementHierarchyControllerMap(c *Client, f map[string]FeatureMembershipConfigmanagementHierarchyController, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementHierarchyController(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipConfigmanagementHierarchyControllerSlice expands the contents of FeatureMembershipConfigmanagementHierarchyController into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementHierarchyControllerSlice(c *Client, f []FeatureMembershipConfigmanagementHierarchyController, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipConfigmanagementHierarchyController(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipConfigmanagementHierarchyControllerMap flattens the contents of FeatureMembershipConfigmanagementHierarchyController from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementHierarchyControllerMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementHierarchyController {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementHierarchyController{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementHierarchyController{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementHierarchyController)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementHierarchyController(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementHierarchyControllerSlice flattens the contents of FeatureMembershipConfigmanagementHierarchyController from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementHierarchyControllerSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementHierarchyController {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementHierarchyController{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementHierarchyController{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementHierarchyController, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementHierarchyController(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
-// expandFeatureMembershipConfigmanagementHierarchyController expands an instance of FeatureMembershipConfigmanagementHierarchyController into a JSON
-// request object.
-func expandFeatureMembershipConfigmanagementHierarchyController(c *Client, f *FeatureMembershipConfigmanagementHierarchyController, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	m := make(map[string]interface{})
-	if v := f.Enabled; v != nil {
-		m["enabled"] = v
-	}
-	if v := f.EnablePodTreeLabels; v != nil {
-		m["enablePodTreeLabels"] = v
-	}
-	if v := f.EnableHierarchicalResourceQuota; v != nil {
-		m["enableHierarchicalResourceQuota"] = v
-	}
-
-	return m, nil
-}
-
-// flattenFeatureMembershipConfigmanagementHierarchyController flattens an instance of FeatureMembershipConfigmanagementHierarchyController from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementHierarchyController(c *Client, i interface{}, res *FeatureMembership) *FeatureMembershipConfigmanagementHierarchyController {
-	m, ok := i.(map[string]interface{})
-	if !ok {
-		return nil
-	}
-
-	r := &FeatureMembershipConfigmanagementHierarchyController{}
-
-	if dcl.IsEmptyValueIndirect(i) {
-		return EmptyFeatureMembershipConfigmanagementHierarchyController
-	}
-	r.Enabled = dcl.FlattenBool(m["enabled"])
-	r.EnablePodTreeLabels = dcl.FlattenBool(m["enablePodTreeLabels"])
-	r.EnableHierarchicalResourceQuota = dcl.FlattenBool(m["enableHierarchicalResourceQuota"])
-
-	return r
-}
-
-// expandFeatureMembershipPolicycontrollerMap expands the contents of FeatureMembershipPolicycontroller into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerMap(c *Client, f map[string]FeatureMembershipPolicycontroller, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontroller(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerSlice expands the contents of FeatureMembershipPolicycontroller into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerSlice(c *Client, f []FeatureMembershipPolicycontroller, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontroller(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerMap flattens the contents of FeatureMembershipPolicycontroller from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontroller {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontroller{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontroller{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontroller)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontroller(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerSlice flattens the contents of FeatureMembershipPolicycontroller from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontroller {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontroller{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontroller{}
-	}
-
-	items := make([]FeatureMembershipPolicycontroller, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontroller(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipPolicycontroller expands an instance of FeatureMembershipPolicycontroller into a JSON
@@ -5950,87 +3184,6 @@ func flattenFeatureMembershipPolicycontroller(c *Client, i interface{}, res *Fea
 	r.PolicyControllerHubConfig = flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, m["policyControllerHubConfig"], res)
 
 	return r
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfig into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfig, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfig into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfig, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfig from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfig{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfig{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfig)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfig from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfig {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfig{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfig{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfig, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfig expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfig into a JSON
@@ -6108,87 +3261,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfig(c *Client
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring into a JSON
 // request object.
 func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring(c *Client, f *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring, res *FeatureMembership) (map[string]interface{}, error) {
@@ -6220,87 +3292,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring
 	r.Backends = flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnumSlice(c, m["backends"], res)
 
 	return r
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent into a JSON
@@ -6344,87 +3335,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyCont
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrarySlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary into a JSON
 // request object.
 func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary(c *Client, f *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary, res *FeatureMembership) (map[string]interface{}, error) {
@@ -6458,47 +3368,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyCont
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles from a JSON
 // response object.
 func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
@@ -6517,41 +3386,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyCont
 	}
 
 	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles(c *Client, f *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles, res *FeatureMembership) (map[string]interface{}, error) {
-	if dcl.IsEmptyValueIndirect(f) {
-		return nil, nil
-	}
-
-	m := make(map[string]interface{})
-	if v := f.ExemptedNamespaces; v != nil {
-		m["exemptedNamespaces"] = v
-	}
-
-	return m, nil
 }
 
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles flattens an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles from a JSON
@@ -6593,26 +3427,6 @@ func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentC
 	return items, nil
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs from a JSON
 // response object.
 func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
@@ -6628,26 +3442,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs)
 	for k, item := range a {
 		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs(c, item.(map[string]interface{}), res))
 	}
 
 	return items
@@ -6702,87 +3496,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources into a JSON
 // request object.
 func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources(c *Client, f *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources, res *FeatureMembership) (map[string]interface{}, error) {
@@ -6824,87 +3537,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits into a JSON
 // request object.
 func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits(c *Client, f *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits, res *FeatureMembership) (map[string]interface{}, error) {
@@ -6940,87 +3572,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	r.Cpu = dcl.FlattenString(m["cpu"])
 
 	return r
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, res *FeatureMembership) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests expands an instance of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests into a JSON
@@ -7060,27 +3611,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	return r
 }
 
-// expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsMap expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations into a JSON
-// request object.
-func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsMap(c *Client, f map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, res *FeatureMembership) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice expands the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations into a JSON
 // request object.
 func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice(c *Client, f []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations, res *FeatureMembership) ([]map[string]interface{}, error) {
@@ -7099,26 +3629,6 @@ func expandFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentC
 	}
 
 	return items, nil
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations from a JSON
@@ -7186,46 +3696,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	return r
 }
 
-// flattenFeatureMembershipMeshManagementEnumMap flattens the contents of FeatureMembershipMeshManagementEnum from a JSON
-// response object.
-func flattenFeatureMembershipMeshManagementEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipMeshManagementEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipMeshManagementEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipMeshManagementEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipMeshManagementEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipMeshManagementEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipMeshManagementEnumSlice flattens the contents of FeatureMembershipMeshManagementEnum from a JSON
-// response object.
-func flattenFeatureMembershipMeshManagementEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipMeshManagementEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipMeshManagementEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipMeshManagementEnum{}
-	}
-
-	items := make([]FeatureMembershipMeshManagementEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipMeshManagementEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipMeshManagementEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipMeshManagementEnum with the same value as that string.
 func flattenFeatureMembershipMeshManagementEnum(i interface{}) *FeatureMembershipMeshManagementEnum {
@@ -7237,46 +3707,6 @@ func flattenFeatureMembershipMeshManagementEnum(i interface{}) *FeatureMembershi
 	return FeatureMembershipMeshManagementEnumRef(s)
 }
 
-// flattenFeatureMembershipMeshControlPlaneEnumMap flattens the contents of FeatureMembershipMeshControlPlaneEnum from a JSON
-// response object.
-func flattenFeatureMembershipMeshControlPlaneEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipMeshControlPlaneEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipMeshControlPlaneEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipMeshControlPlaneEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipMeshControlPlaneEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipMeshControlPlaneEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipMeshControlPlaneEnumSlice flattens the contents of FeatureMembershipMeshControlPlaneEnum from a JSON
-// response object.
-func flattenFeatureMembershipMeshControlPlaneEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipMeshControlPlaneEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipMeshControlPlaneEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipMeshControlPlaneEnum{}
-	}
-
-	items := make([]FeatureMembershipMeshControlPlaneEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipMeshControlPlaneEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipMeshControlPlaneEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipMeshControlPlaneEnum with the same value as that string.
 func flattenFeatureMembershipMeshControlPlaneEnum(i interface{}) *FeatureMembershipMeshControlPlaneEnum {
@@ -7286,26 +3716,6 @@ func flattenFeatureMembershipMeshControlPlaneEnum(i interface{}) *FeatureMembers
 	}
 
 	return FeatureMembershipMeshControlPlaneEnumRef(s)
-}
-
-// flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnumMap flattens the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum(item.(interface{}))
-	}
-
-	return items
 }
 
 // flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnumSlice flattens the contents of FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnum from a JSON
@@ -7339,46 +3749,6 @@ func flattenFeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsE
 	return FeatureMembershipConfigmanagementPolicyControllerMonitoringBackendsEnumRef(s)
 }
 
-// flattenFeatureMembershipConfigmanagementManagementEnumMap flattens the contents of FeatureMembershipConfigmanagementManagementEnum from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementManagementEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipConfigmanagementManagementEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipConfigmanagementManagementEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipConfigmanagementManagementEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipConfigmanagementManagementEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipConfigmanagementManagementEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipConfigmanagementManagementEnumSlice flattens the contents of FeatureMembershipConfigmanagementManagementEnum from a JSON
-// response object.
-func flattenFeatureMembershipConfigmanagementManagementEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipConfigmanagementManagementEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipConfigmanagementManagementEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipConfigmanagementManagementEnum{}
-	}
-
-	items := make([]FeatureMembershipConfigmanagementManagementEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipConfigmanagementManagementEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipConfigmanagementManagementEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipConfigmanagementManagementEnum with the same value as that string.
 func flattenFeatureMembershipConfigmanagementManagementEnum(i interface{}) *FeatureMembershipConfigmanagementManagementEnum {
@@ -7390,46 +3760,6 @@ func flattenFeatureMembershipConfigmanagementManagementEnum(i interface{}) *Feat
 	return FeatureMembershipConfigmanagementManagementEnumRef(s)
 }
 
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnumMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnumSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum with the same value as that string.
 func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum(i interface{}) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnum {
@@ -7439,26 +3769,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpe
 	}
 
 	return FeatureMembershipPolicycontrollerPolicyControllerHubConfigInstallSpecEnumRef(s)
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnumMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum(item.(interface{}))
-	}
-
-	return items
 }
 
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnumSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnum from a JSON
@@ -7492,46 +3802,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring
 	return FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringBackendsEnumRef(s)
 }
 
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnumMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnumSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum with the same value as that string.
 func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum(i interface{}) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnum {
@@ -7543,46 +3813,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyCont
 	return FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryInstallationEnumRef(s)
 }
 
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnumMap flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnumMap(c *Client, i interface{}, res *FeatureMembership) map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum{}
-	}
-
-	items := make(map[string]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum)
-	for k, item := range a {
-		items[k] = *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnumSlice flattens the contents of FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum from a JSON
-// response object.
-func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnumSlice(c *Client, i interface{}, res *FeatureMembership) []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum{}
-	}
-
-	if len(a) == 0 {
-		return []FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum{}
-	}
-
-	items := make([]FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum asserts that an interface is a string, and returns a
 // pointer to a *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum with the same value as that string.
 func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum(i interface{}) *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnum {
@@ -7592,48 +3822,6 @@ func flattenFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeployment
 	}
 
 	return FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodAffinityEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *FeatureMembership) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalFeatureMembership(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Feature == nil && ncr.Feature == nil {
-			c.Config.Logger.Info("Both Feature fields null - considering equal.")
-		} else if nr.Feature == nil || ncr.Feature == nil {
-			c.Config.Logger.Info("Only one Feature field is null - considering unequal.")
-			return false
-		} else if *nr.Feature != *ncr.Feature {
-			return false
-		}
-		return true
-	}
 }
 
 type featureMembershipDiff struct {
@@ -7787,12 +3975,6 @@ func extractFeatureMembershipConfigmanagementConfigSyncFields(r *FeatureMembersh
 	}
 	return nil
 }
-func extractFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides) error {
-	return nil
-}
-func extractFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers) error {
-	return nil
-}
 func extractFeatureMembershipConfigmanagementConfigSyncGitFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncGit) error {
 	return nil
 }
@@ -7878,58 +4060,6 @@ func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyCont
 func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) error {
 	return nil
 }
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) error {
-	return nil
-}
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) error {
-	vContainerResources := o.ContainerResources
-	if vContainerResources == nil {
-		// note: explicitly not the empty object.
-		vContainerResources = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesFields(r, vContainerResources); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vContainerResources) {
-		o.ContainerResources = vContainerResources
-	}
-	return nil
-}
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) error {
-	vLimits := o.Limits
-	if vLimits == nil {
-		// note: explicitly not the empty object.
-		vLimits = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsFields(r, vLimits); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vLimits) {
-		o.Limits = vLimits
-	}
-	vRequests := o.Requests
-	if vRequests == nil {
-		// note: explicitly not the empty object.
-		vRequests = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsFields(r, vRequests); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRequests) {
-		o.Requests = vRequests
-	}
-	return nil
-}
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) error {
-	return nil
-}
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) error {
-	return nil
-}
-func extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) error {
-	return nil
-}
-
 func postReadExtractFeatureMembershipFields(r *FeatureMembership) error {
 	vMesh := r.Mesh
 	if vMesh == nil {
@@ -8005,63 +4135,6 @@ func postReadExtractFeatureMembershipConfigmanagementFields(r *FeatureMembership
 	}
 	return nil
 }
-func postReadExtractFeatureMembershipConfigmanagementConfigSyncFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSync) error {
-	vGit := o.Git
-	if vGit == nil {
-		// note: explicitly not the empty object.
-		vGit = &FeatureMembershipConfigmanagementConfigSyncGit{}
-	}
-	if err := extractFeatureMembershipConfigmanagementConfigSyncGitFields(r, vGit); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vGit) {
-		o.Git = vGit
-	}
-	vOci := o.Oci
-	if vOci == nil {
-		// note: explicitly not the empty object.
-		vOci = &FeatureMembershipConfigmanagementConfigSyncOci{}
-	}
-	if err := extractFeatureMembershipConfigmanagementConfigSyncOciFields(r, vOci); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vOci) {
-		o.Oci = vOci
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncDeploymentOverrides) error {
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainersFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncDeploymentOverridesContainers) error {
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementConfigSyncGitFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncGit) error {
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementConfigSyncOciFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementConfigSyncOci) error {
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementPolicyControllerFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementPolicyController) error {
-	vMonitoring := o.Monitoring
-	if vMonitoring == nil {
-		// note: explicitly not the empty object.
-		vMonitoring = &FeatureMembershipConfigmanagementPolicyControllerMonitoring{}
-	}
-	if err := extractFeatureMembershipConfigmanagementPolicyControllerMonitoringFields(r, vMonitoring); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vMonitoring) {
-		o.Monitoring = vMonitoring
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementPolicyControllerMonitoringFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementPolicyControllerMonitoring) error {
-	return nil
-}
-func postReadExtractFeatureMembershipConfigmanagementHierarchyControllerFields(r *FeatureMembership, o *FeatureMembershipConfigmanagementHierarchyController) error {
-	return nil
-}
 func postReadExtractFeatureMembershipPolicycontrollerFields(r *FeatureMembership, o *FeatureMembershipPolicycontroller) error {
 	vPolicyControllerHubConfig := o.PolicyControllerHubConfig
 	if vPolicyControllerHubConfig == nil {
@@ -8074,101 +4147,5 @@ func postReadExtractFeatureMembershipPolicycontrollerFields(r *FeatureMembership
 	if !dcl.IsEmptyValueIndirect(vPolicyControllerHubConfig) {
 		o.PolicyControllerHubConfig = vPolicyControllerHubConfig
 	}
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfig) error {
-	vMonitoring := o.Monitoring
-	if vMonitoring == nil {
-		// note: explicitly not the empty object.
-		vMonitoring = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringFields(r, vMonitoring); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vMonitoring) {
-		o.Monitoring = vMonitoring
-	}
-	vPolicyContent := o.PolicyContent
-	if vPolicyContent == nil {
-		// note: explicitly not the empty object.
-		vPolicyContent = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentFields(r, vPolicyContent); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPolicyContent) {
-		o.PolicyContent = vPolicyContent
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoring) error {
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContent) error {
-	vTemplateLibrary := o.TemplateLibrary
-	if vTemplateLibrary == nil {
-		// note: explicitly not the empty object.
-		vTemplateLibrary = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryFields(r, vTemplateLibrary); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vTemplateLibrary) {
-		o.TemplateLibrary = vTemplateLibrary
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibraryFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentTemplateLibrary) error {
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundlesFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyContentBundles) error {
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigs) error {
-	vContainerResources := o.ContainerResources
-	if vContainerResources == nil {
-		// note: explicitly not the empty object.
-		vContainerResources = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesFields(r, vContainerResources); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vContainerResources) {
-		o.ContainerResources = vContainerResources
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResources) error {
-	vLimits := o.Limits
-	if vLimits == nil {
-		// note: explicitly not the empty object.
-		vLimits = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsFields(r, vLimits); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vLimits) {
-		o.Limits = vLimits
-	}
-	vRequests := o.Requests
-	if vRequests == nil {
-		// note: explicitly not the empty object.
-		vRequests = &FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests{}
-	}
-	if err := extractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsFields(r, vRequests); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRequests) {
-		o.Requests = vRequests
-	}
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimitsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesLimits) error {
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequestsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsContainerResourcesRequests) error {
-	return nil
-}
-func postReadExtractFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerationsFields(r *FeatureMembership, o *FeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentConfigsPodTolerations) error {
 	return nil
 }

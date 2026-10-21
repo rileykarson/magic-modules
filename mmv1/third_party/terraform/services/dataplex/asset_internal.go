@@ -751,34 +751,6 @@ func canonicalizeAssetResourceSpec(des, initial *AssetResourceSpec, opts ...dcl.
 	return cDes
 }
 
-func canonicalizeAssetResourceSpecSlice(des, initial []AssetResourceSpec, opts ...dcl.ApplyOption) []AssetResourceSpec {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetResourceSpec, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetResourceSpec(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetResourceSpec, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetResourceSpec(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetResourceSpec(c *Client, des, nw *AssetResourceSpec) *AssetResourceSpec {
 
 	if des == nil {
@@ -798,52 +770,6 @@ func canonicalizeNewAssetResourceSpec(c *Client, des, nw *AssetResourceSpec) *As
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetResourceSpecSet(c *Client, des, nw []AssetResourceSpec) []AssetResourceSpec {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetResourceSpec
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetResourceSpecNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetResourceSpec(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetResourceSpecSlice(c *Client, des, nw []AssetResourceSpec) []AssetResourceSpec {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetResourceSpec
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetResourceSpec(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetResourceStatus(des, initial *AssetResourceStatus, opts ...dcl.ApplyOption) *AssetResourceStatus {
@@ -881,34 +807,6 @@ func canonicalizeAssetResourceStatus(des, initial *AssetResourceStatus, opts ...
 	return cDes
 }
 
-func canonicalizeAssetResourceStatusSlice(des, initial []AssetResourceStatus, opts ...dcl.ApplyOption) []AssetResourceStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetResourceStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetResourceStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetResourceStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetResourceStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetResourceStatus(c *Client, des, nw *AssetResourceStatus) *AssetResourceStatus {
 
 	if des == nil {
@@ -928,52 +826,6 @@ func canonicalizeNewAssetResourceStatus(c *Client, des, nw *AssetResourceStatus)
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetResourceStatusSet(c *Client, des, nw []AssetResourceStatus) []AssetResourceStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetResourceStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetResourceStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetResourceStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetResourceStatusSlice(c *Client, des, nw []AssetResourceStatus) []AssetResourceStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetResourceStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetResourceStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetSecurityStatus(des, initial *AssetSecurityStatus, opts ...dcl.ApplyOption) *AssetSecurityStatus {
@@ -1011,34 +863,6 @@ func canonicalizeAssetSecurityStatus(des, initial *AssetSecurityStatus, opts ...
 	return cDes
 }
 
-func canonicalizeAssetSecurityStatusSlice(des, initial []AssetSecurityStatus, opts ...dcl.ApplyOption) []AssetSecurityStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetSecurityStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetSecurityStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetSecurityStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetSecurityStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetSecurityStatus(c *Client, des, nw *AssetSecurityStatus) *AssetSecurityStatus {
 
 	if des == nil {
@@ -1058,52 +882,6 @@ func canonicalizeNewAssetSecurityStatus(c *Client, des, nw *AssetSecurityStatus)
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetSecurityStatusSet(c *Client, des, nw []AssetSecurityStatus) []AssetSecurityStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetSecurityStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetSecurityStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetSecurityStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetSecurityStatusSlice(c *Client, des, nw []AssetSecurityStatus) []AssetSecurityStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetSecurityStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetSecurityStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetDiscoverySpec(des, initial *AssetDiscoverySpec, opts ...dcl.ApplyOption) *AssetDiscoverySpec {
@@ -1146,34 +924,6 @@ func canonicalizeAssetDiscoverySpec(des, initial *AssetDiscoverySpec, opts ...dc
 	return cDes
 }
 
-func canonicalizeAssetDiscoverySpecSlice(des, initial []AssetDiscoverySpec, opts ...dcl.ApplyOption) []AssetDiscoverySpec {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetDiscoverySpec, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetDiscoverySpec(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetDiscoverySpec, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetDiscoverySpec(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetDiscoverySpec(c *Client, des, nw *AssetDiscoverySpec) *AssetDiscoverySpec {
 
 	if des == nil {
@@ -1204,52 +954,6 @@ func canonicalizeNewAssetDiscoverySpec(c *Client, des, nw *AssetDiscoverySpec) *
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetDiscoverySpecSet(c *Client, des, nw []AssetDiscoverySpec) []AssetDiscoverySpec {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetDiscoverySpec
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetDiscoverySpecNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetDiscoverySpec(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetDiscoverySpecSlice(c *Client, des, nw []AssetDiscoverySpec) []AssetDiscoverySpec {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetDiscoverySpec
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetDiscoverySpec(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetDiscoverySpecCsvOptions(des, initial *AssetDiscoverySpecCsvOptions, opts ...dcl.ApplyOption) *AssetDiscoverySpecCsvOptions {
@@ -1291,34 +995,6 @@ func canonicalizeAssetDiscoverySpecCsvOptions(des, initial *AssetDiscoverySpecCs
 	return cDes
 }
 
-func canonicalizeAssetDiscoverySpecCsvOptionsSlice(des, initial []AssetDiscoverySpecCsvOptions, opts ...dcl.ApplyOption) []AssetDiscoverySpecCsvOptions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetDiscoverySpecCsvOptions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetDiscoverySpecCsvOptions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetDiscoverySpecCsvOptions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetDiscoverySpecCsvOptions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetDiscoverySpecCsvOptions(c *Client, des, nw *AssetDiscoverySpecCsvOptions) *AssetDiscoverySpecCsvOptions {
 
 	if des == nil {
@@ -1344,52 +1020,6 @@ func canonicalizeNewAssetDiscoverySpecCsvOptions(c *Client, des, nw *AssetDiscov
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetDiscoverySpecCsvOptionsSet(c *Client, des, nw []AssetDiscoverySpecCsvOptions) []AssetDiscoverySpecCsvOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetDiscoverySpecCsvOptions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetDiscoverySpecCsvOptionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetDiscoverySpecCsvOptions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetDiscoverySpecCsvOptionsSlice(c *Client, des, nw []AssetDiscoverySpecCsvOptions) []AssetDiscoverySpecCsvOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetDiscoverySpecCsvOptions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetDiscoverySpecCsvOptions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetDiscoverySpecJsonOptions(des, initial *AssetDiscoverySpecJsonOptions, opts ...dcl.ApplyOption) *AssetDiscoverySpecJsonOptions {
@@ -1420,34 +1050,6 @@ func canonicalizeAssetDiscoverySpecJsonOptions(des, initial *AssetDiscoverySpecJ
 	return cDes
 }
 
-func canonicalizeAssetDiscoverySpecJsonOptionsSlice(des, initial []AssetDiscoverySpecJsonOptions, opts ...dcl.ApplyOption) []AssetDiscoverySpecJsonOptions {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetDiscoverySpecJsonOptions, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetDiscoverySpecJsonOptions(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetDiscoverySpecJsonOptions, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetDiscoverySpecJsonOptions(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetDiscoverySpecJsonOptions(c *Client, des, nw *AssetDiscoverySpecJsonOptions) *AssetDiscoverySpecJsonOptions {
 
 	if des == nil {
@@ -1470,52 +1072,6 @@ func canonicalizeNewAssetDiscoverySpecJsonOptions(c *Client, des, nw *AssetDisco
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetDiscoverySpecJsonOptionsSet(c *Client, des, nw []AssetDiscoverySpecJsonOptions) []AssetDiscoverySpecJsonOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetDiscoverySpecJsonOptions
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetDiscoverySpecJsonOptionsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetDiscoverySpecJsonOptions(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetDiscoverySpecJsonOptionsSlice(c *Client, des, nw []AssetDiscoverySpecJsonOptions) []AssetDiscoverySpecJsonOptions {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetDiscoverySpecJsonOptions
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetDiscoverySpecJsonOptions(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetDiscoveryStatus(des, initial *AssetDiscoveryStatus, opts ...dcl.ApplyOption) *AssetDiscoveryStatus {
@@ -1565,34 +1121,6 @@ func canonicalizeAssetDiscoveryStatus(des, initial *AssetDiscoveryStatus, opts .
 	return cDes
 }
 
-func canonicalizeAssetDiscoveryStatusSlice(des, initial []AssetDiscoveryStatus, opts ...dcl.ApplyOption) []AssetDiscoveryStatus {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetDiscoveryStatus, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetDiscoveryStatus(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetDiscoveryStatus, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetDiscoveryStatus(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetDiscoveryStatus(c *Client, des, nw *AssetDiscoveryStatus) *AssetDiscoveryStatus {
 
 	if des == nil {
@@ -1616,52 +1144,6 @@ func canonicalizeNewAssetDiscoveryStatus(c *Client, des, nw *AssetDiscoveryStatu
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetDiscoveryStatusSet(c *Client, des, nw []AssetDiscoveryStatus) []AssetDiscoveryStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetDiscoveryStatus
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetDiscoveryStatusNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetDiscoveryStatus(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetDiscoveryStatusSlice(c *Client, des, nw []AssetDiscoveryStatus) []AssetDiscoveryStatus {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetDiscoveryStatus
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetDiscoveryStatus(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeAssetDiscoveryStatusStats(des, initial *AssetDiscoveryStatusStats, opts ...dcl.ApplyOption) *AssetDiscoveryStatusStats {
@@ -1706,34 +1188,6 @@ func canonicalizeAssetDiscoveryStatusStats(des, initial *AssetDiscoveryStatusSta
 	return cDes
 }
 
-func canonicalizeAssetDiscoveryStatusStatsSlice(des, initial []AssetDiscoveryStatusStats, opts ...dcl.ApplyOption) []AssetDiscoveryStatusStats {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]AssetDiscoveryStatusStats, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeAssetDiscoveryStatusStats(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]AssetDiscoveryStatusStats, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeAssetDiscoveryStatusStats(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewAssetDiscoveryStatusStats(c *Client, des, nw *AssetDiscoveryStatusStats) *AssetDiscoveryStatusStats {
 
 	if des == nil {
@@ -1749,52 +1203,6 @@ func canonicalizeNewAssetDiscoveryStatusStats(c *Client, des, nw *AssetDiscovery
 	}
 
 	return nw
-}
-
-func canonicalizeNewAssetDiscoveryStatusStatsSet(c *Client, des, nw []AssetDiscoveryStatusStats) []AssetDiscoveryStatusStats {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []AssetDiscoveryStatusStats
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareAssetDiscoveryStatusStatsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewAssetDiscoveryStatusStats(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewAssetDiscoveryStatusStatsSlice(c *Client, des, nw []AssetDiscoveryStatusStats) []AssetDiscoveryStatusStats {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []AssetDiscoveryStatusStats
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewAssetDiscoveryStatusStats(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -2481,87 +1889,6 @@ func flattenAsset(c *Client, i interface{}, res *Asset) *Asset {
 	return resultRes
 }
 
-// expandAssetResourceSpecMap expands the contents of AssetResourceSpec into a JSON
-// request object.
-func expandAssetResourceSpecMap(c *Client, f map[string]AssetResourceSpec, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetResourceSpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetResourceSpecSlice expands the contents of AssetResourceSpec into a JSON
-// request object.
-func expandAssetResourceSpecSlice(c *Client, f []AssetResourceSpec, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetResourceSpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetResourceSpecMap flattens the contents of AssetResourceSpec from a JSON
-// response object.
-func flattenAssetResourceSpecMap(c *Client, i interface{}, res *Asset) map[string]AssetResourceSpec {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetResourceSpec{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetResourceSpec{}
-	}
-
-	items := make(map[string]AssetResourceSpec)
-	for k, item := range a {
-		items[k] = *flattenAssetResourceSpec(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetResourceSpecSlice flattens the contents of AssetResourceSpec from a JSON
-// response object.
-func flattenAssetResourceSpecSlice(c *Client, i interface{}, res *Asset) []AssetResourceSpec {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetResourceSpec{}
-	}
-
-	if len(a) == 0 {
-		return []AssetResourceSpec{}
-	}
-
-	items := make([]AssetResourceSpec, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetResourceSpec(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandAssetResourceSpec expands an instance of AssetResourceSpec into a JSON
 // request object.
 func expandAssetResourceSpec(c *Client, f *AssetResourceSpec, res *Asset) (map[string]interface{}, error) {
@@ -2601,87 +1928,6 @@ func flattenAssetResourceSpec(c *Client, i interface{}, res *Asset) *AssetResour
 	r.ReadAccessMode = flattenAssetResourceSpecReadAccessModeEnum(m["readAccessMode"])
 
 	return r
-}
-
-// expandAssetResourceStatusMap expands the contents of AssetResourceStatus into a JSON
-// request object.
-func expandAssetResourceStatusMap(c *Client, f map[string]AssetResourceStatus, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetResourceStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetResourceStatusSlice expands the contents of AssetResourceStatus into a JSON
-// request object.
-func expandAssetResourceStatusSlice(c *Client, f []AssetResourceStatus, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetResourceStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetResourceStatusMap flattens the contents of AssetResourceStatus from a JSON
-// response object.
-func flattenAssetResourceStatusMap(c *Client, i interface{}, res *Asset) map[string]AssetResourceStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetResourceStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetResourceStatus{}
-	}
-
-	items := make(map[string]AssetResourceStatus)
-	for k, item := range a {
-		items[k] = *flattenAssetResourceStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetResourceStatusSlice flattens the contents of AssetResourceStatus from a JSON
-// response object.
-func flattenAssetResourceStatusSlice(c *Client, i interface{}, res *Asset) []AssetResourceStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetResourceStatus{}
-	}
-
-	if len(a) == 0 {
-		return []AssetResourceStatus{}
-	}
-
-	items := make([]AssetResourceStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetResourceStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandAssetResourceStatus expands an instance of AssetResourceStatus into a JSON
@@ -2725,87 +1971,6 @@ func flattenAssetResourceStatus(c *Client, i interface{}, res *Asset) *AssetReso
 	return r
 }
 
-// expandAssetSecurityStatusMap expands the contents of AssetSecurityStatus into a JSON
-// request object.
-func expandAssetSecurityStatusMap(c *Client, f map[string]AssetSecurityStatus, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetSecurityStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetSecurityStatusSlice expands the contents of AssetSecurityStatus into a JSON
-// request object.
-func expandAssetSecurityStatusSlice(c *Client, f []AssetSecurityStatus, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetSecurityStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetSecurityStatusMap flattens the contents of AssetSecurityStatus from a JSON
-// response object.
-func flattenAssetSecurityStatusMap(c *Client, i interface{}, res *Asset) map[string]AssetSecurityStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetSecurityStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetSecurityStatus{}
-	}
-
-	items := make(map[string]AssetSecurityStatus)
-	for k, item := range a {
-		items[k] = *flattenAssetSecurityStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetSecurityStatusSlice flattens the contents of AssetSecurityStatus from a JSON
-// response object.
-func flattenAssetSecurityStatusSlice(c *Client, i interface{}, res *Asset) []AssetSecurityStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetSecurityStatus{}
-	}
-
-	if len(a) == 0 {
-		return []AssetSecurityStatus{}
-	}
-
-	items := make([]AssetSecurityStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetSecurityStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandAssetSecurityStatus expands an instance of AssetSecurityStatus into a JSON
 // request object.
 func expandAssetSecurityStatus(c *Client, f *AssetSecurityStatus, res *Asset) (map[string]interface{}, error) {
@@ -2845,87 +2010,6 @@ func flattenAssetSecurityStatus(c *Client, i interface{}, res *Asset) *AssetSecu
 	r.UpdateTime = dcl.FlattenString(m["updateTime"])
 
 	return r
-}
-
-// expandAssetDiscoverySpecMap expands the contents of AssetDiscoverySpec into a JSON
-// request object.
-func expandAssetDiscoverySpecMap(c *Client, f map[string]AssetDiscoverySpec, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetDiscoverySpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetDiscoverySpecSlice expands the contents of AssetDiscoverySpec into a JSON
-// request object.
-func expandAssetDiscoverySpecSlice(c *Client, f []AssetDiscoverySpec, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetDiscoverySpec(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetDiscoverySpecMap flattens the contents of AssetDiscoverySpec from a JSON
-// response object.
-func flattenAssetDiscoverySpecMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoverySpec {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoverySpec{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoverySpec{}
-	}
-
-	items := make(map[string]AssetDiscoverySpec)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoverySpec(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetDiscoverySpecSlice flattens the contents of AssetDiscoverySpec from a JSON
-// response object.
-func flattenAssetDiscoverySpecSlice(c *Client, i interface{}, res *Asset) []AssetDiscoverySpec {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoverySpec{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoverySpec{}
-	}
-
-	items := make([]AssetDiscoverySpec, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoverySpec(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandAssetDiscoverySpec expands an instance of AssetDiscoverySpec into a JSON
@@ -2985,87 +2069,6 @@ func flattenAssetDiscoverySpec(c *Client, i interface{}, res *Asset) *AssetDisco
 	return r
 }
 
-// expandAssetDiscoverySpecCsvOptionsMap expands the contents of AssetDiscoverySpecCsvOptions into a JSON
-// request object.
-func expandAssetDiscoverySpecCsvOptionsMap(c *Client, f map[string]AssetDiscoverySpecCsvOptions, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetDiscoverySpecCsvOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetDiscoverySpecCsvOptionsSlice expands the contents of AssetDiscoverySpecCsvOptions into a JSON
-// request object.
-func expandAssetDiscoverySpecCsvOptionsSlice(c *Client, f []AssetDiscoverySpecCsvOptions, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetDiscoverySpecCsvOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetDiscoverySpecCsvOptionsMap flattens the contents of AssetDiscoverySpecCsvOptions from a JSON
-// response object.
-func flattenAssetDiscoverySpecCsvOptionsMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoverySpecCsvOptions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoverySpecCsvOptions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoverySpecCsvOptions{}
-	}
-
-	items := make(map[string]AssetDiscoverySpecCsvOptions)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoverySpecCsvOptions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetDiscoverySpecCsvOptionsSlice flattens the contents of AssetDiscoverySpecCsvOptions from a JSON
-// response object.
-func flattenAssetDiscoverySpecCsvOptionsSlice(c *Client, i interface{}, res *Asset) []AssetDiscoverySpecCsvOptions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoverySpecCsvOptions{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoverySpecCsvOptions{}
-	}
-
-	items := make([]AssetDiscoverySpecCsvOptions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoverySpecCsvOptions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandAssetDiscoverySpecCsvOptions expands an instance of AssetDiscoverySpecCsvOptions into a JSON
 // request object.
 func expandAssetDiscoverySpecCsvOptions(c *Client, f *AssetDiscoverySpecCsvOptions, res *Asset) (map[string]interface{}, error) {
@@ -3111,87 +2114,6 @@ func flattenAssetDiscoverySpecCsvOptions(c *Client, i interface{}, res *Asset) *
 	return r
 }
 
-// expandAssetDiscoverySpecJsonOptionsMap expands the contents of AssetDiscoverySpecJsonOptions into a JSON
-// request object.
-func expandAssetDiscoverySpecJsonOptionsMap(c *Client, f map[string]AssetDiscoverySpecJsonOptions, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetDiscoverySpecJsonOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetDiscoverySpecJsonOptionsSlice expands the contents of AssetDiscoverySpecJsonOptions into a JSON
-// request object.
-func expandAssetDiscoverySpecJsonOptionsSlice(c *Client, f []AssetDiscoverySpecJsonOptions, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetDiscoverySpecJsonOptions(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetDiscoverySpecJsonOptionsMap flattens the contents of AssetDiscoverySpecJsonOptions from a JSON
-// response object.
-func flattenAssetDiscoverySpecJsonOptionsMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoverySpecJsonOptions {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoverySpecJsonOptions{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoverySpecJsonOptions{}
-	}
-
-	items := make(map[string]AssetDiscoverySpecJsonOptions)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoverySpecJsonOptions(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetDiscoverySpecJsonOptionsSlice flattens the contents of AssetDiscoverySpecJsonOptions from a JSON
-// response object.
-func flattenAssetDiscoverySpecJsonOptionsSlice(c *Client, i interface{}, res *Asset) []AssetDiscoverySpecJsonOptions {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoverySpecJsonOptions{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoverySpecJsonOptions{}
-	}
-
-	items := make([]AssetDiscoverySpecJsonOptions, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoverySpecJsonOptions(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandAssetDiscoverySpecJsonOptions expands an instance of AssetDiscoverySpecJsonOptions into a JSON
 // request object.
 func expandAssetDiscoverySpecJsonOptions(c *Client, f *AssetDiscoverySpecJsonOptions, res *Asset) (map[string]interface{}, error) {
@@ -3227,87 +2149,6 @@ func flattenAssetDiscoverySpecJsonOptions(c *Client, i interface{}, res *Asset) 
 	r.DisableTypeInference = dcl.FlattenBool(m["disableTypeInference"])
 
 	return r
-}
-
-// expandAssetDiscoveryStatusMap expands the contents of AssetDiscoveryStatus into a JSON
-// request object.
-func expandAssetDiscoveryStatusMap(c *Client, f map[string]AssetDiscoveryStatus, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetDiscoveryStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetDiscoveryStatusSlice expands the contents of AssetDiscoveryStatus into a JSON
-// request object.
-func expandAssetDiscoveryStatusSlice(c *Client, f []AssetDiscoveryStatus, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetDiscoveryStatus(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetDiscoveryStatusMap flattens the contents of AssetDiscoveryStatus from a JSON
-// response object.
-func flattenAssetDiscoveryStatusMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoveryStatus {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoveryStatus{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoveryStatus{}
-	}
-
-	items := make(map[string]AssetDiscoveryStatus)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoveryStatus(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetDiscoveryStatusSlice flattens the contents of AssetDiscoveryStatus from a JSON
-// response object.
-func flattenAssetDiscoveryStatusSlice(c *Client, i interface{}, res *Asset) []AssetDiscoveryStatus {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoveryStatus{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoveryStatus{}
-	}
-
-	items := make([]AssetDiscoveryStatus, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoveryStatus(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandAssetDiscoveryStatus expands an instance of AssetDiscoveryStatus into a JSON
@@ -3365,87 +2206,6 @@ func flattenAssetDiscoveryStatus(c *Client, i interface{}, res *Asset) *AssetDis
 	return r
 }
 
-// expandAssetDiscoveryStatusStatsMap expands the contents of AssetDiscoveryStatusStats into a JSON
-// request object.
-func expandAssetDiscoveryStatusStatsMap(c *Client, f map[string]AssetDiscoveryStatusStats, res *Asset) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandAssetDiscoveryStatusStats(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandAssetDiscoveryStatusStatsSlice expands the contents of AssetDiscoveryStatusStats into a JSON
-// request object.
-func expandAssetDiscoveryStatusStatsSlice(c *Client, f []AssetDiscoveryStatusStats, res *Asset) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandAssetDiscoveryStatusStats(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenAssetDiscoveryStatusStatsMap flattens the contents of AssetDiscoveryStatusStats from a JSON
-// response object.
-func flattenAssetDiscoveryStatusStatsMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoveryStatusStats {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoveryStatusStats{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoveryStatusStats{}
-	}
-
-	items := make(map[string]AssetDiscoveryStatusStats)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoveryStatusStats(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenAssetDiscoveryStatusStatsSlice flattens the contents of AssetDiscoveryStatusStats from a JSON
-// response object.
-func flattenAssetDiscoveryStatusStatsSlice(c *Client, i interface{}, res *Asset) []AssetDiscoveryStatusStats {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoveryStatusStats{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoveryStatusStats{}
-	}
-
-	items := make([]AssetDiscoveryStatusStats, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoveryStatusStats(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandAssetDiscoveryStatusStats expands an instance of AssetDiscoveryStatusStats into a JSON
 // request object.
 func expandAssetDiscoveryStatusStats(c *Client, f *AssetDiscoveryStatusStats, res *Asset) (map[string]interface{}, error) {
@@ -3491,46 +2251,6 @@ func flattenAssetDiscoveryStatusStats(c *Client, i interface{}, res *Asset) *Ass
 	return r
 }
 
-// flattenAssetStateEnumMap flattens the contents of AssetStateEnum from a JSON
-// response object.
-func flattenAssetStateEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetStateEnum{}
-	}
-
-	items := make(map[string]AssetStateEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetStateEnumSlice flattens the contents of AssetStateEnum from a JSON
-// response object.
-func flattenAssetStateEnumSlice(c *Client, i interface{}, res *Asset) []AssetStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetStateEnum{}
-	}
-
-	items := make([]AssetStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenAssetStateEnum asserts that an interface is a string, and returns a
 // pointer to a *AssetStateEnum with the same value as that string.
 func flattenAssetStateEnum(i interface{}) *AssetStateEnum {
@@ -3540,46 +2260,6 @@ func flattenAssetStateEnum(i interface{}) *AssetStateEnum {
 	}
 
 	return AssetStateEnumRef(s)
-}
-
-// flattenAssetResourceSpecTypeEnumMap flattens the contents of AssetResourceSpecTypeEnum from a JSON
-// response object.
-func flattenAssetResourceSpecTypeEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetResourceSpecTypeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetResourceSpecTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetResourceSpecTypeEnum{}
-	}
-
-	items := make(map[string]AssetResourceSpecTypeEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetResourceSpecTypeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetResourceSpecTypeEnumSlice flattens the contents of AssetResourceSpecTypeEnum from a JSON
-// response object.
-func flattenAssetResourceSpecTypeEnumSlice(c *Client, i interface{}, res *Asset) []AssetResourceSpecTypeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetResourceSpecTypeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetResourceSpecTypeEnum{}
-	}
-
-	items := make([]AssetResourceSpecTypeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetResourceSpecTypeEnum(item.(interface{})))
-	}
-
-	return items
 }
 
 // flattenAssetResourceSpecTypeEnum asserts that an interface is a string, and returns a
@@ -3593,46 +2273,6 @@ func flattenAssetResourceSpecTypeEnum(i interface{}) *AssetResourceSpecTypeEnum 
 	return AssetResourceSpecTypeEnumRef(s)
 }
 
-// flattenAssetResourceSpecReadAccessModeEnumMap flattens the contents of AssetResourceSpecReadAccessModeEnum from a JSON
-// response object.
-func flattenAssetResourceSpecReadAccessModeEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetResourceSpecReadAccessModeEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetResourceSpecReadAccessModeEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetResourceSpecReadAccessModeEnum{}
-	}
-
-	items := make(map[string]AssetResourceSpecReadAccessModeEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetResourceSpecReadAccessModeEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetResourceSpecReadAccessModeEnumSlice flattens the contents of AssetResourceSpecReadAccessModeEnum from a JSON
-// response object.
-func flattenAssetResourceSpecReadAccessModeEnumSlice(c *Client, i interface{}, res *Asset) []AssetResourceSpecReadAccessModeEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetResourceSpecReadAccessModeEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetResourceSpecReadAccessModeEnum{}
-	}
-
-	items := make([]AssetResourceSpecReadAccessModeEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetResourceSpecReadAccessModeEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenAssetResourceSpecReadAccessModeEnum asserts that an interface is a string, and returns a
 // pointer to a *AssetResourceSpecReadAccessModeEnum with the same value as that string.
 func flattenAssetResourceSpecReadAccessModeEnum(i interface{}) *AssetResourceSpecReadAccessModeEnum {
@@ -3642,46 +2282,6 @@ func flattenAssetResourceSpecReadAccessModeEnum(i interface{}) *AssetResourceSpe
 	}
 
 	return AssetResourceSpecReadAccessModeEnumRef(s)
-}
-
-// flattenAssetResourceStatusStateEnumMap flattens the contents of AssetResourceStatusStateEnum from a JSON
-// response object.
-func flattenAssetResourceStatusStateEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetResourceStatusStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetResourceStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetResourceStatusStateEnum{}
-	}
-
-	items := make(map[string]AssetResourceStatusStateEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetResourceStatusStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetResourceStatusStateEnumSlice flattens the contents of AssetResourceStatusStateEnum from a JSON
-// response object.
-func flattenAssetResourceStatusStateEnumSlice(c *Client, i interface{}, res *Asset) []AssetResourceStatusStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetResourceStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetResourceStatusStateEnum{}
-	}
-
-	items := make([]AssetResourceStatusStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetResourceStatusStateEnum(item.(interface{})))
-	}
-
-	return items
 }
 
 // flattenAssetResourceStatusStateEnum asserts that an interface is a string, and returns a
@@ -3695,46 +2295,6 @@ func flattenAssetResourceStatusStateEnum(i interface{}) *AssetResourceStatusStat
 	return AssetResourceStatusStateEnumRef(s)
 }
 
-// flattenAssetSecurityStatusStateEnumMap flattens the contents of AssetSecurityStatusStateEnum from a JSON
-// response object.
-func flattenAssetSecurityStatusStateEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetSecurityStatusStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetSecurityStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetSecurityStatusStateEnum{}
-	}
-
-	items := make(map[string]AssetSecurityStatusStateEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetSecurityStatusStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetSecurityStatusStateEnumSlice flattens the contents of AssetSecurityStatusStateEnum from a JSON
-// response object.
-func flattenAssetSecurityStatusStateEnumSlice(c *Client, i interface{}, res *Asset) []AssetSecurityStatusStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetSecurityStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetSecurityStatusStateEnum{}
-	}
-
-	items := make([]AssetSecurityStatusStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetSecurityStatusStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenAssetSecurityStatusStateEnum asserts that an interface is a string, and returns a
 // pointer to a *AssetSecurityStatusStateEnum with the same value as that string.
 func flattenAssetSecurityStatusStateEnum(i interface{}) *AssetSecurityStatusStateEnum {
@@ -3746,46 +2306,6 @@ func flattenAssetSecurityStatusStateEnum(i interface{}) *AssetSecurityStatusStat
 	return AssetSecurityStatusStateEnumRef(s)
 }
 
-// flattenAssetDiscoveryStatusStateEnumMap flattens the contents of AssetDiscoveryStatusStateEnum from a JSON
-// response object.
-func flattenAssetDiscoveryStatusStateEnumMap(c *Client, i interface{}, res *Asset) map[string]AssetDiscoveryStatusStateEnum {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]AssetDiscoveryStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return map[string]AssetDiscoveryStatusStateEnum{}
-	}
-
-	items := make(map[string]AssetDiscoveryStatusStateEnum)
-	for k, item := range a {
-		items[k] = *flattenAssetDiscoveryStatusStateEnum(item.(interface{}))
-	}
-
-	return items
-}
-
-// flattenAssetDiscoveryStatusStateEnumSlice flattens the contents of AssetDiscoveryStatusStateEnum from a JSON
-// response object.
-func flattenAssetDiscoveryStatusStateEnumSlice(c *Client, i interface{}, res *Asset) []AssetDiscoveryStatusStateEnum {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []AssetDiscoveryStatusStateEnum{}
-	}
-
-	if len(a) == 0 {
-		return []AssetDiscoveryStatusStateEnum{}
-	}
-
-	items := make([]AssetDiscoveryStatusStateEnum, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenAssetDiscoveryStatusStateEnum(item.(interface{})))
-	}
-
-	return items
-}
-
 // flattenAssetDiscoveryStatusStateEnum asserts that an interface is a string, and returns a
 // pointer to a *AssetDiscoveryStatusStateEnum with the same value as that string.
 func flattenAssetDiscoveryStatusStateEnum(i interface{}) *AssetDiscoveryStatusStateEnum {
@@ -3795,64 +2315,6 @@ func flattenAssetDiscoveryStatusStateEnum(i interface{}) *AssetDiscoveryStatusSt
 	}
 
 	return AssetDiscoveryStatusStateEnumRef(s)
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *Asset) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalAsset(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.DataplexZone == nil && ncr.DataplexZone == nil {
-			c.Config.Logger.Info("Both DataplexZone fields null - considering equal.")
-		} else if nr.DataplexZone == nil || ncr.DataplexZone == nil {
-			c.Config.Logger.Info("Only one DataplexZone field is null - considering unequal.")
-			return false
-		} else if *nr.DataplexZone != *ncr.DataplexZone {
-			return false
-		}
-		if nr.Lake == nil && ncr.Lake == nil {
-			c.Config.Logger.Info("Both Lake fields null - considering equal.")
-		} else if nr.Lake == nil || ncr.Lake == nil {
-			c.Config.Logger.Info("Only one Lake field is null - considering unequal.")
-			return false
-		} else if *nr.Lake != *ncr.Lake {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type assetDiff struct {
@@ -4114,12 +2576,6 @@ func postReadExtractAssetDiscoverySpecFields(r *Asset, o *AssetDiscoverySpec) er
 	}
 	return nil
 }
-func postReadExtractAssetDiscoverySpecCsvOptionsFields(r *Asset, o *AssetDiscoverySpecCsvOptions) error {
-	return nil
-}
-func postReadExtractAssetDiscoverySpecJsonOptionsFields(r *Asset, o *AssetDiscoverySpecJsonOptions) error {
-	return nil
-}
 func postReadExtractAssetDiscoveryStatusFields(r *Asset, o *AssetDiscoveryStatus) error {
 	vStats := o.Stats
 	if vStats == nil {
@@ -4132,8 +2588,5 @@ func postReadExtractAssetDiscoveryStatusFields(r *Asset, o *AssetDiscoveryStatus
 	if !dcl.IsEmptyValueIndirect(vStats) {
 		o.Stats = vStats
 	}
-	return nil
-}
-func postReadExtractAssetDiscoveryStatusStatsFields(r *Asset, o *AssetDiscoveryStatusStats) error {
 	return nil
 }

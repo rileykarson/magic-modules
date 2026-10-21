@@ -38,193 +38,6 @@ func (r *DeliveryPipeline) validate() error {
 func (r *DeliveryPipelineSerialPipeline) validate() error {
 	return nil
 }
-func (r *DeliveryPipelineSerialPipelineStages) validate() error {
-	if !dcl.IsEmptyValueIndirect(r.Strategy) {
-		if err := r.Strategy.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategy) validate() error {
-	if !dcl.IsEmptyValueIndirect(r.Standard) {
-		if err := r.Standard.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.Canary) {
-		if err := r.Canary.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyStandard) validate() error {
-	if !dcl.IsEmptyValueIndirect(r.Predeploy) {
-		if err := r.Predeploy.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.Postdeploy) {
-		if err := r.Postdeploy.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanary) validate() error {
-	if err := dcl.ValidateAtMostOneOfFieldsSet([]string{"CanaryDeployment", "CustomCanaryDeployment"}, r.CanaryDeployment, r.CustomCanaryDeployment); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.RuntimeConfig) {
-		if err := r.RuntimeConfig.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.CanaryDeployment) {
-		if err := r.CanaryDeployment.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.CustomCanaryDeployment) {
-		if err := r.CustomCanaryDeployment.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) validate() error {
-	if err := dcl.ValidateAtMostOneOfFieldsSet([]string{"Kubernetes", "CloudRun"}, r.Kubernetes, r.CloudRun); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.Kubernetes) {
-		if err := r.Kubernetes.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.CloudRun) {
-		if err := r.CloudRun.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) validate() error {
-	if err := dcl.ValidateAtMostOneOfFieldsSet([]string{"GatewayServiceMesh", "ServiceNetworking"}, r.GatewayServiceMesh, r.ServiceNetworking); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.GatewayServiceMesh) {
-		if err := r.GatewayServiceMesh.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.ServiceNetworking) {
-		if err := r.ServiceNetworking.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) validate() error {
-	if err := dcl.Required(r, "httpRoute"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "service"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "deployment"); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.RouteDestinations) {
-		if err := r.RouteDestinations.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) validate() error {
-	if err := dcl.Required(r, "destinationIds"); err != nil {
-		return err
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) validate() error {
-	if err := dcl.Required(r, "service"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "deployment"); err != nil {
-		return err
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) validate() error {
-	if err := dcl.Required(r, "percentages"); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.Predeploy) {
-		if err := r.Predeploy.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.Postdeploy) {
-		if err := r.Postdeploy.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) validate() error {
-	if err := dcl.Required(r, "phaseConfigs"); err != nil {
-		return err
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs) validate() error {
-	if err := dcl.Required(r, "phaseId"); err != nil {
-		return err
-	}
-	if err := dcl.Required(r, "percentage"); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(r.Predeploy) {
-		if err := r.Predeploy.validate(); err != nil {
-			return err
-		}
-	}
-	if !dcl.IsEmptyValueIndirect(r.Postdeploy) {
-		if err := r.Postdeploy.validate(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) validate() error {
-	return nil
-}
-func (r *DeliveryPipelineSerialPipelineStagesDeployParameters) validate() error {
-	if err := dcl.Required(r, "values"); err != nil {
-		return err
-	}
-	return nil
-}
 func (r *DeliveryPipelineCondition) validate() error {
 	if !dcl.IsEmptyValueIndirect(r.PipelineReadyCondition) {
 		if err := r.PipelineReadyCondition.validate(); err != nil {
@@ -847,34 +660,6 @@ func canonicalizeDeliveryPipelineSerialPipeline(des, initial *DeliveryPipelineSe
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineSlice(des, initial []DeliveryPipelineSerialPipeline, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipeline {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipeline, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipeline(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipeline, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipeline(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipeline(c *Client, des, nw *DeliveryPipelineSerialPipeline) *DeliveryPipelineSerialPipeline {
 
 	if des == nil {
@@ -892,52 +677,6 @@ func canonicalizeNewDeliveryPipelineSerialPipeline(c *Client, des, nw *DeliveryP
 	nw.Stages = canonicalizeNewDeliveryPipelineSerialPipelineStagesSlice(c, des.Stages, nw.Stages)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineSet(c *Client, des, nw []DeliveryPipelineSerialPipeline) []DeliveryPipelineSerialPipeline {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipeline
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipeline(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineSlice(c *Client, des, nw []DeliveryPipelineSerialPipeline) []DeliveryPipelineSerialPipeline {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipeline
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipeline(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStages(des, initial *DeliveryPipelineSerialPipelineStages, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStages {
@@ -1024,32 +763,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStages(c *Client, des, nw *Del
 	return nw
 }
 
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStages) []DeliveryPipelineSerialPipelineStages {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStages
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStages(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStages) []DeliveryPipelineSerialPipelineStages {
 	if des == nil {
 		return nw
@@ -1090,34 +803,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategy(des, initial *Deli
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategy) *DeliveryPipelineSerialPipelineStagesStrategy {
 
 	if des == nil {
@@ -1136,52 +821,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategy(c *Client, des,
 	nw.Canary = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanary(c, des.Canary, nw.Canary)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategy) []DeliveryPipelineSerialPipelineStagesStrategy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategy) []DeliveryPipelineSerialPipelineStagesStrategy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandard(des, initial *DeliveryPipelineSerialPipelineStagesStrategyStandard, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyStandard {
@@ -1209,34 +848,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandard(des, initi
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyStandard, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyStandard {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandard, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandard(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandard, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandard(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandard(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyStandard) *DeliveryPipelineSerialPipelineStagesStrategyStandard {
 
 	if des == nil {
@@ -1258,52 +869,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandard(c *Clie
 	nw.Postdeploy = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, des.Postdeploy, nw.Postdeploy)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandard) []DeliveryPipelineSerialPipelineStagesStrategyStandard {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandard
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyStandardNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandard(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandard) []DeliveryPipelineSerialPipelineStagesStrategyStandard {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandard
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandard(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(des, initial *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
@@ -1329,34 +894,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(d
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
 
 	if des == nil {
@@ -1376,52 +913,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeplo
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(des, initial *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
@@ -1447,34 +938,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
 
 	if des == nil {
@@ -1494,52 +957,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdepl
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanary(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanary, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanary {
@@ -1583,34 +1000,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanary(des, initial
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanarySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanary, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanary {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanary, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanary(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanary, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanary(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanary(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanary) *DeliveryPipelineSerialPipelineStagesStrategyCanary {
 
 	if des == nil {
@@ -1630,52 +1019,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanary(c *Client
 	nw.CustomCanaryDeployment = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, des.CustomCanaryDeployment, nw.CustomCanaryDeployment)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanarySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanary) []DeliveryPipelineSerialPipelineStagesStrategyCanary {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanary
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanary(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanarySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanary) []DeliveryPipelineSerialPipelineStagesStrategyCanary {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanary
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanary(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
@@ -1718,34 +1061,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
 
 	if des == nil {
@@ -1764,52 +1079,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	nw.CloudRun = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, des.CloudRun, nw.CloudRun)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
@@ -1852,34 +1121,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
 
 	if des == nil {
@@ -1898,52 +1139,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	nw.ServiceNetworking = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, des.ServiceNetworking, nw.ServiceNetworking)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
@@ -1995,34 +1190,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
 
 	if des == nil {
@@ -2060,52 +1227,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	return nw
 }
 
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
 	if des == nil {
 		return initial
@@ -2134,34 +1255,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
 
 	if des == nil {
@@ -2184,52 +1277,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
@@ -2270,34 +1317,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
 
 	if des == nil {
@@ -2326,52 +1345,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
@@ -2412,34 +1385,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
 
 	if des == nil {
@@ -2468,52 +1413,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeCon
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
@@ -2547,34 +1446,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploym
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
 
 	if des == nil {
@@ -2596,52 +1467,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDepl
 	nw.Postdeploy = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, des.Postdeploy, nw.Postdeploy)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
@@ -2667,34 +1492,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploym
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
 
 	if des == nil {
@@ -2714,52 +1511,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDepl
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
@@ -2785,34 +1536,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploym
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
 
 	if des == nil {
@@ -2834,52 +1557,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDepl
 	return nw
 }
 
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, &d, &n))
-	}
-
-	return items
-}
-
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
 	if des == nil {
 		return initial
@@ -2899,34 +1576,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryD
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
 
 	if des == nil {
@@ -2944,52 +1593,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCana
 	nw.PhaseConfigs = canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSlice(c, des.PhaseConfigs, nw.PhaseConfigs)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs {
@@ -3090,32 +1693,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCana
 	return nw
 }
 
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs {
 	if des == nil {
 		return nw
@@ -3159,34 +1736,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryD
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
 
 	if des == nil {
@@ -3206,52 +1755,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCana
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(des, initial *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
@@ -3277,34 +1780,6 @@ func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryD
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice(des, initial []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, opts ...dcl.ApplyOption) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c *Client, des, nw *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
 
 	if des == nil {
@@ -3324,52 +1799,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCana
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineSerialPipelineStagesDeployParameters(des, initial *DeliveryPipelineSerialPipelineStagesDeployParameters, opts ...dcl.ApplyOption) *DeliveryPipelineSerialPipelineStagesDeployParameters {
@@ -3447,32 +1876,6 @@ func canonicalizeNewDeliveryPipelineSerialPipelineStagesDeployParameters(c *Clie
 	return nw
 }
 
-func canonicalizeNewDeliveryPipelineSerialPipelineStagesDeployParametersSet(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesDeployParameters) []DeliveryPipelineSerialPipelineStagesDeployParameters {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineSerialPipelineStagesDeployParameters
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineSerialPipelineStagesDeployParametersNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineSerialPipelineStagesDeployParameters(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
 func canonicalizeNewDeliveryPipelineSerialPipelineStagesDeployParametersSlice(c *Client, des, nw []DeliveryPipelineSerialPipelineStagesDeployParameters) []DeliveryPipelineSerialPipelineStagesDeployParameters {
 	if des == nil {
 		return nw
@@ -3514,34 +1917,6 @@ func canonicalizeDeliveryPipelineCondition(des, initial *DeliveryPipelineConditi
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineConditionSlice(des, initial []DeliveryPipelineCondition, opts ...dcl.ApplyOption) []DeliveryPipelineCondition {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineCondition, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineCondition(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineCondition, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineCondition(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineCondition(c *Client, des, nw *DeliveryPipelineCondition) *DeliveryPipelineCondition {
 
 	if des == nil {
@@ -3561,52 +1936,6 @@ func canonicalizeNewDeliveryPipelineCondition(c *Client, des, nw *DeliveryPipeli
 	nw.TargetsTypeCondition = canonicalizeNewDeliveryPipelineConditionTargetsTypeCondition(c, des.TargetsTypeCondition, nw.TargetsTypeCondition)
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineConditionSet(c *Client, des, nw []DeliveryPipelineCondition) []DeliveryPipelineCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineCondition
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineConditionNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineCondition(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineConditionSlice(c *Client, des, nw []DeliveryPipelineCondition) []DeliveryPipelineCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineCondition
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineCondition(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineConditionPipelineReadyCondition(des, initial *DeliveryPipelineConditionPipelineReadyCondition, opts ...dcl.ApplyOption) *DeliveryPipelineConditionPipelineReadyCondition {
@@ -3638,34 +1967,6 @@ func canonicalizeDeliveryPipelineConditionPipelineReadyCondition(des, initial *D
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineConditionPipelineReadyConditionSlice(des, initial []DeliveryPipelineConditionPipelineReadyCondition, opts ...dcl.ApplyOption) []DeliveryPipelineConditionPipelineReadyCondition {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineConditionPipelineReadyCondition, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineConditionPipelineReadyCondition(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineConditionPipelineReadyCondition, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineConditionPipelineReadyCondition(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineConditionPipelineReadyCondition(c *Client, des, nw *DeliveryPipelineConditionPipelineReadyCondition) *DeliveryPipelineConditionPipelineReadyCondition {
 
 	if des == nil {
@@ -3685,52 +1986,6 @@ func canonicalizeNewDeliveryPipelineConditionPipelineReadyCondition(c *Client, d
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineConditionPipelineReadyConditionSet(c *Client, des, nw []DeliveryPipelineConditionPipelineReadyCondition) []DeliveryPipelineConditionPipelineReadyCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineConditionPipelineReadyCondition
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineConditionPipelineReadyConditionNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineConditionPipelineReadyCondition(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineConditionPipelineReadyConditionSlice(c *Client, des, nw []DeliveryPipelineConditionPipelineReadyCondition) []DeliveryPipelineConditionPipelineReadyCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineConditionPipelineReadyCondition
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineConditionPipelineReadyCondition(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineConditionTargetsPresentCondition(des, initial *DeliveryPipelineConditionTargetsPresentCondition, opts ...dcl.ApplyOption) *DeliveryPipelineConditionTargetsPresentCondition {
@@ -3767,34 +2022,6 @@ func canonicalizeDeliveryPipelineConditionTargetsPresentCondition(des, initial *
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineConditionTargetsPresentConditionSlice(des, initial []DeliveryPipelineConditionTargetsPresentCondition, opts ...dcl.ApplyOption) []DeliveryPipelineConditionTargetsPresentCondition {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineConditionTargetsPresentCondition, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineConditionTargetsPresentCondition(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineConditionTargetsPresentCondition, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineConditionTargetsPresentCondition(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineConditionTargetsPresentCondition(c *Client, des, nw *DeliveryPipelineConditionTargetsPresentCondition) *DeliveryPipelineConditionTargetsPresentCondition {
 
 	if des == nil {
@@ -3817,52 +2044,6 @@ func canonicalizeNewDeliveryPipelineConditionTargetsPresentCondition(c *Client, 
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineConditionTargetsPresentConditionSet(c *Client, des, nw []DeliveryPipelineConditionTargetsPresentCondition) []DeliveryPipelineConditionTargetsPresentCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineConditionTargetsPresentCondition
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineConditionTargetsPresentConditionNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineConditionTargetsPresentCondition(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineConditionTargetsPresentConditionSlice(c *Client, des, nw []DeliveryPipelineConditionTargetsPresentCondition) []DeliveryPipelineConditionTargetsPresentCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineConditionTargetsPresentCondition
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineConditionTargetsPresentCondition(c, &d, &n))
-	}
-
-	return items
 }
 
 func canonicalizeDeliveryPipelineConditionTargetsTypeCondition(des, initial *DeliveryPipelineConditionTargetsTypeCondition, opts ...dcl.ApplyOption) *DeliveryPipelineConditionTargetsTypeCondition {
@@ -3893,34 +2074,6 @@ func canonicalizeDeliveryPipelineConditionTargetsTypeCondition(des, initial *Del
 	return cDes
 }
 
-func canonicalizeDeliveryPipelineConditionTargetsTypeConditionSlice(des, initial []DeliveryPipelineConditionTargetsTypeCondition, opts ...dcl.ApplyOption) []DeliveryPipelineConditionTargetsTypeCondition {
-	if dcl.IsEmptyValueIndirect(des) {
-		return initial
-	}
-
-	if len(des) != len(initial) {
-
-		items := make([]DeliveryPipelineConditionTargetsTypeCondition, 0, len(des))
-		for _, d := range des {
-			cd := canonicalizeDeliveryPipelineConditionTargetsTypeCondition(&d, nil, opts...)
-			if cd != nil {
-				items = append(items, *cd)
-			}
-		}
-		return items
-	}
-
-	items := make([]DeliveryPipelineConditionTargetsTypeCondition, 0, len(des))
-	for i, d := range des {
-		cd := canonicalizeDeliveryPipelineConditionTargetsTypeCondition(&d, &initial[i], opts...)
-		if cd != nil {
-			items = append(items, *cd)
-		}
-	}
-	return items
-
-}
-
 func canonicalizeNewDeliveryPipelineConditionTargetsTypeCondition(c *Client, des, nw *DeliveryPipelineConditionTargetsTypeCondition) *DeliveryPipelineConditionTargetsTypeCondition {
 
 	if des == nil {
@@ -3943,52 +2096,6 @@ func canonicalizeNewDeliveryPipelineConditionTargetsTypeCondition(c *Client, des
 	}
 
 	return nw
-}
-
-func canonicalizeNewDeliveryPipelineConditionTargetsTypeConditionSet(c *Client, des, nw []DeliveryPipelineConditionTargetsTypeCondition) []DeliveryPipelineConditionTargetsTypeCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Find the elements in des that are also in nw and canonicalize them. Remove matched elements from nw.
-	var items []DeliveryPipelineConditionTargetsTypeCondition
-	for _, d := range des {
-		matchedIndex := -1
-		for i, n := range nw {
-			if diffs, _ := compareDeliveryPipelineConditionTargetsTypeConditionNewStyle(&d, &n, dcl.FieldName{}); len(diffs) == 0 {
-				matchedIndex = i
-				break
-			}
-		}
-		if matchedIndex != -1 {
-			items = append(items, *canonicalizeNewDeliveryPipelineConditionTargetsTypeCondition(c, &d, &nw[matchedIndex]))
-			nw = append(nw[:matchedIndex], nw[matchedIndex+1:]...)
-		}
-	}
-	// Also include elements in nw that are not matched in des.
-	items = append(items, nw...)
-
-	return items
-}
-
-func canonicalizeNewDeliveryPipelineConditionTargetsTypeConditionSlice(c *Client, des, nw []DeliveryPipelineConditionTargetsTypeCondition) []DeliveryPipelineConditionTargetsTypeCondition {
-	if des == nil {
-		return nw
-	}
-
-	// Lengths are unequal. A diff will occur later, so we shouldn't canonicalize.
-	// Return the original array.
-	if len(des) != len(nw) {
-		return nw
-	}
-
-	var items []DeliveryPipelineConditionTargetsTypeCondition
-	for i, d := range des {
-		n := nw[i]
-		items = append(items, *canonicalizeNewDeliveryPipelineConditionTargetsTypeCondition(c, &d, &n))
-	}
-
-	return items
 }
 
 // The differ returns a list of diffs, along with a list of operations that should be taken
@@ -5225,87 +3332,6 @@ func flattenDeliveryPipeline(c *Client, i interface{}, res *DeliveryPipeline) *D
 	return resultRes
 }
 
-// expandDeliveryPipelineSerialPipelineMap expands the contents of DeliveryPipelineSerialPipeline into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineMap(c *Client, f map[string]DeliveryPipelineSerialPipeline, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipeline(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineSlice expands the contents of DeliveryPipelineSerialPipeline into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineSlice(c *Client, f []DeliveryPipelineSerialPipeline, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipeline(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineMap flattens the contents of DeliveryPipelineSerialPipeline from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipeline {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipeline{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipeline{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipeline)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipeline(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineSlice flattens the contents of DeliveryPipelineSerialPipeline from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipeline {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipeline{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipeline{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipeline, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipeline(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipeline expands an instance of DeliveryPipelineSerialPipeline into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipeline(c *Client, f *DeliveryPipelineSerialPipeline, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -5341,27 +3367,6 @@ func flattenDeliveryPipelineSerialPipeline(c *Client, i interface{}, res *Delive
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesMap expands the contents of DeliveryPipelineSerialPipelineStages into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStages, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStages(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandDeliveryPipelineSerialPipelineStagesSlice expands the contents of DeliveryPipelineSerialPipelineStages into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesSlice(c *Client, f []DeliveryPipelineSerialPipelineStages, res *DeliveryPipeline) ([]map[string]interface{}, error) {
@@ -5380,26 +3385,6 @@ func expandDeliveryPipelineSerialPipelineStagesSlice(c *Client, f []DeliveryPipe
 	}
 
 	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesMap flattens the contents of DeliveryPipelineSerialPipelineStages from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStages {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStages{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStages{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStages)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStages(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenDeliveryPipelineSerialPipelineStagesSlice flattens the contents of DeliveryPipelineSerialPipelineStages from a JSON
@@ -5471,87 +3456,6 @@ func flattenDeliveryPipelineSerialPipelineStages(c *Client, i interface{}, res *
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategy expands an instance of DeliveryPipelineSerialPipelineStagesStrategy into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategy, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -5591,87 +3495,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategy(c *Client, i interface{
 	r.Canary = flattenDeliveryPipelineSerialPipelineStagesStrategyCanary(c, m["canary"], res)
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandard into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyStandard, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandard(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandard into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyStandard, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandard(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandard from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyStandard {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyStandard)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyStandard(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandard from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyStandard {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandard, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyStandard(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 func expandDeliveryPipelineSerialPipelineStagesStrategyStandard(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyStandard, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -5721,87 +3544,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyStandard(c *Client, i in
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
 	if f == nil {
 		return nil, nil
@@ -5837,87 +3579,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy(c *Cli
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 func expandDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
 	if f == nil {
 		return nil, nil
@@ -5951,87 +3612,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy(c *Cl
 	r.Tasks = flattenDeliveryPipelineTaskSlice(c, m["tasks"], res)
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanary into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanary, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanary(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanarySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanary into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanarySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanary, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanary(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanary from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanary {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanary)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanary(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanarySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanary from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanarySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanary {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanary, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanary(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanary expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanary into a JSON
@@ -6081,87 +3661,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanary(c *Client, i inte
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -6203,87 +3702,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig(c *C
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -6323,87 +3741,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKuber
 	r.ServiceNetworking = flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, m["serviceNetworking"], res)
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh into a JSON
@@ -6465,87 +3802,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKuber
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -6581,87 +3837,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKuber
 	r.PropagateService = dcl.FlattenBool(m["propagateService"])
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking into a JSON
@@ -6709,87 +3884,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKuber
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -6833,87 +3927,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloud
 	r.StableRevisionTags = dcl.FlattenStringSlice(m["stableRevisionTags"])
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 func expandDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysis(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyStandardAnalysis, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -7157,87 +4170,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment(c
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 func expandDeliveryPipelineTaskSlice(c *Client, f []DeliveryPipelineTask, res *DeliveryPipeline) ([]map[string]interface{}, error) {
 	if f == nil {
 		return nil, nil
@@ -7365,87 +4297,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPr
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
 	if f == nil {
 		return nil, nil
@@ -7479,87 +4330,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPo
 	r.Tasks = flattenDeliveryPipelineTaskSlice(c, m["tasks"], res)
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment expands an instance of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment into a JSON
@@ -7597,27 +4367,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploy
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs, res *DeliveryPipeline) ([]map[string]interface{}, error) {
@@ -7636,26 +4385,6 @@ func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploym
 	}
 
 	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsSlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs from a JSON
@@ -7763,87 +4492,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploy
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
 	if f == nil {
 		return nil, nil
@@ -7877,87 +4525,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploy
 	r.Tasks = flattenDeliveryPipelineTaskSlice(c, m["tasks"], res)
 
 	return r
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployMap expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice expands the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice(c *Client, f []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployMap flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice flattens the contents of DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploySlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-
-	items := make([]DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 func expandDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy(c *Client, f *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -7995,27 +4562,6 @@ func flattenDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploy
 	return r
 }
 
-// expandDeliveryPipelineSerialPipelineStagesDeployParametersMap expands the contents of DeliveryPipelineSerialPipelineStagesDeployParameters into a JSON
-// request object.
-func expandDeliveryPipelineSerialPipelineStagesDeployParametersMap(c *Client, f map[string]DeliveryPipelineSerialPipelineStagesDeployParameters, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineSerialPipelineStagesDeployParameters(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
 // expandDeliveryPipelineSerialPipelineStagesDeployParametersSlice expands the contents of DeliveryPipelineSerialPipelineStagesDeployParameters into a JSON
 // request object.
 func expandDeliveryPipelineSerialPipelineStagesDeployParametersSlice(c *Client, f []DeliveryPipelineSerialPipelineStagesDeployParameters, res *DeliveryPipeline) ([]map[string]interface{}, error) {
@@ -8034,26 +4580,6 @@ func expandDeliveryPipelineSerialPipelineStagesDeployParametersSlice(c *Client, 
 	}
 
 	return items, nil
-}
-
-// flattenDeliveryPipelineSerialPipelineStagesDeployParametersMap flattens the contents of DeliveryPipelineSerialPipelineStagesDeployParameters from a JSON
-// response object.
-func flattenDeliveryPipelineSerialPipelineStagesDeployParametersMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineSerialPipelineStagesDeployParameters {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineSerialPipelineStagesDeployParameters{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineSerialPipelineStagesDeployParameters{}
-	}
-
-	items := make(map[string]DeliveryPipelineSerialPipelineStagesDeployParameters)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineSerialPipelineStagesDeployParameters(c, item.(map[string]interface{}), res)
-	}
-
-	return items
 }
 
 // flattenDeliveryPipelineSerialPipelineStagesDeployParametersSlice flattens the contents of DeliveryPipelineSerialPipelineStagesDeployParameters from a JSON
@@ -8113,87 +4639,6 @@ func flattenDeliveryPipelineSerialPipelineStagesDeployParameters(c *Client, i in
 	return r
 }
 
-// expandDeliveryPipelineConditionMap expands the contents of DeliveryPipelineCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionMap(c *Client, f map[string]DeliveryPipelineCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineConditionSlice expands the contents of DeliveryPipelineCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionSlice(c *Client, f []DeliveryPipelineCondition, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineConditionMap flattens the contents of DeliveryPipelineCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineCondition {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineCondition{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineCondition{}
-	}
-
-	items := make(map[string]DeliveryPipelineCondition)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineCondition(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineConditionSlice flattens the contents of DeliveryPipelineCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineCondition {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineCondition{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineCondition{}
-	}
-
-	items := make([]DeliveryPipelineCondition, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineCondition(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineCondition expands an instance of DeliveryPipelineCondition into a JSON
 // request object.
 func expandDeliveryPipelineCondition(c *Client, f *DeliveryPipelineCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -8241,87 +4686,6 @@ func flattenDeliveryPipelineCondition(c *Client, i interface{}, res *DeliveryPip
 	return r
 }
 
-// expandDeliveryPipelineConditionPipelineReadyConditionMap expands the contents of DeliveryPipelineConditionPipelineReadyCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionPipelineReadyConditionMap(c *Client, f map[string]DeliveryPipelineConditionPipelineReadyCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineConditionPipelineReadyCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineConditionPipelineReadyConditionSlice expands the contents of DeliveryPipelineConditionPipelineReadyCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionPipelineReadyConditionSlice(c *Client, f []DeliveryPipelineConditionPipelineReadyCondition, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineConditionPipelineReadyCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineConditionPipelineReadyConditionMap flattens the contents of DeliveryPipelineConditionPipelineReadyCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionPipelineReadyConditionMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineConditionPipelineReadyCondition {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineConditionPipelineReadyCondition{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineConditionPipelineReadyCondition{}
-	}
-
-	items := make(map[string]DeliveryPipelineConditionPipelineReadyCondition)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineConditionPipelineReadyCondition(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineConditionPipelineReadyConditionSlice flattens the contents of DeliveryPipelineConditionPipelineReadyCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionPipelineReadyConditionSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineConditionPipelineReadyCondition {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineConditionPipelineReadyCondition{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineConditionPipelineReadyCondition{}
-	}
-
-	items := make([]DeliveryPipelineConditionPipelineReadyCondition, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineConditionPipelineReadyCondition(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineConditionPipelineReadyCondition expands an instance of DeliveryPipelineConditionPipelineReadyCondition into a JSON
 // request object.
 func expandDeliveryPipelineConditionPipelineReadyCondition(c *Client, f *DeliveryPipelineConditionPipelineReadyCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -8357,87 +4721,6 @@ func flattenDeliveryPipelineConditionPipelineReadyCondition(c *Client, i interfa
 	r.UpdateTime = dcl.FlattenString(m["updateTime"])
 
 	return r
-}
-
-// expandDeliveryPipelineConditionTargetsPresentConditionMap expands the contents of DeliveryPipelineConditionTargetsPresentCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionTargetsPresentConditionMap(c *Client, f map[string]DeliveryPipelineConditionTargetsPresentCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineConditionTargetsPresentCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineConditionTargetsPresentConditionSlice expands the contents of DeliveryPipelineConditionTargetsPresentCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionTargetsPresentConditionSlice(c *Client, f []DeliveryPipelineConditionTargetsPresentCondition, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineConditionTargetsPresentCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineConditionTargetsPresentConditionMap flattens the contents of DeliveryPipelineConditionTargetsPresentCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionTargetsPresentConditionMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineConditionTargetsPresentCondition {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineConditionTargetsPresentCondition{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineConditionTargetsPresentCondition{}
-	}
-
-	items := make(map[string]DeliveryPipelineConditionTargetsPresentCondition)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineConditionTargetsPresentCondition(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineConditionTargetsPresentConditionSlice flattens the contents of DeliveryPipelineConditionTargetsPresentCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionTargetsPresentConditionSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineConditionTargetsPresentCondition {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineConditionTargetsPresentCondition{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineConditionTargetsPresentCondition{}
-	}
-
-	items := make([]DeliveryPipelineConditionTargetsPresentCondition, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineConditionTargetsPresentCondition(c, item.(map[string]interface{}), res))
-	}
-
-	return items
 }
 
 // expandDeliveryPipelineConditionTargetsPresentCondition expands an instance of DeliveryPipelineConditionTargetsPresentCondition into a JSON
@@ -8481,87 +4764,6 @@ func flattenDeliveryPipelineConditionTargetsPresentCondition(c *Client, i interf
 	return r
 }
 
-// expandDeliveryPipelineConditionTargetsTypeConditionMap expands the contents of DeliveryPipelineConditionTargetsTypeCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionTargetsTypeConditionMap(c *Client, f map[string]DeliveryPipelineConditionTargetsTypeCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := make(map[string]interface{})
-	for k, item := range f {
-		i, err := expandDeliveryPipelineConditionTargetsTypeCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-		if i != nil {
-			items[k] = i
-		}
-	}
-
-	return items, nil
-}
-
-// expandDeliveryPipelineConditionTargetsTypeConditionSlice expands the contents of DeliveryPipelineConditionTargetsTypeCondition into a JSON
-// request object.
-func expandDeliveryPipelineConditionTargetsTypeConditionSlice(c *Client, f []DeliveryPipelineConditionTargetsTypeCondition, res *DeliveryPipeline) ([]map[string]interface{}, error) {
-	if f == nil {
-		return nil, nil
-	}
-
-	items := []map[string]interface{}{}
-	for _, item := range f {
-		i, err := expandDeliveryPipelineConditionTargetsTypeCondition(c, &item, res)
-		if err != nil {
-			return nil, err
-		}
-
-		items = append(items, i)
-	}
-
-	return items, nil
-}
-
-// flattenDeliveryPipelineConditionTargetsTypeConditionMap flattens the contents of DeliveryPipelineConditionTargetsTypeCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionTargetsTypeConditionMap(c *Client, i interface{}, res *DeliveryPipeline) map[string]DeliveryPipelineConditionTargetsTypeCondition {
-	a, ok := i.(map[string]interface{})
-	if !ok {
-		return map[string]DeliveryPipelineConditionTargetsTypeCondition{}
-	}
-
-	if len(a) == 0 {
-		return map[string]DeliveryPipelineConditionTargetsTypeCondition{}
-	}
-
-	items := make(map[string]DeliveryPipelineConditionTargetsTypeCondition)
-	for k, item := range a {
-		items[k] = *flattenDeliveryPipelineConditionTargetsTypeCondition(c, item.(map[string]interface{}), res)
-	}
-
-	return items
-}
-
-// flattenDeliveryPipelineConditionTargetsTypeConditionSlice flattens the contents of DeliveryPipelineConditionTargetsTypeCondition from a JSON
-// response object.
-func flattenDeliveryPipelineConditionTargetsTypeConditionSlice(c *Client, i interface{}, res *DeliveryPipeline) []DeliveryPipelineConditionTargetsTypeCondition {
-	a, ok := i.([]interface{})
-	if !ok {
-		return []DeliveryPipelineConditionTargetsTypeCondition{}
-	}
-
-	if len(a) == 0 {
-		return []DeliveryPipelineConditionTargetsTypeCondition{}
-	}
-
-	items := make([]DeliveryPipelineConditionTargetsTypeCondition, 0, len(a))
-	for _, item := range a {
-		items = append(items, *flattenDeliveryPipelineConditionTargetsTypeCondition(c, item.(map[string]interface{}), res))
-	}
-
-	return items
-}
-
 // expandDeliveryPipelineConditionTargetsTypeCondition expands an instance of DeliveryPipelineConditionTargetsTypeCondition into a JSON
 // request object.
 func expandDeliveryPipelineConditionTargetsTypeCondition(c *Client, f *DeliveryPipelineConditionTargetsTypeCondition, res *DeliveryPipeline) (map[string]interface{}, error) {
@@ -8597,48 +4799,6 @@ func flattenDeliveryPipelineConditionTargetsTypeCondition(c *Client, i interface
 	r.ErrorDetails = dcl.FlattenString(m["errorDetails"])
 
 	return r
-}
-
-// This function returns a matcher that checks whether a serialized resource matches this resource
-// in its parameters (as defined by the fields in a Get, which definitionally define resource
-// identity).  This is useful in extracting the element from a List call.
-func (r *DeliveryPipeline) matcher(c *Client) func([]byte) bool {
-	return func(b []byte) bool {
-		cr, err := unmarshalDeliveryPipeline(b, c, r)
-		if err != nil {
-			c.Config.Logger.Warning("failed to unmarshal provided resource in matcher.")
-			return false
-		}
-		nr := r.urlNormalized()
-		ncr := cr.urlNormalized()
-		c.Config.Logger.Infof("looking for %v\nin %v", nr, ncr)
-
-		if nr.Project == nil && ncr.Project == nil {
-			c.Config.Logger.Info("Both Project fields null - considering equal.")
-		} else if nr.Project == nil || ncr.Project == nil {
-			c.Config.Logger.Info("Only one Project field is null - considering unequal.")
-			return false
-		} else if *nr.Project != *ncr.Project {
-			return false
-		}
-		if nr.Location == nil && ncr.Location == nil {
-			c.Config.Logger.Info("Both Location fields null - considering equal.")
-		} else if nr.Location == nil || ncr.Location == nil {
-			c.Config.Logger.Info("Only one Location field is null - considering unequal.")
-			return false
-		} else if *nr.Location != *ncr.Location {
-			return false
-		}
-		if nr.Name == nil && ncr.Name == nil {
-			c.Config.Logger.Info("Both Name fields null - considering equal.")
-		} else if nr.Name == nil || ncr.Name == nil {
-			c.Config.Logger.Info("Only one Name field is null - considering unequal.")
-			return false
-		} else if *nr.Name != *ncr.Name {
-			return false
-		}
-		return true
-	}
 }
 
 type deliveryPipelineDiff struct {
@@ -8720,253 +4880,6 @@ func extractDeliveryPipelineFields(r *DeliveryPipeline) error {
 func extractDeliveryPipelineSerialPipelineFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipeline) error {
 	return nil
 }
-func extractDeliveryPipelineSerialPipelineStagesFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStages) error {
-	vStrategy := o.Strategy
-	if vStrategy == nil {
-		// note: explicitly not the empty object.
-		vStrategy = &DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyFields(r, vStrategy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vStrategy) {
-		o.Strategy = vStrategy
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategy) error {
-	vStandard := o.Standard
-	if vStandard == nil {
-		// note: explicitly not the empty object.
-		vStandard = &DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardFields(r, vStandard); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vStandard) {
-		o.Standard = vStandard
-	}
-	vCanary := o.Canary
-	if vCanary == nil {
-		// note: explicitly not the empty object.
-		vCanary = &DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryFields(r, vCanary); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCanary) {
-		o.Canary = vCanary
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyStandardFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandard) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanary) error {
-	vRuntimeConfig := o.RuntimeConfig
-	if vRuntimeConfig == nil {
-		// note: explicitly not the empty object.
-		vRuntimeConfig = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigFields(r, vRuntimeConfig); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRuntimeConfig) {
-		o.RuntimeConfig = vRuntimeConfig
-	}
-	vCanaryDeployment := o.CanaryDeployment
-	if vCanaryDeployment == nil {
-		// note: explicitly not the empty object.
-		vCanaryDeployment = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentFields(r, vCanaryDeployment); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCanaryDeployment) {
-		o.CanaryDeployment = vCanaryDeployment
-	}
-	vCustomCanaryDeployment := o.CustomCanaryDeployment
-	if vCustomCanaryDeployment == nil {
-		// note: explicitly not the empty object.
-		vCustomCanaryDeployment = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentFields(r, vCustomCanaryDeployment); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCustomCanaryDeployment) {
-		o.CustomCanaryDeployment = vCustomCanaryDeployment
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) error {
-	vKubernetes := o.Kubernetes
-	if vKubernetes == nil {
-		// note: explicitly not the empty object.
-		vKubernetes = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesFields(r, vKubernetes); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vKubernetes) {
-		o.Kubernetes = vKubernetes
-	}
-	vCloudRun := o.CloudRun
-	if vCloudRun == nil {
-		// note: explicitly not the empty object.
-		vCloudRun = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunFields(r, vCloudRun); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCloudRun) {
-		o.CloudRun = vCloudRun
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) error {
-	vGatewayServiceMesh := o.GatewayServiceMesh
-	if vGatewayServiceMesh == nil {
-		// note: explicitly not the empty object.
-		vGatewayServiceMesh = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshFields(r, vGatewayServiceMesh); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vGatewayServiceMesh) {
-		o.GatewayServiceMesh = vGatewayServiceMesh
-	}
-	vServiceNetworking := o.ServiceNetworking
-	if vServiceNetworking == nil {
-		// note: explicitly not the empty object.
-		vServiceNetworking = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingFields(r, vServiceNetworking); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vServiceNetworking) {
-		o.ServiceNetworking = vServiceNetworking
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) error {
-	vRouteDestinations := o.RouteDestinations
-	if vRouteDestinations == nil {
-		// note: explicitly not the empty object.
-		vRouteDestinations = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsFields(r, vRouteDestinations); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRouteDestinations) {
-		o.RouteDestinations = vRouteDestinations
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) error {
-	return nil
-}
-func extractDeliveryPipelineSerialPipelineStagesDeployParametersFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesDeployParameters) error {
-	return nil
-}
 func extractDeliveryPipelineConditionFields(r *DeliveryPipeline, o *DeliveryPipelineCondition) error {
 	vPipelineReadyCondition := o.PipelineReadyCondition
 	if vPipelineReadyCondition == nil {
@@ -9041,253 +4954,6 @@ func postReadExtractDeliveryPipelineFields(r *DeliveryPipeline) error {
 func postReadExtractDeliveryPipelineSerialPipelineFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipeline) error {
 	return nil
 }
-func postReadExtractDeliveryPipelineSerialPipelineStagesFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStages) error {
-	vStrategy := o.Strategy
-	if vStrategy == nil {
-		// note: explicitly not the empty object.
-		vStrategy = &DeliveryPipelineSerialPipelineStagesStrategy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyFields(r, vStrategy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vStrategy) {
-		o.Strategy = vStrategy
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategy) error {
-	vStandard := o.Standard
-	if vStandard == nil {
-		// note: explicitly not the empty object.
-		vStandard = &DeliveryPipelineSerialPipelineStagesStrategyStandard{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardFields(r, vStandard); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vStandard) {
-		o.Standard = vStandard
-	}
-	vCanary := o.Canary
-	if vCanary == nil {
-		// note: explicitly not the empty object.
-		vCanary = &DeliveryPipelineSerialPipelineStagesStrategyCanary{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryFields(r, vCanary); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCanary) {
-		o.Canary = vCanary
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyStandardFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandard) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyStandardPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandardPredeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyStandardPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyStandardPostdeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanary) error {
-	vRuntimeConfig := o.RuntimeConfig
-	if vRuntimeConfig == nil {
-		// note: explicitly not the empty object.
-		vRuntimeConfig = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigFields(r, vRuntimeConfig); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRuntimeConfig) {
-		o.RuntimeConfig = vRuntimeConfig
-	}
-	vCanaryDeployment := o.CanaryDeployment
-	if vCanaryDeployment == nil {
-		// note: explicitly not the empty object.
-		vCanaryDeployment = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentFields(r, vCanaryDeployment); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCanaryDeployment) {
-		o.CanaryDeployment = vCanaryDeployment
-	}
-	vCustomCanaryDeployment := o.CustomCanaryDeployment
-	if vCustomCanaryDeployment == nil {
-		// note: explicitly not the empty object.
-		vCustomCanaryDeployment = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentFields(r, vCustomCanaryDeployment); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCustomCanaryDeployment) {
-		o.CustomCanaryDeployment = vCustomCanaryDeployment
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfig) error {
-	vKubernetes := o.Kubernetes
-	if vKubernetes == nil {
-		// note: explicitly not the empty object.
-		vKubernetes = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesFields(r, vKubernetes); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vKubernetes) {
-		o.Kubernetes = vKubernetes
-	}
-	vCloudRun := o.CloudRun
-	if vCloudRun == nil {
-		// note: explicitly not the empty object.
-		vCloudRun = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunFields(r, vCloudRun); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vCloudRun) {
-		o.CloudRun = vCloudRun
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetes) error {
-	vGatewayServiceMesh := o.GatewayServiceMesh
-	if vGatewayServiceMesh == nil {
-		// note: explicitly not the empty object.
-		vGatewayServiceMesh = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshFields(r, vGatewayServiceMesh); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vGatewayServiceMesh) {
-		o.GatewayServiceMesh = vGatewayServiceMesh
-	}
-	vServiceNetworking := o.ServiceNetworking
-	if vServiceNetworking == nil {
-		// note: explicitly not the empty object.
-		vServiceNetworking = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingFields(r, vServiceNetworking); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vServiceNetworking) {
-		o.ServiceNetworking = vServiceNetworking
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMesh) error {
-	vRouteDestinations := o.RouteDestinations
-	if vRouteDestinations == nil {
-		// note: explicitly not the empty object.
-		vRouteDestinations = &DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsFields(r, vRouteDestinations); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vRouteDestinations) {
-		o.RouteDestinations = vRouteDestinations
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinationsFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesGatewayServiceMeshRouteDestinations) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworkingFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigKubernetesServiceNetworking) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRunFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryRuntimeConfigCloudRun) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeployment) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPredeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCanaryDeploymentPostdeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeployment) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigs) error {
-	vPredeploy := o.Predeploy
-	if vPredeploy == nil {
-		// note: explicitly not the empty object.
-		vPredeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployFields(r, vPredeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPredeploy) {
-		o.Predeploy = vPredeploy
-	}
-	vPostdeploy := o.Postdeploy
-	if vPostdeploy == nil {
-		// note: explicitly not the empty object.
-		vPostdeploy = &DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy{}
-	}
-	if err := extractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployFields(r, vPostdeploy); err != nil {
-		return err
-	}
-	if !dcl.IsEmptyValueIndirect(vPostdeploy) {
-		o.Postdeploy = vPostdeploy
-	}
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPredeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeployFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesStrategyCanaryCustomCanaryDeploymentPhaseConfigsPostdeploy) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineSerialPipelineStagesDeployParametersFields(r *DeliveryPipeline, o *DeliveryPipelineSerialPipelineStagesDeployParameters) error {
-	return nil
-}
 func postReadExtractDeliveryPipelineConditionFields(r *DeliveryPipeline, o *DeliveryPipelineCondition) error {
 	vPipelineReadyCondition := o.PipelineReadyCondition
 	if vPipelineReadyCondition == nil {
@@ -9322,14 +4988,5 @@ func postReadExtractDeliveryPipelineConditionFields(r *DeliveryPipeline, o *Deli
 	if !dcl.IsEmptyValueIndirect(vTargetsTypeCondition) {
 		o.TargetsTypeCondition = vTargetsTypeCondition
 	}
-	return nil
-}
-func postReadExtractDeliveryPipelineConditionPipelineReadyConditionFields(r *DeliveryPipeline, o *DeliveryPipelineConditionPipelineReadyCondition) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineConditionTargetsPresentConditionFields(r *DeliveryPipeline, o *DeliveryPipelineConditionTargetsPresentCondition) error {
-	return nil
-}
-func postReadExtractDeliveryPipelineConditionTargetsTypeConditionFields(r *DeliveryPipeline, o *DeliveryPipelineConditionTargetsTypeCondition) error {
 	return nil
 }
