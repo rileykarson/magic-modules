@@ -193,6 +193,50 @@ func clusterSchemaNodePoolDefaults() *schema.Schema {
 							"gcfs_config": schemaGcfsConfig(),
 							"insecure_kubelet_readonly_port_enabled": schemaInsecureKubeletReadonlyPortEnabled(),
 							"logging_variant": schemaLoggingVariant(),
+
+{{- if ne $.TargetVersionName "ga" }}
+							"host_maintenance_policy": {
+								Type:        schema.TypeList,
+								Optional:    true,
+								Description: `The maintenance policy for the hosts on which the GKE VMs run on.`,
+								MaxItems:    1,
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"maintenance_interval": {
+											Type: schema.TypeString,
+											Required:     true,
+											Description:  `Specifies the frequency of planned maintenance events. One of: "MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC".`,
+											ValidateFunc: validation.StringInSlice([]string{"MAINTENANCE_INTERVAL_UNSPECIFIED", "AS_NEEDED", "PERIODIC"}, false),
+										},
+										"opportunistic_maintenance_strategy": {
+											Type:        schema.TypeList,
+											Optional:    true,
+											MaxItems:    1,
+											Description: `Strategy that will trigger maintenance on behalf of the customer.`,
+											Elem: &schema.Resource{
+												Schema: map[string]*schema.Schema{
+													"node_idle_time_window": {
+														Type:        schema.TypeString,
+														Required:    true,
+														Description: `The amount of time that a node can remain idle (no customer owned workloads running), before triggering maintenance.`,
+													},
+													"maintenance_availability_window": {
+														Type:        schema.TypeString,
+														Required:    true,
+														Description: `The window of time that opportunistic maintenance can run. Example: A setting of 14 days implies that opportunistic maintenance can only be ran in the 2 weeks leading up to the scheduled maintenance date. Setting 28 days allows opportunistic maintenance to run at any time in the scheduled maintenance window (all PERIODIC maintenance is set 28 days in advance).`,
+													},
+													"min_nodes_per_pool": {
+														Type:        schema.TypeInt,
+														Required:    true,
+														Description: `The minimum nodes required to be available in a pool. Blocks maintenance if it would cause the number of running nodes to dip below this value.`,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+{{- end }}
 						},
 					},
 				},
@@ -5473,6 +5517,23 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 			log.Printf("[INFO] GKE cluster %s containerd config has been updated to %#v", d.Id(), req.Update.DesiredContainerdConfig)
 		}
 	}
+
+{{- if ne $.TargetVersionName "ga" }}
+	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy") {
+		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy"); ok {
+			req := &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredHostMaintenancePolicy: expandHostMaintenancePolicy(v),
+				},
+			}
+			updateF := updateFunc(req, "updating GKE cluster host maintenance policy config")
+			if err := updateF(); err != nil {
+				return err
+			}
+			log.Printf("[INFO] GKE cluster %s host maintenance policy config has been updated", d.Id())
+		}
+	}
+{{- end }}
 
 	if d.HasChange("node_pool_auto_config.0.node_kubelet_config") {
 		req := &container.UpdateClusterRequest{

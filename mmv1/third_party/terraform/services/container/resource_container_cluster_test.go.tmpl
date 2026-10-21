@@ -21224,3 +21224,88 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+
+{{ if ne $.TargetVersionName `ga` -}}
+func TestAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(t *testing.T) {
+	t.Parallel()
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:         func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
+		CheckDestroy: testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "PERIODIC", "1209600s"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "PERIODIC"),
+				),
+			},
+			{
+				ResourceName:      "google_container_cluster.primary",
+				ImportStateId:     fmt.Sprintf("us-east1-c/%s", clusterName),
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{"deletion_protection"},
+			},
+			{
+				Config: testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, "AS_NEEDED", "1296000s"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.#", "1"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary",
+						"node_pool_defaults.0.node_config_defaults.0.host_maintenance_policy.0.maintenance_interval", "AS_NEEDED"),
+				),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withNodePoolDefaultsHostMaintenancePolicy(clusterName, networkName, subnetworkName, interval, window string) string {
+        return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  provider           = google-beta
+  name               = "%s"
+  location           = "us-east1-c"
+  initial_node_count = 1
+
+  node_config {
+    machine_type = "n1-standard-2"
+    guest_accelerator {
+      type  = "nvidia-tesla-t4"
+      count = 1
+      gpu_driver_installation_config {
+        gpu_driver_version = "LATEST"
+      }
+    }
+  }
+
+  node_pool_defaults {
+    node_config_defaults {
+      host_maintenance_policy {
+        maintenance_interval = "%s"
+		opportunistic_maintenance_strategy {
+			maintenance_availability_window = "%s"
+			min_nodes_per_pool = 1
+			node_idle_time_window = "1800s"
+		}
+      }
+    }
+  }
+  network    = "%s"
+  subnetwork = "%s"
+
+  deletion_protection = false
+}
+`, clusterName, interval, window, networkName, subnetworkName)
+}
+{{- end }}

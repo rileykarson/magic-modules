@@ -1639,6 +1639,12 @@ func expandNodeConfigDefaults(configured interface{}) *container.NodeConfigDefau
 		}
 	}
 
+{{ if ne $.TargetVersionName `ga` -}}
+	if v, ok := config["host_maintenance_policy"]; ok {
+		nodeConfigDefaults.HostMaintenancePolicy = expandHostMaintenancePolicy(v)
+	}
+{{- end }}
+
 	return nodeConfigDefaults
 }
 
@@ -3048,6 +3054,10 @@ func flattenNodeConfigDefaults(c *container.NodeConfigDefaults) []map[string]int
 	result[0]["logging_variant"] = flattenLoggingVariant(c.LoggingConfig)
 
 	result[0]["gcfs_config"] = flattenGcfsConfig(c.GcfsConfig)
+
+{{ if ne $.TargetVersionName `ga` -}}
+	result[0]["host_maintenance_policy"] = flattenHostMaintenancePolicy(c.HostMaintenancePolicy)
+{{- end }}
 
 	return result
 }
