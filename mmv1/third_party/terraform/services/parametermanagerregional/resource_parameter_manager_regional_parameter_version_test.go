@@ -11,9 +11,7 @@ import (
 func TestAccParameterManagerRegionalRegionalParameterVersion_update(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21,7 +19,10 @@ func TestAccParameterManagerRegionalRegionalParameterVersion_update(t *testing.T
 		CheckDestroy:             testAccCheckParameterManagerRegionalRegionalParameterVersionDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccParameterManagerRegionalRegionalParameterVersion_basic(context),
+				Config: testAccParameterManagerRegionalRegionalParameterVersion_update(map[string]interface{}{
+					"disabled":      nil,
+					"random_suffix": randomSuffix,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_parameter_manager_regional_parameter_version.regional-parameter-version-update", "data_crc32c", "4019737965"),
 				),
@@ -33,7 +34,10 @@ func TestAccParameterManagerRegionalRegionalParameterVersion_update(t *testing.T
 				ImportStateVerifyIgnore: []string{"parameter", "parameter_version_id"},
 			},
 			{
-				Config: testAccParameterManagerRegionalRegionalParameterVersion_update(context),
+				Config: testAccParameterManagerRegionalRegionalParameterVersion_update(map[string]interface{}{
+					"disabled":      true,
+					"random_suffix": randomSuffix,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_parameter_manager_regional_parameter_version.regional-parameter-version-update", "data_crc32c", "4019737965"),
 				),
@@ -47,7 +51,10 @@ func TestAccParameterManagerRegionalRegionalParameterVersion_update(t *testing.T
 				ImportStateVerifyIgnore: []string{"parameter", "parameter_version_id", "data_crc32c"},
 			},
 			{
-				Config: testAccParameterManagerRegionalRegionalParameterVersion_basic(context),
+				Config: testAccParameterManagerRegionalRegionalParameterVersion_update(map[string]interface{}{
+					"disabled":      nil,
+					"random_suffix": randomSuffix,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_parameter_manager_regional_parameter_version.regional-parameter-version-update", "data_crc32c", "4019737965"),
 				),
@@ -90,21 +97,6 @@ func TestAccParameterManagerRegionalRegionalParameterVersion_dataCrc32c(t *testi
 	})
 }
 
-func testAccParameterManagerRegionalRegionalParameterVersion_basic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_parameter_manager_regional_parameter" "regional-parameter-update" {
-  parameter_id = "tf_test_regional_parameter%{random_suffix}"
-  location = "us-central1"
-}
-
-resource "google_parameter_manager_regional_parameter_version" "regional-parameter-version-update" {
-  parameter = google_parameter_manager_regional_parameter.regional-parameter-update.id
-  parameter_version_id = "tf_test_regional_parameter_version%{random_suffix}"
-  parameter_data = "regional-parameter-version-data"
-}
-`, context)
-}
-
 func testAccParameterManagerRegionalRegionalParameterVersion_update(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_parameter_manager_regional_parameter" "regional-parameter-update" {
@@ -116,7 +108,7 @@ resource "google_parameter_manager_regional_parameter_version" "regional-paramet
   parameter = google_parameter_manager_regional_parameter.regional-parameter-update.id
   parameter_version_id = "tf_test_regional_parameter_version%{random_suffix}"
   parameter_data = "regional-parameter-version-data"
-  disabled = true
+  disabled = %{disabled}
 }
 `, context)
 }
