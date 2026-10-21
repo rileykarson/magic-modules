@@ -21229,8 +21229,8 @@ func TestAccContainerCluster_allowRouteOverlap(t *testing.T) {
 	t.Parallel()
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
-	networkName := fmt.Sprintf("tf-test-network-%s", acctest.RandString(t, 10))
-	subnetName := fmt.Sprintf("tf-test-subnet-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.83.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21249,40 +21249,20 @@ func TestAccContainerCluster_allowRouteOverlap(t *testing.T) {
 
 func testAccContainerCluster_allowRouteOverlap(clusterName, networkName, subnetName string) string {
 	return fmt.Sprintf(`
-resource "google_compute_network" "default" {
-  name                    = "%s"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "default" {
-  name          = "%s"
-  ip_cidr_range = "10.0.0.0/16"
-  region        = "us-central1"
-  network       = google_compute_network.default.id
-  secondary_ip_range {
-    range_name    = "services-range"
-    ip_cidr_range = "192.168.1.0/24"
-  }
-  secondary_ip_range {
-    range_name    = "pod-ranges"
-    ip_cidr_range = "192.168.64.0/22"
-  }
-}
-
 resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "us-central1-a"
   initial_node_count = 1
-  network            = google_compute_network.default.id
-  subnetwork         = google_compute_subnetwork.default.id
+  network            = "%s"
+  subnetwork         = "%s"
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = "pod-ranges"
-    services_secondary_range_name = "services-range"
-    allow_route_overlap           = true
+    cluster_ipv4_cidr_block  = "10.84.0.0/16"
+    services_ipv4_cidr_block = "10.85.0.0/16"
+    allow_route_overlap      = true
   }
   deletion_protection = false
 }
-`, networkName, subnetName, clusterName)
+`, clusterName, networkName, subnetName)
 }
 {{- end }}
