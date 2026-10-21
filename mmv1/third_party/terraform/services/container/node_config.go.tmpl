@@ -1249,7 +1249,7 @@ func schemaNodeConfig() *schema.Schema {
 									},
 								},
 							},
-														"disk_io_scheduler": {
+							"disk_io_scheduler": {
 								Type:             schema.TypeList,
 								Optional:         true,
 								MaxItems: 1,
@@ -2397,7 +2397,7 @@ func expandLinuxNodeConfig(v interface{}) *container.LinuxNodeConfig {
 		linuxNodeConfig.AccurateTimeConfig = expandAccurateTimeConfig(v)
 	}
 
-		if v, ok := cfg["disk_io_scheduler"]; ok {
+	if v, ok := cfg["disk_io_scheduler"]; ok {
 		linuxNodeConfig.DiskIoScheduler = expandDiskIoScheduler(v)
 	}
 	if v, ok := cfg["custom_node_init"]; ok {
@@ -3649,7 +3649,7 @@ func flattenLinuxNodeConfig(c *container.LinuxNodeConfig) []map[string]interface
 			"node_kernel_module_loading":   flattenNodeKernelModuleLoading(c.NodeKernelModuleLoading),
 			"swap_config":                  flattenSwapConfig(c.SwapConfig),
 			"accurate_time_config":         flattenAccurateTimeConfig(c.AccurateTimeConfig),
-						"disk_io_scheduler":             flattenDiskIoScheduler(c.DiskIoScheduler),
+			"disk_io_scheduler":          flattenDiskIoScheduler(c.DiskIoScheduler),
 			"custom_node_init":             flattenCustomNodeInit(c.CustomNodeInit),
 		})
 	}
