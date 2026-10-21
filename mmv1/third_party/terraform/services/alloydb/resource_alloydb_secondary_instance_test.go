@@ -16,8 +16,9 @@ func TestAccAlloydbInstance_secondaryInstanceUpdateMachineConfig(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"random_suffix":  acctest.RandString(t, 10),
+		"network_name":   servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"database_flags": nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -71,6 +72,8 @@ resource "google_alloydb_instance" "primary" {
   machine_config {
     cpu_count = 2
   }
+
+  %{database_flags}
 }
 
 resource "google_alloydb_cluster" "secondary" {
@@ -104,6 +107,8 @@ resource "google_alloydb_instance" "secondary" {
   machine_config {
     cpu_count = 2
   }
+
+  %{database_flags}
 }
 
 data "google_project" "project" {}
@@ -186,8 +191,9 @@ func TestAccAlloydbInstance_secondaryInstanceWithReadPoolInstance(t *testing.T) 
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"random_suffix":  acctest.RandString(t, 10),
+		"network_name":   servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"database_flags": nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -391,8 +397,17 @@ func TestAccAlloydbInstance_secondaryInstanceUpdateDatabaseFlag(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"random_suffix":  acctest.RandString(t, 10),
+		"network_name":   servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"database_flags": nil,
+	}
+
+	contextUpdate := map[string]interface{}{
+		"random_suffix": context["random_suffix"],
+		"network_name":  context["network_name"],
+		"database_flags": `database_flags = {
+    "alloydb.enable_auto_explain" = "true"
+  }`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -410,7 +425,7 @@ func TestAccAlloydbInstance_secondaryInstanceUpdateDatabaseFlag(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"cluster", "instance_id", "reconciling", "update_time", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccAlloydbInstance_secondaryInstanceUpdateDatabaseFlag(context),
+				Config: testAccAlloydbInstance_secondaryInstanceInitial(contextUpdate),
 			},
 			{
 				ResourceName:            "google_alloydb_instance.secondary",
@@ -422,84 +437,14 @@ func TestAccAlloydbInstance_secondaryInstanceUpdateDatabaseFlag(t *testing.T) {
 	})
 }
 
-func testAccAlloydbInstance_secondaryInstanceUpdateDatabaseFlag(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_alloydb_cluster" "primary" {
-  cluster_id = "tf-test-alloydb-primary-cluster%{random_suffix}"
-  location   = "us-east1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-
-  initial_user {
-    password = "tf-test-alloydb-cluster%{random_suffix}"
-  }
-
-  deletion_protection = false
-}
-
-resource "google_alloydb_instance" "primary" {
-  cluster       = google_alloydb_cluster.primary.name
-  instance_id   = "tf-test-alloydb-primary-instance%{random_suffix}"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 2
-  }
-}
-
-resource "google_alloydb_cluster" "secondary" {
-  cluster_id   = "tf-test-alloydb-secondary-cluster%{random_suffix}"
-  location     = "us-east1"
-  network_config {
-    network = data.google_compute_network.default.id
-  }
-  cluster_type = "SECONDARY"
-
-  continuous_backup_config {
-    enabled = false
-  }
-
-  secondary_config {
-    primary_cluster_name = google_alloydb_cluster.primary.name
-  }
-
-  deletion_policy = "FORCE"
-
-  deletion_protection = false
-
-  depends_on = [google_alloydb_instance.primary]
-}
-
-resource "google_alloydb_instance" "secondary" {
-  cluster       = google_alloydb_cluster.secondary.name
-  instance_id   = "tf-test-alloydb-secondary-instance%{random_suffix}"
-  instance_type = google_alloydb_cluster.secondary.cluster_type
-
-  machine_config {
-    cpu_count = 2
-  }
-
-  database_flags = {
-    "alloydb.enable_auto_explain" = "true"
-  }
-}
-
-data "google_project" "project" {}
-
-data "google_compute_network" "default" {
-  name = "%{network_name}"
-}
-`, context)
-}
-
 // This test passes if secondary instance's query insight config can be updated
 func TestAccAlloydbInstance_secondaryInstanceUpdateQueryInsightConfig(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"random_suffix":  acctest.RandString(t, 10),
+		"network_name":   servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"database_flags": nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -608,8 +553,9 @@ func TestAccAlloydbInstance_secondaryInstanceMaximumFields(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"network_name":  servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"random_suffix":  acctest.RandString(t, 10),
+		"network_name":   servicenetworking.BootstrapSharedServiceNetworkingConnection(t, "alloydb-1"),
+		"database_flags": nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
