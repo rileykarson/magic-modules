@@ -167,6 +167,10 @@ state.
 * `addons_config` - (Optional) The configuration for addons supported by GKE.
     Structure is [documented below](#nested_addons_config).
 
+* `allow_net_admin` - (Optional) Enable NET_ADMIN for the cluster. Defaults to
+`false`. This field should only be enabled for Autopilot clusters (`enable_autopilot`
+set to `true`).
+
 * `workload_policy_config` - (Optional) Configuration for cluster workload policy.
     Structure is [documented below](#nested_workload_policy_config).
 

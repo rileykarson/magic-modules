@@ -15543,9 +15543,7 @@ resource "google_container_cluster" "primary" {
   subnetwork       = "%s"
 
   enable_autopilot = true
-  workload_policy_config {
-    allow_net_admin = %t
-  }
+  allow_net_admin  = %t
 
   deletion_protection = false
 }
@@ -21242,12 +21240,14 @@ func TestAccContainerCluster_autopilotCompatibilityAuditing(t *testing.T) {
 			{
 				Config: testAccContainerCluster_workloadPolicyConfig(clusterName, networkName, subnetworkName, false),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.allow_net_admin", "false"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.autopilot_compatibility_auditing_enabled", "false"),
 				),
 			},
 			{
 				Config: testAccContainerCluster_workloadPolicyConfig(clusterName, networkName, subnetworkName, true),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.allow_net_admin", "false"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "workload_policy_config.0.autopilot_compatibility_auditing_enabled", "true"),
 				),
 			},
@@ -21273,6 +21273,7 @@ resource "google_container_cluster" "primary" {
   initial_node_count = 1
 
   workload_policy_config {
+    allow_net_admin                          = false
     autopilot_compatibility_auditing_enabled = %t
   }
 
