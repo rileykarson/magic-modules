@@ -70,6 +70,85 @@ func TestAccApigeeSecurityAction_update(t *testing.T) {
 		"random_suffix":   acctest.RandString(t, 10),
 	}
 
+	contextBaseCondition := map[string]interface{}{
+		"billing_account": context["billing_account"],
+		"org_id":          context["org_id"],
+		"random_suffix":   context["random_suffix"],
+		"http_methods":    nil,
+		"api_keys":        nil,
+		"access_tokens":   nil,
+		"api_products":    nil,
+		"developer_apps":  nil,
+		"developers":      nil,
+		"user_agents":     nil,
+		"region_codes":    nil,
+		"asns":            nil,
+		"expire_time":     `"2032-12-31T23:59:59Z"`,
+		"ttl":             nil,
+	}
+
+	contextHttpMethods := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextHttpMethods[k] = v
+	}
+	contextHttpMethods["http_methods"] = `[ "GET", "POST", "PUT" ]`
+
+	contextApiKeys := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextApiKeys[k] = v
+	}
+	contextApiKeys["api_keys"] = `[ "foo-key", "bar-key" ]`
+
+	contextAccessTokens := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextAccessTokens[k] = v
+	}
+	contextAccessTokens["access_tokens"] = `[ "foo-token", "bar-token" ]`
+
+	contextApiProducts := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextApiProducts[k] = v
+	}
+	contextApiProducts["api_products"] = `[ "foo-product", "bar-product" ]`
+
+	contextDeveloperApps := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextDeveloperApps[k] = v
+	}
+	contextDeveloperApps["developer_apps"] = `[ "foo-app", "bar-app" ]`
+
+	contextDevelopers := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextDevelopers[k] = v
+	}
+	contextDevelopers["developers"] = `[ "foo-developer", "bar-developer" ]`
+
+	contextUserAgents := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextUserAgents[k] = v
+	}
+	contextUserAgents["user_agents"] = `[ "Mozilla/5.0", "curl/7.64.1" ]`
+
+	contextRegionCodes := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextRegionCodes[k] = v
+	}
+	contextRegionCodes["region_codes"] = `[ "US", "CA" ]`
+
+	contextAsns := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextAsns[k] = v
+	}
+	contextAsns["asns"] = `[ "23", "42" ]`
+
+	contextTTL := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextTTL[k] = v
+	}
+	contextTTL["asns"] = `[ "23", "42" ]`
+	contextTTL["expire_time"] = nil
+	contextTTL["ttl"] = `"3600s"`
+
 	resourceName := "google_apigee_security_action.default"
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -183,6 +262,85 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 		"random_suffix":   acctest.RandString(t, 10),
 	}
 
+	contextBaseCondition := map[string]interface{}{
+		"billing_account": context["billing_account"],
+		"org_id":          context["org_id"],
+		"random_suffix":   context["random_suffix"],
+		"http_methods":    nil,
+		"api_keys":        nil,
+		"access_tokens":   nil,
+		"api_products":    nil,
+		"developer_apps":  nil,
+		"developers":      nil,
+		"user_agents":     nil,
+		"region_codes":    nil,
+		"asns":            nil,
+		"expire_time":     `"2032-12-31T23:59:59Z"`,
+		"ttl":             nil,
+	}
+
+	contextHttpMethods := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextHttpMethods[k] = v
+	}
+	contextHttpMethods["http_methods"] = `[ "GET", "POST", "PUT" ]`
+
+	contextApiKeys := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextApiKeys[k] = v
+	}
+	contextApiKeys["api_keys"] = `[ "foo-key", "bar-key" ]`
+
+	contextAccessTokens := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextAccessTokens[k] = v
+	}
+	contextAccessTokens["access_tokens"] = `[ "foo-token", "bar-token" ]`
+
+	contextApiProducts := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextApiProducts[k] = v
+	}
+	contextApiProducts["api_products"] = `[ "foo-product", "bar-product" ]`
+
+	contextDeveloperApps := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextDeveloperApps[k] = v
+	}
+	contextDeveloperApps["developer_apps"] = `[ "foo-app", "bar-app" ]`
+
+	contextDevelopers := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextDevelopers[k] = v
+	}
+	contextDevelopers["developers"] = `[ "foo-developer", "bar-developer" ]`
+
+	contextUserAgents := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextUserAgents[k] = v
+	}
+	contextUserAgents["user_agents"] = `[ "Mozilla/5.0", "curl/7.64.1" ]`
+
+	contextRegionCodes := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextRegionCodes[k] = v
+	}
+	contextRegionCodes["region_codes"] = `[ "US", "CA" ]`
+
+	contextAsns := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextAsns[k] = v
+	}
+	contextAsns["asns"] = `[ "23", "42" ]`
+
+	contextTTL := map[string]interface{}{}
+	for k, v := range contextBaseCondition {
+		contextTTL[k] = v
+	}
+	contextTTL["asns"] = `[ "23", "42" ]`
+	contextTTL["expire_time"] = nil
+	contextTTL["ttl"] = `"3600s"`
+
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
@@ -210,7 +368,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullHttpMethods(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextHttpMethods),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -226,7 +384,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullApiKeys(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextApiKeys),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -234,7 +392,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullAccessTokens(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextAccessTokens),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -242,7 +400,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullApiProducts(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextApiProducts),
 			},
 
 			{
@@ -251,7 +409,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullDeveloperApps(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextDeveloperApps),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -259,7 +417,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullDevelopers(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextDevelopers),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -267,7 +425,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullUserAgents(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextUserAgents),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -275,7 +433,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullRegionCodes(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextRegionCodes),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -283,7 +441,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullAsns(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextAsns),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -291,7 +449,7 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config:             testAccApigeeSecurityAction_apigeeSecurityActionFullTTL(context),
+				Config:             testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(contextTTL),
 				ExpectNonEmptyPlan: true, // ttl change enforces recreation of the resource
 			},
 		},
@@ -493,7 +651,7 @@ resource "google_apigee_security_action" "default" {
 `, context)
 }
 
-func testAccApigeeSecurityAction_apigeeSecurityActionFullHttpMethods(context map[string]interface{}) string {
+func testAccApigeeSecurityAction_apigeeSecurityActionFullCondition(context map[string]interface{}) string {
 	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
 resource "google_apigee_security_action" "default" {
     security_action_id = "tf-test-%{random_suffix}"
@@ -503,270 +661,24 @@ resource "google_apigee_security_action" "default" {
     state              = "ENABLED"
 
     condition_config {
-        http_methods = [
-			"GET",
-			"POST",
-			"PUT",
-		]
+        http_methods   = %{http_methods}
+        api_keys       = %{api_keys}
+        access_tokens  = %{access_tokens}
+        api_products   = %{api_products}
+        developer_apps = %{developer_apps}
+        developers     = %{developers}
+        user_agents    = %{user_agents}
+        region_codes   = %{region_codes}
+        asns           = %{asns}
     }
 	
 	deny {
 		response_code = 403
 	}
 
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
+    expire_time = %{expire_time}
+    ttl         = %{ttl}
 
-func testAccApigeeSecurityAction_apigeeSecurityActionFullApiKeys(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-		api_keys = [
-			"foo-key",
-			"bar-key",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullAccessTokens(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-        access_tokens = [
-			"foo-token",
-			"bar-token",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullApiProducts(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-        api_products = [
-			"foo-product",
-			"bar-product",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullDeveloperApps(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-		developer_apps = [
-			"foo-app",
-			"bar-app",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullDevelopers(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-        developers = [
-			"foo-developer",
-			"bar-developer",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullUserAgents(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-        user_agents = [
-			"Mozilla/5.0",
-			"curl/7.64.1",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullRegionCodes(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-        region_codes = [
-			"US",
-			"CA",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullAsns(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-		asns = [
-			"23",
-			"42",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullTTL(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-		asns = [
-			"23",
-			"42",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    ttl 		= "3600s"
     depends_on  = [
         google_apigee_addons_config.apigee_org_security_addons_config
     ]
