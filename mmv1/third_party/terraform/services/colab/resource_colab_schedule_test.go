@@ -79,7 +79,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 		CheckDestroy:             testAccCheckColabScheduleDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccColabSchedule_full(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": nil,
+				})),
 			},
 			{
 				ResourceName:            "google_colab_schedule.schedule",
@@ -88,7 +90,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_active(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": `"ACTIVE"`,
+				})),
 			},
 			{
 				ResourceName:            "google_colab_schedule.schedule",
@@ -97,7 +101,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_paused(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": `"PAUSED"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_colab_schedule.schedule", plancheck.ResourceActionUpdate),
@@ -111,7 +117,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_active(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": `"ACTIVE"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_colab_schedule.schedule", plancheck.ResourceActionUpdate),
@@ -125,7 +133,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_full(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": nil,
+				})),
 			},
 			{
 				ResourceName:            "google_colab_schedule.schedule",
@@ -134,7 +144,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_paused(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": `"PAUSED"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_colab_schedule.schedule", plancheck.ResourceActionUpdate),
@@ -162,7 +174,9 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "desired_state"},
 			},
 			{
-				Config: testAccColabSchedule_active(context),
+				Config: testAccColabSchedule_full(acctest.MergeMap(context, map[string]interface{}{
+					"desired_state": `"ACTIVE"`,
+				})),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_colab_schedule.schedule", plancheck.ResourceActionUpdate),
@@ -181,291 +195,41 @@ func TestAccColabSchedule_update_state(t *testing.T) {
 
 func testAccColabSchedule_full(context map[string]interface{}) string {
 	return acctest.Nprintf(`
-resource "google_colab_runtime_template" "my_runtime_template" {
-  name = "tf-test-runtime-template%{random_suffix}"
+resource "google_colab_runtime_template" "my_template" {
+  name        = "tf-test-colab-runtime%{random_suffix}"
   display_name = "Runtime template"
-  location = "us-central1"
-
+  location    = "us-central1"
   machine_spec {
     machine_type     = "e2-standard-4"
   }
-
   network_spec {
     enable_internet_access = true
   }
 }
 
-resource "google_storage_bucket" "output_bucket" {
-  name          = "tf_test_my_bucket%{random_suffix}"
-  location      = "US"
-  force_destroy = true
-  uniform_bucket_level_access = true
-}
-
-resource "google_storage_bucket_object" "notebook" {
-  name   = "hello_world.ipynb"
-  bucket = google_storage_bucket.output_bucket.name
-  content = <<EOF
-    {
-      "cells": [
-        {
-          "cell_type": "code",
-          "execution_count": null,
-          "metadata": {},
-          "outputs": [],
-          "source": [
-            "print(\"Hello, World!\")"
-          ]
-        }
-      ],
-      "metadata": {
-        "kernelspec": {
-          "display_name": "Python 3",
-          "language": "python",
-          "name": "python3"
-        },
-        "language_info": {
-          "codemirror_mode": {
-            "name": "ipython",
-            "version": 3
-          },
-          "file_extension": ".py",
-          "mimetype": "text/x-python",
-          "name": "python",
-          "nbconvert_exporter": "python",
-          "pygments_lexer": "ipython3",
-          "version": "3.8.5"
-        }
-      },
-      "nbformat": 4,
-      "nbformat_minor": 4
-    }
-    EOF
-}
-
 resource "google_colab_schedule" "schedule" {
-  display_name = "tf-test-schedule%{random_suffix}"
-  location = "%{location}"
-  allow_queueing = true
-  max_concurrent_run_count = 2
-  cron = "TZ=America/Los_Angeles * * * * *"
-  max_run_count = 5
-  start_time = "%{start_time}"
-  end_time = "%{end_time}"
-
-  create_notebook_execution_job_request {
-    notebook_execution_job {
-      display_name = "Notebook execution"
-      gcs_notebook_source {
-        uri = "gs://${google_storage_bucket_object.notebook.bucket}/${google_storage_bucket_object.notebook.name}"
-        generation = google_storage_bucket_object.notebook.generation
-      }
-
-      notebook_runtime_template_resource_name = "projects/${google_colab_runtime_template.my_runtime_template.project}/locations/${google_colab_runtime_template.my_runtime_template.location}/notebookRuntimeTemplates/${google_colab_runtime_template.my_runtime_template.name}"
-      gcs_output_uri = "gs://${google_storage_bucket.output_bucket.name}"
-      service_account = "%{service_account}"
-      }
-  }
-
-  depends_on = [
-    google_colab_runtime_template.my_runtime_template,
-    google_storage_bucket.output_bucket,
-  ]
-}
-`, context)
-}
-
-func testAccColabSchedule_paused(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_colab_runtime_template" "my_runtime_template" {
-  name = "tf-test-runtime-template%{random_suffix}"
-  display_name = "Runtime template"
+  display_name = "tf-test-colab-schedule%{random_suffix}"
   location = "us-central1"
-
-  machine_spec {
-    machine_type     = "e2-standard-4"
-  }
-
-  network_spec {
-    enable_internet_access = true
-  }
-}
-
-resource "google_storage_bucket" "output_bucket" {
-  name          = "tf_test_my_bucket%{random_suffix}"
-  location      = "US"
-  force_destroy = true
-  uniform_bucket_level_access = true
-}
-
-resource "google_storage_bucket_object" "notebook" {
-  name   = "hello_world.ipynb"
-  bucket = google_storage_bucket.output_bucket.name
-  content = <<EOF
-    {
-      "cells": [
-        {
-          "cell_type": "code",
-          "execution_count": null,
-          "metadata": {},
-          "outputs": [],
-          "source": [
-            "print(\"Hello, World!\")"
-          ]
-        }
-      ],
-      "metadata": {
-        "kernelspec": {
-          "display_name": "Python 3",
-          "language": "python",
-          "name": "python3"
-        },
-        "language_info": {
-          "codemirror_mode": {
-            "name": "ipython",
-            "version": 3
-          },
-          "file_extension": ".py",
-          "mimetype": "text/x-python",
-          "name": "python",
-          "nbconvert_exporter": "python",
-          "pygments_lexer": "ipython3",
-          "version": "3.8.5"
-        }
-      },
-      "nbformat": 4,
-      "nbformat_minor": 4
-    }
-    EOF
-}
-
-resource "google_colab_schedule" "schedule" {
-  display_name = "tf-test-schedule%{random_suffix}"
-  location = "%{location}"
-  allow_queueing = true
   max_concurrent_run_count = 2
   cron = "TZ=America/Los_Angeles * * * * *"
-  max_run_count = 5
-  start_time = "%{start_time}"
-  end_time = "%{end_time}"
-
-  desired_state = "PAUSED"
 
   create_notebook_execution_job_request {
     notebook_execution_job {
       display_name = "Notebook execution"
       gcs_notebook_source {
-        uri = "gs://${google_storage_bucket_object.notebook.bucket}/${google_storage_bucket_object.notebook.name}"
-        generation = google_storage_bucket_object.notebook.generation
+        uri = "gs://tf-test-colab-schedule%{random_suffix}/test.ipynb"
+        generation = "1"
       }
-
-      notebook_runtime_template_resource_name = "projects/${google_colab_runtime_template.my_runtime_template.project}/locations/${google_colab_runtime_template.my_runtime_template.location}/notebookRuntimeTemplates/${google_colab_runtime_template.my_runtime_template.name}"
-      gcs_output_uri = "gs://${google_storage_bucket.output_bucket.name}"
+      notebook_runtime_template_resource_name = google_colab_runtime_template.my_template.id
+      gcs_output_uri = "gs://tf-test-colab-schedule%{random_suffix}"
       service_account = "%{service_account}"
-      }
-  }
-
-  depends_on = [
-    google_colab_runtime_template.my_runtime_template,
-    google_storage_bucket.output_bucket,
-  ]
-}
-`, context)
-}
-
-func testAccColabSchedule_active(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_colab_runtime_template" "my_runtime_template" {
-  name = "tf-test-runtime-template%{random_suffix}"
-  display_name = "Runtime template"
-  location = "us-central1"
-
-  machine_spec {
-    machine_type     = "e2-standard-4"
-  }
-
-  network_spec {
-    enable_internet_access = true
-  }
-}
-
-resource "google_storage_bucket" "output_bucket" {
-  name          = "tf_test_my_bucket%{random_suffix}"
-  location      = "US"
-  force_destroy = true
-  uniform_bucket_level_access = true
-}
-
-resource "google_storage_bucket_object" "notebook" {
-  name   = "hello_world.ipynb"
-  bucket = google_storage_bucket.output_bucket.name
-  content = <<EOF
-    {
-      "cells": [
-        {
-          "cell_type": "code",
-          "execution_count": null,
-          "metadata": {},
-          "outputs": [],
-          "source": [
-            "print(\"Hello, World!\")"
-          ]
-        }
-      ],
-      "metadata": {
-        "kernelspec": {
-          "display_name": "Python 3",
-          "language": "python",
-          "name": "python3"
-        },
-        "language_info": {
-          "codemirror_mode": {
-            "name": "ipython",
-            "version": 3
-          },
-          "file_extension": ".py",
-          "mimetype": "text/x-python",
-          "name": "python",
-          "nbconvert_exporter": "python",
-          "pygments_lexer": "ipython3",
-          "version": "3.8.5"
-        }
-      },
-      "nbformat": 4,
-      "nbformat_minor": 4
     }
-    EOF
-}
-
-resource "google_colab_schedule" "schedule" {
-  display_name = "tf-test-schedule%{random_suffix}"
-  location = "%{location}"
-  allow_queueing = true
-  max_concurrent_run_count = 2
-  cron = "TZ=America/Los_Angeles * * * * *"
-  max_run_count = 5
-  start_time = "%{start_time}"
-  end_time = "%{end_time}"
-
-  desired_state = "ACTIVE"
-
-  create_notebook_execution_job_request {
-    notebook_execution_job {
-      display_name = "Notebook execution"
-      gcs_notebook_source {
-        uri = "gs://${google_storage_bucket_object.notebook.bucket}/${google_storage_bucket_object.notebook.name}"
-        generation = google_storage_bucket_object.notebook.generation
-      }
-
-      notebook_runtime_template_resource_name = "projects/${google_colab_runtime_template.my_runtime_template.project}/locations/${google_colab_runtime_template.my_runtime_template.location}/notebookRuntimeTemplates/${google_colab_runtime_template.my_runtime_template.name}"
-      gcs_output_uri = "gs://${google_storage_bucket.output_bucket.name}"
-      service_account = "%{service_account}"
-      }
   }
 
+  desired_state = %{desired_state}
+
   depends_on = [
-    google_colab_runtime_template.my_runtime_template,
-    google_storage_bucket.output_bucket,
+    google_colab_runtime_template.my_template,
   ]
 }
 `, context)
