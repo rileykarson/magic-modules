@@ -12,9 +12,7 @@ import (
 func TestAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -22,7 +20,11 @@ func TestAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticast
 		CheckDestroy:             testAccCheckNetworkServicesMulticastConsumerAssociationDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample_full(context),
+				Config: testAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_network_services_multicast_consumer_association.mca_test",
@@ -31,7 +33,11 @@ func TestAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticast
 				ImportStateVerifyIgnore: []string{"labels", "location", "multicast_consumer_association_id", "terraform_labels"},
 			},
 			{
-				Config: testAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample_update(context),
+				Config: testAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample_full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated description",
+					"labels":        `{ fake_label = "label123" }`,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_network_services_multicast_consumer_association.mca_test", plancheck.ResourceActionUpdate),
@@ -72,41 +78,8 @@ resource "google_network_services_multicast_domain_activation" "multicast_domain
 resource "google_network_services_multicast_consumer_association" mca_test  {
   multicast_consumer_association_id              = "tf-test-test-consumer-association-mca%{random_suffix}"
   location = "us-central1-b"
-  network = google_compute_network.network.id
-  multicast_domain_activation = google_network_services_multicast_domain_activation.multicast_domain_activation.id
-  depends_on = [google_compute_network.network]
-}
-`, context)
-}
-
-func testAccNetworkServicesMulticastConsumerAssociation_networkServicesMulticastConsumerAssociationUpdateExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_network" "network" {
-  name                    = "tf-test-test-network-mca%{random_suffix}"
-  auto_create_subnetworks = false
-}
-
-resource "google_network_services_multicast_domain" "multicast_domain" {
-  multicast_domain_id                    = "tf-test-test-domain-mca%{random_suffix}"
-  location = "global"
-  admin_network = google_compute_network.network.id
-  connection_config  { connection_type="SAME_VPC"}
-  depends_on = [google_compute_network.network]
-}
-
-resource "google_network_services_multicast_domain_activation" "multicast_domain_activation" {
-  multicast_domain_activation_id                    = "tf-test-test-domain-activation-mca%{random_suffix}"
-  location = "us-central1-b"
-  multicast_domain = google_network_services_multicast_domain.multicast_domain.id
-}
-
-resource "google_network_services_multicast_consumer_association" mca_test  {
-  multicast_consumer_association_id              = "tf-test-test-consumer-association-mca%{random_suffix}"
-  location = "us-central1-b"
-  description = "Updated description"
-  labels = {
-    fake_label = "label123"
-  }
+  description = "%{description}"
+  labels = %{labels}
   network = google_compute_network.network.id
   multicast_domain_activation = google_network_services_multicast_domain_activation.multicast_domain_activation.id
   depends_on = [google_compute_network.network]
