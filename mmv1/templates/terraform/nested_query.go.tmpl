@@ -81,6 +81,7 @@ func resource{{ $.ResourceName }}FindNestedObjectInList(d *schema.ResourceData, 
   return -1, nil, nil
 }
 {{- if $.NestedQuery.ModifyByPatch }}
+{{- if not $.CustomCode.CustomCreate }}
 // PatchCreateEncoder handles creating request data to PATCH parent resource
 // with list including new object.
 func resource{{ $.ResourceName }}PatchCreateEncoder(d *schema.ResourceData, meta interface{}, obj map[string]interface{}) (map[string]interface{}, error) {
@@ -120,6 +121,7 @@ func resource{{ $.ResourceName }}PatchCreateEncoder(d *schema.ResourceData, meta
 
   return res, nil
 }
+{{- end }}
 
 {{- if $.Updatable }}
 // PatchUpdateEncoder handles creating request data to PATCH parent resource

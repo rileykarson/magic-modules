@@ -162,7 +162,7 @@ func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.T
     {{- end }}{{/* if $.IsA "Map" */}}
     {{ if $.NestedProperties }}
       {{- range $prop := $.NestedProperties }}
-        {{- if not (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) }}
+        {{- if not (or (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) $prop.ClientSide) }}
           {{- if $.ResourceMetadata.ProductMetadata.IsTgcCompiler }}
           {{- template "expandTgcPropertyMethod" $prop -}}
           {{- else }}

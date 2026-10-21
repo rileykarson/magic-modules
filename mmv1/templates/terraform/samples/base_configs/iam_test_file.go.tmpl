@@ -11,8 +11,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 {{- if not $.IamPolicy.ExcludeImportTest }}
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 {{- end }}
 
@@ -671,6 +671,7 @@ resource "{{ $.IamTerraformName }}_policy" "foo" {
 }
 {{- end }}{{/* if $.IamPolicy.IamConditionsRequestType */}}
 
+{{- if not $.IamPolicy.ExcludeImportTest }}
 {{- if $.IamPolicy.CustomImportStateIDFuncs }}
 {{ customTemplate $ $.IamPolicy.CustomImportStateIDFuncs true }}
 {{- else }}
@@ -739,4 +740,5 @@ func generate{{ $.ResourceName }}IAMMemberStateID(iamResourceAddr string) func (
 		return acctest.BuildIAMImportId(fmt.Sprintf("{{ $.IamImportFormat }}", {{ join $.IamImportParams ", " }}), rawState["role"], rawState["member"], rawState["condition.0.title"]), nil
 	}
 }
+{{- end }}
 {{- end }}
