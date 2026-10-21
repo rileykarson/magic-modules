@@ -21224,3 +21224,77 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+
+
+func testAccContainerCluster_autoprovisioningDefaultsUpgradeSettingsAutoscaled(clusterName, networkName, subnetworkName string, duration string) string {
+	return fmt.Sprintf(`
+    resource "google_container_cluster" "with_autoprovisioning_upgrade_settings" {
+      name               = "%s"
+      location           = "us-east1-b"
+      initial_node_count = 1
+
+      cluster_autoscaling {
+        enabled = true
+
+        resource_limits {
+          resource_type = "cpu"
+          minimum       = 1
+          maximum       = 5
+        }
+
+        resource_limits {
+          resource_type = "memory"
+          minimum       = 1
+          maximum       = 5
+        }
+
+        auto_provisioning_defaults {
+          upgrade_settings {
+            strategy        = "BLUE_GREEN"
+            blue_green_settings {
+              node_pool_soak_duration = "%s"
+              autoscaled_rollout_policy {
+                wait_for_drain_duration = "%s"
+              }
+            }
+          }
+        }
+      }
+      network    = "%s"
+      subnetwork = "%s"
+
+      deletion_protection = false
+    }
+  `, clusterName, duration, duration, networkName, subnetworkName)
+}
+
+
+func TestAccContainerCluster_withAutoProvisioningDefaultsUpgradeSettingsAutoscaled(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_autoprovisioningDefaultsUpgradeSettingsAutoscaled(cluster, networkName, subnetworkName, "1.500s"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.strategy", "BLUE_GREEN"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.node_pool_soak_duration", "1.500s"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.autoscaled_rollout_policy.#", "1"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.autoscaled_rollout_policy.0.wait_for_drain_duration", "1.500s"),
+				),
+			},
+			{
+				ResourceName:      "google_container_cluster.with_autoprovisioning_upgrade_settings",
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+		},
+	})
+}

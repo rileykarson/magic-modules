@@ -1031,6 +1031,26 @@ func ResourceContainerCluster() *schema.Resource {
 																	},
 																},
 															},
+															"autoscaled_rollout_policy": {
+																Type:        schema.TypeList,
+																Optional:    true,
+																Computed:    true,
+																MaxItems:    1,
+																Description: `Autoscaled rollout policy for the blue-green upgrade.`,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+																		"wait_for_drain_duration": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																			Computed: true,
+																			Description: `Time in seconds to wait after cordoning the blue pool before draining the nodes.
+
+																			A duration in seconds with up to nine fractional digits, ending with 's'. Example: "3.5s".`,
+																		},
+																	},
+																},
+															},
+
 														},
 													},
 												},

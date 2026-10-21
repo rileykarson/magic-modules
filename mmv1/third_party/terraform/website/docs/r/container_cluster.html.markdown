@@ -788,6 +788,12 @@ This block also contains several computed attributes, documented below.
 
 * `standard_rollout_policy`: (Optional) Standard policy for the blue-green upgrade. To be specified when strategy is set to BLUE_GREEN. Structure is [documented below](#nested_standard_rollout_policy).
 
+* `autoscaled_rollout_policy`: (Optional) Autoscaled rollout policy for the blue-green upgrade. Structure is [documented below](#nested_autoscaled_rollout_policy).
+
+<a name="nested_autoscaled_rollout_policy"></a>The `autoscaled_rollout_policy` block supports:
+
+* `wait_for_drain_duration` - (Optional) Time in seconds to wait after cordoning the blue pool before draining the nodes. A duration in seconds with up to nine fractional digits, ending with 's'. Example: "3.5s".
+
 <a name="nested_standard_rollout_policy"></a>The `standard_rollout_policy` block supports:
 
 * `batch_percentage`: (Optional) Percentage of the bool pool nodes to drain in a batch. The range of this field should be (0.0, 1.0). Only one of the batch_percentage or batch_node_count can be specified.
