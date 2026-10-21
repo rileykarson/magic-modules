@@ -1,10 +1,7 @@
 package tpgdclresource
 
 import (
-	"encoding/json"
-	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/kylelemons/godebug/pretty"
 )
@@ -23,12 +20,6 @@ const (
 	BlockCreation
 	// BlockModification will error if the resource is not in the desired state.
 	BlockModification
-	// IgnoreIfMissing does not create (and does not error) if the resource
-	// does not exist.
-	IgnoreIfMissing
-	// NoopOnDestroy does not destroy the resource, even if Delete() is
-	// called.
-	NoopOnDestroy
 )
 
 // HasLifecycleParam returns whether the given slice has the requested param.
@@ -150,20 +141,6 @@ func FlattenKeyValuePairs(v any) map[string]string {
 	return assertStringMap(p)
 }
 
-// FlattenKeyValueInterface returns a pointer to an interface.
-// It can only be used for untyped maps.
-func FlattenKeyValueInterface(v any) map[string]any {
-	if v == nil {
-		return nil
-	}
-
-	if ss, ok := v.(map[string]any); ok {
-		return ss
-	}
-
-	return map[string]any{}
-}
-
 // Returns a map[string]string from a map[string]interface{}
 // Non-string values are skipped.
 func assertStringMap(mi map[string]any) map[string]string {
@@ -178,37 +155,6 @@ func assertStringMap(mi map[string]any) map[string]string {
 		}
 	}
 	return ms
-}
-
-// FlattenFloatSlice asserts that an interface is a []float64 and returns
-// it.
-func FlattenFloatSlice(v any) []float64 {
-	if v == nil {
-		return nil
-	}
-	p, ok := v.([]any)
-	if !ok {
-		return []float64{}
-	}
-
-	return assertFloatSlice(p)
-}
-
-// Returns a []float64 from an []interface
-// Non-float values are skipped.
-func assertFloatSlice(id []any) []float64 {
-	dd := []float64{}
-	for _, v := range id {
-		if v == nil {
-			continue
-		}
-
-		if d, ok := v.(float64); ok {
-			dd = append(dd, d)
-		}
-	}
-
-	return dd
 }
 
 // FlattenIntSlice asserts that an interface is a []int and returns
@@ -304,26 +250,6 @@ func FlattenBool(v any) *bool {
 	return &p
 }
 
-// FlattenTime asserts that an interface is a time.Time and returns it.
-// Time values transmitted in JSON will be an RFC3339 time as per
-// https://developers.google.com/discovery/v1/type-format
-// Otherwise, it returns the empty time.
-func FlattenTime(v any) time.Time {
-	if s, ok := v.(string); ok {
-		t, err := time.Parse(time.RFC3339, s)
-		if err == nil {
-			return t
-		}
-	}
-
-	// In case we inject a time.Time in custom code, convert it.
-	if p, ok := v.(time.Time); ok {
-		return p
-	}
-
-	return time.Time{}
-}
-
 // FlattenSecretValue behaves the same way as FlattenString, except that it
 // returns nil if the value is not present.
 func FlattenSecretValue(v any) *string {
@@ -334,37 +260,4 @@ func FlattenSecretValue(v any) *string {
 
 	return &p
 
-}
-
-// ExtractElementFromList takes in bytes corresponding to a json object of the structure
-// { "listKey": [{"foo": "bar", ...}, {"foo": "baz", ...}] }
-// and returns the first element for which isElement returns true.
-// isElement operates on the serialized json representation of each element -
-// to the extent that json.Marshal(json.Unmarshal(X)) != X, this may differ from the
-// actual elements in the input bytes - but this should be exclusively
-// differences which are not semantically significant in json.
-func ExtractElementFromList(b []byte, listKey string, isElement func([]byte) bool) ([]byte, error) {
-	var m map[string]any
-	if err := json.Unmarshal(b, &m); err != nil {
-		return nil, err
-	}
-	l, ok := m[listKey]
-	if !ok {
-		return nil, NotFoundError{Cause: fmt.Errorf("could not find %q in %v, assuming list is empty and returning not found", listKey, m)}
-	}
-	list, ok := l.([]any)
-	if !ok {
-		return nil, fmt.Errorf("could not convert %v to list", l)
-	}
-	for _, v := range list {
-		if subM, ok := v.(map[string]any); ok {
-			if subB, err := json.Marshal(subM); err != nil {
-				continue
-			} else if isElement(subB) {
-				return subB, nil
-			}
-		}
-	}
-	// Return a 404-style error.
-	return nil, NotFoundError{Cause: fmt.Errorf("could not find a match in %v", list)}
 }

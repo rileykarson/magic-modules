@@ -45,17 +45,6 @@ type RetryProvider interface {
 	New() Retry
 }
 
-// NoRetry is a Retry implementation that will never retry.
-type NoRetry struct{}
-
-// RetryAfter implementation that never retries.
-func (n *NoRetry) RetryAfter(_ *RetryDetails) time.Duration {
-	return Stop
-}
-
-// Reset is a no-op.
-func (n *NoRetry) Reset() {}
-
 // Backoff is a Retry implementation that uses exponential backoff with jitter.
 type Backoff struct {
 	// InitialInterval sets the time interval for the first retry delay.
@@ -71,17 +60,6 @@ func NewBackoff() *Backoff {
 	bo := backoff.NewExponentialBackOff()
 	bo.MaxInterval = BackoffMaxInterval
 	bo.InitialInterval = BackoffInitialInterval
-	bo.MaxElapsedTime = 0
-	return &Backoff{
-		bo: bo,
-	}
-}
-
-// NewBackoffWithOptions returns a Backoff with caller-supplied parameters.
-func NewBackoffWithOptions(initialInterval, maxInterval time.Duration) *Backoff {
-	bo := backoff.NewExponentialBackOff()
-	bo.MaxInterval = maxInterval
-	bo.InitialInterval = initialInterval
 	bo.MaxElapsedTime = 0
 	return &Backoff{
 		bo: bo,

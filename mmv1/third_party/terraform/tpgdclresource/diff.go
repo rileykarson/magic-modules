@@ -78,17 +78,6 @@ func (d *FieldDiff) String() string {
 	return fmt.Sprintf("Field %s: got %s, want %s", d.FieldName, SprintResourceCompact(d.Actual), SprintResourceCompact(d.Desired))
 }
 
-func stringValue(i any) string {
-	v := reflect.ValueOf(i)
-	if v.Kind() == reflect.Ptr {
-		if v.IsNil() {
-			return "nil"
-		}
-		return fmt.Sprintf("%v", reflect.Indirect(v))
-	}
-	return fmt.Sprintf("%v", i)
-}
-
 // Diff takes in two interfaces and diffs them according to Info.
 func Diff(desired, actual any, info DiffInfo, fn FieldName) ([]*FieldDiff, error) {
 	var diffs []*FieldDiff
@@ -386,20 +375,6 @@ func ValueType(i any) string {
 		return reflect.Indirect(reflect.ValueOf(i)).Kind().String()
 	}
 	return reflect.ValueOf(i).Kind().String()
-}
-
-func strs(d, i any) (*string, *string, error) {
-	dStr, err := str(d)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	iStr, err := str(i)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return dStr, iStr, nil
 }
 
 func str(d any) (*string, error) {
