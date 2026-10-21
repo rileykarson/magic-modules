@@ -13,8 +13,9 @@ import (
 func TestAccIAMWorkforcePoolOauthClient_full(t *testing.T) {
 	t.Parallel()
 
+	randomSuffix := acctest.RandString(t, 10)
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix": randomSuffix,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -32,7 +33,11 @@ func TestAccIAMWorkforcePoolOauthClient_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "oauth_client_id"},
 			},
 			{
-				Config: testAccIAMWorkforcePoolOauthClient_full_update(context),
+				Config: testAccIAMWorkforcePoolOauthClient_full_update(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"display_name":  "Updated displayName",
+					"description":   "Updated description",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_oauth_client.example", plancheck.ResourceActionUpdate),
@@ -46,7 +51,11 @@ func TestAccIAMWorkforcePoolOauthClient_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "oauth_client_id"},
 			},
 			{
-				Config: testAccIAMWorkforcePoolOauthClient_full_cleanOptionalFields(context),
+				Config: testAccIAMWorkforcePoolOauthClient_full_update(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"display_name":  nil,
+					"description":   nil,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_oauth_client.example", plancheck.ResourceActionUpdate),
@@ -83,22 +92,8 @@ func testAccIAMWorkforcePoolOauthClient_full_update(context map[string]interface
 	return acctest.Nprintf(`
 resource "google_iam_oauth_client" "example" {
   oauth_client_id = "tf-test-example-client-id%{random_suffix}"
-  display_name              = "Updated displayName"
-  description               = "Updated description"
-  location                  = "global"
-  disabled                  = true
-  allowed_grant_types       = ["AUTHORIZATION_CODE_GRANT"]
-  allowed_redirect_uris     = ["https://www.update.com"]
-  allowed_scopes            = ["https://www.googleapis.com/auth/cloud-platform", "openid"]
-  client_type               = "CONFIDENTIAL_CLIENT"
-}
-`, context)
-}
-
-func testAccIAMWorkforcePoolOauthClient_full_cleanOptionalFields(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_oauth_client" "example" {
-  oauth_client_id = "tf-test-example-client-id%{random_suffix}"
+  display_name              = "%{display_name}"
+  description               = "%{description}"
   location                  = "global"
   disabled                  = true
   allowed_grant_types       = ["AUTHORIZATION_CODE_GRANT"]
