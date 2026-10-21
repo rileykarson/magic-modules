@@ -1878,6 +1878,27 @@ func ResourceContainerCluster() *schema.Resource {
 
 			"node_pool_defaults": clusterSchemaNodePoolDefaults(),
 
+{{- if ne $.TargetVersionName "ga" }}
+			"node_pool_upgrade_concurrency_config": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: `Node pool upgrade concurrency configuration for the cluster.`,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"max_count": {
+							Type:         schema.TypeInt,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.IntBetween(1, 100),
+							Description:  `Maximum number of concurrently upgrading node pools in the cluster.`,
+						},
+					},
+				},
+			},
+{{- end }}
+
 			"node_pool_auto_config": {
 				Type:        schema.TypeList,
 				Optional:    true,
@@ -3386,6 +3407,12 @@ func resourceContainerClusterCreate(d *schema.ResourceData, meta interface{}) er
                 cluster.NodePoolDefaults = expandNodePoolDefaults(v)
         }
 
+{{- if ne $.TargetVersionName "ga" }}
+	if v, ok := d.GetOk("node_pool_upgrade_concurrency_config"); ok {
+		cluster.NodePoolUpgradeConcurrencyConfig = expandNodePoolUpgradeConcurrencyConfig(v)
+	}
+{{- end }}
+
 	if v, ok := d.GetOk("node_config"); ok {
 		cluster.NodeConfig = expandNodeConfig(d, "", v)
 	}
@@ -4081,6 +4108,12 @@ func resourceContainerClusterRead(d *schema.ResourceData, meta interface{}) erro
         if err := d.Set("node_pool_defaults", flattenNodePoolDefaults(cluster.NodePoolDefaults)); err != nil {
                 return err
         }
+
+{{- if ne $.TargetVersionName "ga" }}
+	if err := d.Set("node_pool_upgrade_concurrency_config", flattenNodePoolUpgradeConcurrencyConfig(cluster.NodePoolUpgradeConcurrencyConfig)); err != nil {
+		return err
+	}
+{{- end }}
 
 	if err := d.Set("security_posture_config", flattenSecurityPostureConfig(cluster.SecurityPostureConfig)); err != nil {
 		return err
@@ -5378,6 +5411,34 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 			log.Printf("[INFO] GKE cluster %s enabled Kubernetes Beta APIs has been updated", d.Id())
 		}
 	}
+
+
+{{- if ne $.TargetVersionName "ga" }}
+	if d.HasChange("node_pool_upgrade_concurrency_config") {
+		if v, ok := d.GetOk("node_pool_upgrade_concurrency_config"); ok {
+			req := &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolUpgradeConcurrencyConfig: expandNodePoolUpgradeConcurrencyConfig(v),
+				},
+			}
+			err := sendUpdate(config, req, project, location, d, userAgent, "Cluster NodePoolUpgradeConcurrencyConfig update")
+			if err != nil {
+				return err
+			}
+		} else {
+			// Clearing it
+			req := &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolUpgradeConcurrencyConfig: &container.NodePoolUpgradeConcurrencyConfig{},
+				},
+			}
+			err := sendUpdate(config, req, project, location, d, userAgent, "Cluster NodePoolUpgradeConcurrencyConfig clear")
+			if err != nil {
+				return err
+			}
+		}
+	}
+{{- end }}
 
 	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.insecure_kubelet_readonly_port_enabled") {
 		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.insecure_kubelet_readonly_port_enabled"); ok {
@@ -7508,6 +7569,35 @@ func expandNodePoolDefaults(configured interface{}) *container.NodePoolDefaults 
 	}
 	return nodePoolDefaults
 }
+
+
+{{- if ne $.TargetVersionName "ga" }}
+func flattenNodePoolUpgradeConcurrencyConfig(config *container.NodePoolUpgradeConcurrencyConfig) []map[string]interface{} {
+	if config == nil {
+		return nil
+	}
+
+	result := map[string]interface{}{}
+	if config.MaxCount != 0 {
+		result["max_count"] = config.MaxCount
+	}
+
+	return []map[string]interface{}{result}
+}
+
+func expandNodePoolUpgradeConcurrencyConfig(configured interface{}) *container.NodePoolUpgradeConcurrencyConfig {
+	l, ok := configured.([]interface{})
+	if !ok || l == nil || len(l) == 0 || l[0] == nil {
+		return nil
+	}
+
+	m := l[0].(map[string]interface{})
+
+	return &container.NodePoolUpgradeConcurrencyConfig{
+		MaxCount: int64(m["max_count"].(int)),
+	}
+}
+{{- end }}
 
 func flattenNodePoolDefaults(c *container.NodePoolDefaults) []map[string]interface{} {
 	if c == nil {
