@@ -2047,6 +2047,10 @@ func expandNodeConfig(d *schema.ResourceData, prefix string, v interface{}) *con
 		nc.ConfidentialNodes = expandConfidentialNodes(v)
 	}
 
+	if v, ok := nodeConfig["consolidation_delay"]; ok {
+		nc.ConsolidationDelay = v.(string)
+	}
+
 	return nc
 }
 
@@ -3136,6 +3140,10 @@ func flattenNodeConfig(c *container.NodeConfig, v interface{}) []map[string]inte
 		config[0]["oauth_scopes"] = schema.NewSet(tpgresource.StringScopeHashcode, tpgresource.ConvertStringArrToInterface(c.OauthScopes))
 	}
 
+	if c.ConsolidationDelay != "" {
+		config[0]["consolidation_delay"] = c.ConsolidationDelay
+	}
+
 	return config
 }
 
@@ -4020,6 +4028,30 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 	}
 
 	if d.HasChange(prefix + "node_config") {
+
+		if d.HasChange(prefix + "node_config.0.consolidation_delay") {
+			req := &container.UpdateNodePoolRequest{
+				Name: name,
+				ConsolidationDelay: d.Get(prefix + "node_config.0.consolidation_delay").(string),
+			}
+			updateF := func() error {
+				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+				if config.UserProjectOverride {
+					clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
+				}
+				op, err := clusterNodePoolsUpdateCall.Do()
+				if err != nil {
+					return err
+				}
+				return ContainerOperationWait(config, op, nodePoolInfo.project, nodePoolInfo.location, "updating GKE node pool consolidation_delay", userAgent, timeout)
+			}
+			transport_tpg.MutexStore.Lock(npLockKey)
+			err = retryTimeDuration(updateF, timeout, isNodePoolConflictRetryable)
+			transport_tpg.MutexStore.Unlock(npLockKey)
+			if err != nil {
+				return fmt.Errorf("Error updating consolidation_delay in Node Pool %s: %s", name, err)
+			}
+		}
 
 		if d.HasChange(prefix + "node_config.0.logging_variant") {
 			if v, ok := d.GetOk(prefix + "node_config.0.logging_variant"); ok {
