@@ -21231,7 +21231,7 @@ func TestAccContainerCluster_nodePoolUpgradeConcurrencyConfig(t *testing.T) {
 
 	clusterName := fmt.Sprintf("cluster-npucc-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.0.0.0/16")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.78.0.0/20")
 	zone := "us-central1-c"
 
 	acctest.VcrTest(t, resource.TestCase{

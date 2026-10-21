@@ -5425,17 +5425,6 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 			if err := updateF(); err != nil {
 				return err
 			}
-		} else {
-			// Clearing it
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredNodePoolUpgradeConcurrencyConfig: &container.NodePoolUpgradeConcurrencyConfig{},
-				},
-			}
-			updateF := updateFunc(req, "Cluster NodePoolUpgradeConcurrencyConfig clear")
-			if err := updateF(); err != nil {
-				return err
-			}
 		}
 	}
 {{- end }}
