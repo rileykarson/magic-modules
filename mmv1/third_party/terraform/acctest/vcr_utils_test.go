@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
@@ -425,4 +426,29 @@ func prepareCassetteRequest(d requestDescription) cassette.Request {
 	}
 
 	return req
+}
+
+func TestIsVcrReplaying(t *testing.T) {
+	cases := []struct {
+		name     string
+		vcrPath  string
+		vcrMode  string
+		expected bool
+	}{
+		{"empty", "", "", false},
+		{"path only", "/tmp", "", false},
+		{"mode recording", "/tmp", "RECORDING", false},
+		{"mode replaying no path", "", "REPLAYING", false},
+		{"mode replaying with path", "/tmp", "REPLAYING", true},
+		{"mode other", "/tmp", "OTHER", false},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Setenv("VCR_PATH", tc.vcrPath)
+			t.Setenv("VCR_MODE", tc.vcrMode)
+			if got := acctest.IsVcrReplaying(); got != tc.expected {
+				t.Errorf("IsVcrReplaying() = %v, expected %v", got, tc.expected)
+			}
+		})
+	}
 }

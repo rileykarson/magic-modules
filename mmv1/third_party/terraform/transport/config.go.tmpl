@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -454,8 +455,12 @@ func (c *Config) ApplySleepUnit() {
 }
 
 func ExpandProviderBatchingConfig(v interface{}) (*BatchingConfig, error) {
+	sendAfter := time.Second * DefaultBatchSendIntervalSec
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		sendAfter = 50 * time.Millisecond
+	}
 	config := &BatchingConfig{
-		SendAfter:      time.Second * DefaultBatchSendIntervalSec,
+		SendAfter:      sendAfter,
 		EnableBatching: true,
 	}
 
