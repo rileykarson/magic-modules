@@ -35,20 +35,34 @@ jobs:
         with:
           go-version: '1.26.9'
           cache-dependency-path: |
+            tgc/go.mod
             tgc/go.sum
+            tpgb/go.mod
             tpgb/go.sum
+            tpgb/google-beta/acctest/**
+            tpgb/google-beta/envvar/**
+            tpgb/google-beta/functions/**
+            tpgb/google-beta/fwmodels/**
+            tpgb/google-beta/fwprovider/**
+            tpgb/google-beta/fwresource/**
+            tpgb/google-beta/fwtransport/**
+            tpgb/google-beta/fwutils/**
+            tpgb/google-beta/fwvalidators/**
+            tpgb/google-beta/provider/**
+            tpgb/google-beta/registry/**
+            tpgb/google-beta/sweeper/**
+            tpgb/google-beta/tpgdclresource/**
+            tpgb/google-beta/tpgiamresource/**
+            tpgb/google-beta/tpgresource/**
+            tpgb/google-beta/transport/**
+            tpgb/google-beta/verify/**
 
       - name: Get dependencies
         run: |
           cd tgc
-          go mod download
-
-      - name: Build Terraform Google Conversion
-        run: |
-          cd tgc
           go mod edit -replace=github.com/hashicorp/terraform-provider-google-beta=../tpgb
           go mod tidy
-          make build
+          go mod download
 
       - name: Run Unit Tests
         run: |
