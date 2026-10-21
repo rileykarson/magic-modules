@@ -32,6 +32,26 @@ jobs:
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
           go-version: '1.26.9'
+          cache-dependency-path: |
+            go.mod
+            go.sum
+            google*/acctest/**
+            google*/envvar/**
+            google*/functions/**
+            google*/fwmodels/**
+            google*/fwprovider/**
+            google*/fwresource/**
+            google*/fwtransport/**
+            google*/fwutils/**
+            google*/fwvalidators/**
+            google*/provider/**
+            google*/registry/**
+            google*/sweeper/**
+            google*/tpgdclresource/**
+            google*/tpgiamresource/**
+            google*/tpgresource/**
+            google*/transport/**
+            google*/verify/**
 
       - name: Get dependencies
         run: |
