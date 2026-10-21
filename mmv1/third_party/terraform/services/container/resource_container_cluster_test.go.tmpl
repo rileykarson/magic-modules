@@ -21230,7 +21230,7 @@ func TestAccContainerCluster_allowRouteOverlap(t *testing.T) {
 
 	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
 	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
-	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.83.0.0/20")
+	subnetName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.78.0.0/20")
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -21257,8 +21257,8 @@ resource "google_container_cluster" "primary" {
   subnetwork         = "%s"
 
   ip_allocation_policy {
-    cluster_ipv4_cidr_block  = "10.84.0.0/16"
-    services_ipv4_cidr_block = "10.85.0.0/16"
+    cluster_ipv4_cidr_block  = "10.96.0.0/16"
+    services_ipv4_cidr_block = "10.97.0.0/20"
     allow_route_overlap      = true
   }
   deletion_protection = false
