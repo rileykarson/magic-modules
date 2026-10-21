@@ -1036,7 +1036,7 @@ func TestAccContainerNodePool_withKubeletConfig(t *testing.T) {
 		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerNodePool_withKubeletConfig(cluster, np, "static", "None", "best-effort", "pod", "100ms", networkName, subnetworkName, "TRUE", "100Mi", "1m", "10m", true, true, 2048, 10, 10, 85, "100s"),
+				Config: testAccContainerNodePool_withKubeletConfig(cluster, np, "static", "None", "best-effort", "pod", "100ms", networkName, subnetworkName, "TRUE", "100Mi", "60s", "10m", true, true, 2048, 10, 10, 85, "100s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						acctest.ExpectNoDelete(),
@@ -1060,7 +1060,7 @@ func TestAccContainerNodePool_withKubeletConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
                                                 "node_config.0.kubelet_config.0.image_gc_high_threshold_percent", "85"),
 					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
-                                                "node_config.0.kubelet_config.0.image_minimum_gc_age", "1m"),
+                                                "node_config.0.kubelet_config.0.image_minimum_gc_age", "60s"),
 					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
                                                 "node_config.0.kubelet_config.0.image_maximum_gc_age", "10m"),
 					resource.TestCheckResourceAttr("google_container_node_pool.with_kubelet_config",
@@ -4669,7 +4669,7 @@ resource "google_container_node_pool" "with_kubelet_config" {
         pid_available = "10%%"
       }
       eviction_soft_grace_period {
-        memory_available = "5m"
+        memory_available = "300s"
         nodefs_available = "4m30s"
         nodefs_inodes_free = "3.6m"
         imagefs_available = "100s"
@@ -8424,9 +8424,9 @@ func TestAccContainerNodePool_withConsolidationDelay(t *testing.T) {
 		CheckDestroy:             testAccCheckContainerNodePoolDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccContainerNodePool_consolidationDelay(cluster, np, networkName, subnetworkName, "1m"),
+				Config: testAccContainerNodePool_consolidationDelay(cluster, np, networkName, subnetworkName, "60s"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_config.0.consolidation_delay", "1m"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_config.0.consolidation_delay", "60s"),
 				),
 			},
 			{
@@ -8435,14 +8435,14 @@ func TestAccContainerNodePool_withConsolidationDelay(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccContainerNodePool_consolidationDelay(cluster, np, networkName, subnetworkName, "5m"),
+				Config: testAccContainerNodePool_consolidationDelay(cluster, np, networkName, subnetworkName, "300s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
 					},
 				},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_config.0.consolidation_delay", "5m"),
+					resource.TestCheckResourceAttr("google_container_node_pool.np", "node_config.0.consolidation_delay", "300s"),
 				),
 			},
 			{
