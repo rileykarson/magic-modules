@@ -654,8 +654,21 @@ addons_config {
 
 * `enabled` - (DEPRECATED) Enable Binary Authorization for this cluster. Deprecated in favor of `evaluation_mode`.
 
+{{- if ne $.TargetVersionName "ga" }}
+* `evaluation_mode` - (Optional) Mode of operation for Binary Authorization policy evaluation. Valid values are `DISABLED`,
+  `PROJECT_SINGLETON_POLICY_ENFORCE`, `POLICY_BINDINGS` and `POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE`.
+
+* `policy_bindings` - (Optional, Beta) Binauthz policies that apply to this cluster. Structure is [documented below](#nested_policy_bindings).
+{{- else }}
 * `evaluation_mode` - (Optional) Mode of operation for Binary Authorization policy evaluation. Valid values are `DISABLED`
   and `PROJECT_SINGLETON_POLICY_ENFORCE`.
+{{- end }}
+
+{{- if ne $.TargetVersionName "ga" }}
+<a name="nested_policy_bindings"></a>The `policy_bindings` block supports:
+
+* `name` - (Optional, Beta) The relative resource name of the binauthz platform policy to audit. GKE platform policies have the following format: `projects/{project_number}/platforms/gke/policies/{policy_id}`.
+{{- end }}
 
 <a name="nested_service_external_ips_config"></a>The `service_external_ips_config` block supports:
 

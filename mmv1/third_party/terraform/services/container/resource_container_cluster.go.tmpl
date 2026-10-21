@@ -1100,10 +1100,30 @@ func ResourceContainerCluster() *schema.Resource {
 											Type:          schema.TypeString,
 											Optional:      true,
                      									Computed:      true,
+											{{- if ne $.TargetVersionName "ga" }}
+											ValidateFunc:  validation.StringInSlice([]string{"DISABLED", "PROJECT_SINGLETON_POLICY_ENFORCE", "POLICY_BINDINGS", "POLICY_BINDINGS_AND_PROJECT_SINGLETON_POLICY_ENFORCE"}, false),
+											{{- else }}
 											ValidateFunc:  validation.StringInSlice([]string{"DISABLED", "PROJECT_SINGLETON_POLICY_ENFORCE"}, false),
+											{{- end }}
 											Description:   "Mode of operation for Binary Authorization policy evaluation.",
 											ConflictsWith: []string{"binary_authorization.0.enabled"},
 									},
+									{{- if ne $.TargetVersionName "ga" }}
+									"policy_bindings": {
+											Type:          schema.TypeList,
+											Optional:      true,
+											Description:   "Binauthz policies that apply to this cluster.",
+											Elem: &schema.Resource{
+													Schema: map[string]*schema.Schema{
+															"name": {
+																	Type:        schema.TypeString,
+																	Optional:    true,
+																	Description: "The relative resource name of the binauthz platform policy to audit. GKE platform policies have the following format: `projects/{project_number}/platforms/gke/policies/{policy_id}`.",
+															},
+													},
+											},
+									},
+									{{- end }}
 							},
 					},
 			},
@@ -6723,10 +6743,30 @@ func expandBinaryAuthorization(configured interface{}) *container.BinaryAuthoriz
 		}
 	}
 	config := l[0].(map[string]interface{})
+	{{- if ne $.TargetVersionName "ga" }}
+	var policyBindings []*container.BinaryAuthorizationPolicyBinding
+	if v, ok := config["policy_bindings"].([]interface{}); ok && len(v) > 0 {
+		for _, v := range v {
+			if v == nil {
+				continue
+			}
+			obj := v.(map[string]interface{})
+			policyBindings = append(policyBindings, &container.BinaryAuthorizationPolicyBinding{
+				Name: obj["name"].(string),
+			})
+		}
+	}
+	return &container.BinaryAuthorization{
+		Enabled:        config["enabled"].(bool),
+		EvaluationMode: config["evaluation_mode"].(string),
+		PolicyBindings: policyBindings,
+	}
+	{{- else }}
 	return &container.BinaryAuthorization{
 		Enabled:        config["enabled"].(bool),
 		EvaluationMode: config["evaluation_mode"].(string),
 	}
+	{{- end }}
 }
 
 func expandMasterAuth(configured interface{}) *container.MasterAuth {
@@ -7668,10 +7708,26 @@ func flattenNotificationConfig(c *container.NotificationConfig) []map[string]int
 func flattenBinaryAuthorization(c *container.BinaryAuthorization) []map[string]interface{} {
 	result := []map[string]interface{}{}
 	if c != nil {
+		{{- if ne $.TargetVersionName "ga" }}
+		var policyBindings []map[string]interface{}
+		for _, v := range c.PolicyBindings {
+			if v != nil {
+				policyBindings = append(policyBindings, map[string]interface{}{
+					"name": v.Name,
+				})
+			}
+		}
+		result = append(result, map[string]interface{}{
+			"enabled":         c.Enabled,
+			"evaluation_mode": c.EvaluationMode,
+			"policy_bindings": policyBindings,
+		})
+		{{- else }}
 		result = append(result, map[string]interface{}{
                         "enabled":         c.Enabled,
 			"evaluation_mode": c.EvaluationMode,
 		})
+		{{- end }}
         }
 	return result
 }

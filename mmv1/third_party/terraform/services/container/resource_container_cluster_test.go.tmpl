@@ -21224,3 +21224,59 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+{{- if ne $.TargetVersionName "ga" }}
+func TestAccContainerCluster_withBinaryAuthorizationPolicyBindings(t *testing.T) {
+	t.Parallel()
+
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := fmt.Sprintf("tf-test-network-%s", acctest.RandString(t, 10))
+	subnetName := fmt.Sprintf("tf-test-subnet-%s", acctest.RandString(t, 10))
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.evaluation_mode", "POLICY_BINDINGS"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "binary_authorization.0.policy_bindings.#", "1"),
+				),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withBinaryAuthorizationPolicyBindings(clusterName, networkName, subnetName string) string {
+	return fmt.Sprintf(`
+resource "google_compute_network" "default" {
+  name                    = "%s"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "default" {
+  name          = "%s"
+  ip_cidr_range = "10.0.0.0/16"
+  region        = "us-central1"
+  network       = google_compute_network.default.id
+}
+
+resource "google_container_cluster" "primary" {
+  name               = "%s"
+  location           = "us-central1-a"
+  initial_node_count = 1
+  network            = google_compute_network.default.id
+  subnetwork         = google_compute_subnetwork.default.id
+
+  binary_authorization {
+    evaluation_mode = "POLICY_BINDINGS"
+    policy_bindings {
+      name = "projects/${google_compute_network.default.project}/platforms/gke/policies/my-policy"
+    }
+  }
+  deletion_protection = false
+}
+`, networkName, subnetName, clusterName)
+}
+{{- end }}
