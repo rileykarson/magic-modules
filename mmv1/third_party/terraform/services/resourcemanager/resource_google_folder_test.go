@@ -96,13 +96,11 @@ func TestAccFolder_moveParent(t *testing.T) {
 func TestAccFolder_tags(t *testing.T) {
 	t.Parallel()
 
+	org := envvar.GetTestOrgFromEnv(t)
 	tagKey := tags.BootstrapSharedTestOrganizationTagKey(t, "crm-folder-tagkey", nil)
-	context := map[string]interface{}{
-		"org":           envvar.GetTestOrgFromEnv(t),
-		"tagKey":        tagKey,
-		"tagValue":      tags.BootstrapSharedTestOrganizationTagValue(t, "crm-folder-tagvalue", tagKey),
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	tagValue := tags.BootstrapSharedTestOrganizationTagValue(t, "crm-folder-tagvalue", tagKey)
+	randomSuffix := acctest.RandString(t, 10)
+	tagsMap := fmt.Sprintf("{\n\t\"%s/%s\" = \"%s\"\n  }", org, tagKey, tagValue)
 
 	folder_tags := cloudresourcemanagerv3.Folder{}
 	acctest.VcrTest(t, resource.TestCase{
@@ -110,7 +108,12 @@ func TestAccFolder_tags(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccFolder_tags(context),
+				Config: testAccFolder_tags(map[string]interface{}{
+					"org":                 org,
+					"random_suffix":       randomSuffix,
+					"deletion_protection": nil,
+					"tags":                tagsMap,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGoogleFolderExists(t, "google_folder.folder_tags", &folder_tags),
 				),
@@ -124,11 +127,21 @@ func TestAccFolder_tags(t *testing.T) {
 			},
 			// Update tags tries to replace the folder but fails due to deletion protection
 			{
-				Config:      testAccFolder_withoutTags(context),
+				Config: testAccFolder_tags(map[string]interface{}{
+					"org":                 org,
+					"random_suffix":       randomSuffix,
+					"deletion_protection": nil,
+					"tags":                nil,
+				}),
 				ExpectError: regexp.MustCompile("deletion_protection"),
 			},
 			{
-				Config: testAccFolder_tagsAllowDestroy(context),
+				Config: testAccFolder_tags(map[string]interface{}{
+					"org":                 org,
+					"random_suffix":       randomSuffix,
+					"deletion_protection": false,
+					"tags":                tagsMap,
+				}),
 			},
 		},
 	})
@@ -208,33 +221,10 @@ resource "google_folder" "folder1" {
 func testAccFolder_tags(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_folder" "folder_tags" {
-  display_name = "tf-test-%{random_suffix}"
-  parent       = "organizations/%{org}"
-  tags         = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
-}
-`, context)
-}
-
-func testAccFolder_withoutTags(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_folder" "folder_tags" {
-  display_name = "tf-test-%{random_suffix}"
-  parent       = "organizations/%{org}"
-}
-`, context)
-}
-
-func testAccFolder_tagsAllowDestroy(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_folder" "folder_tags" {
-  display_name = "tf-test-%{random_suffix}"
-  parent       = "organizations/%{org}"
-  deletion_protection = false
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
+  display_name        = "tf-test-%{random_suffix}"
+  parent              = "organizations/%{org}"
+  deletion_protection = %{deletion_protection}
+  tags                = %{tags}
 }
 `, context)
 }
