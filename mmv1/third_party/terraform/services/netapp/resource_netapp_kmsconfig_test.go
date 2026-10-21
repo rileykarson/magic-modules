@@ -13,10 +13,8 @@ import (
 func TestAccNetappkmsconfig_kmsConfigCreateExample_Update(t *testing.T) {
 	// t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"kms_key_name":  kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-east4", "tf-bootstrap-netapp-kmsconfig-key2").CryptoKey.Name,
-	}
+	randomSuffix := acctest.RandString(t, 10)
+	kmsKeyName := kms.BootstrapKMSKeyWithPurposeInLocationAndName(t, "ENCRYPT_DECRYPT", "us-east4", "tf-bootstrap-netapp-kmsconfig-key2").CryptoKey.Name
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -24,7 +22,12 @@ func TestAccNetappkmsconfig_kmsConfigCreateExample_Update(t *testing.T) {
 		CheckDestroy:             testAccCheckNetappkmsconfigDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNetappkmsconfig_kmsConfigCreateExample_Full(context),
+				Config: testAccNetappkmsconfig_kmsConfigCreateExample_Full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"kms_key_name":  kmsKeyName,
+					"description":   "this is a test description",
+					"labels":        nil,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_kmsconfig.kmsConfig",
@@ -33,7 +36,12 @@ func TestAccNetappkmsconfig_kmsConfigCreateExample_Update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"location", "name", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccNetappkmsconfig_kmsConfigCreateExample_Update(context),
+				Config: testAccNetappkmsconfig_kmsConfigCreateExample_Full(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"kms_key_name":  kmsKeyName,
+					"description":   "kmsconfig update",
+					"labels":        `{"foo" = "bar"}`,
+				}),
 			},
 			{
 				ResourceName:            "google_netapp_kmsconfig.kmsConfig",
@@ -49,23 +57,10 @@ func testAccNetappkmsconfig_kmsConfigCreateExample_Full(context map[string]inter
 	return acctest.Nprintf(` 
 	resource "google_netapp_kmsconfig" "kmsConfig" {
 		name = "tf-test-kms-test%{random_suffix}"
-		description="this is a test description"
+		description="%{description}"
 		crypto_key_name="%{kms_key_name}"
 		location="us-east4"
-	}
-`, context)
-}
-
-func testAccNetappkmsconfig_kmsConfigCreateExample_Update(context map[string]interface{}) string {
-	return acctest.Nprintf(`  
-	resource "google_netapp_kmsconfig" "kmsConfig" {
-		name = "tf-test-kms-test%{random_suffix}"
-		description="kmsconfig update"
-		crypto_key_name="%{kms_key_name}"
-		location="us-east4"
-		labels = {
-			"foo": "bar",
-		}
+		labels = %{labels}
 	}
 `, context)
 }
