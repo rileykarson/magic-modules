@@ -6472,11 +6472,29 @@ func expandBlueGreenSettings(configured interface{}) *container.BlueGreenSetting
 	config := l[0].(map[string]interface{})
 
 	blueGreenSettings := &container.BlueGreenSettings{
-		NodePoolSoakDuration:  config["node_pool_soak_duration"].(string),
-		StandardRolloutPolicy: expandStandardRolloutPolicy(config["standard_rollout_policy"]),
+		NodePoolSoakDuration: config["node_pool_soak_duration"].(string),
+	}
+	if v, ok := config["autoscaled_rollout_policy"]; ok && len(v.([]interface{})) > 0 {
+		blueGreenSettings.AutoscaledRolloutPolicy = expandAutoscaledRolloutPolicy(v)
+	} else {
+		blueGreenSettings.StandardRolloutPolicy = expandStandardRolloutPolicy(config["standard_rollout_policy"])
 	}
 
 	return blueGreenSettings
+}
+
+func expandAutoscaledRolloutPolicy(configured interface{}) *container.AutoscaledRolloutPolicy {
+	l, ok := configured.([]interface{})
+	if !ok || l == nil || len(l) == 0 || l[0] == nil {
+		return &container.AutoscaledRolloutPolicy{}
+	}
+
+	config := l[0].(map[string]interface{})
+	autoscaledRolloutPolicy := &container.AutoscaledRolloutPolicy{
+		WaitForDrainDuration: config["wait_for_drain_duration"].(string),
+	}
+
+	return autoscaledRolloutPolicy
 }
 
 func expandStandardRolloutPolicy(configured interface{}) *container.StandardRolloutPolicy {
@@ -8426,6 +8444,18 @@ func flattenBlueGreenSettings(a *container.BlueGreenSettings) []map[string]inter
 	r := make(map[string]interface{})
 	r["node_pool_soak_duration"] = a.NodePoolSoakDuration
 	r["standard_rollout_policy"] = flattenStandardRolloutPolicy(a.StandardRolloutPolicy)
+	r["autoscaled_rollout_policy"] = flattenAutoscaledRolloutPolicy(a.AutoscaledRolloutPolicy)
+
+	return []map[string]interface{}{r}
+}
+
+func flattenAutoscaledRolloutPolicy(a *container.AutoscaledRolloutPolicy) []map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+
+	r := make(map[string]interface{})
+	r["wait_for_drain_duration"] = a.WaitForDrainDuration
 
 	return []map[string]interface{}{r}
 }

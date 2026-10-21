@@ -92,6 +92,8 @@ fields:
     api_field: 'autoscaling.autoprovisioningNodePoolDefaults.shieldedInstanceConfig.enableIntegrityMonitoring'
   - field: 'cluster_autoscaling.auto_provisioning_defaults.shielded_instance_config.enable_secure_boot'
     api_field: 'autoscaling.autoprovisioningNodePoolDefaults.shieldedInstanceConfig.enableSecureBoot'
+  - field: 'cluster_autoscaling.auto_provisioning_defaults.upgrade_settings.blue_green_settings.autoscaled_rollout_policy.wait_for_drain_duration'
+    api_field: 'autoscaling.autoprovisioningNodePoolDefaults.upgradeSettings.blueGreenSettings.autoscaledRolloutPolicy.waitForDrainDuration'
   - field: 'cluster_autoscaling.auto_provisioning_defaults.upgrade_settings.blue_green_settings.node_pool_soak_duration'
     api_field: 'autoscaling.autoprovisioningNodePoolDefaults.upgradeSettings.blueGreenSettings.nodePoolSoakDuration'
   - field: 'cluster_autoscaling.auto_provisioning_defaults.upgrade_settings.blue_green_settings.standard_rollout_policy.batch_node_count'
@@ -846,10 +848,8 @@ fields:
     api_field: 'nodePools.bestEffortProvisioning.enabled'
   - field: 'node_pool.best_effort_provisioning.min_provision_nodes'
     api_field: 'nodePools.bestEffortProvisioning.minProvisionNodes'
-{{- if ne $.TargetVersionName "ga" }}
   - field: 'node_pool.upgrade_settings.blue_green_settings.autoscaled_rollout_policy.wait_for_drain_duration'
     api_field: 'nodePools.upgradeSettings.blueGreenSettings.autoscaledRolloutPolicy.waitForDrainDuration'
-{{- end }}
   - field: 'node_pool.upgrade_settings.blue_green_settings.node_pool_soak_duration'
     api_field: 'nodePools.upgradeSettings.blueGreenSettings.nodePoolSoakDuration'
   - field: 'node_pool.upgrade_settings.blue_green_settings.standard_rollout_policy.batch_node_count'

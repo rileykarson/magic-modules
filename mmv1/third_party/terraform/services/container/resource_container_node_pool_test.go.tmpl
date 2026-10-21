@@ -1794,7 +1794,7 @@ func TestAccContainerNodePool_withUpgradeSettings(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccContainerNodePool_withUpgradeSettings(cluster, np, networkName, subnetworkName, 0, 0, "BLUE_GREEN", "AUTOSCALED", "0s", 0, 0.0, "", "100s"),
+				Config: testAccContainerNodePool_withUpgradeSettingsAutoscaled(cluster, np, networkName, subnetworkName, "0s", "100s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_container_node_pool.with_upgrade_settings", plancheck.ResourceActionUpdate),
@@ -5330,6 +5330,44 @@ resource "google_container_node_pool" "with_upgrade_settings" {
   %s
 }
 `, clusterName, networkName, subnetworkName, nodePoolName, upgradeSettings)
+}
+
+func testAccContainerNodePool_withUpgradeSettingsAutoscaled(clusterName, nodePoolName, networkName, subnetworkName, nodePoolSoakDuration, waitForDrainDuration string) string {
+	return fmt.Sprintf(`
+data "google_container_engine_versions" "central1" {
+  location = "us-east1"
+}
+
+resource "google_container_cluster" "cluster" {
+  name               = "%s"
+  location           = "us-east1"
+  initial_node_count = 1
+  min_master_version = "${data.google_container_engine_versions.central1.latest_master_version}"
+  deletion_protection = false
+  network    = "%s"
+  subnetwork    = "%s"
+}
+
+resource "google_container_node_pool" "with_upgrade_settings" {
+  name = "%s"
+  location = "us-east1"
+  cluster = google_container_cluster.cluster.name
+  initial_node_count = 1
+  autoscaling {
+	  min_node_count = 1
+	  max_node_count = 3
+  }
+  upgrade_settings {
+    strategy = "BLUE_GREEN"
+    blue_green_settings {
+      autoscaled_rollout_policy {
+        wait_for_drain_duration = "%s"
+      }
+      node_pool_soak_duration = "%s"
+    }
+  }
+}
+`, clusterName, networkName, subnetworkName, nodePoolName, waitForDrainDuration, nodePoolSoakDuration)
 }
 
 func testAccContainerNodePool_withRDMA(cluster, np, networkName, subnetworkName string) string {

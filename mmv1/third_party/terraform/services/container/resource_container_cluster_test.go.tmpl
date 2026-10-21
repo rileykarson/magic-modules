@@ -2493,7 +2493,6 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
-{{ if ne $.TargetVersionName `ga` -}}
 			{
 				Config: testAccContainerCluster_nodePoolWithUpgradeSettings(clusterName, npName, networkName, subnetworkName, 0, 0, "BLUE_GREEN", "AUTOSCALED", 0, 0.0, "", "0s", ""),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
@@ -2509,7 +2508,7 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
 			{
-				Config: testAccContainerCluster_nodePoolWithUpgradeSettings(clusterName, npName, networkName, subnetworkName, 0, 0, "BLUE_GREEN", "AUTOSCALED", 0, 0.0, "", "0s", "100s"),
+				Config: testAccContainerCluster_nodePoolWithUpgradeSettingsAutoscaled(clusterName, npName, networkName, subnetworkName, "0s", "100s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
@@ -2522,7 +2521,6 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{"deletion_protection"},
 			},
-{{- end }}
 		},
 	})
 }
@@ -2548,6 +2546,36 @@ resource "google_container_cluster" "primary" {
 	}
 }
 `, cluster, network, subnetwork, np, upgradeSettings)
+}
+
+func testAccContainerCluster_nodePoolWithUpgradeSettingsAutoscaled(cluster, np, network, subnetwork, nodePoolSoakDuration, waitForDrainDuration string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+	name               = "%s"
+	location           = "us-east1-b"
+	network            = "%s"
+	subnetwork         = "%s"
+	deletion_protection = false
+
+	node_pool {
+		name = "%s"
+		initial_node_count = 1
+		autoscaling {
+      min_node_count = 1
+      max_node_count = 3
+    }
+		upgrade_settings {
+			strategy = "BLUE_GREEN"
+			blue_green_settings {
+				autoscaled_rollout_policy {
+					wait_for_drain_duration = "%s"
+				}
+				node_pool_soak_duration = "%s"
+			}
+		}
+	}
+}
+`, cluster, network, subnetwork, np, waitForDrainDuration, nodePoolSoakDuration)
 }
 
 func TestAccContainerCluster_withPrivateClusterConfigBasic(t *testing.T) {
@@ -21238,14 +21266,12 @@ func testAccContainerCluster_autoprovisioningDefaultsUpgradeSettingsAutoscaled(c
 
         resource_limits {
           resource_type = "cpu"
-          minimum       = 1
-          maximum       = 5
+          maximum       = 2
         }
 
         resource_limits {
           resource_type = "memory"
-          minimum       = 1
-          maximum       = 5
+          maximum       = 2048
         }
 
         auto_provisioning_defaults {
@@ -21291,9 +21317,30 @@ func TestAccContainerCluster_withAutoProvisioningDefaultsUpgradeSettingsAutoscal
 				),
 			},
 			{
-				ResourceName:      "google_container_cluster.with_autoprovisioning_upgrade_settings",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "google_container_cluster.with_autoprovisioning_upgrade_settings",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection", "node_pool"},
+			},
+			{
+				Config: testAccContainerCluster_autoprovisioningDefaultsUpgradeSettingsAutoscaled(cluster, networkName, subnetworkName, "3.500s"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning_upgrade_settings", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.strategy", "BLUE_GREEN"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.node_pool_soak_duration", "3.500s"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.autoscaled_rollout_policy.#", "1"),
+					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_upgrade_settings", "cluster_autoscaling.0.auto_provisioning_defaults.0.upgrade_settings.0.blue_green_settings.0.autoscaled_rollout_policy.0.wait_for_drain_duration", "3.500s"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.with_autoprovisioning_upgrade_settings",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection", "node_pool"},
 			},
 		},
 	})

@@ -762,6 +762,8 @@ as "Intel Haswell" or "Intel Sandy Bridge".
 
 * `management` - (Optional) NodeManagement configuration for this NodePool. Structure is [documented below](#nested_management).
 
+* `upgrade_settings` - (Optional) Specifies the upgrade settings for NAP created node pools. Structure is [documented below](#nested_upgrade_settings).
+
 <a name="nested_management"></a>The `management` block supports:
 
 * `auto_upgrade` - (Optional) Specifies whether node auto-upgrade is enabled for the node pool. If enabled, node auto-upgrade helps keep the nodes in your node pool up to date with the latest release version of Kubernetes.
@@ -769,8 +771,6 @@ as "Intel Haswell" or "Intel Sandy Bridge".
 * `auto_repair` - (Optional) Specifies whether the node auto-repair is enabled for the node pool. If enabled, the nodes in this node pool will be monitored and, if they fail health checks too many times, an automatic repair action will be triggered.
 
 This block also contains several computed attributes, documented below.
-
-* `upgrade_settings` - (Optional) Specifies the upgrade settings for NAP created node pools. Structure is [documented below](#nested_upgrade_settings).
 
 <a name="nested_upgrade_settings"></a>The `upgrade_settings` block supports:
 
@@ -786,9 +786,9 @@ This block also contains several computed attributes, documented below.
 
 * `node_pool_soak_duration` - (Optional) Time needed after draining entire blue pool. After this period, blue pool will be cleaned up. A duration in seconds with up to nine fractional digits, ending with 's'. Example: "3.5s".
 
-* `standard_rollout_policy`: (Optional) Standard policy for the blue-green upgrade. To be specified when strategy is set to BLUE_GREEN. Structure is [documented below](#nested_standard_rollout_policy).
+* `standard_rollout_policy` - (Optional) Standard policy for the blue-green upgrade. To be specified when strategy is set to BLUE_GREEN. Structure is [documented below](#nested_standard_rollout_policy).
 
-* `autoscaled_rollout_policy`: (Optional) Autoscaled rollout policy for the blue-green upgrade. Structure is [documented below](#nested_autoscaled_rollout_policy).
+* `autoscaled_rollout_policy` - (Optional) Autoscaled rollout policy for the blue-green upgrade. Structure is [documented below](#nested_autoscaled_rollout_policy).
 
 <a name="nested_autoscaled_rollout_policy"></a>The `autoscaled_rollout_policy` block supports:
 
@@ -1476,6 +1476,8 @@ workload_identity_config {
 <a name="nested_node_pool"></a>The `node_pool` block supports:
 
 * `node_config` - (Optional) The node configuration of the pool. Structure is [documented below](#nested_node_pool_node_config).
+
+* `upgrade_settings` - (Optional) Specify node upgrade settings to change how GKE upgrades nodes. Structure is [documented below](#nested_upgrade_settings).
 
 * `best_effort_provisioning` - (Optional) Best-effort provisioning allows node pool creations to automatically ignore stockout errors once the minimum number of nodes have been provisioned. Structure is [documented below](#nested_node_pool_best_effort_provisioning).
 
