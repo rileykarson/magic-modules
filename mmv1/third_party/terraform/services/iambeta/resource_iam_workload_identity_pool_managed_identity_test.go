@@ -14,9 +14,7 @@ import (
 func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -24,7 +22,11 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 		CheckDestroy:             testAccCheckIAMBetaWorkloadIdentityPoolManagedIdentityDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   nil,
+					"disabled":      nil,
+				}),
 			},
 			{
 				ResourceName:            "google_iam_workload_identity_pool_managed_identity.example",
@@ -33,7 +35,11 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"workload_identity_pool_id", "workload_identity_pool_namespace_id", "workload_identity_pool_managed_identity_id"},
 			},
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_updated(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated Managed Identity in a Workload Identity Pool Namespace",
+					"disabled":      false,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_managed_identity.example", plancheck.ResourceActionUpdate),
@@ -53,9 +59,11 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_full(t *testing.T) {
 	t.Parallel()
 
+	project := envvar.GetTestProjectNumberFromEnv()
+	randomSuffix := acctest.RandString(t, 10)
 	context := map[string]interface{}{
-		"project":       envvar.GetTestProjectNumberFromEnv(),
-		"random_suffix": acctest.RandString(t, 10),
+		"project":       project,
+		"random_suffix": randomSuffix,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -73,7 +81,11 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_full(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"workload_identity_pool_id", "workload_identity_pool_namespace_id", "workload_identity_pool_managed_identity_id"},
 			},
 			{
-				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_updated(context),
+				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(map[string]interface{}{
+					"random_suffix": randomSuffix,
+					"description":   "Updated Managed Identity in a Workload Identity Pool Namespace",
+					"disabled":      false,
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_managed_identity.example", plancheck.ResourceActionUpdate),
@@ -106,6 +118,8 @@ resource "google_iam_workload_identity_pool_managed_identity" "example" {
   workload_identity_pool_id                  = google_iam_workload_identity_pool.pool.workload_identity_pool_id
   workload_identity_pool_namespace_id        = google_iam_workload_identity_pool_namespace.ns.workload_identity_pool_namespace_id
   workload_identity_pool_managed_identity_id = "tf-test-example-managed-identity%{random_suffix}"
+  description                                = "%{description}"
+  disabled                                   = %{disabled}
 }
 `, context)
 }
@@ -134,28 +148,6 @@ resource "google_iam_workload_identity_pool_managed_identity" "example" {
   attestation_rules {
     google_cloud_resource = "//run.googleapis.com/projects/%{project}/name/locations/us-east1/services/my-service"
   }
-}
-`, context)
-}
-
-func testAccIAMBetaWorkloadIdentityPoolManagedIdentity_updated(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iam_workload_identity_pool" "pool" {
-  workload_identity_pool_id = "tf-test-example-pool%{random_suffix}"
-  mode                      = "TRUST_DOMAIN"
-}
-
-resource "google_iam_workload_identity_pool_namespace" "ns" {
-  workload_identity_pool_id           = google_iam_workload_identity_pool.pool.workload_identity_pool_id
-  workload_identity_pool_namespace_id = "tf-test-example-namespace%{random_suffix}"
-}
-
-resource "google_iam_workload_identity_pool_managed_identity" "example" {
-  workload_identity_pool_id                  = google_iam_workload_identity_pool.pool.workload_identity_pool_id
-  workload_identity_pool_namespace_id        = google_iam_workload_identity_pool_namespace.ns.workload_identity_pool_namespace_id
-  workload_identity_pool_managed_identity_id = "tf-test-example-managed-identity%{random_suffix}"
-  description                                = "Updated Managed Identity in a Workload Identity Pool Namespace"
-  disabled                                   = false
 }
 `, context)
 }
