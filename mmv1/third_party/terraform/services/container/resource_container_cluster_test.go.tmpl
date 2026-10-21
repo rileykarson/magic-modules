@@ -21224,3 +21224,146 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+
+func TestAccContainerCluster_withDiskIoScheduler(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withDiskIoScheduler(cluster, networkName, subnetworkName, "none", "none"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.disk_io_scheduler.0.node_system_io_scheduler", "none"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.disk_io_scheduler.0.node_attached_disk_io_scheduler", "none"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection", "min_master_version"},
+			},
+			{
+				Config: testAccContainerCluster_withDiskIoScheduler(cluster, networkName, subnetworkName, "mq-deadline", "bfq"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.disk_io_scheduler.0.node_system_io_scheduler", "mq-deadline"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.linux_node_config.0.disk_io_scheduler.0.node_attached_disk_io_scheduler", "bfq"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection", "min_master_version"},
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withDiskIoScheduler(cluster, networkName, subnetworkName, systemScheduler, attachedScheduler string) string {
+	return fmt.Sprintf(`
+data "google_container_engine_versions" "central1a" {
+  location = "us-east1-b"
+}
+
+resource "google_container_cluster" "primary" {
+  name                = "%s"
+  location            = "us-east1-b"
+  initial_node_count  = 1
+  min_master_version  = data.google_container_engine_versions.central1a.latest_master_version
+  deletion_protection = false
+  network             = "%s"
+  subnetwork          = "%s"
+
+  node_config {
+    image_type = "UBUNTU_CONTAINERD"
+    linux_node_config {
+      disk_io_scheduler {
+        node_system_io_scheduler        = "%s"
+        node_attached_disk_io_scheduler = "%s"
+      }
+    }
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+    ]
+  }
+}
+`, cluster, networkName, subnetworkName, systemScheduler, attachedScheduler)
+}
+
+func TestAccContainerCluster_withDiskIoSchedulerInline(t *testing.T) {
+	t.Parallel()
+
+	cluster := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-east1", "10.79.0.0/20")
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withDiskIoSchedulerInline(cluster, networkName, subnetworkName, "none", "none"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.disk_io_scheduler.0.node_system_io_scheduler", "none"),
+					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.disk_io_scheduler.0.node_attached_disk_io_scheduler", "none"),
+				),
+			},
+			{
+				ResourceName:            "google_container_cluster.primary",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"deletion_protection", "min_master_version"},
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withDiskIoSchedulerInline(cluster, networkName, subnetworkName, systemScheduler, attachedScheduler string) string {
+	return fmt.Sprintf(`
+data "google_container_engine_versions" "central1a" {
+  location = "us-east1-b"
+}
+
+resource "google_container_cluster" "primary" {
+  name                = "%s"
+  location            = "us-east1-b"
+  min_master_version  = data.google_container_engine_versions.central1a.latest_master_version
+  deletion_protection = false
+  network             = "%s"
+  subnetwork          = "%s"
+
+  node_pool {
+    name               = "default-pool"
+    initial_node_count = 1
+    node_config {
+      image_type = "UBUNTU_CONTAINERD"
+      linux_node_config {
+        disk_io_scheduler {
+          node_system_io_scheduler        = "%s"
+          node_attached_disk_io_scheduler = "%s"
+        }
+      }
+      oauth_scopes = [
+        "https://www.googleapis.com/auth/logging.write",
+        "https://www.googleapis.com/auth/monitoring",
+      ]
+    }
+  }
+}
+`, cluster, networkName, subnetworkName, systemScheduler, attachedScheduler)
+}

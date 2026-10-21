@@ -388,14 +388,13 @@ cluster.
 
 <a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
 
-* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler.
-  Structure is documented below.
+* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler. Structure is [documented below](#nested_disk_io_scheduler).
 
-The `disk_io_scheduler` block supports:
+<a name="nested_disk_io_scheduler"></a>The `disk_io_scheduler` block supports:
 
-* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are bfq, kyber, mq-deadline, none.
+* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are `bfq`, `kyber`, `mq-deadline`, `none`.
 
-* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are bfq, kyber, mq-deadline, none.
+* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are `bfq`, `kyber`, `mq-deadline`, `none`.
 
 <a name="nested_taint_config"></a>The `taint_config` block supports:
 

@@ -256,3 +256,30 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestDiskIoSchedulerExpandFlatten(t *testing.T) {
+	t.Parallel()
+
+	input := []interface{}{
+		map[string]interface{}{
+			"node_system_io_scheduler":        "mq-deadline",
+			"node_attached_disk_io_scheduler": "bfq",
+		},
+	}
+
+	expanded := expandDiskIoScheduler(input)
+	if expanded == nil {
+		t.Fatalf("expandDiskIoScheduler returned nil")
+	}
+	if expanded.NodeSystemIoScheduler != "mq-deadline" || expanded.NodeAttachedDiskIoScheduler != "bfq" {
+		t.Errorf("expandDiskIoScheduler = %+v, want mq-deadline/bfq", expanded)
+	}
+
+	flattened := flattenDiskIoScheduler(expanded)
+	if len(flattened) != 1 {
+		t.Fatalf("expected 1 flattened DiskIoScheduler, got %d", len(flattened))
+	}
+	if flattened[0]["node_system_io_scheduler"] != "mq-deadline" || flattened[0]["node_attached_disk_io_scheduler"] != "bfq" {
+		t.Errorf("flattenDiskIoScheduler = %+v, want mq-deadline/bfq", flattened[0])
+	}
+}

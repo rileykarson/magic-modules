@@ -1483,6 +1483,8 @@ workload_identity_config {
 
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
+* `linux_node_config` - (Optional) Parameters that can be configured on Linux nodes. Structure is [documented below](#nested_linux_node_config).
+
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_pool_node_config_taint_config).
 
 <a name="nested_node_pool_node_config_taint_config"></a>The `taint_config` block supports:
@@ -1875,15 +1877,6 @@ those in the Guaranteed QoS class, by influencing NUMA affinity. Structure is [d
 
 <a name="nested_linux_node_config"></a>The `linux_node_config` block supports:
 
-* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler.
-  Structure is documented below.
-
-The `disk_io_scheduler` block supports:
-
-* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are bfq, kyber, mq-deadline, none.
-
-* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are bfq, kyber, mq-deadline, none.
-
 * `sysctls` - (Optional) The Linux kernel parameters to be applied to the nodes
 and all pods running on the nodes. Specified as a map from the key, such as
 `net.core.wmem_max`, to a string value. Currently supported attributes can be found [here](https://cloud.google.com/sdk/gcloud/reference/beta/container/node-pools/create#--system-config-from-file).
@@ -1913,6 +1906,8 @@ linux_node_config {
 * `accurate_time_config` - (Optional) Accurate time configuration for the node. Structure is [documented below](#nested_accurate_time_config).
 
 * `custom_node_init` - (Optional) Custom node init settings. Structure is [documented below](#nested_custom_node_init).
+
+* `disk_io_scheduler` - (Optional) Configuration for the disk IO scheduler. Structure is [documented below](#nested_disk_io_scheduler).
 
 <a name="nested_swap_config"></a>The `swap_config` block supports:
 
@@ -1991,6 +1986,12 @@ linux_node_config {
 * `gcs_generation` - (Optional) The generation of the init script in Google Cloud Storage. If `gcs_uri` is used, `gcs_generation` is required.
 
 * `gcp_secret_manager_secret_uri` - (Optional) The Google Cloud Secret Manager secret version URI for storing the init script. Format: `projects/PROJECT_ID/secrets/SECRET_NAME/versions/VERSION`. The service account on the nodepool must have access to the secret version. Conflicts with `gcs_uri`.
+
+<a name="nested_disk_io_scheduler"></a>The `disk_io_scheduler` block supports:
+
+* `node_system_io_scheduler` - (Optional) Configures the IO scheduler for the boot disk or ephemeral lssd that runs node system workloads. Supported values are `bfq`, `kyber`, `mq-deadline`, `none`.
+
+* `node_attached_disk_io_scheduler` - (Optional) Configures the IO scheduler for the attached disks. Supported values are `bfq`, `kyber`, `mq-deadline`, `none`.
 
 <a name="nested_windows_node_config"></a>The `windows_node_config` block supports:
 
