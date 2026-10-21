@@ -130,11 +130,9 @@ resource "google_gke_hub_feature" "feature" {
 func TestAccGKEHubFeature_gkehubFeatureMciUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix":   acctest.RandString(t, 10),
-		"org_id":          envvar.GetTestOrgFromEnv(t),
-		"billing_account": envvar.GetTestBillingAccountFromEnv(t),
-	}
+	randomSuffix := acctest.RandString(t, 10)
+	orgId := envvar.GetTestOrgFromEnv(t)
+	billingAccount := envvar.GetTestBillingAccountFromEnv(t)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -145,7 +143,13 @@ func TestAccGKEHubFeature_gkehubFeatureMciUpdate(t *testing.T) {
 		CheckDestroy: testAccCheckGKEHubFeatureDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGKEHubFeature_gkehubFeatureMciUpdateStart(context),
+				Config: testAccGKEHubFeature_gkehubFeatureMciUpdateStart(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"org_id":            orgId,
+					"billing_account":   billingAccount,
+					"config_membership": "google_gke_hub_membership.membership.id",
+					"labels":            nil,
+				}),
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -154,7 +158,13 @@ func TestAccGKEHubFeature_gkehubFeatureMciUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"update_time", "state"},
 			},
 			{
-				Config: testAccGKEHubFeature_gkehubFeatureMciChangeMembership(context),
+				Config: testAccGKEHubFeature_gkehubFeatureMciUpdateStart(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"org_id":            orgId,
+					"billing_account":   billingAccount,
+					"config_membership": "google_gke_hub_membership.membership_second.id",
+					"labels":            `{ foo = "bar" }`,
+				}),
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -212,65 +222,10 @@ resource "google_gke_hub_feature" "feature" {
   location = "global"
   spec {
     multiclusteringress {
-      config_membership = google_gke_hub_membership.membership.id
+      config_membership = %{config_membership}
     }
   }
-  project = google_project.project.project_id
-}
-`, context)
-}
-
-func testAccGKEHubFeature_gkehubFeatureMciChangeMembership(context map[string]interface{}) string {
-	return gkeHubFeatureProjectSetupForGA(context) + acctest.Nprintf(`
-resource "google_container_cluster" "primary" {
-  name               = "tf-test%{random_suffix}"
-  location           = "us-central1-a"
-  initial_node_count = 1
-  project = google_project.project.project_id
-  deletion_protection = false
-  depends_on = [time_sleep.wait_for_gkehub_enablement]
-}
-
-resource "google_container_cluster" "secondary" {
-  name               = "tf-test2%{random_suffix}"
-  location           = "us-central1-a"
-  initial_node_count = 1
-  project = google_project.project.project_id
-  deletion_protection = false
-  depends_on = [time_sleep.wait_for_gkehub_enablement]
-}
-
-resource "google_gke_hub_membership" "membership" {
-  membership_id = "tf-test%{random_suffix}"
-  endpoint {
-    gke_cluster {
-      resource_link = "//container.googleapis.com/${google_container_cluster.primary.id}"
-    }
-  }
-  project = google_project.project.project_id
-}
-
-resource "google_gke_hub_membership" "membership_second" {
-  membership_id = "tf-test2%{random_suffix}"
-  endpoint {
-    gke_cluster {
-      resource_link = "//container.googleapis.com/${google_container_cluster.secondary.id}"
-    }
-  }
-  project = google_project.project.project_id
-}
-
-resource "google_gke_hub_feature" "feature" {
-  name = "multiclusteringress"
-  location = "global"
-  spec {
-    multiclusteringress {
-      config_membership = google_gke_hub_membership.membership_second.id
-    }
-  }
-  labels = {
-    foo = "bar"
-  }
+  labels = %{labels}
   project = google_project.project.project_id
 }
 `, context)
