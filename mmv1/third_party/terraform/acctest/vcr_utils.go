@@ -49,6 +49,10 @@ func IsVcrEnabled() bool {
 	return envPath != "" && vcrMode != ""
 }
 
+func IsVcrReplaying() bool {
+	return IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING"
+}
+
 var configsLock = sync.RWMutex{}
 var sourcesLock = sync.RWMutex{}
 
@@ -173,11 +177,11 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 		if s.ImportStateVerify && !slices.Contains(s.ImportStateVerifyIgnore, "terraform_labels") {
 			s.ImportStateVerifyIgnore = append(s.ImportStateVerifyIgnore, "terraform_labels")
 		}
-		if IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING" {
-			re := regexp.MustCompile(`create_duration = "\d+[sm]"`)
-			s.Config = re.ReplaceAllString(s.Config, `create_duration = "1s"`)
-			re = regexp.MustCompile(`destroy_duration = "\d+[sm]"`)
-			s.Config = re.ReplaceAllString(s.Config, `destroy_duration = "1s"`)
+		if IsVcrReplaying() {
+			re := regexp.MustCompile(`create_duration = "\d+[smh]"`)
+			s.Config = re.ReplaceAllString(s.Config, `create_duration = "1ms"`)
+			re = regexp.MustCompile(`destroy_duration = "\d+[smh]"`)
+			s.Config = re.ReplaceAllString(s.Config, `destroy_duration = "1ms"`)
 			// During RECORDING, extendWithTGCData attaches a non-nil Check function to steps
 			// containing resources, which causes terraform-plugin-testing to run a pre-destroy
 			// refresh on Destroy: true steps. Since extendWithTGCData is skipped in REPLAYING

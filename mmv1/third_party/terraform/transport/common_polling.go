@@ -3,6 +3,7 @@ package transport
 import (
 	"fmt"
 	"log"
+	"os"
 	"sync"
 	"time"
 
@@ -36,7 +37,7 @@ func PollingWaitTime(pollF PollReadFunc, checkResponse PollCheckResponseFunc, ac
 	timeout time.Duration, targetOccurrences int) error {
 	log.Printf("[DEBUG] %s: Polling until expected state is read", activity)
 	log.Printf("[DEBUG] Target occurrences: %d", targetOccurrences)
-	if targetOccurrences == 1 {
+	if targetOccurrences == 1 && (os.Getenv("VCR_PATH") == "" || os.Getenv("VCR_MODE") != "REPLAYING") {
 		return retry.Retry(timeout, func() *retry.RetryError {
 			readResp, readErr := pollF()
 			return checkResponse(readResp, readErr)
@@ -58,11 +59,19 @@ func RetryWithTargetOccurrences(timeout time.Duration, targetOccurrences int,
 	var resultErr error
 	var resultErrMu sync.Mutex
 
+	minTimeout := 500 * time.Millisecond
+	var pollInterval time.Duration
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		minTimeout = time.Millisecond
+		pollInterval = time.Millisecond
+	}
+
 	c := &retry.StateChangeConf{
 		Pending:                   []string{"retryableerror"},
 		Target:                    []string{"success"},
 		Timeout:                   timeout,
-		MinTimeout:                500 * time.Millisecond,
+		MinTimeout:                minTimeout,
+		PollInterval:              pollInterval,
 		ContinuousTargetOccurence: targetOccurrences,
 		Refresh: func() (interface{}, string, error) {
 			rerr := f()

@@ -12,6 +12,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"google.golang.org/api/googleapi"
 )
 
@@ -304,4 +305,28 @@ func testRetryTransportRetryPredicate(err error) (bool, string) {
 		}
 	}
 	return false, ""
+}
+
+func TestRetryWithTargetOccurrences_VCRReplayingFastPoll(t *testing.T) {
+	t.Setenv("VCR_PATH", "/tmp")
+	t.Setenv("VCR_MODE", "REPLAYING")
+
+	calls := 0
+	start := time.Now()
+	err := RetryWithTargetOccurrences(5*time.Second, 3, func() *retry.RetryError {
+		calls++
+		if calls < 3 {
+			return retry.RetryableError(fmt.Errorf("transient error %d", calls))
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if calls != 5 {
+		t.Fatalf("expected 5 calls (2 failures + 3 target occurrences), got %d", calls)
+	}
+	if elapsed := time.Since(start); elapsed > 100*time.Millisecond {
+		t.Fatalf("expected RetryWithTargetOccurrences in REPLAYING mode to complete quickly, took %v", elapsed)
+	}
 }

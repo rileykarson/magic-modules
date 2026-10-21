@@ -3,6 +3,7 @@ package tpgdclresource
 import (
 	"context"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/cenkalti/backoff"
@@ -125,6 +126,9 @@ func Do(ctx context.Context, op Operation, retryProvider RetryProvider) error {
 				}
 			}
 			return OperationNotDone{}
+		}
+		if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+			w = time.Millisecond
 		}
 
 		t := time.NewTimer(w)

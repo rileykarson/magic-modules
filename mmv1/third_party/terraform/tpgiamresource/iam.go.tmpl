@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"reflect"
 	"sort"
 	"time"
@@ -89,7 +90,7 @@ func iamPolicyReadModifyWrite(updater ResourceIamUpdater, modify iamPolicyModify
 	transport_tpg.MutexStore.Lock(mutexKey)
 	defer transport_tpg.MutexStore.Unlock(mutexKey)
 
-	err := retry.Retry(maxBackoffTimeout, func() *retry.RetryError {
+	err := tpgresource.Retry(maxBackoffTimeout, func() *retry.RetryError {
 		log.Printf("[DEBUG]: Retrieving policy for %s\n", updater.DescribeResource())
 		p, err := updater.GetResourceIamPolicy()
 		if err != nil {
@@ -119,12 +120,21 @@ func iamPolicyReadModifyWrite(updater ResourceIamUpdater, modify iamPolicyModify
 		return err
 	}
 
+	delay := 1 * time.Second
+	minTimeout := 1 * time.Second
+	var pollInterval time.Duration
+	if os.Getenv("VCR_PATH") != "" && os.Getenv("VCR_MODE") == "REPLAYING" {
+		delay = 0
+		minTimeout = time.Millisecond
+		pollInterval = time.Millisecond
+	}
 	fetchConf := &retry.StateChangeConf{
 		Pending:                   []string{"retrying"},
 		Target:                    []string{"done"},
-		Delay:                     1 * time.Second,
+		Delay:                     delay,
 		Timeout:                   maxBackoffTimeout,
-		MinTimeout:                1 * time.Second,
+		MinTimeout:                minTimeout,
+		PollInterval:              pollInterval,
 		ContinuousTargetOccurence: 3,
 		Refresh: func() (interface{}, string, error) {
 			log.Printf("[DEBUG]: Retrieving policy for %s\n", updater.DescribeResource())
