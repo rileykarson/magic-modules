@@ -13,9 +13,11 @@ import (
 func TestAccGKEBackupBackupPlan_update(t *testing.T) {
 	t.Parallel()
 
+	cluster := tpgcontainer.BootstrapSharedGKECluster(t, "gkebackup")
+	randomSuffix := acctest.RandString(t, 10)
 	context := map[string]interface{}{
-		"cluster":       tpgcontainer.BootstrapSharedGKECluster(t, "gkebackup"),
-		"random_suffix": acctest.RandString(t, 10),
+		"cluster":       cluster,
+		"random_suffix": randomSuffix,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -24,7 +26,11 @@ func TestAccGKEBackupBackupPlan_update(t *testing.T) {
 		CheckDestroy:             testAccCheckGKEBackupBackupPlanDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGKEBackupBackupPlan_basic(context),
+				Config: testAccGKEBackupBackupPlan_basic(map[string]interface{}{
+					"cluster":         cluster,
+					"random_suffix":   randomSuffix,
+					"permissive_mode": nil,
+				}),
 			},
 			{
 				ResourceName:            "google_gke_backup_backup_plan.backupplan",
@@ -33,7 +39,11 @@ func TestAccGKEBackupBackupPlan_update(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels"},
 			},
 			{
-				Config: testAccGKEBackupBackupPlan_permissive(context),
+				Config: testAccGKEBackupBackupPlan_basic(map[string]interface{}{
+					"cluster":         cluster,
+					"random_suffix":   randomSuffix,
+					"permissive_mode": true,
+				}),
 			},
 			{
 				ResourceName:            "google_gke_backup_backup_plan.backupplan",
@@ -91,25 +101,7 @@ resource "google_gke_backup_backup_plan" "backupplan" {
     include_volume_data = false
     include_secrets = false
     all_namespaces = true
-  }
-  labels = {
-    "some-key-1": "some-value-1"
-  }
-}
-`, context)
-}
-
-func testAccGKEBackupBackupPlan_permissive(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_gke_backup_backup_plan" "backupplan" {
-  name = "tf-test-testplan%{random_suffix}"
-  cluster = "%{cluster}"
-  location = "us-east1"
-  backup_config {
-    include_volume_data = false
-    include_secrets = false
-    all_namespaces = true
-    permissive_mode = true
+    permissive_mode = %{permissive_mode}
   }
   labels = {
     "some-key-1": "some-value-1"
