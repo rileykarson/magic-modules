@@ -421,6 +421,8 @@ Structure is [documented below](#nested_gke_auto_upgrade_config).
     [Cost Allocation](https://cloud.google.com/kubernetes-engine/docs/how-to/cost-allocations) feature.
     Structure is [documented below](#nested_cost_management_config).
 
+* `control_plane_egress` - (Optional) Configuration for Control Plane Egress. Structure is [documented below](#nested_control_plane_egress).
+
 * `resource_usage_export_config` - (Optional) Configuration for the
     [ResourceUsageExportConfig](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-usage-metering) feature.
     Structure is [documented below](#nested_resource_usage_export_config).
@@ -1710,6 +1712,10 @@ not.
 * `patch_mode` - (Required) The selected patch mode.
     Accepted values are:
     * ACCELERATED: Upgrades to the latest available patch version in a given minor and release channel.
+
+<a name="nested_control_plane_egress"></a>The `control_plane_egress` block supports:
+
+* `mode` - (Optional) Which mode to use for Control Plane Egress. Can be `MODE_UNSPECIFIED`, `VIA_CONTROL_PLANE`, or `NONE`.
 
 <a name="nested_cost_management_config"></a>The `cost_management_config` block supports:
 

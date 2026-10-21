@@ -2706,6 +2706,24 @@ func ResourceContainerCluster() *schema.Resource {
 			   Computed: true,
 			},
 
+			"control_plane_egress": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: `Configuration for Control Plane Egress.`,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"mode": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							ValidateFunc: validation.StringInSlice([]string{"MODE_UNSPECIFIED", "VIA_CONTROL_PLANE", "NONE"}, false),
+							Description:  `Which mode to use for Control Plane Egress.`,
+						},
+					},
+				},
+			},
 			"cost_management_config": {
 				Type:        schema.TypeList,
 				MaxItems:    1,
@@ -3897,6 +3915,9 @@ func resourceContainerClusterRead(d *schema.ResourceData, meta interface{}) erro
 	if err := d.Set("disable_l4_lb_firewall_reconciliation", cluster.NetworkConfig.DisableL4LbFirewallReconciliation); err != nil {
 		return fmt.Errorf("Error setting disable_l4_lb_firewall_reconciliation: %s", err)
 	}
+	if err := d.Set("control_plane_egress", flattenControlPlaneEgress(cluster.ControlPlaneEgress)); err != nil {
+		return fmt.Errorf("Error setting control_plane_egress: %s", err)
+	}
 	if err := d.Set("cost_management_config", flattenManagementConfig(cluster.CostManagementConfig)); err != nil {
 		return fmt.Errorf("Error setting cost_management_config: %s", err)
 	}
@@ -4553,6 +4574,19 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 		}
 
 		log.Printf("[INFO] GKE cluster %s Cilium Clusterwide Network Policy has been updated to %v", d.Id(), enabled)
+	}
+
+	if d.HasChange("control_plane_egress") {
+		c := d.Get("control_plane_egress")
+		req := &container.UpdateClusterRequest{
+			Update: &container.ClusterUpdate{
+				DesiredControlPlaneEgress: expandControlPlaneEgress(c),
+			},
+		}
+
+		updateF := updateFunc(req, "updating control plane egress")
+		// Call update serially.
+		updateFuncs = append(updateFuncs, updateF)
 	}
 
 	if d.HasChange("cost_management_config") {
@@ -9488,4 +9522,30 @@ func init() {
 		Type: registry.SchemaTypeResource,
 		Schema: ResourceContainerCluster(),
 	}.Register()
+}
+
+func expandControlPlaneEgress(configured interface{}) *container.ControlPlaneEgress {
+	if configured == nil {
+		return nil
+	}
+	ls := configured.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	m := ls[0].(map[string]interface{})
+	return &container.ControlPlaneEgress{
+		Mode:          m["mode"].(string),
+		ForceSendFields: []string{"Mode"},
+	}
+}
+
+func flattenControlPlaneEgress(c *container.ControlPlaneEgress) []interface{} {
+	if c == nil {
+		return nil
+	}
+	m := make(map[string]interface{})
+	if c.Mode != "" {
+		m["mode"] = c.Mode
+	}
+	return []interface{}{m}
 }
