@@ -24,7 +24,9 @@ func TestAccCloudRunDomainMapping_foregroundDeletion(t *testing.T) {
 		CheckDestroy:             testAccCheckCloudRunDomainMappingDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated1(context),
+				Config: testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated(acctest.MergeMap(context, map[string]interface{}{
+					"labels": nil,
+				})),
 			},
 			{
 				ResourceName:            "google_cloud_run_domain_mapping.default",
@@ -33,7 +35,11 @@ func TestAccCloudRunDomainMapping_foregroundDeletion(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "location", "status", "metadata.0.labels", "metadata.0.terraform_labels", "metadata.0.resource_version"},
 			},
 			{
-				Config: testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated2(context),
+				Config: testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated(acctest.MergeMap(context, map[string]interface{}{
+					"labels": `{
+      "my-label" = "my-value"
+    }`,
+				})),
 			},
 			{
 				ResourceName:            "google_cloud_run_domain_mapping.default",
@@ -45,48 +51,16 @@ func TestAccCloudRunDomainMapping_foregroundDeletion(t *testing.T) {
 	})
 }
 
-func testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated1(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_cloud_run_service" "default" {
-    name     = "tf-test-cloudrun-srv%{random_suffix}"
-    location = "us-central1"
-
-    metadata {
-      namespace = "%{namespace}"
-    }
-
-    template {
-      spec {
-        containers {
-          image = "us-docker.pkg.dev/cloudrun/container/hello"
-        }
-      }
-    }
-  }
-
-resource "google_cloud_run_domain_mapping" "default" {
-  location = "us-central1"
-  name     = "tf-test-domain%{random_suffix}.gcp.tfacc.hashicorptest.com"
-
-  metadata {
-    namespace = "%{namespace}"
-  }
-
-  spec {
-    route_name = google_cloud_run_service.default.name
-  }
-}
-`, context)
-}
-
-func testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated2(context map[string]interface{}) string {
+func testAccCloudRunDomainMapping_cloudRunDomainMappingUpdated(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_cloud_run_service" "default" {
   name     = "tf-test-cloudrun-srv%{random_suffix}"
   location = "us-central1"
+
   metadata {
     namespace = "%{namespace}"
   }
+
   template {
     spec {
       containers {
@@ -95,15 +69,16 @@ resource "google_cloud_run_service" "default" {
     }
   }
 }
+
 resource "google_cloud_run_domain_mapping" "default" {
   location = "us-central1"
   name     = "tf-test-domain%{random_suffix}.gcp.tfacc.hashicorptest.com"
+
   metadata {
     namespace = "%{namespace}"
-    labels = {
-      "my-label" = "my-value"
-    }
+    labels = %{labels}
   }
+
   spec {
     route_name = google_cloud_run_service.default.name
   }
