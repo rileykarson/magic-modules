@@ -21230,8 +21230,8 @@ func TestAccContainerCluster_nodePoolUpgradeConcurrencyConfig(t *testing.T) {
 	t.Parallel()
 
 	clusterName := fmt.Sprintf("cluster-npucc-%s", acctest.RandString(t, 10))
-	networkName := fmt.Sprintf("tf-test-network-%s", acctest.RandString(t, 10))
-	subnetworkName := fmt.Sprintf("tf-test-subnetwork-%s", acctest.RandString(t, 10))
+	networkName := tpgcompute.BootstrapSharedTestNetwork(t, "gke-cluster")
+	subnetworkName := tpgcompute.BootstrapSubnetInRegion(t, "gke-cluster", networkName, "us-central1", "10.0.0.0/16")
 	zone := "us-central1-c"
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -21257,30 +21257,18 @@ func TestAccContainerCluster_nodePoolUpgradeConcurrencyConfig(t *testing.T) {
 
 func testAccContainerCluster_nodePoolUpgradeConcurrencyConfig(clusterName, networkName, subnetworkName, zone string, maxCount int) string {
 	return fmt.Sprintf(`
-resource "google_compute_network" "network" {
-  name                    = "%s"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "subnetwork" {
-  name          = "%s"
-  network       = google_compute_network.network.name
-  ip_cidr_range = "10.0.0.0/16"
-  region        = "us-central1"
-}
-
 resource "google_container_cluster" "primary" {
   name               = "%s"
   location           = "%s"
   initial_node_count = 1
 
-  network    = google_compute_network.network.name
-  subnetwork = google_compute_subnetwork.subnetwork.name
+  network    = "%s"
+  subnetwork = "%s"
 
   node_pool_upgrade_concurrency_config {
     max_count = %d
   }
 }
-`, networkName, subnetworkName, clusterName, zone, maxCount)
+`, clusterName, zone, networkName, subnetworkName, maxCount)
 }
 {{- end }}

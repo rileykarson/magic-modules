@@ -5421,8 +5421,8 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 					DesiredNodePoolUpgradeConcurrencyConfig: expandNodePoolUpgradeConcurrencyConfig(v),
 				},
 			}
-			err := sendUpdate(config, req, project, location, d, userAgent, "Cluster NodePoolUpgradeConcurrencyConfig update")
-			if err != nil {
+			updateF := updateFunc(req, "Cluster NodePoolUpgradeConcurrencyConfig update")
+			if err := updateF(); err != nil {
 				return err
 			}
 		} else {
@@ -5432,8 +5432,8 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 					DesiredNodePoolUpgradeConcurrencyConfig: &container.NodePoolUpgradeConcurrencyConfig{},
 				},
 			}
-			err := sendUpdate(config, req, project, location, d, userAgent, "Cluster NodePoolUpgradeConcurrencyConfig clear")
-			if err != nil {
+			updateF := updateFunc(req, "Cluster NodePoolUpgradeConcurrencyConfig clear")
+			if err := updateF(); err != nil {
 				return err
 			}
 		}
