@@ -215,6 +215,24 @@ This should be used if the resource can never be deleted in the API, and there i
 exclude_delete: true
 ```
 
+### `exclude_post_create_read`
+If true, the resource populates Terraform state and identity directly from the synchronous `Create` response body (or from the completed long-running operation response body when `async.result.resource_inside_response: true`) via `Resource<Name>Flatten` instead of issuing an additional post-create `Read` API call.
+
+Default: `false`
+
+```yaml
+exclude_post_create_read: true
+```
+
+### `exclude_post_update_read`
+If true, the resource populates Terraform state and identity directly from the synchronous `Update` response body (or from the completed long-running operation response body when `async.result.resource_inside_response: true`) via `Resource<Name>Flatten` instead of issuing an additional post-update `Read` API call.
+
+Default: `false`
+
+```yaml
+exclude_post_update_read: true
+```
+
 ### `autogen_async`
 
 If true, code for handling long-running operations is generated along with
