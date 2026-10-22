@@ -13,6 +13,7 @@
 
 ---
 name: InstanceAttachment
+exclude_post_create_read: true
 description: |
   An `Instance attachment` in Apigee.
 references:
