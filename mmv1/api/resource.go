@@ -337,6 +337,16 @@ type Resource struct {
 	// public ca external account keys
 	ExcludeRead bool `yaml:"exclude_read,omitempty"`
 
+	// Set to true to populate Terraform state directly from the Create API or LRO
+	// response via Resource<Name>Flatten instead of calling resource<Name>Read at
+	// the end of Create.
+	ExcludePostCreateRead bool `yaml:"exclude_post_create_read,omitempty"`
+
+	// Set to true to populate Terraform state directly from the Update API or LRO
+	// response via Resource<Name>Flatten instead of calling resource<Name>Read at
+	// the end of Update.
+	ExcludePostUpdateRead bool `yaml:"exclude_post_update_read,omitempty"`
+
 	// Set to true for resources that are excluded from universal deletion policy due to differing
 	// behavior on a universal option or use a different data type
 	DeletionPolicyExclude bool `yaml:"deletion_policy_exclude,omitempty"`
@@ -653,6 +663,37 @@ func (r *Resource) Validate() (es []error) {
 
 	for _, sample := range r.Samples {
 		es = append(es, sample.Validate(r.Name)...)
+	}
+
+	if r.ExcludePostCreateRead {
+		if r.ExcludeRead {
+			es = append(es, fmt.Errorf("Cannot set `exclude_post_create_read: true` when `exclude_read: true` on %s", r.Name))
+		}
+		if a := r.GetAsync(); a != nil && a.Allow("Create") {
+			if a.IsA("PollAsync") {
+				es = append(es, fmt.Errorf("Cannot set `exclude_post_create_read: true` with PollAsync on Create for %s", r.Name))
+			} else if a.IsA("OpAsync") && !a.Result.ResourceInsideResponse {
+				es = append(es, fmt.Errorf("Cannot set `exclude_post_create_read: true` with OpAsync on Create unless `async.result.resource_inside_response: true` on %s", r.Name))
+			}
+		}
+	}
+
+	if r.ExcludePostUpdateRead {
+		if r.ExcludeRead {
+			es = append(es, fmt.Errorf("Cannot set `exclude_post_update_read: true` when `exclude_read: true` on %s", r.Name))
+		}
+		if r.FieldSpecificUpdateMethods() {
+			es = append(es, fmt.Errorf("Cannot set `exclude_post_update_read: true` when properties have custom `update_url` on %s", r.Name))
+		}
+		if !r.Immutable {
+			if a := r.GetAsync(); a != nil && a.Allow("update") {
+				if a.IsA("PollAsync") {
+					es = append(es, fmt.Errorf("Cannot set `exclude_post_update_read: true` with PollAsync on Update for %s", r.Name))
+				} else if a.IsA("OpAsync") && !a.Result.ResourceInsideResponse {
+					es = append(es, fmt.Errorf("Cannot set `exclude_post_update_read: true` with OpAsync on Update unless `async.result.resource_inside_response: true` on %s", r.Name))
+				}
+			}
+		}
 	}
 
 	return es
