@@ -576,6 +576,103 @@ func TestExpandUpgradeSettingsUpdate(t *testing.T) {
 			t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
 		}
 	})
+
+	t.Run("updating standard_rollout_policy batch_node_count to 0 sets ForceSendFields", func(t *testing.T) {
+		t.Parallel()
+		d := makeData(t, map[string]string{
+			"id":                                                                                   "np-id",
+			"upgrade_settings.#":                                                                   "1",
+			"upgrade_settings.0.strategy":                                                          "BLUE_GREEN",
+			"upgrade_settings.0.blue_green_settings.#":                                             "1",
+			"upgrade_settings.0.blue_green_settings.0.node_pool_soak_duration":                     "100s",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.#":                   "1",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_node_count":  "1",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_soak_duration": "10s",
+		}, map[string]interface{}{
+			"upgrade_settings": []interface{}{
+				map[string]interface{}{
+					"strategy": "BLUE_GREEN",
+					"blue_green_settings": []interface{}{
+						map[string]interface{}{
+							"node_pool_soak_duration": "100s",
+							"standard_rollout_policy": []interface{}{
+								map[string]interface{}{
+									"batch_node_count":    0,
+									"batch_soak_duration": "10s",
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+		got, err := expandUpgradeSettingsUpdate(d, "")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if got.BlueGreenSettings == nil || got.BlueGreenSettings.StandardRolloutPolicy == nil {
+			t.Fatal("expected StandardRolloutPolicy to be populated")
+		}
+		if diff := cmp.Diff([]string{"BatchNodeCount"}, got.BlueGreenSettings.StandardRolloutPolicy.ForceSendFields); diff != "" {
+			t.Errorf("StandardRolloutPolicy.ForceSendFields mismatch (-want +got):\n%s", diff)
+		}
+	})
+}
+
+func TestExpandNodeConfigDefaults(t *testing.T) {
+	t.Parallel()
+
+	t.Run("omitted insecure_kubelet_readonly_port_enabled and logging_variant do not populate empty sub-structs", func(t *testing.T) {
+		t.Parallel()
+		got := expandNodeConfigDefaults([]interface{}{
+			map[string]interface{}{
+				"insecure_kubelet_readonly_port_enabled": "",
+				"logging_variant":                        "",
+				"gcfs_config": []interface{}{
+					map[string]interface{}{
+						"enabled": false,
+					},
+				},
+			},
+		})
+		if got == nil {
+			t.Fatal("expandNodeConfigDefaults returned nil")
+		}
+		if got.NodeKubeletConfig != nil {
+			t.Errorf("NodeKubeletConfig = %+v, want nil when insecure_kubelet_readonly_port_enabled is empty", got.NodeKubeletConfig)
+		}
+		if got.LoggingConfig != nil {
+			t.Errorf("LoggingConfig = %+v, want nil when logging_variant is empty", got.LoggingConfig)
+		}
+		if got.GcfsConfig == nil || got.GcfsConfig.Enabled {
+			t.Fatalf("GcfsConfig = %+v, want Enabled=false", got.GcfsConfig)
+		}
+		if diff := cmp.Diff([]string{"Enabled"}, got.GcfsConfig.ForceSendFields); diff != "" {
+			t.Errorf("GcfsConfig.ForceSendFields mismatch (-want +got):\n%s", diff)
+		}
+	})
+
+	t.Run("explicit FALSE insecure_kubelet_readonly_port_enabled sets ForceSendFields", func(t *testing.T) {
+		t.Parallel()
+		got := expandNodeConfigDefaults([]interface{}{
+			map[string]interface{}{
+				"insecure_kubelet_readonly_port_enabled": "FALSE",
+				"logging_variant":                        "DEFAULT",
+			},
+		})
+		if got == nil || got.NodeKubeletConfig == nil {
+			t.Fatal("expected NodeKubeletConfig to be populated")
+		}
+		if got.NodeKubeletConfig.InsecureKubeletReadonlyPortEnabled {
+			t.Errorf("InsecureKubeletReadonlyPortEnabled = true, want false")
+		}
+		if diff := cmp.Diff([]string{"InsecureKubeletReadonlyPortEnabled"}, got.NodeKubeletConfig.ForceSendFields); diff != "" {
+			t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
+		}
+		if got.LoggingConfig == nil || got.LoggingConfig.VariantConfig == nil || got.LoggingConfig.VariantConfig.Variant != "DEFAULT" {
+			t.Errorf("LoggingConfig = %+v, want DEFAULT", got.LoggingConfig)
+		}
+	})
 }
 
 func TestExpandNodeDrainConfig(t *testing.T) {

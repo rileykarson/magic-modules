@@ -1422,9 +1422,15 @@ func expandNodePool(d *schema.ResourceData, prefix string) (*container.NodePool,
 				}
 				if v, ok := standardRolloutPolicyConfig["batch_node_count"]; ok {
 					standardRolloutPolicy.BatchNodeCount = int64(v.(int))
+					if standardRolloutPolicy.BatchNodeCount == 0 && (d.HasChange(prefix+"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_node_count") || isRawStandardRolloutPolicyConfigured(d, prefix, "batch_node_count")) {
+						standardRolloutPolicy.ForceSendFields = append(standardRolloutPolicy.ForceSendFields, "BatchNodeCount")
+					}
 				}
 				if v, ok := standardRolloutPolicyConfig["batch_percentage"]; ok {
 					standardRolloutPolicy.BatchPercentage = v.(float64)
+					if standardRolloutPolicy.BatchPercentage == 0 && (d.HasChange(prefix+"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_percentage") || isRawStandardRolloutPolicyConfigured(d, prefix, "batch_percentage")) {
+						standardRolloutPolicy.ForceSendFields = append(standardRolloutPolicy.ForceSendFields, "BatchPercentage")
+					}
 				}
 
 				np.UpgradeSettings.BlueGreenSettings.StandardRolloutPolicy = standardRolloutPolicy
@@ -1952,9 +1958,15 @@ func expandUpgradeSettingsUpdate(d *schema.ResourceData, prefix string) (*contai
 							standardRolloutPolicy.BatchSoakDuration = standardRolloutPolicyConfig["batch_soak_duration"].(string)
 							if v, ok := standardRolloutPolicyConfig["batch_node_count"]; ok {
 								standardRolloutPolicy.BatchNodeCount = int64(v.(int))
+								if standardRolloutPolicy.BatchNodeCount == 0 && (d.HasChange(prefix+"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_node_count") || isRawStandardRolloutPolicyConfigured(d, prefix, "batch_node_count")) {
+									standardRolloutPolicy.ForceSendFields = append(standardRolloutPolicy.ForceSendFields, "BatchNodeCount")
+								}
 							}
 							if v, ok := standardRolloutPolicyConfig["batch_percentage"]; ok {
 								standardRolloutPolicy.BatchPercentage = v.(float64)
+								if standardRolloutPolicy.BatchPercentage == 0 && (d.HasChange(prefix+"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_percentage") || isRawStandardRolloutPolicyConfigured(d, prefix, "batch_percentage")) {
+									standardRolloutPolicy.ForceSendFields = append(standardRolloutPolicy.ForceSendFields, "BatchPercentage")
+								}
 							}
 						}
 						blueGreenSettings.StandardRolloutPolicy = standardRolloutPolicy

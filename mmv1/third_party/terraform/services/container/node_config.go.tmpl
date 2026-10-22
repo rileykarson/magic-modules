@@ -1618,13 +1618,13 @@ func expandNodeConfigDefaults(configured interface{}) *container.NodeConfigDefau
 
 	nodeConfigDefaults := &container.NodeConfigDefaults{}
 	nodeConfigDefaults.ContainerdConfig = expandContainerdConfig(config["containerd_config"])
-	if v, ok := config["insecure_kubelet_readonly_port_enabled"]; ok {
+	if v, ok := config["insecure_kubelet_readonly_port_enabled"]; ok && v.(string) != "" {
 		nodeConfigDefaults.NodeKubeletConfig = &container.NodeKubeletConfig{
 			InsecureKubeletReadonlyPortEnabled: expandInsecureKubeletReadonlyPortEnabled(v),
 			ForceSendFields:                    []string{"InsecureKubeletReadonlyPortEnabled"},
 		}
 	}
-	if variant, ok := config["logging_variant"]; ok {
+	if variant, ok := config["logging_variant"]; ok && variant.(string) != "" {
 		nodeConfigDefaults.LoggingConfig = &container.NodePoolLoggingConfig{
 			VariantConfig: &container.LoggingVariantConfig{
 				Variant: variant.(string),
@@ -1632,10 +1632,14 @@ func expandNodeConfigDefaults(configured interface{}) *container.NodeConfigDefau
 		}
 	}
 
-	if v, ok := config["gcfs_config"]; ok && len(v.([]interface{})) > 0 {
+	if v, ok := config["gcfs_config"]; ok && len(v.([]interface{})) > 0 && v.([]interface{})[0] != nil {
 		gcfsConfig := v.([]interface{})[0].(map[string]interface{})
+		enabled := gcfsConfig["enabled"].(bool)
 		nodeConfigDefaults.GcfsConfig = &container.GcfsConfig{
-			Enabled: gcfsConfig["enabled"].(bool),
+			Enabled: enabled,
+		}
+		if !enabled {
+			nodeConfigDefaults.GcfsConfig.ForceSendFields = []string{"Enabled"}
 		}
 	}
 
@@ -2119,6 +2123,60 @@ func isRawUpgradeSettingConfigured(d *schema.ResourceData, prefix, attr string) 
 		return false
 	}
 	vAttr := usVal.GetAttr(attr)
+	return vAttr != cty.NullVal(cty.Number) && !vAttr.IsNull()
+}
+
+func isRawStandardRolloutPolicyConfigured(d *schema.ResourceData, prefix, attr string) bool {
+	if d == nil {
+		return false
+	}
+	rawConfigNPRoot := d.GetRawConfig()
+	if rawConfigNPRoot.IsNull() || !rawConfigNPRoot.IsKnown() {
+		return false
+	}
+	if prefix != "" {
+		parts := strings.Split(prefix, ".")
+		npIndex, err := strconv.Atoi(parts[1])
+		if err != nil {
+			return false
+		}
+		if !rawConfigNPRoot.Type().HasAttribute("node_pool") {
+			return false
+		}
+		vNP := rawConfigNPRoot.GetAttr("node_pool")
+		if vNP.IsNull() || !vNP.IsKnown() || vNP.LengthInt() <= npIndex {
+			return false
+		}
+		rawConfigNPRoot = vNP.Index(cty.NumberIntVal(int64(npIndex)))
+	}
+	if rawConfigNPRoot.IsNull() || !rawConfigNPRoot.IsKnown() || !rawConfigNPRoot.Type().HasAttribute("upgrade_settings") {
+		return false
+	}
+	vUS := rawConfigNPRoot.GetAttr("upgrade_settings")
+	if vUS.IsNull() || !vUS.IsKnown() || vUS.LengthInt() == 0 {
+		return false
+	}
+	usVal := vUS.Index(cty.NumberIntVal(0))
+	if usVal.IsNull() || !usVal.IsKnown() || !usVal.Type().HasAttribute("blue_green_settings") {
+		return false
+	}
+	vBGS := usVal.GetAttr("blue_green_settings")
+	if vBGS.IsNull() || !vBGS.IsKnown() || vBGS.LengthInt() == 0 {
+		return false
+	}
+	bgsVal := vBGS.Index(cty.NumberIntVal(0))
+	if bgsVal.IsNull() || !bgsVal.IsKnown() || !bgsVal.Type().HasAttribute("standard_rollout_policy") {
+		return false
+	}
+	vSRP := bgsVal.GetAttr("standard_rollout_policy")
+	if vSRP.IsNull() || !vSRP.IsKnown() || vSRP.LengthInt() == 0 {
+		return false
+	}
+	srpVal := vSRP.Index(cty.NumberIntVal(0))
+	if srpVal.IsNull() || !srpVal.IsKnown() || !srpVal.Type().HasAttribute(attr) {
+		return false
+	}
+	vAttr := srpVal.GetAttr(attr)
 	return vAttr != cty.NullVal(cty.Number) && !vAttr.IsNull()
 }
 
