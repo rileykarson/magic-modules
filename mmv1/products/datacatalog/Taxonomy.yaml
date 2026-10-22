@@ -13,6 +13,8 @@
 
 ---
 name: Taxonomy
+exclude_post_update_read: true
+exclude_post_create_read: true
 description: |
   A collection of policy tags that classify data along a common axis.
 references:
