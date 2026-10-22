@@ -1,6 +1,7 @@
 package bigtable
 
 import (
+	"container/list"
 	"context"
 	"fmt"
 	"log"
@@ -505,11 +506,163 @@ func resourceBigtableInstanceUpdate(d *schema.ResourceData, meta interface{}) er
 
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutUpdate))
 	defer cancel()
-	if _, err := bigtable.UpdateInstanceAndSyncClusters(ctxWithTimeout, c, conf); err != nil {
+	if _, err := UpdateInstanceAndSyncClusters(ctxWithTimeout, c, conf); err != nil {
 		return fmt.Errorf("Error updating instance. %s", err)
 	}
 
 	return resourceBigtableInstanceRead(d, meta)
+}
+
+type bigtableInstanceAdminClient interface {
+	Clusters(ctx context.Context, instanceID string) ([]*bigtable.ClusterInfo, error)
+	UpdateInstanceWithClusters(ctx context.Context, conf *bigtable.InstanceWithClustersConfig) error
+	SetAutoscaling(ctx context.Context, instanceID, clusterID string, conf bigtable.AutoscalingConfig) error
+	UpdateCluster(ctx context.Context, instanceID, clusterID string, serveNodes int32) error
+	DeleteCluster(ctx context.Context, instanceID, clusterID string) error
+	CreateCluster(ctx context.Context, conf *bigtable.ClusterConfig) error
+}
+
+// UpdateInstanceAndSyncClusters updates an instance and its clusters, and will synchronize the
+// clusters in the instance with the provided clusters, creating and deleting them as necessary.
+// The provided InstanceWithClustersConfig is used as follows:
+//   - InstanceID is required
+//   - DisplayName and InstanceType are updated only if they are not empty
+//   - ClusterID is required for any provided cluster
+//   - Any cluster present in conf.Clusters but not part of the instance will be created using CreateCluster
+//     and the given ClusterConfig.
+//   - Any cluster missing from conf.Clusters but present in the instance will be removed from the instance
+//     using DeleteCluster.
+//   - Any cluster in conf.Clusters that also exists in the instance will be
+//     updated either to contain the provided number of nodes or to use the
+//     provided autoscaling config. If both the number of nodes and autoscaling
+//     are configured, autoscaling takes precedence. If the number of nodes is zero
+//     and autoscaling is not provided in InstanceWithClustersConfig, the cluster
+//     is not updated.
+//
+// This method may return an error after partially succeeding, for example if the instance is updated
+// but a cluster update fails. If an error is returned, InstanceInfo and Clusters may be called to
+// determine the current state. The return UpdateInstanceResults will describe the work done by the
+// method, whether partial or complete.
+func UpdateInstanceAndSyncClusters(ctx context.Context, iac *bigtable.InstanceAdminClient, conf *bigtable.InstanceWithClustersConfig) (*bigtable.UpdateInstanceResults, error) {
+	return updateInstanceAndSyncClusters(ctx, iac, conf)
+}
+
+func updateInstanceAndSyncClusters(ctx context.Context, iac bigtableInstanceAdminClient, conf *bigtable.InstanceWithClustersConfig) (*bigtable.UpdateInstanceResults, error) {
+	// First fetch the existing clusters so we know what to remove, add or update.
+	existingClusters, err := iac.Clusters(ctx, conf.InstanceID)
+	if err != nil {
+		return nil, err
+	}
+
+	instanceOnlyConf := *conf
+	instanceOnlyConf.Clusters = nil
+	if err := iac.UpdateInstanceWithClusters(ctx, &instanceOnlyConf); err != nil {
+		return nil, err
+	}
+	updatedInstance := conf.DisplayName != "" ||
+		conf.InstanceType != bigtable.UNSPECIFIED ||
+		conf.Edition != bigtable.EditionUnspecified ||
+		conf.Labels != nil
+
+	results := &bigtable.UpdateInstanceResults{InstanceUpdated: updatedInstance}
+
+	existingClusterNames := make(map[string]bool)
+	for _, cluster := range existingClusters {
+		existingClusterNames[cluster.Name] = true
+	}
+
+	// Synchronize clusters that were passed in with the existing clusters in the instance.
+	// First update any cluster we encounter that already exists in the instance.
+	// Collect the clusters that we will create and delete so that we can minimize disruption
+	// of the instance.
+	clustersToCreate := list.New()
+	clustersToDelete := list.New()
+	for _, cluster := range conf.Clusters {
+		_, clusterExists := existingClusterNames[cluster.ClusterID]
+		if !clusterExists {
+			// The cluster doesn't exist yet, so we must create it.
+			clustersToCreate.PushBack(cluster)
+			continue
+		}
+		delete(existingClusterNames, cluster.ClusterID)
+
+		if cluster.NumNodes <= 0 && cluster.AutoscalingConfig == nil {
+			// We only synchronize clusters with a valid number of nodes
+			// or a valid autoscaling config.
+			continue
+		}
+
+		// We update the clusters autoscaling config, or its number of serve
+		// nodes.
+		var updateErr error
+		if cluster.AutoscalingConfig != nil {
+			updateErr = iac.SetAutoscaling(ctx, conf.InstanceID, cluster.ClusterID,
+				*cluster.AutoscalingConfig)
+		} else {
+			updateErr = iac.UpdateCluster(ctx, conf.InstanceID, cluster.ClusterID,
+				cluster.NumNodes)
+		}
+		if updateErr != nil {
+			return results, fmt.Errorf("UpdateCluster %q failed %w; Progress: %v",
+				cluster.ClusterID, updateErr, results)
+		}
+		results.UpdatedClusters = append(results.UpdatedClusters, cluster.ClusterID)
+	}
+
+	// Any cluster left in existingClusterNames was NOT in the given config and should be deleted.
+	for clusterToDelete := range existingClusterNames {
+		clustersToDelete.PushBack(clusterToDelete)
+	}
+
+	// Now that we have the clusters that we need to create and delete, we do so keeping the following
+	// in mind:
+	// - Don't delete the last cluster in the instance, as that will result in an error.
+	// - Attempt to offset each deletion with a creation before another deletion, so that instance
+	//   capacity is never reduced more than necessary.
+	// Note that there is a limit on number of clusters in an instance which we are not aware of here,
+	// so delete a cluster before adding one (as long as there are > 1 clusters left) so that we are
+	// less likely to exceed the maximum number of clusters.
+	numExistingClusters := len(existingClusters)
+	nextCreation := clustersToCreate.Front()
+	nextDeletion := clustersToDelete.Front()
+	for {
+		// We are done when both lists are empty.
+		if nextCreation == nil && nextDeletion == nil {
+			break
+		}
+
+		// If there is more than one existing cluster, we always want to delete first if possible.
+		// If there are no more creations left, always go ahead with the deletion.
+		if (numExistingClusters > 1 && nextDeletion != nil) || nextCreation == nil {
+			clusterToDelete := nextDeletion.Value.(string)
+			err = iac.DeleteCluster(ctx, conf.InstanceID, clusterToDelete)
+			if err != nil {
+				return results, fmt.Errorf("DeleteCluster %q failed %w; Progress: %v",
+					clusterToDelete, err, results)
+			}
+			results.DeletedClusters = append(results.DeletedClusters, clusterToDelete)
+			numExistingClusters--
+			nextDeletion = nextDeletion.Next()
+		}
+
+		// Now create a new cluster if required.
+		if nextCreation != nil {
+			clusterToCreate := nextCreation.Value.(bigtable.ClusterConfig)
+			// Assume the cluster config is well formed and rely on the underlying call to error out.
+			// Make sure to set the InstanceID, though, since we know what it must be.
+			clusterToCreate.InstanceID = conf.InstanceID
+			err = iac.CreateCluster(ctx, &clusterToCreate)
+			if err != nil {
+				return results, fmt.Errorf("CreateCluster %v failed %w; Progress: %v",
+					clusterToCreate, err, results)
+			}
+			results.CreatedClusters = append(results.CreatedClusters, clusterToCreate.ClusterID)
+			numExistingClusters++
+			nextCreation = nextCreation.Next()
+		}
+	}
+
+	return results, nil
 }
 
 func resourceBigtableInstanceDestroy(d *schema.ResourceData, meta interface{}) error {
