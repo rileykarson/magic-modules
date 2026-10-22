@@ -13,6 +13,7 @@
 
 ---
 name: Processor
+exclude_post_create_read: true
 description: |
   The first-class citizen for Document AI. Each processor defines how to extract structural information from a document.
 references:
