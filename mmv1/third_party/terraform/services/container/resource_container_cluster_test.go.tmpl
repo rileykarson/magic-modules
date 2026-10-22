@@ -647,7 +647,7 @@ func TestAccContainerCluster_withMaxRunDuration(t *testing.T) {
 				Config: testAccContainerCluster_withMaxRunDuration(clusterName, npName, networkName, subnetworkName, "1800s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_cluster.max_run_duration", plancheck.ResourceActionReplace),
+						plancheck.ExpectResourceAction("google_container_cluster.max_run_duration", plancheck.ResourceActionUpdate),
 					},
 				},
 			},
@@ -661,7 +661,7 @@ func TestAccContainerCluster_withMaxRunDuration(t *testing.T) {
 				Config: testAccContainerCluster_disableMaxRunDuration(clusterName, npName, networkName, subnetworkName),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_cluster.max_run_duration", plancheck.ResourceActionReplace),
+						plancheck.ExpectResourceAction("google_container_cluster.max_run_duration", plancheck.ResourceActionUpdate),
 					},
 				},
 			},
@@ -21220,4 +21220,72 @@ resource "google_container_cluster" "primary" {
   }
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
+}
+
+func TestAccContainerCluster_withInPlaceNodeConfigSchemaCoverage(t *testing.T) {
+	t.Parallel()
+	t.Skip("https://github.com/hashicorp/terraform-provider-google/issues/15254#issuecomment-1646277473")
+
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	npName := fmt.Sprintf("tf-test-nodepool-%s", acctest.RandString(t, 10))
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withInPlaceNodeConfigSchemaCoverage(clusterName, npName),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withInPlaceNodeConfigSchemaCoverage(clusterName, npName string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  name                = "%s"
+  location            = "us-central1-a"
+  initial_node_count  = 1
+  deletion_protection = false
+
+  node_config {
+    flex_start = true
+    guest_accelerator {
+      count              = 1
+      type               = "nvidia-tesla-t4"
+      gpu_partition_size = "1g.5gb"
+      gpu_driver_installation_config {
+        gpu_driver_version = "LATEST"
+      }
+      gpu_sharing_config {
+        gpu_sharing_strategy       = "TIME_SHARING"
+        max_shared_clients_per_gpu = 2
+      }
+    }
+  }
+
+  node_pool {
+    name       = "%s"
+    node_count = 1
+    queued_provisioning {
+      enabled = true
+    }
+    node_config {
+      guest_accelerator {
+        count              = 1
+        type               = "nvidia-tesla-t4"
+        gpu_partition_size = "1g.5gb"
+        gpu_driver_installation_config {
+          gpu_driver_version = "LATEST"
+        }
+        gpu_sharing_config {
+          gpu_sharing_strategy       = "TIME_SHARING"
+          max_shared_clients_per_gpu = 2
+        }
+      }
+    }
+  }
+}
+`, clusterName, npName)
 }

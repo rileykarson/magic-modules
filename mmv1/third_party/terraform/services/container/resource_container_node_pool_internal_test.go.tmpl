@@ -256,3 +256,97 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitNodePoolSchema_InPlaceUpdateFields(t *testing.T) {
+	t.Parallel()
+
+	ncSchema := schemaNodeConfig().Elem.(*schema.Resource).Schema
+
+	if schemaNodePool["queued_provisioning"].ForceNew {
+		t.Error("queued_provisioning should not be ForceNew")
+	}
+	qpSchema := schemaNodePool["queued_provisioning"].Elem.(*schema.Resource).Schema
+	if qpSchema["enabled"].ForceNew {
+		t.Error("queued_provisioning.enabled should not be ForceNew")
+	}
+	for _, field := range []string{"flex_start", "max_run_duration", "guest_accelerator"} {
+		if ncSchema[field].ForceNew {
+			t.Errorf("node_config.%s should not be ForceNew", field)
+		}
+	}
+	gaSchema := ncSchema["guest_accelerator"].Elem.(*schema.Resource).Schema
+	for _, field := range []string{"count", "type", "gpu_driver_installation_config", "gpu_partition_size", "gpu_sharing_config"} {
+		if gaSchema[field].ForceNew {
+			t.Errorf("node_config.guest_accelerator.%s should not be ForceNew", field)
+		}
+	}
+	if gaSchema["gpu_driver_installation_config"].Elem.(*schema.Resource).Schema["gpu_driver_version"].ForceNew {
+		t.Error("node_config.guest_accelerator.gpu_driver_installation_config.gpu_driver_version should not be ForceNew")
+	}
+	gscSchema := gaSchema["gpu_sharing_config"].Elem.(*schema.Resource).Schema
+	if gscSchema["gpu_sharing_strategy"].ForceNew || gscSchema["max_shared_clients_per_gpu"].ForceNew {
+		t.Error("node_config.guest_accelerator.gpu_sharing_config subfields should not be ForceNew")
+	}
+}
+
+func TestUnitExpandAndFlattenNodePool_QueuedProvisioning(t *testing.T) {
+	t.Parallel()
+
+	dFalse := schema.TestResourceDataRaw(t, schemaNodePool, map[string]interface{}{
+		"queued_provisioning": []interface{}{
+			map[string]interface{}{
+				"enabled": false,
+			},
+		},
+	})
+	np, err := expandNodePool(dFalse, "")
+	if err != nil {
+		t.Fatalf("expandNodePool failed: %v", err)
+	}
+	if np.QueuedProvisioning == nil || np.QueuedProvisioning.Enabled != false {
+		t.Fatalf("expected QueuedProvisioning.Enabled=false, got %#v", np.QueuedProvisioning)
+	}
+	if diff := cmp.Diff(np.QueuedProvisioning.ForceSendFields, []string{"Enabled"}); diff != "" {
+		t.Errorf("unexpected ForceSendFields diff: %s", diff)
+	}
+
+	flattenedConfigured, err := flattenNodePool(dFalse, &transport_tpg.Config{}, &container.NodePool{
+		Name:               "np-1",
+		QueuedProvisioning: &container.QueuedProvisioning{Enabled: false},
+	}, "")
+	if err != nil {
+		t.Fatalf("flattenNodePool failed: %v", err)
+	}
+	wantFalseBlock := []map[string]interface{}{
+		{"enabled": false},
+	}
+	if diff := cmp.Diff(flattenedConfigured["queued_provisioning"], wantFalseBlock); diff != "" {
+		t.Errorf("flattenNodePool with configured enabled=false diff: %s", diff)
+	}
+
+	dRemoved := schema.TestResourceDataRaw(t, schemaNodePool, map[string]interface{}{})
+	flattenedRemoved, err := flattenNodePool(dRemoved, &transport_tpg.Config{}, &container.NodePool{
+		Name:               "np-1",
+		QueuedProvisioning: &container.QueuedProvisioning{Enabled: false},
+	}, "")
+	if err != nil {
+		t.Fatalf("flattenNodePool failed: %v", err)
+	}
+	if flattenedRemoved["queued_provisioning"] != nil {
+		t.Errorf("expected nil queued_provisioning when unconfigured and disabled, got %#v", flattenedRemoved["queued_provisioning"])
+	}
+}
+
+func TestUnitExpandGuestAccelerators(t *testing.T) {
+	t.Parallel()
+
+	clearedAccels := expandGuestAccelerators([]interface{}{
+		map[string]interface{}{
+			"count": 0,
+			"type":  "nvidia-tesla-t4",
+		},
+	})
+	if len(clearedAccels) != 0 {
+		t.Errorf("expected empty slice for count=0 accelerator, got %#v", clearedAccels)
+	}
+}

@@ -442,13 +442,11 @@ var schemaNodePool = map[string]*schema.Schema{
 		Optional:    true,
 		MaxItems:    1,
 		Description: `Specifies the configuration of queued provisioning`,
-		ForceNew:    true,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"enabled": {
 					Type:        schema.TypeBool,
 					Required:    true,
-					ForceNew:    true,
 					Description: `Whether nodes in this node pool are obtainable solely through the ProvisioningRequest API`,
 				},
 			},
@@ -1306,10 +1304,11 @@ func expandNodePool(d *schema.ResourceData, prefix string) (*container.NodePool,
 	}
 
 	if v, ok := d.GetOk(prefix + "queued_provisioning"); ok {
-		if v.([]interface{}) != nil && v.([]interface{})[0] != nil {
-			queued_provisioning := v.([]interface{})[0].(map[string]interface{})
+		if l := v.([]interface{}); len(l) > 0 && l[0] != nil {
+			queued_provisioning := l[0].(map[string]interface{})
 			np.QueuedProvisioning = &container.QueuedProvisioning{
-				Enabled: queued_provisioning["enabled"].(bool),
+				Enabled:         queued_provisioning["enabled"].(bool),
+				ForceSendFields: []string{"Enabled"},
 			}
 		}
 	}
@@ -1657,10 +1656,20 @@ func flattenNodePool(d *schema.ResourceData, config *transport_tpg.Config, np *c
 		}
 	}
 
-	if np.QueuedProvisioning != nil {
+	if np.QueuedProvisioning != nil && np.QueuedProvisioning.Enabled {
 		nodePool["queued_provisioning"] = []map[string]interface{}{
 			{
-				"enabled": np.QueuedProvisioning.Enabled,
+				"enabled": true,
+			},
+		}
+	} else if v, ok := d.GetOk(prefix + "queued_provisioning"); ok && len(v.([]interface{})) > 0 {
+		enabled := false
+		if np.QueuedProvisioning != nil {
+			enabled = np.QueuedProvisioning.Enabled
+		}
+		nodePool["queued_provisioning"] = []map[string]interface{}{
+			{
+				"enabled": enabled,
 			},
 		}
 	}
@@ -2263,6 +2272,46 @@ func nodePoolUpdate(d *schema.ResourceData, meta interface{}, nodePoolInfo *Node
 			return err
 		}
 		log.Printf("[INFO] Updated maintenance policy in Node Pool %s", name)
+	}
+
+	if d.HasChange(prefix + "queued_provisioning") {
+		enabled := false
+		if v, ok := d.GetOk(prefix + "queued_provisioning"); ok {
+			if l := v.([]interface{}); len(l) > 0 && l[0] != nil {
+				qp := l[0].(map[string]interface{})
+				if e, ok := qp["enabled"]; ok {
+					enabled = e.(bool)
+				}
+			}
+		}
+		req := &container.UpdateNodePoolRequest{
+			NodePoolId: name,
+			QueuedProvisioning: &container.QueuedProvisioning{
+				Enabled:         enabled,
+				ForceSendFields: []string{"Enabled"},
+			},
+		}
+
+		updateF := func() error {
+			clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+			if config.UserProjectOverride {
+				clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
+			}
+			op, err := clusterNodePoolsUpdateCall.Do()
+			if err != nil {
+				return err
+			}
+
+			return ContainerOperationWait(config, op,
+				nodePoolInfo.project,
+				nodePoolInfo.location,
+				"updating GKE node pool queued_provisioning", userAgent, timeout)
+		}
+
+		if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+			return err
+		}
+		log.Printf("[INFO] Updated queued_provisioning in Node Pool %s", name)
 	}
 
 	return nil

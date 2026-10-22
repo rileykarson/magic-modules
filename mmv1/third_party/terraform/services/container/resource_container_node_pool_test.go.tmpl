@@ -6129,7 +6129,7 @@ func TestAccContainerNodePool_withMaxRunDuration(t *testing.T) {
 				Config: testAccContainerNodePool_withMaxRunDuration(clusterName, np, networkName, subnetworkName, "1800s"),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionReplace),
+						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
 					},
 				},
 			},
@@ -6142,7 +6142,7 @@ func TestAccContainerNodePool_withMaxRunDuration(t *testing.T) {
 				Config: testAccContainerNodePool_disableMaxRunDuration(clusterName, np, networkName, subnetworkName),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionReplace),
+						plancheck.ExpectResourceAction("google_container_node_pool.np", plancheck.ResourceActionUpdate),
 					},
 				},
 			},
