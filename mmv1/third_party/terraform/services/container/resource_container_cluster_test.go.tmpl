@@ -9952,6 +9952,9 @@ resource "google_container_cluster" "flex_start" {
     channel = "RAPID"
   }
 
+  node_config {
+    consolidation_delay = "3600s"
+  }
 
   node_pool {
     name = "%s"
@@ -9965,6 +9968,7 @@ resource "google_container_cluster" "flex_start" {
       machine_type = "n4-standard-2"
 	  flex_start = true
 	  max_run_duration = "604800s"
+	  consolidation_delay = "3600s"
 	  
 	  reservation_affinity {
       	consume_reservation_type = "NO_RESERVATION"

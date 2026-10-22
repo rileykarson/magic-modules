@@ -1219,6 +1219,8 @@ gvnic {
 
 * `flex_start` - (Optional) Enables Flex Start provisioning model for the node pool.
 
+* `consolidation_delay` - (Optional) The duration after which the spot/flex-start nodes in the node pool will be consolidated, terminated by 's'. Example: "3600s".
+
 * `host_maintenance_policy` - (Optional, [Beta](../guides/provider_versions.html.markdown)) The maintenance policy for the hosts on which the GKE VMs run on. Structure is [documented below](#nested_host_maintenance_policy).
 
 * `local_ssd_count` - (Optional) The amount of local SSD disks that will be
@@ -1480,6 +1482,8 @@ workload_identity_config {
 * `min_provision_nodes` - (Optional) Minimum number of nodes that must be provisioned for the creation to be considered successful. The remaining nodes are provisioned gradually once the stockout issue has been resolved. Can only be set when `enabled` is `true`.
 
 <a name="nested_node_pool_node_config"></a>The `node_config` block supports:
+
+* `consolidation_delay` - (Optional) The duration after which the spot/flex-start nodes in the node pool will be consolidated, terminated by 's'. Example: "3600s".
 
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 

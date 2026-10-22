@@ -256,3 +256,28 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitExpandAndFlattenNodeConfig_ConsolidationDelay(t *testing.T) {
+	t.Parallel()
+
+	rawNodeConfig := []interface{}{
+		map[string]interface{}{
+			"consolidation_delay": "1800s",
+		},
+	}
+
+	d := schema.TestResourceDataRaw(t, map[string]*schema.Schema{
+		"node_config": schemaNodeConfig(),
+	}, map[string]interface{}{
+		"node_config": rawNodeConfig,
+	})
+	nc := expandNodeConfig(d, "", d.Get("node_config"))
+	if nc.ConsolidationDelay != "1800s" {
+		t.Fatalf("expected ConsolidationDelay=\"1800s\", got %q", nc.ConsolidationDelay)
+	}
+
+	flattened := flattenNodeConfig(nc, d.Get("node_config"))
+	if len(flattened) != 1 || flattened[0]["consolidation_delay"] != "1800s" {
+		t.Fatalf("expected flattened consolidation_delay=\"1800s\", got %#v", flattened)
+	}
+}

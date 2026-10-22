@@ -359,6 +359,8 @@ cluster.
 
 <a name="nested_node_config"></a>The `node_config` block supports:
 
+* `consolidation_delay` - (Optional) The duration after which the spot/flex-start nodes in the node pool will be consolidated, terminated by 's'. Example: "3600s".
+
 * `kubelet_config` - (Optional) Node kubelet configs. Structure is [documented below](#nested_kubelet_config).
 
 * `taint_config` - (Optional) Taint configuration for the node pool. Structure is [documented below](#nested_node_config_taint_config).
