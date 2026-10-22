@@ -256,3 +256,312 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitExpandNodePool_nodeLocationsPrefix(t *testing.T) {
+	t.Parallel()
+
+	standaloneRes := ResourceContainerNodePool()
+	standaloneData := schema.TestResourceDataRaw(t, standaloneRes.Schema, map[string]interface{}{
+		"name":           "np-standalone",
+		"node_locations": []interface{}{"us-central1-a", "us-central1-b"},
+	})
+	npStandalone, err := expandNodePool(standaloneData, "")
+	if err != nil {
+		t.Fatalf("expandNodePool standalone failed: %v", err)
+	}
+	if len(npStandalone.Locations) != 2 {
+		t.Fatalf("expected 2 locations for standalone node pool, got %v", npStandalone.Locations)
+	}
+
+	clusterRes := ResourceContainerCluster()
+	inlineData := schema.TestResourceDataRaw(t, clusterRes.Schema, map[string]interface{}{
+		"node_pool": []interface{}{
+			map[string]interface{}{
+				"name":           "np-inline",
+				"node_locations": []interface{}{"us-central1-a", "us-central1-c"},
+			},
+		},
+	})
+	npInline, err := expandNodePool(inlineData, "node_pool.0.")
+	if err != nil {
+		t.Fatalf("expandNodePool inline failed: %v", err)
+	}
+	if len(npInline.Locations) != 2 {
+		t.Fatalf("expected 2 locations for inline node pool, got %v", npInline.Locations)
+	}
+}
+
+func TestUnitBuildNodePoolDiskMachineUpdateRequest(t *testing.T) {
+	t.Parallel()
+
+	r := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"node_pool": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"node_config": schemaNodeConfig(),
+					},
+				},
+			},
+		},
+	}
+
+	basePriorAttrs := func() map[string]string {
+		return map[string]string{
+			"id":                                                       "test-cluster",
+			"node_pool.#":                                              "1",
+			"node_pool.0.node_config.#":                                "1",
+			"node_pool.0.node_config.0.machine_type":                   "e2-medium",
+			"node_pool.0.node_config.0.disk_size_gb":                   "60",
+			"node_pool.0.node_config.0.disk_type":                      "hyperdisk-balanced",
+			"node_pool.0.node_config.0.storage_pools.#":                "1",
+			"node_pool.0.node_config.0.storage_pools.0":                "projects/p/zones/z/storagePools/sp1",
+			"node_pool.0.node_config.0.boot_disk.#":                    "1",
+			"node_pool.0.node_config.0.boot_disk.0.disk_type":          "hyperdisk-balanced",
+			"node_pool.0.node_config.0.boot_disk.0.size_gb":            "60",
+			"node_pool.0.node_config.0.boot_disk.0.provisioned_iops":       "3200",
+			"node_pool.0.node_config.0.boot_disk.0.provisioned_throughput": "145",
+		}
+	}
+
+	cases := []struct {
+		name      string
+		nodeConfig map[string]interface{}
+		want      *container.UpdateNodePoolRequest
+	}{
+		{
+			name: "machine_type update does not send unchanged boot_disk or legacy disk fields",
+			nodeConfig: map[string]interface{}{
+				"machine_type":  "e2-standard-4",
+				"storage_pools": []interface{}{"projects/p/zones/z/storagePools/sp1"},
+			},
+			want: &container.UpdateNodePoolRequest{
+				Name:         "np-1",
+				MachineType:  "e2-standard-4",
+				StoragePools: []string{"projects/p/zones/z/storagePools/sp1"},
+			},
+		},
+		{
+			name: "boot_disk size_gb update only sends changed size_gb subfield",
+			nodeConfig: map[string]interface{}{
+				"machine_type":  "e2-medium",
+				"storage_pools": []interface{}{"projects/p/zones/z/storagePools/sp1"},
+				"boot_disk": []interface{}{
+					map[string]interface{}{
+						"disk_type":              "hyperdisk-balanced",
+						"size_gb":                70,
+						"provisioned_iops":       3200,
+						"provisioned_throughput": 145,
+					},
+				},
+			},
+			want: &container.UpdateNodePoolRequest{
+				Name:         "np-1",
+				MachineType:  "e2-medium",
+				StoragePools: []string{"projects/p/zones/z/storagePools/sp1"},
+				BootDisk: &container.BootDisk{
+					SizeGb: 70,
+				},
+			},
+		},
+		{
+			name: "boot_disk disk_type transition to pd-balanced does not leak computed iops or throughput",
+			nodeConfig: map[string]interface{}{
+				"machine_type":  "e2-medium",
+				"storage_pools": []interface{}{"projects/p/zones/z/storagePools/sp1"},
+				"boot_disk": []interface{}{
+					map[string]interface{}{
+						"disk_type": "pd-balanced",
+						"size_gb":   60,
+					},
+				},
+			},
+			want: &container.UpdateNodePoolRequest{
+				Name:         "np-1",
+				MachineType:  "e2-medium",
+				StoragePools: []string{"projects/p/zones/z/storagePools/sp1"},
+				BootDisk: &container.BootDisk{
+					DiskType: "pd-balanced",
+				},
+			},
+		},
+		{
+			name: "clearing storage_pools forces empty StoragePools slice",
+			nodeConfig: map[string]interface{}{
+				"machine_type":  "e2-medium",
+				"storage_pools": []interface{}{},
+			},
+			want: &container.UpdateNodePoolRequest{
+				Name:            "np-1",
+				MachineType:     "e2-medium",
+				StoragePools:    []string{},
+				ForceSendFields: []string{"StoragePools"},
+			},
+		},
+		{
+			name: "legacy disk_size_gb update sends DiskSizeGb without BootDisk",
+			nodeConfig: map[string]interface{}{
+				"machine_type":  "e2-medium",
+				"disk_size_gb":  80,
+				"storage_pools": []interface{}{"projects/p/zones/z/storagePools/sp1"},
+			},
+			want: &container.UpdateNodePoolRequest{
+				Name:         "np-1",
+				MachineType:  "e2-medium",
+				DiskSizeGb:   80,
+				StoragePools: []string{"projects/p/zones/z/storagePools/sp1"},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			prior := &terraform.InstanceState{
+				ID:         "test-cluster",
+				Attributes: basePriorAttrs(),
+			}
+			rawCfg := map[string]interface{}{
+				"node_pool": []interface{}{
+					map[string]interface{}{
+						"node_config": []interface{}{tc.nodeConfig},
+					},
+				},
+			}
+			diff, err := r.SimpleDiff(context.Background(), prior, terraform.NewResourceConfigRaw(rawCfg), nil)
+			if err != nil {
+				t.Fatalf("SimpleDiff: %v", err)
+			}
+			d, err := schema.InternalMap(r.SchemaMap()).Data(prior, diff)
+			if err != nil {
+				t.Fatalf("Data: %v", err)
+			}
+
+			got := buildNodePoolDiskMachineUpdateRequest(d, "node_pool.0.", "np-1")
+			if diff := cmp.Diff(tc.want, got); diff != "" {
+				t.Errorf("buildNodePoolDiskMachineUpdateRequest diff (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestUnitBuildNodePoolImageConfigUpdateRequest(t *testing.T) {
+	t.Parallel()
+
+	r := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"node_pool": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"node_config": schemaNodeConfig(),
+					},
+				},
+			},
+		},
+	}
+
+	prior := &terraform.InstanceState{
+		ID: "test-cluster",
+		Attributes: map[string]string{
+			"id":                                                        "test-cluster",
+			"node_pool.#":                                               "1",
+			"node_pool.0.node_config.#":                                 "1",
+			"node_pool.0.node_config.0.image_type":                      "COS_CONTAINERD",
+			"node_pool.0.node_config.0.node_image_config.#":             "1",
+			"node_pool.0.node_config.0.node_image_config.0.image":         "old-image",
+			"node_pool.0.node_config.0.node_image_config.0.image_project": "old-project",
+		},
+	}
+
+	cases := []struct {
+		name       string
+		nodeConfig map[string]interface{}
+		want       *container.UpdateClusterRequest
+	}{
+		{
+			name: "updating node_image_config alone defaults DesiredImageType to CUSTOM_CONTAINERD",
+			nodeConfig: map[string]interface{}{
+				"node_image_config": []interface{}{
+					map[string]interface{}{
+						"image":         "new-image",
+						"image_project": "new-project",
+					},
+				},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId:   "np-1",
+					DesiredImage:        "new-image",
+					DesiredImageProject: "new-project",
+					DesiredImageType:    "CUSTOM_CONTAINERD",
+				},
+			},
+		},
+		{
+			name: "updating both node_image_config and image_type sends configured DesiredImageType",
+			nodeConfig: map[string]interface{}{
+				"image_type": "UBUNTU_CONTAINERD",
+				"node_image_config": []interface{}{
+					map[string]interface{}{
+						"image":         "new-image",
+						"image_project": "new-project",
+					},
+				},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId:   "np-1",
+					DesiredImage:        "new-image",
+					DesiredImageProject: "new-project",
+					DesiredImageType:    "UBUNTU_CONTAINERD",
+				},
+			},
+		},
+		{
+			name: "clearing node_image_config without changing image_type preserves state image_type",
+			nodeConfig: map[string]interface{}{
+				"node_image_config": []interface{}{},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId: "np-1",
+					DesiredImageType:  "COS_CONTAINERD",
+				},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			rawCfg := map[string]interface{}{
+				"node_pool": []interface{}{
+					map[string]interface{}{
+						"node_config": []interface{}{tc.nodeConfig},
+					},
+				},
+			}
+			diff, err := r.SimpleDiff(context.Background(), prior, terraform.NewResourceConfigRaw(rawCfg), nil)
+			if err != nil {
+				t.Fatalf("SimpleDiff: %v", err)
+			}
+			d, err := schema.InternalMap(r.SchemaMap()).Data(prior, diff)
+			if err != nil {
+				t.Fatalf("Data: %v", err)
+			}
+
+			got := buildNodePoolImageConfigUpdateRequest(d, "node_pool.0.", "np-1")
+			if diff := cmp.Diff(tc.want, got); diff != "" {
+				t.Errorf("buildNodePoolImageConfigUpdateRequest diff (-want +got):\n%s", diff)
+			}
+		})
+	}
+}

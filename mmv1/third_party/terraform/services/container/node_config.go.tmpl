@@ -4162,56 +4162,13 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			}
 		}
 
-		if d.HasChange("node_config.0.disk_size_gb") ||
-			d.HasChange("node_config.0.disk_type") ||
-			d.HasChange("node_config.0.machine_type") ||
-			d.HasChange("node_config.0.storage_pools") ||
-			d.HasChange("node_config.0.boot_disk") {
+		if d.HasChange(prefix+"node_config.0.disk_size_gb") ||
+			d.HasChange(prefix+"node_config.0.disk_type") ||
+			d.HasChange(prefix+"node_config.0.machine_type") ||
+			d.HasChange(prefix+"node_config.0.storage_pools") ||
+			d.HasChange(prefix+"node_config.0.boot_disk") {
 
-			req := &container.UpdateNodePoolRequest{
-				Name:        name,
-				DiskSizeGb:  int64(d.Get("node_config.0.disk_size_gb").(int)),
-				DiskType:    d.Get("node_config.0.disk_type").(string),
-				MachineType: d.Get("node_config.0.machine_type").(string),
-			}
-			if v, ok := d.GetOk("node_config.0.storage_pools"); ok {
-				spList := v.([]interface{})
-				storagePools := []string{}
-				for _, v := range spList {
-					if v != nil {
-						storagePools = append(storagePools, v.(string))
-					}
-				}
-				req.StoragePools = storagePools
-			}
-
-			if v, ok := d.GetOk("node_config.0.boot_disk"); ok {
-				bd := expandBootDiskConfig(v)
-				req.BootDisk = bd
-
-				// The following checks are to ensure that the migrating fields are handled properly.
-				// Migrating fields are disk_type -> boot_disk.disk_type and disk_size_gb -> boot_disk.size_gb
-				// If the legacy (top level) disk_type field is not changing, nil it out to allow the API to fill it in.
-				legacyDiskTypeOld, legacyDiskTypeNew := d.GetChange("node_config.0.disk_type")
-				if legacyDiskTypeOld == legacyDiskTypeNew {
-					req.DiskType = ""
-				}
-				// If the new boot disk configuration disk_filed is not changing, nil it out to allow the API to fill it in.
-				bootDiskTypeOld, bootDiskTypeNew := d.GetChange("node_config.0.boot_disk.0.disk_type")
-				if bootDiskTypeOld == bootDiskTypeNew {
-					req.BootDisk.DiskType = ""
-				}
-				// If the legacy (top level) disk_size_gb field is not changing, nil it out to allow the API to fill it in.
-				legacyDiskSizeGbOld, legacyDiskSizeGbNew := d.GetChange("node_config.0.disk_size_gb")
-				if legacyDiskSizeGbOld == legacyDiskSizeGbNew {
-					req.DiskSizeGb = 0
-				}
-				// if the new boot disk configuration size_gb field is not changing, nil it out to allow the API to fill it in.
-				bootDiskSizeGbOld, bootDiskSizeGbNew := d.GetChange("node_config.0.boot_disk.0.size_gb")
-				if bootDiskSizeGbOld == bootDiskSizeGbNew {
-					req.BootDisk.SizeGb = 0
-				}
-			}
+			req := buildNodePoolDiskMachineUpdateRequest(d, prefix, name)
 
 			updateF := func() error {
 				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
@@ -4699,24 +4656,7 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			log.Printf("[INFO] Updated windows_node_config for node pool %s", name)
 		}
 		if d.HasChange(prefix + "node_config.0.node_image_config") {
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredNodePoolId: name,
-				},
-			}
-			if imageConfig := expandNodeImageConfig(d.Get(prefix + "node_config.0.node_image_config")); imageConfig!=nil {
-			  req.Update.DesiredImage = imageConfig.Image
-			  req.Update.DesiredImageProject = imageConfig.ImageProject
-			}
-
-			if d.HasChange(prefix + "node_config.0.image_type") {
-				req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
-			} else {
-			  // If only updating the node_image_config (DesiredImage and/or DesiredImage) and
-			  // the image_type unspecified, then it is an use case of custom image feature, where
-			  // the DesiredImageType should be CUSTOM_CONTAINERD (go/gke-custom-image-builder-ug-edit)
-			  req.Update.DesiredImageType = "CUSTOM_CONTAINERD"
-			}
+			req := buildNodePoolImageConfigUpdateRequest(d, prefix, name)
 
 			updateF := func() error {
 				clusterUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.Update(nodePoolInfo.parent(), req)
@@ -4779,4 +4719,91 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 	}
 
 	return nil
+}
+
+func buildNodePoolDiskMachineUpdateRequest(d *schema.ResourceData, prefix, name string) *container.UpdateNodePoolRequest {
+	req := &container.UpdateNodePoolRequest{
+		Name:        name,
+		DiskSizeGb:  int64(d.Get(prefix + "node_config.0.disk_size_gb").(int)),
+		DiskType:    d.Get(prefix + "node_config.0.disk_type").(string),
+		MachineType: d.Get(prefix + "node_config.0.machine_type").(string),
+	}
+
+	// The following checks are to ensure that the migrating fields are handled properly.
+	// Migrating fields are disk_type -> boot_disk.disk_type and disk_size_gb -> boot_disk.size_gb
+	// If the legacy (top level) disk_type field is not changing, nil it out to allow the API to fill it in.
+	if !d.HasChange(prefix + "node_config.0.disk_type") {
+		req.DiskType = ""
+	}
+	// If the legacy (top level) disk_size_gb field is not changing, nil it out to allow the API to fill it in.
+	if !d.HasChange(prefix + "node_config.0.disk_size_gb") {
+		req.DiskSizeGb = 0
+	}
+
+	if v, ok := d.GetOk(prefix + "node_config.0.storage_pools"); ok {
+		spList := v.([]interface{})
+		storagePools := []string{}
+		for _, v := range spList {
+			if v != nil {
+				storagePools = append(storagePools, v.(string))
+			}
+		}
+		req.StoragePools = storagePools
+	}
+	if d.HasChange(prefix+"node_config.0.storage_pools") && len(req.StoragePools) == 0 {
+		req.StoragePools = []string{}
+		req.ForceSendFields = append(req.ForceSendFields, "StoragePools")
+	}
+
+	if d.HasChange(prefix + "node_config.0.boot_disk") {
+		if v, ok := d.GetOk(prefix + "node_config.0.boot_disk"); ok {
+			if bd := expandBootDiskConfig(v); bd != nil {
+				// If the new boot disk configuration disk_type field is not changing, nil it out to allow the API to fill it in.
+				if !d.HasChange(prefix + "node_config.0.boot_disk.0.disk_type") {
+					bd.DiskType = ""
+				}
+				// If the new boot disk configuration size_gb field is not changing, nil it out to allow the API to fill it in.
+				if !d.HasChange(prefix + "node_config.0.boot_disk.0.size_gb") {
+					bd.SizeGb = 0
+				}
+				// If the new boot disk configuration provisioned_iops field is not changing, nil it out to allow the API to fill it in.
+				if !d.HasChange(prefix + "node_config.0.boot_disk.0.provisioned_iops") {
+					bd.ProvisionedIops = 0
+				}
+				// If the new boot disk configuration provisioned_throughput field is not changing, nil it out to allow the API to fill it in.
+				if !d.HasChange(prefix + "node_config.0.boot_disk.0.provisioned_throughput") {
+					bd.ProvisionedThroughput = 0
+				}
+				req.BootDisk = bd
+			}
+		}
+	}
+
+	return req
+}
+
+func buildNodePoolImageConfigUpdateRequest(d *schema.ResourceData, prefix, name string) *container.UpdateClusterRequest {
+	req := &container.UpdateClusterRequest{
+		Update: &container.ClusterUpdate{
+			DesiredNodePoolId: name,
+		},
+	}
+	imageConfig := expandNodeImageConfig(d.Get(prefix + "node_config.0.node_image_config"))
+	if imageConfig != nil {
+		req.Update.DesiredImage = imageConfig.Image
+		req.Update.DesiredImageProject = imageConfig.ImageProject
+	}
+
+	if d.HasChange(prefix+"node_config.0.image_type") && d.Get(prefix+"node_config.0.image_type").(string) != "" {
+		req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
+	} else if imageConfig != nil && (imageConfig.Image != "" || imageConfig.ImageProject != "") {
+		// If only updating the node_image_config (DesiredImage and/or DesiredImageProject) and
+		// the image_type unspecified, then it is an use case of custom image feature, where
+		// the DesiredImageType should be CUSTOM_CONTAINERD (go/gke-custom-image-builder-ug-edit)
+		req.Update.DesiredImageType = "CUSTOM_CONTAINERD"
+	} else {
+		req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
+	}
+
+	return req
 }
