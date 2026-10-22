@@ -13,6 +13,8 @@
 
 ---
 name: ApiHubInstance
+exclude_post_create_read: true
+exclude_post_update_read: true
 description: |-
   An ApiHubInstance represents the instance resources of the API Hub.
   Currently, only one ApiHub instance is allowed for each project.
