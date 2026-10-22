@@ -1267,7 +1267,7 @@ func expandNodePool(d *schema.ResourceData, prefix string) (*container.NodePool,
 	}
 
 	var locations []string
-	if v, ok := d.GetOk("node_locations"); ok && v.(*schema.Set).Len() > 0 {
+	if v, ok := d.GetOk(prefix + "node_locations"); ok && v.(*schema.Set).Len() > 0 {
 		locations = tpgresource.ConvertStringSet(v.(*schema.Set))
 	}
 

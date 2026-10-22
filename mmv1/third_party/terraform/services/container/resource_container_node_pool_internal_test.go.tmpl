@@ -256,3 +256,37 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitExpandNodePool_nodeLocationsPrefix(t *testing.T) {
+	t.Parallel()
+
+	standaloneRes := ResourceContainerNodePool()
+	standaloneData := schema.TestResourceDataRaw(t, standaloneRes.Schema, map[string]interface{}{
+		"name":           "np-standalone",
+		"node_locations": []interface{}{"us-central1-a", "us-central1-b"},
+	})
+	npStandalone, err := expandNodePool(standaloneData, "")
+	if err != nil {
+		t.Fatalf("expandNodePool standalone failed: %v", err)
+	}
+	if len(npStandalone.Locations) != 2 {
+		t.Fatalf("expected 2 locations for standalone node pool, got %v", npStandalone.Locations)
+	}
+
+	clusterRes := ResourceContainerCluster()
+	inlineData := schema.TestResourceDataRaw(t, clusterRes.Schema, map[string]interface{}{
+		"node_pool": []interface{}{
+			map[string]interface{}{
+				"name":           "np-inline",
+				"node_locations": []interface{}{"us-central1-a", "us-central1-c"},
+			},
+		},
+	})
+	npInline, err := expandNodePool(inlineData, "node_pool.0.")
+	if err != nil {
+		t.Fatalf("expandNodePool inline failed: %v", err)
+	}
+	if len(npInline.Locations) != 2 {
+		t.Fatalf("expected 2 locations for inline node pool, got %v", npInline.Locations)
+	}
+}
