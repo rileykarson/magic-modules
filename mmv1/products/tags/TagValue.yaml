@@ -13,6 +13,8 @@
 
 ---
 name: TagValue
+exclude_post_create_read: true
+exclude_post_update_read: true
 description: A TagValue is a child of a particular TagKey. TagValues are used to group cloud resources for the purpose of controlling them using policies.
 references:
   guides:
