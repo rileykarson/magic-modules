@@ -4699,24 +4699,7 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			log.Printf("[INFO] Updated windows_node_config for node pool %s", name)
 		}
 		if d.HasChange(prefix + "node_config.0.node_image_config") {
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredNodePoolId: name,
-				},
-			}
-			if imageConfig := expandNodeImageConfig(d.Get(prefix + "node_config.0.node_image_config")); imageConfig!=nil {
-			  req.Update.DesiredImage = imageConfig.Image
-			  req.Update.DesiredImageProject = imageConfig.ImageProject
-			}
-
-			if d.HasChange(prefix + "node_config.0.image_type") {
-				req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
-			} else {
-			  // If only updating the node_image_config (DesiredImage and/or DesiredImage) and
-			  // the image_type unspecified, then it is an use case of custom image feature, where
-			  // the DesiredImageType should be CUSTOM_CONTAINERD (go/gke-custom-image-builder-ug-edit)
-			  req.Update.DesiredImageType = "CUSTOM_CONTAINERD"
-			}
+			req := buildNodePoolImageConfigUpdateRequest(d, prefix, name)
 
 			updateF := func() error {
 				clusterUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.Update(nodePoolInfo.parent(), req)
@@ -4779,4 +4762,30 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 	}
 
 	return nil
+}
+
+func buildNodePoolImageConfigUpdateRequest(d *schema.ResourceData, prefix, name string) *container.UpdateClusterRequest {
+	req := &container.UpdateClusterRequest{
+		Update: &container.ClusterUpdate{
+			DesiredNodePoolId: name,
+		},
+	}
+	imageConfig := expandNodeImageConfig(d.Get(prefix + "node_config.0.node_image_config"))
+	if imageConfig != nil {
+		req.Update.DesiredImage = imageConfig.Image
+		req.Update.DesiredImageProject = imageConfig.ImageProject
+	}
+
+	if d.HasChange(prefix+"node_config.0.image_type") && d.Get(prefix+"node_config.0.image_type").(string) != "" {
+		req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
+	} else if imageConfig != nil && (imageConfig.Image != "" || imageConfig.ImageProject != "") {
+		// If only updating the node_image_config (DesiredImage and/or DesiredImageProject) and
+		// the image_type unspecified, then it is an use case of custom image feature, where
+		// the DesiredImageType should be CUSTOM_CONTAINERD (go/gke-custom-image-builder-ug-edit)
+		req.Update.DesiredImageType = "CUSTOM_CONTAINERD"
+	} else {
+		req.Update.DesiredImageType = d.Get(prefix + "node_config.0.image_type").(string)
+	}
+
+	return req
 }

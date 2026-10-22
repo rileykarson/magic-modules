@@ -256,3 +256,120 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitBuildNodePoolImageConfigUpdateRequest(t *testing.T) {
+	t.Parallel()
+
+	r := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"node_pool": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"node_config": schemaNodeConfig(),
+					},
+				},
+			},
+		},
+	}
+
+	prior := &terraform.InstanceState{
+		ID: "test-cluster",
+		Attributes: map[string]string{
+			"id":                                                        "test-cluster",
+			"node_pool.#":                                               "1",
+			"node_pool.0.node_config.#":                                 "1",
+			"node_pool.0.node_config.0.image_type":                      "COS_CONTAINERD",
+			"node_pool.0.node_config.0.node_image_config.#":             "1",
+			"node_pool.0.node_config.0.node_image_config.0.image":         "old-image",
+			"node_pool.0.node_config.0.node_image_config.0.image_project": "old-project",
+		},
+	}
+
+	cases := []struct {
+		name       string
+		nodeConfig map[string]interface{}
+		want       *container.UpdateClusterRequest
+	}{
+		{
+			name: "updating node_image_config alone defaults DesiredImageType to CUSTOM_CONTAINERD",
+			nodeConfig: map[string]interface{}{
+				"node_image_config": []interface{}{
+					map[string]interface{}{
+						"image":         "new-image",
+						"image_project": "new-project",
+					},
+				},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId:   "np-1",
+					DesiredImage:        "new-image",
+					DesiredImageProject: "new-project",
+					DesiredImageType:    "CUSTOM_CONTAINERD",
+				},
+			},
+		},
+		{
+			name: "updating both node_image_config and image_type sends configured DesiredImageType",
+			nodeConfig: map[string]interface{}{
+				"image_type": "UBUNTU_CONTAINERD",
+				"node_image_config": []interface{}{
+					map[string]interface{}{
+						"image":         "new-image",
+						"image_project": "new-project",
+					},
+				},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId:   "np-1",
+					DesiredImage:        "new-image",
+					DesiredImageProject: "new-project",
+					DesiredImageType:    "UBUNTU_CONTAINERD",
+				},
+			},
+		},
+		{
+			name: "clearing node_image_config without changing image_type preserves state image_type",
+			nodeConfig: map[string]interface{}{
+				"node_image_config": []interface{}{},
+			},
+			want: &container.UpdateClusterRequest{
+				Update: &container.ClusterUpdate{
+					DesiredNodePoolId: "np-1",
+					DesiredImageType:  "COS_CONTAINERD",
+				},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			rawCfg := map[string]interface{}{
+				"node_pool": []interface{}{
+					map[string]interface{}{
+						"node_config": []interface{}{tc.nodeConfig},
+					},
+				},
+			}
+			diff, err := r.SimpleDiff(context.Background(), prior, terraform.NewResourceConfigRaw(rawCfg), nil)
+			if err != nil {
+				t.Fatalf("SimpleDiff: %v", err)
+			}
+			d, err := schema.InternalMap(r.SchemaMap()).Data(prior, diff)
+			if err != nil {
+				t.Fatalf("Data: %v", err)
+			}
+
+			got := buildNodePoolImageConfigUpdateRequest(d, "node_pool.0.", "np-1")
+			if diff := cmp.Diff(tc.want, got); diff != "" {
+				t.Errorf("buildNodePoolImageConfigUpdateRequest diff (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
