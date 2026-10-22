@@ -13,6 +13,8 @@
 
 ---
 name: Contact
+exclude_post_update_read: true
+exclude_post_create_read: true
 api_variant_patterns:
   - folders/{folder}/contacts/{contact}
   - organizations/{organization}/contacts/{contact}
