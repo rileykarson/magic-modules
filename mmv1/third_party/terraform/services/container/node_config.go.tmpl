@@ -1939,51 +1939,7 @@ func expandNodeConfig(d *schema.ResourceData, prefix string, v interface{}) *con
 	}
 
 	if v, ok := nodeConfig["kubelet_config"]; ok {
-		nc.KubeletConfig = expandKubeletConfig(v)
-		if nc.KubeletConfig != nil {
-			// start cpu_cfs_quota fix https://github.com/hashicorp/terraform-provider-google/issues/15767
-			// this makes the field conditional on appearance in configuration. This allows the API `true` default
-			// to override null, where currently we force-send null as false, which is wrong.
-			rawConfigNPRoot := d.GetRawConfig()
-			// if we have a prefix, we're in `node_pool.N.` in GKE Cluster. Traverse the RawConfig object to reach that
-			// root, at which point local references work going forwards.
-			if prefix != "" {
-				parts := strings.Split(prefix, ".") // "node_pool.N." -> ["node_pool" "N", ""]
-				npIndex, err := strconv.Atoi(parts[1])
-				if err != nil { // no error return from expander
-				    panic(fmt.Errorf("unexpected format for node pool path prefix: %w. value: %v", err, prefix))
-				}
-
-				rawConfigNPRoot = rawConfigNPRoot.GetAttr("node_pool").Index(cty.NumberIntVal(int64(npIndex)))
-			}
-
-			if vNC := rawConfigNPRoot.GetAttr("node_config"); vNC.LengthInt() > 0 {
-				if vKC := vNC.Index(cty.NumberIntVal(0)).GetAttr("kubelet_config"); vKC.LengthInt() > 0 {
-					v := vKC.Index(cty.NumberIntVal(0)).GetAttr("cpu_cfs_quota");
-					if v == cty.NullVal(cty.Bool) {
-					    nc.KubeletConfig.CpuCfsQuota = true
-					} else if v.False() { // force-send explicit false to API
-						nc.KubeletConfig.ForceSendFields = append(nc.KubeletConfig.ForceSendFields, "CpuCfsQuota")
-					}
-				}
-			}
-			// end cpu_cfs_quota fix
-
-			// start shutdown_grace_period ForceSendFields fix
-			if vNC := rawConfigNPRoot.GetAttr("node_config"); vNC.LengthInt() > 0 {
-				if vKC := vNC.Index(cty.NumberIntVal(0)).GetAttr("kubelet_config"); vKC.LengthInt() > 0 {
-					vSGP := vKC.Index(cty.NumberIntVal(0)).GetAttr("shutdown_grace_period_seconds")
-					if vSGP != cty.NullVal(cty.Number) && !vSGP.IsNull() {
-						nc.KubeletConfig.ForceSendFields = append(nc.KubeletConfig.ForceSendFields, "ShutdownGracePeriodSeconds")
-					}
-					vSGPC := vKC.Index(cty.NumberIntVal(0)).GetAttr("shutdown_grace_period_critical_pods_seconds")
-					if vSGPC != cty.NullVal(cty.Number) && !vSGPC.IsNull() {
-						nc.KubeletConfig.ForceSendFields = append(nc.KubeletConfig.ForceSendFields, "ShutdownGracePeriodCriticalPodsSeconds")
-					}
-				}
-			}
-			// end shutdown_grace_period ForceSendFields fix
-		}
+		nc.KubeletConfig = expandKubeletConfigWithRawConfig(d, prefix, v)
 	}
 
 	if v, ok := nodeConfig["linux_node_config"]; ok {
@@ -2128,6 +2084,174 @@ func expandInsecureKubeletReadonlyPortEnabled(v interface{}) bool {
 	return false
 }
 
+func isRawUpgradeSettingConfigured(d *schema.ResourceData, prefix, attr string) bool {
+	if d == nil {
+		return false
+	}
+	rawConfigNPRoot := d.GetRawConfig()
+	if rawConfigNPRoot.IsNull() || !rawConfigNPRoot.IsKnown() {
+		return false
+	}
+	if prefix != "" {
+		parts := strings.Split(prefix, ".")
+		npIndex, err := strconv.Atoi(parts[1])
+		if err != nil {
+			return false
+		}
+		if !rawConfigNPRoot.Type().HasAttribute("node_pool") {
+			return false
+		}
+		vNP := rawConfigNPRoot.GetAttr("node_pool")
+		if vNP.IsNull() || !vNP.IsKnown() || vNP.LengthInt() <= npIndex {
+			return false
+		}
+		rawConfigNPRoot = vNP.Index(cty.NumberIntVal(int64(npIndex)))
+	}
+	if rawConfigNPRoot.IsNull() || !rawConfigNPRoot.IsKnown() || !rawConfigNPRoot.Type().HasAttribute("upgrade_settings") {
+		return false
+	}
+	vUS := rawConfigNPRoot.GetAttr("upgrade_settings")
+	if vUS.IsNull() || !vUS.IsKnown() || vUS.LengthInt() == 0 {
+		return false
+	}
+	usVal := vUS.Index(cty.NumberIntVal(0))
+	if usVal.IsNull() || !usVal.IsKnown() || !usVal.Type().HasAttribute(attr) {
+		return false
+	}
+	vAttr := usVal.GetAttr(attr)
+	return vAttr != cty.NullVal(cty.Number) && !vAttr.IsNull()
+}
+
+func expandKubeletConfigWithRawConfig(d *schema.ResourceData, prefix string, v interface{}) *container.NodeKubeletConfig {
+	kConfig := expandKubeletConfig(v)
+	if kConfig == nil || d == nil {
+		return kConfig
+	}
+
+	appendForceSend := func(field string) {
+		for _, f := range kConfig.ForceSendFields {
+			if f == field {
+				return
+			}
+		}
+		kConfig.ForceSendFields = append(kConfig.ForceSendFields, field)
+	}
+
+	rawConfigNPRoot := d.GetRawConfig()
+	var rawKC cty.Value
+	if !rawConfigNPRoot.IsNull() && rawConfigNPRoot.IsKnown() {
+		// if we have a prefix, we're in `node_pool.N.` in GKE Cluster. Traverse the RawConfig object to reach that
+		// root, at which point local references work going forwards.
+		if prefix != "" {
+			parts := strings.Split(prefix, ".") // "node_pool.N." -> ["node_pool" "N", ""]
+			npIndex, err := strconv.Atoi(parts[1])
+			if err != nil { // no error return from expander
+				panic(fmt.Errorf("unexpected format for node pool path prefix: %w. value: %v", err, prefix))
+			}
+
+			if rawConfigNPRoot.Type().HasAttribute("node_pool") {
+				vNP := rawConfigNPRoot.GetAttr("node_pool")
+				if !vNP.IsNull() && vNP.IsKnown() && vNP.LengthInt() > npIndex {
+					rawConfigNPRoot = vNP.Index(cty.NumberIntVal(int64(npIndex)))
+				} else {
+					rawConfigNPRoot = cty.NilVal
+				}
+			} else {
+				rawConfigNPRoot = cty.NilVal
+			}
+		}
+
+		if rawConfigNPRoot != cty.NilVal && !rawConfigNPRoot.IsNull() && rawConfigNPRoot.IsKnown() && rawConfigNPRoot.Type().HasAttribute("node_config") {
+			if vNC := rawConfigNPRoot.GetAttr("node_config"); !vNC.IsNull() && vNC.IsKnown() && vNC.LengthInt() > 0 {
+				ncVal := vNC.Index(cty.NumberIntVal(0))
+				if !ncVal.IsNull() && ncVal.IsKnown() && ncVal.Type().HasAttribute("kubelet_config") {
+					if vKC := ncVal.GetAttr("kubelet_config"); !vKC.IsNull() && vKC.IsKnown() && vKC.LengthInt() > 0 {
+						rawKC = vKC.Index(cty.NumberIntVal(0))
+					}
+				}
+			}
+		}
+	}
+
+	if rawKC != cty.NilVal && !rawKC.IsNull() && rawKC.IsKnown() {
+		// start cpu_cfs_quota fix https://github.com/hashicorp/terraform-provider-google/issues/15767
+		// this makes the field conditional on appearance in configuration. This allows the API `true` default
+		// to override null, where currently we force-send null as false, which is wrong.
+		if rawKC.Type().HasAttribute("cpu_cfs_quota") {
+			v := rawKC.GetAttr("cpu_cfs_quota")
+			if v == cty.NullVal(cty.Bool) || v.IsNull() {
+				if d.Id() == "" || !d.HasChange(prefix+"node_config.0.kubelet_config.0.cpu_cfs_quota") {
+					kConfig.CpuCfsQuota = true
+				}
+			} else if v.IsKnown() && v.False() { // force-send explicit false to API
+				appendForceSend("CpuCfsQuota")
+			}
+		}
+		// end cpu_cfs_quota fix
+
+		// start shutdown_grace_period ForceSendFields fix
+		if rawKC.Type().HasAttribute("shutdown_grace_period_seconds") {
+			vSGP := rawKC.GetAttr("shutdown_grace_period_seconds")
+			if vSGP != cty.NullVal(cty.Number) && !vSGP.IsNull() {
+				appendForceSend("ShutdownGracePeriodSeconds")
+			}
+		}
+		if rawKC.Type().HasAttribute("shutdown_grace_period_critical_pods_seconds") {
+			vSGPC := rawKC.GetAttr("shutdown_grace_period_critical_pods_seconds")
+			if vSGPC != cty.NullVal(cty.Number) && !vSGPC.IsNull() {
+				appendForceSend("ShutdownGracePeriodCriticalPodsSeconds")
+			}
+		}
+		// end shutdown_grace_period ForceSendFields fix
+
+		if rawKC.Type().HasAttribute("single_process_oom_kill") {
+			vSPOK := rawKC.GetAttr("single_process_oom_kill")
+			if vSPOK != cty.NullVal(cty.Bool) && !vSPOK.IsNull() && vSPOK.IsKnown() && vSPOK.False() {
+				appendForceSend("SingleProcessOomKill")
+			}
+		}
+		if rawKC.Type().HasAttribute("eviction_max_pod_grace_period_seconds") {
+			vEMPGP := rawKC.GetAttr("eviction_max_pod_grace_period_seconds")
+			if vEMPGP != cty.NullVal(cty.Number) && !vEMPGP.IsNull() && kConfig.EvictionMaxPodGracePeriodSeconds == 0 {
+				appendForceSend("EvictionMaxPodGracePeriodSeconds")
+			}
+		}
+		if rawKC.Type().HasAttribute("allowed_unsafe_sysctls") {
+			vAUS := rawKC.GetAttr("allowed_unsafe_sysctls")
+			if !vAUS.IsNull() && len(kConfig.AllowedUnsafeSysctls) == 0 {
+				appendForceSend("AllowedUnsafeSysctls")
+			}
+		}
+	}
+
+	if d.Id() != "" {
+		kcPrefix := prefix + "node_config.0.kubelet_config.0."
+		if d.HasChange(kcPrefix+"cpu_cfs_quota") && !kConfig.CpuCfsQuota {
+			appendForceSend("CpuCfsQuota")
+		}
+		if d.HasChange(kcPrefix + "shutdown_grace_period_seconds") {
+			appendForceSend("ShutdownGracePeriodSeconds")
+		}
+		if d.HasChange(kcPrefix + "shutdown_grace_period_critical_pods_seconds") {
+			appendForceSend("ShutdownGracePeriodCriticalPodsSeconds")
+		}
+		if d.HasChange(kcPrefix+"single_process_oom_kill") && !kConfig.SingleProcessOomKill {
+			appendForceSend("SingleProcessOomKill")
+		}
+		if d.HasChange(kcPrefix+"eviction_max_pod_grace_period_seconds") && kConfig.EvictionMaxPodGracePeriodSeconds == 0 {
+			appendForceSend("EvictionMaxPodGracePeriodSeconds")
+		}
+		if d.HasChange(kcPrefix+"allowed_unsafe_sysctls") && len(kConfig.AllowedUnsafeSysctls) == 0 {
+			appendForceSend("AllowedUnsafeSysctls")
+		}
+		if d.HasChange(kcPrefix + "insecure_kubelet_readonly_port_enabled") {
+			appendForceSend("InsecureKubeletReadonlyPortEnabled")
+		}
+	}
+
+	return kConfig
+}
+
 func expandKubeletConfig(v interface{}) *container.NodeKubeletConfig {
 	if v == nil {
 		return nil
@@ -2147,7 +2271,7 @@ func expandKubeletConfig(v interface{}) *container.NodeKubeletConfig {
 	if cpuCfsQuotaPeriod, ok := cfg["cpu_cfs_quota_period"]; ok {
 		kConfig.CpuCfsQuotaPeriod = cpuCfsQuotaPeriod.(string)
 	}
-	if insecureKubeletReadonlyPortEnabled, ok := cfg["insecure_kubelet_readonly_port_enabled"]; ok {
+	if insecureKubeletReadonlyPortEnabled, ok := cfg["insecure_kubelet_readonly_port_enabled"]; ok && insecureKubeletReadonlyPortEnabled.(string) != "" {
 		kConfig.InsecureKubeletReadonlyPortEnabled = expandInsecureKubeletReadonlyPortEnabled(insecureKubeletReadonlyPortEnabled)
 		kConfig.ForceSendFields = append(kConfig.ForceSendFields, "InsecureKubeletReadonlyPortEnabled")
 	}
@@ -4599,8 +4723,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 		if d.HasChange(prefix + "node_config.0.kubelet_config") {
 			req := &container.UpdateNodePoolRequest{
 				NodePoolId: name,
-				KubeletConfig: expandKubeletConfig(
-					d.Get(prefix + "node_config.0.kubelet_config")),
+				KubeletConfig: expandKubeletConfigWithRawConfig(
+					d, prefix, d.Get(prefix + "node_config.0.kubelet_config")),
 			}
 			if req.KubeletConfig == nil {
 				req.KubeletConfig = &container.NodeKubeletConfig{}

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
@@ -254,5 +255,360 @@ func TestUnitFlattenNodePool(t *testing.T) {
 				t.Errorf("managed_instance_group_urls returned unexpected diff. +got, -want:\n%s", diff)
 			}
 		})
+	}
+}
+
+func TestExpandKubeletConfig_InsecureKubeletReadonlyPortEnabled(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		input         []interface{}
+		wantEnabled   bool
+		wantForceSend []string
+	}{
+		"unset empty string does not force-send false": {
+			input: []interface{}{
+				map[string]interface{}{
+					"cpu_manager_policy":                     "static",
+					"insecure_kubelet_readonly_port_enabled": "",
+				},
+			},
+			wantEnabled:   false,
+			wantForceSend: nil,
+		},
+		"explicit FALSE force-sends false": {
+			input: []interface{}{
+				map[string]interface{}{
+					"insecure_kubelet_readonly_port_enabled": "FALSE",
+				},
+			},
+			wantEnabled:   false,
+			wantForceSend: []string{"InsecureKubeletReadonlyPortEnabled"},
+		},
+		"explicit TRUE force-sends true": {
+			input: []interface{}{
+				map[string]interface{}{
+					"insecure_kubelet_readonly_port_enabled": "TRUE",
+				},
+			},
+			wantEnabled:   true,
+			wantForceSend: []string{"InsecureKubeletReadonlyPortEnabled"},
+		},
+	}
+
+	for name, tc := range cases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			got := expandKubeletConfig(tc.input)
+			if got == nil {
+				t.Fatal("expandKubeletConfig returned nil")
+			}
+			if got.InsecureKubeletReadonlyPortEnabled != tc.wantEnabled {
+				t.Errorf("InsecureKubeletReadonlyPortEnabled = %v, want %v", got.InsecureKubeletReadonlyPortEnabled, tc.wantEnabled)
+			}
+			if diff := cmp.Diff(tc.wantForceSend, got.ForceSendFields); diff != "" {
+				t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestExpandKubeletConfigWithRawConfig(t *testing.T) {
+	t.Parallel()
+
+	r := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"node_config": schemaNodeConfig(),
+		},
+	}
+
+	makeDataWithRaw := func(t *testing.T, raw map[string]interface{}, rawKC cty.Value) *schema.ResourceData {
+		t.Helper()
+		diff, err := r.SimpleDiff(context.Background(), nil, terraform.NewResourceConfigRaw(raw), nil)
+		if err != nil {
+			t.Fatalf("SimpleDiff: %v", err)
+		}
+		diff.RawConfig = cty.ObjectVal(map[string]cty.Value{
+			"node_config": cty.ListVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{
+					"kubelet_config": cty.ListVal([]cty.Value{rawKC}),
+				}),
+			}),
+		})
+		d, err := schema.InternalMap(r.SchemaMap()).Data(nil, diff)
+		if err != nil {
+			t.Fatalf("Data: %v", err)
+		}
+		return d
+	}
+
+	t.Run("explicit false and zero values populate ForceSendFields", func(t *testing.T) {
+		t.Parallel()
+		raw := map[string]interface{}{
+			"node_config": []interface{}{
+				map[string]interface{}{
+					"kubelet_config": []interface{}{
+						map[string]interface{}{
+							"cpu_cfs_quota":                               false,
+							"shutdown_grace_period_seconds":               0,
+							"shutdown_grace_period_critical_pods_seconds": 0,
+							"single_process_oom_kill":                     false,
+							"eviction_max_pod_grace_period_seconds":       0,
+							"allowed_unsafe_sysctls":                      []interface{}{},
+						},
+					},
+				},
+			},
+		}
+		rawKC := cty.ObjectVal(map[string]cty.Value{
+			"cpu_cfs_quota":                               cty.False,
+			"shutdown_grace_period_seconds":               cty.NumberIntVal(0),
+			"shutdown_grace_period_critical_pods_seconds": cty.NumberIntVal(0),
+			"single_process_oom_kill":                     cty.False,
+			"eviction_max_pod_grace_period_seconds":       cty.NumberIntVal(0),
+			"allowed_unsafe_sysctls":                      cty.ListValEmpty(cty.String),
+		})
+		d := makeDataWithRaw(t, raw, rawKC)
+		got := expandKubeletConfigWithRawConfig(d, "", d.Get("node_config.0.kubelet_config"))
+		if got == nil {
+			t.Fatal("expandKubeletConfigWithRawConfig returned nil")
+		}
+		if got.CpuCfsQuota {
+			t.Errorf("CpuCfsQuota = true, want false")
+		}
+		wantForceSend := []string{
+			"CpuCfsQuota",
+			"ShutdownGracePeriodSeconds",
+			"ShutdownGracePeriodCriticalPodsSeconds",
+			"SingleProcessOomKill",
+			"EvictionMaxPodGracePeriodSeconds",
+			"AllowedUnsafeSysctls",
+		}
+		if diff := cmp.Diff(wantForceSend, got.ForceSendFields); diff != "" {
+			t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
+		}
+	})
+
+	t.Run("omitted cpu_cfs_quota defaults to true without ForceSendFields", func(t *testing.T) {
+		t.Parallel()
+		raw := map[string]interface{}{
+			"node_config": []interface{}{
+				map[string]interface{}{
+					"kubelet_config": []interface{}{
+						map[string]interface{}{
+							"cpu_manager_policy": "static",
+						},
+					},
+				},
+			},
+		}
+		rawKC := cty.ObjectVal(map[string]cty.Value{
+			"cpu_manager_policy":                          cty.StringVal("static"),
+			"cpu_cfs_quota":                               cty.NullVal(cty.Bool),
+			"shutdown_grace_period_seconds":               cty.NullVal(cty.Number),
+			"shutdown_grace_period_critical_pods_seconds": cty.NullVal(cty.Number),
+			"single_process_oom_kill":                     cty.NullVal(cty.Bool),
+			"eviction_max_pod_grace_period_seconds":       cty.NullVal(cty.Number),
+			"allowed_unsafe_sysctls":                      cty.NullVal(cty.List(cty.String)),
+		})
+		d := makeDataWithRaw(t, raw, rawKC)
+		got := expandKubeletConfigWithRawConfig(d, "", d.Get("node_config.0.kubelet_config"))
+		if got == nil {
+			t.Fatal("expandKubeletConfigWithRawConfig returned nil")
+		}
+		if !got.CpuCfsQuota {
+			t.Errorf("CpuCfsQuota = false, want true when omitted")
+		}
+		if len(got.ForceSendFields) != 0 {
+			t.Errorf("ForceSendFields = %v, want empty", got.ForceSendFields)
+		}
+	})
+}
+
+func TestExpandUpgradeSettingsUpdate(t *testing.T) {
+	t.Parallel()
+
+	r := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"upgrade_settings": schemaNodePool["upgrade_settings"],
+		},
+	}
+
+	makeData := func(t *testing.T, priorAttrs map[string]string, rawCfg map[string]interface{}) *schema.ResourceData {
+		t.Helper()
+		prior := &terraform.InstanceState{
+			ID:         "np-id",
+			Attributes: priorAttrs,
+		}
+		diff, err := r.SimpleDiff(context.Background(), prior, terraform.NewResourceConfigRaw(rawCfg), nil)
+		if err != nil {
+			t.Fatalf("SimpleDiff: %v", err)
+		}
+		d, err := schema.InternalMap(r.SchemaMap()).Data(prior, diff)
+		if err != nil {
+			t.Fatalf("Data: %v", err)
+		}
+		return d
+	}
+
+	t.Run("transition SURGE to BLUE_GREEN with max_surge reset to 0 succeeds", func(t *testing.T) {
+		t.Parallel()
+		d := makeData(t, map[string]string{
+			"id":                                "np-id",
+			"upgrade_settings.#":                "1",
+			"upgrade_settings.0.strategy":       "SURGE",
+			"upgrade_settings.0.max_surge":       "2",
+			"upgrade_settings.0.max_unavailable": "1",
+		}, map[string]interface{}{
+			"upgrade_settings": []interface{}{
+				map[string]interface{}{
+					"strategy":        "BLUE_GREEN",
+					"max_surge":       0,
+					"max_unavailable": 0,
+					"blue_green_settings": []interface{}{
+						map[string]interface{}{
+							"node_pool_soak_duration": "100s",
+							"standard_rollout_policy": []interface{}{
+								map[string]interface{}{
+									"batch_percentage":    0.5,
+									"batch_soak_duration": "10s",
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+		got, err := expandUpgradeSettingsUpdate(d, "")
+		if err != nil {
+			t.Fatalf("unexpected error transitioning SURGE -> BLUE_GREEN: %v", err)
+		}
+		if got.Strategy != "BLUE_GREEN" {
+			t.Errorf("Strategy = %q, want BLUE_GREEN", got.Strategy)
+		}
+		if got.BlueGreenSettings == nil {
+			t.Fatal("expected BlueGreenSettings to be populated")
+		}
+	})
+
+	t.Run("transition BLUE_GREEN to SURGE removing blue_green_settings succeeds", func(t *testing.T) {
+		t.Parallel()
+		d := makeData(t, map[string]string{
+			"id":                                                                                     "np-id",
+			"upgrade_settings.#":                                                                     "1",
+			"upgrade_settings.0.strategy":                                                            "BLUE_GREEN",
+			"upgrade_settings.0.max_surge":                                                           "0",
+			"upgrade_settings.0.max_unavailable":                                                     "0",
+			"upgrade_settings.0.blue_green_settings.#":                                               "1",
+			"upgrade_settings.0.blue_green_settings.0.node_pool_soak_duration":                       "100s",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.#":                     "1",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_percentage":    "0.5",
+			"upgrade_settings.0.blue_green_settings.0.standard_rollout_policy.0.batch_soak_duration": "10s",
+		}, map[string]interface{}{
+			"upgrade_settings": []interface{}{
+				map[string]interface{}{
+					"strategy":           "SURGE",
+					"max_surge":          2,
+					"max_unavailable":    0,
+					"blue_green_settings": []interface{}{},
+				},
+			},
+		})
+		got, err := expandUpgradeSettingsUpdate(d, "")
+		if err != nil {
+			t.Fatalf("unexpected error transitioning BLUE_GREEN -> SURGE: %v", err)
+		}
+		if got.Strategy != "SURGE" {
+			t.Errorf("Strategy = %q, want SURGE", got.Strategy)
+		}
+		if got.MaxSurge != 2 {
+			t.Errorf("MaxSurge = %d, want 2", got.MaxSurge)
+		}
+		if got.BlueGreenSettings != nil {
+			t.Errorf("BlueGreenSettings = %+v, want nil", got.BlueGreenSettings)
+		}
+	})
+
+	t.Run("setting non-zero max_surge with BLUE_GREEN strategy errors", func(t *testing.T) {
+		t.Parallel()
+		d := makeData(t, map[string]string{
+			"id":                                "np-id",
+			"upgrade_settings.#":                "1",
+			"upgrade_settings.0.strategy":       "BLUE_GREEN",
+			"upgrade_settings.0.max_surge":       "0",
+			"upgrade_settings.0.max_unavailable": "0",
+		}, map[string]interface{}{
+			"upgrade_settings": []interface{}{
+				map[string]interface{}{
+					"strategy":  "BLUE_GREEN",
+					"max_surge": 2,
+				},
+			},
+		})
+		if _, err := expandUpgradeSettingsUpdate(d, ""); err == nil {
+			t.Fatal("expected error when setting non-zero max_surge with BLUE_GREEN strategy, got nil")
+		}
+	})
+
+	t.Run("updating max_surge to 0 with SURGE strategy sets ForceSendFields", func(t *testing.T) {
+		t.Parallel()
+		d := makeData(t, map[string]string{
+			"id":                                "np-id",
+			"upgrade_settings.#":                "1",
+			"upgrade_settings.0.strategy":       "SURGE",
+			"upgrade_settings.0.max_surge":       "2",
+			"upgrade_settings.0.max_unavailable": "1",
+		}, map[string]interface{}{
+			"upgrade_settings": []interface{}{
+				map[string]interface{}{
+					"strategy":        "SURGE",
+					"max_surge":       0,
+					"max_unavailable": 1,
+				},
+			},
+		})
+		got, err := expandUpgradeSettingsUpdate(d, "")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if diff := cmp.Diff([]string{"MaxSurge"}, got.ForceSendFields); diff != "" {
+			t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
+		}
+	})
+}
+
+func TestExpandNodeDrainConfig(t *testing.T) {
+	t.Parallel()
+
+	if got := expandNodeDrainConfig(nil); got != nil {
+		t.Fatalf("expandNodeDrainConfig(nil) = %+v, want nil", got)
+	}
+
+	gotFalse := expandNodeDrainConfig([]interface{}{
+		map[string]interface{}{
+			"respect_pdb_during_node_pool_deletion": false,
+		},
+	})
+	if gotFalse == nil {
+		t.Fatal("expandNodeDrainConfig returned nil")
+	}
+	if gotFalse.RespectPdbDuringNodePoolDeletion {
+		t.Errorf("RespectPdbDuringNodePoolDeletion = true, want false")
+	}
+	if diff := cmp.Diff([]string{"RespectPdbDuringNodePoolDeletion"}, gotFalse.ForceSendFields); diff != "" {
+		t.Errorf("ForceSendFields mismatch (-want +got):\n%s", diff)
+	}
+
+	gotTrue := expandNodeDrainConfig([]interface{}{
+		map[string]interface{}{
+			"respect_pdb_during_node_pool_deletion": true,
+		},
+	})
+	if gotTrue == nil || !gotTrue.RespectPdbDuringNodePoolDeletion {
+		t.Fatalf("RespectPdbDuringNodePoolDeletion = %+v, want true", gotTrue)
+	}
+	if len(gotTrue.ForceSendFields) != 0 {
+		t.Errorf("ForceSendFields = %v, want empty", gotTrue.ForceSendFields)
 	}
 }

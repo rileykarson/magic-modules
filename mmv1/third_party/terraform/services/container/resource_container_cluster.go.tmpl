@@ -5380,69 +5380,71 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.insecure_kubelet_readonly_port_enabled") {
-		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.insecure_kubelet_readonly_port_enabled"); ok {
-			insecureKubeletReadonlyPortEnabled := v.(string)
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredNodeKubeletConfig: &container.NodeKubeletConfig{
-						InsecureKubeletReadonlyPortEnabled: expandInsecureKubeletReadonlyPortEnabled(insecureKubeletReadonlyPortEnabled),
-						ForceSendFields:                    []string{"InsecureKubeletReadonlyPortEnabled"},
-					},
+		insecureKubeletReadonlyPortEnabled := d.Get("node_pool_defaults.0.node_config_defaults.0.insecure_kubelet_readonly_port_enabled")
+		req := &container.UpdateClusterRequest{
+			Update: &container.ClusterUpdate{
+				DesiredNodeKubeletConfig: &container.NodeKubeletConfig{
+					InsecureKubeletReadonlyPortEnabled: expandInsecureKubeletReadonlyPortEnabled(insecureKubeletReadonlyPortEnabled),
+					ForceSendFields:                    []string{"InsecureKubeletReadonlyPortEnabled"},
 				},
-			}
-
-			updateF := updateFunc(req, "updating GKE cluster desired node pool insecure kubelet readonly port configuration defaults.")
-			// Call update serially.
-			if err := updateF(); err != nil {
-				return err
-			}
-
-			log.Printf("[INFO] GKE cluster %s node pool insecure_kubelet_readonly_port_enabled default has been updated", d.Id())
+			},
 		}
+
+		updateF := updateFunc(req, "updating GKE cluster desired node pool insecure kubelet readonly port configuration defaults.")
+		// Call update serially.
+		if err := updateF(); err != nil {
+			return err
+		}
+
+		log.Printf("[INFO] GKE cluster %s node pool insecure_kubelet_readonly_port_enabled default has been updated", d.Id())
 	}
 
 	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.logging_variant") {
-		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.logging_variant"); ok {
-			loggingVariant := v.(string)
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredNodePoolLoggingConfig: &container.NodePoolLoggingConfig{
-						VariantConfig: &container.LoggingVariantConfig{
-							Variant: loggingVariant,
-						},
+		loggingVariant := d.Get("node_pool_defaults.0.node_config_defaults.0.logging_variant").(string)
+		if loggingVariant == "" {
+			loggingVariant = "DEFAULT"
+		}
+		req := &container.UpdateClusterRequest{
+			Update: &container.ClusterUpdate{
+				DesiredNodePoolLoggingConfig: &container.NodePoolLoggingConfig{
+					VariantConfig: &container.LoggingVariantConfig{
+						Variant: loggingVariant,
 					},
 				},
-			}
-
-			updateF := updateFunc(req, "updating GKE cluster desired node pool logging configuration defaults.")
-			// Call update serially.
-			if err := updateF(); err != nil {
-				return err
-			}
-
-			log.Printf("[INFO] GKE cluster %s node pool logging configuration defaults have been updated", d.Id())
+			},
 		}
+
+		updateF := updateFunc(req, "updating GKE cluster desired node pool logging configuration defaults.")
+		// Call update serially.
+		if err := updateF(); err != nil {
+			return err
+		}
+
+		log.Printf("[INFO] GKE cluster %s node pool logging configuration defaults have been updated", d.Id())
 	}
 
 	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.gcfs_config") {
-		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.gcfs_config"); ok {
-			gcfsConfig := v.([]interface{})[0].(map[string]interface{})
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredGcfsConfig: &container.GcfsConfig{
-						Enabled: gcfsConfig["enabled"].(bool),
-					},
-				},
-			}
-
-			updateF := updateFunc(req, "updating GKE cluster desired gcfs config.")
-			// Call update serially.
-			if err := updateF(); err != nil {
-				return err
-			}
-
-			log.Printf("[INFO] GKE cluster %s default gcfs config has been updated", d.Id())
+		gcfs := &container.GcfsConfig{
+			Enabled:         false,
+			ForceSendFields: []string{"Enabled"},
 		}
+		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.gcfs_config"); ok && len(v.([]interface{})) > 0 && v.([]interface{})[0] != nil {
+			gcfsConfig := v.([]interface{})[0].(map[string]interface{})
+			gcfs.Enabled = gcfsConfig["enabled"].(bool)
+		}
+		req := &container.UpdateClusterRequest{
+			Update: &container.ClusterUpdate{
+				DesiredGcfsConfig: gcfs,
+			},
+		}
+
+		updateF := updateFunc(req, "updating GKE cluster desired gcfs config.")
+		// Call update serially.
+		if err := updateF(); err != nil {
+			return err
+		}
+
+		log.Printf("[INFO] GKE cluster %s default gcfs config has been updated", d.Id())
 	}
 
 	if d.HasChange("security_posture_config") {
@@ -5460,27 +5462,40 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if d.HasChange("node_pool_defaults") && d.HasChange("node_pool_defaults.0.node_config_defaults.0.containerd_config") {
-		if v, ok := d.GetOk("node_pool_defaults.0.node_config_defaults.0.containerd_config"); ok {
-			req := &container.UpdateClusterRequest{
-				Update: &container.ClusterUpdate{
-					DesiredContainerdConfig: expandContainerdConfig(v),
-				},
-			}
-			updateF := updateFunc(req, "updating GKE cluster containerd config")
-			if err := updateF(); err != nil {
-				return err
-			}
-			log.Printf("[INFO] GKE cluster %s containerd config has been updated to %#v", d.Id(), req.Update.DesiredContainerdConfig)
+		update := &container.ClusterUpdate{
+			DesiredContainerdConfig: expandContainerdConfig(d.Get("node_pool_defaults.0.node_config_defaults.0.containerd_config")),
 		}
+		if update.DesiredContainerdConfig == nil {
+			update.DesiredContainerdConfig = &container.ContainerdConfig{}
+			update.ForceSendFields = []string{"DesiredContainerdConfig"}
+		}
+		req := &container.UpdateClusterRequest{
+			Update: update,
+		}
+		updateF := updateFunc(req, "updating GKE cluster containerd config")
+		if err := updateF(); err != nil {
+			return err
+		}
+		log.Printf("[INFO] GKE cluster %s containerd config has been updated to %#v", d.Id(), req.Update.DesiredContainerdConfig)
 	}
 
 	if d.HasChange("node_pool_auto_config.0.node_kubelet_config") {
+		update := &container.ClusterUpdate{
+			DesiredNodePoolAutoConfigKubeletConfig: expandKubeletConfig(
+				d.Get("node_pool_auto_config.0.node_kubelet_config"),
+			),
+		}
+		if update.DesiredNodePoolAutoConfigKubeletConfig == nil {
+			update.DesiredNodePoolAutoConfigKubeletConfig = &container.NodeKubeletConfig{
+				InsecureKubeletReadonlyPortEnabled: false,
+				ForceSendFields:                    []string{"InsecureKubeletReadonlyPortEnabled"},
+			}
+			update.ForceSendFields = []string{"DesiredNodePoolAutoConfigKubeletConfig"}
+		} else if d.HasChange("node_pool_auto_config.0.node_kubelet_config.0.insecure_kubelet_readonly_port_enabled") && len(update.DesiredNodePoolAutoConfigKubeletConfig.ForceSendFields) == 0 {
+			update.DesiredNodePoolAutoConfigKubeletConfig.ForceSendFields = []string{"InsecureKubeletReadonlyPortEnabled"}
+		}
 		req := &container.UpdateClusterRequest{
-			Update: &container.ClusterUpdate{
-				DesiredNodePoolAutoConfigKubeletConfig: expandKubeletConfig(
-					d.Get("node_pool_auto_config.0.node_kubelet_config"),
-				),
-			},
+			Update: update,
 		}
 
 		updateF := updateFunc(req, "updating GKE cluster node pool auto config node_kubelet_config parameters")
@@ -5532,12 +5547,17 @@ func resourceContainerClusterUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if d.HasChange("node_pool_auto_config.0.linux_node_config") {
+		update := &container.ClusterUpdate{
+			DesiredNodePoolAutoConfigLinuxNodeConfig: expandLinuxNodeConfig(
+				d.Get("node_pool_auto_config.0.linux_node_config"),
+			),
+		}
+		if update.DesiredNodePoolAutoConfigLinuxNodeConfig == nil {
+			update.DesiredNodePoolAutoConfigLinuxNodeConfig = &container.LinuxNodeConfig{}
+			update.ForceSendFields = []string{"DesiredNodePoolAutoConfigLinuxNodeConfig"}
+		}
 		req := &container.UpdateClusterRequest{
-			Update: &container.ClusterUpdate{
-				DesiredNodePoolAutoConfigLinuxNodeConfig: expandLinuxNodeConfig(
-					d.Get("node_pool_auto_config.0.linux_node_config"),
-				),
-			},
+			Update: update,
 		}
 
 		updateF := updateFunc(req, "updating GKE cluster node pool auto config linux node config")
@@ -7566,6 +7586,10 @@ func expandNodePoolAutoConfigLinuxNodeConfig(configured interface{}) *container.
 	}
 	config := ls[0].(map[string]interface{})
 	linuxNodeConfig := &container.LinuxNodeConfig{}
+	cgroupMode := expandCgroupMode(config)
+	if len(cgroupMode) != 0 {
+		linuxNodeConfig.CgroupMode = cgroupMode
+	}
 	if v, ok := config["node_kernel_module_loading"]; ok {
 		linuxNodeConfig.NodeKernelModuleLoading = expandNodeKernelModuleLoading(v)
 	}
