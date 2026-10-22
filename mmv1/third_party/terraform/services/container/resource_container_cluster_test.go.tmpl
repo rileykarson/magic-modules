@@ -21221,3 +21221,60 @@ resource "google_container_cluster" "primary" {
 }
 `, clusterName, networkName, subnetworkName, npName, enabled, minProvisionNodes)
 }
+
+func TestAccContainerCluster_withImmutableSubfieldsSchemaCoverage(t *testing.T) {
+	t.Parallel()
+	t.Skip("https://github.com/hashicorp/terraform-provider-google/issues/15254#issuecomment-1646277473")
+
+	clusterName := fmt.Sprintf("tf-test-cluster-%s", acctest.RandString(t, 10))
+	npName := fmt.Sprintf("tf-test-nodepool-%s", acctest.RandString(t, 10))
+
+	acctest.VcrTest(t, resource.TestCase{
+		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+		CheckDestroy:             testAccCheckContainerClusterDestroyProducer(t),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccContainerCluster_withImmutableSubfieldsSchemaCoverage(clusterName, npName),
+			},
+		},
+	})
+}
+
+func testAccContainerCluster_withImmutableSubfieldsSchemaCoverage(clusterName, npName string) string {
+	return fmt.Sprintf(`
+resource "google_container_cluster" "primary" {
+  name                = "%s"
+  location            = "us-central1-a"
+  initial_node_count  = 1
+  deletion_protection = false
+
+  node_config {
+    gpudirect_strategy = "RDMA"
+  }
+
+  node_pool {
+    name       = "%s"
+    node_count = 1
+    network_config {
+      pod_cidr_overprovision_config {
+        disabled = true
+      }
+    }
+    node_config {
+      gpudirect_strategy = "RDMA"
+      sandbox_config {
+{{- if ne $.TargetVersionName "ga" }}
+        sandbox_type = "gvisor"
+{{- end }}
+        type         = "GVISOR"
+      }
+    }
+    placement_policy {
+      type         = "COMPACT"
+      tpu_topology = "2x2x2"
+    }
+  }
+}
+`, clusterName, npName)
+}

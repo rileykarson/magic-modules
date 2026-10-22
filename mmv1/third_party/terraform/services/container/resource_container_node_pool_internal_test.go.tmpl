@@ -256,3 +256,35 @@ func TestUnitFlattenNodePool(t *testing.T) {
 		})
 	}
 }
+
+func TestUnitNodePoolSchema_ImmutableSubfieldsForceNew(t *testing.T) {
+	t.Parallel()
+
+	ncSchema := schemaNodeConfig().Elem.(*schema.Resource).Schema
+
+	if !ncSchema["gpudirect_strategy"].ForceNew {
+		t.Error("node_config.gpudirect_strategy should be ForceNew")
+	}
+	stSchema := ncSchema["sole_tenant_config"].Elem.(*schema.Resource).Schema
+	if !stSchema["min_node_cpus"].ForceNew {
+		t.Error("node_config.sole_tenant_config.min_node_cpus should be ForceNew")
+	}
+	ppSchema := schemaNodePool["placement_policy"].Elem.(*schema.Resource).Schema
+	if !ppSchema["type"].ForceNew || !ppSchema["tpu_topology"].ForceNew {
+		t.Error("placement_policy.type and placement_policy.tpu_topology should be ForceNew")
+	}
+	netSchema := schemaNodePool["network_config"].Elem.(*schema.Resource).Schema
+	pcoSchema := netSchema["pod_cidr_overprovision_config"].Elem.(*schema.Resource).Schema
+	if !pcoSchema["disabled"].ForceNew {
+		t.Error("network_config.pod_cidr_overprovision_config.disabled should be ForceNew")
+	}
+	sbSchema := ncSchema["sandbox_config"].Elem.(*schema.Resource).Schema
+	if !sbSchema["type"].ForceNew {
+		t.Error("node_config.sandbox_config.type should be ForceNew")
+	}
+{{ if ne $.TargetVersionName `ga` -}}
+	if !sbSchema["sandbox_type"].ForceNew {
+		t.Error("node_config.sandbox_config.sandbox_type should be ForceNew")
+	}
+{{- end }}
+}

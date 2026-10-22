@@ -418,19 +418,21 @@ var schemaNodePool = map[string]*schema.Schema{
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"type": {
-					Type:         schema.TypeString,
-					Required:     true,
-					Description:  `Type defines the type of placement policy`,
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `Type defines the type of placement policy`,
 				},
 				"policy_name": {
-					Type:         schema.TypeString,
+					Type:        schema.TypeString,
 					Optional:    true,
 					ForceNew:    true,
-					Description:  `If set, refers to the name of a custom resource policy supplied by the user. The resource policy must be in the same project and region as the node pool. If not found, InvalidArgument error is returned.`,
+					Description: `If set, refers to the name of a custom resource policy supplied by the user. The resource policy must be in the same project and region as the node pool. If not found, InvalidArgument error is returned.`,
 				},
 				"tpu_topology": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					ForceNew:    true,
 					Description: `The TPU topology like "2x4" or "2x2x2". https://cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#topology`,
 				},
 			},
@@ -738,6 +740,7 @@ var schemaNodePool = map[string]*schema.Schema{
 							"disabled": {
 								Type:     schema.TypeBool,
 								Required: true,
+								ForceNew: true,
 							},
 						},
 					},

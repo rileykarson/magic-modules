@@ -306,11 +306,12 @@ func schemaNodeConfig() *schema.Schema {
 				"boot_disk": schemaBootDiskConfig(),
 
 				"gpudirect_strategy": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Computed:    true,
+					Type:             schema.TypeString,
+					Optional:         true,
+					Computed:         true,
+					ForceNew:         true,
 					DiffSuppressFunc: tpgresource.CaseDiffSuppress,
-					Description: `The type of GPUDirect strategy to enable on the node.`,
+					Description:      `The type of GPUDirect strategy to enable on the node.`,
 				},
 
 				"guest_accelerator": {
@@ -761,30 +762,32 @@ func schemaNodeConfig() *schema.Schema {
 },
 
 			"sandbox_config": {
-				Type:       schema.TypeList,
-				Optional:   true,
-				ForceNew:   true,
-				MaxItems:   1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				ForceNew:    true,
+				MaxItems:    1,
 				Description: `Sandbox configuration for this node.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 {{ if ne $.TargetVersionName `ga` -}}
 						"sandbox_type": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Deprecated:   "`sandbox_config.sandbox_type` is deprecated and will be removed in a future major release. Use `sandbox_config.type` instead.",
-							Description:  `Type of the sandbox to use for the node (e.g. 'gvisor'). Deprecated in favor of type.`,
-							ValidateFunc: validation.StringInSlice([]string{"gvisor"}, false),
+							Type:             schema.TypeString,
+							Optional:         true,
+							ForceNew:         true,
+							Deprecated:       "`sandbox_config.sandbox_type` is deprecated and will be removed in a future major release. Use `sandbox_config.type` instead.",
+							Description:      `Type of the sandbox to use for the node (e.g. 'gvisor'). Deprecated in favor of type.`,
+							ValidateFunc:     validation.StringInSlice([]string{"gvisor"}, false),
 							DiffSuppressFunc: sandboxTypeDiffSuppress,
 						},
 {{- end }}
 						"type": {
-							Type:         schema.TypeString,
+							Type:     schema.TypeString,
+							ForceNew: true,
 {{ if ne $.TargetVersionName `ga` -}}
-							Optional:     true,
+							Optional:         true,
 							DiffSuppressFunc: sandboxTypeDiffSuppress,
 {{- else -}}
-							Required:     true,
+							Required: true,
 {{- end }}
 							Description:  `Type of the sandbox to use for the node (e.g. 'GVISOR').`,
 							ValidateFunc: validation.StringInSlice([]string{"GVISOR", "MICROVM"}, false),
@@ -1382,10 +1385,11 @@ func schemaNodeConfig() *schema.Schema {
 								},
 							},
 							"min_node_cpus": {
-                                                                Type:        schema.TypeInt,
-                                                                Optional:    true,
-                                                                Description: `Specifies the minimum number of vCPUs that each sole tenant node must have to use CPU overcommit. If not specified, the CPU overcommit feature is disabled.`,
-                                                        },
+								Type:        schema.TypeInt,
+								Optional:    true,
+								ForceNew:    true,
+								Description: `Specifies the minimum number of vCPUs that each sole tenant node must have to use CPU overcommit. If not specified, the CPU overcommit feature is disabled.`,
+							},
 						},
 					},
 				},
