@@ -1,17 +1,107 @@
 package compute
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
+	"google.golang.org/api/googleapi"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+func isInstanceUpdateFingerprintError(err error) (bool, string) {
+	if err == nil {
+		return false, ""
+	}
+	if retry, reason := transport_tpg.IsFingerprintError(err); retry {
+		return true, reason
+	}
+	var gerr *googleapi.Error
+	if errors.As(err, &gerr) {
+		if gerr.Code == 412 {
+			return true, "fingerprint mismatch on instance update"
+		}
+		if gerr.Code == 400 && strings.Contains(strings.ToLower(gerr.Message), "fingerprint") {
+			return true, "fingerprint mismatch on instance update"
+		}
+	}
+	if strings.Contains(strings.ToLower(err.Error()), "fingerprint mismatch") {
+		return true, "fingerprint mismatch on instance update"
+	}
+	return false, ""
+}
+
+func computeInstanceWholeResourceModify(d *schema.ResourceData, config *transport_tpg.Config, project, instanceUrl, userAgent, getErrWrap, putErrWrap, waitActivity string, mutateFn func(instMap map[string]interface{}) error) error {
+	return computeInstanceWholeResourceModifyWithWaitErr(d, config, project, instanceUrl, userAgent, getErrWrap, putErrWrap, "", waitActivity, mutateFn)
+}
+
+func computeInstanceWholeResourceModifyWithWaitErr(d *schema.ResourceData, config *transport_tpg.Config, project, instanceUrl, userAgent, getErrWrap, putErrWrap, waitErrWrap, waitActivity string, mutateFn func(instMap map[string]interface{}) error) error {
+	if getErrWrap == "" {
+		getErrWrap = "Error retrieving instance: {{"{{"}}err{{"}}"}}"
+	}
+	return transport_tpg.Retry(transport_tpg.RetryOptions{
+		RetryFunc: func() error {
+			instMap, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
+				Config:    config,
+				Method:    "GET",
+				Project:   project,
+				RawURL:    instanceUrl,
+				UserAgent: userAgent,
+			})
+			if err != nil {
+				return errwrap.Wrapf(getErrWrap, err)
+			}
+
+			if err := mutateFn(instMap); err != nil {
+				return err
+			}
+
+			stripInitializeParams(instMap)
+
+			res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
+				Config:    config,
+				Method:    "PUT",
+				Project:   project,
+				RawURL:    instanceUrl,
+				UserAgent: userAgent,
+				Body:      instMap,
+			})
+			if err != nil {
+				if putErrWrap != "" {
+					return errwrap.Wrapf(putErrWrap, err)
+				}
+				return err
+			}
+
+			err = ComputeOperationWaitTime(config, res, project, waitActivity, userAgent, d.Timeout(schema.TimeoutUpdate))
+			if err != nil && waitErrWrap != "" {
+				return errwrap.Wrapf(waitErrWrap, err)
+			}
+			return err
+		},
+		ErrorRetryPredicates: []transport_tpg.RetryErrorPredicateFunc{isInstanceUpdateFingerprintError},
+	})
+}
+
+func computeInstanceModifyNicAtIndex(d *schema.ResourceData, config *transport_tpg.Config, project, instanceUrl, userAgent string, nicIndex int, putErrWrap, waitActivity string, mutateNicFn func(nicMap map[string]interface{}) error) error {
+	return computeInstanceWholeResourceModify(d, config, project, instanceUrl, userAgent, "", putErrWrap, waitActivity, func(instMap map[string]interface{}) error {
+		freshNics, _ := instMap["networkInterfaces"].([]interface{})
+		if nicIndex < len(freshNics) {
+			if freshNic, ok := freshNics[nicIndex].(map[string]interface{}); ok {
+				return mutateNicFn(freshNic)
+			}
+		}
+		return nil
+	})
+}
 
 func instanceSchedulingNodeAffinitiesElemSchema() *schema.Resource {
 	return &schema.Resource{

@@ -3,63 +3,121 @@ package compute
 import (
 	"fmt"
 
-	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
+func computeInstanceUpdateInstanceURL(d *schema.ResourceData, config *transport_tpg.Config) (string, error) {
+	url, err := tpgresource.ReplaceVars(d, config, "{{"{{"}}ComputeBasePath{{"}}"}}projects/{{"{{"}}project{{"}}"}}/zones/{{"{{"}}zone{{"}}"}}/instances/{{"{{"}}name{{"}}"}}")
+	if err != nil {
+		return "", err
+	}
+{{- if ne $.TargetVersionName "ga" }}
+	url, err = transport_tpg.AddQueryParams(url, map[string]string{"view": "FULL"})
+	if err != nil {
+		return "", err
+	}
+{{- end }}
+	return url, nil
+}
+
+func findInstanceNetworkInterfaceByName(instMap map[string]interface{}, nicName string) (map[string]interface{}, error) {
+	rawNics, ok := instMap["networkInterfaces"].([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("instance has no networkInterfaces")
+	}
+	for _, rawNic := range rawNics {
+		nic, ok := rawNic.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if name, _ := nic["name"].(string); name == nicName {
+			return nic, nil
+		}
+	}
+	if len(rawNics) == 1 {
+		if nic, ok := rawNics[0].(map[string]interface{}); ok {
+			return nic, nil
+		}
+	}
+	return nil, fmt.Errorf("instance has no network interface named %q", nicName)
+}
+
 func computeInstanceDeleteAccessConfigs(d *schema.ResourceData, config *transport_tpg.Config, instNetworkInterface map[string]interface{}, project, zone, userAgent, instanceName string) error {
 	// Delete any accessConfig that currently exists in instNetworkInterface
 	rawAccessConfigs, ok := instNetworkInterface["accessConfigs"].([]interface{})
-	if !ok {
+	if !ok || len(rawAccessConfigs) == 0 {
 		return nil // No access configs to delete
 	}
 
+	instanceUrl, err := computeInstanceUpdateInstanceURL(d, config)
+	if err != nil {
+		return fmt.Errorf("error replacing vars for DeleteAccessConfig URL: %w", err)
+	}
+
+	nicName, _ := instNetworkInterface["name"].(string)
 	for _, rawAc := range rawAccessConfigs {
 		ac, ok := rawAc.(map[string]interface{})
 		if !ok {
 			continue
 		}
-		acName := ac["name"].(string)
-		nicName := instNetworkInterface["name"].(string)
+		acName, _ := ac["name"].(string)
 
-		url, err := tpgresource.ReplaceVars(d, config, "{{"{{"}}ComputeBasePath{{"}}"}}projects/{{"{{"}}project{{"}}"}}/zones/{{"{{"}}zone{{"}}"}}/instances/{{"{{"}}name{{"}}"}}/deleteAccessConfig")
+		err = computeInstanceWholeResourceModifyWithWaitErr(
+			d,
+			config,
+			project,
+			instanceUrl,
+			userAgent,
+			"",
+			fmt.Sprintf("error deleting old access_config %q: {{"{{"}}err{{"}}"}}", acName),
+			fmt.Sprintf("error waiting for old access_config %q deletion: {{"{{"}}err{{"}}"}}", acName),
+			"old access_config to delete",
+			func(instMap map[string]interface{}) error {
+				targetNic, err := findInstanceNetworkInterfaceByName(instMap, nicName)
+				if err != nil {
+					return err
+				}
+				if currentAcs, ok := targetNic["accessConfigs"].([]interface{}); ok && len(currentAcs) > 1 {
+					remaining := make([]interface{}, 0, len(currentAcs))
+					for _, curRaw := range currentAcs {
+						if curAc, ok := curRaw.(map[string]interface{}); ok {
+							if curName, _ := curAc["name"].(string); curName == acName {
+								continue
+							}
+						}
+						remaining = append(remaining, curRaw)
+					}
+					if len(remaining) > 0 {
+						targetNic["accessConfigs"] = remaining
+					} else {
+						delete(targetNic, "accessConfigs")
+					}
+				} else {
+					delete(targetNic, "accessConfigs")
+				}
+				return nil
+			},
+		)
 		if err != nil {
-			return fmt.Errorf("error replacing vars for DeleteAccessConfig URL: %w", err)
-		}
-
-		params := map[string]string{
-			"accessConfig":     acName,
-			"networkInterface": nicName,
-		}
-		url, err = transport_tpg.AddQueryParams(url, params)
-		if err != nil {
-			return fmt.Errorf("error adding query params for DeleteAccessConfig: %w", err)
-		}
-
-		res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
-			Config:    config,
-			Method:    "POST",
-			Project:   project,
-			RawURL:    url,
-			UserAgent: userAgent,
-		})
-		if err != nil {
-			return fmt.Errorf("error deleting old access_config %q: %w", acName, err)
-		}
-
-		err = ComputeOperationWaitTime(config, res, project, "old access_config to delete", userAgent, d.Timeout(schema.TimeoutUpdate))
-		if err != nil {
-			return fmt.Errorf("error waiting for old access_config %q deletion: %w", acName, err)
+			return err
 		}
 	}
 	return nil
 }
 
 func computeInstanceAddAccessConfigs(d *schema.ResourceData, config *transport_tpg.Config, instNetworkInterface map[string]interface{}, accessConfigs []interface{}, project, zone, userAgent, instanceName string) error {
-	nicName := instNetworkInterface["name"].(string)
+	if len(accessConfigs) == 0 {
+		return nil
+	}
 
+	instanceUrl, err := computeInstanceUpdateInstanceURL(d, config)
+	if err != nil {
+		return fmt.Errorf("error replacing vars for AddAccessConfig URL: %w", err)
+	}
+
+	nicName, _ := instNetworkInterface["name"].(string)
 	// Create new ones
 	for _, rawAc := range accessConfigs {
 		ac, ok := rawAc.(map[string]interface{})
@@ -68,34 +126,27 @@ func computeInstanceAddAccessConfigs(d *schema.ResourceData, config *transport_t
 		}
 		acName, _ := ac["name"].(string)
 
-		url, err := tpgresource.ReplaceVars(d, config, "{{"{{"}}ComputeBasePath{{"}}"}}projects/{{"{{"}}project{{"}}"}}/zones/{{"{{"}}zone{{"}}"}}/instances/{{"{{"}}name{{"}}"}}/addAccessConfig")
+		err = computeInstanceWholeResourceModifyWithWaitErr(
+			d,
+			config,
+			project,
+			instanceUrl,
+			userAgent,
+			"",
+			fmt.Sprintf("error adding new access_config %q: {{"{{"}}err{{"}}"}}", acName),
+			fmt.Sprintf("error waiting for new access_config %q addition: {{"{{"}}err{{"}}"}}", acName),
+			"new access_config to add",
+			func(instMap map[string]interface{}) error {
+				targetNic, err := findInstanceNetworkInterfaceByName(instMap, nicName)
+				if err != nil {
+					return err
+				}
+				targetNic["accessConfigs"] = []interface{}{ac}
+				return nil
+			},
+		)
 		if err != nil {
-			return fmt.Errorf("error replacing vars for AddAccessConfig URL: %w", err)
-		}
-
-		params := map[string]string{
-			"networkInterface": nicName,
-		}
-		url, err = transport_tpg.AddQueryParams(url, params)
-		if err != nil {
-			return fmt.Errorf("error adding query params for AddAccessConfig: %w", err)
-		}
-
-		res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
-			Config:    config,
-			Method:    "POST",
-			Project:   project,
-			RawURL:    url,
-			UserAgent: userAgent,
-			Body:      ac,
-		})
-		if err != nil {
-			return fmt.Errorf("error adding new access_config %q: %w", acName, err)
-		}
-
-		err = ComputeOperationWaitTime(config, res, project, "new access_config to add", userAgent, d.Timeout(schema.TimeoutUpdate))
-		if err != nil {
-			return fmt.Errorf("error waiting for new access_config %q addition: %w", acName, err)
+			return err
 		}
 	}
 	return nil
@@ -116,8 +167,6 @@ func computeInstanceCreateUpdateWhileStoppedCall(d *schema.ResourceData, config 
 			return fmt.Errorf("error updating network interface: invalid network interface type at index %d", index)
 		}
 
-		networkInterfacePatchObj["fingerprint"] = instNetworkInterface["fingerprint"]
-
 		// Access config can run into some issues since we can't tell the difference between
 		// the users declared intent (config within their hcl file) and what we have inferred from the
 		// server (terraform state). Access configs contain an ip subproperty that can be incompatible
@@ -130,35 +179,52 @@ func computeInstanceCreateUpdateWhileStoppedCall(d *schema.ResourceData, config 
 			}
 		}
 
-		url, err := tpgresource.ReplaceVars(d, config, "{{"{{"}}ComputeBasePath{{"}}"}}projects/{{"{{"}}project{{"}}"}}/zones/{{"{{"}}zone{{"}}"}}/instances/{{"{{"}}name{{"}}"}}/updateNetworkInterface")
+		instanceUrl, err := computeInstanceUpdateInstanceURL(d, config)
 		if err != nil {
 			return fmt.Errorf("error replacing vars for UpdateNetworkInterface URL: %w", err)
 		}
 
-		nicName := instNetworkInterface["name"].(string)
-		params := map[string]string{
-			"networkInterface": nicName,
-		}
-		url, err = transport_tpg.AddQueryParams(url, params)
-		if err != nil {
-			return fmt.Errorf("error adding query params for UpdateNetworkInterface: %w", err)
-		}
+		err = computeInstanceWholeResourceModifyWithWaitErr(
+			d,
+			config,
+			project,
+			instanceUrl,
+			userAgent,
+			"",
+			"Error updating network interface: {{"{{"}}err{{"}}"}}",
+			"error waiting for network interface update: {{"{{"}}err{{"}}"}}",
+			"network interface to update",
+			func(instMap map[string]interface{}) error {
+				freshNics, ok := instMap["networkInterfaces"].([]interface{})
+				if !ok || len(freshNics) <= index {
+					return fmt.Errorf("error updating network interface: instance has no network interface at index %d", index)
+				}
+				freshNic, ok := freshNics[index].(map[string]interface{})
+				if !ok {
+					return fmt.Errorf("error updating network interface: invalid network interface type at index %d", index)
+				}
 
-		res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
-			Config:    config,
-			Method:    "PATCH",
-			Project:   project,
-			RawURL:    url,
-			UserAgent: userAgent,
-			Body:      networkInterfacePatchObj,
-		})
+				for k, v := range networkInterfacePatchObj {
+					if k == "fingerprint" {
+						continue
+					}
+					if v == nil {
+						delete(freshNic, k)
+					} else {
+						freshNic[k] = v
+					}
+				}
+				if _, hasNetIP := networkInterfacePatchObj["networkIP"]; !hasNetIP {
+					delete(freshNic, "networkIP")
+				}
+				if _, hasAlias := networkInterfacePatchObj["aliasIpRanges"]; !hasAlias {
+					delete(freshNic, "aliasIpRanges")
+				}
+				return nil
+			},
+		)
 		if err != nil {
-			return errwrap.Wrapf("Error updating network interface: {{"{{"}}err{{"}}"}}", err)
-		}
-
-		err = ComputeOperationWaitTime(config, res, project, "network interface to update", userAgent, d.Timeout(schema.TimeoutUpdate))
-		if err != nil {
-			return fmt.Errorf("error waiting for network interface update: %w", err)
+			return err
 		}
 
 		if accessConfigsHaveChanged {
