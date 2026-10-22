@@ -1624,7 +1624,7 @@ func expandNodeConfigDefaults(configured interface{}) *container.NodeConfigDefau
 			ForceSendFields:                    []string{"InsecureKubeletReadonlyPortEnabled"},
 		}
 	}
-	if variant, ok := config["logging_variant"]; ok {
+	if variant, ok := config["logging_variant"]; ok && variant.(string) != "" {
 		nodeConfigDefaults.LoggingConfig = &container.NodePoolLoggingConfig{
 			VariantConfig: &container.LoggingVariantConfig{
 				Variant: variant.(string),
@@ -1632,11 +1632,8 @@ func expandNodeConfigDefaults(configured interface{}) *container.NodeConfigDefau
 		}
 	}
 
-	if v, ok := config["gcfs_config"]; ok && len(v.([]interface{})) > 0 {
-		gcfsConfig := v.([]interface{})[0].(map[string]interface{})
-		nodeConfigDefaults.GcfsConfig = &container.GcfsConfig{
-			Enabled: gcfsConfig["enabled"].(bool),
-		}
+	if v, ok := config["gcfs_config"]; ok {
+		nodeConfigDefaults.GcfsConfig = expandGcfsConfig(v)
 	}
 
 	return nodeConfigDefaults
@@ -1720,7 +1717,7 @@ func expandNodeConfig(d *schema.ResourceData, prefix string, v interface{}) *con
 		nc.LocalSsdCount = int64(v.(int))
 	}
 
-	if v, ok := nodeConfig["logging_variant"]; ok {
+	if v, ok := nodeConfig["logging_variant"]; ok && v.(string) != "" {
 		nc.LoggingConfig = &container.NodePoolLoggingConfig{
 			VariantConfig: &container.LoggingVariantConfig{
 				Variant: v.(string),
@@ -1777,25 +1774,16 @@ func expandNodeConfig(d *schema.ResourceData, prefix string, v interface{}) *con
 		}
 	}
 
-	if v, ok := nodeConfig["gcfs_config"]; ok && len(v.([]interface{})) > 0 {
-		conf := v.([]interface{})[0].(map[string]interface{})
-		nc.GcfsConfig = &container.GcfsConfig{
-			Enabled: conf["enabled"].(bool),
-		}
+	if v, ok := nodeConfig["gcfs_config"]; ok {
+		nc.GcfsConfig = expandGcfsConfig(v)
 	}
 
-	if v, ok := nodeConfig["gvnic"]; ok && len(v.([]interface{})) > 0 {
-		conf := v.([]interface{})[0].(map[string]interface{})
-		nc.Gvnic = &container.VirtualNIC{
-			Enabled: conf["enabled"].(bool),
-		}
+	if v, ok := nodeConfig["gvnic"]; ok {
+		nc.Gvnic = expandGvnic(v)
 	}
 
-	if v, ok := nodeConfig["fast_socket"]; ok && len(v.([]interface{})) > 0 {
-		conf := v.([]interface{})[0].(map[string]interface{})
-		nc.FastSocket = &container.FastSocket{
-			Enabled: conf["enabled"].(bool),
-		}
+	if v, ok := nodeConfig["fast_socket"]; ok {
+		nc.FastSocket = expandFastSocket(v)
 	}
 
 	if v, ok := nodeConfig["reservation_affinity"]; ok && len(v.([]interface{})) > 0 {
@@ -2347,6 +2335,7 @@ func expandLinuxNodeConfig(v interface{}) *container.LinuxNodeConfig {
 	sysctls := expandSysctls(cfg)
 	if sysctls != nil {
 		linuxNodeConfig.Sysctls = sysctls
+		linuxNodeConfig.ForceSendFields = append(linuxNodeConfig.ForceSendFields, "Sysctls")
 	}
 	cgroupMode := expandCgroupMode(cfg)
 	if len(cgroupMode) != 0 {
@@ -2509,6 +2498,9 @@ func expandAccurateTimeConfig(v interface{}) *container.AccurateTimeConfig {
 
 	if v, ok := cfg["enable_ptp_kvm_time_sync"]; ok {
 		accurateTimeConfig.EnablePtpKvmTimeSync = v.(bool)
+		if !accurateTimeConfig.EnablePtpKvmTimeSync {
+			accurateTimeConfig.ForceSendFields = append(accurateTimeConfig.ForceSendFields, "EnablePtpKvmTimeSync")
+		}
 	}
 
 	return accurateTimeConfig
@@ -2736,6 +2728,9 @@ func expandPrivateRegistryAccessConfig(v interface{}) *container.PrivateRegistry
 	pracc := &container.PrivateRegistryAccessConfig{}
 	if enabled, ok := cfg["enabled"]; ok {
 		pracc.Enabled = enabled.(bool)
+		if !pracc.Enabled {
+			pracc.ForceSendFields = append(pracc.ForceSendFields, "Enabled")
+		}
 	}
 	if caCfgRaw, ok := cfg["certificate_authority_domain_config"]; ok {
 		ls := caCfgRaw.([]interface{})
@@ -2804,6 +2799,9 @@ func expandWritableCgroups(v interface{}) *container.WritableCgroups {
 	wcg := &container.WritableCgroups{}
 	if enabled, ok := cfg["enabled"]; ok {
 		wcg.Enabled = enabled.(bool)
+		if !wcg.Enabled {
+			wcg.ForceSendFields = append(wcg.ForceSendFields, "Enabled")
+		}
 	}
 	return wcg
 }
@@ -2832,6 +2830,9 @@ func expandRegistryHosts(v interface{}) []*container.RegistryHostConfig {
 				}
 				if v, ok := hostData["override_path"]; ok {
 					h.OverridePath = v.(bool)
+					if !h.OverridePath {
+						h.ForceSendFields = append(h.ForceSendFields, "OverridePath")
+					}
 				}
 				if v, ok := hostData["dial_timeout"]; ok {
 					h.DialTimeout = v.(string)
@@ -3022,15 +3023,82 @@ func expandOpportunisticMaintenanceStrategy(v interface{}) *container.Opportunis
 {{- end }}
 
 func expandConfidentialNodes(configured interface{}) *container.ConfidentialNodes {
+	if configured == nil {
+		return nil
+	}
 	l := configured.([]interface{})
 	if len(l) == 0 || l[0] == nil {
 		return nil
 	}
 	config := l[0].(map[string]interface{})
-	return &container.ConfidentialNodes{
-		Enabled: config["enabled"].(bool),
-		ConfidentialInstanceType: config["confidential_instance_type"].(string),
+	enabled := config["enabled"].(bool)
+	cn := &container.ConfidentialNodes{
+		Enabled: enabled,
 	}
+	if v, ok := config["confidential_instance_type"]; ok {
+		cn.ConfidentialInstanceType = v.(string)
+	}
+	if !enabled {
+		cn.ForceSendFields = []string{"Enabled"}
+	}
+	return cn
+}
+
+func expandGcfsConfig(v interface{}) *container.GcfsConfig {
+	if v == nil {
+		return nil
+	}
+	ls := v.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	cfg := ls[0].(map[string]interface{})
+	enabled := cfg["enabled"].(bool)
+	gcfs := &container.GcfsConfig{
+		Enabled: enabled,
+	}
+	if !enabled {
+		gcfs.ForceSendFields = []string{"Enabled"}
+	}
+	return gcfs
+}
+
+func expandGvnic(v interface{}) *container.VirtualNIC {
+	if v == nil {
+		return nil
+	}
+	ls := v.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	cfg := ls[0].(map[string]interface{})
+	enabled := cfg["enabled"].(bool)
+	gvnic := &container.VirtualNIC{
+		Enabled: enabled,
+	}
+	if !enabled {
+		gvnic.ForceSendFields = []string{"Enabled"}
+	}
+	return gvnic
+}
+
+func expandFastSocket(v interface{}) *container.FastSocket {
+	if v == nil {
+		return nil
+	}
+	ls := v.([]interface{})
+	if len(ls) == 0 || ls[0] == nil {
+		return nil
+	}
+	cfg := ls[0].(map[string]interface{})
+	enabled := cfg["enabled"].(bool)
+	fastSocket := &container.FastSocket{
+		Enabled: enabled,
+	}
+	if !enabled {
+		fastSocket.ForceSendFields = []string{"Enabled"}
+	}
+	return fastSocket
 }
 
 func flattenNodeConfigDefaults(c *container.NodeConfigDefaults) []map[string]interface{} {
@@ -3063,12 +3131,31 @@ func flattenNodeConfig(c *container.NodeConfig, v interface{}) []map[string]inte
 
 	// default to no prior taint state if there are any issues
 	oldTaints := []interface{}{}
-	oldNodeConfigSchemaContainer := v.([]interface{})
-	if len(oldNodeConfigSchemaContainer) != 0 {
-		oldNodeConfigSchema := oldNodeConfigSchemaContainer[0].(map[string]interface{})
-		if vt, ok := oldNodeConfigSchema["taint"]; ok && len(vt.([]interface{})) > 0 {
-			oldTaints = vt.([]interface{})
+	hasOldNodeConfig := false
+	hasOldGvnic := false
+	hasOldFastSocket := false
+	if oldNodeConfigSchemaContainer, ok := v.([]interface{}); ok && len(oldNodeConfigSchemaContainer) != 0 {
+		if oldNodeConfigSchema, ok := oldNodeConfigSchemaContainer[0].(map[string]interface{}); ok {
+			hasOldNodeConfig = true
+			if vt, ok := oldNodeConfigSchema["taint"]; ok && vt != nil && len(vt.([]interface{})) > 0 {
+				oldTaints = vt.([]interface{})
+			}
+			if vg, ok := oldNodeConfigSchema["gvnic"]; ok && vg != nil && len(vg.([]interface{})) > 0 {
+				hasOldGvnic = true
+			}
+			if vf, ok := oldNodeConfigSchema["fast_socket"]; ok && vf != nil && len(vf.([]interface{})) > 0 {
+				hasOldFastSocket = true
+			}
 		}
+	}
+
+	gvnic := flattenGvnic(c.Gvnic)
+	if hasOldNodeConfig && !hasOldGvnic && c.Gvnic != nil && !c.Gvnic.Enabled {
+		gvnic = []map[string]interface{}{}
+	}
+	fastSocket := flattenFastSocket(c.FastSocket)
+	if hasOldNodeConfig && !hasOldFastSocket && c.FastSocket != nil && !c.FastSocket.Enabled {
+		fastSocket = []map[string]interface{}{}
 	}
 
 	config = append(config, map[string]interface{}{
@@ -3088,7 +3175,7 @@ func flattenNodeConfig(c *container.NodeConfig, v interface{}) []map[string]inte
 		"local_nvme_ssd_block_config": flattenLocalNvmeSsdBlockConfig(c.LocalNvmeSsdBlockConfig),
 		"ephemeral_storage_local_ssd_config": flattenEphemeralStorageLocalSsdConfig(c.EphemeralStorageLocalSsdConfig),
 		"gcfs_config":              flattenGcfsConfig(c.GcfsConfig),
-		"gvnic":					flattenGvnic(c.Gvnic),
+		"gvnic":					gvnic,
 		"reservation_affinity":     flattenGKEReservationAffinity(c.ReservationAffinity),
 		"service_account":          c.ServiceAccount,
 		"metadata":                 c.Metadata,
@@ -3120,7 +3207,7 @@ func flattenNodeConfig(c *container.NodeConfig, v interface{}) []map[string]inte
 		"max_run_duration": 		 c.MaxRunDuration,
 		"flex_start":				 c.FlexStart,
 		"sole_tenant_config":        flattenSoleTenantConfig(c.SoleTenantConfig),
-		"fast_socket":               flattenFastSocket(c.FastSocket),
+		"fast_socket":               fastSocket,
 		"resource_manager_tags":     flattenResourceManagerTags(c.ResourceManagerTags),
 		"enable_confidential_storage": c.EnableConfidentialStorage,
 		"local_ssd_encryption_mode":      c.LocalSsdEncryptionMode,
@@ -4016,150 +4103,151 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 	if d.HasChange(prefix + "node_config") {
 
 		if d.HasChange(prefix + "node_config.0.logging_variant") {
-			if v, ok := d.GetOk(prefix + "node_config.0.logging_variant"); ok {
-				loggingVariant := v.(string)
-				req := &container.UpdateNodePoolRequest{
-					Name: name,
-					LoggingConfig: &container.NodePoolLoggingConfig{
-						VariantConfig: &container.LoggingVariantConfig{
-							Variant: loggingVariant,
-						},
-					},
-				}
-
-				updateF := func() error {
-					clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
-					if config.UserProjectOverride {
-						clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
-					}
-					op, err := clusterNodePoolsUpdateCall.Do()
-					if err != nil {
-						return err
-					}
-
-					// Wait until it's updated
-					return ContainerOperationWait(config, op,
-						nodePoolInfo.project,
-						nodePoolInfo.location,
-						"updating GKE node pool logging_variant", userAgent,
-						timeout)
-				}
-
-				if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
-						return err
-				}
-
-				log.Printf("[INFO] Updated logging_variant for node pool %s", name)
+			loggingVariant := d.Get(prefix + "node_config.0.logging_variant").(string)
+			variantConfig := &container.LoggingVariantConfig{
+				Variant: loggingVariant,
 			}
-		}
+			if loggingVariant == "" {
+				variantConfig.ForceSendFields = []string{"Variant"}
+			}
+			req := &container.UpdateNodePoolRequest{
+				Name: name,
+				LoggingConfig: &container.NodePoolLoggingConfig{
+					VariantConfig:   variantConfig,
+					ForceSendFields: []string{"VariantConfig"},
+				},
+				ForceSendFields: []string{"LoggingConfig"},
+			}
 
-		if d.HasChange(prefix + "node_config.0.taint_config") {
-			if _, ok := d.GetOk(prefix + "node_config.0.taint_config"); ok {
-				req := &container.UpdateNodePoolRequest{
-					Name:        name,
-					TaintConfig: expandTaintConfig(d.Get(prefix + "node_config.0.taint_config")),
+			updateF := func() error {
+				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+				if config.UserProjectOverride {
+					clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
 				}
-				if req.TaintConfig == nil {
-					req.TaintConfig = &container.TaintConfig{}
-					req.ForceSendFields = []string{"TaintConfig"}
-				}
-
-				updateF := func() error {
-					clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
-					if config.UserProjectOverride {
-						clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
-					}
-					op, err := clusterNodePoolsUpdateCall.Do()
-					if err != nil {
-						return err
-					}
-
-					// Wait until it's updated
-					return ContainerOperationWait(config, op,
-						nodePoolInfo.project,
-						nodePoolInfo.location,
-						"updating GKE node pool taint_config", userAgent,
-						timeout)
-				}
-
-				if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+				op, err := clusterNodePoolsUpdateCall.Do()
+				if err != nil {
 					return err
 				}
 
-				log.Printf("[INFO] Updated taint_config for node pool %s", name)
+				// Wait until it's updated
+				return ContainerOperationWait(config, op,
+					nodePoolInfo.project,
+					nodePoolInfo.location,
+					"updating GKE node pool logging_variant", userAgent,
+					timeout)
 			}
+
+			if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+				return err
+			}
+
+			log.Printf("[INFO] Updated logging_variant for node pool %s", name)
+		}
+
+		if d.HasChange(prefix + "node_config.0.taint_config") {
+			req := &container.UpdateNodePoolRequest{
+				Name:        name,
+				TaintConfig: expandTaintConfig(d.Get(prefix + "node_config.0.taint_config")),
+			}
+			if req.TaintConfig == nil {
+				req.TaintConfig = &container.TaintConfig{}
+				req.ForceSendFields = []string{"TaintConfig"}
+			}
+
+			updateF := func() error {
+				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+				if config.UserProjectOverride {
+					clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
+				}
+				op, err := clusterNodePoolsUpdateCall.Do()
+				if err != nil {
+					return err
+				}
+
+				// Wait until it's updated
+				return ContainerOperationWait(config, op,
+					nodePoolInfo.project,
+					nodePoolInfo.location,
+					"updating GKE node pool taint_config", userAgent,
+					timeout)
+			}
+
+			if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+				return err
+			}
+
+			log.Printf("[INFO] Updated taint_config for node pool %s", name)
 		}
 
 		if d.HasChange(prefix + "node_config.0.containerd_config") {
-			if _, ok := d.GetOk(prefix + "node_config.0.containerd_config"); ok {
-				req := &container.UpdateNodePoolRequest{
-					Name: name,
-					ContainerdConfig: expandContainerdConfig(d.Get(prefix + "node_config.0.containerd_config")),
-				}
-				if req.ContainerdConfig == nil {
-					req.ContainerdConfig = &container.ContainerdConfig{}
-					req.ForceSendFields = []string{"ContainerdConfig"}
-				}
-				updateF := func() error {
-					clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
-					if config.UserProjectOverride {
-						clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
-					}
-					op, err := clusterNodePoolsUpdateCall.Do()
-					if err != nil {
-						return err
-					}
-
-					// Wait until it's updated
-					return ContainerOperationWait(config, op,
-						nodePoolInfo.project,
-						nodePoolInfo.location,
-						"updating GKE node pool containerd_config", userAgent,
-						timeout)
-				}
-
-				if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
-						return err
-				}
-
-				log.Printf("[INFO] Updated containerd_config for node pool %s", name)
+			req := &container.UpdateNodePoolRequest{
+				Name:             name,
+				ContainerdConfig: expandContainerdConfig(d.Get(prefix + "node_config.0.containerd_config")),
 			}
+			if req.ContainerdConfig == nil {
+				req.ContainerdConfig = &container.ContainerdConfig{}
+				req.ForceSendFields = []string{"ContainerdConfig"}
+			}
+			updateF := func() error {
+				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+				if config.UserProjectOverride {
+					clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
+				}
+				op, err := clusterNodePoolsUpdateCall.Do()
+				if err != nil {
+					return err
+				}
+
+				// Wait until it's updated
+				return ContainerOperationWait(config, op,
+					nodePoolInfo.project,
+					nodePoolInfo.location,
+					"updating GKE node pool containerd_config", userAgent,
+					timeout)
+			}
+
+			if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+				return err
+			}
+
+			log.Printf("[INFO] Updated containerd_config for node pool %s", name)
 		}
 
 		if d.HasChange(prefix + "node_config.0.confidential_nodes") {
-			if _, ok := d.GetOk(prefix + "node_config.0.confidential_nodes"); ok {
-				req := &container.UpdateNodePoolRequest{
-					Name: name,
-					ConfidentialNodes: expandConfidentialNodes(d.Get(prefix + "node_config.0.confidential_nodes")),
-				}
-				if req.ConfidentialNodes == nil {
-					req.ConfidentialNodes = &container.ConfidentialNodes{}
-					req.ForceSendFields = []string{"ConfidentialNodes"}
-				}
-				updateF := func() error {
-					clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
-					if config.UserProjectOverride {
-						clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
-					}
-					op, err := clusterNodePoolsUpdateCall.Do()
-					if err != nil {
-						return err
-					}
-
-					// Wait until it's updated
-					return ContainerOperationWait(config, op,
-						nodePoolInfo.project,
-						nodePoolInfo.location,
-						"updating GKE node pool confidential_nodes", userAgent,
-						timeout)
-				}
-
-				if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
-						return err
-				}
-
-				log.Printf("[INFO] Updated confidential_nodes for node pool %s", name)
+			req := &container.UpdateNodePoolRequest{
+				Name:              name,
+				ConfidentialNodes: expandConfidentialNodes(d.Get(prefix + "node_config.0.confidential_nodes")),
 			}
+			if req.ConfidentialNodes == nil {
+				req.ConfidentialNodes = &container.ConfidentialNodes{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
+				}
+				req.ForceSendFields = []string{"ConfidentialNodes"}
+			}
+			updateF := func() error {
+				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name), req)
+				if config.UserProjectOverride {
+					clusterNodePoolsUpdateCall.Header().Add("X-Goog-User-Project", nodePoolInfo.project)
+				}
+				op, err := clusterNodePoolsUpdateCall.Do()
+				if err != nil {
+					return err
+				}
+
+				// Wait until it's updated
+				return ContainerOperationWait(config, op,
+					nodePoolInfo.project,
+					nodePoolInfo.location,
+					"updating GKE node pool confidential_nodes", userAgent,
+					timeout)
+			}
+
+			if err := retryWhileIncompatibleOperation(timeout, npLockKey, updateF); err != nil {
+				return err
+			}
+
+			log.Printf("[INFO] Updated confidential_nodes for node pool %s", name)
 		}
 
 		if d.HasChange("node_config.0.disk_size_gb") ||
@@ -4256,7 +4344,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 					}
 				}
 				ntaints := &container.NodeTaints{
-					Taints: taints,
+					Taints:          taints,
+					ForceSendFields: []string{"Taints"},
 				}
 				req.Taints = ntaints
 			}
@@ -4264,7 +4353,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			if req.Taints == nil {
 				taints := make([]*container.NodeTaint, 0, 0)
 				ntaints := &container.NodeTaints{
-					Taints: taints,
+					Taints:          taints,
+					ForceSendFields: []string{"Taints"},
 				}
 				req.Taints = ntaints
 			}
@@ -4306,7 +4396,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 					}
 				}
 				ntags := &container.NetworkTags{
-					Tags: tags,
+					Tags:            tags,
+					ForceSendFields: []string{"Tags"},
 				}
 				req.Tags = ntags
 			}
@@ -4316,7 +4407,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			if req.Tags == nil {
 				tags := []string{}
 				ntags := &container.NetworkTags{
-					Tags: tags,
+					Tags:            tags,
+					ForceSendFields: []string{"Tags"},
 				}
 				req.Tags = ntags
 			}
@@ -4358,7 +4450,8 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			if req.ResourceManagerTags == nil {
 				tags := make(map[string]string)
 				rmTags := &container.ResourceManagerTags{
-					Tags: tags,
+					Tags:            tags,
+					ForceSendFields: []string{"Tags"},
 				}
 				req.ResourceManagerTags = rmTags
 			}
@@ -4395,7 +4488,13 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			if v, ok := d.GetOk(prefix + "node_config.0.resource_labels"); ok {
 				resourceLabels := v.(map[string]interface{})
 				req.ResourceLabels = &container.ResourceLabels{
-					Labels: tpgresource.ConvertStringMap(resourceLabels),
+					Labels:          tpgresource.ConvertStringMap(resourceLabels),
+					ForceSendFields: []string{"Labels"},
+				}
+			} else {
+				req.ResourceLabels = &container.ResourceLabels{
+					Labels:          map[string]string{},
+					ForceSendFields: []string{"Labels"},
 				}
 			}
 
@@ -4433,7 +4532,13 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 			if v, ok := d.GetOk(prefix + "node_config.0.labels"); ok {
 				labels := v.(map[string]interface{})
 				req.Labels = &container.NodeLabels{
-					Labels: tpgresource.ConvertStringMap(labels),
+					Labels:          tpgresource.ConvertStringMap(labels),
+					ForceSendFields: []string{"Labels"},
+				}
+			} else {
+				req.Labels = &container.NodeLabels{
+					Labels:          map[string]string{},
+					ForceSendFields: []string{"Labels"},
 				}
 			}
 
@@ -4531,12 +4636,15 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 		}
 
 		if d.HasChange(prefix + "node_config.0.gcfs_config") {
-			gcfsEnabled := bool(d.Get(prefix + "node_config.0.gcfs_config.0.enabled").(bool))
 			req := &container.UpdateNodePoolRequest{
 				NodePoolId: name,
-				GcfsConfig: &container.GcfsConfig{
-					Enabled: gcfsEnabled,
-				},
+				GcfsConfig: expandGcfsConfig(d.Get(prefix + "node_config.0.gcfs_config")),
+			}
+			if req.GcfsConfig == nil {
+				req.GcfsConfig = &container.GcfsConfig{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
+				}
 			}
 			updateF := func() error {
 				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name),req)
@@ -4564,12 +4672,15 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 		}
 
 		if d.HasChange(prefix + "node_config.0.gvnic") {
-			gvnicEnabled := bool(d.Get(prefix + "node_config.0.gvnic.0.enabled").(bool))
 			req := &container.UpdateNodePoolRequest{
 				NodePoolId: name,
-				Gvnic: &container.VirtualNIC{
-					Enabled: gvnicEnabled,
-				},
+				Gvnic:      expandGvnic(d.Get(prefix + "node_config.0.gvnic")),
+			}
+			if req.Gvnic == nil {
+				req.Gvnic = &container.VirtualNIC{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
+				}
 			}
 			updateF := func() error {
 				clusterNodePoolsUpdateCall := NewClient(config, userAgent).Projects.Locations.Clusters.NodePools.Update(nodePoolInfo.fullyQualifiedName(name),req)
@@ -4744,12 +4855,12 @@ func nodePoolNodeConfigUpdate(d *schema.ResourceData, config *transport_tpg.Conf
 		if d.HasChange(prefix + "node_config.0.fast_socket") {
 			req := &container.UpdateNodePoolRequest{
 				NodePoolId: name,
-				FastSocket: &container.FastSocket{},
+				FastSocket: expandFastSocket(d.Get(prefix + "node_config.0.fast_socket")),
 			}
-			if v, ok := d.GetOk(prefix + "node_config.0.fast_socket"); ok {
-				fastSocket := v.([]interface{})[0].(map[string]interface{})
-				req.FastSocket =  &container.FastSocket{
-					Enabled: fastSocket["enabled"].(bool),
+			if req.FastSocket == nil {
+				req.FastSocket = &container.FastSocket{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
 				}
 			}
 			updateF := func() error {
