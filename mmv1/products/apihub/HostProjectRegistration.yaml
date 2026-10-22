@@ -13,6 +13,7 @@
 
 ---
 name: HostProjectRegistration
+exclude_post_create_read: true
 api_variant_patterns:
   - projects/{project}/locations/{location}/hostProjectRegistrations/{hostproject}
 description: |-
