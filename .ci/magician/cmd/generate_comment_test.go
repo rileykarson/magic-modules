@@ -732,6 +732,16 @@ func TestCheckDocumentFrontmatter(t *testing.T) {
 subcategory: Example Subcategory
 ---	
 `,
+		"missingclosing.markdown": `
+---
+subcategory: Example Subcategory
+`,
+		"invalidyaml.markdown": `
+---
+subcategory: [unclosed
+---
+`,
+		"crlf.markdown": "\r\n---\r\nsubcategory: Example Subcategory\r\n--- \t\r\n",
 		"sample.markdown": `
 ---
 subcategory: Example Subcategory
@@ -782,6 +792,16 @@ random: Example Subcategory
 			wantErr:      true,
 		},
 		{
+			name:         "missing closing delimiter",
+			changedFiles: []string{"website/docs/r/missingclosing.markdown"},
+			wantErr:      true,
+		},
+		{
+			name:         "invalid yaml frontmatter",
+			changedFiles: []string{"website/docs/r/invalidyaml.markdown"},
+			wantErr:      true,
+		},
+		{
 			name:         "markdown not exist",
 			changedFiles: []string{"website/docs/d/sample.markdown"},
 			wantErr:      true,
@@ -789,6 +809,11 @@ random: Example Subcategory
 		{
 			name:         "correct format",
 			changedFiles: []string{"website/docs/r/sample.markdown"},
+			wantErr:      false,
+		},
+		{
+			name:         "correct format with CRLF",
+			changedFiles: []string{"website/docs/r/crlf.markdown"},
 			wantErr:      false,
 		},
 	}
