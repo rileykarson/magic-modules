@@ -1,17 +1,129 @@
 package compute
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 
+	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
+	"google.golang.org/api/googleapi"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+func isInstanceUpdateFingerprintError(err error) (bool, string) {
+	if err == nil {
+		return false, ""
+	}
+	if retry, reason := transport_tpg.IsFingerprintError(err); retry {
+		return true, reason
+	}
+	var gerr *googleapi.Error
+	if errors.As(err, &gerr) {
+		if gerr.Code == 412 {
+			return true, "fingerprint mismatch on instance update"
+		}
+		if gerr.Code == 400 && strings.Contains(strings.ToLower(gerr.Message), "fingerprint") {
+			return true, "fingerprint mismatch on instance update"
+		}
+	}
+	if strings.Contains(strings.ToLower(err.Error()), "fingerprint mismatch") {
+		return true, "fingerprint mismatch on instance update"
+	}
+	return false, ""
+}
+
+type instanceUpdateMutation struct {
+	activity string
+	errWrap  string
+	getErr   string
+	waitErr  string
+	apply    func(instMap map[string]interface{}) error
+}
+
+func newNicUpdateMutation(idx int, activity, errWrap string, mutateNic func(freshNic map[string]interface{}) error) instanceUpdateMutation {
+	return instanceUpdateMutation{
+		activity: activity,
+		errWrap:  errWrap,
+		apply: func(instMap map[string]interface{}) error {
+			freshNics, _ := instMap["networkInterfaces"].([]interface{})
+			if idx < len(freshNics) {
+				if freshNic, ok := freshNics[idx].(map[string]interface{}); ok {
+					return mutateNic(freshNic)
+				}
+			}
+			return nil
+		},
+	}
+}
+
+func applyCoalescedInstanceUpdates(d *schema.ResourceData, config *transport_tpg.Config, project, instanceUrl, userAgent string, mutations []instanceUpdateMutation) error {
+	if len(mutations) == 0 {
+		return nil
+	}
+	first := mutations[0]
+	getErrWrap := first.getErr
+	if getErrWrap == "" {
+		getErrWrap = "Error retrieving instance: {{"{{"}}err{{"}}"}}"
+	}
+	putErrWrap := first.errWrap
+	waitErrWrap := first.waitErr
+	activity := first.activity
+	if len(mutations) > 1 {
+		activity = "instance to update"
+	}
+
+	return transport_tpg.Retry(transport_tpg.RetryOptions{
+		RetryFunc: func() error {
+			instMap, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
+				Config:    config,
+				Method:    "GET",
+				Project:   project,
+				RawURL:    instanceUrl,
+				UserAgent: userAgent,
+			})
+			if err != nil {
+				return errwrap.Wrapf(getErrWrap, err)
+			}
+
+			for _, m := range mutations {
+				if err := m.apply(instMap); err != nil {
+					return err
+				}
+			}
+
+			stripInitializeParams(instMap)
+
+			res, err := transport_tpg.SendRequest(transport_tpg.SendRequestOptions{
+				Config:    config,
+				Method:    "PUT",
+				Project:   project,
+				RawURL:    instanceUrl,
+				UserAgent: userAgent,
+				Body:      instMap,
+			})
+			if err != nil {
+				if putErrWrap != "" {
+					return errwrap.Wrapf(putErrWrap, err)
+				}
+				return err
+			}
+
+			err = ComputeOperationWaitTime(config, res, project, activity, userAgent, d.Timeout(schema.TimeoutUpdate))
+			if err != nil && waitErrWrap != "" {
+				return errwrap.Wrapf(waitErrWrap, err)
+			}
+			return err
+		},
+		ErrorRetryPredicates: []transport_tpg.RetryErrorPredicateFunc{isInstanceUpdateFingerprintError},
+	})
+}
 
 func instanceSchedulingNodeAffinitiesElemSchema() *schema.Resource {
 	return &schema.Resource{
