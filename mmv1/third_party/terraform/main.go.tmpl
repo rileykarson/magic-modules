@@ -24,8 +24,8 @@ func main() {
 	primary := provider.Provider()
 
 	providers := []func() tfprotov5.ProviderServer{
-		primary.GRPCProvider, // sdk provider
-		providerserver.NewProtocol5(fwprovider.New(primary)), // framework provider
+		provider.NewEmbeddedSDKProviderServer(primary.GRPCProvider), // sdk provider
+		provider.NewEmbeddedFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(primary))), // framework provider
 	}
 
 	// use the muxer
