@@ -21,6 +21,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,6 +36,147 @@ func TestProvider(t *testing.T) {
 
 func TestProvider_impl(t *testing.T) {
 	var _ *schema.Provider = provider.Provider()
+}
+
+func TestProvider_PrepareProviderConfig_ValidateUserConfig(t *testing.T) {
+	ctx := context.Background()
+
+	newProviderWithSchemaFuncResource := func(schemaFuncCalls *int, useValidateUserConfig bool) *schema.Provider {
+		p := provider.Provider()
+		if !useValidateUserConfig {
+			p.ValidateFunc = nil
+		}
+		p.ResourcesMap["google_test_schema_func_resource"] = &schema.Resource{
+			SchemaFunc: func() map[string]*schema.Schema {
+				*schemaFuncCalls++
+				return map[string]*schema.Schema{
+					"name": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+				}
+			},
+		}
+		return p
+	}
+
+	schemaResp, err := provider.Provider().GRPCProvider().GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
+	if err != nil {
+		t.Fatalf("GetProviderSchema failed: %v", err)
+	}
+	providerType, ok := schemaResp.Provider.ValueType().(tftypes.Object)
+	if !ok {
+		t.Fatalf("provider schema type is %T, want tftypes.Object", schemaResp.Provider.ValueType())
+	}
+
+	buildConfig := func(attrs map[string]tftypes.Value) *tfprotov5.DynamicValue {
+		values := make(map[string]tftypes.Value, len(providerType.AttributeTypes))
+		for name, attrType := range providerType.AttributeTypes {
+			if v, exists := attrs[name]; exists {
+				values[name] = v
+			} else {
+				values[name] = tftypes.NewValue(attrType, nil)
+			}
+		}
+		dv, err := tfprotov5.NewDynamicValue(providerType, tftypes.NewValue(providerType, values))
+		if err != nil {
+			t.Fatalf("NewDynamicValue failed: %v", err)
+		}
+		return &dv
+	}
+
+	cases := []struct {
+		name    string
+		attrs   map[string]tftypes.Value
+		wantErr bool
+	}{
+		{
+			name:    "empty config applies defaults",
+			attrs:   map[string]tftypes.Value{},
+			wantErr: false,
+		},
+		{
+			name: "valid project config",
+			attrs: map[string]tftypes.Value{
+				"project": tftypes.NewValue(tftypes.String, "my-project"),
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid credentials JSON",
+			attrs: map[string]tftypes.Value{
+				"credentials": tftypes.NewValue(tftypes.String, "not-valid-json"),
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid compute_custom_endpoint",
+			attrs: map[string]tftypes.Value{
+				"compute_custom_endpoint": tftypes.NewValue(tftypes.String, "https://example.com/no-trailing-slash"),
+			},
+			wantErr: true,
+		},
+		{
+			name: "conflicting access_token and credentials",
+			attrs: map[string]tftypes.Value{
+				"access_token": tftypes.NewValue(tftypes.String, "my-token"),
+				"credentials":  tftypes.NewValue(tftypes.String, `{"type":"service_account"}`),
+			},
+			wantErr: true,
+		},
+	}
+
+	diagKey := func(d *tfprotov5.Diagnostic) string {
+		if d == nil {
+			return ""
+		}
+		attr := ""
+		if d.Attribute != nil {
+			attr = d.Attribute.String()
+		}
+		return fmt.Sprintf("%d|%s|%s|%s", d.Severity, d.Summary, d.Detail, attr)
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var userConfigCalls, fullValidateCalls int
+			userP := newProviderWithSchemaFuncResource(&userConfigCalls, true)
+			fullP := newProviderWithSchemaFuncResource(&fullValidateCalls, false)
+
+			req := &tfprotov5.PrepareProviderConfigRequest{
+				Config: buildConfig(tc.attrs),
+			}
+
+			gotResp, err := userP.GRPCProvider().PrepareProviderConfig(ctx, req)
+			if err != nil {
+				t.Fatalf("PrepareProviderConfig (ValidateUserConfig) failed: %v", err)
+			}
+			if userConfigCalls != 0 {
+				t.Fatalf("expected SchemaFunc to be called 0 times during PrepareProviderConfig, got %d", userConfigCalls)
+			}
+
+			wantResp, err := fullP.GRPCProvider().PrepareProviderConfig(ctx, req)
+			if err != nil {
+				t.Fatalf("PrepareProviderConfig (Validate) failed: %v", err)
+			}
+			if fullValidateCalls == 0 {
+				t.Fatalf("expected stock Validate to invoke SchemaFunc, got 0 calls")
+			}
+
+			if tc.wantErr && len(gotResp.Diagnostics) == 0 {
+				t.Fatalf("expected error diagnostics, got none")
+			}
+			if !tc.wantErr && len(gotResp.Diagnostics) > 0 {
+				t.Fatalf("unexpected diagnostics: %v", gotResp.Diagnostics)
+			}
+
+			if diff := cmp.Diff(wantResp, gotResp, cmpopts.SortSlices(func(a, b *tfprotov5.Diagnostic) bool {
+				return diagKey(a) < diagKey(b)
+			})); diff != "" {
+				t.Fatalf("PrepareProviderConfig mismatch (-Validate +ValidateUserConfig):\n%s", diff)
+			}
+		})
+	}
 }
 
 // TestEmbeddedProviderSchema_MatchesLiveSchema verifies that the embedded
