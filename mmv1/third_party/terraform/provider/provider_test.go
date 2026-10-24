@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"reflect"
 	"regexp"
 	"strings"
 	"testing"
@@ -19,6 +18,7 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
@@ -77,12 +77,9 @@ func TestEmbeddedProviderSchema_MatchesLiveSchema(t *testing.T) {
 	if err != nil {
 		t.Fatalf("embedded GetProviderSchema failed: %v", err)
 	}
-	if diff := cmp.Diff(wantSchema, gotSchema); diff != "" {
+	if diff := cmp.Diff(wantSchema, gotSchema, cmpopts.EquateEmpty()); diff != "" {
 		t.Fatalf("Embedded provider schema (provider_schema.gz) has diverged from live provider schemas (-want +got):\n%s\n"+
 			"To fix this, run 'go generate ./google/provider/...' (or 'go generate ./google-beta/provider/...' / 'make provider') and commit the updated provider_schema.gz.", diff)
-	}
-	if !reflect.DeepEqual(gotSchema, wantSchema) {
-		t.Fatal("Embedded GetProviderSchema response is not DeepEqual to live GetProviderSchema response.")
 	}
 
 	wantIdentity, err := stockMux.ProviderServer().GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{})
@@ -93,12 +90,9 @@ func TestEmbeddedProviderSchema_MatchesLiveSchema(t *testing.T) {
 	if err != nil {
 		t.Fatalf("embedded GetResourceIdentitySchemas failed: %v", err)
 	}
-	if diff := cmp.Diff(wantIdentity, gotIdentity); diff != "" {
+	if diff := cmp.Diff(wantIdentity, gotIdentity, cmpopts.EquateEmpty()); diff != "" {
 		t.Fatalf("Embedded resource identity schemas (provider_schema.gz) have diverged from live provider identity schemas (-want +got):\n%s\n"+
 			"To fix this, run 'go generate ./google/provider/...' (or 'go generate ./google-beta/provider/...' / 'make provider') and commit the updated provider_schema.gz.", diff)
-	}
-	if !reflect.DeepEqual(gotIdentity, wantIdentity) {
-		t.Fatal("Embedded GetResourceIdentitySchemas response is not DeepEqual to live GetResourceIdentitySchemas response.")
 	}
 
 	t.Run("GOOGLE_TERRAFORM_LIVE_SCHEMA fallback", func(t *testing.T) {
@@ -107,15 +101,15 @@ func TestEmbeddedProviderSchema_MatchesLiveSchema(t *testing.T) {
 		if err != nil {
 			t.Fatalf("GetProviderSchema with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 failed: %v", err)
 		}
-		if !reflect.DeepEqual(liveSchema, wantSchema) {
-			t.Fatal("GetProviderSchema with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 differs from stock mux")
+		if diff := cmp.Diff(wantSchema, liveSchema, cmpopts.EquateEmpty()); diff != "" {
+			t.Fatalf("GetProviderSchema with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 differs from stock mux:\n%s", diff)
 		}
 		liveIdentity, err := embeddedSrv.GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{})
 		if err != nil {
 			t.Fatalf("GetResourceIdentitySchemas with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 failed: %v", err)
 		}
-		if !reflect.DeepEqual(liveIdentity, wantIdentity) {
-			t.Fatal("GetResourceIdentitySchemas with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 differs from stock mux")
+		if diff := cmp.Diff(wantIdentity, liveIdentity, cmpopts.EquateEmpty()); diff != "" {
+			t.Fatalf("GetResourceIdentitySchemas with GOOGLE_TERRAFORM_LIVE_SCHEMA=1 differs from stock mux:\n%s", diff)
 		}
 	})
 }

@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"math/big"
-	"reflect"
+	"encoding/gob"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 )
@@ -21,6 +21,14 @@ func gzipRaw(b []byte) []byte {
 	return buf.Bytes()
 }
 
+func encodeGobPayload(p gobPayload, extra ...byte) []byte {
+	var raw bytes.Buffer
+	raw.WriteString(schemaCodecMagic)
+	_ = gob.NewEncoder(&raw).Encode(&p)
+	raw.Write(extra)
+	return gzipRaw(raw.Bytes())
+}
+
 func FuzzDecodeEmbeddedSchemas(f *testing.F) {
 	flipped := bytes.Clone(embeddedSchemaBlob)
 	if len(flipped) > 0 {
@@ -29,9 +37,8 @@ func FuzzDecodeEmbeddedSchemas(f *testing.F) {
 	for _, s := range [][]byte{
 		nil, []byte("not-gzip"), embeddedSchemaBlob[:min(len(embeddedSchemaBlob), 64)], flipped,
 		gzipRaw([]byte("BADMAGIC")), gzipRaw([]byte(schemaCodecMagic)),
-		gzipRaw(append([]byte(schemaCodecMagic), 1, 1, 0, 0x80, 0x80, 0x80, 0x80, 0x08)),
-		gzipRaw(append([]byte(schemaCodecMagic), bytes.Repeat([]byte{1, 5}, 70)...)),
-		gzipRaw(append([]byte(schemaCodecMagic), 1, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 4, 5, 0, 4, 0x91, 0x01, 0, 0)),
+		gzipRaw(append([]byte(schemaCodecMagic), "corrupt-gob"...)),
+		encodeGobPayload(gobPayload{HasProvider: true, Types: [][]byte{[]byte("bad-json")}}),
 	} {
 		f.Add(s)
 	}
@@ -52,7 +59,7 @@ func FuzzSchemaCodecRoundTrip(f *testing.F) {
 		if err != nil {
 			t.Fatalf("DecodeEmbeddedSchemas: %v", err)
 		}
-		if diff := cmp.Diff(orig, got); diff != "" || !reflect.DeepEqual(orig, got) {
+		if diff := cmp.Diff(orig, got, cmpopts.EquateEmpty()); diff != "" {
 			t.Fatalf("round-trip mismatch:\n%s", diff)
 		}
 	})
@@ -116,33 +123,16 @@ func buildFuzzSchemas(data []byte) *EmbeddedSchemas {
 		}
 		return map[string]*tfprotov5.Schema{"s_" + str(): genSchema()}
 	}
-	objT := tftypes.Object{AttributeTypes: map[string]tftypes.Type{"l": tftypes.List{ElementType: tftypes.String}}}
-	objV := tftypes.NewValue(objT, map[string]tftypes.Value{"l": tftypes.NewValue(tftypes.List{ElementType: tftypes.String}, []tftypes.Value{tftypes.NewValue(tftypes.String, str())})})
-	ap := tftypes.NewAttributePathWithSteps([]tftypes.AttributePathStep{
-		tftypes.AttributeName(str()), tftypes.ElementKeyString(str()), tftypes.ElementKeyInt(int(next()) - 64),
-		tftypes.ElementKeyValue(tftypes.NewValue(tftypes.String, str())),
-		tftypes.ElementKeyValue(tftypes.NewValue(tftypes.Number, big.NewFloat(float64(next()%2)))),
-		tftypes.ElementKeyValue(tftypes.NewValue(tftypes.Bool, bit())),
-		tftypes.ElementKeyValue(tftypes.NewValue(tftypes.String, nil)),
-		tftypes.ElementKeyValue(tftypes.NewValue(tftypes.String, tftypes.UnknownValue)),
-		tftypes.ElementKeyValue(objV),
-	})
-	if bit() {
-		ap = tftypes.NewAttributePath()
-	}
-	diags := []*tfprotov5.Diagnostic{{Severity: tfprotov5.DiagnosticSeverity(next() % 3), Summary: str(), Detail: str(), Attribute: ap}}
 	return &EmbeddedSchemas{
 		ProviderSchema: &tfprotov5.GetProviderSchemaResponse{
 			Provider: genSchema(), ProviderMeta: genSchema(),
 			ResourceSchemas: genMap(), DataSourceSchemas: genMap(), EphemeralResourceSchemas: genMap(), ListResourceSchemas: genMap(),
 			Functions:          map[string]*tfprotov5.Function{"fn": {Parameters: []*tfprotov5.FunctionParameter{{Name: str(), Type: genType(0), AllowNullValue: bit(), AllowUnknownValues: bit(), Description: str(), DescriptionKind: tfprotov5.StringKind(next() % 2)}}, VariadicParameter: &tfprotov5.FunctionParameter{Name: str(), Type: genType(0)}, Return: &tfprotov5.FunctionReturn{Type: genType(0)}, Summary: str(), Description: str(), DescriptionKind: tfprotov5.StringKind(next() % 2), DeprecationMessage: str()}},
 			ActionSchemas:      map[string]*tfprotov5.ActionSchema{"act": {Schema: genSchema()}},
-			Diagnostics:        diags,
 			ServerCapabilities: &tfprotov5.ServerCapabilities{PlanDestroy: bit(), GetProviderSchemaOptional: bit(), MoveResourceState: bit(), GenerateResourceConfig: bit()},
 		},
 		ResourceIdentitySchemas: &tfprotov5.GetResourceIdentitySchemasResponse{
 			IdentitySchemas: map[string]*tfprotov5.ResourceIdentitySchema{"r": {Version: int64(next() % 3), IdentityAttributes: []*tfprotov5.ResourceIdentitySchemaAttribute{{Name: str(), Type: genType(0), RequiredForImport: bit(), OptionalForImport: bit(), Description: str()}}}},
-			Diagnostics:     diags,
 		},
 	}
 }
@@ -151,8 +141,14 @@ func TestEmbeddedSchemas_MutationsAndBoundaries(t *testing.T) {
 	base := buildFuzzSchemas([]byte{1, 2, 3, 4})
 	base.ProviderSchema.ResourceSchemas = map[string]*tfprotov5.Schema{"r": {Version: 1, Block: &tfprotov5.SchemaBlock{Attributes: []*tfprotov5.SchemaAttribute{{Name: "a", Type: tftypes.String, Required: true}}, BlockTypes: []*tfprotov5.SchemaNestedBlock{{TypeName: "b", Nesting: tfprotov5.SchemaNestedBlockNestingModeSingle}}}}}
 	base.ProviderSchema.ListResourceSchemas = map[string]*tfprotov5.Schema{"lr": {Version: 1}}
-	blob, _ := EncodeEmbeddedSchemas(base)
-	decoded, _ := DecodeEmbeddedSchemas(blob)
+	blob, err := EncodeEmbeddedSchemas(base)
+	if err != nil {
+		t.Fatalf("EncodeEmbeddedSchemas: %v", err)
+	}
+	decoded, err := DecodeEmbeddedSchemas(blob)
+	if err != nil {
+		t.Fatalf("DecodeEmbeddedSchemas: %v", err)
+	}
 	for i, mut := range []func(*EmbeddedSchemas){
 		func(s *EmbeddedSchemas) { s.ProviderSchema.ResourceSchemas["new"] = &tfprotov5.Schema{Version: 1} },
 		func(s *EmbeddedSchemas) { delete(s.ProviderSchema.ResourceSchemas, "r") },
@@ -172,14 +168,27 @@ func TestEmbeddedSchemas_MutationsAndBoundaries(t *testing.T) {
 		func(s *EmbeddedSchemas) { s.ProviderSchema.ActionSchemas["act"].Schema.Version = 9 },
 	} {
 		clone, _ := DecodeEmbeddedSchemas(blob)
-		if mut(clone); cmp.Diff(decoded, clone) == "" {
+		if mut(clone); cmp.Diff(decoded, clone, cmpopts.EquateEmpty()) == "" {
 			t.Fatalf("mutant %d survived cmp.Diff", i)
 		}
 	}
 	if _, err := EncodeEmbeddedSchemas(nil); err == nil {
 		t.Fatal("expected error on nil EncodeEmbeddedSchemas")
 	}
-	for _, b := range [][]byte{nil, []byte("bad"), gzipRaw([]byte("BADMAGIC")), gzipRaw(append([]byte(schemaCodecMagic), 0, 0, 1)), gzipRaw(append([]byte(schemaCodecMagic), 2, 0)), gzipRaw(append([]byte(schemaCodecMagic), 1, 0, 0, 4, 2, 'a', 0, 2, 'a', 0))} {
+	if _, err := EncodeEmbeddedSchemas(&EmbeddedSchemas{ProviderSchema: &tfprotov5.GetProviderSchemaResponse{Diagnostics: []*tfprotov5.Diagnostic{{Summary: "err"}}}}); err == nil {
+		t.Fatal("expected error on EncodeEmbeddedSchemas with diagnostics")
+	}
+	oneAttr := &tfprotov5.Schema{Block: &tfprotov5.SchemaBlock{Attributes: []*tfprotov5.SchemaAttribute{{Name: "a"}}}}
+	for _, b := range [][]byte{
+		nil,
+		[]byte("bad"),
+		gzipRaw([]byte("BADMAGIC")),
+		gzipRaw([]byte(schemaCodecMagic)),
+		encodeGobPayload(gobPayload{}, 0xff),
+		encodeGobPayload(gobPayload{HasProvider: true, Provider: oneAttr}),
+		encodeGobPayload(gobPayload{Types: [][]byte{[]byte(`"string"`)}}),
+		encodeGobPayload(gobPayload{HasProvider: true, Provider: oneAttr, Types: [][]byte{[]byte("bad-json")}}),
+	} {
 		if _, err := DecodeEmbeddedSchemas(b); err == nil {
 			t.Fatalf("expected DecodeEmbeddedSchemas error for %x", b)
 		}

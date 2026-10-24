@@ -5,8 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"reflect"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/hashicorp/terraform-provider-google/google/provider"
 )
 
@@ -31,8 +32,11 @@ func main() {
 		fatalf("encoding provider schemas: %v", err)
 	}
 	decoded, err := provider.DecodeEmbeddedSchemas(encoded)
-	if err != nil || !reflect.DeepEqual(decoded, schemas) {
-		fatalf("round-trip verification failed: %v", err)
+	if err != nil {
+		fatalf("decoding provider schemas: %v", err)
+	}
+	if diff := cmp.Diff(schemas, decoded, cmpopts.EquateEmpty()); diff != "" {
+		fatalf("round-trip verification failed (-want +got):\n%s", diff)
 	}
 	tmpPath := *outputPath + ".tmp"
 	if err := os.WriteFile(tmpPath, encoded, 0644); err != nil {
