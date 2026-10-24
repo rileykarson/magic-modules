@@ -24,8 +24,8 @@ func main() {
 	primary := provider.Provider()
 
 	providers := []func() tfprotov5.ProviderServer{
-		provider.NewEmbeddedSDKProviderServer(primary.GRPCProvider), // sdk provider
-		provider.NewEmbeddedFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(primary))), // framework provider
+		primary.GRPCProvider, // sdk provider
+		providerserver.NewProtocol5(fwprovider.New(primary)), // framework provider
 	}
 
 	// use the muxer
@@ -42,7 +42,7 @@ func main() {
 
 	err = tf5server.Serve(
 		"registry.terraform.io/hashicorp/google{{- if ne $.TargetVersionName "ga" -}}-{{$.TargetVersionName}}{{- end }}",
-		muxServer.ProviderServer,
+		provider.NewEmbeddedProviderServer(muxServer.ProviderServer),
 		serveOpts...,
 	)
 
