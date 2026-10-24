@@ -148,79 +148,14 @@ func (s *fastValidateProviderServer) ConfigureProvider(ctx context.Context, req 
 
 func (s *fastValidateProviderServer) GetProviderSchema(ctx context.Context, req *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
 	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.SDKProviderSchema != nil {
-		resp := cloneProviderSchemaResponse(embedded.SDKProviderSchema)
-		if len(s.provider.ResourcesMap) != len(resp.ResourceSchemas) {
-			for k := range resp.ResourceSchemas {
-				if _, ok := s.provider.ResourcesMap[k]; !ok {
-					delete(resp.ResourceSchemas, k)
-				}
-			}
-		}
-		for k := range s.provider.ResourcesMap {
-			if _, ok := resp.ResourceSchemas[k]; !ok {
-				singleResp, err := s.serverForResource(k).GetProviderSchema(ctx, req)
-				if err != nil {
-					return nil, err
-				}
-				if len(singleResp.Diagnostics) > 0 {
-					resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
-				}
-				if sch, ok := singleResp.ResourceSchemas[k]; ok {
-					resp.ResourceSchemas[k] = sch
-				}
-			}
-		}
-		if len(s.provider.DataSourcesMap) != len(resp.DataSourceSchemas) {
-			for k := range resp.DataSourceSchemas {
-				if _, ok := s.provider.DataSourcesMap[k]; !ok {
-					delete(resp.DataSourceSchemas, k)
-				}
-			}
-		}
-		for k := range s.provider.DataSourcesMap {
-			if _, ok := resp.DataSourceSchemas[k]; !ok {
-				singleResp, err := s.serverForDataSource(k).GetProviderSchema(ctx, req)
-				if err != nil {
-					return nil, err
-				}
-				if len(singleResp.Diagnostics) > 0 {
-					resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
-				}
-				if sch, ok := singleResp.DataSourceSchemas[k]; ok {
-					resp.DataSourceSchemas[k] = sch
-				}
-			}
-		}
-		return resp, nil
+		return cloneProviderSchemaResponse(embedded.SDKProviderSchema), nil
 	}
 	return s.allSchemasServer().GetProviderSchema(ctx, req)
 }
 
 func (s *fastValidateProviderServer) GetResourceIdentitySchemas(ctx context.Context, req *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
 	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.SDKResourceIdentitySchemas != nil {
-		resp := cloneResourceIdentitySchemasResponse(embedded.SDKResourceIdentitySchemas)
-		for k := range resp.IdentitySchemas {
-			if _, ok := s.provider.ResourcesMap[k]; !ok {
-				delete(resp.IdentitySchemas, k)
-			}
-		}
-		if embedded.SDKProviderSchema != nil {
-			for k := range s.provider.ResourcesMap {
-				if _, ok := embedded.SDKProviderSchema.ResourceSchemas[k]; !ok {
-					singleResp, err := s.serverForResource(k).GetResourceIdentitySchemas(ctx, req)
-					if err != nil {
-						return nil, err
-					}
-					if len(singleResp.Diagnostics) > 0 {
-						resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
-					}
-					if idSch, ok := singleResp.IdentitySchemas[k]; ok {
-						resp.IdentitySchemas[k] = idSch
-					}
-				}
-			}
-		}
-		return resp, nil
+		return cloneResourceIdentitySchemasResponse(embedded.SDKResourceIdentitySchemas), nil
 	}
 	return s.allSchemasServer().GetResourceIdentitySchemas(ctx, req)
 }
