@@ -2,13 +2,14 @@ package provider
 
 import (
 	"context"
-	"maps"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	sdkterraform "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/hashicorp/terraform-provider-google/google/registry"
 )
 
@@ -21,7 +22,6 @@ type fastValidateProviderServer struct {
 	*schema.GRPCProviderServer
 
 	provider         *schema.Provider
-	validate         *schema.GRPCProviderServer
 	mu               sync.RWMutex
 	resMaps          sync.Map
 	dsMaps           sync.Map
@@ -32,56 +32,42 @@ type fastValidateProviderServer struct {
 }
 
 // NewFastValidateProviderServer returns a tfprotov5.ProviderServer for p that
-// answers PrepareProviderConfig without walking every resource schema, and
-// lazily resolves per-resource schemas when p was created via LazyProvider().
+// answers PrepareProviderConfig via p.ValidateUserConfig without walking every
+// resource schema, and lazily resolves per-resource schemas when p was created
+// via LazyProvider().
 func NewFastValidateProviderServer(p *schema.Provider) tfprotov5.ProviderServer {
 	srv := &fastValidateProviderServer{
 		GRPCProviderServer: schema.NewGRPCProviderServer(p),
 		provider:           p,
 	}
 
-	validateSchema := maps.Clone(p.Schema)
-	checkDuration := func(v interface{}, _ string) ([]string, []error) {
-		s, ok := v.(string)
-		if !ok || s == "" {
-			srv.fwValidateNeeded.Store(true)
-			return nil, nil
+	p.ValidateFunc = func(c *sdkterraform.ResourceConfig) diag.Diagnostics {
+		for _, field := range []string{"request_timeout", "poll_interval"} {
+			if v, ok := c.Get(field); ok {
+				s, isStr := v.(string)
+				if !isStr || s == "" {
+					srv.fwValidateNeeded.Store(true)
+				} else if dur, err := time.ParseDuration(s); err != nil || dur < 0 {
+					srv.fwValidateNeeded.Store(true)
+				}
+			}
 		}
-		dur, err := time.ParseDuration(s)
-		if err != nil || dur < 0 {
-			srv.fwValidateNeeded.Store(true)
-		}
-		return nil, nil
+		return p.ValidateUserConfig(c)
 	}
-	for _, field := range []string{"request_timeout", "poll_interval"} {
-		if orig, ok := validateSchema[field]; ok && orig != nil && orig.ValidateFunc == nil {
-			cp := *orig
-			cp.ValidateFunc = checkDuration
-			validateSchema[field] = &cp
-		}
-	}
-
-	configOnly := &schema.Provider{
-		Schema:             validateSchema,
-		ProviderMetaSchema: p.ProviderMetaSchema,
-	}
-	srv.validate = schema.NewGRPCProviderServer(configOnly)
 	return srv
 }
 
 func (s *fastValidateProviderServer) serverForResource(typeName string) *schema.GRPCProviderServer {
 	if typeName == "" {
-		return s.validate
+		return s.GRPCProviderServer
 	}
 	res, ok := s.provider.ResourcesMap[typeName]
-	if !ok {
-		return s.validate
+	if !ok || res != nil {
+		return s.GRPCProviderServer
 	}
 
 	var m map[string]*schema.Resource
-	if res != nil {
-		m = map[string]*schema.Resource{typeName: res}
-	} else if cached, ok := s.resMaps.Load(typeName); ok {
+	if cached, ok := s.resMaps.Load(typeName); ok {
 		m = cached.(map[string]*schema.Resource)
 	} else {
 		built := registry.Resource(typeName)
@@ -100,17 +86,15 @@ func (s *fastValidateProviderServer) serverForResource(typeName string) *schema.
 
 func (s *fastValidateProviderServer) serverForDataSource(typeName string) *schema.GRPCProviderServer {
 	if typeName == "" {
-		return s.validate
+		return s.GRPCProviderServer
 	}
 	ds, ok := s.provider.DataSourcesMap[typeName]
-	if !ok {
-		return s.validate
+	if !ok || ds != nil {
+		return s.GRPCProviderServer
 	}
 
 	var m map[string]*schema.Resource
-	if ds != nil {
-		m = map[string]*schema.Resource{typeName: ds}
-	} else if cached, ok := s.dsMaps.Load(typeName); ok {
+	if cached, ok := s.dsMaps.Load(typeName); ok {
 		m = cached.(map[string]*schema.Resource)
 	} else {
 		built := registry.DataSource(typeName)
@@ -162,7 +146,7 @@ func (s *fastValidateProviderServer) GetResourceIdentitySchemas(ctx context.Cont
 
 func (s *fastValidateProviderServer) PrepareProviderConfig(ctx context.Context, req *tfprotov5.PrepareProviderConfigRequest) (*tfprotov5.PrepareProviderConfigResponse, error) {
 	s.fwValidateNeeded.Store(false)
-	resp, err := s.validate.PrepareProviderConfig(ctx, req)
+	resp, err := s.GRPCProviderServer.PrepareProviderConfig(ctx, req)
 	if err == nil && resp != nil && len(resp.Diagnostics) == 0 && !s.fwValidateNeeded.Load() && req != nil && req.Config != nil {
 		lastValidatedConfigMu.Lock()
 		lastValidatedConfig = req.Config

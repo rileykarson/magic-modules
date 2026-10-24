@@ -253,6 +253,7 @@ func newProvider(dataSourcesMap, resourcesMap map[string]*schema.Resource) *sche
 	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		return ProviderConfigure(ctx, d, provider)
 	}
+	provider.ValidateFunc = provider.ValidateUserConfig
 	return provider
 }
 

@@ -43,6 +43,23 @@ func TestLazyProvider_resolvesOnDemand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("lazy fastServer GetProviderSchema failed: %s", err)
 	}
+	providerObjType, ok := schemaResp.Provider.ValueType().(tftypes.Object)
+	if !ok {
+		t.Fatalf("provider ValueType is %T, want tftypes.Object", schemaResp.Provider.ValueType())
+	}
+	prepResp, err := fastServer.PrepareProviderConfig(ctx, &tfprotov5.PrepareProviderConfigRequest{
+		Config: providerConfigValue(t, providerObjType, map[string]tftypes.Value{"project": tftypes.NewValue(tftypes.String, "my-project")}),
+	})
+	if err != nil {
+		t.Fatalf("lazy fastServer PrepareProviderConfig failed: %s", err)
+	}
+	if len(prepResp.Diagnostics) != 0 {
+		t.Errorf("unexpected diagnostics from PrepareProviderConfig: %v", prepResp.Diagnostics)
+	}
+	if lazyP.ResourcesMap["google_compute_network"] != nil {
+		t.Fatal("expected google_compute_network entry in LazyProvider().ResourcesMap to remain nil after PrepareProviderConfig")
+	}
+
 	netSchema, ok := schemaResp.ResourceSchemas["google_compute_network"]
 	if !ok {
 		t.Fatal("expected google_compute_network schema in GetProviderSchema response")
