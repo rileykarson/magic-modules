@@ -83,6 +83,15 @@ mmv1: mm_binary
 		else \
 			$(MM_BINARY) --output $(OUTPUT_PATH) --version $(VERSION) $(mmv1_args); \
 		fi
+	@if [ -z "$(RESOURCE)" ] || [ "$(SHOULD_SKIP_CLEAN)" = "true" ]; then \
+		echo "Generating embedded provider schema in $(OUTPUT_PATH)"; \
+		cd $(OUTPUT_PATH) && \
+		if [ "$(VERSION)" = "ga" ]; then \
+			go generate ./google/provider/...; \
+		else \
+			go generate ./google-$(VERSION)/provider/...; \
+		fi; \
+	fi
 
 clean-provider: check_safe_build
 	@if [ "$(SHOULD_SKIP_CLEAN)" = "true" ]; then \

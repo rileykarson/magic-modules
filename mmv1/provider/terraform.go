@@ -657,6 +657,11 @@ func (t Terraform) copyFile(outputFolder, target, source string, generateCode bo
 	if err != nil {
 		log.Fatalf("Cannot read source file %s while copying: %s", source, err)
 	}
+	if len(sourceByte) == 0 && strings.HasSuffix(target, "/provider/provider_schema.gz") {
+		if info, err := os.Stat(targetFile); err == nil && info.Size() > 0 {
+			return
+		}
+	}
 
 	var permission fs.FileMode
 	if strings.HasSuffix(targetDir, "scripts") {
@@ -761,6 +766,7 @@ func (t Terraform) getCommonCompileFiles(versionName string) map[string]string {
 	// Case 3: When compile a single file, save the target as key and source as value to the map singleFiles
 	singleFiles := map[string]string{
 		"main.go":                       "third_party/terraform/main.go.tmpl",
+		"GNUmakefile":                   "third_party/terraform/GNUmakefile.tmpl",
 		".goreleaser.yml":               "third_party/terraform/.goreleaser.yml.tmpl",
 		".release/release-metadata.hcl": "third_party/terraform/release-metadata.hcl.tmpl",
 		".copywrite.hcl":                "third_party/terraform/.copywrite.hcl.tmpl",

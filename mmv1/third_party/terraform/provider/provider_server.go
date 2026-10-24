@@ -71,15 +71,17 @@ func NewFastValidateProviderServer(p *schema.Provider) tfprotov5.ProviderServer 
 
 func (s *fastValidateProviderServer) serverForResource(typeName string) *schema.GRPCProviderServer {
 	if typeName == "" {
-		return s.GRPCProviderServer
+		return s.validate
 	}
 	res, ok := s.provider.ResourcesMap[typeName]
-	if !ok || res != nil {
-		return s.GRPCProviderServer
+	if !ok {
+		return s.validate
 	}
 
 	var m map[string]*schema.Resource
-	if cached, ok := s.resMaps.Load(typeName); ok {
+	if res != nil {
+		m = map[string]*schema.Resource{typeName: res}
+	} else if cached, ok := s.resMaps.Load(typeName); ok {
 		m = cached.(map[string]*schema.Resource)
 	} else {
 		built := registry.Resource(typeName)
@@ -92,20 +94,23 @@ func (s *fastValidateProviderServer) serverForResource(typeName string) *schema.
 	pCopy := *s.provider
 	s.mu.RUnlock()
 	pCopy.ResourcesMap = m
+	pCopy.DataSourcesMap = nil
 	return schema.NewGRPCProviderServer(&pCopy)
 }
 
 func (s *fastValidateProviderServer) serverForDataSource(typeName string) *schema.GRPCProviderServer {
 	if typeName == "" {
-		return s.GRPCProviderServer
+		return s.validate
 	}
 	ds, ok := s.provider.DataSourcesMap[typeName]
-	if !ok || ds != nil {
-		return s.GRPCProviderServer
+	if !ok {
+		return s.validate
 	}
 
 	var m map[string]*schema.Resource
-	if cached, ok := s.dsMaps.Load(typeName); ok {
+	if ds != nil {
+		m = map[string]*schema.Resource{typeName: ds}
+	} else if cached, ok := s.dsMaps.Load(typeName); ok {
 		m = cached.(map[string]*schema.Resource)
 	} else {
 		built := registry.DataSource(typeName)
@@ -117,6 +122,7 @@ func (s *fastValidateProviderServer) serverForDataSource(typeName string) *schem
 	s.mu.RLock()
 	pCopy := *s.provider
 	s.mu.RUnlock()
+	pCopy.ResourcesMap = nil
 	pCopy.DataSourcesMap = m
 	return schema.NewGRPCProviderServer(&pCopy)
 }
@@ -141,10 +147,81 @@ func (s *fastValidateProviderServer) ConfigureProvider(ctx context.Context, req 
 }
 
 func (s *fastValidateProviderServer) GetProviderSchema(ctx context.Context, req *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
+	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.SDKProviderSchema != nil {
+		resp := cloneProviderSchemaResponse(embedded.SDKProviderSchema)
+		if len(s.provider.ResourcesMap) != len(resp.ResourceSchemas) {
+			for k := range resp.ResourceSchemas {
+				if _, ok := s.provider.ResourcesMap[k]; !ok {
+					delete(resp.ResourceSchemas, k)
+				}
+			}
+		}
+		for k := range s.provider.ResourcesMap {
+			if _, ok := resp.ResourceSchemas[k]; !ok {
+				singleResp, err := s.serverForResource(k).GetProviderSchema(ctx, req)
+				if err != nil {
+					return nil, err
+				}
+				if len(singleResp.Diagnostics) > 0 {
+					resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
+				}
+				if sch, ok := singleResp.ResourceSchemas[k]; ok {
+					resp.ResourceSchemas[k] = sch
+				}
+			}
+		}
+		if len(s.provider.DataSourcesMap) != len(resp.DataSourceSchemas) {
+			for k := range resp.DataSourceSchemas {
+				if _, ok := s.provider.DataSourcesMap[k]; !ok {
+					delete(resp.DataSourceSchemas, k)
+				}
+			}
+		}
+		for k := range s.provider.DataSourcesMap {
+			if _, ok := resp.DataSourceSchemas[k]; !ok {
+				singleResp, err := s.serverForDataSource(k).GetProviderSchema(ctx, req)
+				if err != nil {
+					return nil, err
+				}
+				if len(singleResp.Diagnostics) > 0 {
+					resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
+				}
+				if sch, ok := singleResp.DataSourceSchemas[k]; ok {
+					resp.DataSourceSchemas[k] = sch
+				}
+			}
+		}
+		return resp, nil
+	}
 	return s.allSchemasServer().GetProviderSchema(ctx, req)
 }
 
 func (s *fastValidateProviderServer) GetResourceIdentitySchemas(ctx context.Context, req *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.SDKResourceIdentitySchemas != nil {
+		resp := cloneResourceIdentitySchemasResponse(embedded.SDKResourceIdentitySchemas)
+		for k := range resp.IdentitySchemas {
+			if _, ok := s.provider.ResourcesMap[k]; !ok {
+				delete(resp.IdentitySchemas, k)
+			}
+		}
+		if embedded.SDKProviderSchema != nil {
+			for k := range s.provider.ResourcesMap {
+				if _, ok := embedded.SDKProviderSchema.ResourceSchemas[k]; !ok {
+					singleResp, err := s.serverForResource(k).GetResourceIdentitySchemas(ctx, req)
+					if err != nil {
+						return nil, err
+					}
+					if len(singleResp.Diagnostics) > 0 {
+						resp.Diagnostics = append(resp.Diagnostics, singleResp.Diagnostics...)
+					}
+					if idSch, ok := singleResp.IdentitySchemas[k]; ok {
+						resp.IdentitySchemas[k] = idSch
+					}
+				}
+			}
+		}
+		return resp, nil
+	}
 	return s.allSchemasServer().GetResourceIdentitySchemas(ctx, req)
 }
 
@@ -305,6 +382,20 @@ func (s *fastFrameworkProviderServer) GetMetadata(_ context.Context, _ *tfprotov
 			MoveResourceState:         true,
 		},
 	}, nil
+}
+
+func (s *fastFrameworkProviderServer) GetProviderSchema(ctx context.Context, req *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
+	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.FrameworkProviderSchema != nil {
+		return cloneProviderSchemaResponse(embedded.FrameworkProviderSchema), nil
+	}
+	return s.fullProviderServer.GetProviderSchema(ctx, req)
+}
+
+func (s *fastFrameworkProviderServer) GetResourceIdentitySchemas(ctx context.Context, req *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+	if embedded := getEmbeddedSchemas(); embedded != nil && embedded.FrameworkResourceIdentitySchemas != nil {
+		return cloneResourceIdentitySchemasResponse(embedded.FrameworkResourceIdentitySchemas), nil
+	}
+	return s.fullProviderServer.GetResourceIdentitySchemas(ctx, req)
 }
 
 func (s *fastFrameworkProviderServer) PrepareProviderConfig(ctx context.Context, req *tfprotov5.PrepareProviderConfigRequest) (*tfprotov5.PrepareProviderConfigResponse, error) {

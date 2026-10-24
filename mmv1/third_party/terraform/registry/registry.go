@@ -178,20 +178,23 @@ func Resource(name string) *schema.Resource {
 	return r.Schema
 }
 
-// ResourceNamesMap returns a map with an entry for every registered resource
-// name and its currently resolved (possibly nil) *schema.Resource.
+// ResourceNamesMap returns a map with a nil entry for every registered resource
+// name so callers can inspect registered names without resolving deferred
+// SchemaFunc entries.
 func ResourceNamesMap() map[string]*schema.Resource {
 	schemas.RLock()
 	defer schemas.RUnlock()
 	ret := make(map[string]*schema.Resource, len(schemas.r))
-	for k, v := range schemas.r {
-		ret[k] = v.Schema
+	for k := range schemas.r {
+		ret[k] = nil
 	}
 	return ret
 }
 
 func ResourceMap() map[string]*schema.Resource {
 	schemas.buildAll()
+	schemas.RLock()
+	defer schemas.RUnlock()
 	ret := make(map[string]*schema.Resource, len(schemas.r))
 	for k, v := range schemas.r {
 		ret[k] = v.Schema
@@ -226,20 +229,23 @@ func DataSource(name string) *schema.Resource {
 	return d.Schema
 }
 
-// DatasourceNamesMap returns a map with an entry for every registered data
-// source name and its currently resolved (possibly nil) *schema.Resource.
+// DatasourceNamesMap returns a map with a nil entry for every registered data
+// source name so callers can inspect registered names without resolving deferred
+// SchemaFunc entries.
 func DatasourceNamesMap() map[string]*schema.Resource {
 	schemas.RLock()
 	defer schemas.RUnlock()
 	ret := make(map[string]*schema.Resource, len(schemas.d))
-	for k, v := range schemas.d {
-		ret[k] = v.Schema
+	for k := range schemas.d {
+		ret[k] = nil
 	}
 	return ret
 }
 
 func DatasourceMap() map[string]*schema.Resource {
 	schemas.buildAll()
+	schemas.RLock()
+	defer schemas.RUnlock()
 	ret := make(map[string]*schema.Resource, len(schemas.d))
 	for k, v := range schemas.d {
 		ret[k] = v.Schema

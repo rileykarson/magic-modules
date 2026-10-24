@@ -23,7 +23,12 @@ func TestLazyProvider_resolvesOnDemand(t *testing.T) {
 	ctx := context.Background()
 
 	lazyP := provider.LazyProvider()
-	lazyP.ResourcesMap["google_compute_network"] = nil
+	if lazyP.ResourcesMap["google_compute_network"] != nil {
+		t.Fatal("expected google_compute_network entry in LazyProvider().ResourcesMap to start nil")
+	}
+	if lazyP.DataSourcesMap["google_compute_network"] != nil {
+		t.Fatal("expected google_compute_network entry in LazyProvider().DataSourcesMap to start nil")
+	}
 	fastServer := provider.NewFastValidateProviderServer(lazyP)
 
 	metaResp, err := fastServer.GetMetadata(ctx, &tfprotov5.GetMetadataRequest{})
@@ -34,12 +39,9 @@ func TestLazyProvider_resolvesOnDemand(t *testing.T) {
 		t.Fatal("expected non-empty resources metadata from LazyProvider")
 	}
 
-	// Obtain the object type for google_compute_network via a separate server
-	// while lazyP.ResourcesMap["google_compute_network"] remains nil.
-	schemaHelper := provider.NewFastValidateProviderServer(provider.LazyProvider())
-	schemaResp, err := schemaHelper.GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
+	schemaResp, err := fastServer.GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
 	if err != nil {
-		t.Fatalf("lazy schemaHelper GetProviderSchema failed: %s", err)
+		t.Fatalf("lazy fastServer GetProviderSchema failed: %s", err)
 	}
 	netSchema, ok := schemaResp.ResourceSchemas["google_compute_network"]
 	if !ok {
@@ -59,6 +61,25 @@ func TestLazyProvider_resolvesOnDemand(t *testing.T) {
 	}
 	if len(valResp.Diagnostics) != 0 {
 		t.Errorf("unexpected diagnostics from ValidateResourceTypeConfig: %v", valResp.Diagnostics)
+	}
+
+	dsSchema, ok := schemaResp.DataSourceSchemas["google_compute_network"]
+	if !ok {
+		t.Fatal("expected google_compute_network data source schema in GetProviderSchema response")
+	}
+	dsObjType, ok := dsSchema.ValueType().(tftypes.Object)
+	if !ok {
+		t.Fatalf("google_compute_network data source ValueType is %T, want tftypes.Object", dsSchema.ValueType())
+	}
+	dsValResp, err := fastServer.ValidateDataSourceConfig(ctx, &tfprotov5.ValidateDataSourceConfigRequest{
+		TypeName: "google_compute_network",
+		Config:   providerConfigValue(t, dsObjType, map[string]tftypes.Value{"name": tftypes.NewValue(tftypes.String, "my-net")}),
+	})
+	if err != nil {
+		t.Fatalf("ValidateDataSourceConfig failed: %s", err)
+	}
+	if len(dsValResp.Diagnostics) != 0 {
+		t.Errorf("unexpected diagnostics from ValidateDataSourceConfig: %v", dsValResp.Diagnostics)
 	}
 }
 
@@ -321,5 +342,49 @@ func sortMetadata(resp *tfprotov5.GetMetadataResponse) {
 	})
 	slices.SortFunc(resp.EphemeralResources, func(a, b tfprotov5.EphemeralResourceMetadata) int {
 		return strings.Compare(a.TypeName, b.TypeName)
+	})
+}
+
+func BenchmarkMuxedProviderSchema(b *testing.B) {
+	ctx := context.Background()
+
+	b.Run("Stock_LiveSchema", func(b *testing.B) {
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			primary := provider.Provider()
+			mux, err := tf5muxserver.NewMuxServer(ctx,
+				primary.GRPCProvider,
+				providerserver.NewProtocol5(fwprovider.New(primary)),
+			)
+			if err != nil {
+				b.Fatal(err)
+			}
+			if _, err := mux.ProviderServer().GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{}); err != nil {
+				b.Fatal(err)
+			}
+			if _, err := mux.ProviderServer().GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{}); err != nil {
+				b.Fatal(err)
+			}
+		}
+	})
+
+	b.Run("Fast_EmbeddedSchema", func(b *testing.B) {
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			primary := provider.LazyProvider()
+			mux, err := tf5muxserver.NewMuxServer(ctx,
+				func() tfprotov5.ProviderServer { return provider.NewFastValidateProviderServer(primary) },
+				provider.NewFastFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(primary))),
+			)
+			if err != nil {
+				b.Fatal(err)
+			}
+			if _, err := mux.ProviderServer().GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{}); err != nil {
+				b.Fatal(err)
+			}
+			if _, err := mux.ProviderServer().GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{}); err != nil {
+				b.Fatal(err)
+			}
+		}
 	})
 }

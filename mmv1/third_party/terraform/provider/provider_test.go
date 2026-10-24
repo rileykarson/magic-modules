@@ -1,20 +1,27 @@
 package provider_test
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"reflect"
 	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-provider-google/google/acctest"
 	"github.com/hashicorp/terraform-provider-google/google/envvar"
+	"github.com/hashicorp/terraform-provider-google/google/fwprovider"
 	"github.com/hashicorp/terraform-provider-google/google/provider"
 	_ "github.com/hashicorp/terraform-provider-google/google/services/compute"
 	_ "github.com/hashicorp/terraform-provider-google/google/services/pubsub"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
+	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
@@ -28,6 +35,235 @@ func TestProvider(t *testing.T) {
 
 func TestProvider_impl(t *testing.T) {
 	var _ *schema.Provider = provider.Provider()
+}
+
+// TestEmbeddedProviderSchema_MatchesLiveSchema verifies that the embedded
+// pre-computed provider schema and resource identity schema in
+// provider_schema.gz exactly match the live schemas dynamically constructed
+// from all registered SDKv2 and Plugin Framework resources, data sources,
+// ephemeral resources, list resources, and functions.
+func TestEmbeddedProviderSchema_MatchesLiveSchema(t *testing.T) {
+	if !provider.EmbeddedSchemaLoaded() {
+		t.Fatal("Embedded provider schema (provider_schema.gz) is missing or empty.\n" +
+			"Run 'go generate ./google/provider/...' (or 'go generate ./google-beta/provider/...' / 'make generate' / 'make provider') and commit the updated provider_schema.gz.")
+	}
+
+	ctx := context.Background()
+
+	stockPrimary := provider.Provider()
+	stockMux, err := tf5muxserver.NewMuxServer(ctx,
+		stockPrimary.GRPCProvider,
+		providerserver.NewProtocol5(fwprovider.New(stockPrimary)),
+	)
+	if err != nil {
+		t.Fatalf("stock NewMuxServer failed: %v", err)
+	}
+
+	lazyPrimary := provider.LazyProvider()
+	fastMux, err := tf5muxserver.NewMuxServer(ctx,
+		func() tfprotov5.ProviderServer {
+			return provider.NewFastValidateProviderServer(lazyPrimary)
+		},
+		provider.NewFastFrameworkProviderServer(providerserver.NewProtocol5(fwprovider.New(lazyPrimary))),
+	)
+	if err != nil {
+		t.Fatalf("fast NewMuxServer failed: %v", err)
+	}
+
+	wantSchema, err := stockMux.ProviderServer().GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
+	if err != nil {
+		t.Fatalf("stock GetProviderSchema failed: %v", err)
+	}
+	gotSchema, err := fastMux.ProviderServer().GetProviderSchema(ctx, &tfprotov5.GetProviderSchemaRequest{})
+	if err != nil {
+		t.Fatalf("fast GetProviderSchema failed: %v", err)
+	}
+
+	if diffs := provider.CompareProviderSchemas(gotSchema, wantSchema); len(diffs) > 0 {
+		limit := len(diffs)
+		if limit > 25 {
+			limit = 25
+		}
+		t.Fatalf("Embedded provider schema (provider_schema.gz) has diverged from live provider schemas (%d differences found):\n  - %s\n\n"+
+			"To fix this, regenerate the embedded schema by running:\n"+
+			"  go generate ./google/provider/...   (in terraform-provider-google)\n"+
+			"  go generate ./google-beta/provider/... (in terraform-provider-google-beta)\n"+
+			"  or 'make generate' / 'make provider', and commit the updated provider_schema.gz.",
+			len(diffs), strings.Join(diffs[:limit], "\n  - "))
+	}
+	if !reflect.DeepEqual(gotSchema, wantSchema) {
+		t.Fatal("Embedded GetProviderSchema response is not DeepEqual to live GetProviderSchema response.\n" +
+			"Run 'go generate ./google/provider/...' (or 'make generate' / 'make provider') and commit the updated provider_schema.gz.")
+	}
+
+	wantIdentity, err := stockMux.ProviderServer().GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{})
+	if err != nil {
+		t.Fatalf("stock GetResourceIdentitySchemas failed: %v", err)
+	}
+	gotIdentity, err := fastMux.ProviderServer().GetResourceIdentitySchemas(ctx, &tfprotov5.GetResourceIdentitySchemasRequest{})
+	if err != nil {
+		t.Fatalf("fast GetResourceIdentitySchemas failed: %v", err)
+	}
+
+	if diffs := provider.CompareResourceIdentitySchemas(gotIdentity, wantIdentity); len(diffs) > 0 {
+		limit := len(diffs)
+		if limit > 25 {
+			limit = 25
+		}
+		t.Fatalf("Embedded resource identity schemas (provider_schema.gz) have diverged from live provider identity schemas (%d differences found):\n  - %s\n\n"+
+			"To fix this, regenerate the embedded schema by running:\n"+
+			"  go generate ./google/provider/...   (in terraform-provider-google)\n"+
+			"  go generate ./google-beta/provider/... (in terraform-provider-google-beta)\n"+
+			"  or 'make generate' / 'make provider', and commit the updated provider_schema.gz.",
+			len(diffs), strings.Join(diffs[:limit], "\n  - "))
+	}
+	if !reflect.DeepEqual(gotIdentity, wantIdentity) {
+		t.Fatal("Embedded GetResourceIdentitySchemas response is not DeepEqual to live GetResourceIdentitySchemas response.\n" +
+			"Run 'go generate ./google/provider/...' (or 'make generate' / 'make provider') and commit the updated provider_schema.gz.")
+	}
+}
+
+// TestEmbeddedProviderSchema_DivergenceDetection verifies that
+// CompareProviderSchemas and CompareResourceIdentitySchemas detect missing,
+// extra, and modified resources, data sources, attributes, blocks, functions,
+// and identity schemas.
+func TestEmbeddedProviderSchema_DivergenceDetection(t *testing.T) {
+	baseSchema := func() *tfprotov5.GetProviderSchemaResponse {
+		return &tfprotov5.GetProviderSchemaResponse{
+			Provider: &tfprotov5.Schema{
+				Version: 0,
+				Block: &tfprotov5.SchemaBlock{
+					Attributes: []*tfprotov5.SchemaAttribute{
+						{Name: "project", Type: tftypes.String, Optional: true},
+					},
+				},
+			},
+			ResourceSchemas: map[string]*tfprotov5.Schema{
+				"google_compute_network": {
+					Version: 1,
+					Block: &tfprotov5.SchemaBlock{
+						Attributes: []*tfprotov5.SchemaAttribute{
+							{Name: "name", Type: tftypes.String, Required: true, Description: "Network name"},
+						},
+						BlockTypes: []*tfprotov5.SchemaNestedBlock{
+							{
+								TypeName: "timeouts",
+								Nesting:  tfprotov5.SchemaNestedBlockNestingModeSingle,
+								Block: &tfprotov5.SchemaBlock{
+									Attributes: []*tfprotov5.SchemaAttribute{
+										{Name: "create", Type: tftypes.String, Optional: true},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			DataSourceSchemas: map[string]*tfprotov5.Schema{
+				"google_compute_network": {
+					Version: 0,
+					Block: &tfprotov5.SchemaBlock{
+						Attributes: []*tfprotov5.SchemaAttribute{
+							{Name: "name", Type: tftypes.String, Required: true},
+						},
+					},
+				},
+			},
+			Functions: map[string]*tfprotov5.Function{
+				"name_from_id": {
+					Summary: "Extracts name",
+					Return:  &tfprotov5.FunctionReturn{Type: tftypes.String},
+				},
+			},
+		}
+	}
+
+	if diffs := provider.CompareProviderSchemas(baseSchema(), baseSchema()); len(diffs) != 0 {
+		t.Fatalf("expected 0 diffs for identical schemas, got: %v", diffs)
+	}
+
+	t.Run("missing resource in embedded", func(t *testing.T) {
+		embedded := baseSchema()
+		live := baseSchema()
+		live.ResourceSchemas["google_new_resource"] = &tfprotov5.Schema{Block: &tfprotov5.SchemaBlock{}}
+		diffs := provider.CompareProviderSchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `ResourceSchemas["google_new_resource"]: missing`) {
+			t.Fatalf("expected missing resource diff, got: %v", diffs)
+		}
+	})
+
+	t.Run("extra resource in embedded", func(t *testing.T) {
+		embedded := baseSchema()
+		embedded.ResourceSchemas["google_removed_resource"] = &tfprotov5.Schema{Block: &tfprotov5.SchemaBlock{}}
+		live := baseSchema()
+		diffs := provider.CompareProviderSchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `ResourceSchemas["google_removed_resource"]: extra`) {
+			t.Fatalf("expected extra resource diff, got: %v", diffs)
+		}
+	})
+
+	t.Run("modified resource attribute", func(t *testing.T) {
+		embedded := baseSchema()
+		live := baseSchema()
+		live.ResourceSchemas["google_compute_network"].Block.Attributes[0].Required = false
+		live.ResourceSchemas["google_compute_network"].Block.Attributes[0].Optional = true
+		diffs := provider.CompareProviderSchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `ResourceSchemas["google_compute_network"].Block.Attributes["name"] differs`) {
+			t.Fatalf("expected modified attribute diff, got: %v", diffs)
+		}
+	})
+
+	t.Run("modified nested block", func(t *testing.T) {
+		embedded := baseSchema()
+		live := baseSchema()
+		live.ResourceSchemas["google_compute_network"].Block.BlockTypes[0].Block.Attributes[0].Type = tftypes.Number
+		diffs := provider.CompareProviderSchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `BlockTypes["timeouts"].Block.Attributes["create"] differs`) {
+			t.Fatalf("expected modified nested block diff, got: %v", diffs)
+		}
+	})
+
+	t.Run("modified provider schema", func(t *testing.T) {
+		embedded := baseSchema()
+		live := baseSchema()
+		live.Provider.Block.Attributes = append(live.Provider.Block.Attributes, &tfprotov5.SchemaAttribute{
+			Name:     "new_provider_field",
+			Type:     tftypes.String,
+			Optional: true,
+		})
+		diffs := provider.CompareProviderSchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `Provider.Block.Attributes["new_provider_field"]: missing`) {
+			t.Fatalf("expected missing provider attribute diff, got: %v", diffs)
+		}
+	})
+
+	t.Run("modified identity schema", func(t *testing.T) {
+		embedded := &tfprotov5.GetResourceIdentitySchemasResponse{
+			IdentitySchemas: map[string]*tfprotov5.ResourceIdentitySchema{
+				"google_compute_network": {
+					Version: 1,
+					IdentityAttributes: []*tfprotov5.ResourceIdentitySchemaAttribute{
+						{Name: "name", Type: tftypes.String, RequiredForImport: true},
+					},
+				},
+			},
+		}
+		live := &tfprotov5.GetResourceIdentitySchemasResponse{
+			IdentitySchemas: map[string]*tfprotov5.ResourceIdentitySchema{
+				"google_compute_network": {
+					Version: 1,
+					IdentityAttributes: []*tfprotov5.ResourceIdentitySchemaAttribute{
+						{Name: "name", Type: tftypes.String, RequiredForImport: true},
+						{Name: "project", Type: tftypes.String, OptionalForImport: true},
+					},
+				},
+			},
+		}
+		diffs := provider.CompareResourceIdentitySchemas(embedded, live)
+		if len(diffs) == 0 || !strings.Contains(diffs[0], `IdentitySchemas["google_compute_network"].IdentityAttributes["project"]: missing`) {
+			t.Fatalf("expected missing identity attribute diff, got: %v", diffs)
+		}
+	})
 }
 
 func TestAccProviderBasePath_setBasePath(t *testing.T) {
