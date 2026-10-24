@@ -313,6 +313,8 @@ properties:
               The tag of the container image. If not specified, this defaults to the latest tag.
   - name: 'kernelName'
     type: String
+    # kernelName is not present in CAI asset
+    is_missing_in_cai: true
     description: 'The name of the kernel to use during notebook execution. If unset, the default kernel is used.'
   - name: 'gcsOutputUri'
     required: true

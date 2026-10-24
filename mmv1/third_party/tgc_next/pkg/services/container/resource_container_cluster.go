@@ -2783,6 +2783,22 @@ func ResourceContainerCluster() *schema.Resource {
 					},
 				},
 			},
+			"schedule_upgrade_config": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: `Configuration for scheduled upgrades on the cluster.`,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: `Whether scheduled upgrades are enabled.`,
+						},
+					},
+				},
+			},
 			"enterprise_config": {
 				Type:        schema.TypeList,
 				Optional:    true,

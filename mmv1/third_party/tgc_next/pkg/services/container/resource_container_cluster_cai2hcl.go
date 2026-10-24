@@ -235,6 +235,7 @@ func (c *ContainerClusterCai2hclConverter) convertResourceData(asset caiasset.As
 	hclData["managed_opentelemetry_config"] = flattenManagedOpenTelemetryConfig(asset.Resource.Data["managedOpentelemetryConfig"])
 	hclData["node_pool_auto_config"] = flattenNodePoolAutoConfig(asset.Resource.Data["nodePoolAutoConfig"])
 	hclData["rbac_binding_config"] = flattenRBACBindingConfig(asset.Resource.Data["rbacBindingConfig"])
+	hclData["schedule_upgrade_config"] = flattenScheduleUpgradeConfig(asset.Resource.Data["scheduleUpgradeConfig"])
 
 	ctyVal, err := utils.MapToCtyValWithSchema(hclData, c.schema)
 	if err != nil {
@@ -2055,6 +2056,27 @@ func flattenManagedOpenTelemetryConfig(v interface{}) []map[string]interface{} {
 	return []map[string]interface{}{
 		{
 			"scope": scope,
+		},
+	}
+}
+
+func flattenScheduleUpgradeConfig(v interface{}) []map[string]interface{} {
+	if v == nil {
+		return nil
+	}
+	c, ok := v.(map[string]interface{})
+	if !ok {
+		return nil
+	}
+
+	enabled := false
+	if val, ok := c["enabled"].(bool); ok {
+		enabled = val
+	}
+
+	return []map[string]interface{}{
+		{
+			"enabled": enabled,
 		},
 	}
 }

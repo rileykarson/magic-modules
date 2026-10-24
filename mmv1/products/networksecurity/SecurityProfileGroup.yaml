@@ -91,6 +91,7 @@ samples:
           org_id: 'ORG_ID'
   - name: 'network_security_security_profile_group_wildfire'
     primary_resource_id: 'default'
+    tgc_skip_test: 'Multi-step update test fails due to CAI asset propagation lag between steps'
     steps:
       - name: 'network_security_security_profile_group_wildfire'
         resource_id_vars:

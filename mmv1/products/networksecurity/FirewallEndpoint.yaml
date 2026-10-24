@@ -50,6 +50,11 @@ async:
   include_project: true
 autogen_async: true
 include_in_tgc_next: true
+tgc_tests:
+  - name: TestAccNetworkSecurityFirewallEndpoints_endpointSettings
+    skip: 'Multi-step update test fails due to CAI asset propagation lag between steps'
+  - name: TestAccNetworkSecurityFirewallEndpoints_wildfireSettings
+    skip: 'Multi-step update test fails due to CAI asset propagation lag between steps'
 custom_code:
 sweeper:
   dependencies:
