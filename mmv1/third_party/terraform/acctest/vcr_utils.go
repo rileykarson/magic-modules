@@ -49,6 +49,10 @@ func IsVcrEnabled() bool {
 	return envPath != "" && vcrMode != ""
 }
 
+<<<<<<< HEAD
+=======
+// IsVcrReplaying returns true if VCR is enabled and running in REPLAYING mode.
+>>>>>>> upstream/main
 func IsVcrReplaying() bool {
 	return IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING"
 }

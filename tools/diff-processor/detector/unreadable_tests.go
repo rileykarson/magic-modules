@@ -14,14 +14,9 @@ import (
 // single fmt.Sprintf or acctest.Nprintf template. When a test on this list
 // becomes readable, remove it.
 var KnownUnreadableTests = []string{
-	"TestAccCloudFunctionsFunction_buildServiceAccount",
 	"TestAccComputeInstance_diskResourcePolicies_attachmentDiff",
 	"TestAccComputeNetwork_bgpModeAndMedInteractions",
 	"TestAccComputeNetwork_networkBgpStandardModeDeleteMed",
-	"TestAccComputeRegionTargetHttpsProxy_update",
-	"TestAccComputeRouterNamedSet_updatePrefix",
-	"TestAccComputeTargetHttpsProxy_update",
-	"TestAccContainerCluster_resourceManagerTags",
 	"TestAccDNSManagedZone_update",
 	"TestAccEphemeralServiceAccountJwt_basic",
 	"TestAccEphemeralServiceAccountJwt_withDelegates",
@@ -33,7 +28,6 @@ var KnownUnreadableTests = []string{
 	"TestAccEphemeralServiceAccountToken_withCustomLifetime",
 	"TestAccEphemeralServiceAccountToken_withDelegates",
 	"TestAccPubsubTopic_schema",
-	"TestAccStorageTransferJob_azureBlobStorageDataSourcePrivateNetwork",
 }
 
 // The longest error message reported for a single unreadable test.

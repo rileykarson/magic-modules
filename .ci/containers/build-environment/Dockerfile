@@ -1,4 +1,4 @@
-FROM golang:1.26.9-trixie@sha256:f06b7122f888680048afb247c4e5f49c0069eb6c4c1ccae0f3f4834527a8d22c AS builder
+FROM golang:1.26.10-trixie@sha256:909771fef53e3dcb0950255f0c9a8b4728c3b841e61509c7b29b098de7ee02d4 AS builder
 
 ENV GOPATH /go
 ENV PATH /usr/local/go/bin:$PATH
@@ -27,5 +27,8 @@ RUN go install github.com/github/hub@dcdf56167c38eacef96ad5ef88575e7f74f9a6f2 # 
 WORKDIR /app
 ADD "https://raw.githubusercontent.com/GoogleCloudPlatform/magic-modules/main/mmv1/third_party/terraform/go.mod" go.mod
 ADD "https://raw.githubusercontent.com/GoogleCloudPlatform/magic-modules/main/mmv1/third_party/terraform/go.sum" go.sum
+RUN go mod download
+ADD "https://raw.githubusercontent.com/GoogleCloudPlatform/magic-modules/main/mmv1/go.mod" go.mod
+ADD "https://raw.githubusercontent.com/GoogleCloudPlatform/magic-modules/main/mmv1/go.sum" go.sum
 RUN go mod download && rm -rf /app && chmod -R 1777 "$GOPATH"
 WORKDIR $GOPATH

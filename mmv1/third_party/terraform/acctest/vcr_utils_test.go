@@ -452,3 +452,31 @@ func TestIsVcrReplaying(t *testing.T) {
 		})
 	}
 }
+func TestRunVcrSubtest(t *testing.T) {
+	origPath := os.Getenv("VCR_PATH")
+	origMode := os.Getenv("VCR_MODE")
+	defer func() {
+		os.Setenv("VCR_PATH", origPath)
+		os.Setenv("VCR_MODE", origMode)
+	}()
+
+	os.Setenv("VCR_PATH", "")
+	os.Setenv("VCR_MODE", "")
+	acctest.RunVcrSubtest(t, "disabled when not replaying", func(t *testing.T) {
+		// Calling t.Parallel() here should not panic since RunVcrSubtest didn't call it
+		t.Parallel()
+	})
+
+	os.Setenv("VCR_PATH", "/tmp")
+	os.Setenv("VCR_MODE", "REPLAYING")
+	acctest.RunVcrSubtest(t, "enabled when replaying", func(t *testing.T) {
+		// In Go testing, calling t.Parallel() a second time on the same testing.T panics
+		defer func() {
+			r := recover()
+			if r == nil {
+				t.Errorf("expected panic when calling t.Parallel() a second time, but did not panic")
+			}
+		}()
+		t.Parallel()
+	})
+}

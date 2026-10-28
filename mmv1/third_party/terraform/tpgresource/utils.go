@@ -8,12 +8,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"maps"
 	"math/rand/v2"
 	"net"
 	"net/url"
 	"os"
 	"reflect"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -30,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	"golang.org/x/exp/maps"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -386,8 +387,7 @@ func SortStringsByConfigOrder(configData, apiData []string) ([]string, error) {
 
 	// Sort set config indexes and convert to a slice of strings. This removes items present in the config
 	// but not present in the API response.
-	configIndexes := maps.Keys(byConfigIndex)
-	sort.Ints(configIndexes)
+	configIndexes := slices.Sorted(maps.Keys(byConfigIndex))
 	result := []string{}
 	for _, index := range configIndexes {
 		result = append(result, byConfigIndex[index])
@@ -1139,6 +1139,20 @@ func LocationFromId(id string) string {
 		return GetRegionFromZone(match[1])
 	}
 	return ""
+}
+
+// CanonicalizeIp parses an IP address string and returns its canonical format,
+// or the original value if parsing fails or if v is empty/non-string.
+func CanonicalizeIp(v interface{}) interface{} {
+	if v == nil {
+		return v
+	}
+	if strVal, ok := v.(string); ok && strVal != "" {
+		if ip := net.ParseIP(strVal); ip != nil {
+			return ip.String()
+		}
+	}
+	return v
 }
 
 func Retry(timeout time.Duration, f retry.RetryFunc) error {
