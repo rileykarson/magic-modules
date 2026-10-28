@@ -591,7 +591,6 @@ func (t Terraform) getCommonCopyFiles(versionName string, generateCode, generate
 		"go.sum":                           "third_party/terraform/go.sum",
 		"go.mod":                           "third_party/terraform/go.mod",
 		".go-version":                      "third_party/terraform/.go-version",
-		".golangci.yml":                    "third_party/terraform/.golangci.yml",
 		"terraform-registry-manifest.json": "third_party/terraform/terraform-registry-manifest.json",
 	}
 	maps.Copy(commonCopyFiles, singleFiles)
@@ -956,7 +955,7 @@ func (t Terraform) shouldAddHashicorpCopyRightHeader(outputFolder, target string
 	//       The test-fixtures folder is not included here as it's copied as a whole,
 	//       not file by file
 	ignoredFolders := []string{".release/", ".changelog/", "examples/", "scripts/"}
-	ignoredFiles := []string{"go.mod", ".goreleaser.yml", ".golangci.yml", "terraform-registry-manifest.json"}
+	ignoredFiles := []string{"go.mod", ".goreleaser.yml", "terraform-registry-manifest.json"}
 	for _, folder := range ignoredFolders {
 		// folder will be path leading to file
 		if strings.HasPrefix(target, folder) {
