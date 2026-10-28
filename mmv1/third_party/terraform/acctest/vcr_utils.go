@@ -202,6 +202,9 @@ func syncRecordedZipArchives(t *testing.T, steps []resource.TestStep) {
 			continue
 		}
 		for _, inter := range cas.Interactions {
+			if inter.Request.Method != "POST" || !strings.Contains(inter.Request.URL, "uploadType=multipart") {
+				continue
+			}
 			idx := strings.Index(inter.Request.Body, "PK\x03\x04")
 			end := strings.LastIndex(inter.Request.Body, "\r\n--")
 			if idx >= 0 && end > idx {
@@ -270,7 +273,7 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 		steps = append(steps, s)
 	}
 	c.Steps = steps
-	if IsVcrEnabled() && os.Getenv("VCR_MODE") == "REPLAYING" {
+	if IsVcrReplaying() {
 		syncRecordedZipArchives(t, c.Steps)
 	}
 
