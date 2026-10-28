@@ -98,7 +98,7 @@ clean-provider: check_safe_build
 				printf "\e[1;33mINFO:\e[0m Skipping git-based cleaning because $(OUTPUT_PATH) is not a git repository.\n"; \
 			else \
 				echo "---> Removing tracked files that will be regenerated..." && \
-				git ls-files | grep -v -E '(^\.git|^\.changelog|^\.agents/|^\.travis\.yml$$|^\.golangci\.yml$$|^CHANGELOG\.md$$|^CHANGELOG_v.*\.md$$|^GNUmakefile$$|docscheck\.sh$$|^\.whitesource$$|^LICENSE$$|^CODEOWNERS$$|^README\.md$$|^\.go-version$$|^\.hashibot\.hcl$$|^go\.mod$$|^go\.sum$$|^examples|^scripts/)' | tr '\n' '\0' | xargs -0 -r rm -f && \
+				git ls-files | grep -v -E '(^\.github/|^\.changelog|^\.agents/|^\.travis\.yml$$|^CHANGELOG\.md$$|^CHANGELOG_v.*\.md$$|^\.whitesource$$|^LICENSE$$|^CODEOWNERS$$|^README\.md$$|^\.go-version$$|^\.hashibot\.hcl$$|^go\.mod$$|^go\.sum$$|^examples)' | tr '\n' '\0' | xargs -0 -r rm -f && \
 				find . -mindepth 1 -type d -empty -not -path './.git' -not -path './.git/*' -delete && \
 				echo "---> Unstaging changes with git reset..." && \
 				git reset -q && \

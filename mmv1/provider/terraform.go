@@ -591,6 +591,7 @@ func (t Terraform) getCommonCopyFiles(versionName string, generateCode, generate
 		"go.sum":                           "third_party/terraform/go.sum",
 		"go.mod":                           "third_party/terraform/go.mod",
 		".go-version":                      "third_party/terraform/.go-version",
+		".golangci.yml":                    "third_party/terraform/.golangci.yml",
 		"terraform-registry-manifest.json": "third_party/terraform/terraform-registry-manifest.json",
 	}
 	maps.Copy(commonCopyFiles, singleFiles)
@@ -761,6 +762,8 @@ func (t Terraform) getCommonCompileFiles(versionName string) map[string]string {
 	// Case 3: When compile a single file, save the target as key and source as value to the map singleFiles
 	singleFiles := map[string]string{
 		"main.go":                       "third_party/terraform/main.go.tmpl",
+		"GNUmakefile":                   "third_party/terraform/GNUmakefile.tmpl",
+		".gitignore":                    "third_party/terraform/.gitignore.tmpl",
 		".goreleaser.yml":               "third_party/terraform/.goreleaser.yml.tmpl",
 		".release/release-metadata.hcl": "third_party/terraform/release-metadata.hcl.tmpl",
 		".copywrite.hcl":                "third_party/terraform/.copywrite.hcl.tmpl",
