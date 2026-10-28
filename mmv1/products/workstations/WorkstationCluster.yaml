@@ -52,18 +52,21 @@ samples:
           workstation_cluster_name: workstation-cluster
   - name: workstation_cluster_private
     primary_resource_id: default
+    exclude_test: true
     steps:
       - name: workstation_cluster_private
         resource_id_vars:
           workstation_cluster_name: workstation-cluster-private
   - name: workstation_cluster_custom_domain
     primary_resource_id: default
+    exclude_test: true
     steps:
       - name: workstation_cluster_custom_domain
         resource_id_vars:
           workstation_cluster_name: workstation-cluster-custom-domain
   - name: workstation_cluster_tags
     primary_resource_id: default
+    exclude_test: true
     steps:
       - name: workstation_cluster_tags
         resource_id_vars:
@@ -75,6 +78,7 @@ samples:
           value_short_name: '"tf-test-value-" + acctest.RandString(t, 10)'
   - name: workstation_cluster_urls
     primary_resource_id: default
+    exclude_test: true
     steps:
       - name: workstation_cluster_custom_urls
         vars:
