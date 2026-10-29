@@ -35,7 +35,7 @@ func TestAccIapTunnelDestGroup_updates(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region", "group_name"},
 			},
 			{
-				Config: testAccIapTunnelDestGroup_updated(context),
+				Config: testAccIapTunnelDestGroup_updated(context, nil),
 			},
 			{
 				ResourceName:            "google_iap_tunnel_dest_group.dest_group",
@@ -44,7 +44,7 @@ func TestAccIapTunnelDestGroup_updates(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"region", "group_name"},
 			},
 			{
-				Config: testAccIapTunnelDestGroup_updated_fqdns(context),
+				Config: testAccIapTunnelDestGroup_updated(context, "[\"proxied.lan\"]"),
 			},
 			{
 				ResourceName:            "google_iap_tunnel_dest_group.dest_group",
@@ -69,7 +69,8 @@ resource "google_iap_tunnel_dest_group" "dest_group" {
 `, context)
 }
 
-func testAccIapTunnelDestGroup_updated(context map[string]interface{}) string {
+func testAccIapTunnelDestGroup_updated(context map[string]interface{}, fqdns interface{}) string {
+	context["fqdns"] = fqdns
 	return acctest.Nprintf(`
 resource "google_iap_tunnel_dest_group" "dest_group" {
   region = "us-central1"
@@ -77,19 +78,7 @@ resource "google_iap_tunnel_dest_group" "dest_group" {
   cidrs = [
     "10.1.0.0/16",
   ]
-}
-`, context)
-}
-
-func testAccIapTunnelDestGroup_updated_fqdns(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_iap_tunnel_dest_group" "dest_group" {
-  region = "us-central1"
-  group_name = "tf-test-testgroup%{random_suffix}"
-  cidrs = [
-    "10.1.0.0/16",
-  ]
-  fqdns = ["proxied.lan"]
+  fqdns = %{fqdns}
 }
 `, context)
 }
