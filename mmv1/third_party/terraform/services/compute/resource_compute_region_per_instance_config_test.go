@@ -25,6 +25,7 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 		"config_name2":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
 		"config_name3":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
 		"config_name4":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
+		"region":        nil,
 	}
 	rigmId := fmt.Sprintf("projects/%s/regions/%s/instanceGroupManagers/%s",
 		envvar.GetTestProjectFromEnv(), envvar.GetTestRegionFromEnv(), rigmName)
@@ -45,7 +46,12 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 			},
 			{
 				// Force-recreate old config
-				Config: testAccComputeRegionPerInstanceConfig_statefulModified(context),
+				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(map[string]interface{}{
+					"rigm_name":     context["rigm_name"],
+					"random_suffix": context["random_suffix"],
+					"config_name":   context["config_name2"],
+					"region":        "google_compute_region_instance_group_manager.rigm.region",
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeRegionPerInstanceConfigDestroyed(t, rigmId, context["config_name"].(string)),
 				),
@@ -98,6 +104,7 @@ func TestAccComputeRegionPerInstanceConfig_update(t *testing.T) {
 		"random_suffix": acctest.RandString(t, 10),
 		"rigm_name":     fmt.Sprintf("tf-test-rigm-%s", acctest.RandString(t, 10)),
 		"config_name":   fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
+		"region":        nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -233,6 +240,7 @@ func TestAccComputeRegionPerInstanceConfig_removeInstanceOnDestroy(t *testing.T)
 func testAccComputeRegionPerInstanceConfig_statefulBasic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_compute_region_per_instance_config" "default" {
+	region = %{region}
 	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
 	name = "%{config_name}"
 	remove_instance_state_on_destroy = true
@@ -255,22 +263,6 @@ resource "google_compute_region_per_instance_config" "default" {
 		metadata = {
 			asdf = "foo"
 			updated = "12345"
-		}
-	}
-}
-`, context) + testAccComputeRegionPerInstanceConfig_rigm(context)
-}
-
-func testAccComputeRegionPerInstanceConfig_statefulModified(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_region_per_instance_config" "default" {
-	region = google_compute_region_instance_group_manager.rigm.region
-	region_instance_group_manager = google_compute_region_instance_group_manager.rigm.name
-	name = "%{config_name2}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "asdf"
 		}
 	}
 }
