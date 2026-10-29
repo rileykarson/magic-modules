@@ -307,10 +307,21 @@ func TestAccSecretManagerRegionalRegionalSecret_rotationInfoUpdate(t *testing.T)
 func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"timestamp_1":   "2114-11-30T00:00:00Z",
-		"timestamp_2":   "2116-11-30T00:00:00Z",
-		"random_suffix": acctest.RandString(t, 10),
+	randomSuffix := acctest.RandString(t, 10)
+	contextWithout := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   nil,
+		"ttl":           nil,
+	}
+	contextExpireBasic := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   "2114-11-30T00:00:00Z",
+		"ttl":           nil,
+	}
+	contextExpireUpdate := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   "2116-11-30T00:00:00Z",
+		"ttl":           nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -319,7 +330,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -328,7 +339,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextExpireBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -337,7 +348,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextExpireUpdate),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -346,7 +357,7 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -361,8 +372,21 @@ func TestAccSecretManagerRegionalRegionalSecret_expireTimeUpdate(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+	randomSuffix := acctest.RandString(t, 10)
+	contextWithout := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   nil,
+		"ttl":           nil,
+	}
+	contextTtlBasic := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   nil,
+		"ttl":           "360000s",
+	}
+	contextTtlUpdate := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   nil,
+		"ttl":           "720000s",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -371,7 +395,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -380,7 +404,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextTtlBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -389,7 +413,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextTtlUpdate),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -398,7 +422,7 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -413,9 +437,16 @@ func TestAccSecretManagerRegionalRegionalSecret_ttlUpdate(t *testing.T) {
 func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"timestamp_1":   "2114-11-30T00:00:00Z",
-		"random_suffix": acctest.RandString(t, 10),
+	randomSuffix := acctest.RandString(t, 10)
+	contextTtlBasic := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   nil,
+		"ttl":           "360000s",
+	}
+	contextExpireBasic := map[string]interface{}{
+		"random_suffix": randomSuffix,
+		"expire_time":   "2114-11-30T00:00:00Z",
+		"ttl":           nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -424,7 +455,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextTtlBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -433,7 +464,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_expireTimeBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextExpireBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -442,7 +473,7 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 				ImportStateVerifyIgnore: []string{"ttl", "annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_ttlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutTtlAndExpireTime(contextTtlBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-expiration",
@@ -457,8 +488,18 @@ func TestAccSecretManagerRegionalRegionalSecret_updateBetweenTtlAndExpireTime(t 
 func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+	randomSuffix := acctest.RandString(t, 10)
+	contextWithout := map[string]interface{}{
+		"random_suffix":       randomSuffix,
+		"version_destroy_ttl": nil,
+	}
+	contextBasic := map[string]interface{}{
+		"random_suffix":       randomSuffix,
+		"version_destroy_ttl": "90000s",
+	}
+	contextUpdate := map[string]interface{}{
+		"random_suffix":       randomSuffix,
+		"version_destroy_ttl": "360000s",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -467,7 +508,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 		CheckDestroy:             testAccCheckSecretManagerRegionalRegionalSecretDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -476,7 +517,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionDestroyTtlBasic(context),
+				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(contextBasic),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -485,7 +526,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_versionDestroyTtlUpdate(context),
+				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(contextUpdate),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -494,7 +535,7 @@ func TestAccSecretManagerRegionalRegionalSecret_versionDestroyTtlUpdate(t *testi
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(context),
+				Config: testAccSecretManagerRegionalSecret_withoutVersionDestroyTtl(contextWithout),
 			},
 			{
 				ResourceName:            "google_secret_manager_regional_secret.regional-secret-with-version-destroy-ttl",
@@ -594,11 +635,23 @@ func TestAccSecretManagerRegionalRegionalSecret_tags(t *testing.T) {
 	t.Parallel()
 
 	tagKey := tags.BootstrapSharedTestOrganizationTagKey(t, "secretmanager_regional_regionalsecret-tagkey", map[string]interface{}{})
+	tagValue := tags.BootstrapSharedTestOrganizationTagValue(t, "secretmanager_regional_regionalsecret-tagvalue", tagKey)
+	org := envvar.GetTestOrgFromEnv(t)
+	randomSuffix := acctest.RandString(t, 10)
+
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"org":           envvar.GetTestOrgFromEnv(t),
-		"tagKey":        tagKey,
-		"tagValue":      tags.BootstrapSharedTestOrganizationTagValue(t, "secretmanager_regional_regionalsecret-tagvalue", tagKey),
+		"random_suffix":       randomSuffix,
+		"org":                 org,
+		"tagKey":              tagKey,
+		"tagValue":            tagValue,
+		"deletion_protection": nil,
+	}
+	contextDeletionProtection := map[string]interface{}{
+		"random_suffix":       randomSuffix,
+		"org":                 org,
+		"tagKey":              tagKey,
+		"tagValue":            tagValue,
+		"deletion_protection": false,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -616,7 +669,7 @@ func TestAccSecretManagerRegionalRegionalSecret_tags(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"annotations", "labels", "location", "secret_id", "terraform_labels", "deletion_protection", "tags"},
 			},
 			{
-				Config: testAccSecretManagerRegionalSecretTagsDeletionProtection(context),
+				Config: testAccSecretManagerRegionalSecretTags(contextDeletionProtection),
 			},
 		},
 	})
@@ -1142,82 +1195,9 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-expiratio
   annotations = {
     myannot = "myannotkey"
   }
-}
-`, context)
-}
 
-func testAccSecretManagerRegionalSecret_expireTimeBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  expire_time = "%{timestamp_1}"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_expireTimeUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  expire_time = "%{timestamp_2}"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_ttlBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  ttl = "360000s"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_ttlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-expiration" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  ttl = "720000s"
+  expire_time = "%{expire_time}"
+  ttl         = "%{ttl}"
 }
 `, context)
 }
@@ -1235,44 +1215,8 @@ resource "google_secret_manager_regional_secret" "regional-secret-with-version-d
   annotations = {
     myannot = "myannotkey"
   }
-}
-`, context)
-}
 
-func testAccSecretManagerRegionalSecret_versionDestroyTtlBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-destroy-ttl" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  version_destroy_ttl = "90000s"
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecret_versionDestroyTtlUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-with-version-destroy-ttl" {
-  secret_id = "tf-test-reg-secret%{random_suffix}"
-  location = "us-central1"
-
-  labels = {
-    mylabel = "mykey"
-  }
-
-  annotations = {
-    myannot = "myannotkey"
-  }
-
-  version_destroy_ttl = "360000s"
+  version_destroy_ttl = "%{version_destroy_ttl}"
 }
 `, context)
 }
@@ -1442,19 +1386,7 @@ resource "google_secret_manager_regional_secret" "regional-secret-basic" {
   tags = {
 	"%{org}/%{tagKey}" = "%{tagValue}"
   }
-}
-`, context)
-}
-
-func testAccSecretManagerRegionalSecretTagsDeletionProtection(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_secret_manager_regional_secret" "regional-secret-basic" {
-  secret_id = "tf-test-reg-secret-%{random_suffix}"
-  location = "us-central1"
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
-  deletion_protection = false  
+  deletion_protection = %{deletion_protection}
 }
 `, context)
 }
