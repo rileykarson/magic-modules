@@ -35,7 +35,13 @@ func TestAccDataCatalogTagTemplate_dataCatalogTagTemplate_updateFields(t *testin
 				ImportStateVerifyIgnore: []string{"region", "tag_template_id", "force_delete"},
 			},
 			{
-				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdateFields(context),
+				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdateFields(map[string]interface{}{
+					"force_delete":    context["force_delete"],
+					"tag_template_id": context["tag_template_id"],
+					"random_suffix":   context["random_suffix"],
+					"primitive_type":  "STRING",
+					"is_required":     true,
+				}),
 			},
 			{
 				ResourceName:            "google_data_catalog_tag_template.basic_tag_template",
@@ -44,11 +50,23 @@ func TestAccDataCatalogTagTemplate_dataCatalogTagTemplate_updateFields(t *testin
 				ImportStateVerifyIgnore: []string{"region", "tag_template_id", "force_delete"},
 			},
 			{
-				Config:      testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdatePrimitiveTypeOfFieldsWithRequired(context),
+				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdateFields(map[string]interface{}{
+					"force_delete":    context["force_delete"],
+					"tag_template_id": context["tag_template_id"],
+					"random_suffix":   context["random_suffix"],
+					"primitive_type":  "DOUBLE",
+					"is_required":     true,
+				}),
 				ExpectError: regexp.MustCompile("Updating the primitive type for a required field on an existing tag template is not supported"),
 			},
 			{
-				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdatePrimitiveTypeOfFieldsWithOptional(context),
+				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdateFields(map[string]interface{}{
+					"force_delete":    context["force_delete"],
+					"tag_template_id": context["tag_template_id"],
+					"random_suffix":   context["random_suffix"],
+					"primitive_type":  "DOUBLE",
+					"is_required":     nil,
+				}),
 			},
 			{
 				ResourceName:            "google_data_catalog_tag_template.basic_tag_template",
@@ -71,86 +89,9 @@ resource "google_data_catalog_tag_template" "basic_tag_template" {
     field_id = "source"
     display_name = "Source of data asset test update"
     type {
-      primitive_type = "STRING"
+      primitive_type = "%{primitive_type}"
     }
-    is_required = true
-  }
-
-  fields {
-    field_id = "pii_type"
-    display_name = "PII type"
-    type {
-      enum_type {
-        allowed_values {
-          display_name = "EMAIL"
-        }
-        allowed_values {
-          display_name = "SOCIAL SECURITY NUMBER"
-        }
-        allowed_values {
-          display_name = "NONE"
-        }
-      }
-    }
-  }
-
-  force_delete = "%{force_delete}"
-}
-`, context)
-}
-
-func testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdatePrimitiveTypeOfFieldsWithRequired(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_catalog_tag_template" "basic_tag_template" {
-  tag_template_id = "%{tag_template_id}"
-  region = "us-central1"
-  display_name = "Demo Tag Template Test Update"
-
-  fields {
-    field_id = "source"
-    display_name = "Source of data asset test update"
-    type {
-      primitive_type = "DOUBLE"
-    }
-    is_required = true
-  }
-
-  fields {
-    field_id = "pii_type"
-    display_name = "PII type"
-    type {
-      enum_type {
-        allowed_values {
-          display_name = "EMAIL"
-        }
-        allowed_values {
-          display_name = "SOCIAL SECURITY NUMBER"
-        }
-        allowed_values {
-          display_name = "NONE"
-        }
-      }
-    }
-  }
-
-  force_delete = "%{force_delete}"
-}
-`, context)
-}
-
-func testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdatePrimitiveTypeOfFieldsWithOptional(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_catalog_tag_template" "basic_tag_template" {
-  tag_template_id = "%{tag_template_id}"
-  region = "us-central1"
-  display_name = "Demo Tag Template Test Update"
-
-  fields {
-    field_id = "source"
-    display_name = "Source of data asset test update"
-    type {
-      primitive_type = "DOUBLE"
-    }
+    is_required = %{is_required}
   }
 
   fields {
