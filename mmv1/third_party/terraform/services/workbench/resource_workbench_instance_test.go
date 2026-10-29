@@ -63,9 +63,14 @@ resource "google_workbench_instance" "instance" {
   gce_setup {
     machine_type = "n4-standard-2"
     boot_disk {
+      disk_size_gb = %{boot_disk_size_gb}
       disk_type = "HYPERDISK_BALANCED"
     }
+    metadata = %{metadata}
   }
+
+  desired_state = "%{desired_state}"
+  labels = %{labels}
 }
 `, context)
 }
@@ -379,16 +384,20 @@ resource "google_workbench_instance" "instance" {
 func TestAccWorkbenchInstance_updateMetadata(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -401,7 +410,19 @@ func TestAccWorkbenchInstance_updateMetadata(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_updateMetadata(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata": `{
+      terraform = "true"
+      "resource-url" = "new-fake-value",
+      "serial-port-logging-enable" = "true",
+    }`,
+					"desired_state": nil,
+					"labels": `{
+    k = "val"
+  }`,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -414,7 +435,13 @@ func TestAccWorkbenchInstance_updateMetadata(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -497,32 +524,6 @@ func TestAccWorkbenchInstance_updateMetadataKey(t *testing.T) {
 	})
 }
 
-func testAccWorkbenchInstance_updateMetadata(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_workbench_instance" "instance" {
-  name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
-
-  gce_setup {
-    machine_type = "n4-standard-2"
-    boot_disk {
-      disk_type = "HYPERDISK_BALANCED"
-    }
-    metadata = {
-      terraform = "true"
-      "resource-url" = "new-fake-value",
-      "serial-port-logging-enable" = "true",
-    }
-  }
-
-  labels = {
-    k = "val"
-  }
-
-}
-`, context)
-}
-
 func testAccWorkbenchInstance_updateMetadataN2(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
@@ -585,16 +586,20 @@ resource "google_workbench_instance" "instance" {
 func TestAccWorkbenchInstance_updateState(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -607,7 +612,13 @@ func TestAccWorkbenchInstance_updateState(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_updateState(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     "STOPPED",
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "STOPPED"),
@@ -620,7 +631,13 @@ func TestAccWorkbenchInstance_updateState(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -636,30 +653,15 @@ func TestAccWorkbenchInstance_updateState(t *testing.T) {
 	})
 }
 
-func testAccWorkbenchInstance_updateState(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_workbench_instance" "instance" {
-  name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
-
-  gce_setup {
-    machine_type = "n4-standard-2"
-    boot_disk {
-      disk_type = "HYPERDISK_BALANCED"
-    }
-  }
-
-  desired_state = "STOPPED"
-
-}
-`, context)
-}
-
 func TestAccWorkbenchInstance_empty_accelerator(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":     acctest.RandString(t, 10),
+		"boot_disk_size_gb": nil,
+		"metadata":          nil,
+		"desired_state":     nil,
+		"labels":            nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -730,16 +732,20 @@ resource "google_workbench_instance" "instance" {
 func TestAccWorkbenchInstance_updateBootDisk(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -752,7 +758,13 @@ func TestAccWorkbenchInstance_updateBootDisk(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type"},
 			},
 			{
-				Config: testAccWorkbenchInstance_updateBootDisk(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": 310,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -772,7 +784,11 @@ func TestAccWorkbenchInstance_updateDataDisk(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":     acctest.RandString(t, 10),
+		"boot_disk_size_gb": nil,
+		"metadata":          nil,
+		"desired_state":     nil,
+		"labels":            nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -812,16 +828,20 @@ func TestAccWorkbenchInstance_updateDataDisk(t *testing.T) {
 func TestAccWorkbenchInstance_updateBothDisks(t *testing.T) {
 	t.Parallel()
 
-	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-	}
+	randomSuffix := acctest.RandString(t, 10)
 
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWorkbenchInstance_basic(context),
+				Config: testAccWorkbenchInstance_basic(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": nil,
+					"metadata":          nil,
+					"desired_state":     nil,
+					"labels":            nil,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -834,7 +854,10 @@ func TestAccWorkbenchInstance_updateBothDisks(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"name", "instance_owners", "location", "instance_id", "request_id", "labels", "terraform_labels", "desired_state", "update_time", "health_info", "health_state", "gce_setup.0.boot_disk.0.disk_type", "gce_setup.0.data_disks.0.disk_type", "gce_setup.0.metadata"},
 			},
 			{
-				Config: testAccWorkbenchInstance_updateBothDisks(context),
+				Config: testAccWorkbenchInstance_updateDataDisk(map[string]interface{}{
+					"random_suffix":     randomSuffix,
+					"boot_disk_size_gb": 310,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_workbench_instance.instance", "state", "ACTIVE"),
@@ -850,22 +873,6 @@ func TestAccWorkbenchInstance_updateBothDisks(t *testing.T) {
 	})
 }
 
-func testAccWorkbenchInstance_updateBootDisk(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_workbench_instance" "instance" {
-  name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
-  gce_setup {
-    machine_type = "n4-standard-2"
-	boot_disk {
-		disk_size_gb  = 310
-		disk_type     = "HYPERDISK_BALANCED"
-	  }
-	}
-}
-`, context)
-}
-
 func testAccWorkbenchInstance_updateDataDisk(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_workbench_instance" "instance" {
@@ -874,28 +881,9 @@ resource "google_workbench_instance" "instance" {
   gce_setup {  
     machine_type = "n4-standard-2"
 	boot_disk {
+		disk_size_gb = %{boot_disk_size_gb}
 		disk_type = "HYPERDISK_BALANCED"
 	}
-	  data_disks {
-		disk_size_gb  = 330
-	  }
-	}
-}
-`, context)
-}
-
-func testAccWorkbenchInstance_updateBothDisks(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_workbench_instance" "instance" {
-  name = "tf-test-workbench-instance%{random_suffix}"
-  location = "us-east1-b"
-  gce_setup {
-    machine_type = "n4-standard-2"
-	boot_disk {
-		disk_size_gb  = 310
-		disk_type     = "HYPERDISK_BALANCED"
-	  }
-
 	  data_disks {
 		disk_size_gb  = 330
 	  }
@@ -911,7 +899,11 @@ func TestAccWorkbenchInstance_updatelabels(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":     acctest.RandString(t, 10),
+		"boot_disk_size_gb": nil,
+		"metadata":          nil,
+		"desired_state":     nil,
+		"labels":            nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
