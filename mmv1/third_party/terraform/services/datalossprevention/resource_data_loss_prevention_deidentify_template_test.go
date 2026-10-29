@@ -2877,7 +2877,13 @@ func TestAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTra
 		CheckDestroy:             testAccCheckDataLossPreventionDeidentifyTemplateDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigString(context),
+				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigString(map[string]interface{}{
+					"project":           context["project"],
+					"string_value":      "someVal",
+					"boolean_value":     nil,
+					"timestamp_value":   nil,
+					"day_of_week_value": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_deidentify_template.basic",
@@ -2885,7 +2891,13 @@ func TestAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTra
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigBoolean(context),
+				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigString(map[string]interface{}{
+					"project":           context["project"],
+					"string_value":      nil,
+					"boolean_value":     true,
+					"timestamp_value":   nil,
+					"day_of_week_value": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_deidentify_template.basic",
@@ -2893,7 +2905,13 @@ func TestAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTra
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigTimestamp(context),
+				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigString(map[string]interface{}{
+					"project":           context["project"],
+					"string_value":      nil,
+					"boolean_value":     nil,
+					"timestamp_value":   "2021-11-16T17:28:52Z",
+					"day_of_week_value": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_deidentify_template.basic",
@@ -2917,7 +2935,13 @@ func TestAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTra
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigDayOfWeek(context),
+				Config: testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigString(map[string]interface{}{
+					"project":           context["project"],
+					"string_value":      nil,
+					"boolean_value":     nil,
+					"timestamp_value":   nil,
+					"day_of_week_value": "WEDNESDAY",
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_deidentify_template.basic",
@@ -2980,137 +3004,10 @@ resource "google_data_loss_prevention_deidentify_template" "basic" {
             primitive_transformation {
               replace_config {
                 new_value {
-                  string_value = "someVal"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`, context)
-}
-
-func testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigBoolean(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_deidentify_template" "basic" {
-  parent = "projects/%{project}"
-  description = "Description"
-  display_name = "Displayname"
-
-  deidentify_config {
-    record_transformations {
-      record_suppressions {
-        condition {
-          expressions {
-            logical_operator = "AND"
-            conditions {
-              conditions {
-                field {
-                  name = "field1"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "FOO-BAR"
-                }
-              }
-              conditions {
-                field {
-                  name = "field2"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "foobar"
-                }
-              }
-            }
-          }
-        }
-      }
-      field_transformations {
-        fields {
-          name = "unconditionally-replace-config"
-        }
-
-        info_type_transformations {
-          transformations {   
-            info_types {
-              name = "PHONE_NUMBER"
-            }
-            info_types {
-              name = "CREDIT_CARD_NUMBER"
-            } 
-            primitive_transformation {
-              replace_config {
-                new_value {
-                  boolean_value = true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`, context)
-}
-
-func testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigTimestamp(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_deidentify_template" "basic" {
-  parent = "projects/%{project}"
-  description = "Description"
-  display_name = "Displayname"
-
-  deidentify_config {
-    record_transformations {
-      record_suppressions {
-        condition {
-          expressions {
-            logical_operator = "AND"
-            conditions {
-              conditions {
-                field {
-                  name = "field1"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "FOO-BAR"
-                }
-              }
-              conditions {
-                field {
-                  name = "field2"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "foobar"
-                }
-              }
-            }
-          }
-        }
-      }
-      field_transformations {
-        fields {
-          name = "unconditionally-replace-config"
-        }
-
-        info_type_transformations {
-          transformations {   
-            info_types {
-              name = "PHONE_NUMBER"
-            }
-            info_types {
-              name = "CREDIT_CARD_NUMBER"
-            } 
-            primitive_transformation {
-              replace_config {
-                new_value {
-                  timestamp_value = "2021-11-16T17:28:52Z"
+                  string_value = "%{string_value}"
+                  boolean_value = %{boolean_value}
+                  timestamp_value = "%{timestamp_value}"
+                  day_of_week_value = "%{day_of_week_value}"
                 }
               }
             }
@@ -3250,71 +3147,6 @@ resource "google_data_loss_prevention_deidentify_template" "basic" {
                     month = 8
                     year = 2020
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`, context)
-}
-
-func testAccDataLossPreventionDeidentifyTemplate_dlpDeidentifyTemplate_recordTransformations_with_infoTypeTransformations_replaceConfigDayOfWeek(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_deidentify_template" "basic" {
-  parent = "projects/%{project}"
-  description = "Description"
-  display_name = "Displayname"
-
-  deidentify_config {
-    record_transformations {
-      record_suppressions {
-        condition {
-          expressions {
-            logical_operator = "AND"
-            conditions {
-              conditions {
-                field {
-                  name = "field1"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "FOO-BAR"
-                }
-              }
-              conditions {
-                field {
-                  name = "field2"
-                }
-                operator = "EQUAL_TO"
-                value {
-                  string_value = "foobar"
-                }
-              }
-            }
-          }
-        }
-      }
-      field_transformations {
-        fields {
-          name = "unconditionally-replace-config"
-        }
-
-        info_type_transformations {
-          transformations {   
-            info_types {
-              name = "PHONE_NUMBER"
-            }
-            info_types {
-              name = "CREDIT_CARD_NUMBER"
-            } 
-            primitive_transformation {
-              replace_config {
-                new_value {
-                  day_of_week_value = "WEDNESDAY"
                 }
               }
             }
