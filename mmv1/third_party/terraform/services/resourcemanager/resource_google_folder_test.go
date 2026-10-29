@@ -110,7 +110,7 @@ func TestAccFolder_tags(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccFolder_tags(context),
+				Config: testAccFolder_tags(context, nil),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGoogleFolderExists(t, "google_folder.folder_tags", &folder_tags),
 				),
@@ -128,7 +128,7 @@ func TestAccFolder_tags(t *testing.T) {
 				ExpectError: regexp.MustCompile("deletion_protection"),
 			},
 			{
-				Config: testAccFolder_tagsAllowDestroy(context),
+				Config: testAccFolder_tags(context, false),
 			},
 		},
 	})
@@ -205,12 +205,14 @@ resource "google_folder" "folder1" {
 `, folder, parent)
 }
 
-func testAccFolder_tags(context map[string]interface{}) string {
+func testAccFolder_tags(context map[string]interface{}, deletionProtection interface{}) string {
+	context["deletion_protection"] = deletionProtection
 	return acctest.Nprintf(`
 resource "google_folder" "folder_tags" {
-  display_name = "tf-test-%{random_suffix}"
-  parent       = "organizations/%{org}"
-  tags         = {
+  display_name        = "tf-test-%{random_suffix}"
+  parent              = "organizations/%{org}"
+  deletion_protection = %{deletion_protection}
+  tags                = {
 	"%{org}/%{tagKey}" = "%{tagValue}"
   }
 }
@@ -222,19 +224,6 @@ func testAccFolder_withoutTags(context map[string]interface{}) string {
 resource "google_folder" "folder_tags" {
   display_name = "tf-test-%{random_suffix}"
   parent       = "organizations/%{org}"
-}
-`, context)
-}
-
-func testAccFolder_tagsAllowDestroy(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_folder" "folder_tags" {
-  display_name = "tf-test-%{random_suffix}"
-  parent       = "organizations/%{org}"
-  deletion_protection = false
-  tags = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
 }
 `, context)
 }
