@@ -302,7 +302,7 @@ func TestAccProject_tags(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccProject_tags(context),
+				Config: testAccProject_tags(context, nil),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGoogleProjectExists("google_project.acceptance", pid),
 				),
@@ -320,7 +320,7 @@ func TestAccProject_tags(t *testing.T) {
 				ExpectError: regexp.MustCompile("deletion_policy"),
 			},
 			{
-				Config: testAccProject_tagsAllowDestroy(context),
+				Config: testAccProject_tags(context, "DELETE"),
 			},
 		},
 	})
@@ -641,12 +641,14 @@ resource "google_folder" "folder1" {
 `, pid, pid, org, folderName, org)
 }
 
-func testAccProject_tags(context map[string]interface{}) string {
+func testAccProject_tags(context map[string]interface{}, deletionPolicy interface{}) string {
+	context["deletion_policy"] = deletionPolicy
 	return acctest.Nprintf(`
 resource "google_project" "acceptance" {
-  project_id = "%{pid}"
-  name       = "%{pid}"
-  org_id     = "%{org}"
+  project_id      = "%{pid}"
+  name            = "%{pid}"
+  org_id          = "%{org}"
+  deletion_policy = "%{deletion_policy}"
   tags = {
 	"%{org}/%{tagKey}" = "%{tagValue}"
   }
@@ -660,20 +662,6 @@ resource "google_project" "acceptance" {
   project_id = "%{pid}"
   name       = "%{pid}"
   org_id     = "%{org}"
-}
-`, context)
-}
-
-func testAccProject_tagsAllowDestroy(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_project" "acceptance" {
-  project_id      = "%{pid}"
-  name            = "%{pid}"
-  org_id          = "%{org}"
-  deletion_policy = "DELETE"
-  tags            = {
-	"%{org}/%{tagKey}" = "%{tagValue}"
-  }
 }
 `, context)
 }
