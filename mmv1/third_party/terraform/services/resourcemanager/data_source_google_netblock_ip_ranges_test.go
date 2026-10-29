@@ -1,12 +1,152 @@
 package resourcemanager_test
 
 import (
+	"reflect"
 	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-provider-google/google/acctest"
+	"github.com/hashicorp/terraform-provider-google/google/services/resourcemanager"
 )
+
+func TestCidrBlocksMinus(t *testing.T) {
+	cases := map[string]struct {
+		target      []string
+		subtract    []string
+		want        []string
+		expectError bool
+	}{
+		"empty target": {
+			target:   nil,
+			subtract: []string{"10.0.0.0/24"},
+			want:     nil,
+		},
+		"IPv4 disjoint ranges": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.1.0/24", "192.168.0.0/16"},
+			want:     []string{"10.0.0.0/24"},
+		},
+		"IPv4 full containment exact": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.0.0/24"},
+			want:     nil,
+		},
+		"IPv4 full containment superset": {
+			target:   []string{"10.0.0.0/24", "10.0.1.0/24"},
+			subtract: []string{"10.0.0.0/16"},
+			want:     nil,
+		},
+		"IPv4 single level split left half removed": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.0.0/25"},
+			want:     []string{"10.0.0.128/25"},
+		},
+		"IPv4 single level split right half removed": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.0.128/25"},
+			want:     []string{"10.0.0.0/25"},
+		},
+		"IPv4 multi-level partial split": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.0.64/26"},
+			want:     []string{"10.0.0.0/26", "10.0.0.128/25"},
+		},
+		"IPv4 multiple subtract blocks": {
+			target:   []string{"10.0.0.0/24"},
+			subtract: []string{"10.0.0.0/26", "10.0.0.192/26"},
+			want:     []string{"10.0.0.128/26", "10.0.0.64/26"},
+		},
+		"IPv4 coalesces sibling target prefixes before subtraction": {
+			target:   []string{"10.0.0.0/25", "10.0.0.128/25"},
+			subtract: []string{"10.0.0.0/26"},
+			want:     []string{"10.0.0.128/25", "10.0.0.64/26"},
+		},
+		"IPv4 overlapping and duplicate target prefixes": {
+			target:   []string{"10.0.0.0/24", "10.0.0.0/25", "10.0.0.0/24"},
+			subtract: []string{"10.0.0.128/25"},
+			want:     []string{"10.0.0.0/25"},
+		},
+		"IPv4 /0 prefix splitting": {
+			target:   []string{"0.0.0.0/0"},
+			subtract: []string{"128.0.0.0/1"},
+			want:     []string{"0.0.0.0/1"},
+		},
+		"IPv6 /0 prefix splitting": {
+			target:   []string{"::/0"},
+			subtract: []string{"8000::/1"},
+			want:     []string{"::/1"},
+		},
+		"IPv4 /32 host prefix as target and subtract": {
+			target:   []string{"10.0.0.1/32", "10.0.0.2/32"},
+			subtract: []string{"10.0.0.1/32"},
+			want:     []string{"10.0.0.2/32"},
+		},
+		"IPv4 /32 host prefix subtracted from /30": {
+			target:   []string{"10.0.0.0/30"},
+			subtract: []string{"10.0.0.1/32"},
+			want:     []string{"10.0.0.0/32", "10.0.0.2/31"},
+		},
+		"IPv6 /128 host prefix as target and subtract": {
+			target:   []string{"2001:db8::1/128", "2001:db8::2/128"},
+			subtract: []string{"2001:db8::1/128"},
+			want:     []string{"2001:db8::2/128"},
+		},
+		"IPv6 /128 host prefix subtracted from /126": {
+			target:   []string{"2001:db8::/126"},
+			subtract: []string{"2001:db8::1/128"},
+			want:     []string{"2001:db8::/128", "2001:db8::2/127"},
+		},
+		"IPv6 disjoint ranges": {
+			target:   []string{"2001:db8::/32"},
+			subtract: []string{"2001:db9::/32"},
+			want:     []string{"2001:db8::/32"},
+		},
+		"IPv6 full containment": {
+			target:   []string{"2001:db8:1000::/36"},
+			subtract: []string{"2001:db8::/32"},
+			want:     nil,
+		},
+		"IPv6 partial split": {
+			target:   []string{"2001:db8::/32"},
+			subtract: []string{"2001:db8::/34"},
+			want:     []string{"2001:db8:4000::/34", "2001:db8:8000::/33"},
+		},
+		"mixed IPv4 and IPv6 blocks": {
+			target:   []string{"10.0.0.0/24", "2001:db8::/32"},
+			subtract: []string{"10.0.0.128/25", "2001:db8::/33"},
+			want:     []string{"10.0.0.0/25", "2001:db8:8000::/33"},
+		},
+		"invalid target CIDR returns error": {
+			target:      []string{"not-a-cidr"},
+			subtract:    []string{"10.0.0.0/24"},
+			expectError: true,
+		},
+		"invalid subtract CIDR returns error": {
+			target:      []string{"10.0.0.0/24"},
+			subtract:    []string{"not-a-cidr"},
+			expectError: true,
+		},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			got, err := resourcemanager.CidrBlocksMinus(tc.target, tc.subtract)
+			if tc.expectError {
+				if err == nil {
+					t.Fatalf("expected error, got nil (result: %v)", got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Fatalf("CidrBlocksMinus(%v, %v) = %v, want %v", tc.target, tc.subtract, got, tc.want)
+			}
+		})
+	}
+}
 
 func TestAccDataSourceGoogleNetblockIpRanges_basic(t *testing.T) {
 	acctest.VcrTest(t, resource.TestCase{
