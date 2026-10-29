@@ -465,11 +465,28 @@ func TestAccFilestoreInstance_replication(t *testing.T) {
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
-		"location_1":    "us-east1",
-		"location_2":    "us-west1",
-		"tier":          "ENTERPRISE",
-		"project":       envvar.GetTestProjectFromEnv(),
+		"random_suffix":         acctest.RandString(t, 10),
+		"location_1":            "us-east1",
+		"location_2":            "us-west1",
+		"tier":                  "ENTERPRISE",
+		"project":               envvar.GetTestProjectFromEnv(),
+		"desired_replica_state": nil,
+	}
+	contextPause := map[string]interface{}{
+		"random_suffix":         context["random_suffix"],
+		"location_1":            context["location_1"],
+		"location_2":            context["location_2"],
+		"tier":                  context["tier"],
+		"project":               context["project"],
+		"desired_replica_state": "PAUSED",
+	}
+	contextResume := map[string]interface{}{
+		"random_suffix":         context["random_suffix"],
+		"location_1":            context["location_1"],
+		"location_2":            context["location_2"],
+		"tier":                  context["tier"],
+		"project":               context["project"],
+		"desired_replica_state": "READY",
 	}
 	acctest.VcrTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
@@ -498,7 +515,7 @@ func TestAccFilestoreInstance_replication(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"zone", "initial_replication", "desired_replica_state", "effective_replication.0.replicas.0.last_active_sync_time"},
 			},
 			{
-				Config: testAccFilestoreInstance_replication_pause(context),
+				Config: testAccFilestoreInstance_replication(contextPause),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_filestore_instance.replica_instance",
@@ -514,7 +531,7 @@ func TestAccFilestoreInstance_replication(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"zone", "initial_replication", "desired_replica_state", "effective_replication.0.replicas.0.last_active_sync_time"},
 			},
 			{
-				Config: testAccFilestoreInstance_replication_resume(context),
+				Config: testAccFilestoreInstance_replication(contextResume),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"google_filestore_instance.replica_instance",
@@ -557,96 +574,7 @@ resource "google_filestore_instance" "replica_instance" {
   location      	= "%{location_2}"
   tier          	= "%{tier}"
   description   	= "An replica instance created during testing."
-
-  file_shares {	
-    capacity_gb 	= 1024
-    name            = "share"
-  }
-
-  networks {
-    network         = "default"
-    modes           = ["MODE_IPV4"]
-  }
-
-  initial_replication {
-    replicas {
-      peer_instance = google_filestore_instance.source_instance.id
-    }
-  }
-}
-`, context)
-}
-
-func testAccFilestoreInstance_replication_pause(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_filestore_instance" "source_instance" {
-  name             = "tf-test-source-instance-%{random_suffix}"
-  location         = "%{location_1}"
-  tier             = "%{tier}"
-  description      = "An source instance created during testing."
-
-  file_shares {
-    capacity_gb    = 1024
-    name           = "share"
-  }
-
-  networks {
-    network        = "default"
-    modes          = ["MODE_IPV4"]
-  }
-}
-
-resource "google_filestore_instance" "replica_instance" {
-  name          	= "tf-test-replica-instance-%{random_suffix}"
-  location      	= "%{location_2}"
-  tier          	= "%{tier}"
-  description   	= "An replica instance created during testing."
-  desired_replica_state    = "PAUSED"
-
-  file_shares {	
-    capacity_gb 	= 1024
-    name            = "share"
-  }
-
-  networks {
-    network         = "default"
-    modes           = ["MODE_IPV4"]
-  }
-
-  initial_replication {
-    replicas {
-      peer_instance = google_filestore_instance.source_instance.id
-    }
-  }
-}
-`, context)
-}
-
-func testAccFilestoreInstance_replication_resume(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_filestore_instance" "source_instance" {
-  name             = "tf-test-source-instance-%{random_suffix}"
-  location         = "%{location_1}"
-  tier             = "%{tier}"
-  description      = "An source instance created during testing."
-
-  file_shares {
-    capacity_gb    = 1024
-    name           = "share"
-  }
-
-  networks {
-    network        = "default"
-    modes          = ["MODE_IPV4"]
-  }
-}
-
-resource "google_filestore_instance" "replica_instance" {
-  name          	= "tf-test-replica-instance-%{random_suffix}"
-  location      	= "%{location_2}"
-  tier          	= "%{tier}"
-  description   	= "An replica instance created during testing."
-  desired_replica_state    = "READY"
+  desired_replica_state    = "%{desired_replica_state}"
 
   file_shares {	
     capacity_gb 	= 1024
