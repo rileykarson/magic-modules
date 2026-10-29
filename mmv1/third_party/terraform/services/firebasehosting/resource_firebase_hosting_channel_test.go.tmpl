@@ -24,7 +24,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckFirebaseHostingChannelDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, nil, nil),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -33,7 +33,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "site_id", "channel_id"},
 			},
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelTtl(context, "8600s"),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, "8600s", nil),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -42,7 +42,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "site_id", "channel_id"},
 			},
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelTtl(context, "86400s"),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, "86400s", nil),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -51,7 +51,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "site_id", "channel_id"},
 			},
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelRetainedReleaseCount(context, 30),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, "86400s", 30),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -60,7 +60,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "site_id", "channel_id"},
 			},
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelRetainedReleaseCount(context, 20),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, "86400s", 20),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -87,7 +87,7 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"ttl", "site_id", "channel_id", "labels", "terraform_labels"},
 			},
 			{
-				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context),
+				Config: testAccFirebaseHostingChannel_firebasehostingChannelBasic(context, nil, nil),
 			},
 			{
 				ResourceName:            "google_firebase_hosting_channel.update",
@@ -99,41 +99,8 @@ func TestAccFirebaseHostingChannel_firebasehostingChannelUpdate(t *testing.T) {
 	})
 }
 
-func testAccFirebaseHostingChannel_firebasehostingChannelBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_firebase_hosting_site" "default" {
-  provider = google-beta
-  project  = "%{project_id}"
-  site_id = "tf-test-site-with-channel%{random_suffix}"
-}
-
-resource "google_firebase_hosting_channel" "update" {
-  provider = google-beta
-  site_id = google_firebase_hosting_site.default.site_id
-  channel_id = "tf-test-channel-update%{random_suffix}"
-}
-`, context)
-}
-
-func testAccFirebaseHostingChannel_firebasehostingChannelTtl(context map[string]interface{}, ttl string) string {
+func testAccFirebaseHostingChannel_firebasehostingChannelBasic(context map[string]interface{}, ttl interface{}, retainedReleaseCount interface{}) string {
 	context["ttl"] = ttl
-	return acctest.Nprintf(`
-resource "google_firebase_hosting_site" "default" {
-  provider = google-beta
-  project  = "%{project_id}"
-  site_id = "tf-test-site-with-channel%{random_suffix}"
-}
-
-resource "google_firebase_hosting_channel" "update" {
-  provider = google-beta
-  site_id = google_firebase_hosting_site.default.site_id
-  channel_id = "tf-test-channel-update%{random_suffix}"
-  ttl = "%{ttl}"
-}
-`, context)
-}
-
-func testAccFirebaseHostingChannel_firebasehostingChannelRetainedReleaseCount(context map[string]interface{}, retainedReleaseCount int) string {
 	context["retained_release_count"] = retainedReleaseCount
 	return acctest.Nprintf(`
 resource "google_firebase_hosting_site" "default" {
@@ -146,7 +113,7 @@ resource "google_firebase_hosting_channel" "update" {
   provider = google-beta
   site_id = google_firebase_hosting_site.default.site_id
   channel_id = "tf-test-channel-update%{random_suffix}"
-  ttl = "86400s"
+  ttl = "%{ttl}"
   retained_release_count = %{retained_release_count}
 }
 `, context)
