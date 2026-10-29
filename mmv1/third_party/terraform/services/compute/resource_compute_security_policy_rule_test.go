@@ -390,7 +390,11 @@ func TestAccComputeSecurityPolicyRule_withRedirectOptionsUpdate(t *testing.T) {
 		CheckDestroy:             testAccCheckComputeSecurityPolicyRuleDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccComputeSecurityPolicyRule_withRedirectOptionsRecaptcha(context),
+				Config: testAccComputeSecurityPolicyRule_withRedirectOptionsRecaptcha(map[string]interface{}{
+					"random_suffix":   context["random_suffix"],
+					"redirect_type":   "GOOGLE_RECAPTCHA",
+					"redirect_target": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_compute_security_policy_rule.policy_rule",
@@ -398,7 +402,11 @@ func TestAccComputeSecurityPolicyRule_withRedirectOptionsUpdate(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccComputeSecurityPolicyRule_withRedirectOptionsExternal(context),
+				Config: testAccComputeSecurityPolicyRule_withRedirectOptionsRecaptcha(map[string]interface{}{
+					"random_suffix":   context["random_suffix"],
+					"redirect_type":   "EXTERNAL_302",
+					"redirect_target": "https://example.com",
+				}),
 			},
 			{
 				ResourceName:      "google_compute_security_policy_rule.policy_rule",
@@ -1262,32 +1270,8 @@ resource "google_compute_security_policy_rule" "policy_rule" {
     }
   }
   redirect_options {
-    type = "GOOGLE_RECAPTCHA"
-  }
-}
-`, context)
-}
-
-func testAccComputeSecurityPolicyRule_withRedirectOptionsExternal(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_security_policy" "default" {
-  name        = "tf-test%{random_suffix}"
-  description = "basic global security policy"
-}
-
-resource "google_compute_security_policy_rule" "policy_rule" {
-  security_policy = google_compute_security_policy.default.name
-  action          = "redirect"
-  priority        = "100"
-  match {
-    versioned_expr = "SRC_IPS_V1"
-    config {
-      src_ip_ranges = ["*"]
-    }
-  }
-  redirect_options {
-    type = "EXTERNAL_302"
-    target = "https://example.com"
+    type = "%{redirect_type}"
+    target = "%{redirect_target}"
   }
 }
 `, context)
