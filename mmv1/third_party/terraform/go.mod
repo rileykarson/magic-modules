@@ -33,7 +33,6 @@ require (
 	github.com/mitchellh/hashstructure v1.1.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/stretchr/testify v1.12.1
-	go4.org/netipx v0.0.0-20260823151212-3075585bcbeb
 	golang.org/x/net v0.61.0
 	golang.org/x/oauth2 v0.37.0
 	google.golang.org/api v0.305.0
