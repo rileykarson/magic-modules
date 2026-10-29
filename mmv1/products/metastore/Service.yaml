@@ -111,6 +111,8 @@ samples:
           metastore_service_name: metastore-metadata
   - name: dataproc_metastore_service_private_service_connect
     primary_resource_id: default
+    # Fails subnetwork destroy due to lingering PSC endpoints: https://github.com/hashicorp/terraform-provider-google/issues/18877
+    skip_vcr: true
     steps:
       - name: dataproc_metastore_service_private_service_connect
         resource_id_vars:
