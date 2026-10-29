@@ -26,6 +26,7 @@ func TestAccComputePerInstanceConfig_statefulBasic(t *testing.T) {
 		"config_name2":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
 		"config_name3":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
 		"config_name4":  fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
+		"zone":          nil,
 	}
 	igmId := fmt.Sprintf("projects/%s/zones/%s/instanceGroupManagers/%s",
 		envvar.GetTestProjectFromEnv(), envvar.GetTestZoneFromEnv(), igmName)
@@ -46,7 +47,12 @@ func TestAccComputePerInstanceConfig_statefulBasic(t *testing.T) {
 			},
 			{
 				// Force-recreate old config
-				Config: testAccComputePerInstanceConfig_statefulModified(context),
+				Config: testAccComputePerInstanceConfig_statefulBasic(map[string]interface{}{
+					"igm_name":      context["igm_name"],
+					"random_suffix": context["random_suffix"],
+					"config_name":   context["config_name2"],
+					"zone":          "google_compute_instance_group_manager.igm.zone",
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputePerInstanceConfigDestroyed(t, igmId, context["config_name"].(string)),
 				),
@@ -99,6 +105,7 @@ func TestAccComputePerInstanceConfig_update(t *testing.T) {
 		"random_suffix": acctest.RandString(t, 10),
 		"igm_name":      fmt.Sprintf("tf-test-igm-%s", acctest.RandString(t, 10)),
 		"config_name":   fmt.Sprintf("tf-test-instance-%s", acctest.RandString(t, 10)),
+		"zone":          nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -234,6 +241,7 @@ func TestAccComputePerInstanceConfig_removeInstanceOnDestroy(t *testing.T) {
 func testAccComputePerInstanceConfig_statefulBasic(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 resource "google_compute_per_instance_config" "default" {
+	zone = %{zone}
 	instance_group_manager = google_compute_instance_group_manager.igm.name
 	name = "%{config_name}"
 	remove_instance_state_on_destroy = true
@@ -256,22 +264,6 @@ resource "google_compute_per_instance_config" "default" {
 		metadata = {
 			asdf = "asdf"
 			update = "12345"
-		}
-	}
-}
-`, context) + testAccComputePerInstanceConfig_igm(context)
-}
-
-func testAccComputePerInstanceConfig_statefulModified(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_per_instance_config" "default" {
-	zone = google_compute_instance_group_manager.igm.zone
-	instance_group_manager = google_compute_instance_group_manager.igm.name
-	name = "%{config_name2}"
-	remove_instance_state_on_destroy = true
-	preserved_state {
-		metadata = {
-			asdf = "asdf"
 		}
 	}
 }
