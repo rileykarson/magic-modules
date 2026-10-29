@@ -24,4 +24,5 @@ resource "google_iam_workforce_pool_provider" "{{$.PrimaryResourceId}}" {
       assertion_claims_behavior = "MERGE_USER_INFO_OVER_ID_TOKEN_CLAIMS"
     }
   }
+  detailed_audit_logging = {{index $.Vars "detailed_audit_logging"}}
 }

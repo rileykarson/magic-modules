@@ -72,6 +72,8 @@ samples:
           workforce_pool_id: example-pool
         test_env_vars:
           org_id: ORG_ID
+        vars:
+          detailed_audit_logging: null
   - name: iam_workforce_pool_provider_oidc_full
     primary_resource_id: example
     steps:
@@ -174,6 +176,7 @@ samples:
     primary_resource_id: example
     steps:
       - name: iam_workforce_pool_provider_oidc_detailed_audit_logging
+        config_path: templates/terraform/samples/services/iamworkforcepool/iam_workforce_pool_provider_oidc_basic.tf.tmpl
         ignore_read_extra:
           - oidc.0.client_secret.0.value.0.plain_text
         resource_id_vars:
@@ -181,6 +184,8 @@ samples:
           workforce_pool_id: example-pool
         test_env_vars:
           org_id: ORG_ID
+        vars:
+          detailed_audit_logging: true
 properties:
   - name: location
     type: String
