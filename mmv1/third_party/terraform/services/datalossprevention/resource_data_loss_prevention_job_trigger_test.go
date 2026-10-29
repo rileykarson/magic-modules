@@ -14,8 +14,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerUpdateExample(t *testing.T
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"project":       envvar.GetTestProjectFromEnv(),
-		"random_suffix": acctest.RandString(t, 10),
+		"project":               envvar.GetTestProjectFromEnv(),
+		"random_suffix":         acctest.RandString(t, 10),
+		"inspect_template_name": "fake",
+		"file_types":            `["POWERPOINT", "EXCEL", "CSV", "TSV"]`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -387,8 +389,10 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerActionsOptionalExample(t *
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"project":       envvar.GetTestProjectFromEnv(),
-		"random_suffix": acctest.RandString(t, 10),
+		"project":               envvar.GetTestProjectFromEnv(),
+		"random_suffix":         acctest.RandString(t, 10),
+		"inspect_template_name": "fake",
+		"file_types":            `["POWERPOINT", "EXCEL", "CSV", "TSV"]`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -431,8 +435,17 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 	t.Parallel()
 
 	context := map[string]interface{}{
-		"project":       envvar.GetTestProjectFromEnv(),
-		"random_suffix": acctest.RandString(t, 10),
+		"project":               envvar.GetTestProjectFromEnv(),
+		"random_suffix":         acctest.RandString(t, 10),
+		"inspect_template_name": nil,
+		"file_types":            nil,
+	}
+
+	contextWithInspect := map[string]interface{}{
+		"project":               context["project"],
+		"random_suffix":         context["random_suffix"],
+		"inspect_template_name": "fake",
+		"file_types":            `["POWERPOINT", "EXCEL", "CSV", "TSV"]`,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -440,15 +453,6 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		CheckDestroy:             testAccCheckDataLossPreventionJobTriggerDestroyProducer(t),
 		Steps: []resource.TestStep{
-			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context),
-			},
-			{
-				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
-				ImportState:             true,
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"parent"},
-			},
 			{
 				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context),
 			},
@@ -459,7 +463,16 @@ func TestAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalExample(t *
 				ImportStateVerifyIgnore: []string{"parent"},
 			},
 			{
-				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context),
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(contextWithInspect),
+			},
+			{
+				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"parent"},
+			},
+			{
+				Config: testAccDataLossPreventionJobTrigger_dlpJobTriggerBasic(context),
 			},
 			{
 				ResourceName:            "google_data_loss_prevention_job_trigger.basic",
@@ -589,7 +602,7 @@ resource "google_data_loss_prevention_job_trigger" "basic" {
 	}
 
 	inspect_job {
-		inspect_template_name = "fake"
+		inspect_template_name = "%{inspect_template_name}"
 		actions {
 			save_findings {
 				output_config {
@@ -605,7 +618,7 @@ resource "google_data_loss_prevention_job_trigger" "basic" {
 				file_set {
 					url = "gs://mybucket/directory/"
 				}
-				file_types = ["POWERPOINT", "EXCEL", "CSV", "TSV"]
+				file_types = %{file_types}
 			}
 		}
 	}
@@ -2440,42 +2453,6 @@ resource "google_data_loss_prevention_job_trigger" "basic" {
 
 	inspect_job {
 		inspect_template_name = "fake"
-		storage_config {
-			cloud_storage_options {
-				file_set {
-					url = "gs://mybucket/directory/"
-				}
-			}
-		}
-	}
-}
-`, context)
-}
-
-func testAccDataLossPreventionJobTrigger_dlpJobTriggerInspectOptionalBasic(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_job_trigger" "basic" {
-	parent = "projects/%{project}"
-	description = "Starting description"
-	display_name = "display"
-
-	triggers {
-		schedule {
-			recurrence_period_duration = "86400s"
-		}
-	}
-
-	inspect_job {
-		actions {
-			save_findings {
-				output_config {
-					table {
-						project_id = "project"
-						dataset_id = "dataset123"
-					}
-				}
-			}
-		}
 		storage_config {
 			cloud_storage_options {
 				file_set {
