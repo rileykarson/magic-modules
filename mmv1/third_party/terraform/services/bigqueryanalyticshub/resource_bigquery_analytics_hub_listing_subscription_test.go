@@ -8,10 +8,11 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+	"time"
 
-	"cloud.google.com/go/bigquery"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"google.golang.org/api/bigquery/v2"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
 
@@ -35,19 +36,19 @@ func AddBigQueryDatasetReplica(t *testing.T, projectID string, datasetID string,
 		return "", fmt.Errorf("failed to bootstrap config")
 	}
 
-	client, err := bigquery.NewClient(ctx, projectID, option.WithTokenSource(config.TokenSource), option.WithUserAgent(config.UserAgent))
+	bqService, err := bigquery.NewService(ctx, option.WithTokenSource(config.TokenSource), option.WithUserAgent(config.UserAgent))
 	if err != nil {
 		return "", fmt.Errorf("failed to create BigQuery client: %w", err)
 	}
-	defer client.Close()
 
 	log.Printf("INFO: Attempting to create dataset '%s' in project '%s' at location '%s'", datasetID, projectID, primaryLocation)
-	datasetRef := client.Dataset(datasetID)
-	datasetMetadata := &bigquery.DatasetMetadata{
+	_, err = bqService.Datasets.Insert(projectID, &bigquery.Dataset{
+		DatasetReference: &bigquery.DatasetReference{
+			ProjectId: projectID,
+			DatasetId: datasetID,
+		},
 		Location: primaryLocation,
-	}
-
-	err = datasetRef.Create(ctx, datasetMetadata)
+	}).Context(ctx).Do()
 	if err != nil {
 		if ge, ok := err.(*googleapi.Error); ok && ge.Code == 409 {
 			log.Printf("INFO: BigQuery dataset '%s' already exists in project '%s' at location '%s'. Continuing.", datasetID, projectID, primaryLocation)
@@ -67,9 +68,14 @@ func AddBigQueryDatasetReplica(t *testing.T, projectID string, datasetID string,
 
 	log.Printf("INFO: Executing BigQuery DDL query: %s", sqlQuery)
 
-	query := client.Query(sqlQuery)
-
-	job, err := query.Run(ctx)
+	job, err := bqService.Jobs.Insert(projectID, &bigquery.Job{
+		Configuration: &bigquery.JobConfiguration{
+			Query: &bigquery.JobConfigurationQuery{
+				Query:        sqlQuery,
+				UseLegacySql: new(bool),
+			},
+		},
+	}).Context(ctx).Do()
 	if err != nil {
 		// Check if the error is an "Already Exists" error on submission
 		if ge, ok := err.(*googleapi.Error); ok && ge.Code == 409 && (strings.Contains(ge.Message, "Duplicate") || strings.Contains(ge.Message, "Already Exists")) {
@@ -78,23 +84,30 @@ func AddBigQueryDatasetReplica(t *testing.T, projectID string, datasetID string,
 			return "", fmt.Errorf("failed to submit BigQuery DDL job for adding replica: %w", err)
 		}
 	} else {
-		status, waitErr := job.Wait(ctx)
-		if waitErr != nil {
-			// Check if the error is an "Already Exists" error after waiting
-			if ge, ok := waitErr.(*googleapi.Error); ok && ge.Code == 409 && (strings.Contains(ge.Message, "Duplicate") || strings.Contains(ge.Message, "Already Exists")) {
-				log.Printf("INFO: Replica '%s' already exists for dataset '%s' (error on job wait). Continuing.", replicaLocation, datasetID)
-			} else {
+		for {
+			polledJob, waitErr := bqService.Jobs.Get(projectID, job.JobReference.JobId).Location(job.JobReference.Location).Context(ctx).Do()
+			if waitErr != nil {
+				// Check if the error is an "Already Exists" error after waiting
+				if ge, ok := waitErr.(*googleapi.Error); ok && ge.Code == 409 && (strings.Contains(ge.Message, "Duplicate") || strings.Contains(ge.Message, "Already Exists")) {
+					log.Printf("INFO: Replica '%s' already exists for dataset '%s' (error on job wait). Continuing.", replicaLocation, datasetID)
+					break
+				}
 				return "", fmt.Errorf("failed to wait for BigQuery job completion for adding replica: %w", waitErr)
 			}
-		} else if status != nil && status.Err() != nil {
-			// Check if the status error is an "Already Exists" error
-			if ge, ok := status.Err().(*googleapi.Error); ok && ge.Code == 409 && (strings.Contains(ge.Message, "Duplicate") || strings.Contains(ge.Message, "Already Exists")) {
-				log.Printf("INFO: Replica '%s' already exists for dataset '%s' (error in job status). Continuing.", replicaLocation, datasetID)
-			} else {
-				return "", fmt.Errorf("BigQuery job for adding replica completed with an error: %w", status.Err())
+			if polledJob.Status != nil && polledJob.Status.State == "DONE" {
+				if polledJob.Status.ErrorResult != nil {
+					errMsg := polledJob.Status.ErrorResult.Message
+					if strings.Contains(errMsg, "Duplicate") || strings.Contains(errMsg, "Already Exists") || polledJob.Status.ErrorResult.Reason == "duplicate" {
+						log.Printf("INFO: Replica '%s' already exists for dataset '%s' (error in job status). Continuing.", replicaLocation, datasetID)
+					} else {
+						return "", fmt.Errorf("BigQuery job for adding replica completed with an error: %s (%s)", errMsg, polledJob.Status.ErrorResult.Reason)
+					}
+				} else {
+					log.Printf("INFO: Successfully added BigQuery dataset replica '%s' for dataset '%s'.", replicaLocation, datasetID)
+				}
+				break
 			}
-		} else {
-			log.Printf("INFO: Successfully added BigQuery dataset replica '%s' for dataset '%s'.", replicaLocation, datasetID)
+			time.Sleep(2 * time.Second)
 		}
 	}
 
@@ -110,12 +123,11 @@ func CleanupBigQueryDatasetAndReplica(t *testing.T, projectID, datasetID, replic
 		return
 	}
 
-	client, cerr := bigquery.NewClient(cleanupCtx, projectID, option.WithTokenSource(config.TokenSource), option.WithUserAgent(config.UserAgent))
+	bqService, cerr := bigquery.NewService(cleanupCtx, option.WithTokenSource(config.TokenSource), option.WithUserAgent(config.UserAgent))
 	if cerr != nil {
 		log.Printf("[ERROR] Cleanup: Failed to create BigQuery client for dataset %s: %v", datasetID, cerr)
 		return
 	}
-	defer client.Close()
 
 	// Attempt to remove the replica first
 	dropReplicaSQL := fmt.Sprintf(
@@ -124,24 +136,38 @@ func CleanupBigQueryDatasetAndReplica(t *testing.T, projectID, datasetID, replic
 		replicaLocation,
 	)
 	log.Printf("[DEBUG] Cleanup: Dropping replica with SQL: %s", dropReplicaSQL)
-	dropQuery := client.Query(dropReplicaSQL)
-	dropJob, dropErr := dropQuery.Run(cleanupCtx)
+	dropJob, dropErr := bqService.Jobs.Insert(projectID, &bigquery.Job{
+		Configuration: &bigquery.JobConfiguration{
+			Query: &bigquery.JobConfigurationQuery{
+				Query:        dropReplicaSQL,
+				UseLegacySql: new(bool),
+			},
+		},
+	}).Context(cleanupCtx).Do()
 	if dropErr != nil {
 		log.Printf("[ERROR] Cleanup: Failed to submit BigQuery DDL job for dropping replica %s of dataset %s: %v", replicaLocation, datasetID, dropErr)
 	} else {
-		dropStatus, dropWaitErr := dropJob.Wait(cleanupCtx)
-		if dropWaitErr != nil {
-			log.Printf("[ERROR] Cleanup: Failed to wait for BigQuery job completion for dropping replica %s of dataset %s: %v", replicaLocation, datasetID, dropWaitErr)
-		} else if dropStatus.Err() != nil {
-			log.Printf("[ERROR] Cleanup: BigQuery job for dropping replica %s of dataset %s completed with an error: %v", replicaLocation, datasetID, dropStatus.Err())
-		} else {
-			log.Printf("[INFO] Cleanup: Successfully dropped BigQuery dataset replica: %s for dataset %s", replicaLocation, datasetID)
+		for {
+			polledJob, dropWaitErr := bqService.Jobs.Get(projectID, dropJob.JobReference.JobId).Location(dropJob.JobReference.Location).Context(cleanupCtx).Do()
+			if dropWaitErr != nil {
+				log.Printf("[ERROR] Cleanup: Failed to wait for BigQuery job completion for dropping replica %s of dataset %s: %v", replicaLocation, datasetID, dropWaitErr)
+				break
+			}
+			if polledJob.Status != nil && polledJob.Status.State == "DONE" {
+				if polledJob.Status.ErrorResult != nil {
+					log.Printf("[ERROR] Cleanup: BigQuery job for dropping replica %s of dataset %s completed with an error: %s (%s)", replicaLocation, datasetID, polledJob.Status.ErrorResult.Message, polledJob.Status.ErrorResult.Reason)
+				} else {
+					log.Printf("[INFO] Cleanup: Successfully dropped BigQuery dataset replica: %s for dataset %s", replicaLocation, datasetID)
+				}
+				break
+			}
+			time.Sleep(2 * time.Second)
 		}
 	}
 
 	// Delete the main dataset (including any remaining contents)
 	log.Printf("[DEBUG] Cleanup: Deleting main BigQuery dataset: %s", datasetID)
-	err := client.Dataset(datasetID).DeleteWithContents(cleanupCtx)
+	err := bqService.Datasets.Delete(projectID, datasetID).DeleteContents(true).Context(cleanupCtx).Do()
 	if err != nil {
 		log.Printf("[ERROR] Cleanup: Failed to delete BigQuery dataset %s: %v", datasetID, err)
 	} else {
