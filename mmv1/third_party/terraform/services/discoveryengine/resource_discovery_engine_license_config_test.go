@@ -12,8 +12,16 @@ func TestAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 	t.Skip("License Config creation has been deprecated at the project level for Gemini Enterprise")
 	t.Parallel()
 
+	randomSuffix := acctest.RandString(t, 10)
 	context := map[string]interface{}{
-		"random_suffix": acctest.RandString(t, 10),
+		"random_suffix":         randomSuffix,
+		"license_count":         50,
+		"last_user_update_time": nil,
+	}
+	contextUpdate := map[string]interface{}{
+		"random_suffix":         randomSuffix,
+		"license_count":         51,
+		"last_user_update_time": "2026-08-19T20:00:00Z",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -30,7 +38,7 @@ func TestAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 				ImportStateVerifyIgnore: []string{"location"},
 			},
 			{
-				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_update(context),
+				Config: testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_basic(contextUpdate),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_discovery_engine_license_config.basic", "last_user_update_time", "2026-08-19T20:00:00Z"),
 				),
@@ -50,7 +58,7 @@ func testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExampl
 resource "google_discovery_engine_license_config" "basic" {
   location = "global"
   license_config_id = "tf-test-license-config-id%{random_suffix}"
-  license_count = 50
+  license_count = %{license_count}
   subscription_tier = "SUBSCRIPTION_TIER_SEARCH_AND_ASSISTANT"
   start_date {
     year = 2099
@@ -63,29 +71,7 @@ resource "google_discovery_engine_license_config" "basic" {
     day = 1
   }
   subscription_term = "SUBSCRIPTION_TERM_ONE_YEAR"
-}
-`, context)
-}
-
-func testAccDiscoveryEngineLicenseConfig_discoveryengineLicenseconfigBasicExample_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_discovery_engine_license_config" "basic" {
-  location = "global"
-  license_config_id = "tf-test-license-config-id%{random_suffix}"
-  license_count = 51
-  subscription_tier = "SUBSCRIPTION_TIER_SEARCH_AND_ASSISTANT"
-  start_date {
-    year = 2099
-    month = 1
-    day = 1
-  }
-  end_date {
-    year = 2100
-    month = 1
-    day = 1
-  }
-  subscription_term = "SUBSCRIPTION_TERM_ONE_YEAR"
-  last_user_update_time = "2026-08-19T20:00:00Z"
+  last_user_update_time = "%{last_user_update_time}"
 }
 `, context)
 }
