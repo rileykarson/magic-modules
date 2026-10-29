@@ -283,7 +283,13 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullAsns(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullAsns(map[string]interface{}{
+					"billing_account": context["billing_account"],
+					"org_id":          context["org_id"],
+					"random_suffix":   context["random_suffix"],
+					"expire_time":     "2032-12-31T23:59:59Z",
+					"ttl":             nil,
+				}),
 			},
 			{
 				ResourceName:      "google_apigee_security_action.default",
@@ -291,7 +297,13 @@ func TestAccApigeeSecurityAction_apigeeSecurityActionFull(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config:             testAccApigeeSecurityAction_apigeeSecurityActionFullTTL(context),
+				Config: testAccApigeeSecurityAction_apigeeSecurityActionFullAsns(map[string]interface{}{
+					"billing_account": context["billing_account"],
+					"org_id":          context["org_id"],
+					"random_suffix":   context["random_suffix"],
+					"expire_time":     nil,
+					"ttl":             "3600s",
+				}),
 				ExpectNonEmptyPlan: true, // ttl change enforces recreation of the resource
 			},
 		},
@@ -738,35 +750,8 @@ resource "google_apigee_security_action" "default" {
 		response_code = 403
 	}
 	
-    expire_time = "2032-12-31T23:59:59Z"
-    depends_on  = [
-        google_apigee_addons_config.apigee_org_security_addons_config
-    ]
-}
-`, context)
-}
-
-func testAccApigeeSecurityAction_apigeeSecurityActionFullTTL(context map[string]interface{}) string {
-	return testAccApigeeSecurityAction_apigeeBase(context) + acctest.Nprintf(`
-resource "google_apigee_security_action" "default" {
-    security_action_id = "tf-test-%{random_suffix}"
-    org_id             = google_apigee_organization.apigee_org.name
-    env_id             = google_apigee_environment.env.name
-    description        = "Apigee Security Action"
-    state              = "ENABLED"
-
-    condition_config {
-		asns = [
-			"23",
-			"42",
-		]
-    }
-	
-	deny {
-		response_code = 403
-	}
-	
-    ttl 		= "3600s"
+    expire_time = "%{expire_time}"
+    ttl 		= "%{ttl}"
     depends_on  = [
         google_apigee_addons_config.apigee_org_security_addons_config
     ]
