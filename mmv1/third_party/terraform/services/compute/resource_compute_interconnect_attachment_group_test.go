@@ -16,6 +16,7 @@ func TestAccComputeInterconnectAttachmentGroup_basic(t *testing.T) {
 	context := map[string]interface{}{
 		"deletion_protection": false,
 		"random_suffix":       acctest.RandString(t, 10),
+		"description":         nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -42,6 +43,7 @@ resource "google_compute_interconnect_attachment_group" "example-interconnect-at
   intent {
     availability_sla = "NO_SLA"
   }
+  description = "%{description}"
 }
 `, context)
 }
@@ -52,6 +54,7 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 	context := map[string]interface{}{
 		"deletion_protection": false,
 		"random_suffix":       acctest.RandString(t, 10),
+		"description":         nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -67,7 +70,11 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccComputeInterconnectAttachmentGroup_update(context),
+				Config: testAccComputeInterconnectAttachmentGroup_basic(map[string]interface{}{
+					"deletion_protection": context["deletion_protection"],
+					"random_suffix":       context["random_suffix"],
+					"description":         "New description",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_compute_interconnect_attachment_group.example-interconnect-attachment-group", plancheck.ResourceActionUpdate),
@@ -81,16 +88,4 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccComputeInterconnectAttachmentGroup_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_interconnect_attachment_group" "example-interconnect-attachment-group" {
-  name   	  = "tf-test-example-interconnect-attachment-group%{random_suffix}"
-  intent {
-    availability_sla = "NO_SLA"
-  }
-  description = "New description"
-}
-`, context)
 }
