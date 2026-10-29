@@ -15,6 +15,7 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeUpdate(t *testing.
 	context := map[string]interface{}{
 		"project":       envvar.GetTestProjectFromEnv(),
 		"random_suffix": acctest.RandString(t, 10),
+		"group_indexes": "[2]",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -51,7 +52,7 @@ resource "google_data_loss_prevention_stored_info_type" "basic" {
 
 	regex {
 		pattern = "patient"
-		group_indexes = [2]
+		group_indexes = %{group_indexes}
 	}
 }
 `, context)
@@ -86,7 +87,10 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t
 		CheckDestroy:             testAccCheckDataLossPreventionStoredInfoTypeDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context),
+				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(map[string]interface{}{
+					"project":       context["project"],
+					"group_indexes": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
@@ -94,7 +98,10 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(context),
+				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(map[string]interface{}{
+					"project":       context["project"],
+					"group_indexes": "[2]",
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
@@ -102,7 +109,10 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(context),
+				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(map[string]interface{}{
+					"project":       context["project"],
+					"group_indexes": "[3]",
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
@@ -110,7 +120,10 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context),
+				Config: testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStart(map[string]interface{}{
+					"project":       context["project"],
+					"group_indexes": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_data_loss_prevention_stored_info_type.basic",
@@ -119,35 +132,6 @@ func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(t
 			},
 		},
 	})
-}
-
-func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeWithoutGroupIndex(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Description"
-	display_name = "Displayname"
-
-	regex {
-		pattern = "patient"
-	}
-}
-`, context)
-}
-
-func testAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeGroupIndexUpdate(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_data_loss_prevention_stored_info_type" "basic" {
-	parent = "projects/%{project}"
-	description = "Description"
-	display_name = "Displayname"
-
-	regex {
-		pattern = "patient"
-		group_indexes = [3]
-	}
-}
-`, context)
 }
 
 func TestAccDataLossPreventionStoredInfoType_dlpStoredInfoTypeStoredInfoTypeId(t *testing.T) {
