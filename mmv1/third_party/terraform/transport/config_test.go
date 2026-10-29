@@ -1,8 +1,11 @@
 package transport_test
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"testing"
@@ -12,6 +15,8 @@ import (
 	"github.com/hashicorp/terraform-provider-google/google/envvar"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 	googleoauth "golang.org/x/oauth2/google"
+	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const testOauthScope = "https://www.googleapis.com/auth/compute"
@@ -581,4 +586,146 @@ func TestGetRegionFromRegionSelfLink(t *testing.T) {
 			}
 		})
 	}
+}
+
+type fakeClientStream struct {
+	grpc.ClientStream
+	sendErr error
+	recvMsg any
+	recvErr error
+}
+
+func (f *fakeClientStream) SendMsg(m any) error {
+	return f.sendErr
+}
+
+func (f *fakeClientStream) RecvMsg(m any) error {
+	if f.recvErr != nil {
+		return f.recvErr
+	}
+	if pb, ok := m.(*wrapperspb.StringValue); ok {
+		if src, ok := f.recvMsg.(*wrapperspb.StringValue); ok {
+			pb.Value = src.Value
+		}
+	}
+	return nil
+}
+
+func TestGRPCPayloadUnaryClientInterceptor(t *testing.T) {
+	origOut := log.Writer()
+	defer log.SetOutput(origOut)
+
+	interceptor := transport_tpg.PayloadUnaryClientInterceptor()
+
+	t.Run("logs proto request and response when TF_LOG is DEBUG", func(t *testing.T) {
+		t.Setenv("TF_LOG", "DEBUG")
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+
+		req := wrapperspb.String("hello-req")
+		reply := wrapperspb.String("")
+		err := interceptor(context.Background(), "/test.Service/UnaryCall", req, reply, nil, func(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, opts ...grpc.CallOption) error {
+			reply.(*wrapperspb.StringValue).Value = "hello-resp"
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		out := buf.String()
+		if !strings.Contains(out, "[DEBUG] gRPC request for /test.Service/UnaryCall: \"hello-req\"") {
+			t.Fatalf("expected request payload in log output, got: %s", out)
+		}
+		if !strings.Contains(out, "[DEBUG] gRPC response for /test.Service/UnaryCall: \"hello-resp\"") {
+			t.Fatalf("expected response payload in log output, got: %s", out)
+		}
+	})
+
+	t.Run("logs JSON fallback for non-proto payloads and suppresses response on error", func(t *testing.T) {
+		t.Setenv("TF_LOG", "DEBUG")
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+
+		req := map[string]string{"key": "val"}
+		reply := map[string]string{"out": "ignored"}
+		wantErr := errors.New("rpc failed")
+		err := interceptor(context.Background(), "/test.Service/FailCall", req, reply, nil, func(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, opts ...grpc.CallOption) error {
+			return wantErr
+		})
+		if !errors.Is(err, wantErr) {
+			t.Fatalf("expected error %v, got %v", wantErr, err)
+		}
+
+		out := buf.String()
+		if !strings.Contains(out, `[DEBUG] gRPC request for /test.Service/FailCall: {"key":"val"}`) {
+			t.Fatalf("expected JSON request payload in log output, got: %s", out)
+		}
+		if strings.Contains(out, "gRPC response") {
+			t.Fatalf("expected no response log on error, got: %s", out)
+		}
+	})
+
+	t.Run("suppresses logs when TF_LOG is not debug or trace", func(t *testing.T) {
+		t.Setenv("TF_LOG", "")
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+
+		req := wrapperspb.String("quiet-req")
+		reply := wrapperspb.String("quiet-resp")
+		err := interceptor(context.Background(), "/test.Service/QuietCall", req, reply, nil, func(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, opts ...grpc.CallOption) error {
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if buf.Len() != 0 {
+			t.Fatalf("expected no log output when TF_LOG is unset, got: %s", buf.String())
+		}
+	})
+}
+
+func TestGRPCPayloadStreamClientInterceptor(t *testing.T) {
+	origOut := log.Writer()
+	defer log.SetOutput(origOut)
+
+	interceptor := transport_tpg.PayloadStreamClientInterceptor()
+
+	t.Run("logs stream SendMsg and RecvMsg when TF_LOG is DEBUG", func(t *testing.T) {
+		t.Setenv("TF_LOG", "DEBUG")
+		var buf bytes.Buffer
+		log.SetOutput(&buf)
+
+		stream, err := interceptor(context.Background(), &grpc.StreamDesc{}, nil, "/test.Service/StreamCall", func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+			return &fakeClientStream{recvMsg: wrapperspb.String("stream-resp")}, nil
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if err := stream.SendMsg(wrapperspb.String("stream-req")); err != nil {
+			t.Fatalf("unexpected SendMsg error: %v", err)
+		}
+		var resp wrapperspb.StringValue
+		if err := stream.RecvMsg(&resp); err != nil {
+			t.Fatalf("unexpected RecvMsg error: %v", err)
+		}
+
+		out := buf.String()
+		if !strings.Contains(out, `[DEBUG] gRPC request for /test.Service/StreamCall: "stream-req"`) {
+			t.Fatalf("expected stream request payload in log output, got: %s", out)
+		}
+		if !strings.Contains(out, `[DEBUG] gRPC response for /test.Service/StreamCall: "stream-resp"`) {
+			t.Fatalf("expected stream response payload in log output, got: %s", out)
+		}
+	})
+
+	t.Run("propagates streamer error", func(t *testing.T) {
+		wantErr := errors.New("stream dial failed")
+		_, err := interceptor(context.Background(), &grpc.StreamDesc{}, nil, "/test.Service/StreamFail", func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+			return nil, wantErr
+		})
+		if !errors.Is(err, wantErr) {
+			t.Fatalf("expected error %v, got %v", wantErr, err)
+		}
+	})
 }

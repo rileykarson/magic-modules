@@ -6,8 +6,8 @@ import (
 	"log"
 	"runtime"
 	"strings"
+	"sync"
 
-	"github.com/gammazero/workerpool"
 	"github.com/hashicorp/terraform-provider-google/google/sweeper"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
@@ -83,23 +83,31 @@ func deleteObjects(config *transport_tpg.Config, bucket string) bool {
 		if len(res.Items) == 0 {
 			break
 		}
-		wp := workerpool.New(runtime.NumCPU() - 1)
+		var wg sync.WaitGroup
+		var errMu sync.Mutex
+		sem := make(chan struct{}, max(1, runtime.NumCPU()-1))
 
 		for _, object := range res.Items {
 			log.Printf("[DEBUG] Found %s", object.Name)
 			object := object
 
-			wp.Submit(func() {
+			wg.Add(1)
+			sem <- struct{}{}
+			go func() {
+				defer wg.Done()
+				defer func() { <-sem }()
 				log.Printf("[TRACE] Attempting to delete %s", object.Name)
 				if err := NewClient(config, userAgent).Objects.Delete(bucket, object.Name).Generation(object.Generation).Do(); err != nil {
+					errMu.Lock()
 					deleteObjectError = err
+					errMu.Unlock()
 					log.Printf("[ERR] Failed to delete storage object %s: %s", object.Name, err)
 				} else {
 					log.Printf("[TRACE] Successfully deleted %s", object.Name)
 				}
-			})
+			}()
 		}
-		wp.StopWait()
+		wg.Wait()
 	}
 
 	if listError != nil || deleteObjectError != nil {

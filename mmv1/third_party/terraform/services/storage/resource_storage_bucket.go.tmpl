@@ -18,7 +18,6 @@ import (
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 	"github.com/hashicorp/terraform-provider-google/google/verify"
 
-	"github.com/gammazero/workerpool"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -1278,10 +1277,8 @@ func resourceStorageBucketDelete(d *schema.ResourceData, meta interface{}) error
 	// decreasing its portability. Ideally we'd want this to connect to
 	// Terraform's top-level -parallelism flag, but that's not plumbed nor
 	// is it scheduled to be plumbed to individual providers.
-	wp := workerpool.New(runtime.NumCPU() - 1)
-
-	// Create a bounded semaphore channel allowing up to 2000 uncompleted deletion tasks in the queue
-	sem := make(chan struct{}, 2000)
+	var wg sync.WaitGroup
+	sem := make(chan struct{}, max(1, runtime.NumCPU()-1))
 
 	// delete anywhere caches
 	cacheList, _ := getAnywhereCacheListResult(d, config) // intentionally ignore errors on list- this requires extra permissions (storage.anywhereCaches.list) and we fall through if not permissioned
@@ -1293,12 +1290,15 @@ func resourceStorageBucketDelete(d *schema.ResourceData, meta interface{}) error
 		}
 
 		log.Printf("[DEBUG] Attempting to destroy %v anywhere caches on bucket %q due to `force_destroy` being set to true.", len(cacheList), bucket)
-		wp.Submit(func() {
-			err = deleteAnywhereCacheIfAny(d, config)
-			if err != nil {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func() {
+			defer wg.Done()
+			defer func() { <-sem }()
+			if err := deleteAnywhereCacheIfAny(d, config); err != nil {
 				deleteCacheError = fmt.Errorf("error deleting the caches on the bucket %s : %w", bucket, err)
 			}
-		})
+		}()
 	}
 
 	// delete objects
@@ -1353,10 +1353,10 @@ func resourceStorageBucketDelete(d *schema.ResourceData, meta interface{}) error
 		for _, object := range listResponse.Items {
 			object := object // ensure that local variable is maintained over loop iterations.
 
-			// Enforce backpressure: blocks when 2000 uncompleted tasks are queued/in-flight
 			sem <- struct{}{}
-
-			wp.Submit(func() {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
 				defer func() { <-sem }()
 				err := NewClient(config, userAgent).Objects.Delete(bucket, object.Name).Generation(object.Generation).Do()
 				if err != nil {
@@ -1374,12 +1374,12 @@ func resourceStorageBucketDelete(d *schema.ResourceData, meta interface{}) error
 						log.Printf("[DEBUG] Failed to delete object %q in bucket %q: %s", object.Name, bucket, err)
 					}
 				}
-			})
+			}()
 		}
 	}
 
 	// Wait for all force-destroyed children (objects, anywhereCaches) to finish getting destroyed
-	wp.StopWait()
+	wg.Wait()
 
 	// destroy bucket
 	err = retry.Retry(1*time.Minute, func() *retry.RetryError {

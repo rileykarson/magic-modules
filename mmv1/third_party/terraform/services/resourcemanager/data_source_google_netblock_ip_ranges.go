@@ -10,7 +10,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-google/google/registry"
-	"go4.org/netipx"
 )
 
 type googRanges struct {
@@ -275,39 +274,116 @@ func getCidrsDifference(reference, excluded map[string][]string) (map[string][]s
 	result := make(map[string][]string)
 
 	for blockName := range reference {
-		var ipSetBuilder netipx.IPSetBuilder
-		for _, cidr := range reference[blockName] {
-			net, err := netip.ParsePrefix(cidr)
-			if err != nil {
-				return result, err
-			}
-			ipSetBuilder.AddPrefix(net)
-		}
-
-		for _, cidr := range excluded[blockName] {
-			net, err := netip.ParsePrefix(cidr)
-			if err != nil {
-				return result, err
-			}
-			ipSetBuilder.RemovePrefix(net)
-		}
-
-		ipSet, err := ipSetBuilder.IPSet()
+		ipRangeStrings, err := cidrBlocksMinus(reference[blockName], excluded[blockName])
 		if err != nil {
 			return result, err
 		}
-
-		var ipRangeStrings []string
-		for _, ipRange := range ipSet.Prefixes() {
-			ipRangeStrings = append(ipRangeStrings, ipRange.String())
-		}
-
-		sort.Strings(ipRangeStrings)
-
 		result[blockName] = ipRangeStrings
 	}
 
 	return result, nil
+}
+
+// CidrBlocksMinus returns the sorted CIDR blocks remaining after subtracting subtract from target.
+func CidrBlocksMinus(target, subtract []string) ([]string, error) {
+	return cidrBlocksMinus(target, subtract)
+}
+
+func cidrBlocksMinus(target, subtract []string) ([]string, error) {
+	var current []netip.Prefix
+	for _, cidr := range target {
+		p, err := netip.ParsePrefix(cidr)
+		if err != nil {
+			return nil, err
+		}
+		current = append(current, p.Masked())
+	}
+	current = coalescePrefixes(current)
+
+	for _, cidr := range subtract {
+		sub, err := netip.ParsePrefix(cidr)
+		if err != nil {
+			return nil, err
+		}
+		sub = sub.Masked()
+		var next []netip.Prefix
+		for _, p := range current {
+			next = append(next, subtractPrefix(p, sub)...)
+		}
+		current = next
+	}
+
+	var ipRangeStrings []string
+	for _, p := range current {
+		ipRangeStrings = append(ipRangeStrings, p.String())
+	}
+	sort.Strings(ipRangeStrings)
+	return ipRangeStrings, nil
+}
+
+func subtractPrefix(p, sub netip.Prefix) []netip.Prefix {
+	if !p.Overlaps(sub) {
+		return []netip.Prefix{p}
+	}
+	if sub.Bits() <= p.Bits() {
+		return nil
+	}
+	left, right := splitPrefix(p)
+	return append(subtractPrefix(left, sub), subtractPrefix(right, sub)...)
+}
+
+func splitPrefix(p netip.Prefix) (netip.Prefix, netip.Prefix) {
+	b := p.Bits()
+	left := netip.PrefixFrom(p.Addr(), b+1)
+	if p.Addr().Is4() {
+		a4 := p.Addr().As4()
+		a4[b/8] |= 1 << (7 - (b % 8))
+		return left, netip.PrefixFrom(netip.AddrFrom4(a4), b+1)
+	}
+	a16 := p.Addr().As16()
+	a16[b/8] |= 1 << (7 - (b % 8))
+	return left, netip.PrefixFrom(netip.AddrFrom16(a16), b+1)
+}
+
+func coalescePrefixes(prefixes []netip.Prefix) []netip.Prefix {
+	if len(prefixes) == 0 {
+		return nil
+	}
+	sort.Slice(prefixes, func(i, j int) bool {
+		if prefixes[i].Addr().BitLen() != prefixes[j].Addr().BitLen() {
+			return prefixes[i].Addr().BitLen() < prefixes[j].Addr().BitLen()
+		}
+		if cmp := prefixes[i].Addr().Compare(prefixes[j].Addr()); cmp != 0 {
+			return cmp < 0
+		}
+		return prefixes[i].Bits() < prefixes[j].Bits()
+	})
+
+	var dedup []netip.Prefix
+	for _, p := range prefixes {
+		if len(dedup) > 0 && dedup[len(dedup)-1].Overlaps(p) {
+			continue
+		}
+		dedup = append(dedup, p)
+	}
+
+	var merged []netip.Prefix
+	for _, p := range dedup {
+		for len(merged) > 0 {
+			top := merged[len(merged)-1]
+			if top.Addr().BitLen() != p.Addr().BitLen() || top.Bits() != p.Bits() || p.Bits() == 0 {
+				break
+			}
+			parent := netip.PrefixFrom(top.Addr(), p.Bits()-1).Masked()
+			if !parent.Overlaps(p) {
+				break
+			}
+			merged = merged[:len(merged)-1]
+			p = parent
+		}
+		merged = append(merged, p)
+	}
+	return merged
 }
 
 func init() {
