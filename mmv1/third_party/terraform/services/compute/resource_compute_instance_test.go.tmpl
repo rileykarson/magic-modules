@@ -3163,6 +3163,7 @@ func TestAccComputeInstance_hyperdiskBootDisk_provisioned_iops_throughput(t *tes
 		"size":                   100,
 		"provisioned_iops":       12000,
 		"provisioned_throughput": 200,
+		"description":            nil,
 	}
 
 	contextUpdate := map[string]interface{}{
@@ -3171,6 +3172,7 @@ func TestAccComputeInstance_hyperdiskBootDisk_provisioned_iops_throughput(t *tes
 		"size":                   200,
 		"provisioned_iops":       15000,
 		"provisioned_throughput": 250,
+		"description":            "updated description",
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -3184,7 +3186,7 @@ func TestAccComputeInstance_hyperdiskBootDisk_provisioned_iops_throughput(t *tes
 			computeInstanceImportStep(context["zone"].(string), context["instance_name"].(string), []string{"allow_stopping_for_update"}),
 			{
 				// Also covers increasing the boot disk size alongside iops/throughput
-				Config: testAccComputeInstanceHyperDiskBootDiskProvisionedIopsThroughput_update(contextUpdate),
+				Config: testAccComputeInstanceHyperDiskBootDiskProvisionedIopsThroughput(contextUpdate),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						// Check that the update is done in-place
@@ -11577,6 +11579,7 @@ resource "google_compute_instance" "foobar" {
   name         = "%{instance_name}"
   machine_type = "h3-standard-88"
   zone         = "%{zone}"
+  description  = "%{description}"
 
   boot_disk {
     initialize_params {
@@ -14855,36 +14858,4 @@ resource "google_compute_instance" "foobar" {
 `, context)
 }
 {{- end }}
-
-func testAccComputeInstanceHyperDiskBootDiskProvisionedIopsThroughput_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-data "google_compute_image" "my_image" {
-  family    = "ubuntu-2204-lts"
-  project   = "ubuntu-os-cloud"
-}
-
-data "google_project" "project" {}
-
-resource "google_compute_instance" "foobar" {
-  name         = "%{instance_name}"
-  machine_type = "h3-standard-88"
-  zone         = "%{zone}"
-  description  = "updated description"
-
-  boot_disk {
-    initialize_params {
-      image = data.google_compute_image.my_image.self_link
-      provisioned_iops = %{provisioned_iops}
-      provisioned_throughput = %{provisioned_throughput}
-      type = "hyperdisk-balanced"
-      size = %{size}
-    }
-  }
-
-  network_interface {
-    network = "default"
-  }
-}
-`, context)
-}
 
