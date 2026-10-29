@@ -25,12 +25,10 @@ require (
 	cloud.google.com/go/auth v0.23.0
 	cloud.google.com/go/auth/oauth2adapt v0.2.8
 	github.com/gammazero/workerpool v1.1.3
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
 	github.com/hashicorp/terraform-plugin-framework-validators v0.19.0
 	github.com/sethvargo/go-retry v0.3.0
-	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/oauth2 v0.36.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260807164820-c8921c73eeea

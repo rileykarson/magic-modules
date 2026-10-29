@@ -14,7 +14,6 @@ require (
 	github.com/gammazero/workerpool v1.2.2
 	github.com/google/go-cmp v0.7.0
 	github.com/google/go-cpy v0.0.0-20211218193943-a9c933c06932
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/hashicorp/errwrap v1.1.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-cty v1.5.0
@@ -31,7 +30,6 @@ require (
 	github.com/kylelemons/godebug v1.1.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/hashstructure v1.1.0
-	github.com/sirupsen/logrus v1.10.2
 	github.com/stretchr/testify v1.12.1
 	go4.org/netipx v0.0.0-20260823151212-3075585bcbeb
 	golang.org/x/net v0.61.0
