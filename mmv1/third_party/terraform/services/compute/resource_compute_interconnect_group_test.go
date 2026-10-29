@@ -16,6 +16,7 @@ func TestAccComputeInterconnectGroup_basic(t *testing.T) {
 	context := map[string]interface{}{
 		"deletion_protection": false,
 		"random_suffix":       acctest.RandString(t, 10),
+		"description":         nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -41,6 +42,7 @@ resource "google_compute_interconnect_group" "example-interconnect-group" {
   intent {
     topology_capability = "NO_SLA"
   }
+  description = "%{description}"
 }
 `, context)
 }
@@ -51,6 +53,7 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 	context := map[string]interface{}{
 		"deletion_protection": false,
 		"random_suffix":       acctest.RandString(t, 10),
+		"description":         nil,
 	}
 
 	acctest.VcrTest(t, resource.TestCase{
@@ -67,7 +70,11 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccComputeInterconnectGroup_update(context),
+				Config: testAccComputeInterconnectGroup_basic(map[string]interface{}{
+					"deletion_protection": context["deletion_protection"],
+					"random_suffix":       context["random_suffix"],
+					"description":         "New description",
+				}),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("google_compute_interconnect_group.example-interconnect-group", plancheck.ResourceActionUpdate),
@@ -81,16 +88,4 @@ func TestAccComputeInterconnectGroup_update(t *testing.T) {
 			},
 		},
 	})
-}
-
-func testAccComputeInterconnectGroup_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_compute_interconnect_group" "example-interconnect-group" {
-  name   	  = "tf-test-example-interconnect-group%{random_suffix}"
-  intent {
-    topology_capability = "NO_SLA"
-  }
-  description = "New description"
-}
-`, context)
 }
