@@ -30,7 +30,10 @@ func TestAccBigqueryAnalyticsHubListing_bigqueryAnalyticshubListingUpdate(t *tes
 		CheckDestroy:             testAccCheckBigqueryAnalyticsHubListingDestroyProducer(t),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccBigqueryAnalyticsHubListing_basic(context),
+				Config: testAccBigqueryAnalyticsHubListing_basic(map[string]interface{}{
+					"random_suffix":                       context["random_suffix"],
+					"log_linked_dataset_query_user_email": nil,
+				}),
 			},
 			{
 				ResourceName:      "google_bigquery_analytics_hub_listing.listing",
@@ -38,7 +41,10 @@ func TestAccBigqueryAnalyticsHubListing_bigqueryAnalyticshubListingUpdate(t *tes
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccBigqueryAnalyticsHubListing_update(context),
+				Config: testAccBigqueryAnalyticsHubListing_basic(map[string]interface{}{
+					"random_suffix":                       context["random_suffix"],
+					"log_linked_dataset_query_user_email": true,
+				}),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_bigquery_analytics_hub_listing.listing", "log_linked_dataset_query_user_email", "true"),
 				),
@@ -106,33 +112,7 @@ resource "google_bigquery_analytics_hub_listing" "listing" {
   data_exchange_id = google_bigquery_analytics_hub_data_exchange.listing.data_exchange_id
   listing_id       = "tf_test_listing_%{random_suffix}"
   display_name     = "tf_test_listing_%{random_suffix}"
-
-  bigquery_dataset {
-    dataset = google_bigquery_dataset.listing.id
-  }
-}
-
-resource "google_bigquery_dataset" "listing" {
-  dataset_id = "tf_test_ds_%{random_suffix}"
-  location   = "US"
-}
-`, context)
-}
-
-func testAccBigqueryAnalyticsHubListing_update(context map[string]interface{}) string {
-	return acctest.Nprintf(`
-resource "google_bigquery_analytics_hub_data_exchange" "listing" {
-  location         = "US"
-  data_exchange_id = "tf_test_de_%{random_suffix}"
-  display_name     = "tf_test_de_%{random_suffix}"
-}
-
-resource "google_bigquery_analytics_hub_listing" "listing" {
-  location         = "US"
-  data_exchange_id = google_bigquery_analytics_hub_data_exchange.listing.data_exchange_id
-  listing_id       = "tf_test_listing_%{random_suffix}"
-  display_name     = "tf_test_listing_%{random_suffix}"
-  log_linked_dataset_query_user_email = true
+  log_linked_dataset_query_user_email = %{log_linked_dataset_query_user_email}
 
   bigquery_dataset {
     dataset = google_bigquery_dataset.listing.id
