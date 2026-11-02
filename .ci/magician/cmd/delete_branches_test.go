@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -45,6 +47,32 @@ func TestFetchPRNumber(t *testing.T) {
 	}
 }
 
+func TestDeleteBranches(t *testing.T) {
+	mr := NewMockRunner()
+	if err := deleteBranches("19408", "token", mr); err != nil {
+		t.Fatalf("deleteBranches() unexpected error: %v", err)
+	}
+	calls, ok := mr.Calls("Run")
+	if !ok {
+		t.Fatal("expected Run to be called")
+	}
+	if len(calls) != len(repoList) {
+		t.Fatalf("got %d Run calls, want %d", len(calls), len(repoList))
+	}
+	for i, repo := range repoList {
+		wantArgs := []string{
+			"push",
+			fmt.Sprintf("https://modular-magician:token@github.com/modular-magician/%s", repo),
+			":auto-pr-19408",
+			":auto-pr-19408-old",
+		}
+		gotArgs, ok := calls[i][2].([]string)
+		if !ok || !reflect.DeepEqual(gotArgs, wantArgs) {
+			t.Errorf("call %d args = %v, want %v", i, calls[i][2], wantArgs)
+		}
+	}
+}
+
 func TestDeleteBranchWithRetry(t *testing.T) {
 	oldBackoffs := pushRetryBackoffs
 	pushRetryBackoffs = []time.Duration{0, 0, 0}
@@ -52,7 +80,7 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 
 	t.Run("succeeds first try", func(t *testing.T) {
 		rnr := &flakyPushRunner{MockRunner: NewMockRunner(), failures: 0}
-		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408"); err != nil {
+		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408", ":auto-pr-19408-old"); err != nil {
 			t.Fatalf("deleteBranchWithRetry() unexpected error: %v", err)
 		}
 		if rnr.pushCalls != 1 {
@@ -62,7 +90,7 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 
 	t.Run("succeeds after transient failures", func(t *testing.T) {
 		rnr := &flakyPushRunner{MockRunner: NewMockRunner(), failures: 2}
-		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408"); err != nil {
+		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408", ":auto-pr-19408-old"); err != nil {
 			t.Fatalf("deleteBranchWithRetry() unexpected error: %v", err)
 		}
 		if rnr.pushCalls != 3 {
@@ -70,8 +98,41 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 		}
 	})
 
-	t.Run("ignores remote ref does not exist without retrying", func(t *testing.T) {
-		rnr := &missingBranchPushRunner{MockRunner: NewMockRunner()}
+	t.Run("ignores remote ref does not exist when both refs are missing", func(t *testing.T) {
+		rnr := &missingBranchPushRunner{
+			MockRunner:      NewMockRunner(),
+			missingBranches: map[string]bool{"auto-pr-19408": true, "auto-pr-19408-old": true},
+		}
+		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408", ":auto-pr-19408-old"); err != nil {
+			t.Fatalf("deleteBranchWithRetry() unexpected error: %v", err)
+		}
+		if rnr.pushCalls != 1 {
+			t.Errorf("got %d push calls, want 1", rnr.pushCalls)
+		}
+	})
+
+	t.Run("deletes remaining ref when only one ref does not exist", func(t *testing.T) {
+		rnr := &missingBranchPushRunner{
+			MockRunner:      NewMockRunner(),
+			missingBranches: map[string]bool{"auto-pr-19408-old": true},
+		}
+		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408", ":auto-pr-19408-old"); err != nil {
+			t.Fatalf("deleteBranchWithRetry() unexpected error: %v", err)
+		}
+		if rnr.pushCalls != 2 {
+			t.Fatalf("got %d push calls, want 2", rnr.pushCalls)
+		}
+		wantSecondCall := []string{"push", "https://example.com/repo", ":auto-pr-19408"}
+		if !reflect.DeepEqual(rnr.pushArgs[1], wantSecondCall) {
+			t.Errorf("second push call args = %v, want %v", rnr.pushArgs[1], wantSecondCall)
+		}
+	})
+
+	t.Run("ignores remote ref does not exist for single ref without retrying", func(t *testing.T) {
+		rnr := &missingBranchPushRunner{
+			MockRunner:      NewMockRunner(),
+			missingBranches: map[string]bool{"auto-pr-19408": true},
+		}
 		if err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408"); err != nil {
 			t.Fatalf("deleteBranchWithRetry() unexpected error: %v", err)
 		}
@@ -82,7 +143,7 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 
 	t.Run("fails after exhausting retries", func(t *testing.T) {
 		rnr := &flakyPushRunner{MockRunner: NewMockRunner(), failures: 10}
-		err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408")
+		err := deleteBranchWithRetry(rnr, "https://example.com/repo", ":auto-pr-19408", ":auto-pr-19408-old")
 		if err == nil || !strings.Contains(err.Error(), "commit_refs") {
 			t.Fatalf("expected commit_refs error, got: %v", err)
 		}
@@ -94,13 +155,26 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 
 type missingBranchPushRunner struct {
 	MockRunner
-	pushCalls int
+	missingBranches map[string]bool
+	pushCalls       int
+	pushArgs        [][]string
 }
 
 func (r *missingBranchPushRunner) Run(name string, args []string, env map[string]string) (string, error) {
 	if name == "git" && len(args) > 0 && args[0] == "push" {
 		r.pushCalls++
-		return "", errors.New("error: unable to delete 'auto-pr-19408': remote ref does not exist")
+		r.pushArgs = append(r.pushArgs, args)
+		var errs []string
+		for _, arg := range args[2:] {
+			branch := strings.TrimPrefix(arg, ":")
+			if r.missingBranches[branch] {
+				errs = append(errs, fmt.Sprintf("error: unable to delete '%s': remote ref does not exist", branch))
+			}
+		}
+		if len(errs) > 0 {
+			return "", errors.New(strings.Join(errs, "\n"))
+		}
+		return "", nil
 	}
 	return r.MockRunner.Run(name, args, env)
 }
