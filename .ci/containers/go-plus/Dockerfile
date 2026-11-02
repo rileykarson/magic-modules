@@ -11,25 +11,37 @@ WORKDIR /app1/magic-modules-main/.ci/magician
 # Build the binary (we won't use it in the final image, but it's cached)
 RUN go build -o /dev/null .
 
+WORKDIR /app1/magic-modules-main/mmv1
+RUN go build -o /dev/null .
+
 WORKDIR /app1/magic-modules-main/mmv1/third_party/terraform
 RUN go mod download
 
 WORKDIR /app1/magic-modules-main/tools/diff-processor
 RUN go mod download
 
+RUN go install github.com/github/hub@dcdf56167c38eacef96ad5ef88575e7f74f9a6f2 # v2.11.2+incompatible
+
 # Stage 2: Creating the final image
 FROM golang:1.26.10-trixie@sha256:909771fef53e3dcb0950255f0c9a8b4728c3b841e61509c7b29b098de7ee02d4
 SHELL ["/bin/bash", "-c"]
+ENV GOPATH=/go
+ENV PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
 ENV GOCACHE=/go/cache
 
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 1777 "$GOPATH"
+
 RUN apt-get update && \
-    apt-get install -y git jq unzip zip parallel apt-transport-https ca-certificates gnupg curl && \
+    apt-get install -y --no-install-recommends git openssh-client jq libjq1 unzip zip parallel apt-transport-https ca-certificates gnupg curl netbase wget gcc make && \
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
     apt-get update -y && \
     apt-get install google-cloud-cli -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN git config --global user.name "Modular Magician"
+RUN git config --global user.email "magic-modules@google.com"
 
 RUN wget https://releases.hashicorp.com/terraform/1.14.3/terraform_1.14.3_linux_amd64.zip \
     && echo "178b2a602251bb68b94732aceca2cc1023d87597cb83dba92cab31b6689edb4d  terraform_1.14.3_linux_amd64.zip" | sha256sum -c - \
@@ -38,5 +50,6 @@ RUN wget https://releases.hashicorp.com/terraform/1.14.3/terraform_1.14.3_linux_
     && mv ./terraform /bin/terraform
 
 # Copy Go dependencies and Go build cache
+COPY --from=builder /go/bin/hub /go/bin/hub
 COPY --from=builder /go/pkg/mod /go/pkg/mod
 COPY --from=builder /go/cache /go/cache
