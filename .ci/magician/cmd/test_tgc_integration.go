@@ -45,6 +45,10 @@ var testTGCIntegrationCmd = &cobra.Command{
 }
 
 func execTestTGCIntegration(prNumber, mmCommit, buildID, projectID, buildStep, ghRepo, githubUsername string, rnr ExecRunner, ctlr *source.Controller, gh GithubClient) error {
+	if !hasRepoDiff(ghRepo, rnr) {
+		return nil
+	}
+
 	newBranch := "auto-pr-" + prNumber
 	repo := &source.Repo{
 		Name:   ghRepo,
@@ -97,6 +101,18 @@ func execTestTGCIntegration(prNumber, mmCommit, buildID, projectID, buildStep, g
 		return fmt.Errorf("error posting build status: %w", err)
 	}
 	return nil
+}
+
+func hasRepoDiff(ghRepo string, rnr ExecRunner) bool {
+	newSha, newErr := rnr.ReadFile(fmt.Sprintf("/workspace/commitSHA_modular-magician_%s.txt", ghRepo))
+	oldSha, oldErr := rnr.ReadFile(fmt.Sprintf("/workspace/commitSHA_modular-magician_%s-old.txt", ghRepo))
+	if newErr == nil && oldErr == nil {
+		if trimmedNew := strings.TrimSpace(newSha); trimmedNew != "" && trimmedNew == strings.TrimSpace(oldSha) {
+			fmt.Printf("Skipping TGC integration tests: no diff between HEAD and BASE for %s (%s)\n", ghRepo, trimmedNew)
+			return false
+		}
+	}
+	return true
 }
 
 func shouldRunTests(changedFiles []string) bool {

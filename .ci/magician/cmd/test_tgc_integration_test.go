@@ -16,8 +16,134 @@
 package cmd
 
 import (
+	"magician/source"
+	"os"
+	"reflect"
 	"testing"
 )
+
+type tgcIntegrationTestRunner struct {
+	*mockRunner
+}
+
+func (r *tgcIntegrationTestRunner) ReadFile(name string) (string, error) {
+	val, ok := r.fileContents[name]
+	if !ok {
+		return "", os.ErrNotExist
+	}
+	return val, nil
+}
+
+func TestExecTestTGCIntegration(t *testing.T) {
+	tgcRepoPath := "/mock/dir/go/src/github.com/modular-magician/terraform-google-conversion"
+	targetURL := "https://console.cloud.google.com/cloud-build/builds;region=global/build1;step=19?project=project1"
+	expectedRunsWhenExecuted := []ParameterList{
+		{"/mock/dir/magic-modules/.ci/magician", "git", []string{"clone", "-b", "auto-pr-123", "https://modular-magician:*******@github.com/modular-magician/terraform-google-conversion", tgcRepoPath}, map[string]string(nil)},
+		{tgcRepoPath, "git", []string{"diff", "--name-only", "HEAD~1"}, map[string]string(nil)},
+		{tgcRepoPath, "go", []string{"mod", "edit", "-replace", "github.com/hashicorp/terraform-provider-google-beta=github.com/modular-magician/terraform-provider-google-beta@auto-pr-123"}, map[string]string(nil)},
+		{tgcRepoPath, "go", []string{"mod", "tidy"}, map[string]string(nil)},
+		{tgcRepoPath, "make", []string{"build"}, map[string]string(nil)},
+		{tgcRepoPath, "make", []string{"test-integration"}, map[string]string(nil)},
+	}
+	expectedStatusesWhenExecuted := [][]any{
+		{"123", "terraform-google-conversion-test-integration", "pending", targetURL, "mm-sha"},
+		{"123", "terraform-google-conversion-test-integration", "success", targetURL, "mm-sha"},
+	}
+
+	cases := []struct {
+		name             string
+		newSha           string
+		oldSha           string
+		writeNewSha      bool
+		writeOldSha      bool
+		expectedRuns     []ParameterList
+		expectedStatuses [][]any
+	}{
+		{
+			name:             "matching SHAs skips cloning and tests",
+			newSha:           "abc123\n",
+			oldSha:           "abc123",
+			writeNewSha:      true,
+			writeOldSha:      true,
+			expectedRuns:     nil,
+			expectedStatuses: nil,
+		},
+		{
+			name:             "differing SHAs proceeds as normal",
+			newSha:           "def456\n",
+			oldSha:           "abc123\n",
+			writeNewSha:      true,
+			writeOldSha:      true,
+			expectedRuns:     expectedRunsWhenExecuted,
+			expectedStatuses: expectedStatusesWhenExecuted,
+		},
+		{
+			name:             "missing old SHA file proceeds as normal",
+			newSha:           "abc123\n",
+			writeNewSha:      true,
+			writeOldSha:      false,
+			expectedRuns:     expectedRunsWhenExecuted,
+			expectedStatuses: expectedStatusesWhenExecuted,
+		},
+		{
+			name:             "empty old SHA file proceeds as normal",
+			newSha:           "abc123\n",
+			oldSha:           "  \n",
+			writeNewSha:      true,
+			writeOldSha:      true,
+			expectedRuns:     expectedRunsWhenExecuted,
+			expectedStatuses: expectedStatusesWhenExecuted,
+		},
+		{
+			name:             "empty new and old SHA files proceeds as normal",
+			newSha:           "  \n",
+			oldSha:           "",
+			writeNewSha:      true,
+			writeOldSha:      true,
+			expectedRuns:     expectedRunsWhenExecuted,
+			expectedStatuses: expectedStatusesWhenExecuted,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			baseRunner := NewMockRunner().(*mockRunner)
+			baseRunner.cmdResults[tgcRepoPath+" git [diff --name-only HEAD~1] map[]"] = "test/services/alloydb/alloydb_cluster_generated_test.go\n"
+			rnr := &tgcIntegrationTestRunner{mockRunner: baseRunner}
+
+			if tc.writeNewSha {
+				if err := rnr.WriteFile("/workspace/commitSHA_modular-magician_terraform-google-conversion.txt", tc.newSha); err != nil {
+					t.Fatalf("WriteFile newSha failed: %v", err)
+				}
+			}
+			if tc.writeOldSha {
+				if err := rnr.WriteFile("/workspace/commitSHA_modular-magician_terraform-google-conversion-old.txt", tc.oldSha); err != nil {
+					t.Fatalf("WriteFile oldSha failed: %v", err)
+				}
+			}
+
+			gh := &mockGithub{
+				calledMethods: make(map[string][][]any),
+			}
+			ctlr := source.NewController("/mock/dir/go", "modular-magician", "*******", rnr)
+
+			err := execTestTGCIntegration("123", "mm-sha", "build1", "project1", "19", "terraform-google-conversion", "modular-magician", rnr, ctlr, gh)
+			if err != nil {
+				t.Fatalf("execTestTGCIntegration returned unexpected error: %v", err)
+			}
+
+			actualRuns, _ := rnr.Calls("Run")
+			if !reflect.DeepEqual(actualRuns, tc.expectedRuns) {
+				t.Errorf("Run calls = %v, want %v", actualRuns, tc.expectedRuns)
+			}
+
+			actualStatuses := gh.calledMethods["PostBuildStatus"]
+			if !reflect.DeepEqual(actualStatuses, tc.expectedStatuses) {
+				t.Errorf("PostBuildStatus calls = %v, want %v", actualStatuses, tc.expectedStatuses)
+			}
+		})
+	}
+}
 
 func TestShouldRunTests(t *testing.T) {
 	cases := []struct {
