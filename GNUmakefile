@@ -52,7 +52,7 @@ else
 	ifneq ($(USE_BAZEL), 0)
 		_ := $(shell printf "\e[1;33mWARNING:\e[0m magic-modules will start requiring installation of bazel for builds in the near future. You can opt in now by installing bazel (recommended: use bazelisk): https://bazel.build/install\n" 1>&2)
 	endif
-	MM_BINARY=../bin/mmv1
+	MM_BINARY ?= ../bin/mmv1
 endif
 
 terraform build provider: validate_environment clean-provider mmv1

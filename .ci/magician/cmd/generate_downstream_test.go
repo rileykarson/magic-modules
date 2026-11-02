@@ -20,6 +20,7 @@ import (
 	"magician/github"
 	"magician/provider"
 	"magician/source"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -240,4 +241,101 @@ func TestRunMake(t *testing.T) {
 			}
 		})
 	}
+}
+
+type envCapturingRunner struct {
+	MockRunner
+	makeMMBinary string
+}
+
+func (r *envCapturingRunner) Run(name string, args []string, env map[string]string) (string, error) {
+	if name == "make" {
+		r.makeMMBinary = os.Getenv("MM_BINARY")
+	}
+	return r.MockRunner.Run(name, args, env)
+}
+
+func TestExecGenerateDownstreamCopyBehavior(t *testing.T) {
+	t.Run("head skips copying magic-modules and sets isolated MM_BINARY", func(t *testing.T) {
+		rnr := &envCapturingRunner{MockRunner: NewMockRunner()}
+		ctlr := source.NewController("/mock/gopath", "modular-magician", "token", rnr)
+		gh := &mockGithub{calledMethods: make(map[string][][]any)}
+
+		if err := execGenerateDownstream("main", "head", "terraform", "ga", "123456", gh, rnr, ctlr); err != nil {
+			t.Fatalf("execGenerateDownstream() unexpected error: %v", err)
+		}
+
+		if rnr.makeMMBinary != "/mock/dir/mmv1-terraform-ga-head" {
+			t.Errorf("MM_BINARY during make = %q, want %q", rnr.makeMMBinary, "/mock/dir/mmv1-terraform-ga-head")
+		}
+
+		gotRuns, _ := rnr.Calls("Run")
+		for _, call := range gotRuns {
+			if call[1] == "cp" {
+				t.Errorf("expected head command not to copy magic-modules, got Run call: %v", call)
+			}
+			if call[0] == "/mock/dir/magic-modules" && call[1] == "git" {
+				t.Errorf("expected no git commands in shared /mock/dir/magic-modules, got Run call: %v", call)
+			}
+		}
+
+		wantMakeCall := ParameterList{
+			"/mock/dir/magic-modules",
+			"make",
+			[]string{"provider", "OUTPUT_PATH=/mock/gopath/src/github.com/hashicorp/terraform-provider-google", "VERSION=ga"},
+			map[string]string(nil),
+		}
+		foundMake := false
+		for _, call := range gotRuns {
+			if reflect.DeepEqual(call, wantMakeCall) {
+				foundMake = true
+				break
+			}
+		}
+		if !foundMake {
+			t.Errorf("expected make call in /mock/dir/magic-modules %v, got calls: %v", wantMakeCall, gotRuns)
+		}
+	})
+
+	t.Run("base copies magic-modules and checks out HEAD~ in the copy", func(t *testing.T) {
+		rnr := &envCapturingRunner{MockRunner: NewMockRunner()}
+		ctlr := source.NewController("/mock/gopath", "modular-magician", "token", rnr)
+		gh := &mockGithub{calledMethods: make(map[string][][]any)}
+
+		if err := execGenerateDownstream("main", "base", "terraform", "ga", "123456", gh, rnr, ctlr); err != nil {
+			t.Fatalf("execGenerateDownstream() unexpected error: %v", err)
+		}
+
+		gotRuns, _ := rnr.Calls("Run")
+		wantCopyCall := ParameterList{
+			"/mock/dir/magic-modules/.ci/magician",
+			"cp",
+			[]string{"-rp", "/mock/dir/magic-modules", "/mock/dir/mm-terraform-ga-base"},
+			map[string]string(nil),
+		}
+		wantCheckoutCall := ParameterList{
+			"/mock/dir/mm-terraform-ga-base",
+			"git",
+			[]string{"checkout", "HEAD~"},
+			map[string]string(nil),
+		}
+		wantMakeCall := ParameterList{
+			"/mock/dir/mm-terraform-ga-base",
+			"make",
+			[]string{"provider", "OUTPUT_PATH=/mock/gopath/src/github.com/hashicorp/terraform-provider-google", "VERSION=ga"},
+			map[string]string(nil),
+		}
+		if len(gotRuns) < 4 {
+			t.Fatalf("expected at least 4 Run calls, got %v", gotRuns)
+		}
+		if !reflect.DeepEqual(gotRuns[0], wantCopyCall) {
+			t.Errorf("first Run call = %v, want %v", gotRuns[0], wantCopyCall)
+		}
+		if !reflect.DeepEqual(gotRuns[2], wantCheckoutCall) {
+			t.Errorf("checkout Run call = %v, want %v", gotRuns[2], wantCheckoutCall)
+		}
+		if !reflect.DeepEqual(gotRuns[3], wantMakeCall) {
+			t.Errorf("make Run call = %v, want %v", gotRuns[3], wantMakeCall)
+		}
+	})
 }

@@ -133,13 +133,33 @@ func execGenerateDownstream(baseBranch, command, repo, version, ref string, gh G
 	}
 
 	mmLocalPath := filepath.Join(rnr.GetCWD(), "..", "..")
-	mmCopyPath := filepath.Join(mmLocalPath, "..", fmt.Sprintf("mm-%s-%s-%s", repo, version, command))
-	if _, err := rnr.Run("cp", []string{"-rp", mmLocalPath, mmCopyPath}, nil); err != nil {
-		return fmt.Errorf("error copying magic modules: %w", err)
+	mmPath := mmLocalPath
+	if command == "base" {
+		mmPath = filepath.Join(mmLocalPath, "..", fmt.Sprintf("mm-%s-%s-%s", repo, version, command))
+		if _, err := rnr.Run("cp", []string{"-rp", mmLocalPath, mmPath}, nil); err != nil {
+			return fmt.Errorf("error copying magic modules: %w", err)
+		}
+	} else {
+		mmBinaryPath := filepath.Join(mmLocalPath, "..", fmt.Sprintf("mmv1-%s-%s-%s", repo, version, command))
+		oldMMBinary, hadMMBinary := os.LookupEnv("MM_BINARY")
+		if err := os.Setenv("MM_BINARY", mmBinaryPath); err != nil {
+			return fmt.Errorf("error setting MM_BINARY environment variable: %w", err)
+		}
+		defer func() {
+			if hadMMBinary {
+				if err := os.Setenv("MM_BINARY", oldMMBinary); err != nil {
+					fmt.Println("Error restoring MM_BINARY environment variable: ", err)
+				}
+			} else {
+				if err := os.Unsetenv("MM_BINARY"); err != nil {
+					fmt.Println("Error unsetting MM_BINARY environment variable: ", err)
+				}
+			}
+		}()
 	}
 	mmRepo := &source.Repo{
 		Name: "magic-modules",
-		Path: mmCopyPath,
+		Path: mmPath,
 	}
 
 	downstreamRepo, scratchRepo, commitMessage, err := cloneRepo(mmRepo, baseBranch, repo, version, command, ref, rnr, ctlr)
@@ -147,12 +167,8 @@ func execGenerateDownstream(baseBranch, command, repo, version, ref string, gh G
 		return fmt.Errorf("error cloning repo: %w", err)
 	}
 
-	if err := rnr.PushDir(mmCopyPath); err != nil {
-		return fmt.Errorf("error changing directory to copied magic modules: %w", err)
-	}
-
-	if err := setGitConfig(rnr); err != nil {
-		return fmt.Errorf("error setting config: %w", err)
+	if err := rnr.PushDir(mmPath); err != nil {
+		return fmt.Errorf("error changing directory to magic modules: %w", err)
 	}
 
 	if err := runMake(downstreamRepo, command, rnr); err != nil {
