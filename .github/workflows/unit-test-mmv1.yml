@@ -140,6 +140,12 @@ jobs:
             if [ ! -z "$yamlfiles" ]; then
               echo "yamlfiles=${yamlfiles//$'\n'/ }" >> $GITHUB_OUTPUT
             fi
+          elif [ "${{ github.event_name }}" == "merge_group" ]; then
+            # For merge groups, get only changed files
+            yamlfiles=$(git diff --name-only --diff-filter=d ${{ github.event.merge_group.base_sha }} -- mmv1/products)
+            if [ ! -z "$yamlfiles" ]; then
+              echo "yamlfiles=${yamlfiles//$'\n'/ }" >> $GITHUB_OUTPUT
+            fi
           else
             # For other events, get all YAML files
             yamlfiles=$(find mmv1/products -name "*.yaml" -o -name "*.yml" | tr '\n' ' ')
