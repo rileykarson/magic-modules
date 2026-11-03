@@ -104,35 +104,50 @@ var repoList = []string{
 }
 
 func deleteBranches(prNumber, githubToken string, runner source.Runner) error {
+	branches := []string{
+		fmt.Sprintf(":auto-pr-%s", prNumber),
+		fmt.Sprintf(":auto-pr-%s-old", prNumber),
+	}
 	for _, repo := range repoList {
 		remote := fmt.Sprintf("https://modular-magician:%s@github.com/modular-magician/%s", githubToken, repo)
-		for _, branch := range []string{
-			fmt.Sprintf(":auto-pr-%s", prNumber),
-			fmt.Sprintf(":auto-pr-%s-old", prNumber),
-		} {
-			if err := deleteBranchWithRetry(runner, remote, branch); err != nil {
-				return err
-			}
+		if err := deleteBranchWithRetry(runner, remote, branches...); err != nil {
+			return err
 		}
 	}
 
 	return nil
 }
 
-func deleteBranchWithRetry(runner source.Runner, remote, branch string) error {
+func deleteBranchWithRetry(runner source.Runner, remote string, branches ...string) error {
+	args := append([]string{"push", remote}, branches...)
+	branchDesc := strings.Join(branches, " ")
 	var err error
 	for attempt := 0; ; attempt++ {
-		_, err = runner.Run("git", []string{"push", remote, branch}, nil)
-		if err == nil || strings.Contains(err.Error(), "does not exist") {
+		_, err = runner.Run("git", args, nil)
+		if err == nil {
+			return nil
+		}
+		if strings.Contains(err.Error(), "does not exist") {
+			if len(branches) <= 1 {
+				return nil
+			}
+			for _, branch := range branches {
+				name := strings.TrimPrefix(branch, ":")
+				if !strings.Contains(err.Error(), fmt.Sprintf("'%s'", name)) {
+					if err := deleteBranchWithRetry(runner, remote, branch); err != nil {
+						return err
+					}
+				}
+			}
 			return nil
 		}
 		if attempt >= len(pushRetryBackoffs) {
 			break
 		}
-		fmt.Printf("Deletion of branch %s failed (attempt %d of %d), retrying in %s: %v\n", branch, attempt+1, len(pushRetryBackoffs)+1, pushRetryBackoffs[attempt], err)
+		fmt.Printf("Deletion of branch %s failed (attempt %d of %d), retrying in %s: %v\n", branchDesc, attempt+1, len(pushRetryBackoffs)+1, pushRetryBackoffs[attempt], err)
 		time.Sleep(pushRetryBackoffs[attempt])
 	}
-	return fmt.Errorf("deletion of branch %s failed after %d attempts: %w", branch, len(pushRetryBackoffs)+1, err)
+	return fmt.Errorf("deletion of branch %s failed after %d attempts: %w", branchDesc, len(pushRetryBackoffs)+1, err)
 }
 
 func init() {

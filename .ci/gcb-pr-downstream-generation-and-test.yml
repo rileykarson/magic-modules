@@ -191,18 +191,6 @@ steps:
         - PR_NUMBER=$_PR_NUMBER
 
     - name: 'gcr.io/graphite-docker-images/go-plus'
-      id: tgc-test
-      allowFailure: true
-      entrypoint: '/workspace/.ci/scripts/go-plus/magician/exec.sh'
-      secretEnv: ["GITHUB_TOKEN_MAGIC_MODULES"]
-      waitFor: ["tpgb-head", "tpgb-base", "tgc-head", "tgc-base"]
-      args:
-        - 'test-tgc'
-      env:
-        - COMMIT_SHA=$COMMIT_SHA
-        - PR_NUMBER=$_PR_NUMBER
-
-    - name: 'gcr.io/graphite-docker-images/go-plus'
       id: tgc-test-integration
       entrypoint: '/workspace/.ci/scripts/go-plus/magician/exec.sh'
       allowFailure: true
@@ -219,7 +207,7 @@ steps:
         - $COMMIT_SHA
         - $BUILD_ID
         - $PROJECT_ID
-        - "19"  # Build step
+        - "18"  # Build step
         - terraform-google-conversion
 
     - name: 'gcr.io/graphite-docker-images/go-plus'
@@ -238,7 +226,7 @@ steps:
         - $COMMIT_SHA
         - $BUILD_ID
         - $PROJECT_ID
-        - "20"  # Build step
+        - "19"  # Build step
         - "true"
 
     - name: 'gcr.io/graphite-docker-images/go-plus'
