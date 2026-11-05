@@ -47,6 +47,9 @@ func TestAccServiceUsageV2ConsumerPolicy_update(t *testing.T) {
 				Config: testAccServiceUsageV2ConsumerPolicy_serviceusagev2Consumerpolicy_dependencyOK(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_service_usage_v2_consumer_policy.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -62,6 +65,9 @@ func TestAccServiceUsageV2ConsumerPolicy_update(t *testing.T) {
 				Config: testAccServiceUsageV2ConsumerPolicy_serviceusagev2Consumerpolicy_removeDependencyOK(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_service_usage_v2_consumer_policy.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -73,6 +79,9 @@ func TestAccServiceUsageV2ConsumerPolicy_update(t *testing.T) {
 				Config: testAccServiceUsageV2ConsumerPolicy_serviceusagev2Consumerpolicy_withCatalogs(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_service_usage_v2_consumer_policy.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -82,6 +91,9 @@ func TestAccServiceUsageV2ConsumerPolicy_update(t *testing.T) {
 			},
 			{
 				Config: testAccServiceUsageV2ConsumerPolicy_serviceusagev2Consumerpolicy_dependnecyValidationOff(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_service_usage_v2_consumer_policy.default",

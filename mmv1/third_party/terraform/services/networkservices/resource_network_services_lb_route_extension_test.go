@@ -29,6 +29,9 @@ func TestAccNetworkServicesLbRouteExtension_update(t *testing.T) {
 				Config: testAccNetworkServicesLbRouteExtension_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_lb_route_extension.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -36,6 +39,9 @@ func TestAccNetworkServicesLbRouteExtension_update(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesLbRouteExtension_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_lb_route_extension.default",
@@ -901,6 +907,9 @@ func TestAccNetworkServicesLbRouteExtension_crossRegionInternalPluginExtension(t
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.test_repository",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -908,6 +917,9 @@ func TestAccNetworkServicesLbRouteExtension_crossRegionInternalPluginExtension(t
 			},
 			{
 				Config: testAccNetworkServicesLbRouteExtension_crossRegionInternalPluginExtension(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_lb_route_extension.default",

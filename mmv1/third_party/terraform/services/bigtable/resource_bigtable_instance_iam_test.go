@@ -42,6 +42,9 @@ func TestAccBigtableInstanceIamBinding(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_instance_iam_binding.binding",
 				ImportStateId:     importId,
 				ImportState:       true,
@@ -50,6 +53,9 @@ func TestAccBigtableInstanceIamBinding(t *testing.T) {
 			{
 				// Test IAM Binding update
 				Config: testAccBigtableInstanceIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_instance_iam_binding.binding",
@@ -177,6 +183,9 @@ func TestAccBigtableInstanceIamBinding_withCondition(t *testing.T) {
 					resource.TestCheckResourceAttr("google_bigtable_instance_iam_binding.binding", "condition.0.expression", conditionExpression),
 					resource.TestCheckResourceAttr("google_bigtable_instance_iam_binding.binding", "condition.0.description", context["condition_desc"].(string)),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_instance_iam_binding.binding",

@@ -48,6 +48,9 @@ func testAccFirestoreField_runUpdateTest(updateConfig string, useOwnProject bool
 				Config: testAccFirestoreField_firestoreFieldUpdateInitialExample(context, useOwnProject),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      fmt.Sprintf("google_firestore_field.%s", resourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -56,12 +59,18 @@ func testAccFirestoreField_runUpdateTest(updateConfig string, useOwnProject bool
 				Config: updateConfig,
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      fmt.Sprintf("google_firestore_field.%s", resourceName),
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccFirestoreField_firestoreFieldUpdateInitialExample(context, useOwnProject),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      fmt.Sprintf("google_firestore_field.%s", resourceName),

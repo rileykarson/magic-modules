@@ -71,6 +71,9 @@ func TestAccMonitoringSlo_basic(t *testing.T) {
 				Check:  setTestCheckMonitoringSloId("google_monitoring_slo.primary", &generatedId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -80,6 +83,9 @@ func TestAccMonitoringSlo_basic(t *testing.T) {
 			{
 				Config: testAccMonitoringSlo_basicUpdate(),
 				Check:  testCheckMonitoringSloIdAfterUpdate("google_monitoring_slo.primary", &generatedId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.primary",
@@ -106,6 +112,9 @@ func TestAccMonitoringSlo_availabilitySli(t *testing.T) {
 				Check:  setTestCheckMonitoringSloId("google_monitoring_slo.primary", &generatedId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -115,6 +124,9 @@ func TestAccMonitoringSlo_availabilitySli(t *testing.T) {
 			{
 				Config: testAccMonitoringSlo_basicUpdate(),
 				Check:  testCheckMonitoringSloIdAfterUpdate("google_monitoring_slo.primary", &generatedId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.primary",
@@ -142,6 +154,9 @@ func TestAccMonitoringSlo_requestBased(t *testing.T) {
 					testAccMonitoringSloSli_requestBasedDistributionMaxOnly()),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -154,6 +169,9 @@ func TestAccMonitoringSlo_requestBased(t *testing.T) {
 					testAccMonitoringSloSli_requestBasedGoodTotalRatio_goodAndTotal()),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -164,6 +182,9 @@ func TestAccMonitoringSlo_requestBased(t *testing.T) {
 				Config: testAccMonitoringSloForSli(
 					randomSuffix,
 					testAccMonitoringSloSli_requestBasedGoodTotalRatio_goodAndBad()),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -193,6 +214,9 @@ func TestAccMonitoringSlo_windowBased_updateSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -204,6 +228,9 @@ func TestAccMonitoringSlo_windowBased_updateSlis(t *testing.T) {
 					randomSuffix,
 					testAccMonitoringSloSli_windowBasedSliGoodTotalRatioThreshold_goodBad(),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -219,6 +246,9 @@ func TestAccMonitoringSlo_windowBased_updateSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -230,6 +260,9 @@ func TestAccMonitoringSlo_windowBased_updateSlis(t *testing.T) {
 					randomSuffix,
 					testAccMonitoringSloSli_windowBasedSliMetricSumRange(),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -259,6 +292,9 @@ func TestAccMonitoringSlo_windowBasedGoodTotalRatioThresholdSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -270,6 +306,9 @@ func TestAccMonitoringSlo_windowBasedGoodTotalRatioThresholdSlis(t *testing.T) {
 					randomSuffix,
 					testAccMonitoringSloSli_windowBasedSliGoodTotalRatioThreshold_distributionCutMaxOnly(),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -285,6 +324,9 @@ func TestAccMonitoringSlo_windowBasedGoodTotalRatioThresholdSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -298,6 +340,9 @@ func TestAccMonitoringSlo_windowBasedGoodTotalRatioThresholdSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -306,6 +351,9 @@ func TestAccMonitoringSlo_windowBasedGoodTotalRatioThresholdSlis(t *testing.T) {
 			},
 			{
 				Config: testAccMonitoringSloSli_windowBasedSliGoodTotalRatioThreshold_basicSli(),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -335,6 +383,9 @@ func TestAccMonitoringSlo_windowBasedMetricMeanRangeSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -346,6 +397,9 @@ func TestAccMonitoringSlo_windowBasedMetricMeanRangeSlis(t *testing.T) {
 					randomSuffix,
 					testAccMonitoringSloSli_windowBasedSliMetricMeanRangeUpdate(),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -375,6 +429,9 @@ func TestAccMonitoringSlo_windowBasedMetricSumRangeSlis(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_monitoring_slo.test_slo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -386,6 +443,9 @@ func TestAccMonitoringSlo_windowBasedMetricSumRangeSlis(t *testing.T) {
 					randomSuffix,
 					testAccMonitoringSloSli_windowBasedSliMetricSumRangeUpdate(),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.test_slo",
@@ -410,6 +470,9 @@ func TestAccMonitoringSlo_genericService(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccMonitoringSlo_generic(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_monitoring_slo.primary",

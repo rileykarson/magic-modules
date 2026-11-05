@@ -35,6 +35,9 @@ func TestAccStorageManagedFolderIamBindingGenerated(t *testing.T) {
 				Config: testAccStorageManagedFolderIamBinding_basicGenerated(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_managed_folder_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("b/%s/managedFolders/managed/folder/name/ roles/storage.objectViewer", fmt.Sprintf("tf-test-my-bucket%s", context["random_suffix"])),
 				ImportState:       true,
@@ -43,6 +46,9 @@ func TestAccStorageManagedFolderIamBindingGenerated(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccStorageManagedFolderIamBinding_updateGenerated(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_managed_folder_iam_binding.foo",
@@ -152,6 +158,9 @@ func TestAccStorageManagedFolderIamBindingGenerated_withCondition(t *testing.T) 
 				Config: testAccStorageManagedFolderIamBinding_withConditionGenerated(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_managed_folder_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("b/%s/managedFolders/managed/folder/name/ roles/storage.objectViewer %s", fmt.Sprintf("tf-test-my-bucket%s", context["random_suffix"]), context["condition_title"]),
 				ImportState:       true,
@@ -183,6 +192,9 @@ func TestAccStorageManagedFolderIamBindingGenerated_withAndWithoutCondition(t *t
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageManagedFolderIamBinding_withAndWithoutConditionGenerated(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_managed_folder_iam_binding.foo",
@@ -259,6 +271,9 @@ func TestAccStorageManagedFolderIamMemberGenerated_withAndWithoutCondition(t *te
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageManagedFolderIamMember_withAndWithoutConditionGenerated(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_managed_folder_iam_member.foo",

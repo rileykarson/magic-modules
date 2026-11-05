@@ -39,6 +39,9 @@ func TestAccDeploymentManagerDeployment_basicFile(t *testing.T) {
 				Config: testAccDeploymentManagerDeployment_basicFile(deploymentId, yamlPath),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -84,6 +87,9 @@ func TestAccDeploymentManagerDeployment_createDeletePolicy(t *testing.T) {
 				Config: testAccDeploymentManagerDeployment_createDeletePolicy(deploymentName, accountId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -115,6 +121,9 @@ func TestAccDeploymentManagerDeployment_imports(t *testing.T) {
 				Check:  testDeploymentManagerDeploymentVerifyServiceAccountExists(t, accountId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -144,6 +153,9 @@ func TestAccDeploymentManagerDeployment_update(t *testing.T) {
 				Check:  testDeploymentManagerDeploymentVerifyServiceAccountMissing(t, accountId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -152,6 +164,9 @@ func TestAccDeploymentManagerDeployment_update(t *testing.T) {
 			{
 				Config: testAccDeploymentManagerDeployment_previewUpdated(deploymentName, accountId2),
 				Check:  testDeploymentManagerDeploymentVerifyServiceAccountMissing(t, accountId2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",
@@ -163,6 +178,9 @@ func TestAccDeploymentManagerDeployment_update(t *testing.T) {
 				// Turn preview to false
 				Config: testAccDeploymentManagerDeployment_deployed(deploymentName, accountId),
 				Check:  testDeploymentManagerDeploymentVerifyServiceAccountExists(t, accountId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_deployment_manager_deployment.deployment",

@@ -36,6 +36,9 @@ func TestAccRedisCluster_createUpdateClusterWithNodeType(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 1, shardCount: 3, deletionProtectionEnabled: true, nodeType: "REDIS_STANDARD_SMALL", zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "TUESDAY", maintenanceHours: 2, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -44,6 +47,9 @@ func TestAccRedisCluster_createUpdateClusterWithNodeType(t *testing.T) {
 			{
 				// update cluster with node type "REDIS_HIGHMEM_MEDIUM"
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 1, shardCount: 3, deletionProtectionEnabled: true, nodeType: "REDIS_HIGHMEM_MEDIUM", zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "TUESDAY", maintenanceHours: 2, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -75,6 +81,9 @@ func TestAccRedisCluster_createClusterWithZoneDistribution(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: false, zoneDistributionMode: "SINGLE_ZONE", zone: "northamerica-south1-a"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -104,6 +113,9 @@ func TestAccRedisCluster_updateReplicaCount(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 1, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -114,6 +126,9 @@ func TestAccRedisCluster_updateReplicaCount(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 2, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -122,6 +137,9 @@ func TestAccRedisCluster_updateReplicaCount(t *testing.T) {
 			{
 				// update replica count to 0
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -153,6 +171,9 @@ func TestAccRedisCluster_updateShardCount(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 1, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -161,6 +182,9 @@ func TestAccRedisCluster_updateShardCount(t *testing.T) {
 			{
 				// update shard count to 3
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 1, shardCount: 3, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -203,6 +227,9 @@ func TestAccRedisCluster_updateRedisConfigs(t *testing.T) {
 					}}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -223,6 +250,9 @@ func TestAccRedisCluster_updateRedisConfigs(t *testing.T) {
 						"maxmemory-policy":  "allkeys-lru",
 						"maxmemory-clients": "90%",
 					}}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -254,6 +284,9 @@ func TestAccRedisCluster_createUpdateDeletionProtection(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: false, zoneDistributionMode: "MULTI_ZONE"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -262,6 +295,9 @@ func TestAccRedisCluster_createUpdateDeletionProtection(t *testing.T) {
 			{
 				// update deletion protection to true
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -292,12 +328,18 @@ func TestAccRedisCluster_automatedBackupConfig(t *testing.T) {
 				Config: testAccRedisCluster_automatedBackupConfig(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_redis_cluster.cluster_abc",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccRedisCluster_automatedBackupConfigWithout(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_redis_cluster.cluster_abc",
@@ -363,12 +405,18 @@ func TestAccRedisCluster_managedBackupSource(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_redis_cluster.cluster_mbs_main",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccRedisCluster_managedBackupSourceImport(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_redis_cluster.cluster_mbs_main",
@@ -497,12 +545,18 @@ func TestAccRedisCluster_gcsSource(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_redis_cluster.cluster_gbs_main",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccRedisCluster_gcsSource(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_redis_cluster.cluster_gbs_main",
@@ -734,6 +788,9 @@ func TestAccRedisCluster_persistenceUpdate(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, nodeType: "REDIS_SHARED_CORE_NANO", zoneDistributionMode: "MULTI_ZONE", persistenceBlock: "persistence_config {\nmode = \"AOF\"\naof_config{\nappend_fsync = \"EVERYSEC\"\n}\n}"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -744,6 +801,9 @@ func TestAccRedisCluster_persistenceUpdate(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, nodeType: "REDIS_SHARED_CORE_NANO", zoneDistributionMode: "MULTI_ZONE", persistenceBlock: "persistence_config {\nmode = \"DISABLED\"\n}"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -751,6 +811,9 @@ func TestAccRedisCluster_persistenceUpdate(t *testing.T) {
 			}, {
 				// update persistence to RDB
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, nodeType: "REDIS_SHARED_CORE_NANO", zoneDistributionMode: "MULTI_ZONE", persistenceBlock: "persistence_config {\nmode = \"RDB\"\nrdb_config {\nrdb_snapshot_period = \"ONE_HOUR\"\nrdb_snapshot_start_time = \"2024-10-02T15:01:23Z\"\n}\n}"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -783,6 +846,9 @@ func TestAccRedisCluster_switchoverAndDetachSecondary(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: pcName, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: false, zoneDistributionMode: "MULTI_ZONE", shouldCreateSecondary: true, secondaryClusterName: scName, ccrRole: "SECONDARY"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test_secondary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -791,6 +857,9 @@ func TestAccRedisCluster_switchoverAndDetachSecondary(t *testing.T) {
 			{
 				// // Switchover to secondary cluster
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: pcName, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: false, zoneDistributionMode: "MULTI_ZONE", shouldCreateSecondary: true, secondaryClusterName: scName, ccrRole: "PRIMARY"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test_secondary",
@@ -822,6 +891,9 @@ func TestAccRedisCluster_updateClusterEndpoints(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0, userEndpointCount: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -830,6 +902,9 @@ func TestAccRedisCluster_updateClusterEndpoints(t *testing.T) {
 			{
 				// create cluster with one user created connection
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0, userEndpointCount: 1}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -842,6 +917,9 @@ func TestAccRedisCluster_updateClusterEndpoints(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0, userEndpointCount: 2}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -852,6 +930,9 @@ func TestAccRedisCluster_updateClusterEndpoints(t *testing.T) {
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0, userEndpointCount: 1}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -860,6 +941,9 @@ func TestAccRedisCluster_updateClusterEndpoints(t *testing.T) {
 			{
 				// update cluster with 0 endpoints
 				Config: createOrUpdateRedisCluster(&ClusterParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0, userEndpointCount: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -1518,6 +1602,9 @@ func TestAccRedisCluster_customerManagedCas(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_redis_cluster.cluster_cas",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1647,6 +1734,9 @@ func TestAccRedisCluster_withAclPolicy(t *testing.T) {
 				Config: testAccRedisCluster_withAclPolicy(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1695,6 +1785,9 @@ func TestAccRedisCluster_withTokenAuth(t *testing.T) {
 				Config: testAccRedisCluster_withTokenAuth(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1707,6 +1800,9 @@ func TestAccRedisCluster_withTokenAuth(t *testing.T) {
 						plancheck.ExpectResourceAction("google_redis_cluster.test", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",
@@ -1764,6 +1860,9 @@ func TestAccRedisCluster_zoneDistributionConfigZones(t *testing.T) {
 					resource.TestCheckResourceAttr("google_redis_cluster.test", "zone_distribution_config.0.active_zones.1", "us-central1-b"),
 					resource.TestCheckResourceAttr("google_redis_cluster.test", "zone_distribution_config.0.active_zones.2", "us-central1-c"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_redis_cluster.test",

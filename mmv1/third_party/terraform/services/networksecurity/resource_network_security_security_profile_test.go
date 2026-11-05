@@ -27,6 +27,9 @@ func TestAccNetworkSecuritySecurityProfiles_update(t *testing.T) {
 				Config: testAccNetworkSecuritySecurityProfiles_basic(orgId, randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -34,6 +37,9 @@ func TestAccNetworkSecuritySecurityProfiles_update(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkSecuritySecurityProfiles_update(orgId, randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_security_profile.foobar",
@@ -60,6 +66,9 @@ func TestAccNetworkSecuritySecurityProfiles_antivirusOverrides(t *testing.T) {
 				Config: testAccNetworkSecuritySecurityProfiles_basic(orgId, randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -74,6 +83,9 @@ func TestAccNetworkSecuritySecurityProfiles_antivirusOverrides(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -86,6 +98,9 @@ func TestAccNetworkSecuritySecurityProfiles_antivirusOverrides(t *testing.T) {
 						plancheck.ExpectResourceAction("google_network_security_security_profile.foobar", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_security_profile.foobar",
@@ -114,6 +129,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileMirrori
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileMirroringBroker_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -126,6 +144,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileMirrori
 						plancheck.ExpectResourceAction("google_network_security_security_profile.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_security_profile.default",
@@ -154,6 +175,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilt
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilteringUpdateEmpty(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -161,6 +185,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilt
 			},
 			{
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilteringUpdate1(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_security_profile.default",
@@ -172,6 +199,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilt
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilteringUpdate2(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -181,6 +211,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilt
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilteringUpdateDefault(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_security_profile.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -188,6 +221,9 @@ func TestAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilt
 			},
 			{
 				Config: testAccNetworkSecuritySecurityProfile_networkSecuritySecurityProfileUrlFilteringUpdateEmpty(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_security_profile.default",

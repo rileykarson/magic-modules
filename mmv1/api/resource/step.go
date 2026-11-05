@@ -135,6 +135,9 @@ type Step struct {
 	// Whether to skip import tests for this test step
 	ExcludeImportTest bool `yaml:"exclude_import_test,omitempty"`
 
+	// Whether to emit a { RefreshState: true } test step before ImportStateVerify for this test step
+	RefreshState bool `yaml:"refresh_state,omitempty"`
+
 	// Whether to generate docs for this test step (override sample's exclude_basic_doc)
 	IncludeStepDoc bool `yaml:"include_step_doc,omitempty"`
 

@@ -35,6 +35,9 @@ func TestAccConfigDeployment_basic(t *testing.T) {
 				Config: testAccConfigDeployment_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_config_deployment.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -42,6 +45,9 @@ func TestAccConfigDeployment_basic(t *testing.T) {
 			},
 			{
 				Config: testAccConfigDeployment_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_config_deployment.basic",
@@ -187,6 +193,9 @@ func TestAccConfigDeployment_full(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccConfigDeployment_full(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_config_deployment.full",

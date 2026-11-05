@@ -29,6 +29,9 @@ func TestAccProjectIamCustomRole_basic(t *testing.T) {
 				Check:  resource.TestCheckResourceAttr("google_project_iam_custom_role.foo", "stage", "GA"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_iam_custom_role.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -47,6 +50,9 @@ func TestAccProjectIamCustomRole_basic(t *testing.T) {
 			},
 			{
 				Config: testAccCheckGoogleProjectIamCustomRole_update(roleId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_iam_custom_role.foo",
@@ -100,6 +106,9 @@ func TestAccProjectIamCustomRole_undelete(t *testing.T) {
 				Check:  testAccCheckGoogleProjectIamCustomRoleDeletionStatus(t, "google_project_iam_custom_role.foo", false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_iam_custom_role.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -115,6 +124,9 @@ func TestAccProjectIamCustomRole_undelete(t *testing.T) {
 			{
 				Config: testAccCheckGoogleProjectIamCustomRole_basic(roleId),
 				Check:  testAccCheckGoogleProjectIamCustomRoleDeletionStatus(t, "google_project_iam_custom_role.foo", false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_iam_custom_role.foo",
@@ -138,6 +150,9 @@ func TestAccProjectIamCustomRole_createAfterDestroy(t *testing.T) {
 				Config: testAccCheckGoogleProjectIamCustomRole_basic(roleId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_iam_custom_role.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -150,6 +165,9 @@ func TestAccProjectIamCustomRole_createAfterDestroy(t *testing.T) {
 			// Re-create with no existing state
 			{
 				Config: testAccCheckGoogleProjectIamCustomRole_basic(roleId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_iam_custom_role.foo",

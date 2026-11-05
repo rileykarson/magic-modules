@@ -21,6 +21,7 @@ These attributes are defined once for an entire sample.
 * `bootstrap_iam`: Specify member/role pairs that should exist before the test runs. This avoids race conditions on global IAM permissions. `{project_number}` and `{organization_id}` are replaced automatically.
 * `min_version`: Sets a minimum provider version for the entire sample (for example, `beta`). This can be overridden by the `min_version` attribute within a specific step.
 * `exclude_test`: If `true`, no tests are generated for this entire sample.
+* `refresh_state`: If `true`, emits a `{ RefreshState: true }` step immediately before each `ImportStateVerify` step in the generated test for this sample. Note that resources with un-ignored `TypeSet` attributes automatically emit `{ RefreshState: true }`; set `refresh_state: true` when a non-`TypeSet` sample experiences post-apply server-side state drift before import verification.
 * `exclude_basic_doc`: If `true`, excludes the first step of this sample from the generated documentation. By default, the first step is automatically included as a use case in the documentation. Use this if you want to skip it.
 * `skip_vcr`: If `true`, skips VCR testing for the entire sample.
 * `skip_test`: If not empty, the entire sample is skipped during tests. The value should be a link to a ticket explaining why.
@@ -45,6 +46,7 @@ A sample contains a list of one or more `steps`. Each step has its own configura
 * `min_version`: Overrides the sample-level `min_version` for this specific step.
 * `ignore_read_extra`: A list of properties to ignore during the import test for this step, typically for write-only fields.
 * `exclude_import_test`: If `true`, no import test is generated for this specific step.
+* `refresh_state`: If `true`, emits a `{ RefreshState: true }` step immediately before the `ImportStateVerify` step for this specific test step.
 * `include_step_doc`: If `true`, forces this specific step to be included in the generated documentation. By default, only the first step of a sample is included in the documentation as a use case. Use this on later steps to showcase update scenarios or complex configurations. This will override a top-level `exclude_basic_doc` setting if applied to the first step.
 
 ---

@@ -1541,3 +1541,391 @@ func TestMergeApiVersions(t *testing.T) {
 		}
 	})
 }
+
+func TestNeedsRefreshState(t *testing.T) {
+	t.Parallel()
+
+	intPtr := func(v int) *int { return &v }
+
+	cases := []struct {
+		name     string
+		resource api.Resource
+		sample   *resource.Sample
+		step     *resource.Step
+		want     bool
+	}{
+		{
+			name: "plain resource without sets or opt-in",
+			resource: api.Resource{
+				Name: "Plain",
+				Properties: []*api.Type{
+					{Name: "name", Type: "String"},
+					{Name: "labels", Type: "KeyValueLabels"},
+					{
+						Name:     "items",
+						Type:     "Array",
+						ItemType: &api.Type{Type: "String"},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "sample refresh_state opt-in on non-set resource",
+			resource: api.Resource{
+				Name: "Plain",
+				Properties: []*api.Type{
+					{Name: "name", Type: "String"},
+				},
+			},
+			sample: &resource.Sample{RefreshState: true},
+			want:   true,
+		},
+		{
+			name: "step refresh_state opt-in on non-set resource",
+			resource: api.Resource{
+				Name: "Plain",
+				Properties: []*api.Type{
+					{Name: "name", Type: "String"},
+				},
+			},
+			step: &resource.Step{RefreshState: true},
+			want: true,
+		},
+		{
+			name: "top-level is_set property",
+			resource: api.Resource{
+				Name: "WithSet",
+				Properties: []*api.Type{
+					{
+						Name:     "scopes",
+						Type:     "Array",
+						IsSet:    true,
+						ItemType: &api.Type{Type: "String"},
+					},
+				},
+			},
+			want: true,
+		},
+		{
+			name: "excluded is_set property does not trigger refresh",
+			resource: api.Resource{
+				Name: "ExcludedSet",
+				Properties: []*api.Type{
+					{
+						Name:     "betaScopes",
+						Type:     "Array",
+						IsSet:    true,
+						Exclude:  true,
+						ItemType: &api.Type{Type: "String"},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "top-level is_set property ignored via ignore_read",
+			resource: api.Resource{
+				Name: "IgnoredSet",
+				Properties: []*api.Type{
+					{
+						Name:       "scopes",
+						Type:       "Array",
+						IsSet:      true,
+						IgnoreRead: true,
+						ItemType:   &api.Type{Type: "String"},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "top-level is_set property ignored via step ignore_read_extra",
+			resource: api.Resource{
+				Name: "StepIgnoredSet",
+				Properties: []*api.Type{
+					{
+						Name:     "targetPools",
+						Type:     "Array",
+						IsSet:    true,
+						ItemType: &api.Type{Type: "String"},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"target_pools"},
+			},
+			want: false,
+		},
+		{
+			name: "SDKv2 Map property maps to schema.TypeSet",
+			resource: api.Resource{
+				Name: "SdkMap",
+				Properties: []*api.Type{
+					{
+						Name: "envVars",
+						Type: "Map",
+						ValueType: &api.Type{
+							Type: "NestedObject",
+							Properties: []*api.Type{
+								{Name: "val", Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			want: true,
+		},
+		{
+			name: "Plugin Framework Map property is MapAttribute not Set",
+			resource: api.Resource{
+				Name:              "FwMap",
+				FrameworkResource: true,
+				Properties: []*api.Type{
+					{
+						Name: "envVars",
+						Type: "Map",
+						ValueType: &api.Type{
+							Type: "NestedObject",
+							Properties: []*api.Type{
+								{Name: "val", Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "Plugin Framework is_set property still needs refresh",
+			resource: api.Resource{
+				Name:              "FwSet",
+				FrameworkResource: true,
+				Properties: []*api.Type{
+					{
+						Name:     "tags",
+						Type:     "Array",
+						IsSet:    true,
+						ItemType: &api.Type{Type: "String"},
+					},
+				},
+			},
+			want: true,
+		},
+		{
+			name: "flatten_object collapses parent segment for nested is_set",
+			resource: api.Resource{
+				Name: "Flattened",
+				Properties: []*api.Type{
+					{
+						Name:          "wrapper",
+						Type:          "NestedObject",
+						FlattenObject: true,
+						Properties: []*api.Type{
+							{
+								Name:     "innerTags",
+								Type:     "Array",
+								IsSet:    true,
+								ItemType: &api.Type{Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			want: true,
+		},
+		{
+			name: "flatten_object nested is_set ignored by collapsed field name",
+			resource: api.Resource{
+				Name: "FlattenedIgnored",
+				Properties: []*api.Type{
+					{
+						Name:          "wrapper",
+						Type:          "NestedObject",
+						FlattenObject: true,
+						Properties: []*api.Type{
+							{
+								Name:     "innerTags",
+								Type:     "Array",
+								IsSet:    true,
+								ItemType: &api.Type{Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"inner_tags"},
+			},
+			want: false,
+		},
+		{
+			name: "nested is_set under non-output NestedObject (MaxItems 1) ignored via .0. path",
+			resource: api.Resource{
+				Name: "SingleNested",
+				Properties: []*api.Type{
+					{
+						Name: "config",
+						Type: "NestedObject",
+						Properties: []*api.Type{
+							{
+								Name:     "allowedIps",
+								Type:     "Array",
+								IsSet:    true,
+								ItemType: &api.Type{Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"config.0.allowed_ips"},
+			},
+			want: false,
+		},
+		{
+			name: "nested is_set under output-only NestedObject (MaxItems 0) not covered by .0. ignore",
+			resource: api.Resource{
+				Name: "OutputNested",
+				Properties: []*api.Type{
+					{
+						Name:   "statusConfig",
+						Type:   "NestedObject",
+						Output: true,
+						Properties: []*api.Type{
+							{
+								Name:     "observedIps",
+								Type:     "Array",
+								IsSet:    true,
+								Output:   true,
+								ItemType: &api.Type{Type: "String"},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"status_config.0.observed_ips"},
+			},
+			want: true,
+		},
+		{
+			name: "nested is_set under multi-item Array (MaxSize nil) ignored by parent prefix",
+			resource: api.Resource{
+				Name: "MultiArrayParentIgnored",
+				Properties: []*api.Type{
+					{
+						Name: "rules",
+						Type: "Array",
+						ItemType: &api.Type{
+							Type: "NestedObject",
+							Properties: []*api.Type{
+								{
+									Name:     "ports",
+									Type:     "Array",
+									IsSet:    true,
+									ItemType: &api.Type{Type: "String"},
+								},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"rules"},
+			},
+			want: false,
+		},
+		{
+			name: "nested is_set under multi-item Array (MaxSize nil) not covered by .0. ignore",
+			resource: api.Resource{
+				Name: "MultiArrayIndexZeroOnly",
+				Properties: []*api.Type{
+					{
+						Name: "rules",
+						Type: "Array",
+						ItemType: &api.Type{
+							Type: "NestedObject",
+							Properties: []*api.Type{
+								{
+									Name:     "ports",
+									Type:     "Array",
+									IsSet:    true,
+									ItemType: &api.Type{Type: "String"},
+								},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"rules.0.ports"},
+			},
+			want: true,
+		},
+		{
+			name: "nested is_set under MaxSize 1 Array covered by .0. ignore",
+			resource: api.Resource{
+				Name: "MaxOneArray",
+				Properties: []*api.Type{
+					{
+						Name:    "rule",
+						Type:    "Array",
+						MaxSize: intPtr(1),
+						ItemType: &api.Type{
+							Type: "NestedObject",
+							Properties: []*api.Type{
+								{
+									Name:     "ports",
+									Type:     "Array",
+									IsSet:    true,
+									ItemType: &api.Type{Type: "String"},
+								},
+							},
+						},
+					},
+				},
+			},
+			step: &resource.Step{
+				IgnoreReadExtra: []string{"rule.0.ports"},
+			},
+			want: false,
+		},
+		{
+			name: "virtual_fields is_set property triggers refresh unless in ignore_read_extra",
+			resource: func() api.Resource {
+				p := api.Product{
+					Name: "Test",
+					Versions: []*product.Version{
+						{Name: "ga", BaseUrl: "https://example.googleapis.com/v1/"},
+					},
+				}
+				r := api.Resource{
+					Name:    "WithVirtualSet",
+					BaseUrl: "projects/{{project}}/items",
+					VirtualFields: []*api.Type{
+						{
+							Name:     "clientFlags",
+							Type:     "Array",
+							IsSet:    true,
+							ItemType: &api.Type{Type: "String"},
+						},
+					},
+				}
+				r.SetDefault(&p)
+				return r
+			}(),
+			want: true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			got := tc.resource.NeedsRefreshState(tc.sample, tc.step)
+			if got != tc.want {
+				t.Errorf("NeedsRefreshState() = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}

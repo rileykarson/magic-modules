@@ -37,6 +37,9 @@ func TestAccDataprocWorkflowTemplate_basic(t *testing.T) {
         Config: testAccDataprocWorkflowTemplate_basic(context),
       },
       {
+        RefreshState: true,
+      },
+      {
         ImportState:             true,
         ImportStateVerify:       true,
         // The "labels" field in the state are decided by the configuration.
@@ -70,6 +73,9 @@ func TestAccDataprocWorkflowTemplate_withShieldedVMs(t *testing.T) {
         Config: testAccDataprocWorkflowTemplate_withShieldedVMs(context),
       },
       {
+        RefreshState: true,
+      },
+      {
         ImportState:             true,
         ImportStateVerify:       true,
         ResourceName:            "google_dataproc_workflow_template.shielded_vms_template",
@@ -95,6 +101,9 @@ func TestAccDataprocWorkflowTemplate_encryptionConfig(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataprocWorkflowTemplate_encryptionConfig(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ImportState:       true,
@@ -357,6 +366,9 @@ func TestAccDataprocWorkflowTemplate_instanceFlexibilityPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels"},
@@ -514,6 +526,9 @@ func TestAccDataprocWorkflowTemplate_diskConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"labels", "terraform_labels"},
@@ -626,6 +641,9 @@ func TestAccDataprocWorkflowTemplate_flexibleConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_dataproc_workflow_template.flexible_config_template", "placement.0.managed_cluster.0.config.0.secondary_worker_flexible_config.0.boot_disk_size_gb", "30"),
 					resource.TestCheckResourceAttr("google_dataproc_workflow_template.flexible_config_template", "placement.0.managed_cluster.0.config.0.secondary_worker_flexible_config.0.hardware_class", "PERFORMANCE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dataproc_workflow_template.flexible_config_template",

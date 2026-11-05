@@ -48,6 +48,9 @@ func TestAccComputeRegionDisk_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -59,6 +62,9 @@ func TestAccComputeRegionDisk_basic(t *testing.T) {
 					testAccCheckComputeRegionDiskExists(
 						t, "google_compute_region_disk.regiondisk", &disk),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -90,6 +96,9 @@ func TestAccComputeRegionDisk_hyperdisk(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -109,6 +118,9 @@ func TestAccComputeRegionDisk_hyperdisk(t *testing.T) {
 					resource.TestCheckResourceAttr("google_compute_region_disk.regiondisk", "provisioned_throughput", "250"),
 					testAccCheckComputeRegionDiskExists(t, "google_compute_region_disk.regiondisk", &disk),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -140,6 +152,9 @@ func TestAccComputeRegionDisk_basicUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -155,6 +170,9 @@ func TestAccComputeRegionDisk_basicUpdate(t *testing.T) {
 					testAccCheckComputeRegionDiskHasLabel(&disk, "a-new-label", "a-new-label-value"),
 					testAccCheckComputeRegionDiskHasLabelFingerprint(&disk, "google_compute_region_disk.regiondisk"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -266,6 +284,9 @@ func TestAccComputeRegionDisk_encryptionKMSUpdate(t *testing.T) {
 				Config: testAccComputeRegionDisk_encryptionKMSUpdateKey(diskName, key1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -277,6 +298,9 @@ func TestAccComputeRegionDisk_encryptionKMSUpdate(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_region_disk.regiondisk", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -329,6 +353,9 @@ func TestAccComputeRegionDisk_encryptionKMSAdd(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_region_disk.regiondisk", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -464,6 +491,9 @@ func TestAccComputeRegionDisk_cloneDisk(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk-clone",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -492,12 +522,18 @@ func TestAccComputeRegionDisk_featuresUpdated(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionDisk_featuresUpdated(diskName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_disk.regiondisk",
@@ -569,6 +605,9 @@ func TestAccComputeRegionDisk_VSSWindowsDefault(t *testing.T) {
                 Config: testAccComputeRegionDisk_VSSWindowsDefault(diskName),
             },
             {
+            	RefreshState: true,
+            },
+            {
                 ResourceName:      "google_compute_region_disk.foobar",
                 ImportState:       true,
                 ImportStateVerify: true,
@@ -593,6 +632,9 @@ func TestAccComputeRegionDisk_VSSWindows(t *testing.T) {
                 Config: testAccComputeRegionDisk_VSSWindows(diskName,true),
             },
             {
+            	RefreshState: true,
+            },
+            {
                 ResourceName:      "google_compute_region_disk.foobar",
                 ImportState:       true,
                 ImportStateVerify: true,
@@ -600,6 +642,9 @@ func TestAccComputeRegionDisk_VSSWindows(t *testing.T) {
             },
             {
                 Config: testAccComputeRegionDisk_VSSWindows(diskName,false),
+            },
+            {
+            	RefreshState: true,
             },
             {
                 ResourceName:      "google_compute_region_disk.foobar",

@@ -30,6 +30,9 @@ func TestAccDataCatalogTag_update(t *testing.T) {
 				Config: testAccDataCatalogTag_dataCatalogEntryTagBasicExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_data_catalog_tag.basic_tag",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -38,12 +41,18 @@ func TestAccDataCatalogTag_update(t *testing.T) {
 				Config: testAccDataCatalogTag_dataCatalogEntryTag_update(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_data_catalog_tag.basic_tag",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDataCatalogTag_dataCatalogEntryTagBasicExample(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_data_catalog_tag.basic_tag",

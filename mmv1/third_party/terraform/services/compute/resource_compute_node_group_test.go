@@ -34,6 +34,9 @@ func TestAccComputeNodeGroup_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_node_group.nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -44,6 +47,9 @@ func TestAccComputeNodeGroup_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckComputeNodeGroupCreationTimeBefore(&timeCreated),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_node_group.nodes",

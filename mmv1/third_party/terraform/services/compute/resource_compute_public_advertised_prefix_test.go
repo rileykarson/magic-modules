@@ -249,6 +249,9 @@ func testAccComputePublicDelegatedPrefix_publicDelegatedPrefixesBasicTest(t *tes
 				Config: testAccComputePublicDelegatedPrefix_publicDelegatedPrefixesBasicExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_public_delegated_prefix.prefix",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -298,6 +301,9 @@ func testAccComputePublicDelegatedPrefix_publicDelegatedPrefixesIpv6Test(t *test
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputePublicDelegatedPrefix_publicDelegatedPrefixesIpv6Example(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_public_delegated_prefix.prefix",
@@ -355,6 +361,9 @@ func testAccComputePublicDelegatedPrefix_publicDelegatedPrefixIpv6SubnetModeTest
 				Config: testAccComputePublicDelegatedPrefix_publicDelegatedPrefixIpv6SubnetModeExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_public_delegated_prefix.prefix",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -407,6 +416,9 @@ func testAccComputePublicDelegatedPrefix_publicDelegatedPrefixInternalIpv6Subnet
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputePublicDelegatedPrefix_publicDelegatedPrefixInternalIpv6SubnetModeExample(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_public_delegated_prefix.prefix",

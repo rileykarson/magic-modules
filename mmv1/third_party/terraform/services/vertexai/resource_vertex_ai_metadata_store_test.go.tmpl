@@ -30,6 +30,9 @@ func TestAccVertexAIMetadataStore_vertexAiMetadataStoreExample(t *testing.T) {
 				Config: testAccVertexAIMetadataStore_vertexAiMetadataStoreExample(name, bootstrapped.CryptoKey.Name),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_metadata_store.store",
 				ImportState:             true,
 				ImportStateVerify:       true,

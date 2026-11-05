@@ -25,12 +25,18 @@ func TestAccDNSPolicy_update(t *testing.T) {
 				Config: testAccDnsPolicy_privateUpdate(policySuffix, "true", "172.16.1.10", "172.16.1.30", "network-1"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_policy.example-policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsPolicy_privateUpdate(policySuffix, "false", "172.16.1.20", "172.16.1.40", "network-2"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_policy.example-policy",
@@ -90,12 +96,18 @@ func TestAccDNSPolicy_dnsPolicyDns64(t *testing.T) {
 				Config: testAccDNSPolicy_dnsPolicyDns64(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_policy.example-policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDNSPolicy_dnsPolicyDns64Update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_policy.example-policy",
@@ -186,12 +198,18 @@ func TestAccDNSPolicy_outboundEndpointsUpdate(t *testing.T) {
 				Config: testAccDnsPolicy_outboundEndpointsUpdate(suffix, "endpoint_1"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_policy.example_policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsPolicy_outboundEndpointsUpdate(suffix, "endpoint_2"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_policy.example_policy",

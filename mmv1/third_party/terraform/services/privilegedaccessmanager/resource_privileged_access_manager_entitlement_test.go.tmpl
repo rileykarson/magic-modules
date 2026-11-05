@@ -27,6 +27,9 @@ func TestAccPrivilegedAccessManagerEntitlement_noApprovalWorkflow(t *testing.T) 
 				Config: testAccPrivilegedAccessManagerEntitlement_noApprovalWorkflow(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_privileged_access_manager_entitlement.tfentitlement",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -53,6 +56,9 @@ func TestAccPrivilegedAccessManagerEntitlement_privilegedAccessManagerEntitlemen
 				Config: testAccPrivilegedAccessManagerEntitlement_privilegedAccessManagerEntitlementBasicExample_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_privileged_access_manager_entitlement.tfentitlement",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -60,6 +66,9 @@ func TestAccPrivilegedAccessManagerEntitlement_privilegedAccessManagerEntitlemen
 			},
 			{
 				Config: testAccPrivilegedAccessManagerEntitlement_privilegedAccessManagerEntitlementBasicExample_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_privileged_access_manager_entitlement.tfentitlement",

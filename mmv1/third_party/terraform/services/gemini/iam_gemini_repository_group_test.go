@@ -185,6 +185,9 @@ func TestAccGeminiRepositoryGroupIamBinding(t *testing.T) {
 				Config: testAccGeminiRepositoryGroupIamBinding_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gemini_repository_group_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("projects/%s/locations/%s/codeRepositoryIndexes/%s/repositoryGroups/%s roles/cloudaicompanion.repositoryGroupsUser", envvar.GetTestProjectFromEnv(), envvar.GetTestRegionFromEnv(), codeRepositoryIndexId, repositoryGroupId),
 				ImportState:       true,
@@ -193,6 +196,9 @@ func TestAccGeminiRepositoryGroupIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccGeminiRepositoryGroupIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gemini_repository_group_iam_binding.foo",

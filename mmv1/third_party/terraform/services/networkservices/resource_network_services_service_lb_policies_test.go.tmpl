@@ -93,6 +93,9 @@ func TestAccNetworkServicesLBPolicies_regionalUpdate(t *testing.T) {
 				Config: testAccNetworkServicesLBPolicies_regionalBasic(policyName, backendName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_service_lb_policies.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -107,6 +110,9 @@ func TestAccNetworkServicesLBPolicies_regionalUpdate(t *testing.T) {
 				Config: testAccNetworkServicesLBPolicies_regionalUpdate(policyName, policyName2, backendName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_service_lb_policies.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -119,6 +125,9 @@ func TestAccNetworkServicesLBPolicies_regionalUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesLBPolicies_regionalDetach(policyName, policyName2, backendName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",

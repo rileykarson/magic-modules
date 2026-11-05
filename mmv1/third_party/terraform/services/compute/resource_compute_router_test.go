@@ -26,6 +26,9 @@ func TestAccComputeRouter_basic(t *testing.T) {
 				Config: testAccComputeRouterBasic(routerName, resourceRegion),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -47,6 +50,9 @@ func TestAccComputeRouter_noRegion(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRouterNoRegion(routerName, providerRegion),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router.foobar",
@@ -71,6 +77,9 @@ func TestAccComputeRouter_full(t *testing.T) {
 				Config: testAccComputeRouterFull(routerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -91,6 +100,9 @@ func TestAccComputeRouter_advertisedIpRangesOrder(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRouterAdvertisedIpRangesOrder(routerName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_router.foobar",
@@ -117,6 +129,9 @@ func TestAccComputeRouter_update(t *testing.T) {
 				Config: testAccComputeRouterBasic(routerName, region),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -125,12 +140,18 @@ func TestAccComputeRouter_update(t *testing.T) {
 				Config: testAccComputeRouterFull(routerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRouterBasic(routerName, region),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router.foobar",
@@ -156,6 +177,9 @@ func TestAccComputeRouter_updateAddRemoveBGP(t *testing.T) {
 				Config: testAccComputeRouterBasic(routerName, region),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -164,12 +188,18 @@ func TestAccComputeRouter_updateAddRemoveBGP(t *testing.T) {
 				Config: testAccComputeRouter_noBGP(routerName, region),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRouterBasic(routerName, region),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router.foobar",
@@ -194,6 +224,9 @@ func TestAccComputeRouter_addAndUpdateIdentifierRangeBgp(t *testing.T) {
 				Config: testAccComputeRouter_addIdentifierRangeBgp(routerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -204,6 +237,9 @@ func TestAccComputeRouter_addAndUpdateIdentifierRangeBgp(t *testing.T) {
 					resource.TestCheckResourceAttr("google_compute_router.foobar", "bgp.0.identifier_range", "169.254.8.8/30"),
 					resource.TestCheckResourceAttrSet("google_compute_router.foobar", "router_id"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router.foobar",
@@ -242,6 +278,9 @@ func TestAccComputeRouter_resourceManagerTags(t *testing.T) {
 				Config: testAccComputeRouter_resourceManagerTags(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_router.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -263,6 +302,9 @@ func TestAccComputeRouter_keepaliveIntervalDefault(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRouter_keepaliveIntervalDefault(routerName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router.foobar",

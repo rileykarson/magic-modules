@@ -36,6 +36,9 @@ func TestAccComputeInstanceGroup_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      resourceName,
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -67,12 +70,18 @@ func TestAccComputeInstanceGroup_rename(t *testing.T) {
 				Config: testAccComputeInstanceGroup_rename(instanceName, instanceGroupName, backendName, healthName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_instance_group.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeInstanceGroup_rename(instanceName, instanceGroupName+"2", backendName, healthName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_instance_group.basic",

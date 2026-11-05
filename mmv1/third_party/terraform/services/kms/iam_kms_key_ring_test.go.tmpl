@@ -45,6 +45,9 @@ func TestAccKmsKeyRingIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_kms_key_ring_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s %s", keyRingId.TerraformId(), roleId),
 				ImportState:       true,
@@ -57,6 +60,9 @@ func TestAccKmsKeyRingIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, projectId),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, projectId),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_kms_key_ring_iam_binding.foo",
@@ -92,6 +98,9 @@ func TestAccKmsKeyRingIamBinding_withCondition(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccKmsKeyRingIamBinding_withCondition(projectId, orgId, billingAccount, account, keyRingName, roleId, conditionTitle),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_kms_key_ring_iam_binding.foo",

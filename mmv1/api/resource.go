@@ -1739,6 +1739,140 @@ func quoteStrings(strs []string) []string {
 	return quoted
 }
 
+type setSchemaPath struct {
+	segs             []string
+	ancestorMaxItems []int
+}
+
+// NeedsRefreshState reports whether a generated acceptance test step needs a
+// `{ RefreshState: true }` step immediately before its `ImportStateVerify: true`
+// step. This is true when either:
+//  1. `refresh_state: true` is explicitly configured on the Sample or Step, or
+//  2. The resource schema contains at least one Set attribute (`is_set: true`,
+//     or `type: Map` on SDKv2 resources) at any nesting depth that is not
+//     covered by `ImportStateVerifyIgnore`.
+func (r Resource) NeedsRefreshState(s *resource.Sample, st *resource.Step) bool {
+	if (s != nil && s.RefreshState) || (st != nil && st.RefreshState) {
+		return true
+	}
+
+	setPaths := r.collectSetSchemaPaths()
+	if len(setPaths) == 0 {
+		return false
+	}
+
+	stepForIgnore := st
+	if stepForIgnore == nil {
+		stepForIgnore = &resource.Step{}
+	}
+	ignores := append(r.IgnoreReadProperties(stepForIgnore), "terraform_labels", "deletion_policy")
+
+	for _, sp := range setPaths {
+		if !isSetSchemaPathIgnored(sp, ignores) {
+			return true
+		}
+	}
+	return false
+}
+
+func (r Resource) collectSetSchemaPaths() []setSchemaPath {
+	var out []setSchemaPath
+	var walk func(props []*Type, segs []string, ancestorMaxItems []int)
+	walk = func(props []*Type, segs []string, ancestorMaxItems []int) {
+		for _, prop := range props {
+			if prop == nil || prop.Exclude {
+				continue
+			}
+			if prop.FlattenObject {
+				walk(prop.Properties, segs, ancestorMaxItems)
+				continue
+			}
+
+			name := google.Underscore(prop.Name)
+			curSegs := append(append([]string(nil), segs...), name)
+
+			isSet := prop.IsSet || (!r.FrameworkResource && prop.IsA("Map"))
+			if isSet {
+				out = append(out, setSchemaPath{
+					segs:             curSegs,
+					ancestorMaxItems: append([]int(nil), ancestorMaxItems...),
+				})
+			}
+
+			switch {
+			case prop.IsA("NestedObject"):
+				maxItems := 0
+				if !isSet {
+					if r.FrameworkResource {
+						maxItems = 1
+					} else if !prop.Output {
+						maxItems = 1
+					}
+				}
+				nextAnc := append(append([]int(nil), ancestorMaxItems...), maxItems)
+				walk(prop.Properties, curSegs, nextAnc)
+			case prop.IsA("Array"):
+				if prop.ItemType != nil && prop.ItemType.IsA("NestedObject") {
+					maxItems := 0
+					if !isSet && prop.MaxSize != nil {
+						maxItems = *prop.MaxSize
+					}
+					nextAnc := append(append([]int(nil), ancestorMaxItems...), maxItems)
+					walk(prop.ItemType.Properties, curSegs, nextAnc)
+				}
+			case prop.IsA("Map"):
+				if prop.ValueType != nil && prop.ValueType.IsA("NestedObject") {
+					nextAnc := append(append([]int(nil), ancestorMaxItems...), 0)
+					walk(prop.ValueType.Properties, curSegs, nextAnc)
+				}
+			}
+		}
+	}
+
+	walk(google.Concat(r.AllUserProperties(), r.UserVirtualFields()), nil, nil)
+	return out
+}
+
+func isSetSchemaPathIgnored(sp setSchemaPath, ignores []string) bool {
+	for _, ig := range ignores {
+		if ig == "" {
+			return true
+		}
+		if igMatchesAllSetKeys(sp.segs, sp.ancestorMaxItems, ig) {
+			return true
+		}
+	}
+	return false
+}
+
+// igMatchesAllSetKeys reports whether every flatmap key produced for a Set at
+// segs satisfies strings.HasPrefix(key, ig) during ImportStateVerify.
+func igMatchesAllSetKeys(segs []string, ancestorMaxItems []int, ig string) bool {
+	prefix := ""
+	for d, seg := range segs {
+		var segPrefix string
+		if prefix == "" {
+			segPrefix = seg
+		} else {
+			segPrefix = prefix + "." + seg
+		}
+		if strings.HasPrefix(segPrefix+".", ig) {
+			return true
+		}
+		if d < len(segs)-1 {
+			if d < len(ancestorMaxItems) && ancestorMaxItems[d] == 1 {
+				prefix = segPrefix + ".0"
+				if strings.HasPrefix(prefix+".", ig) {
+					return true
+				}
+			} else {
+				return false
+			}
+		}
+	}
+	return false
+}
+
 func ignoreReadFields(props []*Type) []string {
 	var fields []string
 	for _, tp := range props {

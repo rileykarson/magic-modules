@@ -26,6 +26,9 @@ func TestAccNetworkSecurityInterceptEndpointGroupAssociation_update(t *testing.T
 				Config: testAccNetworkSecurityInterceptEndpointGroupAssociation_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_intercept_endpoint_group_association.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -38,6 +41,9 @@ func TestAccNetworkSecurityInterceptEndpointGroupAssociation_update(t *testing.T
 						plancheck.ExpectResourceAction("google_network_security_intercept_endpoint_group_association.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_intercept_endpoint_group_association.default",

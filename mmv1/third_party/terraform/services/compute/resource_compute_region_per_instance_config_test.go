@@ -38,6 +38,9 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -51,6 +54,9 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -59,6 +65,9 @@ func TestAccComputeRegionPerInstanceConfig_statefulBasic(t *testing.T) {
 			{
 				// Add two new endpoints
 				Config: testAccComputeRegionPerInstanceConfig_statefulAdditional(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
@@ -109,6 +118,9 @@ func TestAccComputeRegionPerInstanceConfig_update(t *testing.T) {
 				Config: testAccComputeRegionPerInstanceConfig_statefulBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -117,6 +129,9 @@ func TestAccComputeRegionPerInstanceConfig_update(t *testing.T) {
 			{
 				// Update an existing config
 				Config: testAccComputeRegionPerInstanceConfig_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
@@ -150,6 +165,9 @@ func TestAccComputeRegionPerInstanceConfig_statefulIps(t *testing.T) {
 				Config: testAccComputeRegionPerInstanceConfig_statefulIpsBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -158,6 +176,9 @@ func TestAccComputeRegionPerInstanceConfig_statefulIps(t *testing.T) {
 			{
 				// Update an existing config
 				Config: testAccComputeRegionPerInstanceConfig_statefulIpsUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.default",
@@ -194,6 +215,9 @@ func TestAccComputeRegionPerInstanceConfig_removeInstanceOnDestroy(t *testing.T)
 				Config: testAccComputeRegionPerInstanceConfig_removeInstanceOnDestroyBefore(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_per_instance_config.config_one",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -211,6 +235,9 @@ func TestAccComputeRegionPerInstanceConfig_removeInstanceOnDestroy(t *testing.T)
 					testAccCheckComputeRegionPerInstanceConfigDestroyed(t, rigmId, context["config_name"].(string)),
 					testAccCheckComputeRegionPerInstanceConfigInstanceDestroyed(t, rigmId, context["config_name"].(string)),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_per_instance_config.config_two",

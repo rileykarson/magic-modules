@@ -41,6 +41,9 @@ func TestAccComputeNetworkEndpoints_networkEndpointsBasic(t *testing.T) {
 				Config: testAccComputeNetworkEndpoints_networkEndpointsBase(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -54,6 +57,9 @@ func TestAccComputeNetworkEndpoints_networkEndpointsBasic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -62,6 +68,9 @@ func TestAccComputeNetworkEndpoints_networkEndpointsBasic(t *testing.T) {
 			{
 				// Add four new endpoints
 				Config: testAccComputeNetworkEndpoints_networkEndpointsAdditional(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.default",
@@ -74,6 +83,9 @@ func TestAccComputeNetworkEndpoints_networkEndpointsBasic(t *testing.T) {
 				Config: testAccComputeNetworkEndpoints_networkEndpointsPaginated(context, 100, 1300),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -82,6 +94,9 @@ func TestAccComputeNetworkEndpoints_networkEndpointsBasic(t *testing.T) {
 			{
 				// Remove enough endpoints to trigger pagination
 				Config: testAccComputeNetworkEndpoints_networkEndpointsPaginated(context, 700, 1900),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.default",
@@ -332,6 +347,9 @@ func TestAccComputeNetworkEndpoints_ipv6(t *testing.T) {
 				Config: testAccComputeNetworkEndpoints_ipv6Step1Single(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -345,6 +363,9 @@ func TestAccComputeNetworkEndpoints_ipv6(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_network_endpoints.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.default",
@@ -362,6 +383,9 @@ func TestAccComputeNetworkEndpoints_ipv6(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -377,6 +401,9 @@ func TestAccComputeNetworkEndpoints_ipv6(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -390,6 +417,9 @@ func TestAccComputeNetworkEndpoints_ipv6(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_network_endpoints.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.default",

@@ -27,6 +27,9 @@ func TestAccComputeInterconnectAttachmentGroup_basic(t *testing.T) {
 				Config: testAccComputeInterconnectAttachmentGroup_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_interconnect_attachment_group.example-interconnect-attachment-group",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -62,6 +65,9 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 				Config: testAccComputeInterconnectAttachmentGroup_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_interconnect_attachment_group.example-interconnect-attachment-group",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -73,6 +79,9 @@ func TestAccComputeInterconnectAttachmentGroup_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_interconnect_attachment_group.example-interconnect-attachment-group", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_interconnect_attachment_group.example-interconnect-attachment-group",

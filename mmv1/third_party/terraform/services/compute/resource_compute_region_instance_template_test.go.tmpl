@@ -48,6 +48,9 @@ func TestAccComputeRegionInstanceTemplate_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -74,6 +77,9 @@ func TestAccComputeRegionInstanceTemplate_hostErrorTimeoutSeconds(t *testing.T) 
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "scheduling.0.host_error_timeout_seconds", "120"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -118,6 +124,9 @@ func TestAccComputeRegionInstanceTemplate_imageShorthand(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -147,6 +156,9 @@ func TestAccComputeRegionInstanceTemplate_preemptible(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -174,6 +186,9 @@ func TestAccComputeRegionInstanceTemplate_IP(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -198,6 +213,9 @@ func TestAccComputeRegionInstanceTemplate_IPv6(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateExists(
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -228,6 +246,9 @@ func TestAccComputeRegionInstanceTemplate_aliasIpv6Range(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -247,6 +268,9 @@ func TestAccComputeRegionInstanceTemplate_networkTier(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_networkTier(acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -279,6 +303,9 @@ func TestAccComputeRegionInstanceTemplate_networkIP(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -307,6 +334,9 @@ func TestAccComputeRegionInstanceTemplate_networkIPAddress(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateNetworkIPAddress(
 						"google_compute_region_instance_template.foobar", ipAddress, &instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -345,6 +375,9 @@ func TestAccComputeRegionInstanceTemplate_regionDisks(t *testing.T) {
 				Config: testAccComputeRegionInstanceTemplate_regionDisks(acctest.RandString(t, 10)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -365,6 +398,9 @@ func TestAccComputeRegionInstanceTemplate_diskIops(t *testing.T) {
 				Config: testAccComputeRegionInstanceTemplate_diskIops(acctest.RandString(t, 10)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -383,6 +419,9 @@ func TestAccComputeRegionInstanceTemplate_diskIopsThroughput(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_diskIopsThroughput(acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -413,6 +452,9 @@ func TestAccComputeRegionInstanceTemplate_subnet_auto(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -438,6 +480,9 @@ func TestAccComputeRegionInstanceTemplate_subnet_custom(t *testing.T) {
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateSubnetwork(&instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -519,6 +564,9 @@ func TestAccComputeRegionInstanceTemplate_primaryAliasIpRange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -545,6 +593,9 @@ func TestAccComputeRegionInstanceTemplate_secondaryAliasIpRange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -569,6 +620,9 @@ func TestAccComputeRegionInstanceTemplate_guestAccelerator(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateHasGuestAccelerator(&instanceTemplate, "nvidia-tesla-k80", 1),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -620,6 +674,9 @@ func TestAccComputeRegionInstanceTemplate_minCpuPlatform(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -638,6 +695,9 @@ func TestAccComputeRegionInstanceTemplate_soleTenantNodeAffinities(t *testing.T)
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_soleTenantInstanceTemplate(acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -665,6 +725,9 @@ func TestAccComputeRegionInstanceTemplate_instanceResourcePolicies(t *testing.T)
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &template),
 					testAccCheckComputeRegionInstanceTemplateHasInstanceResourcePolicies(&template, policyName),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -695,6 +758,9 @@ func TestAccComputeRegionInstanceTemplate_instanceResourcePoliciesSpread(t *test
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -722,6 +788,9 @@ func TestAccComputeRegionInstanceTemplate_reservationAffinities(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -734,6 +803,9 @@ func TestAccComputeRegionInstanceTemplate_reservationAffinities(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -744,6 +816,9 @@ func TestAccComputeRegionInstanceTemplate_reservationAffinities(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &template),
 					testAccCheckComputeRegionInstanceTemplateHasReservationAffinity(&template, "SPECIFIC_RESERVATION", templateName),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -772,6 +847,9 @@ func TestAccComputeRegionInstanceTemplate_shieldedVmConfig1(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -796,6 +874,9 @@ func TestAccComputeRegionInstanceTemplate_shieldedVmConfig2(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateHasShieldedVmConfig(&instanceTemplate, true, true, false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -892,6 +973,9 @@ func TestAccComputeRegionInstanceTemplate_performanceMonitoringUnit(t *testing.T
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -902,6 +986,9 @@ func TestAccComputeRegionInstanceTemplate_performanceMonitoringUnit(t *testing.T
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "advanced_machine_features.0.performance_monitoring_unit", "ARCHITECTURAL"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -945,6 +1032,9 @@ func TestAccComputeRegionInstanceTemplate_enableUefiNetworking(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -965,6 +1055,9 @@ func TestAccComputeRegionInstanceTemplate_enableDisplay(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_enableDisplay(acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -995,6 +1088,9 @@ func TestAccComputeRegionInstanceTemplate_maintenance_interval(t *testing.T) {
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateMaintenanceInterval(&instanceTemplate, "PERIODIC"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1060,6 +1156,9 @@ func TestAccComputeRegionInstanceTemplate_withScratchDisk(t *testing.T) {
 				Config: testAccComputeRegionInstanceTemplate_with375GbScratchDisk(acctest.RandString(t, 10)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1078,6 +1177,9 @@ func TestAccComputeRegionInstanceTemplate_with18TbScratchDisk(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_with18TbScratchDisk(acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_template.foobar",
@@ -1108,6 +1210,9 @@ func TestAccComputeRegionInstanceTemplate_imageResourceTest(t *testing.T) {
 				Config: testAccComputeRegionInstanceTemplate_imageResourceTest(diskName, computeImage, imageDesc1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1115,6 +1220,9 @@ func TestAccComputeRegionInstanceTemplate_imageResourceTest(t *testing.T) {
 			},
 			{
 				Config: testAccComputeRegionInstanceTemplate_imageResourceTest(diskName, computeImage, imageDesc2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_template.foobar",
@@ -1143,6 +1251,9 @@ func TestAccComputeRegionInstanceTemplate_diskResourcePolicies(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateExists(t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateHasDiskResourcePolicy(&instanceTemplate, policyName),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1223,6 +1334,9 @@ func TestAccComputeRegionInstanceTemplate_managedEnvoy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1250,6 +1364,9 @@ func TestAccComputeRegionInstanceTemplate_flexStart(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplateProvisioningModel(&instanceTemplate, "FLEX_START"),
 					testAccCheckComputeRegionInstanceTemplateInstanceTerminationAction(&instanceTemplate, "DELETE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1287,6 +1404,9 @@ func TestAccComputeRegionInstanceTemplate_reservationBound(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1311,6 +1431,9 @@ func TestAccComputeRegionInstanceTemplate_provisioningModelEmptyString(t *testin
 					testAccCheckComputeRegionInstanceTemplateExists(
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1339,6 +1462,9 @@ func TestAccComputeRegionInstanceTemplate_spot(t *testing.T) {
 					testAccCheckComputeRegionInstanceTemplatePreemptible(&instanceTemplate, true),
 					testAccCheckComputeRegionInstanceTemplateProvisioningModel(&instanceTemplate, "SPOT"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1376,6 +1502,9 @@ func TestAccComputeRegionInstanceTemplate_spot_maxRunDuration(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1407,6 +1536,9 @@ func TestAccComputeRegionInstanceTemplate_maxRunDuration_onInstanceStopAction(t 
 					testAccCheckComputeRegionInstanceTemplateInstanceTerminationAction(&instanceTemplate, "STOP"),
 					testAccCheckComputeRegionInstanceTemplateMaxRunDuration(&instanceTemplate, expectedMaxRunDuration),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1442,6 +1574,9 @@ func TestAccComputeRegionInstanceTemplate_instanceTerminationAction_terminationT
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1471,6 +1606,9 @@ func TestAccComputeRegionInstanceTemplate_localSsdRecoveryTimeout(t *testing.T) 
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionInstanceTemplateLocalSsdRecoveryTimeout(&instanceTemplate, expectedLocalSsdRecoveryTimeout),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1503,6 +1641,9 @@ func TestAccComputeRegionalInstanceTemplate_partnerMetadata(t *testing.T) {
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					testAccCheckComputeRegionalInstanceTemplatePartnerMetadata(&instanceTemplate, expectedPartnerMetadata),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1570,6 +1711,9 @@ func TestAccComputeRegionInstanceTemplate_sourceSnapshotEncryptionKey(t *testing
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.template",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1583,6 +1727,9 @@ func TestAccComputeRegionInstanceTemplate_sourceSnapshotEncryptionKey(t *testing
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.template",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1594,6 +1741,9 @@ func TestAccComputeRegionInstanceTemplate_sourceSnapshotEncryptionKey(t *testing
 					testAccCheckComputeRegionInstanceTemplateExists(
 						t, "google_compute_region_instance_template.template", &instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_template.template",
@@ -1632,6 +1782,9 @@ func TestAccComputeRegionInstanceTemplate_sourceImageEncryptionKey(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.template",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1645,6 +1798,9 @@ func TestAccComputeRegionInstanceTemplate_sourceImageEncryptionKey(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_template.template",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1656,6 +1812,9 @@ func TestAccComputeRegionInstanceTemplate_sourceImageEncryptionKey(t *testing.T)
 					testAccCheckComputeRegionInstanceTemplateExists(
 						t, "google_compute_region_instance_template.template", &instanceTemplate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_template.template",
@@ -1764,6 +1923,9 @@ func TestAccComputeRegionInstanceTemplate_workloadIdentity(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1794,6 +1956,9 @@ func TestAccComputeRegionInstanceTemplate_workloadIdentity_identityType(t *testi
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "workload_identity_config.0.identity_certificate_enabled", "true"),
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "workload_identity_config.0.identity_type", "IDENTITY_TYPE_UNSPECIFIED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1903,6 +2068,9 @@ func TestAccComputeRegionInstanceTemplate_schedulingSkipGuestOSShutdown(t *testi
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1932,6 +2100,9 @@ func TestAccComputeRegionInstanceTemplate_schedulingPreemptionNoticeDuration(t *
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "scheduling.0.preemption_notice_duration.0.seconds", "120"),
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "scheduling.0.preemption_notice_duration.0.nanos", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -1996,6 +2167,9 @@ func TestAccComputeRegionInstanceTemplate_networkAttachment(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_networkAttachment(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -2068,6 +2242,9 @@ func TestAccComputeRegionInstanceTemplate_networkAttachmentServiceClass(t *testi
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2123,6 +2300,9 @@ func TestAccComputeRegionInstanceTemplate_dynamicNic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionInstanceTemplate_dynamicNic(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_template.foobar",
@@ -2248,6 +2428,9 @@ func TestAccComputeRegionInstanceTemplate_storagePool(t *testing.T) {
 						t, "google_compute_region_instance_template.foobar", &instanceTemplate),
 					resource.TestCheckResourceAttr("google_compute_region_instance_template.foobar", "disk.0.storage_pool", "tf-test-storage-pool-"+suffix),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_template.foobar",

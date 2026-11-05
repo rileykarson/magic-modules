@@ -31,12 +31,18 @@ func TestAccDataprocMetastoreService_updateAndImport(t *testing.T) {
 				Config: testAccDataprocMetastoreService_updateAndImport(name, tier[0]),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dataproc_metastore_service.my_metastore",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDataprocMetastoreService_updateAndImport(name, tier[1]),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dataproc_metastore_service.my_metastore",
@@ -80,6 +86,9 @@ func TestAccDataprocMetastoreService_dataprocMetastoreServiceScheduledBackupExam
 				Config: testAccDataprocMetastoreService_dataprocMetastoreServiceScheduledBackupExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataproc_metastore_service.backup",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -107,6 +116,9 @@ func TestAccDataprocMetastoreService_PrivateServiceConnect(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataprocMetastoreService_PrivateServiceConnect(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataproc_metastore_service.default",
@@ -200,6 +212,9 @@ func TestAccMetastoreService_tags(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataproc_metastore_service.default", "tags.%"),
 					testAccCheckMetastoreServiceHasTagBindings(t),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataproc_metastore_service.default",

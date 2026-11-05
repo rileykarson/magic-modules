@@ -28,6 +28,9 @@ func TestAccSecurityCenterV2OrganizationSourceIamBinding(t *testing.T) {
 				Config: testAccSecurityCenterSourceIamBinding_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName: "google_scc_v2_organization_source_iam_binding.foo",
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
 					id := state.RootModule().Resources["google_scc_v2_organization_source.custom_source"].Primary.Attributes["id"]
@@ -42,6 +45,9 @@ func TestAccSecurityCenterV2OrganizationSourceIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccSecurityCenterSourceIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName: "google_scc_v2_organization_source_iam_binding.foo",

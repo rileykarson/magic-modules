@@ -43,6 +43,9 @@ func TestAccProjectIamAuditConfig_basic(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigBasic(pid, org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 		},
 	})
@@ -76,6 +79,9 @@ func TestAccProjectIamAuditConfig_multiple(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigMultiple(pid, org, service, service2),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.multiple", pid, service2),
 		},
@@ -108,6 +114,9 @@ func TestAccProjectIamAuditConfig_multipleAtOnce(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigMultiple(pid, org, service, service2),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.multiple", pid, service2),
 		},
@@ -137,17 +146,26 @@ func TestAccProjectIamAuditConfig_update(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigBasic(pid, org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 
 			// Apply an updated IAM audit config
 			{
 				Config: testAccProjectAssociateAuditConfigUpdated(pid, org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 
 			// Drop the original member
 			{
 				Config: testAccProjectAssociateAuditConfigDropMemberFromBasic(pid, org, service),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 		},
@@ -179,6 +197,9 @@ func TestAccProjectIamAuditConfig_remove(t *testing.T) {
 			// Apply multiple IAM audit configs
 			{
 				Config: testAccProjectAssociateAuditConfigMultiple(pid, org, service, service2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.multiple", pid, service2),
@@ -219,11 +240,17 @@ func TestAccProjectIamAuditConfig_addFirstExemptMember(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigMembers(pid, org, service, members),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 
 			// Apply IAM audit config with one member
 			{
 				Config: testAccProjectAssociateAuditConfigMembers(pid, org, service, members2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 		},
@@ -255,11 +282,17 @@ func TestAccProjectIamAuditConfig_removeLastExemptMember(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigMembers(pid, org, service, members),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 
 			// Apply IAM audit config with no members
 			{
 				Config: testAccProjectAssociateAuditConfigMembers(pid, org, service, members2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 		},
@@ -291,11 +324,17 @@ func TestAccProjectIamAuditConfig_updateNoExemptMembers(t *testing.T) {
 			{
 				Config: testAccProjectAssociateAuditConfigLogType(pid, org, service, logType),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 
 			// Apply IAM audit config with DATA_WRITE
 			{
 				Config: testAccProjectAssociateAuditConfigLogType(pid, org, service, logType2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamAuditConfigImportStep("google_project_iam_audit_config.acceptance", pid, service),
 		},

@@ -36,6 +36,9 @@ func TestAccCloudRunV2WorkerPool_vpcAccess_basic(t *testing.T) {
 				Config: testAccCloudRunV2WorkerPool_vpcAccess_basicConfig(ctx),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_cloud_run_v2_worker_pool.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -106,6 +109,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceFullUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceFull(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -113,6 +119,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceFullUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceFullUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -303,6 +312,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceGcsVolume(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceGcsVolume(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -406,6 +418,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceTCPProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceWithEmptyTCPStartupProbeAndHTTPLivenessProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -413,6 +428,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceTCPProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithTCPStartupProbeAndHTTPLivenessProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -440,6 +458,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceHTTPProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithEmptyHTTPStartupProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -447,6 +468,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceHTTPProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithHTTPStartupProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -475,6 +499,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceGRPCProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudRunServiceUpdateWithEmptyGRPCLivenessProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -482,6 +509,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceGRPCProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudRunServiceUpdateWithGRPCLivenessProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -800,6 +830,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithDirectVPCUpdate(t *testing.T)
 				Config: testAccCloudRunV2Service_cloudRunServiceWithDirectVPC(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -807,6 +840,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithDirectVPCUpdate(t *testing.T)
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudRunServiceWithDirectVPCAndNamedBinAuthPolicyUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -879,6 +915,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceCustomAudienceUpdate(t *testing.T
 				Config: testAccCloudRunV2Service_cloudRunServiceUpdateWithCustomAudience(serviceName, "test"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -887,6 +926,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceCustomAudienceUpdate(t *testing.T
       {
 				Config: testAccCloudRunV2Service_cloudRunServiceUpdateWithCustomAudience(serviceName, "test_update"),
 			},
+      {
+      	RefreshState: true,
+      },
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
@@ -895,6 +937,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceCustomAudienceUpdate(t *testing.T
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudRunServiceUpdateWithoutCustomAudience(serviceName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -1062,6 +1107,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithServiceMinInstances(t *testin
        {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithMinInstances(context),
       },
+       {
+       	RefreshState: true,
+       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
@@ -1070,6 +1118,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithServiceMinInstances(t *testin
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithNoMinInstances(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
@@ -1161,6 +1212,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithDefaultUriDisabled(t *testing
        {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithMinInstancesAndDefaultUriDisabled(context),
       },
+       {
+       	RefreshState: true,
+       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
@@ -1169,6 +1223,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithDefaultUriDisabled(t *testing
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithNoMinInstances(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
@@ -1233,6 +1290,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceMeshUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceMesh(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1240,6 +1300,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceMeshUpdate(t *testing.T) {
                         },
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceMeshUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -1347,6 +1410,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithResourcesRequirements(t *test
        {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithoutGpu(context),
       },
+       {
+       	RefreshState: true,
+       },
       {
         ResourceName:            "google_cloud_run_v2_service.default",
         ImportState:             true,
@@ -1357,6 +1423,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithResourcesRequirements(t *test
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceWithGpu(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1364,6 +1433,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithResourcesRequirements(t *test
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithoutGpu(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:            "google_cloud_run_v2_service.default",
@@ -1424,6 +1496,9 @@ func TestAccCloudRunV2Service_cloudrunv2MultiRegionService(t *testing.T) {
        {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithMultiRegion(context),
       },
+       {
+       	RefreshState: true,
+       },
       {
         ResourceName:            "google_cloud_run_v2_service.default",
         ImportState:             true,
@@ -1432,6 +1507,9 @@ func TestAccCloudRunV2Service_cloudrunv2MultiRegionService(t *testing.T) {
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithMultiRegionUpdate(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:            "google_cloud_run_v2_service.default",
@@ -1565,6 +1643,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceFunctionExample_update(t *testing
                                 Config: testAccCloudRunV2Service_cloudrunv2ServiceFunctionExample_full(context),
                         },
                         {
+                        	RefreshState: true,
+                        },
+                        {
                                 ResourceName:            "google_cloud_run_v2_service.default",
                                 ImportState:             true,
                                 ImportStateVerify:       true,
@@ -1577,6 +1658,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceFunctionExample_update(t *testing
                                                 plancheck.ExpectResourceAction("google_cloud_run_v2_service.default", plancheck.ResourceActionUpdate),
                                         },
                                 },
+                        },
+                        {
+                        	RefreshState: true,
                         },
                         {
                                 ResourceName:            "google_cloud_run_v2_service.default",
@@ -1740,6 +1824,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithTags(t *testing.T) {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithTags(context),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
         ImportStateVerify: true,
@@ -1781,6 +1868,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithManualScaling(t *testing.T) {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithManualScaling(context),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
         ImportStateVerify: true,
@@ -1788,6 +1878,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithManualScaling(t *testing.T) {
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithManualScaling(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
@@ -1861,6 +1954,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithReadinessProbe(t *testing.T) 
         Config: testAccCloudRunV2Service_cloudrunv2ServiceWithHTTPReadinessProbe(context),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
         ImportStateVerify: true,
@@ -1870,6 +1966,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithReadinessProbe(t *testing.T) 
         Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithHTTPReadinessProbe(context),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName: "google_cloud_run_v2_service.default",
         ImportState: true,
         ImportStateVerify: true,
@@ -1877,6 +1976,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWithReadinessProbe(t *testing.T) 
       },
       {
         Config: testAccCloudRunV2Service_cloudrunv2ServiceUpdateWithGRPCReadinessProbe(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName: "google_cloud_run_v2_service.default",
@@ -1980,6 +2082,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceIapUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceIap(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1987,6 +2092,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceIapUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceIapUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -2050,6 +2158,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceSshUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceSsh(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2057,6 +2168,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceSshUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Service_cloudrunv2ServiceSshUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -2174,6 +2288,9 @@ func TestAccCloudRunV2Service_noPermadiffWithMemoryLimitOnly(t *testing.T) {
 				Config: testAccCloudRunV2Service_memoryLimitOnly(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2229,6 +2346,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWorkloadIdentityConfigUpdate(t *t
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2242,6 +2362,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWorkloadIdentityConfigUpdate(t *t
 					resource.TestCheckResourceAttr("google_cloud_run_v2_service.default", "template.0.workload_identity_config.0.identity_type", "IDENTITY_TYPE_WORKLOAD_IDENTITY"),
 					resource.TestCheckResourceAttr("google_cloud_run_v2_service.default", "template.0.workload_identity_config.0.identity_certificate_enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",
@@ -2259,6 +2382,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWorkloadIdentityConfigUpdate(t *t
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2272,6 +2398,9 @@ func TestAccCloudRunV2Service_cloudrunv2ServiceWorkloadIdentityConfigUpdate(t *t
 					resource.TestCheckResourceAttr("google_cloud_run_v2_service.default", "template.0.workload_identity_config.0.identity_type", "IDENTITY_TYPE_SERVICE_ACCOUNT"),
 					resource.TestCheckResourceAttr("google_cloud_run_v2_service.default", "template.0.workload_identity_config.0.identity_certificate_enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_service.default",

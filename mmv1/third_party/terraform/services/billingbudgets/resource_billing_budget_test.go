@@ -88,12 +88,18 @@ func TestAccBillingBudget_billingBudgetUpdate(t *testing.T) {
 				Config: testAccBillingBudget_billingBudgetUpdateStart(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_billing_budget.budget",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBillingBudget_billingBudgetUpdateRemoveFilter(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_billing_budget.budget",
@@ -104,6 +110,9 @@ func TestAccBillingBudget_billingBudgetUpdate(t *testing.T) {
 				Config: testAccBillingBudget_billingBudgetCalendarUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_billing_budget.budget",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -112,12 +121,18 @@ func TestAccBillingBudget_billingBudgetUpdate(t *testing.T) {
 				Config: testAccBillingBudget_billingBudgetUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_billing_budget.budget",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBillingBudget_billingBudgetCustomPeriodUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_billing_budget.budget",
@@ -145,12 +160,18 @@ func TestAccBillingBudget_billingFilterSubaccounts(t *testing.T) {
 				Config: testAccBillingBudget_billingFilterSubaccounts(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_billing_budget.budget",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBillingBudget_billingFilterRemoveSubaccounts(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_billing_budget.budget",
@@ -559,6 +580,9 @@ func TestAccBillingBudget_budgetFilterProjectsOrdering(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBillingBudget_budgetFilterProjectsOrdering1(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_billing_budget.budget",

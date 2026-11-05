@@ -33,6 +33,9 @@ func TestAccBigqueryAnalyticsHubListing_bigqueryAnalyticshubListingUpdate(t *tes
 				Config: testAccBigqueryAnalyticsHubListing_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_analytics_hub_listing.listing",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -82,6 +85,9 @@ func TestAccBigqueryAnalyticsHubListing_multiregion(t *testing.T) {
 					resource.TestCheckResourceAttr("google_bigquery_analytics_hub_listing.listing", "bigquery_dataset.0.replica_locations.#", "1"),
 					resource.TestCheckResourceAttr("google_bigquery_analytics_hub_listing.listing", "bigquery_dataset.0.replica_locations.0", "eu"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_analytics_hub_listing.listing",

@@ -54,6 +54,9 @@ func TestAccStorageBucket_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -123,6 +126,9 @@ func TestAccStorageBucket_basicWithAutoclass(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -137,6 +143,9 @@ func TestAccStorageBucket_basicWithAutoclass(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -144,6 +153,9 @@ func TestAccStorageBucket_basicWithAutoclass(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_basicWithAutoclass(bucketName, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -174,6 +186,9 @@ func TestAccStorageBucket_AutoclassDiffSuppress(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -185,6 +200,9 @@ func TestAccStorageBucket_AutoclassDiffSuppress(t *testing.T) {
 					testAccCheckStorageBucketExists(
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -200,6 +218,9 @@ func TestAccStorageBucket_AutoclassDiffSuppress(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -211,6 +232,9 @@ func TestAccStorageBucket_AutoclassDiffSuppress(t *testing.T) {
 					testAccCheckStorageBucketExists(
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -240,6 +264,9 @@ func TestAccStorageBucket_requesterPays(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -261,6 +288,9 @@ func TestAccStorageBucket_lowercaseLocation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_lowercaseLocation(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -286,6 +316,9 @@ func TestAccStorageBucket_dualLocation(t *testing.T) {
 				Config: testAccStorageBucket_dualLocation(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -307,6 +340,9 @@ func TestAccStorageBucket_dualLocation_lowercase(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_dualLocation_lowercase(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -344,6 +380,17 @@ func TestAccStorageBucket_dualLocation_versionChange(t *testing.T) {
 				},
 			},
 			{
+				// Step-level providers cause terraform-plugin-testing to overwrite wd config with provider-only HCL during RefreshState.
+				RefreshState:       true,
+				ExpectNonEmptyPlan: true,
+				ExternalProviders: map[string]resource.ExternalProvider{
+					"google": {
+						VersionConstraint: "5.30.0",
+						Source:            "hashicorp/google",
+					},
+				},
+			},
+			{
 				ResourceName: "google_storage_bucket.bucket",
 				ExternalProviders: map[string]resource.ExternalProvider{
 					"google": {
@@ -357,6 +404,12 @@ func TestAccStorageBucket_dualLocation_versionChange(t *testing.T) {
 			},
 			{
 				Config:                   testAccStorageBucket_dualLocation(bucketName),
+				ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+			},
+			{
+				// Step-level providers cause terraform-plugin-testing to overwrite wd config with provider-only HCL during RefreshState.
+				RefreshState:             true,
+				ExpectNonEmptyPlan:       true,
 				ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 			},
 			{
@@ -387,6 +440,9 @@ func TestAccStorageBucket_dualLocation_rpo(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -400,6 +456,9 @@ func TestAccStorageBucket_dualLocation_rpo(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -411,6 +470,9 @@ func TestAccStorageBucket_dualLocation_rpo(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "rpo", "DEFAULT"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -440,6 +502,9 @@ func TestAccStorageBucket_customAttributes(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -464,6 +529,9 @@ func TestAccStorageBucket_lifecycleRulesMultiple(t *testing.T) {
 				Config: testAccStorageBucket_lifecycleRulesMultiple(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -471,6 +539,9 @@ func TestAccStorageBucket_lifecycleRulesMultiple(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_lifecycleRulesMultiple_update(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -502,6 +573,9 @@ func TestAccStorageBucket_lifecycleRuleStateLive(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -531,6 +605,9 @@ func TestAccStorageBucket_lifecycleRuleStateArchived(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -543,6 +620,9 @@ func TestAccStorageBucket_lifecycleRuleStateArchived(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 					testAccCheckStorageBucketLifecycleConditionState(googleapi.Bool(false), &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -574,6 +654,9 @@ func TestAccStorageBucket_lifecycleRuleStateAny(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -586,6 +669,9 @@ func TestAccStorageBucket_lifecycleRuleStateAny(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 					testAccCheckStorageBucketLifecycleConditionState(googleapi.Bool(true), &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -602,6 +688,9 @@ func TestAccStorageBucket_lifecycleRuleStateAny(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -614,6 +703,9 @@ func TestAccStorageBucket_lifecycleRuleStateAny(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 					testAccCheckStorageBucketLifecycleConditionState(googleapi.Bool(false), &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -644,6 +736,9 @@ func TestAccStorageBucket_lifecycleRulesVirtualFields(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -657,6 +752,9 @@ func TestAccStorageBucket_lifecycleRulesVirtualFields(t *testing.T) {
 					testAccCheckStorageBucketLifecycleConditionNoAge(nil, &bucket, 1),
 					testAccCheckStorageBucketLifecycleConditionNoAge(&zero_age, &bucket, 2),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -673,6 +771,9 @@ func TestAccStorageBucket_lifecycleRulesVirtualFields(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -684,6 +785,9 @@ func TestAccStorageBucket_lifecycleRulesVirtualFields(t *testing.T) {
 					testAccCheckStorageBucketExists(
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -715,6 +819,9 @@ func TestAccStorageBucket_storageClass(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -728,6 +835,9 @@ func TestAccStorageBucket_storageClass(t *testing.T) {
 					// storage_class-only change should not recreate
 					testAccCheckStorageBucketWasUpdated(&updated, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -759,6 +869,9 @@ func TestAccStorageBucket_update_requesterPays(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -771,6 +884,9 @@ func TestAccStorageBucket_update_requesterPays(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &updated),
 					testAccCheckStorageBucketWasUpdated(&updated, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -804,6 +920,9 @@ func TestAccStorageBucket_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -818,6 +937,9 @@ func TestAccStorageBucket_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "force_destroy", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -836,6 +958,9 @@ func TestAccStorageBucket_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -852,6 +977,9 @@ func TestAccStorageBucket_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -866,6 +994,9 @@ func TestAccStorageBucket_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "force_destroy", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -992,6 +1123,9 @@ func TestAccStorageBucket_enable_object_retention(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1003,6 +1137,9 @@ func TestAccStorageBucket_enable_object_retention(t *testing.T) {
 					testAccCheckStorageBucketExists(
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1037,6 +1174,9 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1052,6 +1192,9 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "versioning.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1071,6 +1214,9 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1086,6 +1232,9 @@ func TestAccStorageBucket_versioning(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "versioning.0.enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1118,6 +1267,9 @@ func TestAccStorageBucket_logging(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1135,6 +1287,9 @@ func TestAccStorageBucket_logging(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1146,6 +1301,9 @@ func TestAccStorageBucket_logging(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "logging.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1171,6 +1329,9 @@ func TestAccStorageBucket_cors(t *testing.T) {
 				Config: testGoogleStorageBucketsCors(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1178,6 +1339,9 @@ func TestAccStorageBucket_cors(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_basic(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1203,6 +1367,9 @@ func TestAccStorageBucket_emptyCors(t *testing.T) {
 				Config: testGoogleStorageBucketsCors(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1213,6 +1380,9 @@ func TestAccStorageBucket_emptyCors(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckBucketCorsCount(t, 3),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1227,6 +1397,9 @@ func TestAccStorageBucket_emptyCors(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1234,6 +1407,9 @@ func TestAccStorageBucket_emptyCors(t *testing.T) {
 			},
 			{
 				Config: testGoogleStorageBucketsRemoveCorsCompletely(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1257,6 +1433,9 @@ func TestAccStorageBucket_defaultEventBasedHold(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_defaultEventBasedHold(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1288,6 +1467,9 @@ func TestAccStorageBucket_encryption(t *testing.T) {
 				Config: testAccStorageBucket_encryption(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1308,6 +1490,9 @@ func TestAccStorageBucket_publicAccessPrevention(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_publicAccessPrevention(bucketName, "enforced"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1332,6 +1517,9 @@ func TestAccStorageBucket_uniformBucketAccessOnly(t *testing.T) {
 				Config: testAccStorageBucket_uniformBucketAccessOnly(bucketName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1339,6 +1527,9 @@ func TestAccStorageBucket_uniformBucketAccessOnly(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_uniformBucketAccessOnly(bucketName, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1365,6 +1556,9 @@ func TestAccStorageBucket_labels(t *testing.T) {
 				Config: testAccStorageBucket_updateLabels(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1375,6 +1569,9 @@ func TestAccStorageBucket_labels(t *testing.T) {
 				Config: testAccStorageBucket_labels(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1383,6 +1580,9 @@ func TestAccStorageBucket_labels(t *testing.T) {
 			// And make sure deleting all labels work
 			{
 				Config: testAccStorageBucket_basic(bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1414,6 +1614,9 @@ func TestAccStorageBucket_retentionPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1442,6 +1645,9 @@ func TestAccStorageBucket_website(t *testing.T) {
 				Config: testAccStorageBucket_websiteOneAttribute(bucketSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.website",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1449,6 +1655,9 @@ func TestAccStorageBucket_website(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_websiteOneAttributeUpdate(bucketSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.website",
@@ -1460,6 +1669,9 @@ func TestAccStorageBucket_website(t *testing.T) {
 				Config: testAccStorageBucket_website(bucketSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.website",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1467,6 +1679,9 @@ func TestAccStorageBucket_website(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_websiteRemoved(bucketSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.website",
@@ -1497,6 +1712,9 @@ func TestAccStorageBucket_retentionPolicyLocked(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 					testAccCheckStorageBucketRetentionPolicy(t, bucketName),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1537,6 +1755,9 @@ func TestAccStorageBucket_SoftDeletePolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1552,6 +1773,9 @@ func TestAccStorageBucket_SoftDeletePolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1565,6 +1789,9 @@ func TestAccStorageBucket_SoftDeletePolicy(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_storage_bucket.bucket", "soft_delete_policy.0.retention_duration_seconds", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1595,6 +1822,9 @@ func TestAccStorageBucket_basic_hns(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1602,6 +1832,9 @@ func TestAccStorageBucket_basic_hns(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_basic_hns_with_data(bucketName, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1616,6 +1849,9 @@ func TestAccStorageBucket_basic_hns(t *testing.T) {
 						plancheck.ExpectEmptyPlan(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1671,6 +1907,9 @@ func TestAccStorageBucket_IPFilter(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1684,6 +1923,9 @@ func TestAccStorageBucket_IPFilter(t *testing.T) {
 					testAccCheckStorageBucketExists(
 						t, "google_storage_bucket.bucket", bucketName, &bucket),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -1701,6 +1943,9 @@ func TestAccStorageBucket_IPFilter(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1715,6 +1960,9 @@ func TestAccStorageBucket_IPFilter(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1727,6 +1975,9 @@ func TestAccStorageBucket_IPFilter(t *testing.T) {
 						t, "google_storage_bucket.bucket", bucketName, &noIPfilter),
 					testAccCheckStorageBucketWasUpdated(&noIPfilter, &disabled),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -3233,6 +3484,9 @@ func TestAccStorageBucket_encryptionCmek(t *testing.T) {
 				Config: testAccStorageBucket_encryptionCmek(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3255,6 +3509,9 @@ func TestAccStorageBucket_encryptionCsek(t *testing.T) {
 				Config: testAccStorageBucket_basic(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3264,6 +3521,9 @@ func TestAccStorageBucket_encryptionCsek(t *testing.T) {
 				Config: testAccStorageBucket_withCsekEncryption(bucketName, "FullyRestricted"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3271,6 +3531,9 @@ func TestAccStorageBucket_encryptionCsek(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_withCsekEncryption(bucketName, "NotRestricted"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",
@@ -3295,6 +3558,9 @@ func TestAccStorageBucket_encryptionGmek(t *testing.T) {
 				Config: testAccStorageBucket_basic(bucketName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3304,6 +3570,9 @@ func TestAccStorageBucket_encryptionGmek(t *testing.T) {
 				Config: testAccStorageBucket_encryptionGmek(bucketName, "NotRestricted"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_bucket.bucket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3311,6 +3580,9 @@ func TestAccStorageBucket_encryptionGmek(t *testing.T) {
 			},
 			{
 				Config: testAccStorageBucket_encryptionGmek(bucketName, "FullyRestricted"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_bucket.bucket",

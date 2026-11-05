@@ -29,6 +29,9 @@ func TestAccDataCatalogTagTemplate_dataCatalogTagTemplate_updateFields(t *testin
 				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateBasicExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_data_catalog_tag_template.basic_tag_template",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -36,6 +39,9 @@ func TestAccDataCatalogTagTemplate_dataCatalogTagTemplate_updateFields(t *testin
 			},
 			{
 				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdateFields(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_data_catalog_tag_template.basic_tag_template",
@@ -49,6 +55,9 @@ func TestAccDataCatalogTagTemplate_dataCatalogTagTemplate_updateFields(t *testin
 			},
 			{
 				Config: testAccDataCatalogTagTemplate_dataCatalogTagTemplateUpdatePrimitiveTypeOfFieldsWithOptional(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_data_catalog_tag_template.basic_tag_template",

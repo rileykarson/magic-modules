@@ -30,6 +30,9 @@ func TestAccAppEngineStandardAppVersion_update(t *testing.T) {
 				Config: testAccAppEngineStandardAppVersion_python(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_app_engine_standard_app_version.foo",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -39,6 +42,9 @@ func TestAccAppEngineStandardAppVersion_update(t *testing.T) {
 				Config: testAccAppEngineStandardAppVersion_pythonUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_app_engine_standard_app_version.foo",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -46,6 +52,9 @@ func TestAccAppEngineStandardAppVersion_update(t *testing.T) {
 			},
 			{
 				Config: testAccAppEngineStandardAppVersion_vpcAccessConnector(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_app_engine_standard_app_version.foo",
@@ -367,6 +376,9 @@ func TestAccAppEngineStandardAppVersion_updateBundledServices(t *testing.T) {
 				Config: testAccAppEngineStandardAppVersion_bundledServices(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_app_engine_standard_app_version.foo",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -374,6 +386,9 @@ func TestAccAppEngineStandardAppVersion_updateBundledServices(t *testing.T) {
 			},
 			{
 				Config: testAccAppEngineStandardAppVersion_bundledServicesUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_app_engine_standard_app_version.foo",

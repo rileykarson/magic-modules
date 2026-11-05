@@ -106,6 +106,9 @@ func TestAccProjectIamMember_multiple(t *testing.T) {
 			{
 				Config: testAccProjectAssociateMemberMultiple(pid, org, role, member, role, member2),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamMemberImportStep(resourceName, pid, role, member),
 			projectIamMemberIdentityImportStep(resourceName),
 			projectIamMemberImportStep(resourceName2, pid, role, member2),
@@ -145,6 +148,9 @@ func TestAccProjectIamMember_remove(t *testing.T) {
 			// Apply multiple IAM bindings
 			{
 				Config: testAccProjectAssociateMemberMultiple(pid, org, role, member, role, member2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamMemberImportStep(resourceName, pid, role, member),
 			projectIamMemberIdentityImportStep(resourceName),

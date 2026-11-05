@@ -28,6 +28,9 @@ func TestAccMemcacheInstance_update(t *testing.T) {
 				Config: testAccMemcacheInstance_update(prefix, name, network),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memcache_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -35,6 +38,9 @@ func TestAccMemcacheInstance_update(t *testing.T) {
 			},
 			{
 				Config: testAccMemcacheInstance_update2(prefix, name, network),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memcache_instance.test",
@@ -118,6 +124,9 @@ func TestAccMemcacheInstance_deletionprotection(t *testing.T) {
 				Config: testAccMemcacheInstanceConfig(prefix, name, network, "us-central1", true), // deletion_protection = true
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memcache_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -129,6 +138,9 @@ func TestAccMemcacheInstance_deletionprotection(t *testing.T) {
 			},
 			{
 				Config: testAccMemcacheInstanceConfig(prefix, name, network, "us-central1", false), // deletion_protection = false
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memcache_instance.test",

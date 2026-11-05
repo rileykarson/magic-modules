@@ -28,6 +28,9 @@ func TestAccComputeOrganizationSecurityPolicy_organizationSecurityPolicyUpdateEx
 				Config: testAccComputeOrganizationSecurityPolicy_organizationSecurityPolicyPreUpdateExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_organization_security_policy.policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccComputeOrganizationSecurityPolicy_organizationSecurityPolicyUpdateEx
 						plancheck.ExpectResourceAction("google_compute_organization_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_organization_security_policy.policy",

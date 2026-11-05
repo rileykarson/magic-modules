@@ -42,6 +42,9 @@ func TestAccPubsubSubscriptionIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_subscription_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s roles/pubsub.subscriber", pubsub.GetComputedSubscriptionName(envvar.GetTestProjectFromEnv(), subscription)),
 				ImportState:       true,

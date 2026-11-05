@@ -88,6 +88,9 @@ type Examples struct {
 	// Whether to skip import tests for this example
 	ExcludeImportTest bool `yaml:"exclude_import_test,omitempty"`
 
+	// Whether to emit a { RefreshState: true } test step before ImportStateVerify for this example
+	RefreshState bool `yaml:"refresh_state,omitempty"`
+
 	// The name of the primary resource for use in IAM tests. IAM tests need
 	// a reference to the primary resource to create IAM policies for
 	PrimaryResourceName string `yaml:"primary_resource_name,omitempty"`

@@ -33,6 +33,9 @@ func TestAccDataplexDatascanDataplexDatascanFullQuality_update(t *testing.T) {
 				Config: testAccDataplexDatascanDataplexDatascanFullQuality_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataplex_datascan.full_quality",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -45,6 +48,9 @@ func TestAccDataplexDatascanDataplexDatascanFullQuality_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_dataplex_datascan.full_quality", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataplex_datascan.full_quality",
@@ -568,6 +574,9 @@ func TestAccDataplexDatascan_dataplexDatascanFullProfile_update(t *testing.T) {
 				Config: testAccDataplexDatascan_dataplexDatascanFullProfile_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataplex_datascan.full_profile",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -582,6 +591,9 @@ func TestAccDataplexDatascan_dataplexDatascanFullProfile_update(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataplex_datascan.full_profile",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -594,6 +606,9 @@ func TestAccDataplexDatascan_dataplexDatascanFullProfile_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_dataplex_datascan.full_profile", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataplex_datascan.full_profile",
@@ -879,6 +894,9 @@ func TestAccDataplexDatascan_dataplexDatascanQualityReusableRulesCatalogBased_up
 				Config: testAccDataplexDatascan_dataplexDatascanQualityReusableRulesCatalogBased_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataplex_datascan.reusable_rules_catalog_based",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -895,6 +913,9 @@ func TestAccDataplexDatascan_dataplexDatascanQualityReusableRulesCatalogBased_up
 					resource.TestCheckResourceAttr("google_dataplex_datascan.reusable_rules_catalog_based", "data_quality_spec.0.enable_catalog_based_rules", "false"),
 					resource.TestCheckResourceAttr("google_dataplex_datascan.reusable_rules_catalog_based", "data_quality_spec.0.rules.0.name", "inline-non-null-check"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataplex_datascan.reusable_rules_catalog_based",
@@ -1318,6 +1339,9 @@ func TestAccDataplexDatascan_dataplexDatascanDataQualityTemplateReference_update
 				Config: testAccDataplexDatascan_dataplexDatascanDataQualityTemplateReference_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataplex_datascan.data_quality_template_reference",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1333,6 +1357,9 @@ func TestAccDataplexDatascan_dataplexDatascanDataQualityTemplateReference_update
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair("google_dataplex_datascan.data_quality_template_reference", "data_quality_spec.0.rules.0.template_reference.0.name", "google_dataplex_entry.test_entry_2", "name"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataplex_datascan.data_quality_template_reference",

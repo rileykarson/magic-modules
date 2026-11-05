@@ -63,6 +63,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated(t *testing.T) {
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "{{ $.IamTerraformName }}_binding.foo",
 				ImportStateIdFunc: generate{{ $.ResourceName }}IAMBindingStateID("{{ $.IamTerraformName }}_binding.foo"),
 				ImportState:       true,
@@ -74,6 +77,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated(t *testing.T) {
 				Config: testAcc{{ $.ResourceName }}IamBinding_updateGenerated(context),
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
+			{
+				RefreshState: true,
+			},
 			{
 				ResourceName:      "{{ $.IamTerraformName }}_binding.foo",
 				ImportStateIdFunc: generate{{ $.ResourceName }}IAMBindingStateID("{{ $.IamTerraformName }}_binding.foo"),
@@ -205,6 +211,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated_withCondition(t *testing.T) 
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "{{ $.IamTerraformName }}_binding.foo",
 				ImportStateIdFunc: generate{{ $.ResourceName }}IAMBindingStateID("{{ $.IamTerraformName }}_binding.foo"),
 				ImportState:       true,
@@ -240,6 +249,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated_withAndWithoutCondition(t *t
 				Config: testAcc{{ $.ResourceName }}IamBinding_withAndWithoutConditionGenerated(context),
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
+			{
+				RefreshState: true,
+			},
 			{
 				ResourceName:      "{{ $.IamTerraformName }}_binding.foo",
 				ImportStateIdFunc: generate{{ $.ResourceName }}IAMBindingStateID("{{ $.IamTerraformName }}_binding.foo"),
@@ -323,6 +335,9 @@ func TestAcc{{ $.ResourceName }}IamMemberGenerated_withAndWithoutCondition(t *te
 				Config: testAcc{{ $.ResourceName }}IamMember_withAndWithoutConditionGenerated(context),
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
+			{
+				RefreshState: true,
+			},
 			{
 				ResourceName:      "{{ $.IamTerraformName }}_member.foo",
 				ImportStateIdFunc: generate{{ $.ResourceName }}IAMMemberStateID("{{ $.IamTerraformName }}_member.foo"),

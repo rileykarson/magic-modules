@@ -31,6 +31,9 @@ func TestAccCESApp_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_ces_app.ces_app_basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -49,6 +52,9 @@ func TestAccCESApp_update(t *testing.T) {
 					resource.TestCheckResourceAttr("google_ces_app.ces_app_basic", "default_channel_profile.0.web_widget_config.0.security_settings.0.enable_origin_check", "true"),
 					resource.TestCheckResourceAttr("google_ces_app.ces_app_basic", "default_channel_profile.0.web_widget_config.0.security_settings.0.enable_recaptcha", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_ces_app.ces_app_basic",
@@ -534,6 +540,9 @@ func TestAccCESApp_synthesizeSpeechConfig(t *testing.T) {
 				Config: testAccCESApp_synthesizeSpeechConfig_initial(ctx),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_ces_app.ces_app_tts",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -546,6 +555,9 @@ func TestAccCESApp_synthesizeSpeechConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_ces_app.ces_app_tts", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_ces_app.ces_app_tts",

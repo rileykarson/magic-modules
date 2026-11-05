@@ -31,6 +31,9 @@ func TestAccComputeRouterBgpPeer_routerPeerRouterAppliance(t *testing.T) {
 				Config: testAccComputeRouterBgpPeer_routerPeerRouterAppliance(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_router_peer.peer",
 				ImportState:             true,
 				ImportStateVerify:       true,

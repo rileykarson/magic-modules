@@ -86,6 +86,9 @@ func TestAccContainerAnalysisOccurrence_basic(t *testing.T) {
 				Config: testAccContainerAnalysisOccurence_basic(params),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_analysis_occurrence.occurrence",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -138,12 +141,18 @@ func TestAccContainerAnalysisOccurrence_multipleSignatures(t *testing.T) {
 				Config: testAccContainerAnalysisOccurence_multipleSignatures(paramsMultipleSignatures),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_analysis_occurrence.occurrence",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccContainerAnalysisOccurence_basic(paramsSingle),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_analysis_occurrence.occurrence",

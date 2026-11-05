@@ -91,6 +91,9 @@ func testAccProjectOrganizationPolicy_list_allowAll(t *testing.T) {
 				Check:  testAccCheckGoogleProjectOrganizationListPolicyAll(t, "list", "ALLOW"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -111,6 +114,9 @@ func testAccProjectOrganizationPolicy_list_allowSome(t *testing.T) {
 				Check:  testAccCheckGoogleProjectOrganizationListPolicyAllowedValues(t, "list", []string{"APPENGINE", "HTTP", "PUBSUB"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -129,6 +135,9 @@ func testAccProjectOrganizationPolicy_list_denySome(t *testing.T) {
 			{
 				Config: testAccProjectOrganizationPolicyConfig_list_denySome(projectId),
 				Check:  testAccCheckGoogleProjectOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_organization_policy.list",
@@ -155,6 +164,9 @@ func testAccProjectOrganizationPolicy_list_update(t *testing.T) {
 				Check:  testAccCheckGoogleProjectOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -176,6 +188,9 @@ func testAccProjectOrganizationPolicy_restore_defaultTrue(t *testing.T) {
 				Check:  getGoogleProjectOrganizationRestoreDefaultTrue(t, "restore", &cloudresourcemanager.RestoreDefault{}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_project_organization_policy.restore",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -195,6 +210,9 @@ func testAccProjectOrganizationPolicy_none(t *testing.T) {
 			{
 				Config: testAccProjectOrganizationPolicyConfig_none(projectId),
 				Check:  testAccCheckGoogleProjectOrganizationPolicyDestroyProducer(t),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_organization_policy.none",

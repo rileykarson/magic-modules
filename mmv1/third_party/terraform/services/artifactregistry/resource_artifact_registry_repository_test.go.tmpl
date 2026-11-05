@@ -23,6 +23,9 @@ func TestAccArtifactRegistryRepository_update(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_update(repositoryID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -30,6 +33,9 @@ func TestAccArtifactRegistryRepository_update(t *testing.T) {
 			},
 			{
 				Config: testAccArtifactRegistryRepository_update2(repositoryID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_artifact_registry_repository.test",
@@ -41,6 +47,9 @@ func TestAccArtifactRegistryRepository_update(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_update3(repositoryID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -48,6 +57,9 @@ func TestAccArtifactRegistryRepository_update(t *testing.T) {
 			},
 			{
 				Config: testAccArtifactRegistryRepository_update4(repositoryID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_artifact_registry_repository.test",
@@ -73,6 +85,9 @@ func TestAccArtifactRegistryRepository_createMvnSnapshot(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_createMvnWithVersionPolicy(repositoryID, "SNAPSHOT"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_artifact_registry_repository.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -95,6 +110,9 @@ func TestAccArtifactRegistryRepository_createMvnRelease(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_createMvnWithVersionPolicy(repositoryID, "RELEASE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_artifact_registry_repository.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -115,6 +133,9 @@ func TestAccArtifactRegistryRepository_updateEmptyMvn(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccArtifactRegistryRepository_createMvnEmpty1(repositoryID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_artifact_registry_repository.test",
@@ -149,6 +170,9 @@ func TestAccArtifactRegistryRepository_kfp(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_kfp(repositoryID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_artifact_registry_repository.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -169,6 +193,9 @@ func TestAccArtifactRegistryRepository_cleanup(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccArtifactRegistryRepository_cleanup(repositoryID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_artifact_registry_repository.test",
@@ -199,6 +226,9 @@ func TestAccArtifactRegistryRepository_preferRegionalEndpoints(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccArtifactRegistryRepository_preferRegionalEndpoints(repositoryID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_artifact_registry_repository.test",
@@ -424,6 +454,9 @@ func TestAccArtifactRegistryRepository_remoteWithAuthUpdate(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_remoteWithAuthUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.my-repo",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -431,6 +464,9 @@ func TestAccArtifactRegistryRepository_remoteWithAuthUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccArtifactRegistryRepository_remoteWithAuthUpdate2(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_artifact_registry_repository.my-repo",
@@ -552,12 +588,18 @@ func TestAccArtifactRegistryRepository_virtual(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_virtual(repositoryID, upstreamRepositoryID, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_artifact_registry_repository.vr-test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccArtifactRegistryRepository_virtual(repositoryID, upstreamRepositoryID, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_artifact_registry_repository.vr-test",
@@ -582,12 +624,18 @@ func TestAccArtifactRegistryRepository_remote(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_remote(repositoryID, "upstream"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_artifact_registry_repository.rr-test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccArtifactRegistryRepository_remote(repositoryID, "docker hub"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_artifact_registry_repository.rr-test",
@@ -612,6 +660,9 @@ func TestAccArtifactRegistryRepository_remoteNoCache(t *testing.T) {
 				Config: testAccArtifactRegistryRepository_remoteNoCache(repositoryID, "connector repo"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.rr-test-nocache",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -619,6 +670,9 @@ func TestAccArtifactRegistryRepository_remoteNoCache(t *testing.T) {
 			},
 			{
 				Config: testAccArtifactRegistryRepository_remoteNoCacheRemoved(repositoryID, "connector repo"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_artifact_registry_repository.rr-test-nocache",

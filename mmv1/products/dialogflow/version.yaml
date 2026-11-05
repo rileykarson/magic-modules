@@ -36,6 +36,7 @@ custom_code:
 samples:
   - name: dialogflow_version_full
     primary_resource_id: full_version
+    refresh_state: true
     external_providers:
       - time
     steps:

@@ -31,6 +31,9 @@ func TestAccRecaptchaEnterpriseKey_AndroidKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_AndroidKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -38,6 +41,9 @@ func TestAccRecaptchaEnterpriseKey_AndroidKey(t *testing.T) {
 			},
 			{
 				Config: testAccRecaptchaEnterpriseKey_AndroidKeyUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -65,6 +71,9 @@ func TestAccRecaptchaEnterpriseKey_IosKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_IosKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -72,6 +81,9 @@ func TestAccRecaptchaEnterpriseKey_IosKey(t *testing.T) {
 			},
 			{
 				Config: testAccRecaptchaEnterpriseKey_IosKeyUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -99,6 +111,9 @@ func TestAccRecaptchaEnterpriseKey_MinimalKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_MinimalKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -122,6 +137,9 @@ func TestAccRecaptchaEnterpriseKey_WafKey(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccRecaptchaEnterpriseKey_WafKey(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -149,6 +167,9 @@ func TestAccRecaptchaEnterpriseKey_WebKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_WebKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -156,6 +177,9 @@ func TestAccRecaptchaEnterpriseKey_WebKey(t *testing.T) {
 			},
 			{
 				Config: testAccRecaptchaEnterpriseKey_WebKeyUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -183,6 +207,9 @@ func TestAccRecaptchaEnterpriseKey_WebScoreKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_WebScoreKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -190,6 +217,9 @@ func TestAccRecaptchaEnterpriseKey_WebScoreKey(t *testing.T) {
 			},
 			{
 				Config: testAccRecaptchaEnterpriseKey_WebScoreKeyUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -217,6 +247,9 @@ func TestAccRecaptchaEnterpriseKey_WebPolicyBasedChallengeKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_WebPolicyBasedChallengeKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -224,6 +257,9 @@ func TestAccRecaptchaEnterpriseKey_WebPolicyBasedChallengeKey(t *testing.T) {
 			},
 			{
 				Config: testAccRecaptchaEnterpriseKey_WebPolicyBasedChallengeKeyUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
@@ -251,6 +287,9 @@ func TestAccRecaptchaEnterpriseKey_ExpressKey(t *testing.T) {
 				Config: testAccRecaptchaEnterpriseKey_ExpressKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -274,6 +313,9 @@ func TestAccRecaptchaEnterpriseKey_UniversalKey(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccRecaptchaEnterpriseKey_UniversalKey(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_recaptcha_enterprise_key.primary",

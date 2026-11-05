@@ -42,6 +42,9 @@ func TestAccComputeOrganizationSnapshotRecycleBinPolicy_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_organization_snapshot_recycle_bin_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -54,6 +57,9 @@ func TestAccComputeOrganizationSnapshotRecycleBinPolicy_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_organization_snapshot_recycle_bin_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -63,6 +69,9 @@ func TestAccComputeOrganizationSnapshotRecycleBinPolicy_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_compute_organization_snapshot_recycle_bin_policy.policy", "rules.#", "2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_organization_snapshot_recycle_bin_policy.policy",

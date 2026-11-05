@@ -65,6 +65,9 @@ func TestAccVmwareengineCluster_vmwareEngineClusterUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vmwareengine_cluster.vmw-engine-ext-cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -74,6 +77,9 @@ func TestAccVmwareengineCluster_vmwareEngineClusterUpdate(t *testing.T) {
 			{
 				// Update cluster to do two operations a) expand cluster and b) unmount datastore
 				Config: testVmwareEngineClusterConfig_DatastoreUnmount(t, context, 4, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vmwareengine_cluster.vmw-engine-ext-cluster",
@@ -87,6 +93,9 @@ func TestAccVmwareengineCluster_vmwareEngineClusterUpdate(t *testing.T) {
 				Config: testVmwareEngineClusterConfig_DatastoreMount(t, context, 3, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vmwareengine_cluster.vmw-engine-ext-cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -98,6 +107,9 @@ func TestAccVmwareengineCluster_vmwareEngineClusterUpdate(t *testing.T) {
 				// Removal of delete protection is required for filstore instance deletion in next step
 				// This test case verifies datastore operation is performed independent of cluster shrink and expand operation
 				Config: testVmwareEngineClusterConfig_DatastoreUnmount(t, context, 3, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vmwareengine_cluster.vmw-engine-ext-cluster",

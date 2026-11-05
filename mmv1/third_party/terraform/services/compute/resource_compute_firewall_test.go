@@ -28,12 +28,18 @@ func TestAccComputeFirewall_update(t *testing.T) {
 				Config: testAccComputeFirewall_basic(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_update(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -48,12 +54,18 @@ func TestAccComputeFirewall_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_basic(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -79,6 +91,9 @@ func TestAccComputeFirewall_localRanges(t *testing.T) {
 				Config: testAccComputeFirewall_localRanges(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -87,12 +102,18 @@ func TestAccComputeFirewall_localRanges(t *testing.T) {
 				Config: testAccComputeFirewall_localRangesUpdate(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_localRanges(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -116,6 +137,9 @@ func TestAccComputeFirewall_priority(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeFirewall_priority(networkName, firewallName, 1001),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -160,6 +184,9 @@ func TestAccComputeFirewall_denied(t *testing.T) {
 				Config: testAccComputeFirewall_denied(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -181,6 +208,9 @@ func TestAccComputeFirewall_egress(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeFirewall_egress(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -209,6 +239,9 @@ func TestAccComputeFirewall_serviceAccounts(t *testing.T) {
 				Config: testAccComputeFirewall_serviceAccounts(sourceSa, targetSa, networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -232,12 +265,18 @@ func TestAccComputeFirewall_disabled(t *testing.T) {
 				Config: testAccComputeFirewall_disabled(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_basic(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -263,12 +302,18 @@ func TestAccComputeFirewall_enableLogging(t *testing.T) {
 				Config: testAccComputeFirewall_enableLogging(networkName, firewallName, ""),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_enableLogging(networkName, firewallName, "INCLUDE_ALL_METADATA"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -279,12 +324,18 @@ func TestAccComputeFirewall_enableLogging(t *testing.T) {
 				Config: testAccComputeFirewall_enableLogging(networkName, firewallName, "EXCLUDE_ALL_METADATA"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_enableLogging(networkName, firewallName, ""),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -308,6 +359,9 @@ func TestAccComputeFirewall_moduleOutput(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeFirewall_moduleOutput(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",
@@ -346,6 +400,9 @@ func TestAccComputeFirewall_resourceManagerTags(t *testing.T) {
 				Config: testAccComputeFirewall_resourceManagerTags(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_firewall.acc_firewall_with_resource_manager_tags",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -370,6 +427,9 @@ func TestAccComputeFirewall_sourceRangesIpv6(t *testing.T) {
 				Config: testAccComputeFirewall_sourceRangesIpv6(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -378,12 +438,18 @@ func TestAccComputeFirewall_sourceRangesIpv6(t *testing.T) {
 				Config: testAccComputeFirewall_sourceRangesIpv6(networkName, firewallName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_firewall.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeFirewall_sourceRangesIpv6Update(networkName, firewallName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_firewall.foobar",

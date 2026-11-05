@@ -291,6 +291,9 @@ func TestAccBigqueryAnalyticsHubListingSubscription_multiregion(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_analytics_hub_listing_subscription.subscription",
 				ImportState:             true,
 				ImportStateVerify:       true,

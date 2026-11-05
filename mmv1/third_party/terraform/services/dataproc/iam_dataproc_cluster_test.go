@@ -39,6 +39,9 @@ func TestAccDataprocClusterIamBinding(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dataproc_cluster_iam_binding.binding",
 				ImportStateId:     importId,
 				ImportState:       true,
@@ -47,6 +50,9 @@ func TestAccDataprocClusterIamBinding(t *testing.T) {
 			{
 				// Test IAM Binding update
 				Config: testAccDataprocClusterIamBinding_update(cluster, subnetworkName, account, role),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dataproc_cluster_iam_binding.binding",

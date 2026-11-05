@@ -30,6 +30,9 @@ func testAccAccessContextManagerAccessLevels_basicTest(t *testing.T) {
 				Config: testAccAccessContextManagerAccessLevels_basic(org, "my policy", "tf_test_corpnet_access", "tf_test_prodnet_access"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_access_context_manager_access_levels.test-access",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -44,6 +47,9 @@ func testAccAccessContextManagerAccessLevels_basicTest(t *testing.T) {
 				Config: testAccAccessContextManagerAccessLevels_basicUpdated(org, "my new policy", "tf_test_corpnet_access", "tf_test_prodnet_access", vpcName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_access_context_manager_access_levels.test-access",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -56,6 +62,9 @@ func testAccAccessContextManagerAccessLevels_basicTest(t *testing.T) {
 			},
 			{
 				Config: testAccAccessContextManagerAccessLevel_empty(org, "my new policy"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_access_context_manager_access_levels.test-access",

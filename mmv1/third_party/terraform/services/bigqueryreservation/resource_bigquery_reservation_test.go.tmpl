@@ -24,6 +24,9 @@ func TestAccBigqueryReservation_withDisasterRecovery_update(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_reservation.reservation",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -33,6 +36,9 @@ func TestAccBigqueryReservation_withDisasterRecovery_update(t *testing.T) {
 					"random_suffix":      randomSuffix,
 					"secondary_location": nil,
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigquery_reservation.reservation",

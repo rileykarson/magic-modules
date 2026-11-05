@@ -39,6 +39,9 @@ func TestAccComputePerInstanceConfig_statefulBasic(t *testing.T) {
 				Config: testAccComputePerInstanceConfig_statefulBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -52,6 +55,9 @@ func TestAccComputePerInstanceConfig_statefulBasic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -60,6 +66,9 @@ func TestAccComputePerInstanceConfig_statefulBasic(t *testing.T) {
 			{
 				// Add two new endpoints
 				Config: testAccComputePerInstanceConfig_statefulAdditional(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_per_instance_config.default",
@@ -110,6 +119,9 @@ func TestAccComputePerInstanceConfig_update(t *testing.T) {
 				Config: testAccComputePerInstanceConfig_statefulBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -118,6 +130,9 @@ func TestAccComputePerInstanceConfig_update(t *testing.T) {
 			{
 				// Update an existing config
 				Config: testAccComputePerInstanceConfig_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_per_instance_config.default",
@@ -151,6 +166,9 @@ func TestAccComputePerInstanceConfig_statefulIps(t *testing.T) {
 				Config: testAccComputePerInstanceConfig_statefulIpsBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_per_instance_config.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -159,6 +177,9 @@ func TestAccComputePerInstanceConfig_statefulIps(t *testing.T) {
 			{
 				// Update an existing config
 				Config: testAccComputePerInstanceConfig_statefulIpsUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_per_instance_config.default",
@@ -195,6 +216,9 @@ func TestAccComputePerInstanceConfig_removeInstanceOnDestroy(t *testing.T) {
 				Config: testAccComputePerInstanceConfig_removeInstanceOnDestroyBefore(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_per_instance_config.config_one",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -212,6 +236,9 @@ func TestAccComputePerInstanceConfig_removeInstanceOnDestroy(t *testing.T) {
 					testAccCheckComputePerInstanceConfigDestroyed(t, igmId, context["config_name"].(string)),
 					testAccCheckComputePerInstanceConfigInstanceDestroyed(t, igmId, context["config_name"].(string)),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_per_instance_config.config_two",

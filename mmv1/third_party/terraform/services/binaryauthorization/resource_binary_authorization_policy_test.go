@@ -33,6 +33,9 @@ func TestAccBinaryAuthorizationPolicy_basic(t *testing.T) {
 				Config: testAccBinaryAuthorizationPolicyBasic(pid, org, billingId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_binary_authorization_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -62,6 +65,9 @@ func TestAccBinaryAuthorizationPolicy_full(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBinaryAuthorizationPolicyFull(pid, org, billingId, note, attestor, "ENABLE"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_binary_authorization_policy.policy",
@@ -94,6 +100,9 @@ func TestAccBinaryAuthorizationPolicy_separateProject(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBinaryAuthorizationPolicy_separateProject(pid, org, billingId, note, attestor),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_binary_authorization_policy.policy",
@@ -130,12 +139,18 @@ func TestAccBinaryAuthorizationPolicy_update(t *testing.T) {
 				Config: testAccBinaryAuthorizationPolicyBasic(pid, org, billingId),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_binary_authorization_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBinaryAuthorizationPolicyFull(pid, org, billingId, note, attestor, "ENABLE"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_binary_authorization_policy.policy",
@@ -146,12 +161,18 @@ func TestAccBinaryAuthorizationPolicy_update(t *testing.T) {
 				Config: testAccBinaryAuthorizationPolicyFull(pid, org, billingId, note, attestor, "DISABLE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_binary_authorization_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBinaryAuthorizationPolicyBasic(pid, org, billingId),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_binary_authorization_policy.policy",

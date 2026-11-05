@@ -31,6 +31,9 @@ func TestAccDNSManagedZone_update(t *testing.T) {
 				Config: testAccDnsManagedZone_basic(suffix, "description1", map[string]string{"foo": "bar", "ping": "pong"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -38,6 +41,9 @@ func TestAccDNSManagedZone_update(t *testing.T) {
 			},
 			{
 				Config: testAccDnsManagedZone_basic(suffix, "description2", map[string]string{"foo": "bar"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.foobar",
@@ -63,12 +69,18 @@ func TestAccDNSManagedZone_privateUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_privateUpdate(suffix, "network-1", "network-2"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.private",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsManagedZone_privateUpdate(suffix, "network-2", "network-3"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.private",
@@ -93,12 +105,18 @@ func TestAccDNSManagedZone_dnssec_update(t *testing.T) {
 				Config: testAccDnsManagedZone_dnssec_on(suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsManagedZone_dnssec_off(suffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.foobar",
@@ -123,6 +141,9 @@ func TestAccDNSManagedZone_dnssec_empty(t *testing.T) {
 				Config: testAccDnsManagedZone_dnssec_empty(suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -145,12 +166,18 @@ func TestAccDNSManagedZone_privateForwardingUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_privateForwardingUpdate(suffix, "172.16.1.10", "172.16.1.20", "fd20:3e9:7a70:680d:0:8::", "default", "private", "default"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.private",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsManagedZone_privateForwardingUpdate(suffix, "172.16.1.10", "192.168.1.1", "fd20:3e9:7a70:680d:0:8::1", "private", "default", "private"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.private",
@@ -175,6 +202,9 @@ func TestAccDNSManagedZone_cloudLoggingConfigUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_cloudLoggingConfig_basic(suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -184,6 +214,9 @@ func TestAccDNSManagedZone_cloudLoggingConfigUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_cloudLoggingConfig_update(suffix, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -191,6 +224,9 @@ func TestAccDNSManagedZone_cloudLoggingConfigUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccDnsManagedZone_cloudLoggingConfig_update(suffix, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.foobar",
@@ -215,6 +251,9 @@ func TestAccDNSManagedZone_reverseLookup(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDnsManagedZone_reverseLookup(suffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.reverse",
@@ -674,6 +713,9 @@ func TestAccDNSManagedZone_importWithProject(t *testing.T) {
 				Config: testAccDnsManagedZone_basicWithProject(suffix, "description1", project),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -707,12 +749,18 @@ func TestAccDNSManagedZone_privateForwardingWithDomainNameUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_privateForwardingWithDomainNameUpdate(suffix, "dns.infra.foo.com.", "private"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.private",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsManagedZone_privateForwardingWithDomainNameUpdate(suffix, "dns.infra.goo.com.", "default"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.private",
@@ -765,12 +813,18 @@ func TestAccDNSManagedZone_outboundEndpointsUpdate(t *testing.T) {
 				Config: testAccDnsManagedZone_outboundEndpointsUpdate(suffix, "endpoint_1"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dns_managed_zone.forwarding_zone",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDnsManagedZone_outboundEndpointsUpdate(suffix, "endpoint_2"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dns_managed_zone.forwarding_zone",
@@ -861,6 +915,9 @@ func TestAccDNSManagedZone_dnsManagedZoneUpdateWithServiceDirectory(t *testing.T
 				Config: testAccDNSManagedZone_dnsManagedZoneWithServiceDirectory(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dns_managed_zone.sd-zone",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -868,6 +925,9 @@ func TestAccDNSManagedZone_dnsManagedZoneUpdateWithServiceDirectory(t *testing.T
 			},
 			{
 				Config: testAccDNSManagedZone_dnsManagedZoneWithServiceDirectoryUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dns_managed_zone.sd-zone",

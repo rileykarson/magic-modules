@@ -25,6 +25,9 @@ func TestAccBeyondcorpSecurityGateway_beyondcorpSecurityGatewayBasicExample_upda
 				Config: testAccBeyondcorpSecurityGateway_beyondcorpSecurityGatewayBasicExample_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_beyondcorp_security_gateway.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -37,6 +40,9 @@ func TestAccBeyondcorpSecurityGateway_beyondcorpSecurityGatewayBasicExample_upda
 						plancheck.ExpectResourceAction("google_beyondcorp_security_gateway.example", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_beyondcorp_security_gateway.example",

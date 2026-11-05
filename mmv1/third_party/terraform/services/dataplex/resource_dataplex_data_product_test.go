@@ -30,6 +30,9 @@ func TestAccDataplexDataProduct_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dataplex_data_product.example",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -51,6 +54,9 @@ func TestAccDataplexDataProduct_update(t *testing.T) {
 					resource.TestCheckResourceAttr("google_dataplex_data_product.example", "icon", "dXBkYXRlZCBkYXRh"),
 					resource.TestCheckResourceAttr("google_dataplex_data_product.example", "access_groups.0.default_iam_role_config.0.role", "roles/bigquery.dataEditor"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dataplex_data_product.example",

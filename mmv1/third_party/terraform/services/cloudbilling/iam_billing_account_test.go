@@ -35,6 +35,9 @@ func TestAccBillingAccountIam(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_billing_account_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s roles/billing.viewer", billing),
 				ImportState:       true,
@@ -47,6 +50,9 @@ func TestAccBillingAccountIam(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_billing_account_iam_binding.foo",

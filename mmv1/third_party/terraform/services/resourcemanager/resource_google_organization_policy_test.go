@@ -78,6 +78,9 @@ func testAccOrganizationPolicy_boolean(t *testing.T) {
 				Check:  testAccCheckGoogleOrganizationBooleanPolicy(t, "bool", true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_organization_policy.bool",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -97,6 +100,9 @@ func testAccOrganizationPolicy_list_allowAll(t *testing.T) {
 			{
 				Config: testAccOrganizationPolicyConfig_list_allowAll(org),
 				Check:  testAccCheckGoogleOrganizationListPolicyAll(t, "list", "ALLOW"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_policy.list",
@@ -120,6 +126,9 @@ func testAccOrganizationPolicy_list_allowSome(t *testing.T) {
 				Check:  testAccCheckGoogleOrganizationListPolicyAllowedValues(t, "list", []string{"projects/" + project, "projects/debian-cloud"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -138,6 +147,9 @@ func testAccOrganizationPolicy_list_denySome(t *testing.T) {
 			{
 				Config: testAccOrganizationPolicyConfig_list_denySome(org),
 				Check:  testAccCheckGoogleOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_policy.list",
@@ -164,6 +176,9 @@ func testAccOrganizationPolicy_list_update(t *testing.T) {
 				Check:  testAccCheckGoogleOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -181,6 +196,9 @@ func testAccOrganizationPolicy_list_inheritFromParent(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccOrganizationPolicyConfig_list_inheritFromParent(org),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_policy.list",
@@ -201,6 +219,9 @@ func testAccOrganizationPolicy_restore_defaultTrue(t *testing.T) {
 			{
 				Config: testAccOrganizationPolicyConfig_restore_defaultTrue(org),
 				Check:  testAccCheckGoogleOrganizationRestoreDefaultTrue(t, "restore", &cloudresourcemanager.RestoreDefault{}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_policy.restore",

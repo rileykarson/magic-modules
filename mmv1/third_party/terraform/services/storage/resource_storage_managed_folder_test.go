@@ -23,6 +23,9 @@ func TestAccStorageManagedFolder_storageManagedFolderUpdate(t *testing.T) {
 				Config: testAccStorageManagedFolder_bucket(bucketName) + testAccStorageManagedFolder_managedFolder(false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_managed_folder.folder",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -34,6 +37,9 @@ func TestAccStorageManagedFolder_storageManagedFolderUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccStorageManagedFolder_bucket(bucketName) + testAccStorageManagedFolder_managedFolder(true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_managed_folder.folder",
@@ -60,6 +66,9 @@ func TestAccStorageManagedFolder_rapidCacheConfig(t *testing.T) {
 				Config: testAccStorageManagedFolder_rapidCacheConfig(bucketName, "enabled"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_managed_folder.folder",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -74,6 +83,9 @@ func TestAccStorageManagedFolder_rapidCacheConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_managed_folder.folder",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -86,6 +98,9 @@ func TestAccStorageManagedFolder_rapidCacheConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_storage_managed_folder.folder", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_managed_folder.folder",

@@ -34,6 +34,9 @@ func TestAccBigQueryDataset_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_dataset.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -49,6 +52,9 @@ func TestAccBigQueryDataset_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("google_bigquery_dataset.test", "effective_labels.env", "foo"),
 					resource.TestCheckResourceAttr("google_bigquery_dataset.test", "effective_labels.default_table_expiration_ms", "3600000"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigquery_dataset.test",
@@ -71,6 +77,9 @@ func TestAccBigQueryDataset_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -78,6 +87,9 @@ func TestAccBigQueryDataset_basic(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDatasetUpdated2(datasetID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -91,6 +103,9 @@ func TestAccBigQueryDataset_basic(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_bigquery_dataset.test", "labels.%"),
 					resource.TestCheckNoResourceAttr("google_bigquery_dataset.test", "effective_labels.%"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigquery_dataset.test",
@@ -130,6 +145,9 @@ func TestAccBigQueryDataset_withComputedLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_dataset.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -139,6 +157,9 @@ func TestAccBigQueryDataset_withComputedLabels(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDatasetUpdated_withComputedLabels(datasetID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -207,6 +228,9 @@ func TestAccBigQueryDataset_withOutOfBandLabels(t *testing.T) {
 				Check:  addOutOfBandLabels(t, datasetID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -216,6 +240,9 @@ func TestAccBigQueryDataset_withOutOfBandLabels(t *testing.T) {
 				Config: testAccBigQueryDatasetUpdated(datasetID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -223,6 +250,9 @@ func TestAccBigQueryDataset_withOutOfBandLabels(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDatasetUpdated_withOutOfBandLabels(datasetID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -250,6 +280,9 @@ func TestAccBigQueryDataset_datasetWithContents(t *testing.T) {
 				Check:  testAccAddTable(t, datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.contents_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -275,6 +308,9 @@ func TestAccBigQueryDataset_access(t *testing.T) {
 				Config: testAccBigQueryDatasetWithOneAccess(datasetID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.access_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -282,6 +318,9 @@ func TestAccBigQueryDataset_access(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDatasetWithThreeAccess(datasetID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.access_test",
@@ -293,6 +332,9 @@ func TestAccBigQueryDataset_access(t *testing.T) {
 				Config: testAccBigQueryDatasetWithOneAccess(datasetID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.access_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -302,6 +344,9 @@ func TestAccBigQueryDataset_access(t *testing.T) {
 				Config: testAccBigQueryDatasetWithConditionAccess(datasetID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.access_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -309,6 +354,9 @@ func TestAccBigQueryDataset_access(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDatasetWithViewAccess(datasetID, otherDatasetID, otherTableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.access_test",
@@ -334,6 +382,9 @@ func TestAccBigQueryDataset_accessMixedCase_userByEmail(t *testing.T) {
 				Config: testAccBigQueryDataset_accessMixedCase(datasetID, "user_by_email", "alicE@google.COM"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.access_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -357,6 +408,9 @@ func TestAccBigQueryDataset_accessMixedCase_groupByEmail(t *testing.T) {
 				Config: testAccBigQueryDataset_accessMixedCase(datasetID, "group_by_email", "MAGIC-MODULES@gOOgle.com"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.access_test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -378,6 +432,9 @@ func TestAccBigQueryDataset_regionalLocation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryRegionalDataset(datasetID1, "asia-south1"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -404,6 +461,9 @@ func TestAccBigQueryDataset_cmek(t *testing.T) {
 				Config: testAccBigQueryDataset_cmek(pid, datasetID1, bootstrapped.CryptoKey.Name),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_dataset.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -424,6 +484,9 @@ func TestAccBigQueryDataset_storageBillModel(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryDatasetStorageBillingModel(datasetID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -492,6 +555,9 @@ func TestAccBigQueryDataset_bigqueryDatasetResourceTags_update(t *testing.T) {
 				Config: testAccBigQueryDataset_bigqueryDatasetResourceTags_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.dataset",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -499,6 +565,9 @@ func TestAccBigQueryDataset_bigqueryDatasetResourceTags_update(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDataset_bigqueryDatasetResourceTags_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.dataset",
@@ -526,6 +595,9 @@ func TestAccBigQueryDataset_bigqueryDatasetExternalReferenceAws(t *testing.T) {
 				Config: testAccBigQueryDataset_bigqueryDatasetExternalReferenceAws(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.dataset",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -551,6 +623,9 @@ func TestAccBigQueryDataset_externalCatalogDatasetOptions_update(t *testing.T) {
 				Config: testAccBigQueryDataset_externalCatalogDatasetOptions_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.dataset",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -558,6 +633,9 @@ func TestAccBigQueryDataset_externalCatalogDatasetOptions_update(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryDataset_externalCatalogDatasetOptions_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.dataset",
@@ -586,6 +664,9 @@ func TestAccBigQueryDataset_collationUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_dataset.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -596,6 +677,9 @@ func TestAccBigQueryDataset_collationUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_bigquery_dataset.test", "default_collation", ""),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_dataset.test",
@@ -624,6 +708,9 @@ func TestAccBigQueryDataset_defaultRoundingModeUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_dataset.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -636,6 +723,9 @@ func TestAccBigQueryDataset_defaultRoundingModeUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_bigquery_dataset.test", "default_rounding_mode", "ROUND_HALF_AWAY_FROM_ZERO"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigquery_dataset.test",

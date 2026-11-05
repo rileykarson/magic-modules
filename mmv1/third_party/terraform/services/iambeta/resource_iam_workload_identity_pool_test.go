@@ -28,12 +28,18 @@ func TestAccIAMBetaWorkloadIdentityPool_full(t *testing.T) {
 				Config: testAccIAMBetaWorkloadIdentityPool_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccIAMBetaWorkloadIdentityPool_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
@@ -61,12 +67,18 @@ func TestAccIAMBetaWorkloadIdentityPool_minimal(t *testing.T) {
 				Config: testAccIAMBetaWorkloadIdentityPool_minimal(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccIAMBetaWorkloadIdentityPool_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
@@ -94,6 +106,9 @@ func TestAccIAMBetaWorkloadIdentityPool_update(t *testing.T) {
 				Config: testAccIAMBetaWorkloadIdentityPool_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -105,6 +120,9 @@ func TestAccIAMBetaWorkloadIdentityPool_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool.my_pool", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
@@ -120,6 +138,9 @@ func TestAccIAMBetaWorkloadIdentityPool_update(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -131,6 +152,9 @@ func TestAccIAMBetaWorkloadIdentityPool_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool.my_pool", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_iam_workload_identity_pool.my_pool",

@@ -33,6 +33,9 @@ func TestAccLoggingBucketConfigFolder_basic(t *testing.T) {
 				Config: testAccLoggingBucketConfigFolder_basic(context, 30),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_folder_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccLoggingBucketConfigFolder_basic(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigFolder_basic(context, 20),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_folder_bucket_config.basic",
@@ -74,6 +80,9 @@ func TestAccLoggingBucketConfigProject_basic(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_basic(context, 30),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -83,6 +92,9 @@ func TestAccLoggingBucketConfigProject_basic(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_basic(context, 20),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -90,6 +102,9 @@ func TestAccLoggingBucketConfigProject_basic(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigProject_basic(context, 40),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
@@ -127,6 +142,9 @@ func TestAccLoggingBucketConfigProject_analyticsEnabled(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_basic(context, 30),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -136,6 +154,9 @@ func TestAccLoggingBucketConfigProject_analyticsEnabled(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_analyticsEnabled(context, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -143,6 +164,9 @@ func TestAccLoggingBucketConfigProject_analyticsEnabled(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigProject_analyticsEnabled(context, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
@@ -180,6 +204,9 @@ func TestAccLoggingBucketConfigProject_cmekSettings(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_cmekSettings(context, keyRingName, cryptoKeyName, cryptoKeyNameUpdate),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -187,6 +214,9 @@ func TestAccLoggingBucketConfigProject_cmekSettings(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigProject_cmekSettingsUpdate(context, keyRingName, cryptoKeyName, cryptoKeyNameUpdate),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
@@ -220,6 +250,9 @@ func TestAccLoggingBucketConfigBillingAccount_basic(t *testing.T) {
 				Config: testAccLoggingBucketConfigBillingAccount_basic(context, 30),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_billing_account_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -227,6 +260,9 @@ func TestAccLoggingBucketConfigBillingAccount_basic(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigBillingAccount_basic(context, 20),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_billing_account_bucket_config.basic",
@@ -259,6 +295,9 @@ func TestAccLoggingBucketConfigOrganization_basic(t *testing.T) {
 				Config: testAccLoggingBucketConfigOrganization_basic(context, 30),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_organization_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -266,6 +305,9 @@ func TestAccLoggingBucketConfigOrganization_basic(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigOrganization_basic(context, 20),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_organization_bucket_config.basic",
@@ -584,6 +626,9 @@ func TestAccLoggingBucketConfigOrganization_indexConfigs(t *testing.T) {
 				Config: testAccLoggingBucketConfigOrganization_indexConfigs(context, "INDEX_TYPE_STRING", "INDEX_TYPE_STRING"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_organization_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -591,6 +636,9 @@ func TestAccLoggingBucketConfigOrganization_indexConfigs(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigOrganization_indexConfigs(context, "INDEX_TYPE_STRING", "INDEX_TYPE_INTEGER"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_organization_bucket_config.basic",
@@ -650,6 +698,9 @@ func TestAccLoggingBucketConfigProject_indexConfigs(t *testing.T) {
 				Config: testAccLoggingBucketConfigProject_indexConfigs(context, "INDEX_TYPE_STRING", "INDEX_TYPE_STRING"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_logging_project_bucket_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -657,6 +708,9 @@ func TestAccLoggingBucketConfigProject_indexConfigs(t *testing.T) {
 			},
 			{
 				Config: testAccLoggingBucketConfigProject_indexConfigs(context, "INDEX_TYPE_STRING", "INDEX_TYPE_INTEGER"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_logging_project_bucket_config.basic",

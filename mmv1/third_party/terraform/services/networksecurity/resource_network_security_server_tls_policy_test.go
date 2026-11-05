@@ -25,6 +25,9 @@ func TestAccNetworkSecurityServerTlsPolicy_update(t *testing.T) {
 				Config: testAccNetworkSecurityServerTlsPolicy_basic(serverTlsPolicyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_server_tls_policy.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -32,6 +35,9 @@ func TestAccNetworkSecurityServerTlsPolicy_update(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkSecurityServerTlsPolicy_update(serverTlsPolicyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_server_tls_policy.foobar",
@@ -95,6 +101,9 @@ func TestAccNetworkSecurityServerTlsPolicy_mtlsValidationRelaxationsUpdate(t *te
 				Config: testAccNetworkSecurityServerTlsPolicy_mtlsValidationRelaxationsInitial(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_server_tls_policy.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -109,6 +118,9 @@ func TestAccNetworkSecurityServerTlsPolicy_mtlsValidationRelaxationsUpdate(t *te
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_security_server_tls_policy.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -121,6 +133,9 @@ func TestAccNetworkSecurityServerTlsPolicy_mtlsValidationRelaxationsUpdate(t *te
 						plancheck.ExpectResourceAction("google_network_security_server_tls_policy.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_security_server_tls_policy.default",

@@ -404,6 +404,9 @@ func TestAccComputeDisk_update(t *testing.T) {
 				Config: testAccComputeDisk_basic(diskName, diskType),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -411,6 +414,9 @@ func TestAccComputeDisk_update(t *testing.T) {
 			},
 			{
 				Config: testAccComputeDisk_updated(diskName, diskType),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -492,6 +498,9 @@ func TestAccComputeDisk_fromTypeUrl(t *testing.T) {
 				Config: testAccComputeDisk_basic(diskName, diskType),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -529,6 +538,9 @@ func TestAccComputeDisk_pdHyperDiskProvisionedIopsLifeCycle(t *testing.T) {
 				Config: testAccComputeDisk_pdHyperDiskProvisionedIopsLifeCycle(context_1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -537,12 +549,18 @@ func TestAccComputeDisk_pdHyperDiskProvisionedIopsLifeCycle(t *testing.T) {
 				Config: testAccComputeDisk_pdHyperDiskProvisionedIopsLifeCycle(context_2),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeDisk_pdHyperDiskProvisionedIopsLifeCycle(context_3),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -581,6 +599,9 @@ func TestAccComputeDisk_pdHyperDiskProvisionedThroughputLifeCycle(t *testing.T) 
 				Config: testAccComputeDisk_pdHyperDiskProvisionedThroughputLifeCycle(context_1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -589,12 +610,18 @@ func TestAccComputeDisk_pdHyperDiskProvisionedThroughputLifeCycle(t *testing.T) 
 				Config: testAccComputeDisk_pdHyperDiskProvisionedThroughputLifeCycle(context_2),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeDisk_pdHyperDiskProvisionedThroughputLifeCycle(context_3),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -622,12 +649,18 @@ func TestAccComputeDisk_fromSnapshot(t *testing.T) {
 				Config: testAccComputeDisk_fromSnapshot(projectName, firstDiskName, snapshotName, diskName, "self_link"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.seconddisk",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeDisk_fromSnapshot(projectName, firstDiskName, snapshotName, diskName, "name"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.seconddisk",
@@ -693,6 +726,9 @@ func TestAccComputeDisk_encryptionKMS(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportStateId:     importID,
 				ImportState:       true,
@@ -727,6 +763,9 @@ func TestAccComputeDisk_encryptionKMSUpdate(t *testing.T) {
 				Config: testAccComputeDisk_encryptionKMSUpdateKey(diskName, key1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportStateId:     importID,
 				ImportState:       true,
@@ -739,6 +778,9 @@ func TestAccComputeDisk_encryptionKMSUpdate(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_disk.foobar", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -796,6 +838,9 @@ func TestAccComputeDisk_encryptionKMSAdd(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportStateId:     importID,
 				ImportState:       true,
@@ -834,6 +879,9 @@ func TestAccComputeDisk_encryptionKMSUpdateWithServiceAccount(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeDisk_encryptionKMSUpdateKeyWithServiceAccount(diskName, key1, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -902,6 +950,9 @@ func TestAccComputeDisk_pdHyperDiskEnableConfidentialCompute(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -925,6 +976,9 @@ func TestAccComputeDisk_deleteDetach(t *testing.T) {
 				Config: testAccComputeDisk_deleteDetach(instanceName, diskName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -935,6 +989,9 @@ func TestAccComputeDisk_deleteDetach(t *testing.T) {
 			// another step
 			{
 				Config: testAccComputeDisk_deleteDetach(instanceName, diskName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foo",
@@ -963,6 +1020,9 @@ func TestAccComputeDisk_deleteDetachIGM(t *testing.T) {
 				Config: testAccComputeDisk_deleteDetachIGM(diskName, mgrName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -975,6 +1035,9 @@ func TestAccComputeDisk_deleteDetachIGM(t *testing.T) {
 				Config: testAccComputeDisk_deleteDetachIGM(diskName, mgrName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -984,6 +1047,9 @@ func TestAccComputeDisk_deleteDetachIGM(t *testing.T) {
 				Config: testAccComputeDisk_deleteDetachIGM(diskName2, mgrName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foo",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -991,6 +1057,9 @@ func TestAccComputeDisk_deleteDetachIGM(t *testing.T) {
 			// Add the extra step like before
 			{
 				Config: testAccComputeDisk_deleteDetachIGM(diskName2, mgrName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foo",
@@ -1014,6 +1083,9 @@ func TestAccComputeDisk_pdExtremeImplicitProvisionedIops(t *testing.T) {
 				Config: testAccComputeDisk_pdExtremeImplicitProvisionedIops(diskName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1035,6 +1107,9 @@ func TestAccComputeDisk_resourcePolicies(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeDisk_resourcePolicies(diskName, policyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -1061,12 +1136,18 @@ func TestAccComputeDisk_updateResourcePolicies(t *testing.T) {
 				Config: testAccComputeDisk_resourcePolicies(diskName, policyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeDisk_updateResourcePolicies(diskName, policyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -1090,6 +1171,9 @@ func TestAccComputeDisk_multiWriter(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeDisk_multiWriter(instanceName, diskName, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -1220,6 +1304,9 @@ func TestAccComputeDisk_cloneDisk(t *testing.T) {
 					testAccCheckComputeDiskExists(
 						t, "google_compute_disk.disk-clone", pid, &disk),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.disk-clone",
@@ -1358,6 +1445,9 @@ func TestAccComputeDisk_featuresUpdated(t *testing.T) {
 				Config: testAccComputeDisk_features(diskName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1365,6 +1455,9 @@ func TestAccComputeDisk_featuresUpdated(t *testing.T) {
 			},
 			{
 				Config: testAccComputeDisk_featuresUpdated(diskName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -1436,6 +1529,9 @@ func TestAccComputeDisk_VSSWindowsDefault(t *testing.T) {
                 Config: testAccComputeDisk_VSSWindowsDefault(diskName),
             },
             {
+            	RefreshState: true,
+            },
+            {
                 ResourceName:      "google_compute_disk.foobar",
                 ImportState:       true,
                 ImportStateVerify: true,
@@ -1460,6 +1556,9 @@ func TestAccComputeDisk_VSSWindows(t *testing.T) {
                 Config: testAccComputeDisk_VSSWindows(diskName,true),
             },
             {
+            	RefreshState: true,
+            },
+            {
                 ResourceName:      "google_compute_disk.foobar",
                 ImportState:       true,
                 ImportStateVerify: true,
@@ -1467,6 +1566,9 @@ func TestAccComputeDisk_VSSWindows(t *testing.T) {
             },
             {
                 Config: testAccComputeDisk_VSSWindows(diskName,false),
+            },
+            {
+            	RefreshState: true,
             },
             {
                 ResourceName:      "google_compute_disk.foobar",
@@ -2193,6 +2295,9 @@ func TestAccComputeDisk_storagePoolSpecified(t *testing.T) {
 				Config: testAccComputeDisk_storagePoolSpecified(diskName, storagePoolNameLong),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2213,6 +2318,9 @@ func TestAccComputeDisk_storagePoolSpecified_nameOnly(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeDisk_storagePoolSpecified(diskName, "tf-bootstrap-storage-pool-hyperdisk-throughput-basic-2"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",
@@ -2432,6 +2540,9 @@ func TestAccComputeDisk_accessModeSpecified(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_disk.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2442,6 +2553,9 @@ func TestAccComputeDisk_accessModeSpecified(t *testing.T) {
                                	Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_compute_disk.foobar", "access_mode", accessModeForUpdate),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_disk.foobar",

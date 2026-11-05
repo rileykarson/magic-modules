@@ -25,6 +25,9 @@ func TestAccManagedKafkaAcl_update(t *testing.T) {
 				Config: testAccManagedKafkaAcl_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_managed_kafka_acl.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -32,6 +35,9 @@ func TestAccManagedKafkaAcl_update(t *testing.T) {
 			},
 			{
 				Config: testAccManagedKafkaAcl_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_managed_kafka_acl.example",

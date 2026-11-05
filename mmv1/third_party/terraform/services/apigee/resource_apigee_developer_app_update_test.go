@@ -47,6 +47,9 @@ func TestAccApigeeDeveloperApp_apigeeDeveloperAppUpdateTest(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -64,6 +67,9 @@ func TestAccApigeeDeveloperApp_apigeeDeveloperAppUpdateTest(t *testing.T) {
 					// Both products should now be associated with that single key.
 					resource.TestCheckResourceAttr(resourceName, "api_products.#", "2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -332,6 +338,9 @@ func TestAccApigeeDeveloperApp_apigeeDeveloperAppStaticCredentialsTest(t *testin
 					resource.TestCheckResourceAttr(resourceName, "credentials.0.consumer_key", fmt.Sprintf("static-key-%s", context["random_suffix"])),
 					resource.TestCheckResourceAttr(resourceName, "credentials.0.consumer_secret", fmt.Sprintf("static-secret-%s", context["random_suffix"])),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      resourceName,

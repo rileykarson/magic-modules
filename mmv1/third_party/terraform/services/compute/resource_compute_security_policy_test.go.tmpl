@@ -31,6 +31,9 @@ func TestAccComputeSecurityPolicy_basic(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_basic(spName, "CLOUD_ARMOR"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -56,6 +59,9 @@ func TestAccComputeSecurityPolicy_basicUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -70,6 +76,9 @@ func TestAccComputeSecurityPolicy_basicUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_compute_security_policy.policy", "type", "CLOUD_ARMOR_EDGE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -94,6 +103,9 @@ func TestAccComputeSecurityPolicy_withRule(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRule(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -114,6 +126,9 @@ func TestAccComputeSecurityPolicy_withRuleExpr(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeSecurityPolicy_withRuleExpr(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -138,12 +153,18 @@ func TestAccComputeSecurityPolicy_withPreconfiguredWafConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withPreconfiguredWafConfig(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withPreconfiguredWafConfig_update(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -154,12 +175,18 @@ func TestAccComputeSecurityPolicy_withPreconfiguredWafConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withPreconfiguredWafConfig_clear(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withPreconfiguredWafConfig_removed(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -184,6 +211,9 @@ func TestAccComputeSecurityPolicy_update(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRule(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -198,6 +228,9 @@ func TestAccComputeSecurityPolicy_update(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_update(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -205,6 +238,9 @@ func TestAccComputeSecurityPolicy_update(t *testing.T) {
 
 			{
 				Config: testAccComputeSecurityPolicy_withRule(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -261,6 +297,9 @@ func TestAccComputeSecurityPolicy_withAdvancedOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_basic(spName, "CLOUD_ARMOR"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -269,12 +308,18 @@ func TestAccComputeSecurityPolicy_withAdvancedOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withAdvancedOptionsConfig(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withAdvancedOptionsConfig_update(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -286,6 +331,9 @@ func TestAccComputeSecurityPolicy_withAdvancedOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withAdvancedOptionsConfig_update2(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -293,6 +341,9 @@ func TestAccComputeSecurityPolicy_withAdvancedOptionsConfig(t *testing.T) {
 			// Swap to json_parsing = STANDARD_WITH_GRAPHQL
 			{
 				Config: testAccComputeSecurityPolicy_withAdvancedOptionsConfig_update3(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -304,12 +355,18 @@ func TestAccComputeSecurityPolicy_withAdvancedOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withAdvancedOptionsConfig_update4(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_basic(spName, "CLOUD_ARMOR"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -334,12 +391,18 @@ func TestAccComputeSecurityPolicy_withAdaptiveProtection(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtection_enabled(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtection_update(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -363,6 +426,9 @@ func TestAccComputeSecurityPolicy_withoutAdaptiveProtection(t *testing.T) {
 			{
 				// Can create with layer 7 protection disabled
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtection_disabled(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -395,12 +461,18 @@ func TestAccComputeSecurityPolicy_withAdaptiveProtection_withThresholdConfigs(t 
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtection_enabled_withThresholdConfigs(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtection_update_ThresholdConfigs(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -426,12 +498,18 @@ func TestAccComputeSecurityPolicy_withAdaptiveProtectionAutoDeployConfig(t *test
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtectionAutoDeployConfig(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withAdaptiveProtectionAutoDeployConfig_update(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -458,6 +536,9 @@ func TestAccComputeSecurityPolicy_withRateLimitOptions(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -478,6 +559,9 @@ func TestAccComputeSecurityPolicy_withRateLimitWithRedirectOptions(t *testing.T)
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeSecurityPolicy_withRateLimitWithRedirectOptions(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -502,6 +586,9 @@ func TestAccComputeSecurityPolicy_withRateLimit_withEnforceOnKeyConfigs(t *testi
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKeyConfigs(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -524,12 +611,18 @@ func TestAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyCo
 				Config: testAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyConfigs(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyConfigs2(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -540,12 +633,18 @@ func TestAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyCo
 				Config: testAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyConfigs3(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRateLimitOption_withMultipleEnforceOnKeyConfigs4(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -570,6 +669,9 @@ func TestAccComputeSecurityPolicy_EnforceOnKeyUpdates(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withoutRateLimitOptions(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -578,12 +680,18 @@ func TestAccComputeSecurityPolicy_EnforceOnKeyUpdates(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKeyName(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKey(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -594,6 +702,9 @@ func TestAccComputeSecurityPolicy_EnforceOnKeyUpdates(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKeyConfigs(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -602,12 +713,18 @@ func TestAccComputeSecurityPolicy_EnforceOnKeyUpdates(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKey(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRateLimitOptions_withEnforceOnKeyName(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -633,12 +750,18 @@ func TestAccComputeSecurityPolicy_withRecaptchaOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_basic(spName, "CLOUD_ARMOR"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRecaptchaOptionsConfig(project, spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -649,12 +772,18 @@ func TestAccComputeSecurityPolicy_withRecaptchaOptionsConfig(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRedirectSiteKeyUpdate(project, spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withEmptyRedirectSiteKey(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -679,12 +808,18 @@ func TestAccComputeSecurityPolicy_ruleActionUpdate(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_ruleActionThrottle(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_ruleActionDeny(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -713,12 +848,18 @@ func TestAccComputeSecurityPolicy_withHeadAction(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withoutHeadAction(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withHeadAction(spName, headerName, headerValue),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -729,6 +870,9 @@ func TestAccComputeSecurityPolicy_withHeadAction(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withHeadAction(spName, headerNameUpdate, headerValueUpdate),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -737,12 +881,18 @@ func TestAccComputeSecurityPolicy_withHeadAction(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withMultipleHeaders(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withoutHeadAction(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -767,6 +917,9 @@ func TestAccComputeSecurityPolicy_withExprOptions(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withExprOptions(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -789,6 +942,9 @@ func TestAccComputeSecurityPolicy_modifyExprOptions(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRule(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -797,12 +953,18 @@ func TestAccComputeSecurityPolicy_modifyExprOptions(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withExprOptions(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_modifyExprOptions(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -827,6 +989,9 @@ func TestAccComputeSecurityPolicy_labels(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_basicLabels(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_security_policy.policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -834,6 +999,9 @@ func TestAccComputeSecurityPolicy_labels(t *testing.T) {
 			},
 			{
 				Config: testAccComputeSecurityPolicy_updateLabels(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_security_policy.policy",
@@ -986,6 +1154,9 @@ func TestAccComputeSecurityPolicy_securityPolicyWithBodyExclude(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeSecurityPolicy_securityPolicyWithBodyExclude(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_security_policy.policy_rule_one",
@@ -2405,6 +2576,9 @@ func TestAccComputeSecurityPolicy_withRedirectOptionsRecaptcha(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRedirectOptionsRecaptcha(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2427,12 +2601,18 @@ func TestAccComputeSecurityPolicy_withRedirectOptionsUpdate(t *testing.T) {
 				Config: testAccComputeSecurityPolicy_withRedirectOptionsRecaptcha(spName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeSecurityPolicy_withRedirectOptionsExternal(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -2455,6 +2635,9 @@ func TestAccComputeSecurityPolicy_withRedirectOptionsExternal(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeSecurityPolicy_withRedirectOptionsExternal(spName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",
@@ -2721,6 +2904,9 @@ func TestAccComputeSecurityPolicy_inlineRuleUpdate(t *testing.T) {
 						"match.0.config.0.src_ip_ranges.#": "1",
 					}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_security_policy.policy",

@@ -32,6 +32,9 @@ func TestAccComputeRegionTargetTcpProxy_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_target_tcp_proxy.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,

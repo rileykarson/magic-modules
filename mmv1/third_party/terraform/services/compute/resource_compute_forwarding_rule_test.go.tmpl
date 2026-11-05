@@ -26,6 +26,9 @@ func TestAccComputeForwardingRule_update(t *testing.T) {
 				Config: testAccComputeForwardingRule_basic(poolName, ruleName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_forwarding_rule.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -33,6 +36,9 @@ func TestAccComputeForwardingRule_update(t *testing.T) {
 			},
 			{
 				Config: testAccComputeForwardingRule_update(poolName, ruleName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.foobar",
@@ -62,6 +68,9 @@ func TestAccComputeForwardingRule_ip(t *testing.T) {
 				Config: testAccComputeForwardingRule_ip(addrName, poolName, ruleName, addressRefFieldID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_forwarding_rule.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -69,6 +78,9 @@ func TestAccComputeForwardingRule_ip(t *testing.T) {
 			},
 			{
 				Config: testAccComputeForwardingRule_ip(addrName, poolName, ruleName, addressRefFieldRaw),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.foobar",
@@ -109,6 +121,9 @@ func TestAccComputeForwardingRule_internalTcpUdpLbWithMigBackendExampleUpdate(t 
 				Config: testAccComputeForwardingRule_internalTcpUdpLbWithMigBackendExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_forwarding_rule.google_compute_forwarding_rule",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -116,6 +131,9 @@ func TestAccComputeForwardingRule_internalTcpUdpLbWithMigBackendExampleUpdate(t 
 			},
 			{
 				Config: testAccComputeForwardingRule_internalTcpUdpLbWithMigBackendExampleUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_forwarding_rule.google_compute_forwarding_rule",
@@ -141,6 +159,9 @@ func TestAccComputeForwardingRule_networkTier(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeForwardingRule_networkTier(poolName, ruleName),
+			},
+			{
+				RefreshState: true,
 			},
 
 			{
@@ -168,6 +189,9 @@ func TestAccComputeForwardingRule_serviceDirectoryRegistrations(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeForwardingRule_serviceDirectoryRegistrations(poolName, ruleName, svcDirNamespace, serviceName),
+			},
+			{
+				RefreshState: true,
 			},
 
 			{
@@ -207,12 +231,18 @@ func TestAccComputeForwardingRule_forwardingRuleVpcPscExampleUpdate(t *testing.T
 				Config: testAccComputeForwardingRule_forwardingRuleVpcPscExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_forwarding_rule.default",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeForwardingRule_forwardingRuleVpcPscExampleUpdate(context, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -222,6 +252,9 @@ func TestAccComputeForwardingRule_forwardingRuleVpcPscExampleUpdate(t *testing.T
 			},
 			{
 				Config: testAccComputeForwardingRule_forwardingRuleVpcPscExampleUpdate(context, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -247,6 +280,9 @@ context := map[string]interface{}{
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeForwardingRule_forwardingRulePscTargetUpdateRecreate(context, false),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -279,6 +315,9 @@ func TestAccComputeForwardingRule_forwardingRulePscAddressUpdateRecreate(t *test
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeForwardingRule_forwardingRulePscAddressUpdateRecreate(context, "10.0.1.1"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -314,6 +353,9 @@ func TestAccComputeForwardingRule_forwardingRulePscRecreate(t *testing.T) {
 				Config: testAccComputeForwardingRule_forwardingRulePscRecreate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_forwarding_rule.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -321,6 +363,9 @@ func TestAccComputeForwardingRule_forwardingRulePscRecreate(t *testing.T) {
 			},
 			{
 				Config: testAccComputeForwardingRule_forwardingRulePscRecreate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -331,6 +376,9 @@ func TestAccComputeForwardingRule_forwardingRulePscRecreate(t *testing.T) {
 			},
 			{
 				Config: testAccComputeForwardingRule_forwardingRulePscRecreate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_forwarding_rule.default",
@@ -365,6 +413,9 @@ func TestAccComputeForwardingRule_forwardingRuleRegionalSteeringExampleUpdate(t 
 				Config: testAccComputeForwardingRule_forwardingRuleRegionalSteeringExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_forwarding_rule.steering",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -372,6 +423,9 @@ func TestAccComputeForwardingRule_forwardingRuleRegionalSteeringExampleUpdate(t 
 			},
 			{
 				Config: testAccComputeForwardingRule_forwardingRuleRegionalSteeringExampleUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_forwarding_rule.steering",
@@ -401,6 +455,9 @@ func TestAccComputeForwardingRule_forwardingRuleIpAddressIpv6(t *testing.T) {
 					resource.TestCheckResourceAttrSet(
 						"google_compute_forwarding_rule.external", "forwarding_rule_id"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_forwarding_rule.external",
@@ -1171,6 +1228,9 @@ func TestAccComputeForwardingRule_allowGlobalAccessUpdate_Internal(t *testing.T)
 				Config: testAccComputeForwardingRule_allowGlobalAccess_Internal(poolName, ruleName, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_forwarding_rule.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1178,6 +1238,9 @@ func TestAccComputeForwardingRule_allowGlobalAccessUpdate_Internal(t *testing.T)
 			},
 			{
 				Config: testAccComputeForwardingRule_allowGlobalAccess_Internal(poolName, ruleName, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_forwarding_rule.foobar",
@@ -1205,6 +1268,9 @@ func TestAccComputeForwardingRule_allowGlobalAccessUpdate_InternalManaged(t *tes
 				Config: testAccComputeForwardingRule_allowGlobalAccess_InternalManaged(poolName, ruleName, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_forwarding_rule.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1213,6 +1279,9 @@ func TestAccComputeForwardingRule_allowGlobalAccessUpdate_InternalManaged(t *tes
 			{
 				// This should trigger recreation due to immutability for INTERNAL_MANAGED
 				Config: testAccComputeForwardingRule_allowGlobalAccess_InternalManaged(poolName, ruleName, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_forwarding_rule.foobar",

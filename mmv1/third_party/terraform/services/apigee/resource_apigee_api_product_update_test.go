@@ -33,6 +33,9 @@ func TestAccApigeeApiProduct_apigeeApiProduct_full(t *testing.T) {
 				Config: testAccApigeeApiProduct_apigeeApiProduct_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_apigee_api_product.apigee_api_product",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -45,6 +48,9 @@ func TestAccApigeeApiProduct_apigeeApiProduct_full(t *testing.T) {
 						plancheck.ExpectResourceAction("google_apigee_api_product.apigee_api_product", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_apigee_api_product.apigee_api_product",

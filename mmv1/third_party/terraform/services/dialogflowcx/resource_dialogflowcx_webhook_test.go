@@ -27,12 +27,18 @@ func TestAccDialogflowCXWebhook_update(t *testing.T) {
 				Config: testAccDialogflowCXWebhook_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_dialogflow_cx_webhook.my_webhook",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDialogflowCXWebhook_full(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dialogflow_cx_webhook.my_webhook",

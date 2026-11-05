@@ -36,6 +36,9 @@ func TestAccActiveDirectoryDomainTrust_activeDirectoryDomainTrustBasicExample(t 
 				Config: testAccActiveDirectoryDomainTrust_activeDirectoryDomainTrustBasicExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_active_directory_domain_trust.ad-domain-trust",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -43,6 +46,9 @@ func TestAccActiveDirectoryDomainTrust_activeDirectoryDomainTrustBasicExample(t 
 			},
 			{
 				Config: testAccActiveDirectoryDomainTrust_activeDirectoryDomainTrustUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_active_directory_domain_trust.ad-domain-trust",

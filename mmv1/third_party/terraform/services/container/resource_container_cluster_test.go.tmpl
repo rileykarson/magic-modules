@@ -76,6 +76,9 @@ func TestAccContainerCluster_basic(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportStateId:     fmt.Sprintf("us-east1-b/%s", clusterName),
 				ImportState:       true,
@@ -117,6 +120,9 @@ func TestAccContainerCluster_noDefaultNodePool(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "initial_node_count", "0"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -166,6 +172,9 @@ func TestAccContainerCluster_noDefaultNodePool_omittedInitialNodeCount(t *testin
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "initial_node_count", "0"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -261,6 +270,9 @@ func TestAccContainerCluster_resourceManagerTags(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportStateId:           fmt.Sprintf("us-east1-b/%s", clusterName),
 				ImportState:             true,
@@ -278,6 +290,9 @@ func TestAccContainerCluster_resourceManagerTags(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "self_link"),
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_config.0.resource_manager_tags.%"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -308,6 +323,9 @@ func TestAccContainerCluster_networkingModeRoutes(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "networking_mode", "ROUTES"),
 					resource.TestCheckResourceAttr("google_container_cluster.secondary", "networking_mode", "ROUTES"),				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:	     "google_container_cluster.primary",
@@ -345,6 +363,9 @@ func TestAccContainerCluster_misc(t *testing.T) {
 					"google_container_cluster.primary", "node_pool.#", "0"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -357,6 +378,9 @@ func TestAccContainerCluster_misc(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -385,6 +409,9 @@ func TestAccContainerCluster_withAddons(t *testing.T) {
 				Config: testAccContainerCluster_withAddons(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -397,6 +424,9 @@ func TestAccContainerCluster_withAddons(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -427,6 +457,9 @@ func TestAccContainerCluster_agentSandbox(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -442,6 +475,9 @@ func TestAccContainerCluster_agentSandbox(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "addons_config.0.agent_sandbox_config.0.enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -486,6 +522,9 @@ func TestAccContainerCluster_withDeletionProtection(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withDeletionProtection(clusterName, networkName, subnetworkName, "false"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -536,6 +575,9 @@ func TestAccContainerCluster_withNotificationConfig(t *testing.T) {
 				Config: testAccContainerCluster_withNotificationConfig(clusterName, topic, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.notification_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -548,6 +590,9 @@ func TestAccContainerCluster_withNotificationConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.notification_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.notification_config",
@@ -564,6 +609,9 @@ func TestAccContainerCluster_withNotificationConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.notification_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -576,6 +624,9 @@ func TestAccContainerCluster_withNotificationConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.notification_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.notification_config",
@@ -605,6 +656,9 @@ func TestAccContainerCluster_withFilteredNotificationConfig(t *testing.T) {
 				Config: testAccContainerCluster_withFilteredNotificationConfig(clusterName, topic, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.filtered_notification_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -619,6 +673,9 @@ func TestAccContainerCluster_withFilteredNotificationConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.filtered_notification_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -631,6 +688,9 @@ func TestAccContainerCluster_withFilteredNotificationConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.filtered_notification_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.filtered_notification_config",
@@ -659,6 +719,9 @@ func TestAccContainerCluster_withConfidentialNodes(t *testing.T) {
 				Config: testAccContainerCluster_withConfidentialNodes(clusterName, npName, networkName, subnetworkName, false, "", "n2d-standard-2"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -671,6 +734,9 @@ func TestAccContainerCluster_withConfidentialNodes(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.confidential_nodes", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
@@ -687,6 +753,9 @@ func TestAccContainerCluster_withConfidentialNodes(t *testing.T) {
                                 },
                         },
                         {
+                          RefreshState: true,
+                        },
+                        {
                                 ResourceName:            "google_container_cluster.confidential_nodes",
                                 ImportState:             true,
                                 ImportStateVerify:       true,
@@ -701,6 +770,9 @@ func TestAccContainerCluster_withConfidentialNodes(t *testing.T) {
                                 },
                         },
                         {
+                          RefreshState: true,
+                        },
+                        {
                                 ResourceName:            "google_container_cluster.confidential_nodes",
                                 ImportState:             true,
                                 ImportStateVerify:       true,
@@ -713,6 +785,9 @@ func TestAccContainerCluster_withConfidentialNodes(t *testing.T) {
                                 		plancheck.ExpectResourceAction("google_container_cluster.confidential_nodes", plancheck.ResourceActionReplace),
                                 	},
                                 },
+                        },
+                        {
+                          RefreshState: true,
                         },
                         {
                                 ResourceName:            "google_container_cluster.confidential_nodes",
@@ -741,6 +816,9 @@ func TestAccContainerCluster_withLocalSsdEncryptionMode(t *testing.T) {
 				Config: testAccContainerCluster_withLocalSsdEncryptionMode(clusterName, npName, networkName, subnetworkName, "EPHEMERAL_KEY_ENCRYPTION"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.local_ssd_encryption_mode",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -767,6 +845,9 @@ func TestAccContainerCluster_withMaxRunDuration(t *testing.T) {
 				Config: testAccContainerCluster_withMaxRunDuration(clusterName, npName, networkName, subnetworkName, "3600s"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.max_run_duration",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -781,6 +862,9 @@ func TestAccContainerCluster_withMaxRunDuration(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.max_run_duration",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -793,6 +877,9 @@ func TestAccContainerCluster_withMaxRunDuration(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.max_run_duration", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.max_run_duration",
@@ -827,6 +914,9 @@ func TestAccContainerCluster_withFlexStart(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.flex_start",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -853,6 +943,9 @@ func TestAccContainerCluster_withILBSubsetting(t *testing.T) {
 				Config: testAccContainerCluster_disableILBSubSetting(clusterName, npName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.confidential_nodes",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -867,6 +960,9 @@ func TestAccContainerCluster_withILBSubsetting(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.confidential_nodes",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -879,6 +975,9 @@ func TestAccContainerCluster_withILBSubsetting(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.confidential_nodes", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.confidential_nodes",
@@ -907,6 +1006,9 @@ func TestAccContainerCluster_omittedILBSubsetting(t *testing.T) {
 				Config: testAccContainerCluster_omittedILBSubSetting(clusterName, npName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -921,6 +1023,9 @@ func TestAccContainerCluster_omittedILBSubsetting(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -933,6 +1038,9 @@ func TestAccContainerCluster_omittedILBSubsetting(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.confidential_nodes", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
@@ -961,6 +1069,9 @@ func TestAccContainerCluster_disableL4LbFirewallReconciliation(t *testing.T) {
 				Config: testAccContainerCluster_disableL4LbFirewallReconciliation(clusterName, npName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -975,6 +1086,9 @@ func TestAccContainerCluster_disableL4LbFirewallReconciliation(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -987,6 +1101,9 @@ func TestAccContainerCluster_disableL4LbFirewallReconciliation(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.confidential_nodes", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.confidential_nodes",
@@ -1010,6 +1127,9 @@ func TestAccContainerCluster_withMultiNetworking(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_enableMultiNetworking(clusterName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.cluster",
@@ -1039,6 +1159,9 @@ func TestAccContainerCluster_inTransitEncryptionConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:	   "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1054,6 +1177,9 @@ func TestAccContainerCluster_inTransitEncryptionConfig(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "in_transit_encryption_config", "IN_TRANSIT_ENCRYPTION_DISABLED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:	   "google_container_cluster.primary",
@@ -1083,6 +1209,9 @@ func TestAccContainerCluster_networkPerformanceConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:	   "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1098,6 +1227,9 @@ func TestAccContainerCluster_networkPerformanceConfig(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "network_performance_config.0.total_egress_bandwidth_tier", "TIER_UNSPECIFIED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:	   "google_container_cluster.primary",
@@ -1123,6 +1255,9 @@ func TestAccContainerCluster_withFQDNNetworkPolicy(t *testing.T) {
 				Config: testAccContainerCluster_withFQDNNetworkPolicy(clusterName, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1135,6 +1270,9 @@ func TestAccContainerCluster_withFQDNNetworkPolicy(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.cluster", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.cluster",
@@ -1160,6 +1298,9 @@ func TestAccContainerCluster_withAdditiveVPC(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withAdditiveVPC(clusterName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.cluster",
@@ -1190,6 +1331,9 @@ func TestAccContainerCluster_withMasterAuthConfig_NoCert(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_master_auth_no_cert",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1218,6 +1362,9 @@ func TestAccContainerCluster_withAuthenticatorGroupsConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1236,6 +1383,9 @@ func TestAccContainerCluster_withAuthenticatorGroupsConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1252,6 +1402,9 @@ func TestAccContainerCluster_withAuthenticatorGroupsConfig(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_container_cluster.primary",
 						"authenticator_groups_config.0.enabled"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -1322,6 +1475,9 @@ func TestAccContainerCluster_withPodAutoscaling(t *testing.T) {
 				Config: testAccContainerCluster_podAutoscalingConfig(clusterName, networkName, subnetworkName, "NONE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.pod_autoscaling_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1335,6 +1491,9 @@ func TestAccContainerCluster_withPodAutoscaling(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.pod_autoscaling_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.pod_autoscaling_config",
@@ -1528,6 +1687,9 @@ func TestAccContainerCluster_withNetworkPolicyEnabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_network_policy_enabled",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1544,6 +1706,9 @@ func TestAccContainerCluster_withNetworkPolicyEnabled(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_network_policy_enabled",
 						"network_policy.0.enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_network_policy_enabled",
@@ -1564,6 +1729,9 @@ func TestAccContainerCluster_withNetworkPolicyEnabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_network_policy_enabled",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1580,6 +1748,9 @@ func TestAccContainerCluster_withNetworkPolicyEnabled(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_network_policy_enabled",
 						"addons_config.0.network_policy_config.0.disabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_network_policy_enabled",
@@ -1612,6 +1783,9 @@ func TestAccContainerCluster_withReleaseChannelEnabled(t *testing.T) {
 				Config: testAccContainerCluster_withReleaseChannelEnabled(clusterName, "STABLE", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_release_channel",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1625,6 +1799,9 @@ func TestAccContainerCluster_withReleaseChannelEnabled(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_release_channel", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_release_channel",
@@ -1652,6 +1829,9 @@ func TestAccContainerCluster_withReleaseChannelEnabledDefaultVersion(t *testing.
 				Config: testAccContainerCluster_withReleaseChannelEnabledDefaultVersion(clusterName, "REGULAR", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_release_channel",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1665,6 +1845,9 @@ func TestAccContainerCluster_withReleaseChannelEnabledDefaultVersion(t *testing.
 						plancheck.ExpectResourceAction("google_container_cluster.with_release_channel", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_release_channel",
@@ -1682,6 +1865,9 @@ func TestAccContainerCluster_withReleaseChannelEnabledDefaultVersion(t *testing.
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_release_channel",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1697,6 +1883,9 @@ func TestAccContainerCluster_withReleaseChannelEnabledDefaultVersion(t *testing.
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_release_channel",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1710,6 +1899,9 @@ func TestAccContainerCluster_withReleaseChannelEnabledDefaultVersion(t *testing.
 						plancheck.ExpectResourceAction("google_container_cluster.with_release_channel", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_release_channel",
@@ -1758,6 +1950,9 @@ func TestAccContainerCluster_withAcceleratedGkeAutoUpgradeConfig(t *testing.T) {
 				Config: testAccContainerCluster_withGkeAutoUpgradeConfig(clusterName, "ACCELERATED", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_gke_auto_upgrade_config",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1784,6 +1979,9 @@ func TestAccContainerCluster_withTelemetryEnabled(t *testing.T) {
 				Config: testAccContainerCluster_withTelemetryEnabled(clusterName, "ENABLED", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_cluster_telemetry",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1799,6 +1997,9 @@ func TestAccContainerCluster_withTelemetryEnabled(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_cluster_telemetry",
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -1812,6 +2013,9 @@ func TestAccContainerCluster_withTelemetryEnabled(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_cluster_telemetry", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_cluster_telemetry",
@@ -1898,6 +2102,9 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithoutConfig(
 				// The server decides what (if anything) is returned.
 				Config: testAccContainerCluster_withoutManagedOpenTelemetryConfig(clusterName, networkName, subnetworkName),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// With nothing in state, adding an empty block plans an update
@@ -1912,6 +2119,9 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithoutConfig(
 					},
 				},
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Disable. No update expectation: the server-computed prior
@@ -1924,12 +2134,18 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithoutConfig(
 				},
 				Check:  testAccCheckManagedOpenTelemetryScope("NONE"),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Optional+Computed: removing the block keeps the previous state.
 				Config:           testAccContainerCluster_withoutManagedOpenTelemetryConfig(clusterName, networkName, subnetworkName),
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectNoop(),
 				Check:            testAccCheckManagedOpenTelemetryScope("NONE"),
+			},
+			{
+				RefreshState: true,
 			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
@@ -1938,12 +2154,18 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithoutConfig(
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectUpdate(),
 				Check:            testAccCheckManagedOpenTelemetryScope("COLLECTION_AND_INSTRUMENTATION_COMPONENTS"),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Optional+Computed: an empty block keeps the previous state.
 				Config:           testAccContainerCluster_withManagedOpenTelemetryConfigEmpty(clusterName, networkName, subnetworkName),
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectNoop(),
 				Check:            testAccCheckManagedOpenTelemetryScope("COLLECTION_AND_INSTRUMENTATION_COMPONENTS"),
+			},
+			{
+				RefreshState: true,
 			},
 			testAccManagedOpenTelemetryImportStep(),
 		},
@@ -1970,6 +2192,9 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithConfig(t *
 				// framework's post-apply plan check catches a permadiff.
 				Config: testAccContainerCluster_withManagedOpenTelemetryConfigEmpty(clusterName, networkName, subnetworkName),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Enable. No update expectation: the server-computed prior
@@ -1982,12 +2207,18 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithConfig(t *
 				},
 				Check:  testAccCheckManagedOpenTelemetryScope("COLLECTION_AND_INSTRUMENTATION_COMPONENTS"),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Optional+Computed: removing the block keeps the previous state.
 				Config:           testAccContainerCluster_withoutManagedOpenTelemetryConfig(clusterName, networkName, subnetworkName),
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectNoop(),
 				Check:            testAccCheckManagedOpenTelemetryScope("COLLECTION_AND_INSTRUMENTATION_COMPONENTS"),
+			},
+			{
+				RefreshState: true,
 			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
@@ -1996,12 +2227,18 @@ func TestAccContainerCluster_withManagedOpenTelemetryConfig_createWithConfig(t *
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectUpdate(),
 				Check:            testAccCheckManagedOpenTelemetryScope("NONE"),
 			},
+			{
+				RefreshState: true,
+			},
 			testAccManagedOpenTelemetryImportStep(),
 			{
 				// Optional+Computed: an empty block keeps the previous state.
 				Config:           testAccContainerCluster_withManagedOpenTelemetryConfigEmpty(clusterName, networkName, subnetworkName),
 				ConfigPlanChecks: testAccManagedOpenTelemetryExpectNoop(),
 				Check:            testAccCheckManagedOpenTelemetryScope("NONE"),
+			},
+			{
+				RefreshState: true,
 			},
 			testAccManagedOpenTelemetryImportStep(),
 		},
@@ -2098,6 +2335,9 @@ func TestAccContainerCluster_withManagedMLDiagnosticsConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.managed_ml_diagnostics",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2116,6 +2356,9 @@ func TestAccContainerCluster_withManagedMLDiagnosticsConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.managed_ml_diagnostics",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2132,6 +2375,9 @@ func TestAccContainerCluster_withManagedMLDiagnosticsConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.managed_ml_diagnostics",
 						"managed_machine_learning_diagnostics_config.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.managed_ml_diagnostics",
@@ -2223,6 +2469,9 @@ func TestAccContainerCluster_withMasterAuthorizedNetworksConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		     "google_container_cluster.with_master_authorized_networks",
 				ImportState:		     true,
 				ImportStateVerify:	     true,
@@ -2235,6 +2484,9 @@ func TestAccContainerCluster_withMasterAuthorizedNetworksConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_master_authorized_networks", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		     "google_container_cluster.with_master_authorized_networks",
@@ -2255,6 +2507,9 @@ func TestAccContainerCluster_withMasterAuthorizedNetworksConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		     "google_container_cluster.with_master_authorized_networks",
 				ImportState:		     true,
 				ImportStateVerify:	     true,
@@ -2267,6 +2522,9 @@ func TestAccContainerCluster_withMasterAuthorizedNetworksConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_master_authorized_networks", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		     "google_container_cluster.with_master_authorized_networks",
@@ -2298,6 +2556,9 @@ func TestAccContainerCluster_withGcpPublicCidrsAccessEnabledToggle(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:				"google_container_cluster.with_gcp_public_cidrs_access_enabled",
 				ImportState:				true,
 				ImportStateVerify:			true,
@@ -2314,6 +2575,9 @@ func TestAccContainerCluster_withGcpPublicCidrsAccessEnabledToggle(t *testing.T)
 					resource.TestCheckResourceAttr("google_container_cluster.with_gcp_public_cidrs_access_enabled",
 						"master_authorized_networks_config.0.gcp_public_cidrs_access_enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:				"google_container_cluster.with_gcp_public_cidrs_access_enabled",
@@ -2402,6 +2666,9 @@ func TestAccContainerCluster_withAuthorizedNetworkPrivateEnforcementToggle(t *te
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:				"google_container_cluster.primary",
 				ImportState:				true,
 				ImportStateVerify:			true,
@@ -2418,6 +2685,9 @@ func TestAccContainerCluster_withAuthorizedNetworkPrivateEnforcementToggle(t *te
 					resource.TestCheckResourceAttr("google_container_cluster.primary",
 						"master_authorized_networks_config.0.private_endpoint_enforcement_enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:				"google_container_cluster.primary",
@@ -2463,6 +2733,9 @@ func TestAccContainerCluster_regional(t *testing.T) {
 				Config: testAccContainerCluster_regional(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.regional",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -2487,6 +2760,9 @@ func TestAccContainerCluster_regionalWithNodePool(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_regionalWithNodePool(clusterName, npName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.regional",
@@ -2516,6 +2792,9 @@ func TestAccContainerCluster_regionalWithNodeLocations(t *testing.T) {
 				Config: testAccContainerCluster_regionalNodeLocations(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_locations",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -2528,6 +2807,9 @@ func TestAccContainerCluster_regionalWithNodeLocations(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_node_locations", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_locations",
@@ -2562,6 +2844,9 @@ func TestAccContainerCluster_withTpu(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_tpu",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -2589,6 +2874,9 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				Config: testAccContainerCluster_nodePoolWithUpgradeSettings(clusterName, npName, networkName, subnetworkName, 2, 3, "SURGE", "", 0, 0.0, "", "", ""),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2603,6 +2891,9 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2615,6 +2906,9 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -2632,6 +2926,9 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2644,6 +2941,9 @@ func TestAccContainerCluster_nodePoolWithUpgradeSettings(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -2694,6 +2994,9 @@ func TestAccContainerCluster_withPrivateClusterConfigBasic(t *testing.T) {
 				Config: testAccContainerCluster_withPrivateClusterConfig(containerNetName, clusterName, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_private_cluster",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -2706,6 +3009,9 @@ func TestAccContainerCluster_withPrivateClusterConfigBasic(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_private_cluster", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_private_cluster",
@@ -2733,6 +3039,9 @@ func TestAccContainerCluster_withPrivateClusterConfigGlobalAccessEnabledOnly(t *
 				Config: testAccContainerCluster_withPrivateClusterConfigGlobalAccessEnabledOnly(clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_private_cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2745,6 +3054,9 @@ func TestAccContainerCluster_withPrivateClusterConfigGlobalAccessEnabledOnly(t *
 						plancheck.ExpectResourceAction("google_container_cluster.with_private_cluster", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_private_cluster",
@@ -2775,6 +3087,9 @@ func TestAccContainerCluster_withIntraNodeVisibility(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_intranode_visibility",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -2790,6 +3105,9 @@ func TestAccContainerCluster_withIntraNodeVisibility(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_intranode_visibility", "enable_intranode_visibility", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_intranode_visibility",
@@ -2817,6 +3135,9 @@ func TestAccContainerCluster_withVersion(t *testing.T) {
 				Config: testAccContainerCluster_withVersion(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:			 "google_container_cluster.with_version",
 				ImportState:			 true,
 				ImportStateVerify:		 true,
@@ -2842,6 +3163,9 @@ func TestAccContainerCluster_updateVersion(t *testing.T) {
 				Config: testAccContainerCluster_withLowerVersion(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_version",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2854,6 +3178,9 @@ func TestAccContainerCluster_updateVersion(t *testing.T) {
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_version",
@@ -2886,6 +3213,9 @@ func TestAccContainerCluster_withNodeConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2898,6 +3228,9 @@ func TestAccContainerCluster_withNodeConfig(t *testing.T) {
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_node_config",
@@ -2931,6 +3264,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2950,6 +3286,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
@@ -2983,6 +3322,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3008,6 +3350,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3029,6 +3374,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3048,6 +3396,9 @@ func TestAccContainerCluster_withNodeConfigLinuxNodeConfig(t *testing.T) {
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_linux_node_config",
@@ -3089,6 +3440,9 @@ func TestAccContainerCluster_withKubeletConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_kubelet_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3115,6 +3469,9 @@ func TestAccContainerCluster_withKubeletConfig(t *testing.T) {
 						"google_container_cluster.with_kubelet_config",
 						"node_config.0.kubelet_config.0.topology_manager.0.scope", "pod"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_kubelet_config",
@@ -3150,6 +3507,9 @@ func TestAccContainerCluster_withKubeletConfigShutdownGracePeriod(t *testing.T) 
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_kubelet_config_shutdown",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3182,6 +3542,9 @@ func TestAccContainerCluster_withInlineNodePoolShutdownGracePeriod(t *testing.T)
 						"google_container_cluster.primary",
 						"node_pool.0.node_config.0.kubelet_config.0.shutdown_grace_period_critical_pods_seconds", "30"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -3220,6 +3583,9 @@ func TestAccContainerCluster_withNodeConfigFastSocket(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_fast_socket",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3236,6 +3602,9 @@ func TestAccContainerCluster_withNodeConfigFastSocket(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_fast_socket",
 						"node_config.0.fast_socket.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_fast_socket",
@@ -3267,6 +3636,9 @@ func TestAccContainerCluster_withNodeConfigGcfsConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_node_config_gcfs_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3279,6 +3651,9 @@ func TestAccContainerCluster_withNodeConfigGcfsConfig(t *testing.T) {
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_node_config_gcfs_config",
@@ -3310,6 +3685,9 @@ func TestAccContainerCluster_withNodeConfigKubeletConfigSettingsUpdates(t *testi
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_node_config_kubelet_config_settings",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3324,6 +3702,9 @@ func TestAccContainerCluster_withNodeConfigKubeletConfigSettingsUpdates(t *testi
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_node_config_kubelet_config_settings",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3336,6 +3717,9 @@ func TestAccContainerCluster_withNodeConfigKubeletConfigSettingsUpdates(t *testi
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_node_config_kubelet_config_settings",
@@ -3363,6 +3747,9 @@ func TestAccContainerCluster_withNodeConfigKubeletConfigSettingsInNodePool(t *te
 				Config: testAccContainerCluster_withNodeConfigKubeletConfigSettingsInNodePool(clusterName, nodePoolName, networkName, subnetworkName, "TRANSPARENT_HUGEPAGE_DEFRAG_NEVER", "TRANSPARENT_HUGEPAGE_ENABLED_MADVISE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_node_config_kubelet_config_settings_in_node_pool",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3386,6 +3773,9 @@ func TestAccContainerCluster_withInsecureKubeletReadonlyPortEnabledInNodePool(t 
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withInsecureKubeletReadonlyPortEnabledInNodePool(clusterName, nodePoolName, networkName, subnetworkName, "TRUE"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_insecure_kubelet_readonly_port_enabled_in_node_pool",
@@ -3421,6 +3811,9 @@ func TestAccContainerCluster_withInsecureKubeletReadonlyPortEnabledDefaultsUpdat
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_insecure_kubelet_readonly_port_enabled_node_pool_update",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3433,6 +3826,9 @@ func TestAccContainerCluster_withInsecureKubeletReadonlyPortEnabledDefaultsUpdat
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_insecure_kubelet_readonly_port_enabled_node_pool_update",
@@ -3449,6 +3845,9 @@ func TestAccContainerCluster_withInsecureKubeletReadonlyPortEnabledDefaultsUpdat
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_insecure_kubelet_readonly_port_enabled_node_pool_update",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3461,6 +3860,9 @@ func TestAccContainerCluster_withInsecureKubeletReadonlyPortEnabledDefaultsUpdat
 						acctest.ExpectNoDelete(),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_insecure_kubelet_readonly_port_enabled_node_pool_update",
@@ -3488,6 +3890,9 @@ func TestAccContainerCluster_withLoggingVariantInNodeConfig(t *testing.T) {
 				Config: testAccContainerCluster_withLoggingVariantInNodeConfig(clusterName, "MAX_THROUGHPUT", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_logging_variant_in_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3511,6 +3916,9 @@ func TestAccContainerCluster_withLoggingVariantInNodePool(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withLoggingVariantInNodePool(clusterName, nodePoolName, "MAX_THROUGHPUT", networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_logging_variant_in_node_pool",
@@ -3537,6 +3945,9 @@ func TestAccContainerCluster_withLoggingVariantUpdates(t *testing.T) {
 				Config: testAccContainerCluster_withLoggingVariantNodePoolDefault(clusterName, "DEFAULT", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_logging_variant_node_pool_default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3551,6 +3962,9 @@ func TestAccContainerCluster_withLoggingVariantUpdates(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_logging_variant_node_pool_default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3563,6 +3977,9 @@ func TestAccContainerCluster_withLoggingVariantUpdates(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_logging_variant_node_pool_default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_logging_variant_node_pool_default",
@@ -3588,6 +4005,9 @@ func TestAccContainerCluster_withAdvancedMachineFeaturesInNodePool(t *testing.T)
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withAdvancedMachineFeaturesInNodePool(clusterName, nodePoolName, networkName, subnetworkName, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_advanced_machine_features_in_node_pool",
@@ -3617,6 +4037,9 @@ func TestAccContainerCluster_withNodePoolDefaults(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportStateId:     fmt.Sprintf("us-east1-b/%s", clusterName),
 				ImportState:       true,
@@ -3639,6 +4062,9 @@ func TestAccContainerCluster_withNodePoolDefaults(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 					ResourceName:            "google_container_cluster.with_node_pool_defaults",
 					ImportState:             true,
 					ImportStateVerify:       true,
@@ -3657,6 +4083,9 @@ func TestAccContainerCluster_withNodePoolDefaults(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_defaults",
 							"node_pool_defaults.0.node_config_defaults.0.gcfs_config.0.enabled", "false"),
 					),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 					ResourceName:            "google_container_cluster.with_node_pool_defaults",
@@ -3684,6 +4113,9 @@ func TestAccContainerCluster_withNodeConfigScopeAlias(t *testing.T) {
 				Config: testAccContainerCluster_withNodeConfigScopeAlias(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_config_scope_alias",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -3707,6 +4139,9 @@ func TestAccContainerCluster_withNodeConfigShieldedInstanceConfig(t *testing.T) 
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withNodeConfigShieldedInstanceConfig(clusterName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_node_config",
@@ -3738,6 +4173,9 @@ func TestAccContainerCluster_withNodeConfigReservationAffinity(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_node_config",
 						"node_config.0.reservation_affinity.0.consume_reservation_type", "ANY_RESERVATION"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_node_config",
@@ -3778,6 +4216,9 @@ func TestAccContainerCluster_withNodeConfigReservationAffinitySpecific(t *testin
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_node_config",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -3808,6 +4249,9 @@ func TestAccContainerCluster_withNodeConfigReservationAffinityAnyReservationThen
 					resource.TestCheckResourceAttr("google_container_cluster.with_node_config",
 						"node_config.0.reservation_affinity.0.consume_reservation_type", "ANY_RESERVATION_THEN_FAIL"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_node_config",
@@ -3864,6 +4308,9 @@ func TestAccContainerCluster_withWorkloadMetadataConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_workload_metadata_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3880,6 +4327,9 @@ func TestAccContainerCluster_withWorkloadMetadataConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_workload_metadata_config",
 						"node_config.0.workload_metadata_config.0.mode", "GKE_METADATA"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_workload_metadata_config",
@@ -3912,6 +4362,9 @@ func TestAccContainerCluster_withSandboxConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_sandbox_config",
 						"node_pool.0.node_config.0.sandbox_config.0.sandbox_type", "gvisor"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_sandbox_config",
@@ -3971,6 +4424,9 @@ func TestAccContainerCluster_withSandboxConfigType(t *testing.T) {
 				Config: testAccContainerCluster_withSandboxConfigType(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_sandbox_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -4004,6 +4460,9 @@ func TestAccContainerCluster_withBootDiskKmsKey(t *testing.T) {
 				Config: testAccContainerCluster_withBootDiskKmsKey(clusterName, bootstrapped.CryptoKey.Name, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_boot_disk_kms_key",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -4026,6 +4485,9 @@ func TestAccContainerCluster_network(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_networkRef(clusterName, network),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		     "google_container_cluster.with_net_ref_by_url",
@@ -4059,6 +4521,9 @@ func TestAccContainerCluster_backend(t *testing.T) {
 				Config: testAccContainerCluster_backendRef(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.primary",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4083,6 +4548,9 @@ func TestAccContainerCluster_withNodePoolBasic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withNodePoolBasic(clusterName, npName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
@@ -4111,6 +4579,9 @@ func TestAccContainerCluster_withNodePoolUpdateVersion(t *testing.T) {
 				Config: testAccContainerCluster_withNodePoolLowerVersion(clusterName, npName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:			 "google_container_cluster.with_node_pool",
 				ImportState:			 true,
 				ImportStateVerify:		 true,
@@ -4123,6 +4594,9 @@ func TestAccContainerCluster_withNodePoolUpdateVersion(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_node_pool", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:			 "google_container_cluster.with_node_pool",
@@ -4154,6 +4628,9 @@ func TestAccContainerCluster_withNodePoolResize(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4169,6 +4646,9 @@ func TestAccContainerCluster_withNodePoolResize(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_node_pool", "node_pool.0.node_count", "3"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
@@ -4201,6 +4681,9 @@ func TestAccContainerCluster_withNodePoolAutoscaling(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4219,6 +4702,9 @@ func TestAccContainerCluster_withNodePoolAutoscaling(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4235,6 +4721,9 @@ func TestAccContainerCluster_withNodePoolAutoscaling(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_container_cluster.with_node_pool", "node_pool.0.autoscaling.0.min_node_count"),
 					resource.TestCheckNoResourceAttr("google_container_cluster.with_node_pool", "node_pool.0.autoscaling.0.max_node_count"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
@@ -4270,6 +4759,9 @@ func TestAccContainerCluster_withNodePoolCIA(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4291,6 +4783,9 @@ func TestAccContainerCluster_withNodePoolCIA(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4309,6 +4804,9 @@ func TestAccContainerCluster_withNodePoolCIA(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_container_cluster.with_node_pool", "node_pool.0.autoscaling.0.total_min_node_count"),
 					resource.TestCheckNoResourceAttr("google_container_cluster.with_node_pool", "node_pool.0.autoscaling.0.total_max_node_count"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool",
@@ -4339,6 +4837,9 @@ func TestAccContainerCluster_withNodePoolNamePrefix(t *testing.T) {
 				Config: testAccContainerCluster_withNodePoolNamePrefix(clusterName, npNamePrefix, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:			 "google_container_cluster.with_node_pool_name_prefix",
 				ImportState:			 true,
 				ImportStateVerify:		 true,
@@ -4363,6 +4864,9 @@ func TestAccContainerCluster_withNodePoolMultiple(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withNodePoolMultiple(clusterName, npNamePrefix, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool_multiple",
@@ -4412,6 +4916,9 @@ func TestAccContainerCluster_withNodePoolNodeConfig(t *testing.T) {
 				Config: testAccContainerCluster_withNodePoolNodeConfig(cluster, np, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool_node_config",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4440,6 +4947,9 @@ func TestAccContainerCluster_withNodePoolNodeDrainConfig(t *testing.T) {
 									resource.TestCheckResourceAttr("google_container_cluster.with_node_pool_node_drain_config",
 										"node_pool.0.node_drain_config.0.respect_pdb_during_node_pool_deletion", "true"),
 								),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_node_pool_node_drain_config",
@@ -4480,6 +4990,9 @@ func TestAccContainerCluster_withNodePoolMaintenancePolicy(t *testing.T) {
 								),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_node_pool_maintenance_policy",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4504,6 +5017,9 @@ func TestAccContainerCluster_withClusterDisruptionBudget(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 					Config: testAccContainerCluster_withClusterDisruptionBudget(clusterName, "1s", networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 					ResourceName:            resourceName,
@@ -4532,6 +5048,9 @@ func TestAccContainerCluster_withDailyMaintenanceWindow(t *testing.T) {
 				Config: testAccContainerCluster_withDailyMaintenanceWindow(clusterName, "03:00", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 resourceName,
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -4550,6 +5069,9 @@ func TestAccContainerCluster_withDailyMaintenanceWindow(t *testing.T) {
 					resource.TestCheckNoResourceAttr(resourceName,
 						"maintenance_policy.0.recurring_maintenance_window.0.window_start_time"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 resourceName,
@@ -4585,6 +5107,9 @@ func TestAccContainerCluster_withRecurringTimeWindow(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:		 true,
@@ -4607,6 +5132,9 @@ func TestAccContainerCluster_withRecurringTimeWindow(t *testing.T) {
 					resource.TestCheckNoResourceAttr(resourceName,
 						"maintenance_policy.0.recurring_maintenance_window.0.window_start_time"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 resourceName,
@@ -4643,6 +5171,9 @@ func TestAccContainerCluster_withRecurringMaintenanceWindow(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportStateIdPrefix:     "us-east1-b/",
 				ImportState:             true,
@@ -4664,6 +5195,9 @@ func TestAccContainerCluster_withRecurringMaintenanceWindow(t *testing.T) {
 					resource.TestCheckNoResourceAttr(resourceName,
 						"maintenance_policy.0.recurring_maintenance_window.0.delay_until.0.year"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -4692,6 +5226,9 @@ func TestAccContainerCluster_withMaintenanceExclusionWindow(t *testing.T) {
 				Config: testAccContainerCluster_withExclusion_RecurringMaintenanceWindow(cluster, "2019-01-01T00:00:00Z", "2019-01-02T00:00:00Z", "2019-05-01T00:00:00Z", "2019-05-02T00:00:00Z", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4705,6 +5242,9 @@ func TestAccContainerCluster_withMaintenanceExclusionWindow(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_maintenance_exclusion_window", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -4740,6 +5280,9 @@ func TestAccContainerCluster_withMaintenanceExclusionOptions(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4769,6 +5312,9 @@ func TestAccContainerCluster_withMaintenanceExclusionOptions_untilEndOfSupport(t
 						resource.TestCheckResourceAttr(resourceName,
 							"maintenance_policy.0.maintenance_exclusion.0.exclusion_options.0.end_time_behavior", "UNTIL_END_OF_SUPPORT"),
 					),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -4804,6 +5350,9 @@ func TestAccContainerCluster_deleteMaintenanceExclusionOptions(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4824,6 +5373,9 @@ func TestAccContainerCluster_deleteMaintenanceExclusionOptions(t *testing.T) {
 						resource.TestCheckNoResourceAttr(resourceName,
 							"maintenance_policy.0.maintenance_exclusion.1.exclusion_options.0.scope"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -4857,6 +5409,9 @@ func TestAccContainerCluster_deleteMaintenanceExclusionOptions_untilEndOfSupport
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4877,6 +5432,9 @@ func TestAccContainerCluster_deleteMaintenanceExclusionOptions_untilEndOfSupport
 						resource.TestCheckNoResourceAttr(resourceName,
 							"maintenance_policy.0.maintenance_exclusion.1.exclusion_options.0.end_time_behavior"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -4915,6 +5473,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4937,6 +5498,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -4957,6 +5521,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName,
 							"maintenance_policy.0.maintenance_exclusion.1.exclusion_options.0.scope", "NO_MINOR_UPGRADES"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -4995,6 +5562,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions_untilEndOfSupport
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -5015,6 +5585,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions_untilEndOfSupport
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -5033,6 +5606,9 @@ func TestAccContainerCluster_updateMaintenanceExclusionOptions_untilEndOfSupport
 						resource.TestCheckResourceAttr(resourceName,
 							"maintenance_policy.0.maintenance_exclusion.0.exclusion_options.0.end_time_behavior", "UNTIL_END_OF_SUPPORT"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -5061,6 +5637,9 @@ func TestAccContainerCluster_deleteExclusionWindow(t *testing.T) {
 				Config: testAccContainerCluster_withExclusion_DailyMaintenanceWindow(cluster, "2020-01-01T00:00:00Z", "2020-01-02T00:00:00Z", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -5076,6 +5655,9 @@ func TestAccContainerCluster_deleteExclusionWindow(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        resourceName,
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -5089,6 +5671,9 @@ func TestAccContainerCluster_deleteExclusionWindow(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_maintenance_exclusion_window", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        resourceName,
@@ -5115,6 +5700,9 @@ func TestAccContainerCluster_withIPAllocationPolicy_existingSecondaryRanges(t *t
 				Config: testAccContainerCluster_withIPAllocationPolicy_existingSecondaryRanges(containerNetName, clusterName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_ip_allocation_policy",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5138,6 +5726,9 @@ func TestAccContainerCluster_withIPAllocationPolicy_specificIPRanges(t *testing.
 				Config: testAccContainerCluster_withIPAllocationPolicy_specificIPRanges(containerNetName, clusterName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_ip_allocation_policy",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5159,6 +5750,9 @@ func TestAccContainerCluster_withIPAllocationPolicy_specificSizes(t *testing.T) 
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withIPAllocationPolicy_specificSizes(containerNetName, clusterName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_ip_allocation_policy",
@@ -5189,6 +5783,9 @@ func TestAccContainerCluster_stackType_withDualStack(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 resourceName,
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5204,6 +5801,9 @@ func TestAccContainerCluster_stackType_withDualStack(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "ip_allocation_policy.0.stack_type", "IPV4"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 resourceName,
@@ -5234,6 +5834,9 @@ func TestAccContainerCluster_stackType_withSingleStack(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 resourceName,
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5260,6 +5863,9 @@ func TestAccContainerCluster_with_PodCIDROverprovisionDisabled(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "ip_allocation_policy.0.pod_cidr_overprovision_config.0.disabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -5295,6 +5901,9 @@ func TestAccContainerCluster_nodeAutoprovisioning(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_autoprovisioning",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -5319,6 +5928,9 @@ func TestAccContainerCluster_nodeAutoprovisioning(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning",
 						"cluster_autoscaling.0.resource_limits.1.resource_type", "memory"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_autoprovisioning",
@@ -5346,6 +5958,9 @@ func TestAccContainerCluster_nodeAutoprovisioning(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning",
 						"cluster_autoscaling.0.resource_limits.1.resource_type", "memory"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_autoprovisioning",
@@ -5382,6 +5997,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaults(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_autoprovisioning",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5401,6 +6019,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaults(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_autoprovisioning",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5413,6 +6034,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaults(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_autoprovisioning",
@@ -5440,6 +6064,9 @@ func TestAccContainerCluster_autoprovisioningDefaultsUpgradeSettings(t *testing.
 				Config: testAccContainerCluster_autoprovisioningDefaultsUpgradeSettings(clusterName, networkName, subnetworkName, 2, 1, "SURGE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_autoprovisioning_upgrade_settings",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -5456,6 +6083,9 @@ func TestAccContainerCluster_autoprovisioningDefaultsUpgradeSettings(t *testing.
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning_upgrade_settings", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_autoprovisioning_upgrade_settings",
@@ -5487,6 +6117,9 @@ func TestAccContainerCluster_nodeAutoprovisioningNetworkTags(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5515,6 +6148,9 @@ func TestAccContainerCluster_withDefaultComputeClassEnabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5530,6 +6166,9 @@ func TestAccContainerCluster_withDefaultComputeClassEnabled(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "cluster_autoscaling.0.default_compute_class_enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -5560,6 +6199,9 @@ func TestAccContainerCluster_withAutopilotDefaultComputeClassEnabled(t *testing.
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5575,6 +6217,9 @@ func TestAccContainerCluster_withAutopilotDefaultComputeClassEnabled(t *testing.
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "cluster_autoscaling.0.default_compute_class_enabled", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -5661,6 +6306,9 @@ func TestAccContainerCluster_withAutopilotClusterPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5689,6 +6337,9 @@ func TestAccContainerCluster_withAutopilotClusterPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5715,6 +6366,9 @@ func TestAccContainerCluster_withAutopilotClusterPolicy(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "autopilot_cluster_policy_config.0.no_unsafe_webhooks", "false"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "autopilot_cluster_policy_config.0.no_standard_node_pools", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -5771,6 +6425,9 @@ func TestAccContainerCluster_withShieldedNodes(t *testing.T) {
 				Config: testAccContainerCluster_withShieldedNodes(clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_shielded_nodes",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -5783,6 +6440,9 @@ func TestAccContainerCluster_withShieldedNodes(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_shielded_nodes", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_shielded_nodes",
@@ -5811,6 +6471,9 @@ func TestAccContainerCluster_withAutopilot(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_autopilot", "networking_mode", "VPC_NATIVE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot",
@@ -5846,6 +6509,9 @@ func TestAccContainerClusterCustomServiceAccount_withAutopilot(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_autopilot",
 						"cluster_autoscaling.0.auto_provisioning_defaults.0.oauth_scopes.0", "https://www.googleapis.com/auth/cloud-platform"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot",
@@ -5893,6 +6559,9 @@ func TestAccContainerCluster_withAutopilotNetworkTags(t *testing.T) {
 				Config: testAccContainerCluster_withAutopilot(pid, containerNetName, clusterName, "us-east1", true, true, ""),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5922,6 +6591,9 @@ func TestAccContainerCluster_withAutopilotKubeletConfig(t *testing.T) {
 				Config: testAccContainerCluster_withAutopilotKubeletConfigBaseline(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot_kubelet_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5936,6 +6608,9 @@ func TestAccContainerCluster_withAutopilotKubeletConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot_kubelet_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -5948,6 +6623,9 @@ func TestAccContainerCluster_withAutopilotKubeletConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_autopilot_kubelet_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot_kubelet_config",
@@ -5979,6 +6657,9 @@ func TestAccContainerCluster_withAutopilot_withNodePoolAutoConfig(t *testing.T) 
 				Config: testAccContainerCluster_withAutopilot_withNodePoolAutoConfig(clusterName, networkName, subnetworkName, "FALSE"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6003,6 +6684,9 @@ func TestAccContainerCluster_withStandard_withNodePoolDefaults(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withStandard_withNodePoolDefaults(clusterName, networkName, subnetworkName, "FALSE"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6044,6 +6728,9 @@ func TestAccContainerCluster_withAutopilotResourceManagerTags(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6065,6 +6752,9 @@ func TestAccContainerCluster_withAutopilotResourceManagerTags(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6080,6 +6770,9 @@ func TestAccContainerCluster_withAutopilotResourceManagerTags(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					acctest.SleepTestCheckFunc(30 * time.Second),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot",
@@ -6108,6 +6801,9 @@ func TestAccContainerCluster_withWorkloadIdentityConfig(t *testing.T) {
 				Config: testAccContainerCluster_withWorkloadIdentityConfigEnabled(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_workload_identity_config",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6122,6 +6818,9 @@ func TestAccContainerCluster_withWorkloadIdentityConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_workload_identity_config",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6134,6 +6833,9 @@ func TestAccContainerCluster_withWorkloadIdentityConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_workload_identity_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_workload_identity_config",
@@ -6162,6 +6864,9 @@ func TestAccContainerCluster_withWorkloadIdentityConfigAutopilot(t *testing.T) {
 				Config: testAccContainerCluster_withWorkloadIdentityConfigEnabledAutopilot(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_workload_identity_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6187,6 +6892,9 @@ func TestAccContainerCluster_withSecretManagerConfig(t *testing.T) {
 				Config: testAccContainerCluster_forSecretManagerConfig(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6199,6 +6907,9 @@ func TestAccContainerCluster_withSecretManagerConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6215,6 +6926,9 @@ func TestAccContainerCluster_withSecretManagerConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6229,6 +6943,9 @@ func TestAccContainerCluster_withSecretManagerConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6241,6 +6958,9 @@ func TestAccContainerCluster_withSecretManagerConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6268,6 +6988,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 				Config: testAccContainerCluster_forSecretSyncConfig(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6280,6 +7003,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6296,6 +7022,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6308,6 +7037,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6324,6 +7056,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6336,6 +7071,9 @@ func TestAccContainerCluster_withSecretSyncConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -6363,6 +7101,9 @@ func TestAccContainerCluster_withLoggingConfig(t *testing.T) {
 				Config: testAccContainerCluster_basicWithMinGKEVersion(clusterName, networkName, subnetworkName, minVersion),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.primary",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6375,6 +7116,9 @@ func TestAccContainerCluster_withLoggingConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.primary",
@@ -6391,6 +7135,9 @@ func TestAccContainerCluster_withLoggingConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.primary",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6405,6 +7152,9 @@ func TestAccContainerCluster_withLoggingConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.primary",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6417,6 +7167,9 @@ func TestAccContainerCluster_withLoggingConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.primary",
@@ -6441,6 +7194,9 @@ func TestAccContainerCluster_withMonitoringConfigAdvancedDatapathObservabilityCo
 				Config: testAccContainerCluster_withMonitoringConfigAdvancedDatapathObservabilityConfigEnabled(clusterName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6453,6 +7209,9 @@ func TestAccContainerCluster_withMonitoringConfigAdvancedDatapathObservabilityCo
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -6479,6 +7238,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				Config: testAccContainerCluster_basic(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6491,6 +7253,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -6507,6 +7272,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6521,6 +7289,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6533,6 +7304,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -6552,6 +7326,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6569,6 +7346,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6582,6 +7362,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -6598,6 +7381,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6612,6 +7398,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -6624,6 +7413,9 @@ func TestAccContainerCluster_withMonitoringConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -6650,6 +7442,9 @@ func TestAccContainerCluster_withSoleTenantGroup(t *testing.T) {
 				Config: testAccContainerCluster_withSoleTenantGroup(resourceName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.primary",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -6674,6 +7469,9 @@ func TestAccContainerCluster_withAutoscalingProfile(t *testing.T) {
 				Config: testAccContainerCluster_withAutoscalingProfile(clusterName, "BALANCED", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.autoscaling_with_profile",
 				ImportStateIdPrefix: "us-east1-b/",
 				ImportState:         true,
@@ -6687,6 +7485,9 @@ func TestAccContainerCluster_withAutoscalingProfile(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.autoscaling_with_profile", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.autoscaling_with_profile",
@@ -6743,6 +7544,9 @@ func TestAccContainerCluster_sharedVpc(t *testing.T) {
 				Config: testAccContainerCluster_sharedVpc(org, billingId, projectName, clusterName, suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.shared_vpc_cluster",
 				ImportStateId: fmt.Sprintf("%s-service/us-east1-b/%s", projectName, clusterName),
 				ImportState:		 true,
@@ -6769,6 +7573,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEnabledBool(t *testing.T) {
 				Config: testAccContainerCluster_withBinaryAuthorizationEnabledBool(clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_enabled_bool",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -6781,6 +7588,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEnabledBool(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_binary_authorization_enabled_bool", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_enabled_bool",
@@ -6808,6 +7618,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEvaluationModeAutopilot(t *t
 				Config: testAccContainerCluster_withBinaryAuthorizationEvaluationMode(clusterName, true, "PROJECT_SINGLETON_POLICY_ENFORCE", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_evaluation_mode",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -6820,6 +7633,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEvaluationModeAutopilot(t *t
 						plancheck.ExpectResourceAction("google_container_cluster.with_binary_authorization_evaluation_mode", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_evaluation_mode",
@@ -6847,6 +7663,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEvaluationModeClassic(t *tes
 				Config: testAccContainerCluster_withBinaryAuthorizationEvaluationMode(clusterName, false, "PROJECT_SINGLETON_POLICY_ENFORCE", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_evaluation_mode",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -6859,6 +7678,9 @@ func TestAccContainerCluster_withBinaryAuthorizationEvaluationModeClassic(t *tes
 						plancheck.ExpectResourceAction("google_container_cluster.with_binary_authorization_evaluation_mode", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_binary_authorization_evaluation_mode",
@@ -6883,6 +7705,9 @@ func TestAccContainerCluster_withFlexiblePodCIDR(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withFlexiblePodCIDR(containerNetName, clusterName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		 "google_container_cluster.with_flexible_cidr",
@@ -6911,6 +7736,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsDiskSizeGb(t *testing.T
 				Config: testAccContainerCluster_autoprovisioningDefaultsDiskSizeGb(clusterName, networkName, subnetworkName, includeDiskSizeGb),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6923,6 +7751,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsDiskSizeGb(t *testing.T
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
@@ -6951,6 +7782,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsDiskType(t *testing.T) 
 				Config: testAccContainerCluster_autoprovisioningDefaultsDiskType(clusterName, networkName, subnetworkName, includeDiskType),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6963,6 +7797,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsDiskType(t *testing.T) 
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
@@ -6991,6 +7828,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsImageType(t *testing.T)
 				Config: testAccContainerCluster_autoprovisioningDefaultsImageType(clusterName, networkName, subnetworkName, includeImageType),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7003,6 +7843,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsImageType(t *testing.T)
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning",
@@ -7038,6 +7881,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsBootDiskKmsKey(t *testi
 				Config: testAccContainerCluster_autoprovisioningDefaultsBootDiskKmsKey(clusterName, bootstrapped.CryptoKey.Name, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.nap_boot_disk_kms_key",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7067,6 +7913,9 @@ func TestAccContainerCluster_nodeAutoprovisioningDefaultsShieldedInstance(t *tes
 				Config: testAccContainerCluster_autoprovisioningDefaultsShieldedInstance(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.nap_shielded_instance",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7092,6 +7941,9 @@ func TestAccContainerCluster_autoprovisioningDefaultsManagement(t *testing.T) {
 				Config: testAccContainerCluster_autoprovisioningDefaultsManagement(clusterName, networkName, subnetworkName, true, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning_management",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7104,6 +7956,9 @@ func TestAccContainerCluster_autoprovisioningDefaultsManagement(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_autoprovisioning_management", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning_management",
@@ -7141,6 +7996,9 @@ func TestAccContainerCluster_autoprovisioningLocations(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning_locations",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7163,6 +8021,9 @@ func TestAccContainerCluster_autoprovisioningLocations(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.with_autoprovisioning_locations",
 						"cluster_autoscaling.0.auto_provisioning_locations.1", "us-east1-d"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autoprovisioning_locations",
@@ -7211,6 +8072,9 @@ func TestAccContainerCluster_errorCleanDanglingCluster(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withInitialCIDR(containerNetName, clusterName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:		     "google_container_cluster.cidr_error_preempt",
@@ -7279,6 +8143,9 @@ func TestAccContainerCluster_withExternalIpsConfig(t *testing.T) {
 				Config: testAccContainerCluster_withExternalIpsConfig(pid, clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_external_ips_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7291,6 +8158,9 @@ func TestAccContainerCluster_withExternalIpsConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_external_ips_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_external_ips_config",
@@ -7319,6 +8189,9 @@ func TestAccContainerCluster_withMeshCertificatesConfig(t *testing.T) {
 				Config: testAccContainerCluster_withMeshCertificatesConfigEnabled(pid, clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_mesh_certificates_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7333,6 +8206,9 @@ func TestAccContainerCluster_withMeshCertificatesConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_mesh_certificates_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7345,6 +8221,9 @@ func TestAccContainerCluster_withMeshCertificatesConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_mesh_certificates_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_mesh_certificates_config",
@@ -7373,6 +8252,9 @@ func TestAccContainerCluster_withCostManagementConfig(t *testing.T) {
 				Config: testAccContainerCluster_updateCostManagementConfig(pid, clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_cost_management_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -7385,6 +8267,9 @@ func TestAccContainerCluster_withCostManagementConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_cost_management_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_cost_management_config",
@@ -7420,6 +8305,9 @@ func TestAccContainerCluster_withDatabaseEncryption(t *testing.T) {
 				Check:  resource.TestCheckResourceAttrSet("data.google_kms_key_ring_iam_policy.test_key_ring_iam_policy", "policy_data"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.primary",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -7432,6 +8320,9 @@ func TestAccContainerCluster_withDatabaseEncryption(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.primary",
@@ -7457,6 +8348,9 @@ func TestAccContainerCluster_withAdvancedDatapath(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withDatapathProvider(clusterName, "ADVANCED_DATAPATH", networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.primary",
@@ -7486,6 +8380,9 @@ func TestAccContainerCluster_dataplaneOptimizationMode(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "datapath_provider", "ADVANCED_DATAPATH"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "dataplane_optimization_mode", "SCALE_OPTIMIZED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -7549,6 +8446,9 @@ func TestAccContainerCluster_enableCiliumPolicies(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7566,6 +8466,9 @@ func TestAccContainerCluster_enableCiliumPolicies(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7581,6 +8484,9 @@ func TestAccContainerCluster_enableCiliumPolicies(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "enable_cilium_clusterwide_network_policy", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -7612,6 +8518,9 @@ func TestAccContainerCluster_enableCiliumPolicies_withAutopilot(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7627,6 +8536,9 @@ func TestAccContainerCluster_enableCiliumPolicies_withAutopilot(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_autopilot", "enable_cilium_clusterwide_network_policy", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot",
@@ -7656,6 +8568,9 @@ func TestAccContainerCluster_withResourceUsageExportConfig(t *testing.T) {
 				Config: testAccContainerCluster_withResourceUsageExportConfig(clusterName, datesetId, "true", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_resource_usage_export_config",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -7670,6 +8585,9 @@ func TestAccContainerCluster_withResourceUsageExportConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:        "google_container_cluster.with_resource_usage_export_config",
 				ImportState:         true,
 				ImportStateVerify:   true,
@@ -7682,6 +8600,9 @@ func TestAccContainerCluster_withResourceUsageExportConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_resource_usage_export_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:        "google_container_cluster.with_resource_usage_export_config",
@@ -7711,6 +8632,9 @@ func TestAccContainerCluster_withMasterAuthorizedNetworksDisabled(t *testing.T) 
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:		 "google_container_cluster.with_private_cluster",
 				ImportState:		 true,
 				ImportStateVerify:	 true,
@@ -7735,6 +8659,9 @@ func TestAccContainerCluster_withEnableKubernetesAlpha(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withEnableKubernetesAlpha(clusterName, npName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -7762,6 +8689,9 @@ func TestAccContainerCluster_withEnableKubernetesBetaAPIs(t *testing.T) {
 				Config: testAccContainerCluster_withEnableKubernetesBetaAPIs(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7787,6 +8717,9 @@ func TestAccContainerCluster_withEnableKubernetesBetaAPIsOnExistingCluster(t *te
 				Config: testAccContainerCluster_withoutEnableKubernetesBetaAPIs(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7799,6 +8732,9 @@ func TestAccContainerCluster_withEnableKubernetesBetaAPIsOnExistingCluster(t *te
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -7847,6 +8783,9 @@ func TestAccContainerCluster_withDNSConfig(t *testing.T) {
 				Config: testAccContainerCluster_basic(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7859,6 +8798,9 @@ func TestAccContainerCluster_withDNSConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -7893,6 +8835,9 @@ func TestAccContainerCluster_withGatewayApiConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -7905,6 +8850,9 @@ func TestAccContainerCluster_withGatewayApiConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -7935,6 +8883,9 @@ func TestAccContainerCluster_withTPUConfig(t *testing.T) {
 				Config: testAccContainerCluster_withTPUConfig(containerNetName, clusterName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_tpu_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -7961,6 +8912,9 @@ func TestAccContainerCluster_withProtectConfig(t *testing.T) {
 				Config: testAccContainerCluster_withProtectConfig(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -7973,6 +8927,9 @@ func TestAccContainerCluster_withProtectConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8001,6 +8958,9 @@ func TestAccContainerCluster_withSecurityPostureConfig(t *testing.T) {
 				Config: testAccContainerCluster_SetSecurityPostureToStandard(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_security_posture_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8013,6 +8973,9 @@ func TestAccContainerCluster_withSecurityPostureConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_security_posture_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_security_posture_config",
@@ -8029,6 +8992,9 @@ func TestAccContainerCluster_withSecurityPostureConfig(t *testing.T) {
 			 	},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_security_posture_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8043,6 +9009,9 @@ func TestAccContainerCluster_withSecurityPostureConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 			 	ResourceName:      "google_container_cluster.with_security_posture_config",
 			 	ImportState:       true,
 			 	ImportStateVerify: true,
@@ -8055,6 +9024,9 @@ func TestAccContainerCluster_withSecurityPostureConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_security_posture_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_security_posture_config",
@@ -8083,6 +9055,9 @@ func TestAccContainerCluster_withFleetConfig(t *testing.T) {
 				Config: testAccContainerCluster_withFleetConfig(clusterName, projectID, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8102,6 +9077,9 @@ func TestAccContainerCluster_withFleetConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8116,6 +9094,9 @@ func TestAccContainerCluster_withFleetConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8128,6 +9109,9 @@ func TestAccContainerCluster_withFleetConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -8156,6 +9140,9 @@ func TestAccContainerCluster_withWorkloadALTSConfig(t *testing.T) {
 				Config: testAccContainerCluster_withWorkloadALTSConfig(pid, networkName, subnetworkName, clusterName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_workload_alts_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8170,6 +9157,9 @@ func TestAccContainerCluster_withWorkloadALTSConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_workload_alts_config", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_workload_alts_config",
@@ -8197,6 +9187,9 @@ func TestAccContainerCluster_withWorkloadALTSConfigAutopilot(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withWorkloadALTSConfigAutopilot(pid, clusterName, networkName, subnetworkName, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_workload_alts_config",
@@ -8231,6 +9224,9 @@ func TestAccContainerCluster_withScheduleUpgradeConfig(t *testing.T) {
 					"google_container_cluster.with_schedule_upgrade_config", "schedule_upgrade_config.0.enabled", "true"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_schedule_upgrade_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8241,6 +9237,9 @@ func TestAccContainerCluster_withScheduleUpgradeConfig(t *testing.T) {
 				Config: testAccContainerCluster_withScheduleUpgradeConfig(networkName, subnetworkName, clusterName, false),
 				Check: resource.TestCheckResourceAttr(
 					"google_container_cluster.with_schedule_upgrade_config", "schedule_upgrade_config.0.enabled", "false"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_schedule_upgrade_config",
@@ -8491,6 +9490,9 @@ func TestAccContainerCluster_WithCPAFeatures(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_EnableCPAFeatures(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_cpa_features",
@@ -8759,6 +9761,9 @@ func TestAccContainerCluster_kubeDns_minimal(t *testing.T) {
 				Config: testAccContainerCluster_withDNSConfig(clusterName, "KUBE_DNS", "", "", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -8781,6 +9786,9 @@ func TestAccContainerCluster_autopilot_minimal(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_autopilot_minimal(clusterName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -8808,6 +9816,9 @@ func TestAccContainerCluster_autopilot_withDNSConfig(t *testing.T) {
 				Config: testAccContainerCluster_withAdvancedDNSConfig(clusterName, networkName, subnetworkName, false, false, ""),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8820,6 +9831,9 @@ func TestAccContainerCluster_autopilot_withDNSConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8836,6 +9850,9 @@ func TestAccContainerCluster_autopilot_withDNSConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8848,6 +9865,9 @@ func TestAccContainerCluster_autopilot_withDNSConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8879,6 +9899,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPC(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8894,6 +9917,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPC(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "dns_config.0.additive_vpc_scope_dns_domain", domain),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8913,6 +9939,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPC(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8928,6 +9957,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPC(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "dns_config.0.additive_vpc_scope_dns_domain", domain),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8955,6 +9987,9 @@ func TestAccContainerCluster_cloudDns_nil_scope(t *testing.T) {
 				Config: testAccContainerCluster_withDNSConfig(clusterName, "CLOUD_DNS", "", "", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -8967,6 +10002,9 @@ func TestAccContainerCluster_cloudDns_nil_scope(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -8994,6 +10032,9 @@ func TestAccContainerCluster_dnsConfig_providerUnspecified(t *testing.T) {
 				Config: testAccContainerCluster_withDNSConfig(clusterName, "", "", "", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9006,6 +10047,9 @@ func TestAccContainerCluster_dnsConfig_providerUnspecified(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9022,6 +10066,9 @@ func TestAccContainerCluster_dnsConfig_providerUnspecified(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9034,6 +10081,9 @@ func TestAccContainerCluster_dnsConfig_providerUnspecified(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9066,6 +10116,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPCMutation(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9079,6 +10132,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPCMutation(t *testing.T) {
 				ConfigPlanChecks: resource.ConfigPlanChecks{PreApply: []plancheck.PlanCheck{plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionReplace)}},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9090,6 +10146,9 @@ func TestAccContainerCluster_autopilot_withAdditiveVPCMutation(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "dns_config.0.additive_vpc_scope_dns_domain", ""),
 				),
 				ConfigPlanChecks: resource.ConfigPlanChecks{PreApply: []plancheck.PlanCheck{plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionReplace)}},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9117,6 +10176,9 @@ func TestAccContainerCluster_autopilot_net_admin(t *testing.T) {
 				Config: testAccContainerCluster_autopilot_net_admin(clusterName, networkName, subnetworkName, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9131,6 +10193,9 @@ func TestAccContainerCluster_autopilot_net_admin(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9143,6 +10208,9 @@ func TestAccContainerCluster_autopilot_net_admin(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -9181,6 +10249,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 				Config: testAccContainerCluster_autopilot_privileged_admission(clusterName, networkName, subnetworkName, []string{"gke://test-path/*"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9188,6 +10259,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 			},
 			{
 				Config: testAccContainerCluster_autopilot_privileged_admission(clusterName, networkName, subnetworkName, []string{""}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9199,6 +10273,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 				Config: testAccContainerCluster_autopilot_privileged_admission(clusterName, networkName, subnetworkName, []string{"gke://*"}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9206,6 +10283,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 			},
 			{
 				Config: testAccContainerCluster_autopilot_privileged_admission(clusterName, networkName, subnetworkName, []string{"gke://test-path-a/*"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9221,6 +10301,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -9228,6 +10311,9 @@ func TestAccContainerCluster_autopilot_privileged_admission(t *testing.T) {
 			},
 			{
 				Config: testAccContainerCluster_autopilot_privileged_admission(clusterName, networkName, subnetworkName, []string{"gke://test-path-b/*"}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -9252,6 +10338,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_create(t *testing.T
 				Config: testAccContainerCluster_additional_pod_ranges_config(clusterName, 1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9274,6 +10363,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_update(t *testing.T
 				Config: testAccContainerCluster_additional_pod_ranges_config(clusterName, 0),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9288,6 +10380,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_update(t *testing.T
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9300,6 +10395,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_update(t *testing.T
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -9316,6 +10414,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_update(t *testing.T
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9328,6 +10429,9 @@ func TestAccContainerCluster_additional_pod_ranges_config_on_update(t *testing.T
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -9354,6 +10458,9 @@ func TestAccContainerCluster_withCpuCfsQuotaPool(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withCpuCfsQuotaPool(clusterName, npName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_kubelet_config",
@@ -9394,6 +10501,9 @@ func TestAccContainerCluster_network_tier_config(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9408,6 +10518,9 @@ func TestAccContainerCluster_network_tier_config(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -9420,6 +10533,9 @@ func TestAccContainerCluster_network_tier_config(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -10710,6 +11826,9 @@ func TestAccContainerCluster_withPrivateEndpointSubnetwork(t *testing.T) {
 				Config: testAccContainerCluster_withPrivateEndpointSubnetwork(containerNetName, clusterName, subnet1Name, subnet1Cidr, subnet2Name, subnet2Cidr),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:				"google_container_cluster.with_private_endpoint_subnetwork",
 				ImportState:				true,
 				ImportStateVerify:			true,
@@ -10778,6 +11897,9 @@ func TestAccContainerCluster_withPrivateClusterConfigPrivateEndpointSubnetwork(t
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withPrivateClusterConfigPrivateEndpointSubnetwork(containerNetName, clusterName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_private_endpoint_subnetwork",
@@ -10855,6 +11977,9 @@ func TestAccContainerCluster_withCidrBlockWithoutPrivateEndpointSubnetwork(t *te
 				Config: testAccContainerCluster_withCidrBlockWithoutPrivateEndpointSubnetwork(containerNetName, clusterName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:				"google_container_cluster.with_private_flexible_cluster",
 				ImportState:				true,
 				ImportStateVerify:			true,
@@ -10920,6 +12045,9 @@ func TestAccContainerCluster_withEnablePrivateEndpointToggle(t *testing.T) {
 				Config: testAccContainerCluster_withEnablePrivateEndpoint(clusterName, "true", networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_enable_private_endpoint",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -10932,6 +12060,9 @@ func TestAccContainerCluster_withEnablePrivateEndpointToggle(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_enable_private_endpoint", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_enable_private_endpoint",
@@ -15870,6 +17001,9 @@ func TestAccContainerCluster_customPlacementPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -16020,6 +17154,9 @@ func TestAccContainerCluster_withConfidentialBootDisk(t *testing.T) {
 				Config: testAccContainerCluster_withConfidentialBootDisk(clusterName, npName, bootstrapped.CryptoKey.Name, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_confidential_boot_disk",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -16086,6 +17223,9 @@ func TestAccContainerCluster_withConfidentialBootDiskNodeConfig(t *testing.T) {
 				Config: testAccContainerCluster_withConfidentialBootDiskNodeConfig(clusterName, bootstrapped.CryptoKey.Name, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_confidential_boot_disk_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -16140,6 +17280,9 @@ func TestAccContainerCluster_withoutConfidentialBootDisk(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withoutConfidentialBootDisk(clusterName, npName, networkName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.without_confidential_boot_disk",
@@ -16851,6 +17994,9 @@ func TestAccContainerCluster_privateRegistry(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -16915,6 +18061,9 @@ func TestAccContainerCluster_privateRegistry(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -16929,6 +18078,9 @@ func TestAccContainerCluster_privateRegistry(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -17176,6 +18328,9 @@ func TestAccContainerCluster_registryHosts(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17226,6 +18381,9 @@ func TestAccContainerCluster_registryHosts(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17240,6 +18398,9 @@ func TestAccContainerCluster_registryHosts(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -17498,6 +18659,9 @@ func TestAccContainerCluster_writableCgroups(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17520,6 +18684,9 @@ func TestAccContainerCluster_writableCgroups(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17535,6 +18702,9 @@ func TestAccContainerCluster_writableCgroups(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionReplace),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -17663,6 +18833,9 @@ func TestAccContainerCluster_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17689,6 +18862,9 @@ func TestAccContainerCluster_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17713,6 +18889,9 @@ func TestAccContainerCluster_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17730,6 +18909,9 @@ func TestAccContainerCluster_withProviderDefaultLabels(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "terraform_labels.%", "1"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "effective_labels.%", "1"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -17836,6 +19018,9 @@ func TestAccContainerCluster_storagePoolsWithNodePool(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.storage_pools_with_node_pool",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17892,6 +19077,9 @@ func TestAccContainerCluster_storagePoolsWithNodeConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.storage_pools_with_node_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17907,6 +19095,9 @@ func TestAccContainerCluster_storagePoolsWithNodeConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.storage_pools_with_node_config", "node_config.0.storage_pools.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.storage_pools_with_node_config",
@@ -17984,6 +19175,9 @@ func TestAccContainerCluster_withAutopilotGcpFilestoreCsiDriver(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_autopilot_gcp_filestore",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -17996,6 +19190,9 @@ func TestAccContainerCluster_withAutopilotGcpFilestoreCsiDriver(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_autopilot_gcp_filestore", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_autopilot_gcp_filestore",
@@ -18064,6 +19261,9 @@ func TestAccContainerCluster_withDnsEndpoint(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -18084,6 +19284,9 @@ func TestAccContainerCluster_withDnsEndpoint(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -18102,6 +19305,9 @@ func TestAccContainerCluster_withDnsEndpoint(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "control_plane_endpoints_config.0.dns_endpoint_config.0.enable_k8s_tokens_via_dns", "false"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "control_plane_endpoints_config.0.dns_endpoint_config.0.enable_k8s_certs_via_dns", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -18148,6 +19354,9 @@ func TestAccContainerCluster_withCgroupModeUpdate(t *testing.T) {
 				Config: testAccContainerCluster_autopilot_minimal(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -18164,6 +19373,9 @@ func TestAccContainerCluster_withCgroupModeUpdate(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_pool_auto_config.0.linux_node_config.0.cgroup_mode"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool_auto_config.0.linux_node_config.0.cgroup_mode", "CGROUP_MODE_V2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -18209,6 +19421,9 @@ func TestAccContainerCluster_withEnterpriseConfig(t *testing.T) {
 				Config: testAccContainerCluster_updateEnterpriseConfig(pid, clusterName, networkName, subnetworkName, "STANDARD"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_enterprise_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18223,6 +19438,9 @@ func TestAccContainerCluster_withEnterpriseConfig(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_enterprise_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18235,6 +19453,9 @@ func TestAccContainerCluster_withEnterpriseConfig(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_enterprise_config", plancheck.ResourceActionNoop),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_enterprise_config",
@@ -18301,6 +19522,9 @@ func TestAccContainerCluster_disableControlPlaneIP(t *testing.T) {
         Config: testAccContainerCluster_basic(clusterName, networkName, subnetworkName),
       },
       {
+        RefreshState: true,
+      },
+      {
         ResourceName:      "google_container_cluster.primary",
         ImportState:       true,
         ImportStateVerify: true,
@@ -18313,6 +19537,9 @@ func TestAccContainerCluster_disableControlPlaneIP(t *testing.T) {
         		plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
         	},
         },
+      },
+      {
+        RefreshState: true,
       },
       {
         ResourceName:      "google_container_cluster.primary",
@@ -18332,6 +19559,9 @@ func TestAccContainerCluster_disableControlPlaneIP(t *testing.T) {
         		plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionNoop),
         	},
         },
+      },
+      {
+        RefreshState: true,
       },
       {
         ResourceName:      "google_container_cluster.primary",
@@ -18414,6 +19644,9 @@ func TestAccContainerCluster_withAdvancedMachineFeaturesPMU_Standard(t *testing.
 				Config: testAccContainerCluster_withAdvancedMachineFeaturesPMU(clusterName, networkName, subnetworkName, "STANDARD"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            clusterResourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -18439,6 +19672,9 @@ func TestAccContainerCluster_withAdvancedMachineFeaturesPMU_Architectural(t *tes
 		Steps: []resource.TestStep{
 			{
 				Config: testAccContainerCluster_withAdvancedMachineFeaturesPMU(clusterName, networkName, subnetworkName, "ARCHITECTURAL"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            clusterResourceName,
@@ -18603,6 +19839,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 				Config: testAccContainerCluster_additional_ip_ranges_config(clusterName, network, sri, false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18616,6 +19855,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -18632,6 +19874,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18644,6 +19889,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -18660,6 +19908,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18674,6 +19925,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18686,6 +19940,9 @@ func TestAccContainerCluster_additional_ip_ranges_config_on_update(t *testing.T)
 						plancheck.ExpectResourceAction("google_container_cluster.primary", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -18716,6 +19973,9 @@ func TestAccContainerCluster_auto_ipam_config_enabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName: "google_container_cluster.primary",
 				ImportState: true,
 				ImportStateVerify: true,
@@ -18733,6 +19993,9 @@ func TestAccContainerCluster_auto_ipam_config_enabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName: "google_container_cluster.primary",
 				ImportState: true,
 				ImportStateVerify: true,
@@ -18748,6 +20011,9 @@ func TestAccContainerCluster_auto_ipam_config_enabled(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "ip_allocation_policy.0.auto_ipam_config.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName: "google_container_cluster.primary",
@@ -18798,6 +20064,9 @@ func TestAccContainerCluster_withAnonymousAuthenticationConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -18813,6 +20082,9 @@ func TestAccContainerCluster_withAnonymousAuthenticationConfig(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "anonymous_authentication_config.0.mode", "ENABLED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -18975,6 +20247,9 @@ func TestAccContainerCluster_WithCPAFeaturesUpdate(t *testing.T) {
 				Config: testAccContainerCluster_EnableCPAFeaturesWithSAkeys(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_cpa_features",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -18987,6 +20262,9 @@ func TestAccContainerCluster_WithCPAFeaturesUpdate(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.with_cpa_features", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_cpa_features",
@@ -19043,6 +20321,9 @@ func TestAccContainerCluster_RbacBindingConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -19060,6 +20341,9 @@ func TestAccContainerCluster_RbacBindingConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "rbac_binding_config.0.enable_insecure_binding_system_unauthenticated", "false"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "rbac_binding_config.0.enable_insecure_binding_system_authenticated", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -19121,6 +20405,9 @@ func TestAccContainerCluster_withKubeletResourceManagerConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.with_kubelet_config",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19147,6 +20434,9 @@ func TestAccContainerCluster_withKubeletResourceManagerConfig(t *testing.T) {
 						"google_container_cluster.with_kubelet_config",
 						"node_config.0.kubelet_config.0.topology_manager.0.scope", "container"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.with_kubelet_config",
@@ -19311,6 +20601,9 @@ func TestAccContainerCluster_guestAcceleratorSubconfigUpdate(t *testing.T) {
 				Config: testAccContainerCluster_guestAcceleratorSubconfig(clusterName, networkName, subnetworkName, "DEFAULT", 2),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19329,6 +20622,9 @@ func TestAccContainerCluster_guestAcceleratorSubconfigUpdate(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.guest_accelerator.0.gpu_driver_installation_config.0.gpu_driver_version", "LATEST"),
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_config.0.guest_accelerator.0.gpu_sharing_config.0.max_shared_clients_per_gpu", "4"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -19385,6 +20681,9 @@ func TestAccContainerCluster_nodePoolGuestAcceleratorSubconfigUpdate(t *testing.
 				Config: testAccContainerCluster_nodePoolGuestAcceleratorSubconfig(clusterName, networkName, subnetworkName, 2),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19401,6 +20700,9 @@ func TestAccContainerCluster_nodePoolGuestAcceleratorSubconfigUpdate(t *testing.
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_pool.0.node_config.0.guest_accelerator.0.gpu_sharing_config.0.max_shared_clients_per_gpu", "4"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -19695,6 +20997,9 @@ func TestAccContainerCluster_nodePool_acceleratorNetworkProfile_Lifecycle(t *tes
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19713,6 +21018,9 @@ func TestAccContainerCluster_nodePool_acceleratorNetworkProfile_Lifecycle(t *tes
 					resource.TestCheckResourceAttr(resourceName, "node_pool.0.network_config.0.additional_node_network_configs.#", "0"),
 					resource.TestCheckResourceAttr(resourceName, "node_pool.0.network_config.0.accelerator_network_profile", ""),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -19734,6 +21042,9 @@ func TestAccContainerCluster_nodePool_acceleratorNetworkProfile_Lifecycle(t *tes
 					resource.TestCheckResourceAttrSet(resourceName, "node_pool.0.network_config.0.additional_node_network_configs.0.network"),
 					resource.TestCheckResourceAttrSet(resourceName, "node_pool.0.network_config.0.additional_node_network_configs.0.subnetwork"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -19764,6 +21075,9 @@ func TestAccContainerCluster_bestEffortProvisioning(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19789,6 +21103,9 @@ func TestAccContainerCluster_withClusterBootDisk(t *testing.T) {
 				Config: testAccContainerCluster_withClusterBootDisk(cluster, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.cluster",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -19801,6 +21118,9 @@ func TestAccContainerCluster_withClusterBootDisk(t *testing.T) {
 						plancheck.ExpectResourceAction("google_container_cluster.cluster", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.cluster",
@@ -19889,6 +21209,9 @@ func TestAccContainerCluster_withMultiNicNetworkConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.cluster",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -19904,6 +21227,9 @@ func TestAccContainerCluster_withMultiNicNetworkConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "enable_multi_networking", "false"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.cluster",
@@ -20143,6 +21469,9 @@ func TestAccContainerCluster_custom_subnet(t *testing.T) {
 				Config: testAccContainerCluster_custom_subnet(clusterName, network, sri),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -20260,6 +21589,9 @@ func TestAccContainerCluster_withNodeCreationConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -20275,6 +21607,9 @@ func TestAccContainerCluster_withNodeCreationConfig(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "node_creation_config.0.node_creation_mode", "VIA_KUBELET"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -20307,6 +21642,9 @@ func TestAccContainerCluster_withCustomNodeInitGcs(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -20337,6 +21675,9 @@ func TestAccContainerCluster_withCustomNodeInitSecret(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcp_secret_manager_secret_uri"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -20372,6 +21713,9 @@ func TestAccContainerCluster_withCustomNodeInitInline(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_pool.0.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcs_generation"),
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "node_pool.1.node_config.0.linux_node_config.0.custom_node_init.0.init_script.0.gcp_secret_manager_secret_uri"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.primary",
@@ -20623,6 +21967,9 @@ func TestAccContainerCluster_withSlurmOperatorConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_slurm_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -20640,6 +21987,9 @@ func TestAccContainerCluster_withSlurmOperatorConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_slurm_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -20655,6 +22005,9 @@ func TestAccContainerCluster_withSlurmOperatorConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_slurm_config", "addons_config.0.slurm_operator_config.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_slurm_config",
@@ -20710,6 +22063,9 @@ func TestAccContainerCluster_withTaintConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.cluster",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -20727,6 +22083,9 @@ func TestAccContainerCluster_withTaintConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_config.0.taint_config.0.architecture_taint_behavior", "NONE"),
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_config.0.effective_taints.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.cluster",
@@ -20749,6 +22108,9 @@ func TestAccContainerCluster_withTaintConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_config.0.effective_taints.0.value", "arm64"),
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_config.0.effective_taints.0.effect", "NO_SCHEDULE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.cluster",
@@ -20846,6 +22208,9 @@ func TestAccContainerCluster_withNodePoolTaintConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.cluster",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -20875,6 +22240,9 @@ func TestAccContainerCluster_withNodePoolTaintConfig_none(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_pool.0.node_config.0.taint_config.0.architecture_taint_behavior", "NONE"),
 					resource.TestCheckResourceAttr("google_container_cluster.cluster", "node_pool.0.node_config.0.effective_taints.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.cluster",
@@ -20997,6 +22365,9 @@ func TestAccContainerCluster_desiredEmulatedVersion(t *testing.T) {
 				Config: testAccContainerCluster_desiredEmulatedVersionBase(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -21014,6 +22385,9 @@ func TestAccContainerCluster_desiredEmulatedVersion(t *testing.T) {
 					// Assert that the computed emulated_version field is populated in state during soak
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "emulated_version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -21034,6 +22408,9 @@ func TestAccContainerCluster_desiredEmulatedVersion(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "emulated_version", ""),
 					testAccCheckContainerClusterEmulatedVersion(t, "google_container_cluster.primary"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -21241,6 +22618,9 @@ func TestAccContainerCluster_desiredEmulatedVersionAutopilot(t *testing.T) {
 				Config: testAccContainerCluster_desiredEmulatedVersionAutopilotBase(clusterName, networkName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_container_cluster.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -21258,6 +22638,9 @@ func TestAccContainerCluster_desiredEmulatedVersionAutopilot(t *testing.T) {
 					// Assert that the computed emulated_version field is populated in state during soak
 					resource.TestCheckResourceAttrSet("google_container_cluster.primary", "emulated_version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -21278,6 +22661,9 @@ func TestAccContainerCluster_desiredEmulatedVersionAutopilot(t *testing.T) {
 					resource.TestCheckResourceAttr("google_container_cluster.primary", "emulated_version", ""),
 					testAccCheckContainerClusterEmulatedVersion(t, "google_container_cluster.primary"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_container_cluster.primary",
@@ -21444,6 +22830,9 @@ func TestAccContainerCluster_withNodeReadinessConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_nrc_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -21461,6 +22850,9 @@ func TestAccContainerCluster_withNodeReadinessConfig(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_cluster.with_nrc_config",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -21476,6 +22868,9 @@ func TestAccContainerCluster_withNodeReadinessConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_nrc_config", "addons_config.0.node_readiness_config.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_nrc_config",
@@ -21523,6 +22918,9 @@ func TestAccContainerCluster_withHighScaleCheckpointingConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_container_cluster.with_hsc_config", "addons_config.0.high_scale_checkpointing_config.0.enabled", "true"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_cluster.with_hsc_config",
@@ -21593,6 +22991,9 @@ func TestAccContainerCluster_nodePoolAdditionalNodeNetworkConfigsStackType(t *te
 					resource.TestCheckResourceAttr(resourceName, "node_pool.0.network_config.0.additional_node_network_configs.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "node_pool.0.network_config.0.additional_node_network_configs.0.stack_type", "IPV6"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,

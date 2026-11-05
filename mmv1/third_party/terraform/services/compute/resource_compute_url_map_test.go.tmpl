@@ -203,12 +203,18 @@ func TestAccComputeUrlMap_defaultRouteActionTrafficDirectorPathUpdate(t *testing
         Config: testAccComputeUrlMap_defaultRouteActionTrafficDirectorPath(bsName, hcName, umName),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:      "google_compute_url_map.foobar",
         ImportState:       true,
         ImportStateVerify: true,
       },
       {
         Config: testAccComputeUrlMap_defaultRouteActionTrafficDirectorPathUpdate(bsName, hcName, umName),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:      "google_compute_url_map.foobar",
@@ -236,12 +242,18 @@ func TestAccComputeUrlMap_defaultRouteActionTrafficDirectorUpdate(t *testing.T) 
         Config: testAccComputeUrlMap_defaultRouteActionTrafficDirector(bsName, hcName, umName),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:      "google_compute_url_map.foobar",
         ImportState:       true,
         ImportStateVerify: true,
       },
       {
         Config: testAccComputeUrlMap_defaultRouteActionTrafficDirectorUpdate(bsName, hcName, umName),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:      "google_compute_url_map.foobar",
@@ -269,12 +281,18 @@ func TestAccComputeUrlMap_trafficDirectorUpdate(t *testing.T) {
 				Config: testAccComputeUrlMap_trafficDirector(bsName, hcName, umName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeUrlMap_trafficDirectorUpdate(bsName, hcName, umName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.foobar",
@@ -302,12 +320,18 @@ func TestAccComputeUrlMap_trafficDirectorPathUpdate(t *testing.T) {
 				Config: testAccComputeUrlMap_trafficDirectorPath(bsName, hcName, umName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeUrlMap_trafficDirectorPathUpdate(bsName, hcName, umName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.foobar",
@@ -335,12 +359,18 @@ func TestAccComputeUrlMap_trafficDirectorRemoveRouteRule(t *testing.T) {
 				Config: testAccComputeUrlMap_trafficDirector(bsName, hcName, umName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeUrlMap_trafficDirectorRemoveRouteRule(bsName, hcName, umName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.foobar",
@@ -362,6 +392,9 @@ func TestAccComputeUrlMap_defaultUrlRedirect(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeUrlMap_defaultUrlRedirectConfig(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.foobar",
@@ -389,6 +422,9 @@ func TestAccComputeUrlMap_urlMapCustomErrorResponsePolicyUpdate(t *testing.T) {
 				Config: testAccComputeUrlMap_urlMapCustomErrorResponsePolicy(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_url_map.urlmap",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -396,6 +432,9 @@ func TestAccComputeUrlMap_urlMapCustomErrorResponsePolicyUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccComputeUrlMap_urlMapCustomErrorResponsePolicyUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_url_map.urlmap",
@@ -423,12 +462,18 @@ func TestAccComputeUrlMap_routeRulesCustomErrorResponsePolicy(t *testing.T) {
 				Config: testAccComputeUrlMap_routeRulesCustomErrorResponsePolicy(randString),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.url_map",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeUrlMap_routeRulesCustomErrorResponsePolicyUpdated(randString),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.url_map",
@@ -454,6 +499,9 @@ func TestAccComputeUrlMap_cachePolicyMultiLevelUpdate(t *testing.T) {
 				Config: testAccComputeUrlMap_cachePolicyMultiLevel(randString),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.urlmap",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -465,6 +513,9 @@ func TestAccComputeUrlMap_cachePolicyMultiLevelUpdate(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_url_map.urlmap", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.urlmap",
@@ -490,6 +541,9 @@ func TestAccComputeUrlMap_dynamicCompressionPolicyMultiLevelUpdate(t *testing.T)
 				Config: testAccComputeUrlMap_dynamicCompressionPolicyMultiLevel(randString),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.urlmap",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -501,6 +555,9 @@ func TestAccComputeUrlMap_dynamicCompressionPolicyMultiLevelUpdate(t *testing.T)
 						plancheck.ExpectResourceAction("google_compute_url_map.urlmap", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.urlmap",
@@ -526,6 +583,9 @@ func TestAccComputeUrlMap_regexRewrite(t *testing.T) {
 				Config: testAccComputeUrlMap_regexRewrite(randString),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.urlmap",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -539,6 +599,9 @@ func TestAccComputeUrlMap_regexRewrite(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_url_map.urlmap",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -550,6 +613,9 @@ func TestAccComputeUrlMap_regexRewrite(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_url_map.urlmap", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_url_map.urlmap",

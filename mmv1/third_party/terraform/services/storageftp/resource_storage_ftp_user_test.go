@@ -34,6 +34,9 @@ func TestAccStorageFtpUser_updateMappingsAndCredentials(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_ftp_user.user_ftp",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -47,6 +50,9 @@ func TestAccStorageFtpUser_updateMappingsAndCredentials(t *testing.T) {
 						plancheck.ExpectResourceAction("google_storage_ftp_user.user_ftp", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_ftp_user.user_ftp",
@@ -78,6 +84,9 @@ func TestAccStorageFtpUser_forceNewOnUserIdChange(t *testing.T) {
 				Config: testAccStorageFtpUser_initial(bucketName, saName, serverId, userId1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_ftp_user.user_ftp",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -91,6 +100,9 @@ func TestAccStorageFtpUser_forceNewOnUserIdChange(t *testing.T) {
 						plancheck.ExpectResourceAction("google_storage_ftp_user.user_ftp", plancheck.ResourceActionDestroyBeforeCreate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_ftp_user.user_ftp",

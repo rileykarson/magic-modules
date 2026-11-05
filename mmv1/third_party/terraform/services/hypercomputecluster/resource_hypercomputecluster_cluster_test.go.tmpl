@@ -33,6 +33,9 @@ func TestAccHypercomputeclusterCluster_update(t *testing.T) {
 				Config: testAccHypercomputeclusterCluster_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_hypercomputecluster_cluster.cluster",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -48,6 +51,9 @@ func TestAccHypercomputeclusterCluster_update(t *testing.T) {
 						),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_hypercomputecluster_cluster.cluster",
@@ -81,6 +87,9 @@ func TestAccHypercomputeclusterCluster_existing(t *testing.T) {
 				Config: testAccHypercomputeclusterCluster_existing(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_hypercomputecluster_cluster.cluster",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -104,6 +113,9 @@ func TestAccHypercomputeclusterCluster_new(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccHypercomputeclusterCluster_new(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_hypercomputecluster_cluster.cluster",
@@ -672,6 +684,9 @@ func TestAccHypercomputeclusterCluster_inPlaceUpdates(t *testing.T) {
 					resource.TestCheckResourceAttr("google_hypercomputecluster_cluster.cluster", "orchestrator.0.slurm.0.node_sets.0.compute_instance.0.boot_disk.0.size_gb", "100"),
 					resource.TestCheckResourceAttr("google_hypercomputecluster_cluster.cluster", "orchestrator.0.slurm.0.node_sets.0.compute_instance.0.boot_disk.0.type", "pd-balanced"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_hypercomputecluster_cluster.cluster",

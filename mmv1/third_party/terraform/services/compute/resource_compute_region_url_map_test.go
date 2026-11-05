@@ -24,12 +24,18 @@ func TestAccComputeRegionUrlMap_headerAction(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_headerAction1(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_headerAction2(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -184,12 +190,18 @@ func TestAccComputeRegionUrlMap_update_path_matcher(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_basic1(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_basic2(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -214,12 +226,18 @@ func TestAccComputeRegionUrlMap_advanced(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_advanced1(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_advanced2(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -244,12 +262,18 @@ func TestAccComputeRegionUrlMap_noPathRulesWithUpdate(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_noPathRules(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_basic1(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -274,12 +298,18 @@ func TestAccComputeRegionUrlMap_ilbPathUpdate(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_ilbPath(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_ilbPathUpdate(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -304,12 +334,18 @@ func TestAccComputeRegionUrlMap_ilbRouteUpdate(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_ilbRoute(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionUrlMap_ilbRouteUpdate(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -334,6 +370,9 @@ func TestAccComputeRegionUrlMap_defaultUrlRedirect(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_defaultUrlRedirectConfig(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -354,6 +393,9 @@ func TestAccComputeRegionUrlMap_defaultUrlRedirectWithinPathMatcher(t *testing.T
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionUrlMap_defaultUrlRedirectWithinPathMatcherConfig(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -377,6 +419,9 @@ func TestAccComputeRegionUrlMap_defaultRouteAction_full_update(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionUrlMap_defaultRouteAction_full(randomSuffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",
@@ -1382,6 +1427,9 @@ func TestAccComputeRegionUrlMap_regexRewrite(t *testing.T) {
 				Config: testAccComputeRegionUrlMap_regexRewrite(randomSuffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1395,6 +1443,9 @@ func TestAccComputeRegionUrlMap_regexRewrite(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_url_map.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1406,6 +1457,9 @@ func TestAccComputeRegionUrlMap_regexRewrite(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_region_url_map.foobar", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_url_map.foobar",

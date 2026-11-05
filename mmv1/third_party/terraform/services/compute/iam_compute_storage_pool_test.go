@@ -38,6 +38,9 @@ func TestAccComputeStoragePoolIam(t *testing.T) {
 				Config: testAccComputeStoragePoolIamBinding_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_storage_pool_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("projects/%s/zones/%s/storagePools/tf-test-storage-pool-balanced-%s roles/compute.viewer", envvar.GetTestProjectFromEnv(), envvar.GetTestZoneFromEnv(), context["random_suffix"]),
 				ImportState:       true,
@@ -46,6 +49,9 @@ func TestAccComputeStoragePoolIam(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccComputeStoragePoolIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_storage_pool_iam_binding.foo",
@@ -123,6 +129,9 @@ func TestAccComputeStoragePoolIam_withCondition(t *testing.T) {
 				Config: testAccComputeStoragePoolIamBinding_withCondition(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_storage_pool_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("projects/%s/zones/%s/storagePools/tf-test-storage-pool-throughput-%s roles/compute.viewer %s", envvar.GetTestProjectFromEnv(), envvar.GetTestZoneFromEnv(), context["random_suffix"], context["condition_title"]),
 				ImportState:       true,
@@ -134,6 +143,9 @@ func TestAccComputeStoragePoolIam_withCondition(t *testing.T) {
 			},
 			{
 				Config: testAccComputeStoragePoolIamBinding_withAndWithoutCondition(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_storage_pool_iam_binding.foo",
@@ -172,6 +184,9 @@ func TestAccComputeStoragePoolIam_withCondition(t *testing.T) {
 			},
 			{
 				Config: testAccComputeStoragePoolIamMember_withAndWithoutCondition(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_storage_pool_iam_member.foo",

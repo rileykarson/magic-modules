@@ -41,6 +41,9 @@ func TestAccComputeNetworkEndpoints_recreateNetworkEndpointsBasic(t *testing.T) 
 				Config: testAccComputeNetworkEndpoints_networkEndpointsSingle(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_endpoints.external_endpoints",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -48,6 +51,9 @@ func TestAccComputeNetworkEndpoints_recreateNetworkEndpointsBasic(t *testing.T) 
 			{
 				// Add two new endpoints
 				Config: testAccComputeNetworkEndpoints_networkEndpointsMultiple(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.external_endpoints",
@@ -61,6 +67,9 @@ func TestAccComputeNetworkEndpoints_recreateNetworkEndpointsBasic(t *testing.T) 
 					testAccCheckComputeNetworkEndpointsWithPortsDestroyedCustom(t, negId, "8442"),
 					testAccCheckComputeNetworkEndpointsWithPortsDestroyedCustom(t, negId, "8443"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_endpoints.external_endpoints",

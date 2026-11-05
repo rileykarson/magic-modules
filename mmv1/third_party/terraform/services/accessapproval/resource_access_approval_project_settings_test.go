@@ -34,6 +34,9 @@ func testAccAccessApprovalProjectSettings(t *testing.T) {
 				Config: testAccAccessApprovalProjectSettings_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_project_access_approval_settings.project_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -43,6 +46,9 @@ func testAccAccessApprovalProjectSettings(t *testing.T) {
 				Config: testAccAccessApprovalProjectSettings_update(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_project_access_approval_settings.project_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -50,6 +56,9 @@ func testAccAccessApprovalProjectSettings(t *testing.T) {
 			},
 			{
 				Config: testAccAccessApprovalProjectSettings_activeKeyVersion(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_project_access_approval_settings.project_access_approval",

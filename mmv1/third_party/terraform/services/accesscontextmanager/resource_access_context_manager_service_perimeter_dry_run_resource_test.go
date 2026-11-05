@@ -31,6 +31,9 @@ func testAccAccessContextManagerServicePerimeterDryRunResource_basicTest(t *test
 				Config: testAccAccessContextManagerServicePerimeterDryRunResource_basic(org, policyTitle, perimeterTitle, folderSuffix, projects[0].ProjectNumber, projects[1].ProjectNumber),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_access_context_manager_service_perimeter_dry_run_resource.test-access1",
 				ImportState:       true,
 				ImportStateVerify: true,

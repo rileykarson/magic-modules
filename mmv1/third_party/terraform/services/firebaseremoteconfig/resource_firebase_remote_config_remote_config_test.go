@@ -53,6 +53,9 @@ func TestAccFirebaseRemoteConfigRemoteConfig_update(t *testing.T) {
 				Config: testAccFirebaseRemoteConfigRemoteConfig_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_firebase_remote_config_remote_config.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -72,6 +75,9 @@ func TestAccFirebaseRemoteConfigRemoteConfig_update(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_firebase_remote_config_remote_config.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -89,6 +95,9 @@ func TestAccFirebaseRemoteConfigRemoteConfig_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_firebase_remote_config_remote_config.basic", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_firebase_remote_config_remote_config.basic",

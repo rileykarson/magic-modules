@@ -51,6 +51,9 @@ func TestAccStorageNotification_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_notification.notification",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -97,6 +100,9 @@ func TestAccStorageNotification_withEventsAndAttributes(t *testing.T) {
 					testAccCheckStorageNotificationCheckAttributes(
 						&notification, "new-attribute", "new-attribute-value"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_notification.notification",

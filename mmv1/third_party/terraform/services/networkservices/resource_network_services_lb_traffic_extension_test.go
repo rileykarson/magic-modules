@@ -847,6 +847,9 @@ func TestAccNetworkServicesLbTrafficExtension_crossRegionInternalPluginExtension
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.test_repository",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1104,6 +1107,9 @@ func TestAccNetworkServicesLbTrafficExtension_globalExternalPluginExtension(t *t
 						"plugin.wasm",
 					),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_artifact_registry_repository.test_repository",

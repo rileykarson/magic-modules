@@ -28,12 +28,18 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyBasicUpdateExample(t
 				Config: testAccComputeRegionSecurityPolicy_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -88,12 +94,18 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyUserDefinedFieldsUpd
 				Config: testAccComputeRegionSecurityPolicy_withoutUserDefinedFields(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_withUserDefinedFields(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -104,12 +116,18 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyUserDefinedFieldsUpd
 				Config: testAccComputeRegionSecurityPolicy_withUserDefinedFieldsUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_withoutUserDefinedFields(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -187,6 +205,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesBasicUpdate
 				Config: testAccComputeRegionSecurityPolicy_withRules(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -198,6 +219,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesBasicUpdate
 						plancheck.ExpectResourceAction("google_compute_region_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -280,6 +304,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesPreconfigur
 				Config: testAccComputeRegionSecurityPolicy_withPreconfiguredWafConfig(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -291,6 +318,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesPreconfigur
 						plancheck.ExpectResourceAction("google_compute_region_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -450,6 +480,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesRateLimitOp
 				Config: testAccComputeRegionSecurityPolicy_withRateLimitOptions(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -461,6 +494,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesRateLimitOp
 						plancheck.ExpectResourceAction("google_compute_region_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -588,6 +624,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesMultipleEnf
 				Config: testAccComputeRegionSecurityPolicy_withMultipleEnforceOnKeyConfigs(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -601,6 +640,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesMultipleEnf
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -612,6 +654,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesMultipleEnf
 						plancheck.ExpectResourceAction("google_compute_region_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -863,12 +908,18 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyRuleOrderingWithMult
 				Config: testAccComputeRegionSecurityPolicy_ruleOrderingWithMultipleRules_create(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_ruleOrderingWithMultipleRules_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -984,6 +1035,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesNetworkMatc
 				Config: testAccComputeRegionSecurityPolicy_withNetworkMatch(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -995,6 +1049,9 @@ func TestAccComputeRegionSecurityPolicy_regionSecurityPolicyWithRulesNetworkMatc
 						plancheck.ExpectResourceAction("google_compute_region_security_policy.policy", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -1223,12 +1280,18 @@ func TestAccComputeRegionSecurityPolicy_withAdvancedOptions(t *testing.T) {
 				Config: testAccComputeRegionSecurityPolicy_withAdvancedOptions(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_withAdvancedOptionsUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",
@@ -1296,12 +1359,18 @@ func TestAccComputeRegionSecurityPolicy_ruleActionUpdate(t *testing.T) {
 				Config: testAccComputeRegionSecurityPolicy_ruleActionThrottle(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_security_policy.policy",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSecurityPolicy_ruleActionDeny(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_security_policy.policy",

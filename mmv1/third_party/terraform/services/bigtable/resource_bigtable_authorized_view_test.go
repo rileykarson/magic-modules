@@ -45,12 +45,18 @@ func TestAccBigtableAuthorizedView_basic(t *testing.T) {
 				Config: testAccBigtableAuthorizedViewBasic(instanceName, tableName, authorizedViewName, familyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_authorized_view.authorized_view",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBigtableAuthorizedViewWithRowPrefixesOnly(instanceName, tableName, authorizedViewName, familyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_authorized_view.authorized_view",
@@ -81,12 +87,18 @@ func TestAccBigtableAuthorizedView_update(t *testing.T) {
 				Config: testAccBigtableAuthorizedViewWithQualifiersOnly(instanceName, tableName, authorizedViewName, familyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_authorized_view.authorized_view",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBigtableAuthorizedViewWithFamilySubsetsOnly(instanceName, tableName, authorizedViewName, familyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_authorized_view.authorized_view",
@@ -118,12 +130,18 @@ func TestAccBigtableAuthorizedView_destroy(t *testing.T) {
 				Config: testAccBigtableAuthorizedViewWithQualifierPrefixesOnly(instanceName, tableName, authorizedViewName, familyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_authorized_view.authorized_view",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBigtableAuthorizedViewDestroy(instanceName, tableName, familyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",

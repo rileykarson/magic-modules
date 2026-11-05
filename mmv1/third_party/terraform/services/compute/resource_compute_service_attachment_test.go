@@ -31,6 +31,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(t *test
 				Config: testAccComputeServiceAttachment_serviceAttachmentBasicExampleFork(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(t *test
 				Config: testAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(context, true, -1, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -47,6 +53,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(t *test
 			},
 			{
 				Config: testAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(context, false, -1, true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
@@ -73,6 +82,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentBasicExampleUpdate(t *test
 				},
 				Check: resource.TestCheckResourceAttr(
 					"google_compute_service_attachment.psc_ilb_service_attachment", "enable_proxy_protocol", "false"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_service_attachment.psc_ilb_service_attachment",
@@ -102,6 +114,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentConnectedEndpointsOutput(t
 				Config: testAccComputeServiceAttachment_serviceAttachmentBasicExampleConnectedEndpointsOutput(context, true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -123,6 +138,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentConnectedEndpointsOutput(t
 					resource.TestCheckResourceAttrSet(
 						"google_compute_service_attachment.psc_ilb_service_attachment", "service_attachment_id"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
@@ -166,6 +184,9 @@ func TestAccComputeServiceAttachment_targetServiceInPlaceUpdate(t *testing.T) {
 					// Verify the service attachment still exists (in-place update, not recreated)
 					resource.TestCheckResourceAttrSet("google_compute_service_attachment.psc_attachment", "self_link"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_service_attachment.psc_attachment",
@@ -597,6 +618,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentBasicExampleGateway(t *tes
 				Config: testAccComputeServiceAttachment_serviceAttachmentBasicExampleGateway(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -718,6 +742,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentEndpointUrl(t *testing.T) 
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -830,6 +857,9 @@ func TestAccComputeServiceAttachment_connectionLimitUpdate(t *testing.T) {
 			{
 				// Step 1: Create the Service Attachment with limit = 1
 				Config: testAccComputeServiceAttachment_connectionLimitConfig(context, 1),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				// Step 2: Update the limit to 2
@@ -1038,6 +1068,9 @@ func TestAccComputeServiceAttachment_serviceAttachmentMultipleSubnets(t *testing
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeServiceAttachment_serviceAttachmentMultipleSubnets(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",

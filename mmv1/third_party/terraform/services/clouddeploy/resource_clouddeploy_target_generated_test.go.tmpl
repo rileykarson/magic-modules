@@ -33,6 +33,9 @@ func TestAccClouddeployTarget_Target(t *testing.T) {
 				Config: testAccClouddeployTarget_Target(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccClouddeployTarget_Target(t *testing.T) {
 			},
 			{
 				Config: testAccClouddeployTarget_TargetUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -51,6 +57,9 @@ func TestAccClouddeployTarget_Target(t *testing.T) {
 				Config: testAccClouddeployTarget_TargetUpdate1(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -60,6 +69,9 @@ func TestAccClouddeployTarget_Target(t *testing.T) {
 				Config: testAccClouddeployTarget_TargetUpdate2(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -67,6 +79,9 @@ func TestAccClouddeployTarget_Target(t *testing.T) {
 			},
 			{
 				Config: testAccClouddeployTarget_TargetUpdate3(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -300,6 +315,9 @@ func TestAccClouddeployTarget_MultiTarget(t *testing.T) {
 				Config: testAccClouddeployTarget_MultiTarget(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -307,6 +325,9 @@ func TestAccClouddeployTarget_MultiTarget(t *testing.T) {
 			},
 			{
 				Config: testAccClouddeployTarget_MultiTargetUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -337,6 +358,9 @@ func TestAccClouddeployTarget_RunTarget(t *testing.T) {
 				Config: testAccClouddeployTarget_RunTarget(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -344,6 +368,9 @@ func TestAccClouddeployTarget_RunTarget(t *testing.T) {
 			},
 			{
 				Config: testAccClouddeployTarget_RunTargetUpdate0(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",

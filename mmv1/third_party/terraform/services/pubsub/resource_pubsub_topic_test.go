@@ -27,6 +27,9 @@ func TestAccPubsubTopic_update(t *testing.T) {
 				Config: testAccPubsubTopic_update(topic, "foo", "bar"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_pubsub_topic.foo",
 				ImportStateId:           topic,
 				ImportState:             true,
@@ -35,6 +38,9 @@ func TestAccPubsubTopic_update(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithRegion(topic, "wibble", "wobble", "us-central1"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_pubsub_topic.foo",
@@ -69,6 +75,9 @@ func TestAccPubsubTopic_cmek(t *testing.T) {
 				Config: testAccPubsubTopic_cmek(topicName, bootstrapped.CryptoKey.Name),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.topic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -93,6 +102,9 @@ func TestAccPubsubTopic_schema(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithSchema(topic, schema1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.bar",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -103,6 +115,9 @@ func TestAccPubsubTopic_schema(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_withoutSchema(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.bar",
@@ -140,6 +155,12 @@ func TestAccPubsubTopic_migration(t *testing.T) {
 				ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 			},
 			{
+				// Step-level providers overwrite wd config with provider-only HCL in terraform-plugin-testing, so post-refresh plan is non-empty.
+				RefreshState:             true,
+				ExpectNonEmptyPlan:       true,
+				ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
+			},
+			{
 				ResourceName:             "google_pubsub_topic.foo",
 				ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 				ImportStateId:            topic,
@@ -165,6 +186,9 @@ func TestAccPubsubTopic_kinesisIngestionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithKinesisIngestionSettings(topic),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -172,6 +196,9 @@ func TestAccPubsubTopic_kinesisIngestionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithUpdatedKinesisIngestionSettings(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -197,6 +224,9 @@ func TestAccPubsubTopic_cloudStorageIngestionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithCloudStorageIngestionSettings(topic),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -204,6 +234,9 @@ func TestAccPubsubTopic_cloudStorageIngestionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithUpdatedCloudStorageIngestionSettings(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -229,6 +262,9 @@ func TestAccPubsubTopic_azureEventHubsIngestionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithAzureEventHubsIngestionSettings(topic),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -236,6 +272,9 @@ func TestAccPubsubTopic_azureEventHubsIngestionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithUpdatedAzureEventHubsIngestionSettings(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -261,6 +300,9 @@ func TestAccPubsubTopic_awsMskIngestionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithAwsMskIngestionSettings(topic),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -268,6 +310,9 @@ func TestAccPubsubTopic_awsMskIngestionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithUpdatedAwsMskIngestionSettings(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -293,6 +338,9 @@ func TestAccPubsubTopic_confluentCloudIngestionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_updateWithConfluentCloudIngestionSettings(topic),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -300,6 +348,9 @@ func TestAccPubsubTopic_confluentCloudIngestionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_updateWithUpdatedConfluentCloudIngestionSettings(topic),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -327,6 +378,9 @@ func TestAccPubsubTopic_javascriptUdfUpdate(t *testing.T) {
 			// Initial transform
 			{
 				Config: testAccPubsubTopic_javascriptUdfSettings(topic, functionName, code),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -361,6 +415,9 @@ func TestAccPubsubTopic_compressionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_compressionSettings(topic, "ZLIB", "COMPRESS", false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -370,6 +427,9 @@ func TestAccPubsubTopic_compressionUpdate(t *testing.T) {
 				Config: testAccPubsubTopic_compressionSettings(topic, "ZLIB", "DECOMPRESS", true),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic.foo",
 				ImportStateId:     topic,
 				ImportState:       true,
@@ -377,6 +437,9 @@ func TestAccPubsubTopic_compressionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccPubsubTopic_javascriptUdfSettings(topic, functionName, code),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic.foo",
@@ -407,6 +470,9 @@ func TestAccPubsubTopic_tags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPubsubTopic_tags(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_pubsub_topic.foo",

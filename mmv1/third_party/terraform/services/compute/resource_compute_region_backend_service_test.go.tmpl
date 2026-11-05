@@ -29,6 +29,9 @@ func TestAccComputeRegionBackendService_basic(t *testing.T) {
 				Config: testAccComputeRegionBackendService_basic(serviceName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -36,6 +39,9 @@ func TestAccComputeRegionBackendService_basic(t *testing.T) {
 			{
 				Config: testAccComputeRegionBackendService_basicModified(
 					serviceName, checkName, extraCheckName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -59,6 +65,9 @@ func TestAccComputeRegionBackendService_ilbBasic_withUnspecifiedProtocol(t *test
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRegionBackendService_ilbBasic_withUnspecifiedProtocol(serviceName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -91,6 +100,9 @@ func TestAccComputeRegionBackendService_withBackendInternal(t *testing.T) {
           serviceName, igName, itName, checkName, 10),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:      "google_compute_region_backend_service.lipsum",
         ImportState:       true,
         ImportStateVerify: true,
@@ -98,6 +110,9 @@ func TestAccComputeRegionBackendService_withBackendInternal(t *testing.T) {
       {
         Config: testAccComputeRegionBackendService_withBackend(
           serviceName, igName, itName, checkName, 20),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:      "google_compute_region_backend_service.lipsum",
@@ -121,6 +136,9 @@ func TestAccComputeRegionBackendService_withBackendInternalManaged(t *testing.T)
     Steps: []resource.TestStep{
       {
         Config: testAccComputeRegionBackendService_internalManagedMultipleBackends(serviceName, igmName, hcName),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:      "google_compute_region_backend_service.default",
@@ -150,6 +168,9 @@ func TestAccComputeRegionBackendService_withBackendMultiNic(t *testing.T) {
                                         serviceName, net1Name, net2Name, igName, itName, checkName, 10),
                         },
                         {
+                        	RefreshState: true,
+                        },
+                        {
                                 ResourceName:      "google_compute_region_backend_service.lipsum",
                                 ImportState:       true,
                                 ImportStateVerify: true,
@@ -173,12 +194,18 @@ func TestAccComputeRegionBackendService_withConnectionDrainingAndUpdate(t *testi
 				Config: testAccComputeRegionBackendService_withConnectionDraining(serviceName, checkName, 10),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_basic(serviceName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -204,12 +231,18 @@ func TestAccComputeRegionBackendService_ilbUpdateBasic(t *testing.T) {
 				Config: testAccComputeRegionBackendService_ilbBasic(backendName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_ilbUpdateBasic(backendName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -240,12 +273,18 @@ func TestAccComputeRegionBackendService_ilbUpdateFull(t *testing.T) {
 				Config: testAccComputeRegionBackendService_ilbFull(backendName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_ilbUpdateFull(backendName, igName, instanceName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -271,6 +310,9 @@ func TestAccComputeRegionBackendService_withBackendAndIAP(t *testing.T) {
       {
 				Config: testAccComputeRegionBackendService_ilbBasic(backendName, checkName),
 			},
+      {
+      	RefreshState: true,
+      },
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
@@ -278,6 +320,9 @@ func TestAccComputeRegionBackendService_withBackendAndIAP(t *testing.T) {
 			},
 			{
 				Config: testAccComputeRegionBackendService_ilbBasicwithIAP(backendName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -304,6 +349,9 @@ func TestAccComputeRegionBackendService_updateIAPEnabled(t *testing.T) {
 					serviceName, 10),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_backend_service.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -311,6 +359,9 @@ func TestAccComputeRegionBackendService_updateIAPEnabled(t *testing.T) {
 			{
 				Config: testAccComputeRegionBackendService_withIAPDisabled(
 					serviceName, 10),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -337,6 +388,9 @@ func TestAccComputeRegionBackendService_UDPFailOverPolicyUpdate(t *testing.T) {
 				Config: testAccComputeRegionBackendService_UDPFailOverPolicyHasDrain(serviceName, "TCP", "true", checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -345,12 +399,18 @@ func TestAccComputeRegionBackendService_UDPFailOverPolicyUpdate(t *testing.T) {
 				Config: testAccComputeRegionBackendService_UDPFailOverPolicyHasDrain(serviceName, "TCP", "false", checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_UDPFailOverPolicy(serviceName, "UDP", "false", checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -379,6 +439,9 @@ func TestAccComputeRegionBackendService_subsettingUpdate(t *testing.T) {
 				Config: testAccComputeRegionBackendService_ilbWithSubsetting(backendName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -387,12 +450,18 @@ func TestAccComputeRegionBackendService_subsettingUpdate(t *testing.T) {
 				Config: testAccComputeRegionBackendService_ilbNoSubsetting(backendName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_imlbWithSubsettingSubsetSize(backendName, checkName, 3),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -425,6 +494,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequests(t *testing.T) {
 					serviceName, igName, itName, checkName, 10),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -432,6 +504,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequests(t *testing.T) {
 			{
 				Config: testAccComputeRegionBackendService_withMaxInFlightRequests(
 					serviceName, igName, itName, checkName, 20),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
@@ -460,6 +535,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequestsPerInstance(t *te
 					serviceName, igName, itName, checkName, 10),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -467,6 +545,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequestsPerInstance(t *te
 			{
 				Config: testAccComputeRegionBackendService_withMaxInFlightRequestsPerInstance(
 					serviceName, igName, itName, checkName, 20),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
@@ -497,6 +578,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequestsPerEndpoint(t *te
 					service, instance, neg, network, check, 5),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -504,6 +588,9 @@ func TestAccComputeRegionBackendService_withMaxInFlightRequestsPerEndpoint(t *te
 			{
 				Config: testAccComputeRegionBackendService_withMaxInFlightRequestsPerEndpoint(
 					service, instance, neg, network, check, 10),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
@@ -532,6 +619,9 @@ func TestAccComputeRegionBackendService_withTrafficDuration(t *testing.T) {
 					serviceName, igName, itName, checkName, "LONG"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -539,6 +629,9 @@ func TestAccComputeRegionBackendService_withTrafficDuration(t *testing.T) {
 			{
 				Config: testAccComputeRegionBackendService_withTrafficDuration(
 					serviceName, igName, itName, checkName, "SHORT"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.lipsum",
@@ -565,12 +658,18 @@ func TestAccComputeRegionBackendService_withLogConfig(t *testing.T) {
 				Config: testAccComputeRegionBackendService_withLogConfig(serviceName, checkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withLogConfigDisabled(serviceName, checkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -596,12 +695,18 @@ func TestAccComputeRegionBackendService_withLogConfigRequestResponseHeaders(t *t
 				Config: testAccComputeRegionBackendService_withLogConfigRequestResponseHeaders(serviceName, checkName, "X-Request-Id", "X-Response-Id"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withLogConfigRequestResponseHeaders(serviceName, checkName, "X-Request-Id-Updated", "X-Response-Id-Updated"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -640,6 +745,9 @@ func TestAccComputeRegionBackendService_zonalILB(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.default",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -658,6 +766,9 @@ locals {
 `, testAccComputeRegionBackendService_common(checkName, negName, instanceName, subnetName),
 					testAccComputeRegionBackendService_zonalILB_withGroup("", serviceName, "local.neg_beta"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.default",
@@ -684,6 +795,9 @@ locals {
 			// STEP 4: Modified scenario (changes NEG/HC/VM) — continues validating real updates
 			{
 				Config: testAccComputeRegionBackendService_zonalILBModified(serviceName, checkName, negName, instanceName, checkName2, negName2, instanceName2, subnetName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.default",
@@ -911,12 +1025,18 @@ func TestAccComputeRegionBackendService_withDynamicBackendCount(t *testing.T) {
 				Config: testAccComputeRegionBackendService_withDynamicBackendCount(serviceName, netName, checkName, igName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withDynamicBackendCountUpdate(serviceName, netName, checkName, igName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -926,6 +1046,9 @@ func TestAccComputeRegionBackendService_withDynamicBackendCount(t *testing.T) {
       {
 				Config: testAccComputeRegionBackendService_withDynamicBackendCount(serviceName, netName, checkName, igName),
 			},
+      {
+      	RefreshState: true,
+      },
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
@@ -955,6 +1078,9 @@ func TestAccComputeRegionBackendService_withTags(t *testing.T) {
 				Config: testAccComputeRegionBackendService_withTags(serviceName, checkName, tagKeyResult["name"], tagValueResult["name"], "foo"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -970,6 +1096,9 @@ func TestAccComputeRegionBackendService_withTags(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_region_backend_service.foobar", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -1904,12 +2033,18 @@ func TestAccComputeRegionBackendService_withSecurityPolicy(t *testing.T) {
 				Config: testAccComputeRegionBackendService_withSecurityPolicy(serviceName, polName, "google_compute_region_security_policy.policy.self_link"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withSecurityPolicy(serviceName, polName, "\"\""),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -1955,12 +2090,18 @@ func TestAccComputeRegionBackendService_withSecurityPolicyUdp(t *testing.T) {
 				Config: testAccComputeRegionBackendService_withSecurityPolicyUdp(ddosPolName, edgeSecName, polName, serviceName, "google_compute_region_security_policy.policy.self_link"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withSecurityPolicyUdp(ddosPolName, edgeSecName, polName, serviceName, "\"\""),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.foobar",
@@ -2431,6 +2572,9 @@ func TestAccComputeRegionBackendService_withNetworkPassThroughLbTrafficPolicy(t 
 				Config: testAccComputeRegionBackendService_withNetworkPassThroughLbTrafficPolicy(randString, "ZONAL_AFFINITY_DISABLED", 0.5),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.nptlbtp",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -2439,12 +2583,18 @@ func TestAccComputeRegionBackendService_withNetworkPassThroughLbTrafficPolicy(t 
 				Config: testAccComputeRegionBackendService_withNetworkPassThroughLbTrafficPolicy(randString, "ZONAL_AFFINITY_SPILL_CROSS_ZONE", 0.6),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_backend_service.nptlbtp",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionBackendService_withNetworkPassThroughLbTrafficPolicy(randString, "ZONAL_AFFINITY_STAY_WITHIN_ZONE", 0.2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_backend_service.nptlbtp",

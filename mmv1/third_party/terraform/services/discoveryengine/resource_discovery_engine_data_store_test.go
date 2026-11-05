@@ -24,6 +24,9 @@ func TestAccDiscoveryEngineDataStore_discoveryengineDatastoreBasicExample_update
 				Config: testAccDiscoveryEngineDataStore_discoveryengineDatastoreBasicExample_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_discovery_engine_data_store.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -31,6 +34,9 @@ func TestAccDiscoveryEngineDataStore_discoveryengineDatastoreBasicExample_update
 			},
 			{
 				Config: testAccDiscoveryEngineDataStore_discoveryengineDatastoreBasicExample_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_discovery_engine_data_store.basic",
@@ -118,6 +124,9 @@ func TestAccDiscoveryEngineDataStore_documentProcessingConfigChangeForcesReplace
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDiscoveryEngineDataStore_documentProcessingConfigDigitalEu(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_discovery_engine_data_store.dpc_change",

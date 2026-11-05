@@ -33,6 +33,9 @@ func TestAccVertexAIEndpointIamBinding(t *testing.T) {
 				Config: testAccVertexAIEndpointIamBinding_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vertex_ai_endpoint_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("projects/%s/locations/%s/endpoints/%s roles/viewer", envvar.GetTestProjectFromEnv(), envvar.GetTestRegionFromEnv(), fmt.Sprintf("tf-test-endpoint-name%s", context["random_suffix"])),
 				ImportState:       true,
@@ -41,6 +44,9 @@ func TestAccVertexAIEndpointIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccVertexAIEndpointIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vertex_ai_endpoint_iam_binding.foo",

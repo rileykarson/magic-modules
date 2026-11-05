@@ -34,6 +34,9 @@ func TestAccBigqueryDatasetIamBinding(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigquery_dataset_iam_binding.binding",
 				ImportStateId:     importId,
 				ImportState:       true,
@@ -42,6 +45,9 @@ func TestAccBigqueryDatasetIamBinding(t *testing.T) {
 			{
 				// Test IAM Binding update
 				Config: testAccBigqueryDatasetIamBinding_update(dataset, account, role),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigquery_dataset_iam_binding.binding",

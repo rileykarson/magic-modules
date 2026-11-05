@@ -29,6 +29,9 @@ func TestAccMetastoreFederation_deletionprotection(t *testing.T) {
 				Config: testAccMetastoreFederationDeletionProtection(name, "us-central1"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataproc_metastore_federation.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccMetastoreFederation_deletionprotection(t *testing.T) {
 			},
 			{
 				Config: testAccMetastoreFederationDeletionProtectionFalse(name, "us-central1"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataproc_metastore_federation.default",
@@ -71,6 +77,9 @@ func TestAccMetastoreFederation_tags(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataproc_metastore_federation.default", "tags.%"),
 					testAccCheckMetastoreFederationHasTagBindings(t),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataproc_metastore_federation.default",

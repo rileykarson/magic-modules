@@ -37,6 +37,9 @@ func TestAccStorageBucket_basicIamBinding(t *testing.T) {
 				Config: testAccStorageBucket_basicIamBinding(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_bucket_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("b/%s roles/storage.objectViewer", fmt.Sprintf("tf-test-my-bucket%s", context["random_suffix"])),
 				ImportState:       true,
@@ -45,6 +48,9 @@ func TestAccStorageBucket_basicIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccStorageBucket_updatedIamBinding(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_bucket_iam_binding.foo",
@@ -154,6 +160,9 @@ func TestAccStorageBucket_iamBindingWithCondition(t *testing.T) {
 				Config: testAccStorageBucket_withConditionIamBinding(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_storage_bucket_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("b/%s roles/storage.objectViewer %s", fmt.Sprintf("tf-test-my-bucket%s", context["random_suffix"]), context["condition_title"]),
 				ImportState:       true,
@@ -185,6 +194,9 @@ func TestAccStorageBucket_iamBindingWithAndWithoutCondition(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_withAndWithoutConditionIamBinding(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_bucket_iam_binding.foo",
@@ -261,6 +273,9 @@ func TestAccStorageBucket_iamMemberWithAndWithoutCondition(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccStorageBucket_withAndWithoutConditionIamMember(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_storage_bucket_iam_member.foo",

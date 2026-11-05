@@ -36,6 +36,9 @@ func TestAccComputeSslPolicy_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -52,6 +55,9 @@ func TestAccComputeSslPolicy_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.update", "post_quantum_key_exchange", ""),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.update",
@@ -72,6 +78,9 @@ func TestAccComputeSslPolicy_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -88,6 +97,9 @@ func TestAccComputeSslPolicy_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.update", "post_quantum_key_exchange", ""),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.update",
@@ -121,6 +133,9 @@ func TestAccComputeSslPolicy_update_to_custom(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -135,6 +150,9 @@ func TestAccComputeSslPolicy_update_to_custom(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.update", "min_tls_version", "TLS_1_1"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.update",
@@ -168,6 +186,9 @@ func TestAccComputeSslPolicy_update_from_custom(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -182,6 +203,9 @@ func TestAccComputeSslPolicy_update_from_custom(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.update", "min_tls_version", "TLS_1_0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.update",
@@ -217,6 +241,9 @@ func TestAccComputeSslPolicy_postQuantumKeyExchange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.post_quantum_key_exchange",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -229,6 +256,9 @@ func TestAccComputeSslPolicy_postQuantumKeyExchange(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.post_quantum_key_exchange", "post_quantum_key_exchange", "DEFAULT"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.post_quantum_key_exchange",
@@ -245,6 +275,9 @@ func TestAccComputeSslPolicy_postQuantumKeyExchange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_ssl_policy.post_quantum_key_exchange",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -257,6 +290,9 @@ func TestAccComputeSslPolicy_postQuantumKeyExchange(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_ssl_policy.post_quantum_key_exchange", "post_quantum_key_exchange", "DEFERRED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_ssl_policy.post_quantum_key_exchange",

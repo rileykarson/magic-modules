@@ -26,6 +26,9 @@ func TestAccComputePacketMirroring_update(t *testing.T) {
 				Config: testAccComputePacketMirroring_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_packet_mirroring.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -39,6 +42,9 @@ func TestAccComputePacketMirroring_update(t *testing.T) {
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_packet_mirroring.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -50,6 +56,9 @@ func TestAccComputePacketMirroring_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_packet_mirroring.foobar", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_packet_mirroring.foobar",

@@ -82,6 +82,9 @@ func TestAccRedisClusterAclPolicy_withCluster(t *testing.T) {
 				Config: testAccRedisClusterAclPolicy_withCluster(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_redis_cluster.test",
 				ImportState:             true,
 				ImportStateVerify:       true,

@@ -51,6 +51,9 @@ func testAccAccessApprovalOrganizationSettings(t *testing.T) {
 				Config: testAccAccessApprovalOrganizationSettings_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_organization_access_approval_settings.organization_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -60,6 +63,9 @@ func testAccAccessApprovalOrganizationSettings(t *testing.T) {
 				Config: testAccAccessApprovalOrganizationSettings_update(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_organization_access_approval_settings.organization_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -67,6 +73,9 @@ func testAccAccessApprovalOrganizationSettings(t *testing.T) {
 			},
 			{
 				Config: testAccAccessApprovalOrganizationSettings_activeKeyVersion(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_organization_access_approval_settings.organization_access_approval",

@@ -30,6 +30,9 @@ func TestAccBigtableTable_basic(t *testing.T) {
 				Config: testAccBigtableTable(instanceName, tableName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -53,6 +56,9 @@ func TestAccBigtableTable_splitKeys(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigtableTable_splitKeys(instanceName, tableName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -82,6 +88,9 @@ func TestAccBigtableTable_family(t *testing.T) {
 				Config: testAccBigtableTable_family(instanceName, tableName, family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -108,6 +117,9 @@ func TestAccBigtableTable_familyType(t *testing.T) {
 				Config: testAccBigtableTable_familyType(instanceName, tableName, family, "intmax"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -127,12 +139,18 @@ func TestAccBigtableTable_familyType(t *testing.T) {
 				}`),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBigtableTable_familyType(instanceName, tableName, family, "intmax"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -178,6 +196,9 @@ func TestAccBigtableTable_testTableWithRowKeySchema(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -203,6 +224,9 @@ func TestAccBigtableTable_testTableWithRowKeySchema(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccBigtableRowKeySchemaExists(t, "google_bigtable_table.table", false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -257,6 +281,9 @@ func TestAccBigtableTable_deletion_protection_protected(t *testing.T) {
 				Config: testAccBigtableTable_deletion_protection(instanceName, tableName, "PROTECTED", family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -278,6 +305,9 @@ func TestAccBigtableTable_deletion_protection_protected(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccBigtableColumnFamilyExists(t, "google_bigtable_table.table", family),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -317,6 +347,9 @@ func TestAccBigtableTable_deletion_protection_unprotected(t *testing.T) {
 				Config: testAccBigtableTable_deletion_protection(instanceName, tableName, "UNPROTECTED", family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -326,6 +359,9 @@ func TestAccBigtableTable_deletion_protection_unprotected(t *testing.T) {
 				Config: testAccBigtableTable(instanceName, tableName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -333,6 +369,9 @@ func TestAccBigtableTable_deletion_protection_unprotected(t *testing.T) {
 			// changing the deletion protection field to protected
 			{
 				Config: testAccBigtableTable_deletion_protection(instanceName, tableName, "PROTECTED", family),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -347,6 +386,9 @@ func TestAccBigtableTable_deletion_protection_unprotected(t *testing.T) {
 			// changing the deletion protection field to unprotected so that the sources can properly be destroyed
 			{
 				Config: testAccBigtableTable_deletion_protection(instanceName, tableName, "UNPROTECTED", family),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -376,6 +418,9 @@ func TestAccBigtableTable_change_stream_enable(t *testing.T) {
 				Config: testAccBigtableTable_change_stream_retention(instanceName, tableName, "24h0m0s", family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -388,6 +433,9 @@ func TestAccBigtableTable_change_stream_enable(t *testing.T) {
 			// changing change stream retention value
 			{
 				Config: testAccBigtableTable_change_stream_retention(instanceName, tableName, "120h0m0s", family),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -440,6 +488,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -448,6 +499,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "0", "0", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -461,6 +515,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -469,6 +526,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_deletion_protection(instanceName, tableName, "UNPROTECTED", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -481,6 +541,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -489,6 +552,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "0", "0", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -512,6 +578,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -520,6 +589,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "72h0m0s", "", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -532,6 +604,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -542,6 +617,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -550,6 +628,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "0", "0", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -563,6 +644,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigtable_table.table",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -572,6 +656,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "72h0m0s", "24h0m0s", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -584,6 +671,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -592,6 +682,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "0", "0", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -603,6 +696,9 @@ func TestAccBigtableTable_automated_backups(t *testing.T) {
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "72h0m0s", "24h0m0s", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, true)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -641,6 +737,9 @@ func TestAccBigtableTable_automated_backups_explicitly_disabled_on_create(t *tes
 			{
 				Config: testAccBigtableTable_automated_backups(instanceName, tableName, "0", "0", family),
 				Check:  resource.ComposeTestCheckFunc(verifyBigtableAutomatedBackupsEnablementState(t, false)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigtable_table.table",
@@ -687,6 +786,9 @@ func TestAccBigtableTable_automated_backups_locations(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -700,6 +802,9 @@ func TestAccBigtableTable_automated_backups_locations(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -711,6 +816,9 @@ func TestAccBigtableTable_automated_backups_locations(t *testing.T) {
 					verifyBigtableAutomatedBackupsEnablementState(t, true),
 					resource.TestCheckResourceAttr("google_bigtable_table.table", "automated_backup_policy.0.locations.#", "0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",
@@ -739,6 +847,9 @@ func TestAccBigtableTable_familyMany(t *testing.T) {
 				Config: testAccBigtableTable_familyMany(instanceName, tableName, family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -765,12 +876,18 @@ func TestAccBigtableTable_familyUpdate(t *testing.T) {
 				Config: testAccBigtableTable_familyMany(instanceName, tableName, family),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table.table",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccBigtableTable_familyUpdate(instanceName, tableName, family),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table.table",

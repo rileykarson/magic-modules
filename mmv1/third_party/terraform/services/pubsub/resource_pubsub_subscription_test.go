@@ -691,6 +691,9 @@ func TestAccPubsubSubscription_javascriptUdfUpdate(t *testing.T) {
 				Config: testAccPubsubSubscription_javascriptUdfSettings_noEnabled(topic, subscriptionShort, functionName, code),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_subscription.foo",
 				ImportStateId:     subscriptionShort,
 				ImportState:       true,

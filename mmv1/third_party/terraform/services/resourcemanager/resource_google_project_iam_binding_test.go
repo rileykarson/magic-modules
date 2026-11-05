@@ -47,6 +47,9 @@ func TestAccProjectIamBinding_basic(t *testing.T) {
 			{
 				Config: testAccProjectAssociateBindingBasic(pid, org, role, member),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 			{
 				ResourceName:    "google_project_iam_binding.acceptance",
@@ -86,6 +89,9 @@ func TestAccProjectIamBinding_multiple(t *testing.T) {
 			{
 				Config: testAccProjectAssociateBindingMultiple(pid, org, role, role2),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 			projectIamBindingImportStep("google_project_iam_binding.multiple", pid, role2),
 		},
@@ -118,6 +124,9 @@ func TestAccProjectIamBinding_multipleAtOnce(t *testing.T) {
 			{
 				Config: testAccProjectAssociateBindingMultiple(pid, org, role, role2),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 			projectIamBindingImportStep("google_project_iam_binding.multiple", pid, role2),
 		},
@@ -148,17 +157,26 @@ func TestAccProjectIamBinding_update(t *testing.T) {
 			{
 				Config: testAccProjectAssociateBindingBasic(pid, org, role, member),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 
 			// Apply an updated IAM binding
 			{
 				Config: testAccProjectAssociateBindingUpdated(pid, org, role),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 
 			// Drop the original member
 			{
 				Config: testAccProjectAssociateBindingDropMemberFromBasic(pid, org, role),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 		},
@@ -190,6 +208,9 @@ func TestAccProjectIamBinding_remove(t *testing.T) {
 			// Apply multiple IAM bindings
 			{
 				Config: testAccProjectAssociateBindingMultiple(pid, org, role, role2),
+			},
+			{
+				RefreshState: true,
 			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 			projectIamBindingImportStep("google_project_iam_binding.multiple", pid, role2),
@@ -227,6 +248,9 @@ func TestAccProjectIamBinding_noMembers(t *testing.T) {
 			{
 				Config: testAccProjectAssociateBindingNoMembers(pid, org, role),
 			},
+			{
+				RefreshState: true,
+			},
 			projectIamBindingImportStep("google_project_iam_binding.acceptance", pid, role),
 		},
 	})
@@ -253,6 +277,9 @@ func TestAccProjectIamBinding_withCondition(t *testing.T) {
 			// Apply an IAM binding
 			{
 				Config: testAccProjectAssociateBinding_withCondition(pid, org, role, conditionTitle),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_project_iam_binding.acceptance",

@@ -36,6 +36,9 @@ func TestAccMemorystoreInstance_updateReplicaCount(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 1, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -45,6 +48,9 @@ func TestAccMemorystoreInstance_updateReplicaCount(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 2, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -52,6 +58,9 @@ func TestAccMemorystoreInstance_updateReplicaCount(t *testing.T) {
 			{
 				// update the replica count to 0
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -82,12 +91,18 @@ func TestAccMemorystoreInstance_automatedBackupConfig(t *testing.T) {
 				Config: testAccMemorystoreInstance_automatedBackupConfig(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test_abc",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccMemorystoreInstance_automatedBackupConfigWithout(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test_abc",
@@ -212,6 +227,9 @@ func TestAccMemorystoreInstance_deprecatedDesiredPscAutoConnections(t *testing.T
 				Config: testAccMemorystoreInstance_deprecatedDesiredPscAutoConnections(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test_abc",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -281,6 +299,9 @@ func TestAccMemorystoreInstance_updateShardCount(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 1, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -288,6 +309,9 @@ func TestAccMemorystoreInstance_updateShardCount(t *testing.T) {
 			{
 				// update shard count to 3
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 1, shardCount: 3, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -329,6 +353,9 @@ func TestAccMemorystoreInstance_updateRedisConfigs(t *testing.T) {
 					maintenanceNanos:          0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -349,6 +376,9 @@ func TestAccMemorystoreInstance_updateRedisConfigs(t *testing.T) {
 					maintenanceMinutes:        0,
 					maintenanceSeconds:        0,
 					maintenanceNanos:          0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -401,6 +431,9 @@ func TestAccMemorystoreInstance_updateDeletionProtection(t *testing.T) {
 					maintenanceNanos:          0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -417,6 +450,9 @@ func TestAccMemorystoreInstance_updateDeletionProtection(t *testing.T) {
 					maintenanceMinutes:        0,
 					maintenanceSeconds:        0,
 					maintenanceNanos:          0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -455,6 +491,9 @@ func TestAccMemorystoreInstance_updateNodeType(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -482,6 +521,9 @@ func TestAccMemorystoreInstance_updateNodeType(t *testing.T) {
 					resource.TestCheckResourceAttr("google_memorystore_instance.test", "engine_configs.maxmemory-policy", "noeviction"),
 					resource.TestCheckResourceAttr("google_memorystore_instance.test", "maintenance_policy.0.weekly_maintenance_window.0.day", "TUESDAY"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -513,6 +555,9 @@ func TestAccMemorystoreInstance_updateEngineVersion(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -525,6 +570,9 @@ func TestAccMemorystoreInstance_updateEngineVersion(t *testing.T) {
 					zoneDistributionMode: "MULTI_ZONE",
 					engineVersion:        "VALKEY_8_0",
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -551,6 +599,9 @@ func TestAccMemorystoreInstance_updatePersistence(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", persistenceMode: "AOF", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -558,6 +609,9 @@ func TestAccMemorystoreInstance_updatePersistence(t *testing.T) {
 			{
 				// update persitence to RDB
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, preventDestroy: true, zoneDistributionMode: "MULTI_ZONE", persistenceMode: "RDB", deletionProtectionEnabled: false, maintenanceDay: "MONDAY", maintenanceHours: 1, maintenanceMinutes: 0, maintenanceSeconds: 0, maintenanceNanos: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.test",
@@ -597,6 +651,9 @@ func TestAccMemorystoreInstance_switchoverAndDetachSecondary(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test_secondary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -613,6 +670,9 @@ func TestAccMemorystoreInstance_switchoverAndDetachSecondary(t *testing.T) {
 					secondaryInstanceName: secondaryName,
 					icrRole:               "PRIMARY",
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.test_secondary",
@@ -652,6 +712,9 @@ func TestAccMemorystoreInstance_updateInstanceEndpoints(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", userEndpointCount: 0}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -660,6 +723,9 @@ func TestAccMemorystoreInstance_updateInstanceEndpoints(t *testing.T) {
 			{
 				// create instance with one user created connection
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", userEndpointCount: 1}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.test",
@@ -672,6 +738,9 @@ func TestAccMemorystoreInstance_updateInstanceEndpoints(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", userEndpointCount: 2}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -682,6 +751,9 @@ func TestAccMemorystoreInstance_updateInstanceEndpoints(t *testing.T) {
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", userEndpointCount: 1}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -690,6 +762,9 @@ func TestAccMemorystoreInstance_updateInstanceEndpoints(t *testing.T) {
 			{
 				// update instance with 0 endpoints
 				Config: createOrUpdateMemorystoreInstance(&InstanceParams{name: name, replicaCount: 0, shardCount: 1, deletionProtectionEnabled: true, zoneDistributionMode: "MULTI_ZONE", userEndpointCount: 0}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.test",
@@ -726,12 +801,18 @@ func TestAccMemorystoreInstance_managedBackupSource(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.instance_mbs_main",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccMemorystoreInstance_managedBackupSourceImport(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.instance_mbs_main",
@@ -863,12 +944,18 @@ func TestAccMemorystoreInstance_gcsSource(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.instance_gbs_main",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccMemorystoreInstance_gcsSource(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.instance_gbs_main",
@@ -1600,6 +1687,9 @@ func TestAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled(t *tes
 				Config: testAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled_bothConnections(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.instance-cluster-disabled",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1607,6 +1697,9 @@ func TestAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled(t *tes
 			},
 			{
 				Config: testAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabledPscAutoConnections(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.instance-cluster-disabled",
@@ -1618,6 +1711,9 @@ func TestAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled(t *tes
 				Config: testAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled_onlyAutoCreatedEndpoints(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.instance-cluster-disabled",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1625,6 +1721,9 @@ func TestAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled(t *tes
 			},
 			{
 				Config: testAccMemorystoreInstance_memorystorePscAutoInstanceClusterDisabled_neitherConnection(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.instance-cluster-disabled",
@@ -1837,12 +1936,18 @@ func TestAccMemorystoreInstance_memorystoreInstanceMaintenanceVersion(t *testing
 				Config: testAccMemorystoreInstance_memorystoreInstanceMaintenanceVersionDeploy(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_memorystore_instance.instance-ms",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccMemorystoreInstance_memorystoreInstanceMaintenanceVersionUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.instance-ms",
@@ -1901,6 +2006,9 @@ func TestAccMemorystoreInstance_customerManagedCas(t *testing.T) {
 					resource.TestCheckResourceAttr("google_memorystore_instance.instance_cas", "server_ca_mode", "CUSTOMER_MANAGED_CAS_CA"),
 					resource.TestCheckResourceAttrSet("google_memorystore_instance.instance_cas", "server_ca_pool"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_memorystore_instance.instance_cas",
@@ -2034,6 +2142,9 @@ func TestAccMemorystoreInstance_withAclPolicy(t *testing.T) {
 				Config: testAccMemorystoreInstance_withAclPolicy(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2083,6 +2194,9 @@ func TestAccMemorystoreInstance_withTokenAuth(t *testing.T) {
 				Config: testAccMemorystoreInstance_withTokenAuth(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2095,6 +2209,9 @@ func TestAccMemorystoreInstance_withTokenAuth(t *testing.T) {
 						plancheck.ExpectResourceAction("google_memorystore_instance.test", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.test",
@@ -2153,6 +2270,9 @@ func TestAccMemorystoreInstance_zoneDistributionConfigZones(t *testing.T) {
 					resource.TestCheckResourceAttr("google_memorystore_instance.test", "zone_distribution_config.0.active_zones.1", "us-central1-b"),
 					resource.TestCheckResourceAttr("google_memorystore_instance.test", "zone_distribution_config.0.active_zones.2", "us-central1-c"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_memorystore_instance.test",

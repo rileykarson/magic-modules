@@ -31,6 +31,9 @@ func TestAccEventarcTrigger_BasicHandWritten(t *testing.T) {
 				Config: testAccEventarcTrigger_BasicHandWritten(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_eventarc_trigger.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -40,6 +43,9 @@ func TestAccEventarcTrigger_BasicHandWritten(t *testing.T) {
 				Config: testAccEventarcTrigger_BasicHandWrittenUpdate0(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_eventarc_trigger.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -47,6 +53,9 @@ func TestAccEventarcTrigger_BasicHandWritten(t *testing.T) {
 			},
 			{
 				Config: testAccEventarcTrigger_BasicHandWrittenUpdate1(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_eventarc_trigger.primary",
@@ -277,6 +286,9 @@ func TestAccEventarcTrigger_AlternateForm(t *testing.T) {
 				Config: testAccEventarcTrigger_AlternateForm(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_eventarc_trigger.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -355,6 +367,9 @@ func TestAccEventarcTrigger_ShortFormWorkflow(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccEventarcTrigger_ShortFormWorkflow(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_eventarc_trigger.primary",

@@ -93,6 +93,7 @@ samples:
   # TODO: Remove this example when instance is supported
   - name: 'instance_with_ip'
     primary_resource_id: 'static'
+    refresh_state: true
     steps:
       - name: 'instance_with_ip'
         resource_id_vars:

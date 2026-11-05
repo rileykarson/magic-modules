@@ -54,6 +54,9 @@ func TestAccDataflowJob_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -83,6 +86,9 @@ func TestAccDataflowJobSkipWait_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowJobExists(t, "google_dataflow_job.big_data"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -118,6 +124,9 @@ func TestAccDataflowJob_withServiceAccount(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -149,6 +158,9 @@ func TestAccDataflowJob_withNetwork(t *testing.T) {
 					testAccDataflowJobExists(t, "google_dataflow_job.big_data"),
 					testAccDataflowJobHasNetwork(t, "google_dataflow_job.big_data", network),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -185,6 +197,9 @@ func TestAccDataflowJob_withSubnetwork(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -217,6 +232,9 @@ func TestAccDataflowJob_withLabels(t *testing.T) {
 					testAccDataflowJobExists(t, "google_dataflow_job.big_data"),
 					testAccDataflowJobHasLabels(t, "google_dataflow_job.big_data", key),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -265,6 +283,9 @@ func TestAccDataflowJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -291,6 +312,9 @@ func TestAccDataflowJob_withProviderDefaultLabels(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-type"),
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_dataflow_job.big_data",
@@ -322,6 +346,9 @@ func TestAccDataflowJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -350,6 +377,9 @@ func TestAccDataflowJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -365,6 +395,9 @@ func TestAccDataflowJob_withProviderDefaultLabels(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-type"),
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -396,6 +429,9 @@ func TestAccDataflowJob_withIpConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowJobExists(t, "google_dataflow_job.big_data"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -440,6 +476,9 @@ func TestAccDataflowJob_withKmsKey(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowJobExists(t, "google_dataflow_job.big_data"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -535,6 +574,9 @@ func TestAccDataflowJob_streamUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.pubsub_stream",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -599,6 +641,9 @@ func TestAccDataflowJob_virtualUpdate(t *testing.T) {
 					testAccDataflowCheckId(t, "google_dataflow_job.pubsub_stream", &id),
 					resource.TestCheckResourceAttr("google_dataflow_job.pubsub_stream", "on_delete", "cancel"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.pubsub_stream",

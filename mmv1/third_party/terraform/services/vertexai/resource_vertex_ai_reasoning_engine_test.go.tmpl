@@ -42,6 +42,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineUpdate(t *testing.T) 
 				Config: testAccVertexAIReasoningEngine_vertexAiReasoningEngineBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -49,6 +52,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineUpdate(t *testing.T) 
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_vertexAiReasoningEngineUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -75,6 +81,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineSourceUpdate(t *testi
 				Config: testAccVertexAIReasoningEngine_vertexAiReasoningEngineSourceBasic(),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -82,6 +91,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineSourceUpdate(t *testi
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_vertexAiReasoningEngineSourceUpdate(),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -602,6 +614,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineIdentityTypeUpdate(t 
 				Config: testAccVertexAIReasoningEngine_identityTypeServiceAccount(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -609,6 +624,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineIdentityTypeUpdate(t 
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_identityTypeAgentIdentity(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -675,6 +693,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineImageSpecUpdate(t *te
 				Config: testAccVertexAIReasoningEngine_vertexAiReasoningEngineImageSpecExample(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -687,6 +708,9 @@ func TestAccVertexAIReasoningEngine_vertexAiReasoningEngineImageSpecUpdate(t *te
 						plancheck.ExpectResourceAction("google_vertex_ai_reasoning_engine.reasoning_engine", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -836,12 +860,18 @@ func TestAccVertexAIReasoningEngine_memoryGenerationTriggerUpdate(t *testing.T) 
 				Config: testAccVertexAIReasoningEngine_memoryGenerationTriggerFixedInterval(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vertex_ai_reasoning_engine.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_memoryGenerationTriggerEventCount(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vertex_ai_reasoning_engine.primary",
@@ -925,12 +955,18 @@ func TestAccVertexAIReasoningEngine_customizationConfigsUpdate(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_customizationConfigsBefore(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vertex_ai_reasoning_engine.primary",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_customizationConfigsAfter(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vertex_ai_reasoning_engine.primary",
@@ -1217,6 +1253,9 @@ func TestAccVertexAIReasoningEngine_agentGatewayConfig(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_agentGatewayConfig(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1224,6 +1263,9 @@ func TestAccVertexAIReasoningEngine_agentGatewayConfig(t *testing.T) {
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_agentGatewayConfigUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -1468,6 +1510,9 @@ func TestAccVertexAIReasoningEngine_trafficSplitUpdate(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_trafficSplitAlwaysLatest(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1475,6 +1520,9 @@ func TestAccVertexAIReasoningEngine_trafficSplitUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_trafficSplitManual(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -1486,6 +1534,9 @@ func TestAccVertexAIReasoningEngine_trafficSplitUpdate(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_trafficSplitLatest(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1495,6 +1546,9 @@ func TestAccVertexAIReasoningEngine_trafficSplitUpdate(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_trafficSplitPrevious(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1502,6 +1556,9 @@ func TestAccVertexAIReasoningEngine_trafficSplitUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_trafficSplitPartial(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
@@ -1709,6 +1766,9 @@ func TestAccVertexAIReasoningEngine_agentConfigSourceUpdate(t *testing.T) {
 				Config: testAccVertexAIReasoningEngine_agentConfigSourceBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1716,6 +1776,9 @@ func TestAccVertexAIReasoningEngine_agentConfigSourceUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccVertexAIReasoningEngine_agentConfigSourceUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vertex_ai_reasoning_engine.reasoning_engine",

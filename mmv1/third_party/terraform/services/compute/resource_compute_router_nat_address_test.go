@@ -75,6 +75,9 @@ func TestAccComputeRouterNatAddress_withAddressCountDecrease(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -89,6 +92,9 @@ func TestAccComputeRouterNatAddress_withAddressCountDecrease(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -101,6 +107,9 @@ func TestAccComputeRouterNatAddress_withAddressCountDecrease(t *testing.T) {
 					resource.TestCheckResourceAttr("google_compute_router_nat_address.foobar", "nat_ips.#", "2"),
 					resource.TestCheckResourceAttr("data.google_compute_router_nat.foo", "nat_ips.#", "2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
@@ -129,6 +138,9 @@ func TestAccComputeRouterNatAddress_withAddressRemoved(t *testing.T) {
 				Config: testAccComputeRouterNatAddressWithNatIps(routerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -147,6 +159,9 @@ func TestAccComputeRouterNatAddress_withAddressRemoved(t *testing.T) {
 						},
 					),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router_nat.foobar",
@@ -175,6 +190,9 @@ func TestAccComputeRouterNatAddress_withAutoAllocateAndAddressRemoved(t *testing
 				Config: testAccComputeRouterNatAddressWithNatIps(routerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -191,6 +209,9 @@ func TestAccComputeRouterNatAddress_withAutoAllocateAndAddressRemoved(t *testing
 							"initial_nat_ips.0",
 						},
 					)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router_nat.foobar",
@@ -228,6 +249,9 @@ func TestAccComputeRouterNatAddress_withNatIpsAndDrainNatIps(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -246,6 +270,9 @@ func TestAccComputeRouterNatAddress_withNatIpsAndDrainNatIps(t *testing.T) {
 					resource.TestCheckResourceAttr("google_compute_router_nat_address.foobar", "nat_ips.#", "1"),
 					resource.TestCheckResourceAttr("data.google_compute_router_nat.foo", "nat_ips.#", "1"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router_nat_address.foobar",
@@ -269,6 +296,9 @@ func TestAccComputeRouterNatAddress_withNatIpsAndDrainNatIps(t *testing.T) {
 						[]string{"initial_nat_ips", "initial_nat_ips.#", "initial_nat_ips.0"},
 					),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_router_nat.foobar",

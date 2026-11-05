@@ -29,6 +29,9 @@ func TestAccComputeInterconnect_computeInterconnectMacsecTest(t *testing.T) {
 				Config: testAccComputeInterconnect_computeInterconnectCreate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_interconnect.example-interconnect",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -36,6 +39,9 @@ func TestAccComputeInterconnect_computeInterconnectMacsecTest(t *testing.T) {
 			},
 			{
 				Config: testAccComputeInterconnect_computeInterconnectEnableMacsec(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_interconnect.example-interconnect",
@@ -125,6 +131,9 @@ func TestAccComputeInterconnect_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeInterconnect_computeInterconnectParams(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_interconnect.example-interconnect",

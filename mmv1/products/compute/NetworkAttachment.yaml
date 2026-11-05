@@ -56,6 +56,7 @@ samples:
   - name: 'network_attachment_instance_usage'
     primary_resource_id: 'default'
     min_version: 'beta'
+    refresh_state: true
     steps:
       - name: 'network_attachment_instance_usage'
         min_version: 'beta'

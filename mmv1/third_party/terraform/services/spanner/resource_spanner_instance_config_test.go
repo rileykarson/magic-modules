@@ -25,6 +25,9 @@ func TestAccSpannerInstanceConfig_update(t *testing.T) {
 				Config: testAccSpannerInstanceConfig_update(name, "display name", false),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_spanner_instance_config.updater",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -32,6 +35,9 @@ func TestAccSpannerInstanceConfig_update(t *testing.T) {
 			},
 			{
 				Config: testAccSpannerInstanceConfig_update(name, "display name updated", true),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_spanner_instance_config.updater",

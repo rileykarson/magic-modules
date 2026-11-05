@@ -70,6 +70,9 @@ func TestAccComposerEnvironmentComposer2_private(t *testing.T) {
 				Config: testAccComposerEnvironmentComposer2_private(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -115,6 +118,9 @@ func TestAccComposerEnvironment_withEncryptionConfigComposer2(t *testing.T) {
 				Config: testAccComposerEnvironment_encryptionCfg(pid, "2", "2", envName, bootstrapped.CryptoKey.Name, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -147,6 +153,9 @@ func TestAccComposerEnvironment_withMaintenanceWindow(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironment_maintenanceWindow(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -186,6 +195,9 @@ func TestAccComposerEnvironment_maintenanceWindowUpdate(t *testing.T) {
 				Config: testAccComposerEnvironment_maintenanceWindowUpdate(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -218,6 +230,9 @@ func TestAccComposerEnvironment_ComposerV2(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironment_composerV2(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -257,6 +272,9 @@ func TestAccComposerEnvironment_UpdateComposerV2ImageVersion(t *testing.T) {
 				Config: testAccComposerEnvironment_composerNewVersion(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -294,6 +312,9 @@ func TestAccComposerEnvironment_UpdateComposerV2ResilienceMode(t *testing.T) {
 				Config: testAccComposerEnvironment_updateComposerV2StandardResilience(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -326,6 +347,9 @@ func TestAccComposerEnvironment_ComposerV2HighResilience(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironment_composerV2HighResilience(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -365,6 +389,9 @@ func TestAccComposerEnvironment_UpdateComposerV2WithTriggerer(t *testing.T) {
 				Config: testAccComposerEnvironment_composerV2WithDisabledTriggerer(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -402,6 +429,9 @@ func TestAccComposerEnvironment_UpdateComposerV2(t *testing.T) {
 				Config: testAccComposerEnvironment_updateComposerV2(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -436,6 +466,9 @@ func TestAccComposerEnvironment_composerV2PrivateServiceConnect(t *testing.T) {
 				Config: testAccComposerEnvironment_composerV2PrivateServiceConnect(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -468,6 +501,9 @@ func TestAccComposerEnvironment_composerV2MasterAuthNetworks(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironment_MasterAuthNetworks("2", "2", envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -507,6 +543,9 @@ func TestAccComposerEnvironment_composerV2MasterAuthNetworksUpdate(t *testing.T)
 				Config: testAccComposerEnvironment_MasterAuthNetworksUpdate("2", "2", envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -539,6 +578,9 @@ func TestAccComposer2Environment_withNodeConfig(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposer2Environment_nodeCfg(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -574,12 +616,18 @@ func TestAccComposerEnvironmentAirflow2_withRecoveryConfig(t *testing.T) {
 				Config: testAccComposerEnvironment_airflow2RecoveryCfg(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComposerEnvironmentUpdate_airflow2RecoveryCfg(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -620,6 +668,9 @@ func TestAccComposerEnvironment_fixPyPiPackages(t *testing.T) {
 			},
 			{
 				Config: testAccComposerEnvironment_fixPyPiPackagesUpdate(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -677,6 +728,9 @@ func TestAccComposerEnvironment_customBucket(t *testing.T) {
 				Config: testAccComposerEnvironment_customBucket(bucketName, envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -712,6 +766,9 @@ func TestAccComposerEnvironment_customBucketWithUrl(t *testing.T) {
 				Config: testAccComposerEnvironment_customBucketWithUrl(bucketName, envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -745,6 +802,9 @@ func TestAccComposerEnvironmentComposer3_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironmentComposer3_basic(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -783,6 +843,9 @@ func TestAccComposerEnvironmentComposer3_update(t *testing.T) {
 			},
 			{
 				Config: testAccComposerEnvironmentComposer3_update(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -850,6 +913,9 @@ func TestAccComposerEnvironmentComposer3_databaseRetention(t *testing.T) {
 				Config: testAccComposerEnvironmentComposer3_databaseRetention(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -884,6 +950,9 @@ func TestAccComposerEnvironmentComposer3_withNetworkAttachment(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComposerEnvironmentComposer3_withNetworkAttachment(envName, networkAttachment, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -925,6 +994,9 @@ func TestAccComposerEnvironmentComposer3_updateWithNetworkAttachment(t *testing.
 				Config: testAccComposerEnvironmentComposer3_withNetworkAttachment(envName, networkAttachment, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -962,6 +1034,9 @@ func TestAccComposerEnvironmentComposer3_updateWithNetworkAndSubnetwork(t *testi
 			},
 			{
 				Config: testAccComposerEnvironmentComposer3_withNetworkAndSubnetwork(envName, networkAttachment, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -1002,6 +1077,9 @@ func TestAccComposerEnvironmentComposer3_updateToEmpty(t *testing.T) {
 				Config: testAccComposerEnvironmentComposer3_empty(envName, network, subnetwork, serviceAccount),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_composer_environment.test",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -1038,6 +1116,9 @@ func TestAccComposerEnvironmentComposer3_updateFromEmpty(t *testing.T) {
 			},
 			{
 				Config: testAccComposerEnvironmentComposer3_update(envName, network, subnetwork, serviceAccount),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",
@@ -1151,6 +1232,9 @@ func TestAccComposerEnvironmentComposer3_trafficRoutingConfig(t *testing.T) {
 			},
 			{
 				Config: testAccComposerEnvironmentComposer3_trafficRouting(envName, network, subnetwork, serviceAccount, "VIA_NETWORK_ATTACHMENT"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_composer_environment.test",

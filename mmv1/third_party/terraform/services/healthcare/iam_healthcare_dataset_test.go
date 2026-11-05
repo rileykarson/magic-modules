@@ -43,6 +43,9 @@ func TestAccHealthcareDatasetIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_healthcare_dataset_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s %s", datasetId.TerraformId(), roleId),
 				ImportState:       true,
@@ -55,6 +58,9 @@ func TestAccHealthcareDatasetIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, projectId),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, projectId),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_healthcare_dataset_iam_binding.foo",

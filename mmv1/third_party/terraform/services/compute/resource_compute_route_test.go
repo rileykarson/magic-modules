@@ -23,6 +23,9 @@ func TestAccComputeRoute_defaultInternetGateway(t *testing.T) {
 				Config: testAccComputeRoute_defaultInternetGateway(acctest.RandString(t, 10)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_route.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -44,6 +47,9 @@ func TestAccComputeRoute_hopInstance(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRoute_hopInstance(instanceName, zone, acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_route.foobar",
@@ -76,6 +82,9 @@ func TestAccComputeRoute_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeRoute_resourceManagerTags(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_route.acc_route_with_resource_manager_tags",

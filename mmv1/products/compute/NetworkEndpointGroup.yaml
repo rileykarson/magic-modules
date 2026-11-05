@@ -66,6 +66,7 @@ samples:
           subnetwork_name: 'neg-subnetwork'
   - name: 'network_endpoint_group_non_gcp'
     primary_resource_id: 'neg'
+    refresh_state: true
     steps:
       - name: 'network_endpoint_group_non_gcp'
         resource_id_vars:

@@ -46,6 +46,9 @@ func TestAccDataflowFlexTemplateJob_basic(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -115,6 +118,9 @@ func TestAccDataflowFlexTemplateJob_streamUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -180,6 +186,9 @@ func TestAccDataflowFlexTemplateJob_FullUpdate(t *testing.T) {
 				Config: testAccDataflowFlexTemplateJob_dataflowFlexTemplateJobFull(job, bucket, topic, randStr),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -187,6 +196,9 @@ func TestAccDataflowFlexTemplateJob_FullUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccDataflowFlexTemplateJob_dataflowFlexTemplateJobFullUpdate(job, bucket, topic, randStr),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
@@ -224,6 +236,9 @@ func TestAccDataflowFlexTemplateJob_withNetwork(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_network",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -235,6 +250,9 @@ func TestAccDataflowFlexTemplateJob_withNetwork(t *testing.T) {
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_network", true),
 					testAccDataflowFlexTemplateJobHasNetwork(t, "google_dataflow_flex_template_job.flex_job_network", network2, true),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_network",
@@ -273,6 +291,9 @@ func TestAccDataflowFlexTemplateJob_withSubNetwork(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_subnetwork",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -284,6 +305,9 @@ func TestAccDataflowFlexTemplateJob_withSubNetwork(t *testing.T) {
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_subnetwork", true),
 					testAccDataflowFlexTemplateJobHasSubNetwork(t, "google_dataflow_flex_template_job.flex_job_subnetwork", subnetwork2, true),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_subnetwork",
@@ -318,6 +342,9 @@ func TestAccDataflowFlexTemplateJob_withIpConfig(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_ipconfig", false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_ipconfig",
@@ -365,6 +392,9 @@ func TestAccDataflowFlexTemplateJob_withKmsKey(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_kms",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -399,6 +429,9 @@ func TestAccDataflowFlexTemplateJob_withAdditionalExperiments(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_experiments",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -431,6 +464,9 @@ func TestAccDataflowFlexTemplateJob_withAdditionalPipelineOptions(t *testing.T) 
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_pipeline_options", false),
 					testAccDataflowFlexTemplateJobHasAdditionalPipelineOptions(t, "google_dataflow_flex_template_job.flex_job_pipeline_options", additionalPipelineOptions, false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_pipeline_options",
@@ -468,6 +504,9 @@ func TestAccDataflowFlexTemplateJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -478,6 +517,9 @@ func TestAccDataflowFlexTemplateJob_withProviderDefaultLabels(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_fullupdate", false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
@@ -492,6 +534,9 @@ func TestAccDataflowFlexTemplateJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -504,6 +549,9 @@ func TestAccDataflowFlexTemplateJob_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -514,6 +562,9 @@ func TestAccDataflowFlexTemplateJob_withProviderDefaultLabels(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccDataflowFlexJobExists(t, "google_dataflow_flex_template_job.flex_job_fullupdate", false),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_flex_template_job.flex_job_fullupdate",
@@ -560,6 +611,9 @@ func TestAccDataflowJob_withAttributionLabelCreationOnly(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -581,6 +635,9 @@ func TestAccDataflowJob_withAttributionLabelCreationOnly(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-type"),
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",
@@ -625,6 +682,9 @@ func TestAccDataflowJob_withAttributionLabelProactive(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_dataflow_job.big_data",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -646,6 +706,9 @@ func TestAccDataflowJob_withAttributionLabelProactive(t *testing.T) {
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-type"),
 					resource.TestCheckResourceAttrSet("google_dataflow_job.big_data", "effective_labels.goog-dataflow-provided-template-version"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_dataflow_job.big_data",

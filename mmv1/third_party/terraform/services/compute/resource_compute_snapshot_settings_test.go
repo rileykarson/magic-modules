@@ -32,6 +32,9 @@ func TestAccComputeSnapshotSettings_snapshotSettings_update(t *testing.T) {
 				Config: testAccComputeSnapshotSettings_snapshotSettings_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_snapshot_settings.tf_test_snapshot_settings",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -43,6 +46,9 @@ func TestAccComputeSnapshotSettings_snapshotSettings_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_snapshot_settings.tf_test_snapshot_settings", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_snapshot_settings.tf_test_snapshot_settings",

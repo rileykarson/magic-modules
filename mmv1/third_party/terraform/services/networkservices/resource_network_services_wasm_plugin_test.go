@@ -44,6 +44,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginLogConfigUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_artifact_registry_repository.test_repository",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -53,6 +56,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginLogConfigUpdate(t *testing.T) {
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginBasicCreate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -60,6 +66,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginLogConfigUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginLogConfigUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
@@ -118,6 +127,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginVersionUpdate(t *testing.T) {
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginVersionCreate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -125,6 +137,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginVersionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginVersionUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
@@ -191,6 +206,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginConfigUpdate(t *testing.T) {
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginBasicCreate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -200,6 +218,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginConfigUpdate(t *testing.T) {
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginConfigDataUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -207,6 +228,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginConfigUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginConfigUriUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",
@@ -247,6 +271,9 @@ func TestAccNetworkServicesWasmPlugin_wasmPluginLocation(t *testing.T) {
 			},
 			{
 				Config: testAccNetworkServicesWasmPlugin_wasmPluginLocationCreate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_services_wasm_plugin.wasm_plugin",

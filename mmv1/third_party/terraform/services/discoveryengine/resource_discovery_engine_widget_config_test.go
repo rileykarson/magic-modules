@@ -29,6 +29,9 @@ func TestAccDiscoveryEngineWidgetConfig_discoveryengineWidgetconfigBasicExample_
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_discovery_engine_widget_config.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -42,12 +45,18 @@ func TestAccDiscoveryEngineWidgetConfig_discoveryengineWidgetconfigBasicExample_
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_discovery_engine_widget_config.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccDiscoveryEngineWidgetConfig_discoveryengineWidgetconfigBasicExample_allFalse(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_discovery_engine_widget_config.basic",

@@ -25,6 +25,9 @@ func TestAccSourceRepoRepository_basic(t *testing.T) {
 				Config: testAccSourceRepoRepository_basic(repositoryName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_sourcerepo_repository.acceptance",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -48,12 +51,18 @@ func TestAccSourceRepoRepository_update(t *testing.T) {
 				Config: testAccSourceRepoRepository_basic(repositoryName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_sourcerepo_repository.acceptance",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccSourceRepoRepository_extended(accountId, topicName, repositoryName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_sourcerepo_repository.acceptance",
@@ -113,6 +122,9 @@ func TestAccSourceRepoRepository_existingResourceCreateIgnoreAlreadyExists(t *te
 				Check:  resource.TestCheckResourceAttr("google_sourcerepo_repository.acceptance", "id", id),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_sourcerepo_repository.acceptance",
 				ImportStateId:           id,
 				ImportState:             true,
@@ -145,6 +157,9 @@ func TestAccSourceRepoRepository_createIgnoreAlreadyExists(t *testing.T) {
 			{
 				Config: testAccSourceRepoRepository_basic(repositoryName),
 				Check:  resource.TestCheckResourceAttr("google_sourcerepo_repository.acceptance", "id", id),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_sourcerepo_repository.acceptance",

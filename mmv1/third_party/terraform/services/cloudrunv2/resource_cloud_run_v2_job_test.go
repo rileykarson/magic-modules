@@ -30,6 +30,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobFullUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2JobFull(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -37,6 +40,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobFullUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobFullUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -229,6 +235,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithDirectVPCUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithDirectVPC(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -236,6 +245,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithDirectVPCUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithDirectVPCAndNamedBinAuthPolicyUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -329,6 +341,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithGcsUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2BasicJob(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -336,6 +351,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithGcsUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithGcsVolume(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -423,6 +441,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithNfsUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2BasicJob(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -430,6 +451,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithNfsUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithNfsVolume(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -497,6 +521,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithTags(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithTags(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -543,6 +570,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobTCPProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithEmptyTCPStartupProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -550,6 +580,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobTCPProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobUpdateWithTCPStartupProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -578,6 +611,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobHTTPProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2JobUpdateWithEmptyHTTPStartupProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -585,6 +621,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobHTTPProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobUpdateWithHTTPStartupProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -613,6 +652,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobGRPCProbesUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudRunJobUpdateWithEmptyGRPCStartupProbe(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -620,6 +662,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobGRPCProbesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudRunJobUpdateWithGRPCStartupProbe(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -809,6 +854,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobDependsOnUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudRunJobWithoutDependsOn(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -818,6 +866,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobDependsOnUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudRunJobWithDependsOn(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -825,6 +876,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobDependsOnUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudRunJobWithDependsOnUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -953,6 +1007,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithStartExecutionTokenUpdate(t *testing.
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithStartExecutionToken(context1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -960,6 +1017,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithStartExecutionTokenUpdate(t *testing.
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithStartExecutionToken(context2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -1011,6 +1071,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithRunExecutionTokenUpdate(t *testing.T)
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithRunExecutionToken(context1),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1018,6 +1081,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithRunExecutionTokenUpdate(t *testing.T)
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithRunExecutionToken(context2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",
@@ -1065,6 +1131,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithGpuUpdate(t *testing.T) {
 				Config: testAccCloudRunV2Job_cloudrunv2BasicJob(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_job.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1072,6 +1141,9 @@ func TestAccCloudRunV2Job_cloudrunv2JobWithGpuUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2Job_cloudrunv2JobWithGpu(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_job.default",

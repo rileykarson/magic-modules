@@ -39,6 +39,9 @@ func TestAccOrganizationIamAuditConfig_basic(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigBasic(org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},
 	})
@@ -65,6 +68,9 @@ func TestAccOrganizationIamAuditConfig_multiple(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigMultiple(org, service, service2),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.multiple", org, service2),
 		},
@@ -90,6 +96,9 @@ func TestAccOrganizationIamAuditConfig_multipleAtOnce(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigMultiple(org, service, service2),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.multiple", org, service2),
 		},
@@ -112,17 +121,26 @@ func TestAccOrganizationIamAuditConfig_update(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigBasic(org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 
 			// Apply an updated IAM audit config
 			{
 				Config: testAccOrganizationAssociateAuditConfigUpdated(org, service),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 
 			// Drop the original member
 			{
 				Config: testAccOrganizationAssociateAuditConfigDropMemberFromBasic(org, service),
+			},
+			{
+				RefreshState: true,
 			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},
@@ -148,12 +166,18 @@ func TestAccOrganizationIamAuditConfig_remove(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigMultiple(org, service, service2),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.multiple", org, service2),
 
 			// Remove one IAM audit config
 			{
 				Config: testAccOrganizationAssociateAuditConfigBasic(org, service),
+			},
+			{
+				RefreshState: true,
 			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},
@@ -178,11 +202,17 @@ func TestAccOrganizationIamAuditConfig_addFirstExemptMember(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigMembers(org, service, members),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 
 			// Apply IAM audit config with one member
 			{
 				Config: testAccOrganizationAssociateAuditConfigMembers(org, service, members2),
+			},
+			{
+				RefreshState: true,
 			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},
@@ -207,11 +237,17 @@ func TestAccOrganizationIamAuditConfig_removeLastExemptMember(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigMembers(org, service, members),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 
 			// Apply IAM audit config with no members
 			{
 				Config: testAccOrganizationAssociateAuditConfigMembers(org, service, members2),
+			},
+			{
+				RefreshState: true,
 			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},
@@ -236,11 +272,17 @@ func TestAccOrganizationIamAuditConfig_updateNoExemptMembers(t *testing.T) {
 			{
 				Config: testAccOrganizationAssociateAuditConfigLogType(org, service, logType),
 			},
+			{
+				RefreshState: true,
+			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 
 			// Apply IAM audit config with DATA_WRITe
 			{
 				Config: testAccOrganizationAssociateAuditConfigLogType(org, service, logType2),
+			},
+			{
+				RefreshState: true,
 			},
 			organizationIamAuditConfigImportStep("google_organization_iam_audit_config.acceptance", org, service),
 		},

@@ -37,6 +37,9 @@ func TestAccBigQueryTable_Basic(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioning(datasetID, tableID, "DAY"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -44,6 +47,9 @@ func TestAccBigQueryTable_Basic(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableUpdated(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -114,6 +120,9 @@ func TestAccBigQueryTable_IgnoreSchemaDataPoliciesMerge(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -130,6 +139,9 @@ func TestAccBigQueryTable_IgnoreSchemaDataPoliciesMerge(t *testing.T) {
 					}),
 					resource.TestCheckResourceAttr("google_bigquery_table.test", "description", "Stage 2 Table"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -160,6 +172,9 @@ func TestAccBigQueryTable_IgnoreSchemaDataPoliciesMerge(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -184,6 +199,9 @@ func TestAccBigQueryTable_TableMetadataView(t *testing.T) {
 				Config: testAccBigQueryTableBasicWithTableMetadataView(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -191,6 +209,9 @@ func TestAccBigQueryTable_TableMetadataView(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableUpdated(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -217,6 +238,9 @@ func TestAccBigQueryTable_OnlyDeletionProtectionUpdate(t *testing.T) {
 				Config: testAccBigQueryTableBasicSchemaWithDeletionProtection(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -224,6 +248,9 @@ func TestAccBigQueryTable_OnlyDeletionProtectionUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableBasicSchema(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -250,6 +277,9 @@ func TestAccBigQueryTable_OnlyNestedFieldUpdate(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioningWithExpirationMs(datasetID, tableID, 1000),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -257,6 +287,9 @@ func TestAccBigQueryTable_OnlyNestedFieldUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableTimePartitioningWithExpirationMs(datasetID, tableID, 2000),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -283,6 +316,9 @@ func TestAccBigQueryTable_DropColumns(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioningDropColumns(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -290,6 +326,9 @@ func TestAccBigQueryTable_DropColumns(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableTimePartitioningDropColumnsUpdate(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -318,6 +357,9 @@ func TestAccBigQueryTable_Kms(t *testing.T) {
 				Config: testAccBigQueryTableKms(cryptoKeyName, datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -342,6 +384,9 @@ func TestAccBigQueryTable_HourlyTimePartitioning(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioning(datasetID, tableID, "HOUR"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -349,6 +394,9 @@ func TestAccBigQueryTable_HourlyTimePartitioning(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableUpdated(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -375,6 +423,9 @@ func TestAccBigQueryTable_MonthlyTimePartitioning(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioning(datasetID, tableID, "MONTH"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -382,6 +433,9 @@ func TestAccBigQueryTable_MonthlyTimePartitioning(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableUpdated(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -408,6 +462,9 @@ func TestAccBigQueryTable_YearlyTimePartitioning(t *testing.T) {
 				Config: testAccBigQueryTableTimePartitioning(datasetID, tableID, "YEAR"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -415,6 +472,9 @@ func TestAccBigQueryTable_YearlyTimePartitioning(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableUpdated(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -442,6 +502,9 @@ func TestAccBigQueryTable_HivePartitioning(t *testing.T) {
 				Config: testAccBigQueryTableHivePartitioning(bucketName, datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -467,6 +530,9 @@ func TestAccBigQueryTable_HivePartitioningCustomSchema_update(t *testing.T) {
 				Config: testAccBigQueryTableHivePartitioningCustomSchema(bucketName, datasetID, tableID, "old-label"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -474,6 +540,9 @@ func TestAccBigQueryTable_HivePartitioningCustomSchema_update(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableHivePartitioningCustomSchema(bucketName, datasetID, tableID, "new-label"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -500,6 +569,9 @@ func TestAccBigQueryTable_AvroPartitioning(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTableAvroPartitioning(bucketName, avroFilePath, datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -529,6 +601,9 @@ func TestAccBigQueryBigLakeManagedTable(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigLakeManagedTable(bucketName, connectionID, datasetID, tableID, TEST_SIMPLE_CSV_SCHEMA),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -605,6 +680,9 @@ func TestAccBigQueryExternalDataTable_json(t *testing.T) {
 				Config: testAccBigQueryTableJson(datasetID, tableID, bucketName, "UTF-8"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -636,6 +714,9 @@ func TestAccBigQueryExternalDataTable_sourceColumnMatch(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -648,6 +729,9 @@ func TestAccBigQueryExternalDataTable_sourceColumnMatch(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -655,6 +739,9 @@ func TestAccBigQueryExternalDataTable_sourceColumnMatch(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableSourceColumnMatchRemoved(datasetID, tableID, bucketName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -681,6 +768,9 @@ func TestAccBigQueryTable_RangePartitioning(t *testing.T) {
 				Config: testAccBigQueryTableRangePartitioning(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -703,6 +793,9 @@ func TestAccBigQueryTable_PrimaryKey(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTablePrimaryKey(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -732,6 +825,9 @@ func TestAccBigQueryTable_ForeignKey(t *testing.T) {
 				Config: testAccBigQueryTableForeignKeys(projectID, datasetID, tableID_pk, tableID_fk),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -759,6 +855,9 @@ func TestAccBigQueryTable_updateTableConstraints(t *testing.T) {
 				Config: testAccBigQueryTableForeignKeys(projectID, datasetID, tableID_pk, tableID_fk),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -766,6 +865,9 @@ func TestAccBigQueryTable_updateTableConstraints(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableTableConstraintsUpdate(projectID, datasetID, tableID_pk, tableID_fk),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            resourceName,
@@ -792,6 +894,9 @@ func TestAccBigQueryTable_View(t *testing.T) {
 				Config: testAccBigQueryTableWithView(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -816,6 +921,9 @@ func TestAccBigQueryTable_updateView(t *testing.T) {
 				Config: testAccBigQueryTableWithView(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -823,6 +931,9 @@ func TestAccBigQueryTable_updateView(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableWithNewSqlView(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -849,6 +960,9 @@ func TestAccBigQueryTable_WithViewAndSchema(t *testing.T) {
 				Config: testAccBigQueryTableWithViewAndSchema(datasetID, tableID, "table description1"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -856,6 +970,9 @@ func TestAccBigQueryTable_WithViewAndSchema(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableWithViewAndSchema(datasetID, tableID, "table description2"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -885,6 +1002,9 @@ func TestAccBigQueryTable_MaterializedView_DailyTimePartioning_Basic(t *testing.
 				Config: testAccBigQueryTableWithMatViewDailyTimePartitioning_basic(datasetID, tableID, materialized_viewID, query),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -898,6 +1018,9 @@ func TestAccBigQueryTable_MaterializedView_DailyTimePartioning_Basic(t *testing.
 			},
 			{
 				Config: testAccBigQueryTableWithMatViewDailyTimePartitioning_basic(datasetID, tableID, materialized_viewID, queryNew),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -936,6 +1059,9 @@ func TestAccBigQueryTable_MaterializedView_DailyTimePartioning_Update(t *testing
 				Config: testAccBigQueryTableWithMatViewDailyTimePartitioning_basic(datasetID, tableID, materialized_viewID, query),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -949,6 +1075,9 @@ func TestAccBigQueryTable_MaterializedView_DailyTimePartioning_Update(t *testing
 			},
 			{
 				Config: testAccBigQueryTableWithMatViewDailyTimePartitioning(datasetID, tableID, materialized_viewID, enable_refresh, refresh_interval_ms, query),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -982,6 +1111,9 @@ func TestAccBigQueryTable_MaterializedView_NonIncremental_basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTableWithMatViewNonIncremental_basic(datasetID, tableID, materialized_viewID, query, maxStaleness),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1390,6 +1522,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchemaAndConnectionIDAndHivePartit
 				Config: testAccBigQueryTableFromGCSWithSchemaWithConnectionIdAndHivePartitioning(datasetID, tableID, connectionID, projectID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1397,6 +1532,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchemaAndConnectionIDAndHivePartit
 			},
 			{
 				Config: testAccBigQueryTableFromGCSWithSchema(datasetID, tableID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1527,6 +1665,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchemaAndConnectionID_UpdateNoConn
 				Config: testAccBigQueryTableFromGCSWithSchemaWithConnectionId(datasetID, tableID, connectionID, projectID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1534,6 +1675,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchemaAndConnectionID_UpdateNoConn
 			},
 			{
 				Config: testAccBigQueryTableFromGCSWithSchema(datasetID, tableID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1569,6 +1713,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchema_UpdateToConnectionID(t *tes
 				Config: testAccBigQueryTableFromGCSWithSchema(datasetID, tableID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1578,6 +1725,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchema_UpdateToConnectionID(t *tes
 				Config: testAccBigQueryTableFromGCSWithSchemaWithConnectionId(datasetID, tableID, connectionID, projectID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1585,6 +1735,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchema_UpdateToConnectionID(t *tes
 			},
 			{
 				Config: testAccBigQueryTableFromGCSWithSchemaWithConnectionId2(datasetID, tableID, connectionID, projectID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1614,6 +1767,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchema_UpdateAllowQuotedNewlines(t
 				Config: testAccBigQueryTableFromGCSWithSchema(datasetID, tableID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1621,6 +1777,9 @@ func TestAccBigQueryExternalDataTable_CSV_WithSchema_UpdateAllowQuotedNewlines(t
 			},
 			{
 				Config: testAccBigQueryTableFromGCSWithSchema_UpdatAllowQuotedNewlines(datasetID, tableID, bucketName, objectName, TEST_SIMPLE_CSV, TEST_SIMPLE_CSV_SCHEMA),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1651,6 +1810,9 @@ func TestAccBigQueryDataTable_bigtable(t *testing.T) {
 				Config: testAccBigQueryTableFromBigtable(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.table",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1677,6 +1839,9 @@ func TestAccBigQueryDataTable_bigtable_options(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTableFromBigtableOptions(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.table",
@@ -1707,6 +1872,9 @@ func TestAccBigQueryDataTable_sheet(t *testing.T) {
 				Config: testAccBigQueryTableFromSheet(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.table",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1731,6 +1899,9 @@ func TestAccBigQueryDataTable_jsonEquivalency(t *testing.T) {
 				Config: testAccBigQueryTable_jsonEq(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1738,6 +1909,9 @@ func TestAccBigQueryDataTable_jsonEquivalency(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTable_jsonEqModeRemoved(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1790,6 +1964,9 @@ func TestAccBigQueryDataTable_expandArray(t *testing.T) {
 				Config: testAccBigQueryTable_arrayInitial(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1797,6 +1974,9 @@ func TestAccBigQueryDataTable_expandArray(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTable_arrayExpanded(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1821,6 +2001,9 @@ func TestAccBigQueryTable_allowDestroy(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTable_noAllowDestroy(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1855,6 +2038,9 @@ func TestAccBigQueryTable_emptySchema(t *testing.T) {
 				Config: testAccBigQueryTable_mimicCreateFromConsole(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1862,6 +2048,9 @@ func TestAccBigQueryTable_emptySchema(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTable_emptySchema(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1889,6 +2078,9 @@ func TestAccBigQueryTable_Update_SchemaWithoutPolicyTagsToWithPolicyTags(t *test
 				Config: testAccBigQueryTableBasicSchema(datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1896,6 +2088,9 @@ func TestAccBigQueryTable_Update_SchemaWithoutPolicyTagsToWithPolicyTags(t *test
 			},
 			{
 				Config: testAccBigQueryTableBasicSchemaWithPolicyTags(datasetID, tableID, projectID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1923,6 +2118,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToNoPolicyTag(t *testing.T)
 				Config: testAccBigQueryTableBasicSchemaWithPolicyTags(datasetID, tableID, projectID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1930,6 +2128,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToNoPolicyTag(t *testing.T)
 			},
 			{
 				Config: testAccBigQueryTableBasicSchema(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1957,6 +2158,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToEmptyPolicyTag(t *testing
 				Config: testAccBigQueryTableBasicSchemaWithPolicyTags(datasetID, tableID, projectID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1964,6 +2168,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToEmptyPolicyTag(t *testing
 			},
 			{
 				Config: testAccBigQueryTableBasicSchemaWithEmptyPolicyTags(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -1991,6 +2198,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToEmptyPolicyTagNames(t *te
 				Config: testAccBigQueryTableBasicSchemaWithPolicyTags(datasetID, tableID, projectID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1998,6 +2208,9 @@ func TestAccBigQueryTable_Update_SchemaWithPolicyTagsToEmptyPolicyTagNames(t *te
 			},
 			{
 				Config: testAccBigQueryTableBasicSchemaWithEmptyPolicyTagNames(datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -2024,6 +2237,9 @@ func TestAccBigQueryTable_SchemaWithEmptyCollation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTableWithEmptyCollation(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -2109,6 +2325,9 @@ func TestAccBigQueryTable_schemaUnchangedWithRowAccessPolicy(t *testing.T) {
 				Config: testAccBigQueryTableWithSchemaAndRowAccessPolicy(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2150,6 +2369,9 @@ func TestAccBigQueryTable_schemaColumnDropWithRowAccessPolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2171,6 +2393,10 @@ func TestAccBigQueryTable_schemaColumnDropWithRowAccessPolicy(t *testing.T) {
 						return nil
 					},
 				),
+				ExpectNonEmptyPlan: true,
+			},
+			{
+				RefreshState:       true,
 				ExpectNonEmptyPlan: true,
 			},
 			{
@@ -2246,6 +2472,9 @@ func TestAccBigQueryTable_TableReplicationInfo_WithoutReplicationInterval(t *tes
 				Config: testAccBigQueryTableWithReplicationInfo(projectID, sourceDatasetID, sourceTableID, sourceMVID, replicaDatasetID, replicaMVID, sourceMVJobID, dropMVJobID, replicationIntervalExpr),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.replica_mv",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2281,6 +2510,9 @@ func TestAccBigQueryTable_TableReplicationInfo_WithReplicationInterval(t *testin
 				Config: testAccBigQueryTableWithReplicationInfo(projectID, sourceDatasetID, sourceTableID, sourceMVID, replicaDatasetID, replicaMVID, sourceMVJobID, dropMVJobID, replicationIntervalExpr),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.replica_mv",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2312,6 +2544,9 @@ func TestAccBigQueryTable_ResourceTags(t *testing.T) {
 				Config: testAccBigQueryTableWithResourceTags(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2319,6 +2554,9 @@ func TestAccBigQueryTable_ResourceTags(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTableWithResourceTagsUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -2329,6 +2567,9 @@ func TestAccBigQueryTable_ResourceTags(t *testing.T) {
 			// testAccBigQueryTableWithResourceTagsDestroy must be called at the end of this test to clear the resource tag bindings of the table before deletion.
 			{
 				Config: testAccBigQueryTableWithResourceTagsDestroy(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -2359,6 +2600,9 @@ func TestAccBigQueryTable_externalCatalogTableOptions(t *testing.T) {
 				Config: testAccBigQueryTable_externalCatalogTableOptions_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2366,6 +2610,9 @@ func TestAccBigQueryTable_externalCatalogTableOptions(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTable_externalCatalogTableOptions_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -2393,6 +2640,9 @@ func TestAccBigQueryTable_foreignTypeInfo(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBigQueryTable_foreignTypeInfo_basic(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",
@@ -5396,6 +5646,9 @@ func TestAccBigQueryTable_SchemaWithNoCollation(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6055,6 +6308,9 @@ func TestAccBigQueryTable_DataGovernanceTags(t *testing.T) {
 				Config: testAccBigQueryTable_dataGovernanceTags(project, tagKeyShortName, tagValueShortName, datasetID, tableID),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_bigquery_table.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -6062,6 +6318,9 @@ func TestAccBigQueryTable_DataGovernanceTags(t *testing.T) {
 			},
 			{
 				Config: testAccBigQueryTable_dataGovernanceTagsClear(project, tagKeyShortName, tagValueShortName, datasetID, tableID),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_bigquery_table.test",

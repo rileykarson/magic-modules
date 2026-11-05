@@ -25,6 +25,9 @@ func TestAccComputeRegionBackendService_regionBackendServiceHaPolicyManualLeader
 				Config: testAccComputeRegionBackendService_regionBackendServiceHaPolicyManualLeader_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_backend_service.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -37,6 +40,9 @@ func TestAccComputeRegionBackendService_regionBackendServiceHaPolicyManualLeader
 						plancheck.ExpectResourceAction("google_compute_region_backend_service.default", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_backend_service.default",

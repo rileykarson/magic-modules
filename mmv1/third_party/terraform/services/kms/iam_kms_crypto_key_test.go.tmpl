@@ -43,6 +43,9 @@ func TestAccKmsCryptoKeyIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_kms_crypto_key_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s/%s %s", keyRingId.TerraformId(), cryptoKeyName, roleId),
 				ImportState:       true,
@@ -55,6 +58,9 @@ func TestAccKmsCryptoKeyIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, projectId),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, projectId),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_kms_crypto_key_iam_binding.foo",
@@ -90,6 +96,9 @@ func TestAccKmsCryptoKeyIamBinding_withCondition(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccKmsCryptoKeyIamBinding_withCondition(projectId, orgId, billingAccount, account, keyRingName, cryptoKeyName, roleId, conditionTitle),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_kms_crypto_key_iam_binding.foo",

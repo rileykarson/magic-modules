@@ -39,6 +39,9 @@ func TestAccStorageFtpServer_updateInternal(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_ftp_server.internal_server",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -66,6 +69,9 @@ func TestAccStorageFtpServer_updateInternal(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_ftp_server.internal_server",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -78,6 +84,9 @@ func TestAccStorageFtpServer_updateInternal(t *testing.T) {
 						plancheck.ExpectResourceAction("google_storage_ftp_server.internal_server", plancheck.ResourceActionDestroyBeforeCreate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_ftp_server.internal_server",
@@ -115,6 +124,9 @@ func TestAccStorageFtpServer_updateExternal(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_ftp_server.external_server",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -139,6 +151,9 @@ func TestAccStorageFtpServer_updateExternal(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_storage_ftp_server.external_server",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -151,6 +166,9 @@ func TestAccStorageFtpServer_updateExternal(t *testing.T) {
 						plancheck.ExpectResourceAction("google_storage_ftp_server.external_server", plancheck.ResourceActionDestroyBeforeCreate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_storage_ftp_server.external_server",

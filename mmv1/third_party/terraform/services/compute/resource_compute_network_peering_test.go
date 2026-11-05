@@ -80,6 +80,9 @@ func TestAccComputeNetworkPeering_customRoutesUpdate(t *testing.T) {
 				Config: testAccComputeNetworkPeeringDefaultCustomRoutes(primaryNetworkName, peeringName, suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_peering.bar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -89,6 +92,9 @@ func TestAccComputeNetworkPeering_customRoutesUpdate(t *testing.T) {
 				Config: testAccComputeNetworkPeering_basic(primaryNetworkName, peeringName, suffix),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_network_peering.bar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -96,6 +102,9 @@ func TestAccComputeNetworkPeering_customRoutesUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccComputeNetworkPeeringDefaultCustomRoutes(primaryNetworkName, peeringName, suffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_network_peering.bar",

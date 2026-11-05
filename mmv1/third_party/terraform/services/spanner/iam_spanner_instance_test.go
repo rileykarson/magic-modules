@@ -27,6 +27,9 @@ func TestAccSpannerInstanceIamBinding(t *testing.T) {
 				Config: testAccSpannerInstanceIamBinding_basic(account, instance, role),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName: "google_spanner_instance_iam_binding.foo",
 				ImportStateId: fmt.Sprintf("%s %s", spanner.SpannerInstanceId{
 					Project:  project,
@@ -38,6 +41,9 @@ func TestAccSpannerInstanceIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccSpannerInstanceIamBinding_update(account, instance, role),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName: "google_spanner_instance_iam_binding.foo",

@@ -52,6 +52,9 @@ func TestAccVmwareenginePrivateCloud_vmwareEnginePrivateCloudUpdate(t *testing.T
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vmwareengine_private_cloud.vmw-engine-pc",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -71,6 +74,9 @@ func TestAccVmwareenginePrivateCloud_vmwareEnginePrivateCloudUpdate(t *testing.T
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vmwareengine_private_cloud.vmw-engine-pc",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -88,6 +94,9 @@ func TestAccVmwareenginePrivateCloud_vmwareEnginePrivateCloudUpdate(t *testing.T
 							"send_deletion_delay_hours_if_zero",
 						}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vmwareengine_private_cloud.vmw-engine-pc",
@@ -117,6 +126,9 @@ func TestAccVmwareenginePrivateCloud_vmwareEnginePrivateCloudUpdate(t *testing.T
 							"send_deletion_delay_hours_if_zero",
 						}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vmwareengine_private_cloud.vmw-engine-pc",

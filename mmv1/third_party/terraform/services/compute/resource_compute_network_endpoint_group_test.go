@@ -49,6 +49,9 @@ func TestAccComputeNetworkEndpointGroup_internalEndpoint(t *testing.T) {
 				Config: testAccComputeNetworkEndpointGroup_internalEndpoint(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_network_endpoint_group.neg",
 				ImportState:             true,
 				ImportStateVerify:       true,

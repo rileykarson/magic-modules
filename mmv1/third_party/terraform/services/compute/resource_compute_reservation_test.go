@@ -27,12 +27,18 @@ func TestAccComputeReservation_update(t *testing.T) {
 				Config: testAccComputeReservation_basic(reservationName, "2"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_reservation.reservation",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeReservation_basic(reservationName, "1"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_reservation.reservation",
@@ -64,6 +70,9 @@ func TestAccComputeReservation_deleteAtTime(t *testing.T) {
 				Config: testAccComputeReservation_deleteAtTime(reservationName, deleteAtTimeRFC3339),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_reservation.reservation",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -91,6 +100,9 @@ func TestAccComputeReservation_deleteAfterDuration(t *testing.T) {
 			},
 			{
 				Config: testAccComputeReservation_deleteAfterDuration(reservationName, deleteTime.Unix()),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_reservation.reservation",

@@ -26,12 +26,18 @@ func TestAccLoggingMetric_update(t *testing.T) {
 				Config: testAccLoggingMetric_update(suffix, filter),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_logging_metric.logging_metric",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccLoggingMetric_update(suffix, updatedFilter),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_logging_metric.logging_metric",
@@ -55,6 +61,9 @@ func TestAccLoggingMetric_explicitBucket(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccLoggingMetric_explicitBucket(suffix, filter),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_logging_metric.logging_metric",
@@ -81,6 +90,9 @@ func TestAccLoggingMetric_loggingBucket(t *testing.T) {
 				Config: testAccLoggingMetric_loggingBucketBase(suffix, filter),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_logging_metric.logging_metric",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -89,12 +101,18 @@ func TestAccLoggingMetric_loggingBucket(t *testing.T) {
 				Config: testAccLoggingMetric_loggingBucket(suffix, filter, project_id),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_logging_metric.logging_metric",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccLoggingMetric_loggingBucketBase(suffix, filter),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_logging_metric.logging_metric",
@@ -119,12 +137,18 @@ func TestAccLoggingMetric_descriptionUpdated(t *testing.T) {
 				Config: testAccLoggingMetric_descriptionUpdated(suffix, "original"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_logging_metric.logging_metric",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccLoggingMetric_descriptionUpdated(suffix, "Updated"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_logging_metric.logging_metric",

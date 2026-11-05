@@ -65,6 +65,9 @@ func TestAccNetworkConnectivityDestination_update(t *testing.T) {
 				Config: testAccNetworkConnectivityDestination_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_connectivity_destination.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -77,6 +80,9 @@ func TestAccNetworkConnectivityDestination_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_network_connectivity_destination.example", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_connectivity_destination.example",

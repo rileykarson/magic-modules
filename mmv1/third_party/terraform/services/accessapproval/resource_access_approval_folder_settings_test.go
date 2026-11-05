@@ -38,6 +38,9 @@ func testAccAccessApprovalFolderSettings(t *testing.T) {
 				Config: testAccAccessApprovalFolderSettings_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_folder_access_approval_settings.folder_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -47,6 +50,9 @@ func testAccAccessApprovalFolderSettings(t *testing.T) {
 				Config: testAccAccessApprovalFolderSettings_update(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_folder_access_approval_settings.folder_access_approval",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -54,6 +60,9 @@ func testAccAccessApprovalFolderSettings(t *testing.T) {
 			},
 			{
 				Config: testAccAccessApprovalFolderSettings_activeKeyVersion(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_folder_access_approval_settings.folder_access_approval",

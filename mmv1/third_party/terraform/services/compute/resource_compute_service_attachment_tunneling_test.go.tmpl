@@ -24,6 +24,9 @@ func TestAccComputeServiceAttachment_tunnelingConfigUpdate(t *testing.T) {
 				Config: testAccComputeServiceAttachment_tunnelingConfig(context, "REGIONAL", "IPV4"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -31,6 +34,9 @@ func TestAccComputeServiceAttachment_tunnelingConfigUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccComputeServiceAttachment_tunnelingConfig(context, "GLOBAL", "IPV6"),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_service_attachment.psc_ilb_service_attachment",

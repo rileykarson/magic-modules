@@ -30,6 +30,9 @@ func TestAccComputeImage_withLicense(t *testing.T) {
 				Config: testAccComputeImage_license("image-test-" + acctest.RandString(t, 10)),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_image.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -76,6 +79,9 @@ func TestAccComputeImage_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_image.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -106,6 +112,9 @@ func TestAccComputeImage_basedondisk(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_image.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -132,6 +141,9 @@ func TestAccComputeImage_shieldedInstance_InitialState(t *testing.T) {
 						t, "google_compute_image.foobar", &image),
 					testAccCheckComputeImageHasShieldedInstanceInitialState(&image),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_image.foobar",
@@ -162,6 +174,9 @@ func TestAccComputeImage_shieldedInstance_UpdatedState(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_image.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -173,6 +188,9 @@ func TestAccComputeImage_shieldedInstance_UpdatedState(t *testing.T) {
 						t, "google_compute_image.foobar", &image),
 					testAccCheckComputeImageHasShieldedInstanceUpdatedState(&image),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_image.foobar",
@@ -201,6 +219,9 @@ func TestAccComputeImage_sourceImage(t *testing.T) {
 						t, "google_compute_image.foobar", &image),
 					testAccCheckComputeImageHasSourceType(&image),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_image.foobar",
@@ -232,6 +253,9 @@ func TestAccComputeImage_sourceSnapshot(t *testing.T) {
 						t, "google_compute_image.foobar", &image),
 					testAccCheckComputeImageHasSourceType(&image),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_image.foobar",
@@ -316,6 +340,9 @@ func TestAccComputeImage_imageEncryptionKey(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeImage_imageEncryptionKey(kmsRingName, kmsKeyName, acctest.RandString(t, 10)),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_image.image",
@@ -1136,6 +1163,9 @@ func TestAccComputeImage_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeImage_resourceManagerTags(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_image.image_with_resource_manager_tags",

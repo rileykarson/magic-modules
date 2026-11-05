@@ -28,6 +28,9 @@ func TestAccSecurityCenterSourceIamBinding(t *testing.T) {
 				Config: testAccSecurityCenterSourceIamBinding_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName: "google_scc_source_iam_binding.foo",
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
 					// This has to be a function because sources only use numeric IDs
@@ -43,6 +46,9 @@ func TestAccSecurityCenterSourceIamBinding(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccSecurityCenterSourceIamBinding_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName: "google_scc_source_iam_binding.foo",

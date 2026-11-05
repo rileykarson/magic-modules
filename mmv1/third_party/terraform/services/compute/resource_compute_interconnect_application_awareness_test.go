@@ -26,6 +26,9 @@ func TestAccComputeInterconnect_computeInterconnectBasicTestExample_update(t *te
 				Config: testAccComputeInterconnect_computeInterconnect_create(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_interconnect.example-interconnect",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -33,6 +36,9 @@ func TestAccComputeInterconnect_computeInterconnectBasicTestExample_update(t *te
 			},
 			{
 				Config: testAccComputeInterconnect_computeInterconnect_enable_aai(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_interconnect.example-interconnect",

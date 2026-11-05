@@ -36,6 +36,9 @@ func TestAccRegionInstanceGroupManager_basic(t *testing.T) {
             "google_compute_region_instance_group_manager.igm-basic", "instance_group_manager_id")),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -64,6 +67,9 @@ func TestAccRegionInstanceGroupManager_targetSizeZero(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccRegionInstanceGroupManager_targetSizeZero(templateName, igmName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -100,6 +106,9 @@ func TestAccRegionInstanceGroupManager_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-update",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -116,6 +125,9 @@ func TestAccRegionInstanceGroupManager_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-update",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -130,6 +142,9 @@ func TestAccRegionInstanceGroupManager_update(t *testing.T) {
 					resource.TestCheckResourceAttr("google_compute_region_instance_group_manager.igm-update", "instance_lifecycle_policy.0.force_update_on_repair", "YES"),
 					resource.TestCheckResourceAttr("google_compute_region_instance_group_manager.igm-update", "instance_lifecycle_policy.0.on_repair.0.allow_changing_zone", "YES"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-update",
@@ -159,6 +174,9 @@ func TestAccRegionInstanceGroupManager_updateLifecycle(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_updateLifecycle(tag1, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-update",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -166,6 +184,9 @@ func TestAccRegionInstanceGroupManager_updateLifecycle(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_updateLifecycle(tag2, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-update",
@@ -193,6 +214,9 @@ func TestAccRegionInstanceGroupManager_rollingUpdatePolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_rollingUpdatePolicy(igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-rolling-update-policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -207,6 +231,9 @@ func TestAccRegionInstanceGroupManager_rollingUpdatePolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_rollingUpdatePolicy2(igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-rolling-update-policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -214,6 +241,9 @@ func TestAccRegionInstanceGroupManager_rollingUpdatePolicy(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_rollingUpdatePolicy3(igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-rolling-update-policy",
@@ -240,6 +270,9 @@ func TestAccRegionInstanceGroupManager_separateRegions(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccRegionInstanceGroupManager_separateRegions(igm1, igm2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -273,6 +306,9 @@ func TestAccRegionInstanceGroupManager_versions(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_versions(primaryTemplate, canaryTemplate, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -299,6 +335,9 @@ func TestAccRegionInstanceGroupManager_autoHealingPolicies(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_autoHealingPolicies(template, target, igm, hck),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -306,6 +345,9 @@ func TestAccRegionInstanceGroupManager_autoHealingPolicies(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_autoHealingPoliciesRemoved(template, target, igm, hck),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -333,6 +375,9 @@ func TestAccRegionInstanceGroupManager_distributionPolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_distributionPolicyEmpty(template, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -340,6 +385,9 @@ func TestAccRegionInstanceGroupManager_distributionPolicy(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_distributionPolicy(template, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -351,6 +399,9 @@ func TestAccRegionInstanceGroupManager_distributionPolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_distributionPolicyUpdate(template, igm, zones),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -358,6 +409,9 @@ func TestAccRegionInstanceGroupManager_distributionPolicy(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_distributionPolicyEmpty(template, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -385,6 +439,9 @@ func TestAccRegionInstanceGroupManager_stateful(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_stateful(template, network, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -392,6 +449,9 @@ func TestAccRegionInstanceGroupManager_stateful(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_statefulUpdate(template, network, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -402,6 +462,9 @@ func TestAccRegionInstanceGroupManager_stateful(t *testing.T) {
       {
 				Config: testAccRegionInstanceGroupManager_statefulRemoved(template, network, igm),
 			},
+      {
+      	RefreshState: true,
+      },
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
@@ -429,6 +492,9 @@ func TestAccRegionInstanceGroupManager_stoppedSuspendedTargetSize(t *testing.T) 
         Config: testAccRegionInstanceGroupManager_stoppedSuspendedTargetSize(template, network, igm),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:            "google_compute_region_instance_group_manager.sr-igm",
         ImportState:             true,
         ImportStateVerify:       true,
@@ -436,6 +502,9 @@ func TestAccRegionInstanceGroupManager_stoppedSuspendedTargetSize(t *testing.T) 
       },
       {
         Config: testAccRegionInstanceGroupManager_stoppedSuspendedTargetSizeUpdate(template, network, igm),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:            "google_compute_region_instance_group_manager.sr-igm",
@@ -463,6 +532,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_instanceFlexibilityPolicy(network, template, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -470,6 +542,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicy(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_instanceFlexibilityPolicyUpdate(network, template, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -481,6 +556,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicy(t *testing.T) {
 				Config: testAccRegionInstanceGroupManager_instanceFlexibilityPolicyUpdateToEmptyBlock(network, template, igm),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -488,6 +566,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicy(t *testing.T) {
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_instanceFlexibilityPolicyRemove(network, template, igm),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -548,6 +629,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicyAdditionalOverri
         ),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
         ImportState:             true,
         ImportStateVerify:       true,
@@ -574,6 +658,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicyAdditionalOverri
         ),
       },
       {
+      	RefreshState: true,
+      },
+      {
         ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
         ImportState:             true,
         ImportStateVerify:       true,
@@ -581,6 +668,9 @@ func TestAccRegionInstanceGroupManager_instanceFlexibilityPolicyAdditionalOverri
       },
       {
         Config: testAccRegionInstanceGroupManager_instanceFlexibilityPolicyAdditionalOverridesRemove(context),
+      },
+      {
+      	RefreshState: true,
       },
       {
         ResourceName:            "google_compute_region_instance_group_manager.igm-basic",
@@ -627,6 +717,9 @@ func TestAccRegionInstanceGroupManager_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccRegionInstanceGroupManager_resourceManagerTags(template_name, tag_name, igm_name, project_id),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.rigm-tags",
@@ -2660,6 +2753,9 @@ func TestAccRegionInstanceGroupManager_targetSizePolicy(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-tsp",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2811,6 +2907,9 @@ func TestAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate(t *t
 				Config: testAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate(suffix, workloadPolicyResourceName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-workload-policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2820,6 +2919,9 @@ func TestAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate(t *t
 				Config: testAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate(suffix, workloadPolicyResourceUpdate),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-workload-policy",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -2827,6 +2929,9 @@ func TestAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate(t *t
 			},
 			{
 				Config: testAccRegionInstanceGroupManager_resourcePoliciesWorkloadPolicyUpdate2(suffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-workload-policy",
@@ -3017,6 +3122,9 @@ func TestAccRegionInstanceGroupManager_deletionPolicyForce(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_region_instance_group_manager.igm-force",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -3027,6 +3135,9 @@ func TestAccRegionInstanceGroupManager_deletionPolicyForce(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_compute_region_instance_group_manager.igm-force", "deletion_policy", "FORCE"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_instance_group_manager.igm-force",

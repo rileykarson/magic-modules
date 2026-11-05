@@ -40,6 +40,9 @@ func TestAccGKEHubFeature_gkehubFeatureFleetObservability(t *testing.T) {
 				Config: testAccGKEHubFeature_gkehubFeatureFleetObservability(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature.feature",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -48,12 +51,18 @@ func TestAccGKEHubFeature_gkehubFeatureFleetObservability(t *testing.T) {
 				Config: testAccGKEHubFeature_gkehubFeatureFleetObservabilityUpdate1(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature.feature",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccGKEHubFeature_gkehubFeatureFleetObservabilityUpdate2(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature.feature",
@@ -148,6 +157,9 @@ func TestAccGKEHubFeature_gkehubFeatureMciUpdate(t *testing.T) {
 				Config: testAccGKEHubFeature_gkehubFeatureMciUpdateStart(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -155,6 +167,9 @@ func TestAccGKEHubFeature_gkehubFeatureMciUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_gkehubFeatureMciChangeMembership(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -297,6 +312,9 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigServiceMesh(t *testing.T) {
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigServiceMesh(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -304,6 +322,9 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigServiceMesh(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigServiceMeshUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature.feature",
@@ -314,12 +335,18 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigServiceMesh(t *testing.T) {
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigServiceMeshRemovalUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature.feature",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigServiceMeshReAddUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature.feature",
@@ -410,6 +437,9 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigConfigManagement(t *testing.T)
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigConfigManagement(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -419,12 +449,18 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigConfigManagement(t *testing.T)
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigConfigManagementUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature.feature",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigConfigManagementRemovalUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature.feature",
@@ -524,6 +560,9 @@ func TestAccGKEHubFeature_Clusterupgrade(t *testing.T) {
 				Config: testAccGKEHubFeature_Clusterupgrade(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -531,6 +570,9 @@ func TestAccGKEHubFeature_Clusterupgrade(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_ClusterupgradeUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -640,6 +682,9 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigPolicyController(t *testing.T)
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigPolicyController(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -649,12 +694,18 @@ func TestAccGKEHubFeature_FleetDefaultMemberConfigPolicyController(t *testing.T)
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigPolicyControllerFull(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature.feature",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccGKEHubFeature_FleetDefaultMemberConfigPolicyControllerMinimal(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature.feature",
@@ -804,6 +855,9 @@ func TestAccGKEHubFeature_gkehubFeatureMcsd(t *testing.T) {
 				Config: testAccGKEHubFeature_gkehubFeatureMcsd(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -811,6 +865,9 @@ func TestAccGKEHubFeature_gkehubFeatureMcsd(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_gkehubFeatureMcsdUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -872,6 +929,9 @@ func TestAccGKEHubFeature_WorkloadIdentity(t *testing.T) {
 				Config: testAccGKEHubFeature_WorkloadIdentity(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -879,6 +939,9 @@ func TestAccGKEHubFeature_WorkloadIdentity(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_WorkloadIdentityUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -1031,6 +1094,9 @@ func TestAccGKEHubFeature_Rbacrolebindingactuation(t *testing.T) {
 				Config: testAccGKEHubFeature_Rbacrolebindingactuation(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_gke_hub_feature.feature",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -1038,6 +1104,9 @@ func TestAccGKEHubFeature_Rbacrolebindingactuation(t *testing.T) {
 			},
 			{
 				Config: testAccGKEHubFeature_RbacrolebindingactuationUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.feature",
@@ -1106,6 +1175,9 @@ func TestAccGKEHubFeature_EmptySpecSubBlock(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_gke_hub_feature.fleetobservability", "spec.0.fleetobservability.#", "1"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_gke_hub_feature.workloadidentity",

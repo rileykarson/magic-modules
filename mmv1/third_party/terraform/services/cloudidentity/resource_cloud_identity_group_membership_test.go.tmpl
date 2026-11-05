@@ -33,6 +33,9 @@ func testAccCloudIdentityGroupMembership_updateTest(t *testing.T) {
 				Config: testAccCloudIdentityGroupMembership_update1(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_cloud_identity_group_membership.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -47,6 +50,9 @@ func testAccCloudIdentityGroupMembership_updateTest(t *testing.T) {
 				Config: testAccCloudIdentityGroupMembership_update2(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_cloud_identity_group_membership.basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -59,6 +65,9 @@ func testAccCloudIdentityGroupMembership_updateTest(t *testing.T) {
 			},
 			{
 				Config: testAccCloudIdentityGroupMembership_update1(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_cloud_identity_group_membership.basic",
@@ -158,6 +167,9 @@ func testAccCloudIdentityGroupMembership_importTest(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCloudIdentityGroupMembership_import(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_cloud_identity_group_membership.basic",
@@ -308,6 +320,9 @@ func testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipWithMemberK
 				Config: testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipWithMemberKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_cloud_identity_group_membership.cloud_identity_group_membership_basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -383,6 +398,9 @@ func testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipUserWithMem
 				Config: testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipUserWithMemberKey(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_cloud_identity_group_membership.cloud_identity_group_membership_basic",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -446,6 +464,9 @@ func testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipExampleTest
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipExample(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_identity_group_membership.cloud_identity_group_membership_basic",
@@ -522,6 +543,9 @@ func testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipUserExample
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCloudIdentityGroupMembership_cloudIdentityGroupMembershipUserExample(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_identity_group_membership.cloud_identity_group_membership_basic",
@@ -632,6 +656,9 @@ func testAccCloudIdentityGroupMembership_existingResourceCreateIgnoreAlreadyExis
 				Check:  resource.TestCheckResourceAttr("google_cloud_identity_group_membership.acceptance", "id", id),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_identity_group_membership.acceptance",
 				ImportStateId:           id,
 				ImportState:             true,
@@ -665,6 +692,9 @@ func testAccCloudIdentityGroupMembership_createIgnoreAlreadyExists(t *testing.T)
 			{
 				Config: testAccCloudIdentityGroupMembershipCreateIgnoreAlreadyExists(context, false),
 				Check:  resource.TestCheckResourceAttr("google_cloud_identity_group_membership.acceptance", "id", id),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_cloud_identity_group_membership.acceptance",

@@ -37,6 +37,9 @@ func TestAccBigtableTableIamBinding(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_bigtable_table_iam_binding.binding",
 				ImportStateId:     importId,
 				ImportState:       true,
@@ -45,6 +48,9 @@ func TestAccBigtableTableIamBinding(t *testing.T) {
 			{
 				// Test IAM Binding update
 				Config: testAccBigtableTableIamBinding_update(instance, cluster, account, role),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_bigtable_table_iam_binding.binding",

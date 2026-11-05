@@ -277,6 +277,9 @@ func testAccProviderUserProjectOverride(t *testing.T) {
 				Config: testAccProviderUserProjectOverride_step2(accessToken, pid, true, topicName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_pubsub_topic.project-2-topic",
 				ImportState:             true,
 				ImportStateVerify:       true,

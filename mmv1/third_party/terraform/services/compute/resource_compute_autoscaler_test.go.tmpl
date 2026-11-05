@@ -26,12 +26,18 @@ func TestAccComputeAutoscaler_update(t *testing.T) {
 				Config: testAccComputeAutoscaler_basic(itName, tpName, igmName, autoscalerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_autoscaler.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeAutoscaler_update(itName, tpName, igmName, autoscalerName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_autoscaler.foobar",
@@ -60,6 +66,9 @@ func TestAccComputeAutoscaler_multicondition(t *testing.T) {
 				Config: testAccComputeAutoscaler_multicondition(itName, tpName, igmName, autoscalerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_autoscaler.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -83,6 +92,9 @@ func TestAccComputeAutoscaler_scaleDownControl(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeAutoscaler_scaleDownControl(itName, tpName, igmName, autoscalerName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_autoscaler.foobar",
@@ -110,6 +122,9 @@ func TestAccComputeAutoscaler_scalingSchedule(t *testing.T) {
 				Config: testAccComputeAutoscaler_scalingSchedule(itName, tpName, igmName, autoscalerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_autoscaler.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -135,6 +150,9 @@ func TestAccComputeAutoscaler_scaleInControl(t *testing.T) {
 				Config: testAccComputeAutoscaler_scaleInControl(itName, tpName, igmName, autoscalerName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_autoscaler.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -158,6 +176,9 @@ func TestAccComputeAutoscaler_scaleInControlFixed(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeAutoscaler_scaleInControlFixed(itName, tpName, igmName, autoscalerName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_autoscaler.foobar",

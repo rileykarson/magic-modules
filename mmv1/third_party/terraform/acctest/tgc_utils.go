@@ -267,16 +267,21 @@ func parseResources(config string) []string {
 	return resources
 }
 
-// determineImportMetadata checks if the next step is an import step and extracts all import metadata
+// determineImportMetadata checks subsequent import steps (skipping intervening RefreshState steps) and extracts all import metadata
 func determineImportMetadata(steps []resource.TestStep, currentStepIndex int, resourceName string) ImportMetadata {
 	var metadata ImportMetadata
 
-	// Check if there's a next step and if it's an import step
-	if currentStepIndex+1 < len(steps) {
-		nextStep := steps[currentStepIndex+1]
+	for j := currentStepIndex + 1; j < len(steps); j++ {
+		nextStep := steps[j]
+		if nextStep.RefreshState {
+			continue
+		}
+		if !nextStep.ImportState {
+			break
+		}
 
 		// Check if it's an import step for our resource
-		if nextStep.ImportState && nextStep.ResourceName == resourceName {
+		if nextStep.ResourceName == resourceName {
 			// Capture ignored fields if present
 			if nextStep.ImportStateVerify && len(nextStep.ImportStateVerifyIgnore) > 0 {
 				metadata.IgnoredFields = nextStep.ImportStateVerifyIgnore

@@ -30,6 +30,9 @@ func TestAccCloudFunctions2Function_update(t *testing.T) {
 				Config: testAccCloudfunctions2function_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -39,6 +42,9 @@ func TestAccCloudFunctions2Function_update(t *testing.T) {
 				Config: testAccCloudFunctions2Function_test_update(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -46,6 +52,9 @@ func TestAccCloudFunctions2Function_update(t *testing.T) {
 			},
 			{
 				Config: testAccCloudFunctions2Function_test_redeploy(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
@@ -353,6 +362,9 @@ func TestAccCloudFunctions2Function_updateAbiuFull(t *testing.T) {
 				Config: testAccCloudfunctions2function_abiuBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -362,6 +374,9 @@ func TestAccCloudFunctions2Function_updateAbiuFull(t *testing.T) {
 				Config: testAccCloudFunctions2Function_test_abiuUpdate(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -369,6 +384,9 @@ func TestAccCloudFunctions2Function_updateAbiuFull(t *testing.T) {
 			},
 			{
 				Config: testAccCloudFunctions2Function_test_abiuUpdate2(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloudfunctions2_function.terraform-test2",
@@ -674,6 +692,9 @@ func TestAccCloudfunctions2function_cloudfunctions2DirectvpcExample_update(t *te
 				Config: testAccCloudfunctions2function_cloudfunctions2DirectvpcExample_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloudfunctions2_function.function",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -686,6 +707,9 @@ func TestAccCloudfunctions2function_cloudfunctions2DirectvpcExample_update(t *te
 						plancheck.ExpectResourceAction("google_cloudfunctions2_function.function", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloudfunctions2_function.function",

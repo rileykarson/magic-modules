@@ -153,6 +153,11 @@ func TestAcc{{ $s.TestSampleSlug $.Res.ProductMetadata.Name $.Res.Name }}(t *tes
 			{{- end }}
 			},
 			{{- if not $st.ExcludeImportTest }}
+			{{- if $.Res.NeedsRefreshState $s $st }}
+			{
+				RefreshState: true,
+			},
+			{{- end }}
 			{
 				ResourceName:      "{{ $s.ResourceType $.Res.TerraformName }}.{{ $s.PrimaryResourceId }}",
 				ImportState:       true,

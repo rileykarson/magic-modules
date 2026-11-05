@@ -27,6 +27,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolFullUpdate(t *testing.T) {
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolFull(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -34,6 +37,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolFullUpdate(t *testing.T) {
 			},
 			{
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolFullUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
@@ -203,6 +209,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolGcsVolume(t *testing.T) {
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolGcsVolume(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -297,6 +306,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithDirectVPCUpdate(t *test
 				Config: testAccCloudRunV2WorkerPool_cloudRunWorkerPoolWithDirectVPC(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -304,6 +316,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithDirectVPCUpdate(t *test
 			},
 			{
 				Config: testAccCloudRunV2WorkerPool_cloudRunWorkerPoolWithDirectVPCAndNamedBinAuthPolicyUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
@@ -477,6 +492,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithManualScaling(t *testin
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithManualScaling(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -484,6 +502,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithManualScaling(t *testin
 			},
 			{
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolUpdateWithManualScaling(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",
@@ -566,6 +587,9 @@ func TestAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithManualInstanceCountZero
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCloudRunV2WorkerPool_cloudrunv2WorkerPoolWithManualInstanceCountZero(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_cloud_run_v2_worker_pool.default",

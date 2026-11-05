@@ -65,6 +65,9 @@ func testAccOrganizationIamBinding_basic(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_organization_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s organizations/%s/roles/%s", org, org, roleId),
 				ImportState:       true,
@@ -77,6 +80,9 @@ func testAccOrganizationIamBinding_basic(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_iam_binding.foo",
@@ -103,6 +109,9 @@ func testAccOrganizationIamBinding_condition(t *testing.T) {
 				Check: testAccCheckGoogleOrganizationIamBindingExists(t, "foo", "test-role", []string{
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_organization_iam_binding.foo",

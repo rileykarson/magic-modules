@@ -45,6 +45,9 @@ type Sample struct {
 	// Whether to skip generating tests for this resource
 	ExcludeTest bool `yaml:"exclude_test,omitempty"`
 
+	// Whether to emit a { RefreshState: true } test step before ImportStateVerify steps in this sample
+	RefreshState bool `yaml:"refresh_state,omitempty"`
+
 	// Whether to EXCLUDE the first step from doc generation
 	ExcludeBasicDoc bool `yaml:"exclude_basic_doc,omitempty"`
 

@@ -24,6 +24,9 @@ func TestAccContainerAnalysisNote_basic(t *testing.T) {
 				Config: testAccContainerAnalysisNoteBasic(name, readableName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_analysis_note.note",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -47,12 +50,18 @@ func TestAccContainerAnalysisNote_update(t *testing.T) {
 				Config: testAccContainerAnalysisNoteBasic(name, readableName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_container_analysis_note.note",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccContainerAnalysisNoteBasic(name, readableName2),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_container_analysis_note.note",

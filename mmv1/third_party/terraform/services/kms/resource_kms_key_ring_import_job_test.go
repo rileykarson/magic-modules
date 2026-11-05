@@ -23,6 +23,9 @@ func TestAccKmsKeyRingImportJob_basic(t *testing.T) {
 				Config: testGoogleKmsKeyRingImportJob_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_kms_key_ring_import_job.import-job",
 				ImportState:             true,
 				ImportStateVerify:       true,

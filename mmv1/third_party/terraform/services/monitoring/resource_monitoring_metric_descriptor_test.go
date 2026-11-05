@@ -21,6 +21,9 @@ func TestAccMonitoringMetricDescriptor_update(t *testing.T) {
 				Config: testAccMonitoringMetricDescriptor_update("initial description", "initial display name", "30s", "30s"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_monitoring_metric_descriptor.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -30,6 +33,9 @@ func TestAccMonitoringMetricDescriptor_update(t *testing.T) {
 				Config: testAccMonitoringMetricDescriptor_update("updated description", "updated display name", "60s", "60s"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_monitoring_metric_descriptor.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -37,6 +43,9 @@ func TestAccMonitoringMetricDescriptor_update(t *testing.T) {
 			},
 			{
 				Config: testAccMonitoringMetricDescriptor_omittedFields(),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_monitoring_metric_descriptor.basic",

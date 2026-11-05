@@ -30,6 +30,9 @@ func TestAccIdentityPlatformConfig_update(t *testing.T) {
 				Config: testAccIdentityPlatformConfig_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_identity_platform_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -39,6 +42,9 @@ func TestAccIdentityPlatformConfig_update(t *testing.T) {
 				Config: testAccIdentityPlatformConfig_disallowTenant(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_identity_platform_config.basic",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -46,6 +52,9 @@ func TestAccIdentityPlatformConfig_update(t *testing.T) {
 			},
 			{
 				Config: testAccIdentityPlatformConfig_update(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_identity_platform_config.basic",

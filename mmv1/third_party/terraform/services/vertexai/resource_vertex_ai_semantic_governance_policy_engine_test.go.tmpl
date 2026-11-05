@@ -73,6 +73,9 @@ func TestAccVertexAISemanticGovernancePolicyEngine_lifecycle(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_vertex_ai_semantic_governance_policy_engine.sgpe",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -88,6 +91,9 @@ func TestAccVertexAISemanticGovernancePolicyEngine_lifecycle(t *testing.T) {
 						"gateway_configs.*",
 						map[string]string{"name": "alpha-" + suffix, "state": "ACTIVE", "allowed_projects.#": "1"}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			// ImportStateVerify — round-trip stability of the Map ->
 			// TypeSet flatten path.
@@ -111,6 +117,9 @@ func TestAccVertexAISemanticGovernancePolicyEngine_lifecycle(t *testing.T) {
 						"gateway_configs.*",
 						map[string]string{"name": "beta-" + suffix, "state": "ACTIVE"}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vertex_ai_semantic_governance_policy_engine.sgpe",
@@ -140,6 +149,9 @@ func TestAccVertexAISemanticGovernancePolicyEngine_lifecycle(t *testing.T) {
 						"google_vertex_ai_semantic_governance_policy_engine.sgpe",
 						[]string{"gamma-" + suffix, "beta-" + suffix}),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_vertex_ai_semantic_governance_policy_engine.sgpe",

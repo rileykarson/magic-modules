@@ -32,6 +32,9 @@ func TestAccComputeVpnTunnel_regionFromGateway(t *testing.T) {
 				Config: testAccComputeVpnTunnel_regionFromGateway(suffix, region),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -53,6 +56,9 @@ func TestAccComputeVpnTunnel_router(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeVpnTunnelRouter(suffix, router),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",
@@ -82,6 +88,9 @@ func TestAccComputeVpnTunnel_routerWithSharedSecretWo_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -98,6 +107,9 @@ func TestAccComputeVpnTunnel_routerWithSharedSecretWo_update(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_compute_vpn_tunnel.foobar", "shared_secret_wo"),
 					resource.TestCheckResourceAttr("google_compute_vpn_tunnel.foobar", "shared_secret_wo_version", "2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",
@@ -120,6 +132,9 @@ func TestAccComputeVpnTunnel_defaultTrafficSelectors(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeVpnTunnelDefaultTrafficSelectors(suffix),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",
@@ -154,6 +169,9 @@ func TestAccComputeVpnTunnel_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeVpnTunnel_resourceManagerTags(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_vpn_tunnel.foobar",

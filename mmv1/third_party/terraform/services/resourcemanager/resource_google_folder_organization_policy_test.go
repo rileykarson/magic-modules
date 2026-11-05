@@ -71,6 +71,9 @@ func TestAccFolderOrganizationPolicy_list_allowAll(t *testing.T) {
 				Check:  testAccCheckGoogleFolderOrganizationListPolicyAll(t, "list", "ALLOW"),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_folder_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -95,6 +98,9 @@ func TestAccFolderOrganizationPolicy_list_allowSome(t *testing.T) {
 				Check:  testAccCheckGoogleFolderOrganizationListPolicyAllowedValues(t, "list", []string{"projects/" + project}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_folder_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -116,6 +122,9 @@ func TestAccFolderOrganizationPolicy_list_denySome(t *testing.T) {
 			{
 				Config: testAccFolderOrganizationPolicy_list_denySome(org, folder),
 				Check:  testAccCheckGoogleFolderOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_folder_organization_policy.list",
@@ -145,6 +154,9 @@ func TestAccFolderOrganizationPolicy_list_update(t *testing.T) {
 				Check:  testAccCheckGoogleFolderOrganizationListPolicyDeniedValues(t, "list", DENIED_ORG_POLICIES),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_folder_organization_policy.list",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -166,6 +178,9 @@ func TestAccFolderOrganizationPolicy_restore_defaultTrue(t *testing.T) {
 			{
 				Config: testAccFolderOrganizationPolicy_restore_defaultTrue(org, folder),
 				Check:  getGoogleFolderOrganizationRestoreDefaultTrue(t, "restore", &cloudresourcemanager.RestoreDefault{}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_folder_organization_policy.restore",

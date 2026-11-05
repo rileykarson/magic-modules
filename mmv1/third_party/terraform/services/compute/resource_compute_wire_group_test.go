@@ -29,6 +29,9 @@ func TestAccComputeWireGroup_update(t *testing.T) {
 				Config: testAccComputeWireGroup_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_wire_group.example-test-wire-group",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -44,6 +47,9 @@ func TestAccComputeWireGroup_update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_compute_wire_group.example-test-wire-group", "description", "Example Wire Group Updated"+context["random_suffix"].(string)),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_wire_group.example-test-wire-group",

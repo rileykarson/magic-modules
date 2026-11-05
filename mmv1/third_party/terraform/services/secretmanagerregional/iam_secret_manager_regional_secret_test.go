@@ -127,6 +127,9 @@ func TestAccSecretManagerRegionalRegionalSecretIam_iamBindingUpdate(t *testing.T
 				Config: testAccSecretManagerRegionalRegionalSecretIam_iamBindingBasic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_secret_manager_regional_secret_iam_binding.default",
 				ImportStateId:     fmt.Sprintf("projects/%s/locations/%s/secrets/%s roles/secretmanager.secretAccessor", envvar.GetTestProjectFromEnv(), envvar.GetTestRegionFromEnv(), fmt.Sprintf("tf-test-tf-reg-secret%s", context["random_suffix"])),
 				ImportState:       true,
@@ -134,6 +137,9 @@ func TestAccSecretManagerRegionalRegionalSecretIam_iamBindingUpdate(t *testing.T
 			},
 			{
 				Config: testAccSecretManagerRegionalRegionalSecretIam_iamBindingUpdate(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_secret_manager_regional_secret_iam_binding.default",

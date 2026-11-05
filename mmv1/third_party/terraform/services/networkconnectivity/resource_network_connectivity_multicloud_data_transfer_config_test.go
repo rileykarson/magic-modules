@@ -54,6 +54,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -69,6 +72,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("google_network_connectivity_multicloud_data_transfer_config.example", "services.#", "2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",
@@ -88,6 +94,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -105,6 +114,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -119,6 +131,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 				},
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -131,6 +146,9 @@ func TestAccNetworkConnectivityMulticloudDataTransferConfig_update(t *testing.T)
 						plancheck.ExpectResourceAction("google_network_connectivity_multicloud_data_transfer_config.example", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_network_connectivity_multicloud_data_transfer_config.example",

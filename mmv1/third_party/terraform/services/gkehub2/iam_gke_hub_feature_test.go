@@ -33,6 +33,9 @@ func TestAccGKEHub2FeatureIamBindingGenerated(t *testing.T) {
 				Config: testAccGKEHub2FeatureIamBinding_basicGenerated(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_gke_hub_feature_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("projects/%s/locations/%s/features/%s roles/viewer", context["project_id"], "global", fmt.Sprint("multiclusterservicediscovery")),
 				ImportState:       true,
@@ -41,6 +44,9 @@ func TestAccGKEHub2FeatureIamBindingGenerated(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAccGKEHub2FeatureIamBinding_updateGenerated(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_gke_hub_feature_iam_binding.foo",

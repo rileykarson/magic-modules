@@ -25,12 +25,18 @@ func TestAccComputeRegionSslPolicy_regionInherit(t *testing.T) {
 				Config: testAccComputeRegionSslRegionDefaultFromEnv(sslPolicyName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.foobar",
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				Config: testAccComputeRegionSslUpdateRegionDefaultFromEnv(sslPolicyName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.foobar",
@@ -64,6 +70,9 @@ func TestAccComputeRegionSslPolicy_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -78,6 +87,9 @@ func TestAccComputeRegionSslPolicy_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.update", "min_tls_version", "TLS_1_2"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
@@ -96,6 +108,9 @@ func TestAccComputeRegionSslPolicy_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -110,6 +125,9 @@ func TestAccComputeRegionSslPolicy_update(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.update", "min_tls_version", "TLS_1_3"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
@@ -143,6 +161,9 @@ func TestAccComputeRegionSslPolicy_update_to_custom(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -157,6 +178,9 @@ func TestAccComputeRegionSslPolicy_update_to_custom(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.update", "min_tls_version", "TLS_1_1"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
@@ -190,6 +214,9 @@ func TestAccComputeRegionSslPolicy_update_from_custom(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -204,6 +231,9 @@ func TestAccComputeRegionSslPolicy_update_from_custom(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.update", "min_tls_version", "TLS_1_0"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.update",
@@ -239,6 +269,9 @@ func TestAccComputeRegionSslPolicy_postQuantumKeyExchange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.post_quantum_key_exchange",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -251,6 +284,9 @@ func TestAccComputeRegionSslPolicy_postQuantumKeyExchange(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.post_quantum_key_exchange", "post_quantum_key_exchange", "ENABLED"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.post_quantum_key_exchange",
@@ -267,6 +303,9 @@ func TestAccComputeRegionSslPolicy_postQuantumKeyExchange(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_region_ssl_policy.post_quantum_key_exchange",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -279,6 +318,9 @@ func TestAccComputeRegionSslPolicy_postQuantumKeyExchange(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"google_compute_region_ssl_policy.post_quantum_key_exchange", "post_quantum_key_exchange", "DEFAULT"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_region_ssl_policy.post_quantum_key_exchange",

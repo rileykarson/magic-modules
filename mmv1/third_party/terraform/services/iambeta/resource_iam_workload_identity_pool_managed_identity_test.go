@@ -27,6 +27,9 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_iam_workload_identity_pool_managed_identity.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -39,6 +42,9 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_minimal(t *testing.T) {
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_managed_identity.example", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_iam_workload_identity_pool_managed_identity.example",
@@ -67,6 +73,9 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_full(t *testing.T) {
 				Config: testAccIAMBetaWorkloadIdentityPoolManagedIdentity_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_iam_workload_identity_pool_managed_identity.example",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -79,6 +88,9 @@ func TestAccIAMBetaWorkloadIdentityPoolManagedIdentity_full(t *testing.T) {
 						plancheck.ExpectResourceAction("google_iam_workload_identity_pool_managed_identity.example", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_iam_workload_identity_pool_managed_identity.example",

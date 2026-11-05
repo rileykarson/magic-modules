@@ -41,6 +41,9 @@ func TestAccHealthcareFhirStoreIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_healthcare_fhir_store_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s/%s %s", datasetId.TerraformId(), fhirStoreName, roleId),
 				ImportState:       true,
@@ -53,6 +56,9 @@ func TestAccHealthcareFhirStoreIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, projectId),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, projectId),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_healthcare_fhir_store_iam_binding.foo",

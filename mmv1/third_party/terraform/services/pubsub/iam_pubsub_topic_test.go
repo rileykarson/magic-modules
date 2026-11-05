@@ -33,6 +33,9 @@ func TestAccPubsubTopicIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_pubsub_topic_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s roles/pubsub.publisher", pubsub.GetComputedTopicName(envvar.GetTestProjectFromEnv(), topic)),
 				ImportState:       true,
@@ -45,6 +48,9 @@ func TestAccPubsubTopicIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s-1@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, envvar.GetTestProjectFromEnv()),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_pubsub_topic_iam_binding.foo",

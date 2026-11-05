@@ -319,6 +319,8 @@ func VcrTest(t *testing.T, c resource.TestCase) {
 	}
 	c.Steps = steps
 
+	validateRefreshStateBeforeImportVerify(t, c)
+
 	resource.Test(t, c)
 }
 

@@ -41,6 +41,9 @@ func TestAccHealthcareHl7V2StoreIamBinding(t *testing.T) {
 				}),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_healthcare_hl7_v2_store_iam_binding.foo",
 				ImportStateId:     fmt.Sprintf("%s/%s %s", datasetId.TerraformId(), hl7V2StoreName, roleId),
 				ImportState:       true,
@@ -53,6 +56,9 @@ func TestAccHealthcareHl7V2StoreIamBinding(t *testing.T) {
 					fmt.Sprintf("serviceAccount:%s@%s.iam.gserviceaccount.com", account, projectId),
 					fmt.Sprintf("serviceAccount:%s-2@%s.iam.gserviceaccount.com", account, projectId),
 				}),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_healthcare_hl7_v2_store_iam_binding.foo",

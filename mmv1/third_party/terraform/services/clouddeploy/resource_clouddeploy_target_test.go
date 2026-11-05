@@ -43,6 +43,9 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -63,6 +66,9 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "effective_labels.%", "3"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -86,6 +92,9 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -108,6 +117,9 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -120,6 +132,9 @@ func TestAccClouddeployTarget_withProviderDefaultLabels(t *testing.T) {
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "terraform_labels.%"),
 					resource.TestCheckNoResourceAttr("google_clouddeploy_target.primary", "effective_labels.%"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -317,6 +332,9 @@ func TestAccClouddeployTarget_withAttributionDisabled(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -336,6 +354,9 @@ func TestAccClouddeployTarget_withAttributionDisabled(t *testing.T) {
 
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "effective_labels.%", "3"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -391,6 +412,9 @@ func TestAccClouddeployTarget_withCreationOnlyAttribution(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_clouddeploy_target.primary",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -411,6 +435,9 @@ func TestAccClouddeployTarget_withCreationOnlyAttribution(t *testing.T) {
 
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "effective_labels.%", "4"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",
@@ -649,6 +676,9 @@ func TestAccClouddeployTarget_withPrivatePool(t *testing.T) {
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "execution_configs.2.private_pool.#", "1"),
 					resource.TestCheckResourceAttr("google_clouddeploy_target.primary", "execution_configs.2.private_pool.0.worker_pool", "projects/"+context["project_name"].(string)+"/locations/"+context["region"].(string)+"/workerPools/my-pool"),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_clouddeploy_target.primary",

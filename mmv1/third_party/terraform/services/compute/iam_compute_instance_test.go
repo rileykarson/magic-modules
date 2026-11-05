@@ -27,6 +27,9 @@ func TestAccComputeInstanceIamPolicy(t *testing.T) {
 			{
 				Config: testAccComputeInstanceIamPolicy_basic(zone, instanceName, role),
 			},
+			{
+				RefreshState: true,
+			},
 			// Test a few import formats
 			{
 				ResourceName:      "google_compute_instance_iam_policy.foo",

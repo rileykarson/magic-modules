@@ -23,6 +23,9 @@ func TestAccVectorSearchCollection_update(t *testing.T) {
 				Config: testAccVectorSearchCollection_basic(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_vector_search_collection.example-collection",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -35,6 +38,9 @@ func TestAccVectorSearchCollection_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_vector_search_collection.example-collection", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_vector_search_collection.example-collection",

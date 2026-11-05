@@ -240,6 +240,9 @@ func TestAccComputeSubnetwork_basic(t *testing.T) {
 						"google_compute_subnetwork.network-ref-by-name", "subnetwork_id")),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-ref-by-url",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -293,6 +296,9 @@ func TestAccComputeSubnetwork_update(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-private-google-access",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -325,6 +331,9 @@ func TestAccComputeSubnetwork_purposeUpdate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-migration-purpose",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -337,6 +346,9 @@ func TestAccComputeSubnetwork_purposeUpdate(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_subnetwork.network-with-migration-purpose", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.network-with-migration-purpose",
@@ -565,6 +577,9 @@ func TestAccComputeSubnetwork_flowLogs(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -575,6 +590,9 @@ func TestAccComputeSubnetwork_flowLogs(t *testing.T) {
 					testAccCheckComputeSubnetworkExists(
 						t, "google_compute_subnetwork.network-with-flow-logs", &subnetwork),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
@@ -589,6 +607,9 @@ func TestAccComputeSubnetwork_flowLogs(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -601,6 +622,9 @@ func TestAccComputeSubnetwork_flowLogs(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -611,6 +635,9 @@ func TestAccComputeSubnetwork_flowLogs(t *testing.T) {
 					testAccCheckComputeSubnetworkExists(
 						t, "google_compute_subnetwork.network-with-flow-logs", &subnetwork),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
@@ -642,6 +669,9 @@ func TestAccComputeSubnetwork_flowLogsMigrate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -654,6 +684,9 @@ func TestAccComputeSubnetwork_flowLogsMigrate(t *testing.T) {
 				),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -664,6 +697,9 @@ func TestAccComputeSubnetwork_flowLogsMigrate(t *testing.T) {
 					testAccCheckComputeSubnetworkExists(
 						t, "google_compute_subnetwork.network-with-flow-logs", &subnetwork),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.network-with-flow-logs",
@@ -689,6 +725,9 @@ func TestAccComputeSubnetwork_ipv6(t *testing.T) {
 				Config: testAccComputeSubnetwork_ipv4(cnName, subnetworkName),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:      "google_compute_subnetwork.subnetwork",
 				ImportState:       true,
 				ImportStateVerify: true,
@@ -700,6 +739,9 @@ func TestAccComputeSubnetwork_ipv6(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_subnetwork.subnetwork", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.subnetwork",
@@ -723,6 +765,9 @@ func TestAccComputeSubnetwork_internal_ipv6(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeSubnetwork_internal_ipv6(cnName, subnetworkName),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:      "google_compute_subnetwork.subnetwork",
@@ -817,6 +862,9 @@ func TestAccComputeSubnetwork_ipv6UpdateWithPdp(t *testing.T) {
 					testAccCheckSubnetIpCollectionMatchesName(subnetResName, "terraform-acceptance-test-sub-pdp"),
 				),
 			},
+			{
+				RefreshState: true,
+			},
 			// Import Check
 			{
 				ResourceName:      subnetResName,
@@ -887,6 +935,9 @@ func TestAccComputeSubnetwork_ipv6UpdateWithExternalPdpAndVm(t *testing.T) {
 					testAccCheckComputeInstanceExists(t, vm1ResName, new(map[string]interface{})),
 					testAccCheckComputeInstanceExists(t, vm2ResName, new(map[string]interface{})),
 				),
+			},
+			{
+				RefreshState: true,
 			},
 			// Import Check
 			{

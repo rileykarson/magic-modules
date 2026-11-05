@@ -31,6 +31,9 @@ func TestAccComputeFutureReservation_update(t *testing.T) {
 				Config: testAccComputeFutureReservation_full(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_compute_future_reservation.gce_future_reservation",
 				ImportState:             true,
 				ImportStateVerify:       true,
@@ -43,6 +46,9 @@ func TestAccComputeFutureReservation_update(t *testing.T) {
 						plancheck.ExpectResourceAction("google_compute_future_reservation.gce_future_reservation", plancheck.ResourceActionUpdate),
 					},
 				},
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_future_reservation.gce_future_reservation",
@@ -129,6 +135,9 @@ func TestAccComputeFutureReservation_resourceManagerTags(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccComputeFutureReservation_resourceManagerTags(context),
+			},
+			{
+				RefreshState: true,
 			},
 			{
 				ResourceName:            "google_compute_future_reservation.gce_future_reservation",

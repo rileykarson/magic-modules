@@ -29,6 +29,9 @@ func TestAccComputeSubnetworkIamPolicy(t *testing.T) {
 			{
 				Config: testAccComputeSubnetworkIamPolicy_basic(account, region, subnetwork, role),
 			},
+			{
+				RefreshState: true,
+			},
 			// Test a few import formats
 			{
 				ResourceName:      "google_compute_subnetwork_iam_policy.foo",

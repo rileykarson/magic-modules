@@ -83,6 +83,9 @@ func TestAccMemorystoreAclPolicy_withInstance(t *testing.T) {
 				Config: testAccMemorystoreAclPolicy_withInstance(context),
 			},
 			{
+				RefreshState: true,
+			},
+			{
 				ResourceName:            "google_memorystore_instance.test",
 				ImportState:             true,
 				ImportStateVerify:       true,
