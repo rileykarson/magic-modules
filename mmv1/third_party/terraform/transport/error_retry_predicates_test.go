@@ -128,6 +128,51 @@ func TestDataprocResourceNotReady_otherError(t *testing.T) {
 	}
 }
 
+func TestIsDiscoveryEngineProjectProvisionRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"project provision 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'discoveryengine.projects.provision' denied on resource '//discoveryengine.googleapis.com/projects/tf-test-example8uhxgmhspf' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"operation get 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'discoveryengine.operations.get' denied on resource '//discoveryengine.googleapis.com/projects/tf-test-example8uhxgmhspf/locations/global/operations/op-123' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"non-403 error": {
+			err: &googleapi.Error{
+				Code: 400,
+				Body: `{"error":{"code":400,"message":"Invalid argument"}}`,
+			},
+			expected: false,
+		},
+		"unrelated 403 error": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'discoveryengine.engines.get' denied on resource '//discoveryengine.googleapis.com/projects/tf-test-123' (or it may not exist)."}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsDiscoveryEngineProjectProvisionRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsDiscoveryEngineProjectProvisionRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIsOperationReadQuotaError_quotaExceeded(t *testing.T) {
 	err := googleapi.Error{
 		Code: 403,

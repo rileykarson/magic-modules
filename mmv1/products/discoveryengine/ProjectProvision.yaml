@@ -23,6 +23,8 @@ docs:
     Destroying this resource only removes it from Terraform state without unprovisioning the Google Cloud project.
 base_url: projects/{{project}}
 create_url: projects/{{project}}:provision
+error_retry_predicates:
+  - 'transport_tpg.IsDiscoveryEngineProjectProvisionRetryableError'
 id_format: projects/{{project}}/locations/{{location}}
 immutable: true
 exclude_read: true

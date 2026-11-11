@@ -403,6 +403,19 @@ func DatastoreIndex409Contention(err error) (bool, string) {
 	return false, ""
 }
 
+var discoveryEngineProjectProvision403Regex = regexp.MustCompile(`Permission 'discoveryengine\.(projects\.provision|operations\.get)' denied on resource '//discoveryengine\.googleapis\.com/projects/[^']+' \(or it may not exist\)\.`)
+
+// Retry if Discovery Engine ProjectProvision returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsDiscoveryEngineProjectProvisionRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (discoveryEngineProjectProvision403Regex.MatchString(gerr.Body) || discoveryEngineProjectProvision403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project and IAM policy propagation for Discovery Engine ProjectProvision"
+		}
+	}
+	return false, ""
+}
+
 // relevant for firestore in datastore mode
 func FirestoreField409RetryUnderlyingDataChanged(err error) (bool, string) {
 	if gerr, ok := err.(*googleapi.Error); ok {
