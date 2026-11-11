@@ -161,6 +161,44 @@ func TestIs403QuotaExceededPerMinuteError_perDayQuotaExceededNotRetryable(t *tes
 	}
 }
 
+func TestIsFirebaseAILogicConfigRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"config update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'firebasevertexai.configs.update' denied on resource '//firebasevertexai.googleapis.com/projects/basicqc8wixnj02/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"config get 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'firebasevertexai.configs.get' denied on resource '//firebasevertexai.googleapis.com/projects/basicqc8wixnj02/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"non-403 error": {
+			err: &googleapi.Error{
+				Code: 400,
+				Body: `{"error":{"code":400,"message":"Invalid argument"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsFirebaseAILogicConfigRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsFirebaseAILogicConfigRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 // An error with retry info is retryable.
 func TestBigtableError_retryable(t *testing.T) {
 	retryInfo := &errdetails.RetryInfo{

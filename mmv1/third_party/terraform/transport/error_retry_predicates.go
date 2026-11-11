@@ -436,6 +436,19 @@ func FirestoreUserCreds409Retry(err error) (bool, string) {
 	return false, ""
 }
 
+var firebaseAILogicConfig403Regex = regexp.MustCompile(`Permission 'firebasevertexai\.configs\.update' denied on resource '//firebasevertexai\.googleapis\.com/projects/[^']+/locations/[^']+/config' \(or it may not exist\)\.`)
+
+// Retry if Firebase AI Logic Config update returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsFirebaseAILogicConfigRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (firebaseAILogicConfig403Regex.MatchString(gerr.Body) || firebaseAILogicConfig403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project and IAM policy propagation for Firebase AI Logic Config"
+		}
+	}
+	return false, ""
+}
+
 func HealthcareDatasetNotInitialized(err error) (bool, string) {
 	if gerr, ok := err.(*googleapi.Error); ok {
 		if gerr.Code == 404 && strings.Contains(strings.ToLower(gerr.Body), "dataset not initialized") {
