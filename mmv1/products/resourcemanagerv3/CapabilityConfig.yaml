@@ -31,6 +31,8 @@ update_url: '{{parent}}/capabilityConfigs/{{capability_config_id}}'
 delete_url: '{{parent}}/capabilityConfigs/{{capability_config_id}}'
 update_verb: PATCH
 update_mask: true
+error_retry_predicates:
+  - 'transport_tpg.IsResourceManagerCapabilityConfigRetryableError'
 import_format:
   - '{{%parent}}/capabilityConfigs/{{capability_config_id}}'
 timeouts:

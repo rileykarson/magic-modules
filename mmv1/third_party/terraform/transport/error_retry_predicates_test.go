@@ -465,3 +465,41 @@ func TestIsResourceManagerBoundaryRetryableError(t *testing.T) {
 		})
 	}
 }
+
+func TestIsResourceManagerCapabilityConfigRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"associate project 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'resourcemanager.projects.associateToCapabilityConfig' denied on resource '//cloudresourcemanager.googleapis.com/projects/74106861110' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"capabilityConfig get 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'resourcemanager.capabilityConfigs.get' denied on resource '//cloudresourcemanager.googleapis.com/projects/74106861110/capabilityConfigs/capcfg' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"organization capabilityConfig 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'resourcemanager.capabilityConfigs.create' denied on resource '//cloudresourcemanager.googleapis.com/organizations/123456789' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsResourceManagerCapabilityConfigRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsResourceManagerCapabilityConfigRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}

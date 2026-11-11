@@ -757,3 +757,16 @@ func IsResourceManagerBoundaryRetryableError(err error) (bool, string) {
 	}
 	return false, ""
 }
+
+var resourceManagerCapabilityConfig403Regex = regexp.MustCompile(`Permission 'resourcemanager\.(projects\.associateToCapabilityConfig|capabilityConfigs\.(create|update))' denied on resource '//cloudresourcemanager\.googleapis\.com/(projects|folders)/[a-z0-9-]+(/capabilityConfigs(/[^']*)?)?' \(or it may not exist\)\.`)
+
+// Retry if Resource Manager CapabilityConfig create/update returns a 403 while a
+// newly created project or folder and its IAM bindings are still propagating.
+func IsResourceManagerCapabilityConfigRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (resourceManagerCapabilityConfig403Regex.MatchString(gerr.Body) || resourceManagerCapabilityConfig403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project or folder IAM policy propagation for Resource Manager CapabilityConfig"
+		}
+	}
+	return false, ""
+}
