@@ -322,6 +322,51 @@ func TestExternalIpServiceNotActive(t *testing.T) {
 	}
 }
 
+func TestIsDataLineageConfigRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"folder config update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.update' denied on resource '//datalineage.googleapis.com/folders/1021450495393/locations/global/config' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"project config update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.update' denied on resource '//datalineage.googleapis.com/projects/tf-test-123/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"organization config update 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.update' denied on resource '//datalineage.googleapis.com/organizations/123456789/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"config get 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.get' denied on resource '//datalineage.googleapis.com/folders/1021450495393/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsDataLineageConfigRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsDataLineageConfigRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIsAgentConnectivityTemplateInUse(t *testing.T) {
 	inUseMessage := "Resource '\"projects/ci-test-project-188019/locations/us-central1/agentConnectivityTemplates/tf-test-my-full-agent-gateway6sn0ed1rvk-template\"' is already being used by resource(s) '\"//networkservices.googleapis.com/projects/1067888929963/locations/us-central1/agentGateways/tf-test-my-full-agent-gateway6sn0ed1rvk\"'"
 	expectedRetryReason := "waiting for AgentConnectivityTemplate to no longer be referenced"

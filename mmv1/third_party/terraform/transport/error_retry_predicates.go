@@ -668,6 +668,19 @@ func IsDataplex1PEntryNotFoundError(err error) (bool, string) {
 	return false, ""
 }
 
+var dataLineageConfig403Regex = regexp.MustCompile(`Permission 'datalineage\.configs\.update' denied on resource '//datalineage\.googleapis\.com/(projects|folders)/[a-z0-9-]+/locations/[^']+/config' \(or it may not exist\)\.`)
+
+// Retry if Data Lineage Config update returns a 403 while a newly created
+// project or folder and its IAM bindings are still propagating.
+func IsDataLineageConfigRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (dataLineageConfig403Regex.MatchString(gerr.Body) || dataLineageConfig403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project or folder IAM policy propagation for Data Lineage Config"
+		}
+	}
+	return false, ""
+}
+
 // Retry on Cloud Scheduler 'Sync Mutate Cannot Be Queued'
 func Is409SyncMutateCannotBeQueuedError(err error) (bool, string) {
 	if err == nil {
