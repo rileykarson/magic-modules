@@ -216,6 +216,44 @@ func TestIsSwgAutogenRouterRetryableError_notReady(t *testing.T) {
 	}
 }
 
+func TestIsCESSecuritySettingsRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"securitySettings update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'ces.securitySettings.update' denied on resource '//ces.googleapis.com/projects/tf-test-project-jpgo768pk2/locations/us/securitySettings' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"securitySettings get 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'ces.securitySettings.get' denied on resource '//ces.googleapis.com/projects/tf-test-project-jpgo768pk2/locations/us/securitySettings' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"non-403 error": {
+			err: &googleapi.Error{
+				Code: 400,
+				Body: `{"error":{"code":400,"message":"Invalid argument"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsCESSecuritySettingsRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsCESSecuritySettingsRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 func TestFirestoreField409_retryUnderlyingDataChanged(t *testing.T) {
 	err := googleapi.Error{
 		Code: 409,

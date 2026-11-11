@@ -479,6 +479,19 @@ func IsDataflowJobUpdateRetryableError(err error) (bool, string) {
 	return false, ""
 }
 
+var cesSecuritySettings403Regex = regexp.MustCompile(`Permission 'ces\.securitySettings\.update' denied on resource '//ces\.googleapis\.com/projects/[^']+/locations/[^']+/securitySettings' \(or it may not exist\)\.`)
+
+// Retry if CES SecuritySettings update returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsCESSecuritySettingsRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (cesSecuritySettings403Regex.MatchString(gerr.Body) || cesSecuritySettings403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project and IAM policy propagation for CES SecuritySettings"
+		}
+	}
+	return false, ""
+}
+
 // Cloud PubSub returns a 400 error if a topic's parent project was recently created and an
 // organization policy has not propagated.
 // See https://github.com/hashicorp/terraform-provider-google/issues/4349
