@@ -261,8 +261,23 @@ func resourceAppEngineApplicationCreate(d *schema.ResourceData, meta interface{}
 	transport_tpg.MutexStore.Lock(lockName)
 	defer transport_tpg.MutexStore.Unlock(lockName)
 
+	var pollInterval time.Duration
+	if config.SleepUnit > 0 && config.SleepUnit != time.Second {
+		pollInterval = config.SleepUnit
+	}
+
 	log.Printf("[DEBUG] Creating App Engine App")
-	op, err := NewClient(config, userAgent).Apps.Create(app).Do()
+	var op *appengine.Operation
+	err = transport_tpg.Retry(transport_tpg.RetryOptions{
+		RetryFunc: func() error {
+			var reqErr error
+			op, reqErr = NewClient(config, userAgent).Apps.Create(app).Do()
+			return reqErr
+		},
+		Timeout:              d.Timeout(schema.TimeoutCreate),
+		PollInterval:         pollInterval,
+		ErrorRetryPredicates: []transport_tpg.RetryErrorPredicateFunc{transport_tpg.IsAppEngineRetryableError},
+	})
 	if err != nil {
 		return fmt.Errorf("Error creating App Engine application: %s", err.Error())
 	}
@@ -374,8 +389,23 @@ func resourceAppEngineApplicationUpdate(d *schema.ResourceData, meta interface{}
 	transport_tpg.MutexStore.Lock(lockName)
 	defer transport_tpg.MutexStore.Unlock(lockName)
 
+	var pollInterval time.Duration
+	if config.SleepUnit > 0 && config.SleepUnit != time.Second {
+		pollInterval = config.SleepUnit
+	}
+
 	log.Printf("[DEBUG] Updating App Engine App")
-	op, err := NewClient(config, userAgent).Apps.Patch(pid, app).UpdateMask("authDomain,databaseType,servingStatus,featureSettings.splitHealthChecks,iap").Do()
+	var op *appengine.Operation
+	err = transport_tpg.Retry(transport_tpg.RetryOptions{
+		RetryFunc: func() error {
+			var reqErr error
+			op, reqErr = NewClient(config, userAgent).Apps.Patch(pid, app).UpdateMask("authDomain,databaseType,servingStatus,featureSettings.splitHealthChecks,iap").Do()
+			return reqErr
+		},
+		Timeout:              d.Timeout(schema.TimeoutUpdate),
+		PollInterval:         pollInterval,
+		ErrorRetryPredicates: []transport_tpg.RetryErrorPredicateFunc{transport_tpg.IsAppEngineRetryableError},
+	})
 	if err != nil {
 		return fmt.Errorf("Error updating App Engine application: %s", err.Error())
 	}

@@ -56,6 +56,24 @@ func TestIsAppEngineRetryableError_serverError(t *testing.T) {
 	}
 }
 
+func TestIsAppEngineRetryableError_iamPropagation403(t *testing.T) {
+	updateErr := googleapi.Error{
+		Code: 403,
+		Body: `{"error":{"code":403,"message":"Permission 'appengine.applications.update' denied on resource '//appengine.googleapis.com/projects/tf-test-4680486881092513069/locations/us-central1/applications/tf-test-4680486881092513069' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+	}
+	if isRetryable, _ := IsAppEngineRetryableError(&updateErr); !isRetryable {
+		t.Errorf("Expected App Engine update 403 error to be retryable")
+	}
+
+	getErr := googleapi.Error{
+		Code: 403,
+		Body: `{"error":{"code":403,"message":"Permission 'appengine.applications.get' denied on resource '//appengine.googleapis.com/projects/tf-test-123/locations/us-central1/applications/tf-test-123' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+	}
+	if isRetryable, _ := IsAppEngineRetryableError(&getErr); isRetryable {
+		t.Errorf("Expected App Engine get 403 error not to be retryable")
+	}
+}
+
 func TestIsCommonRetryableErrorCode_retryableErrorCode(t *testing.T) {
 	codes := []int{429, 500, 502, 503}
 	for _, code := range codes {

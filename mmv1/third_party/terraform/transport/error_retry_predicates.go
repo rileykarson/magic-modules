@@ -543,8 +543,11 @@ func Is429RetryableQuotaError(err error) (bool, string) {
 	return false, ""
 }
 
+var appEngineApplication403Regex = regexp.MustCompile(`Permission 'appengine\.applications\.(create|update)' denied on resource '//appengine\.googleapis\.com/projects/[^']+' \(or it may not exist\)\.`)
+
 // Retry if App Engine operation returns a 409 with a specific message for
-// concurrent operations, or a 404 indicating p4sa has not yet propagated.
+// concurrent operations, a 404 indicating p4sa has not yet propagated, or a 403
+// while IAM permissions on a newly created project are still propagating.
 func IsAppEngineRetryableError(err error) (bool, string) {
 	if gerr, ok := err.(*googleapi.Error); ok {
 		if gerr.Code == 409 && strings.Contains(strings.ToLower(gerr.Body), "operation is already in progress") {
@@ -552,6 +555,9 @@ func IsAppEngineRetryableError(err error) (bool, string) {
 		}
 		if gerr.Code == 404 && strings.Contains(strings.ToLower(gerr.Body), "unable to retrieve p4sa") {
 			return true, "Waiting for P4SA propagation to GAIA"
+		}
+		if gerr.Code == 403 && (appEngineApplication403Regex.MatchString(gerr.Body) || appEngineApplication403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project IAM propagation for App Engine application"
 		}
 	}
 	return false, ""
