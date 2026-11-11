@@ -34,6 +34,8 @@ update_mask: false
 create_verb: PATCH
 update_verb: PATCH
 delete_verb: PATCH
+error_retry_predicates:
+  - 'transport_tpg.IsDataLineageConfigRetryableError'
 id_format: '{{parent}}/locations/{{location}}/config'
 import_format:
   - '{{%parent}}/locations/{{location}}/config'

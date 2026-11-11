@@ -24,6 +24,8 @@ self_link: 'projects/{{project}}/locations/{{location}}/securitySettings'
 create_verb: 'PATCH'
 update_verb: 'PATCH'
 update_mask: true
+error_retry_predicates:
+  - 'transport_tpg.IsCESSecuritySettingsRetryableError'
 import_format:
   - 'projects/{{project}}/locations/{{location}}/securitySettings'
 timeouts:

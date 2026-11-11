@@ -465,3 +465,175 @@ func TestIsResourceManagerBoundaryRetryableError(t *testing.T) {
 		})
 	}
 }
+
+func TestPropagation403RetryPredicates(t *testing.T) {
+	cases := []struct {
+		name     string
+		fn       RetryErrorPredicateFunc
+		err      error
+		expected bool
+	}{
+		{
+			name: "discoveryengine project provision 403",
+			fn:   IsDiscoveryEngineProjectProvisionRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'discoveryengine.projects.provision' denied on resource '//discoveryengine.googleapis.com/projects/tf-test-example8uhxgmhspf' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "discoveryengine operation get 403",
+			fn:   IsDiscoveryEngineProjectProvisionRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'discoveryengine.operations.get' denied on resource '//discoveryengine.googleapis.com/projects/tf-test-example8uhxgmhspf/locations/global/operations/op-123' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "discoveryengine non-403",
+			fn:   IsDiscoveryEngineProjectProvisionRetryableError,
+			err: &googleapi.Error{
+				Code: 400,
+				Body: `{"error":{"code":400,"message":"Invalid argument"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "firebaseailogic config update 403",
+			fn:   IsFirebaseAILogicConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'firebasevertexai.configs.update' denied on resource '//firebasevertexai.googleapis.com/projects/basicnr3p6eveje/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "firebaseailogic config get 403 not retried",
+			fn:   IsFirebaseAILogicConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'firebasevertexai.configs.get' denied on resource '//firebasevertexai.googleapis.com/projects/basicnr3p6eveje/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "kms project kajPolicyConfig update 403",
+			fn:   IsKmsKajPolicyConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/projects/tf-test-my-projectf8danbj9cf/kajPolicyConfig' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "kms folder kajPolicyConfig update 403 with troubleshooter suffix",
+			fn:   IsKmsKajPolicyConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/folders/1094365177104/kajPolicyConfig' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "kms organization kajPolicyConfig update 403 not retried",
+			fn:   IsKmsKajPolicyConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/organizations/123456789/kajPolicyConfig' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "ces securitySettings update 403",
+			fn:   IsCESSecuritySettingsRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'ces.securitySettings.update' denied on resource '//ces.googleapis.com/projects/tf-test-project-tcnkc23b8s/locations/us/securitySettings' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "datalineage folder config update 403",
+			fn:   IsDataLineageConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.update' denied on resource '//datalineage.googleapis.com/folders/69013621843/locations/global/config' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "datalineage organization config update 403 not retried",
+			fn:   IsDataLineageConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'datalineage.configs.update' denied on resource '//datalineage.googleapis.com/organizations/69013621843/locations/global/config' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "resourcemanager capabilityConfig associate project 403",
+			fn:   IsResourceManagerCapabilityConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'resourcemanager.projects.associateToCapabilityConfig' denied on resource '//cloudresourcemanager.googleapis.com/projects/439234338293' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "resourcemanager capabilityConfig get 403 not retried",
+			fn:   IsResourceManagerCapabilityConfigRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'resourcemanager.capabilityConfigs.get' denied on resource '//cloudresourcemanager.googleapis.com/projects/439234338293/capabilityConfigs/capcfg' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "appengine application update 403",
+			fn:   IsAppEngineRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'appengine.applications.update' denied on resource '//appengine.googleapis.com/projects/tf-test-4680486881092513069/locations/us-central1/applications/tf-test-4680486881092513069' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "appengine application get 403 not retried",
+			fn:   IsAppEngineRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'appengine.applications.get' denied on resource '//appengine.googleapis.com/projects/tf-test-123/locations/us-central1/applications/tf-test-123' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		{
+			name: "accesscontextmanager compute networks get 403",
+			fn:   IsAccessContextManagerNetworkRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'compute.networks.get' denied on resource '//compute.googleapis.com/projects/ci-test-project-nightly-beta/global/networks/tf-test-vpc-enep6blvi4' (or it may not exist)","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		{
+			name: "accesscontextmanager policy 403 not retried",
+			fn:   IsAccessContextManagerNetworkRetryableError,
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'accesscontextmanager.accessLevels.create' denied on resource '//accesscontextmanager.googleapis.com/accessPolicies/123' (or it may not exist)","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			isRetryable, _ := tc.fn(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("%s: got %v, want %v for err %v", tc.name, isRetryable, tc.expected, tc.err)
+			}
+		})
+	}
+}

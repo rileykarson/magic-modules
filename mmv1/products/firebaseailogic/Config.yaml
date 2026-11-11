@@ -27,6 +27,8 @@ update_mask: true
 create_verb: PATCH
 update_verb: PATCH
 delete_verb: PATCH
+error_retry_predicates:
+  - 'transport_tpg.IsFirebaseAILogicConfigRetryableError'
 id_format: projects/{{project}}/locations/{{location}}/config
 import_format:
   - projects/{{project}}/locations/{{location}}/config

@@ -543,8 +543,11 @@ func Is429RetryableQuotaError(err error) (bool, string) {
 	return false, ""
 }
 
+var appEngineApplication403Regex = regexp.MustCompile(`Permission 'appengine\.applications\.(create|update)' denied on resource '//appengine\.googleapis\.com/projects/[^']+' \(or it may not exist\)\.`)
+
 // Retry if App Engine operation returns a 409 with a specific message for
-// concurrent operations, or a 404 indicating p4sa has not yet propagated.
+// concurrent operations, a 404 indicating p4sa has not yet propagated, or a 403
+// while IAM permissions on a newly created project are still propagating.
 func IsAppEngineRetryableError(err error) (bool, string) {
 	if gerr, ok := err.(*googleapi.Error); ok {
 		if gerr.Code == 409 && strings.Contains(strings.ToLower(gerr.Body), "operation is already in progress") {
@@ -552,6 +555,9 @@ func IsAppEngineRetryableError(err error) (bool, string) {
 		}
 		if gerr.Code == 404 && strings.Contains(strings.ToLower(gerr.Body), "unable to retrieve p4sa") {
 			return true, "Waiting for P4SA propagation to GAIA"
+		}
+		if gerr.Code == 403 && (appEngineApplication403Regex.MatchString(gerr.Body) || appEngineApplication403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project IAM propagation for App Engine application"
 		}
 	}
 	return false, ""
@@ -756,4 +762,65 @@ func IsResourceManagerBoundaryRetryableError(err error) (bool, string) {
 		}
 	}
 	return false, ""
+}
+
+func is403RegexRetryableError(err error, pattern *regexp.Regexp, reason string) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (pattern.MatchString(gerr.Body) || pattern.MatchString(gerr.Message)) {
+			return true, reason
+		}
+	}
+	return false, ""
+}
+
+var (
+	discoveryEngineProjectProvision403Regex = regexp.MustCompile(`Permission 'discoveryengine\.(projects\.provision|operations\.get)' denied on resource '//discoveryengine\.googleapis\.com/projects/[^']+' \(or it may not exist\)\.`)
+	firebaseAILogicConfig403Regex           = regexp.MustCompile(`Permission 'firebasevertexai\.configs\.update' denied on resource '//firebasevertexai\.googleapis\.com/projects/[^']+/locations/[^']+/config' \(or it may not exist\)\.`)
+	kmsKajPolicyConfig403Regex              = regexp.MustCompile(`Permission 'cloudkms\.kajPolicyConfigs\.update' denied on resource '//cloudkms\.googleapis\.com/(projects|folders)/[a-z0-9-]+/kajPolicyConfig' \(or it may not exist\)\.`)
+	cesSecuritySettings403Regex             = regexp.MustCompile(`Permission 'ces\.securitySettings\.update' denied on resource '//ces\.googleapis\.com/projects/[^']+/locations/[^']+/securitySettings' \(or it may not exist\)\.`)
+	dataLineageConfig403Regex               = regexp.MustCompile(`Permission 'datalineage\.configs\.update' denied on resource '//datalineage\.googleapis\.com/(projects|folders)/[a-z0-9-]+/locations/[^']+/config' \(or it may not exist\)\.`)
+	resourceManagerCapabilityConfig403Regex = regexp.MustCompile(`Permission 'resourcemanager\.(projects\.associateToCapabilityConfig|capabilityConfigs\.(create|update))' denied on resource '//cloudresourcemanager\.googleapis\.com/(projects|folders)/[a-z0-9-]+(/capabilityConfigs(/[^']*)?)?' \(or it may not exist\)\.`)
+	accessContextManagerNetwork403Regex     = regexp.MustCompile(`Permission 'compute\.networks\.get' denied on resource '//compute\.googleapis\.com/projects/[^']+/global/networks/[^']+' \(or it may not exist\)`)
+)
+
+// Retry if Discovery Engine ProjectProvision returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsDiscoveryEngineProjectProvisionRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, discoveryEngineProjectProvision403Regex, "Waiting for project and IAM policy propagation for Discovery Engine ProjectProvision")
+}
+
+// Retry if Firebase AI Logic Config update returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsFirebaseAILogicConfigRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, firebaseAILogicConfig403Regex, "Waiting for project and IAM policy propagation for Firebase AI Logic Config")
+}
+
+// Retry if Cloud KMS KAJ Policy Config update returns a 403 while a newly created
+// project or folder and its IAM bindings are still propagating.
+func IsKmsKajPolicyConfigRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, kmsKajPolicyConfig403Regex, "Waiting for project or folder IAM policy propagation for KMS KAJ Policy Config")
+}
+
+// Retry if CES SecuritySettings update returns a 403 while a newly created
+// project and its IAM bindings are still propagating.
+func IsCESSecuritySettingsRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, cesSecuritySettings403Regex, "Waiting for project and IAM policy propagation for CES SecuritySettings")
+}
+
+// Retry if Data Lineage Config update returns a 403 while a newly created
+// project or folder and its IAM bindings are still propagating.
+func IsDataLineageConfigRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, dataLineageConfig403Regex, "Waiting for project or folder IAM policy propagation for Data Lineage Config")
+}
+
+// Retry if Resource Manager CapabilityConfig create/update returns a 403 while a
+// newly created project or folder and its IAM bindings are still propagating.
+func IsResourceManagerCapabilityConfigRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, resourceManagerCapabilityConfig403Regex, "Waiting for project or folder IAM policy propagation for Resource Manager CapabilityConfig")
+}
+
+// Retry if Access Context Manager AccessLevel create/update returns a 403 on
+// compute.networks.get while a newly created VPC network is still propagating.
+func IsAccessContextManagerNetworkRetryableError(err error) (bool, string) {
+	return is403RegexRetryableError(err, accessContextManagerNetwork403Regex, "Waiting for VPC network propagation for Access Context Manager AccessLevel")
 }
