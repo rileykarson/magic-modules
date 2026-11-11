@@ -34,6 +34,8 @@ base_url: '{{parent}}/accessLevels:replaceAll'
 self_link: '{{parent}}/accessLevels'
 update_url: '{{parent}}/accessLevels:replaceAll'
 update_verb: POST
+error_retry_predicates:
+  - 'transport_tpg.IsAccessContextManagerNetworkRetryableError'
 id_format: '{{parent}}/accessLevels'
 import_format:
   - '{{parent}}/accessLevels'

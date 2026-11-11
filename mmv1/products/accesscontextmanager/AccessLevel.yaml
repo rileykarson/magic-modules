@@ -38,6 +38,8 @@ self_link: '{{name}}'
 create_url: '{{parent}}/accessLevels'
 update_mask: true
 update_verb: PATCH
+error_retry_predicates:
+  - 'transport_tpg.IsAccessContextManagerNetworkRetryableError'
 id_format: '{{name}}'
 import_format:
   - '{{name}}'

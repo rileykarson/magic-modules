@@ -260,6 +260,44 @@ func TestFirestoreUserCreds409Retry(t *testing.T) {
 	}
 }
 
+func TestIsAccessContextManagerNetworkRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"compute networks get 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'compute.networks.get' denied on resource '//compute.googleapis.com/projects/ci-test-project-nightly-beta/global/networks/tf-test-vpc-enep6blvi4' (or it may not exist)","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"access policy 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'accesscontextmanager.accessLevels.create' denied on resource '//accesscontextmanager.googleapis.com/accessPolicies/123' (or it may not exist)","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"non-403 error": {
+			err: &googleapi.Error{
+				Code: 400,
+				Body: `{"error":{"code":400,"message":"Invalid argument"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsAccessContextManagerNetworkRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsAccessContextManagerNetworkRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIs403ConcurrentOperationsQuotaError_retryable(t *testing.T) {
 	err := googleapi.Error{
 		Code: 403,

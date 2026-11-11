@@ -612,6 +612,19 @@ func IsSwgAutogenRouterRetryable(err error) (bool, string) {
 	return false, ""
 }
 
+var accessContextManagerNetwork403Regex = regexp.MustCompile(`Permission 'compute\.networks\.get' denied on resource '//compute\.googleapis\.com/projects/[^']+/global/networks/[^']+' \(or it may not exist\)`)
+
+// Retry if Access Context Manager AccessLevel create/update returns a 403 on
+// compute.networks.get while a newly created VPC network is still propagating.
+func IsAccessContextManagerNetworkRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (accessContextManagerNetwork403Regex.MatchString(gerr.Body) || accessContextManagerNetwork403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for VPC network propagation for Access Context Manager AccessLevel"
+		}
+	}
+	return false, ""
+}
+
 // Retry if getting a resource/operation returns a 403 for specific IAM Admin API Service Account operations.
 // opType should describe the operation for which it can be retryable.
 // IAM API is eventually consistent and returns 403 Forbidden (instead of 404 Not found) for some operations

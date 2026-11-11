@@ -46,6 +46,8 @@ create_url: '{{access_level}}'
 update_mask: true
 create_verb: PATCH
 delete_verb: PATCH
+error_retry_predicates:
+  - 'transport_tpg.IsAccessContextManagerNetworkRetryableError'
 identity:
   - ipSubnetworks
   - requiredAccessLevels
