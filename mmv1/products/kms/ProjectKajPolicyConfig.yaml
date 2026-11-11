@@ -37,6 +37,8 @@ create_url: projects/{{project}}/kajPolicyConfig?updateMask=defaultKeyAccessJust
 update_url: projects/{{project}}/kajPolicyConfig?updateMask=defaultKeyAccessJustificationPolicy
 create_verb: PATCH
 update_verb: PATCH
+error_retry_predicates:
+  - 'transport_tpg.IsKmsKajPolicyConfigRetryableError'
 id_format: projects/{{project}}/kajPolicyConfig
 import_format:
   - projects/{{project}}/kajPolicyConfig

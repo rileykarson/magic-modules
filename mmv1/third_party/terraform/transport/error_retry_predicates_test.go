@@ -84,6 +84,51 @@ func TestIsCommonRetryableErrorCode_otherError(t *testing.T) {
 	}
 }
 
+func TestIsKmsKajPolicyConfigRetryableError(t *testing.T) {
+	cases := map[string]struct {
+		err      error
+		expected bool
+	}{
+		"project kajPolicyConfig update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/projects/tf-test-my-projectqel36sx92c/kajPolicyConfig' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"folder kajPolicyConfig update 403": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/folders/1094365177104/kajPolicyConfig' (or it may not exist). Remediate access with this Troubleshooter URL.","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: true,
+		},
+		"organization kajPolicyConfig update 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.update' denied on resource '//cloudkms.googleapis.com/organizations/123456789/kajPolicyConfig' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+		"kajPolicyConfig get 403 not retried": {
+			err: &googleapi.Error{
+				Code: 403,
+				Body: `{"error":{"code":403,"message":"Permission 'cloudkms.kajPolicyConfigs.get' denied on resource '//cloudkms.googleapis.com/projects/tf-test-123/kajPolicyConfig' (or it may not exist).","status":"PERMISSION_DENIED"}}`,
+			},
+			expected: false,
+		},
+	}
+
+	for tn, tc := range cases {
+		t.Run(tn, func(t *testing.T) {
+			isRetryable, _ := IsKmsKajPolicyConfigRetryableError(tc.err)
+			if isRetryable != tc.expected {
+				t.Errorf("IsKmsKajPolicyConfigRetryableError(%v) = %v, want %v", tc.err, isRetryable, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIsResourceNotReadyError_retryable(t *testing.T) {
 	err := googleapi.Error{
 		Code: 400,

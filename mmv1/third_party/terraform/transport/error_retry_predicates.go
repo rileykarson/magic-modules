@@ -374,6 +374,19 @@ func IsCryptoKeyVersionsPendingGeneration(err error) (bool, string) {
 	return false, ""
 }
 
+var kmsKajPolicyConfig403Regex = regexp.MustCompile(`Permission 'cloudkms\.kajPolicyConfigs\.update' denied on resource '//cloudkms\.googleapis\.com/(projects|folders)/[a-z0-9-]+/kajPolicyConfig' \(or it may not exist\)\.`)
+
+// Retry if Cloud KMS KAJ Policy Config update returns a 403 while a newly created
+// project or folder and its IAM bindings are still propagating.
+func IsKmsKajPolicyConfigRetryableError(err error) (bool, string) {
+	if gerr, ok := err.(*googleapi.Error); ok {
+		if gerr.Code == 403 && (kmsKajPolicyConfig403Regex.MatchString(gerr.Body) || kmsKajPolicyConfig403Regex.MatchString(gerr.Message)) {
+			return true, "Waiting for project or folder IAM policy propagation for KMS KAJ Policy Config"
+		}
+	}
+	return false, ""
+}
+
 // Retry if getting a resource/operation returns a 404 for specific operations.
 // opType should describe the operation for which 404 can be retryable.
 func IsNotFoundRetryableError(opType string) RetryErrorPredicateFunc {
