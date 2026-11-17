@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 
 	"github.com/GoogleCloudPlatform/magic-modules/tools/diff-processor/detector"
 	"github.com/GoogleCloudPlatform/magic-modules/tools/diff-processor/diff"
 	"github.com/spf13/cobra"
 )
 
-const detectMissingIdentityDesc = "Detect resources with ResourceIdentity that are missing SetResourceIdentityAttributes in CRUD functions or missing import identity tests"
+const detectMissingIdentityDesc = "Detect resources with ResourceIdentity that are missing identity handling in CRUD functions or missing import identity tests"
 
 type detectMissingIdentityOptions struct {
 	rootOptions       *rootOptions
@@ -41,12 +42,16 @@ func newDetectMissingIdentityCmd(rootOptions *rootOptions) *cobra.Command {
 func (o *detectMissingIdentityOptions) run(args []string) error {
 	servicesDir := args[0]
 
-	// Get changed resources from schema diff
+	// Get changed resources from schema diff (excluding removed resources)
 	schemaDiff := o.computeSchemaDiff()
 	changedResources := make([]string, 0, len(schemaDiff))
-	for resourceName := range schemaDiff {
+	for resourceName, resourceDiff := range schemaDiff {
+		if resourceDiff.ResourceConfig.Old != nil && resourceDiff.ResourceConfig.New == nil {
+			continue
+		}
 		changedResources = append(changedResources, resourceName)
 	}
+	sort.Strings(changedResources)
 
 	results, err := detector.DetectMissingIdentityCoverage(servicesDir, changedResources)
 	if err != nil {
