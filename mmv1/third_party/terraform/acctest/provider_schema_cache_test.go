@@ -20,6 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5/tf5server"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 )
 
@@ -769,6 +770,15 @@ func TestCachedProviderServer_MetaAndVcrIsolation(t *testing.T) {
 	assertProviderConfigReadback(t, srvBeta, schemaResp, "proj-beta", "europe-west1", "europe-west1-b")
 	assertProviderConfigReadback(t, srvAlpha2, schemaResp, "proj-alpha-2", "asia-east1", "asia-east1-a")
 
+	// Invoking the same MuxedProviders factory closure multiple times also yields distinct wrappers.
+	srvAlpha1Repeat := fnAlpha1()
+	if srvAlpha1Repeat == srvAlpha1 {
+		t.Fatal("expected repeated calls to MuxedProviders closure to return distinct wrapper instances")
+	}
+	configureServerWithFakeCreds(t, srvAlpha1Repeat, schemaResp.Provider, "alpha-repeat", "proj-alpha-repeat", "us-south1", "us-south1-a")
+	assertProviderConfigReadback(t, srvAlpha1Repeat, schemaResp, "proj-alpha-repeat", "us-south1", "us-south1-a")
+	assertProviderConfigReadback(t, srvAlpha1, schemaResp, "proj-alpha-1", "us-central1", "us-central1-a")
+
 	// Part 2: VCR mode per-testName HTTP client & config isolation.
 	vcrDir := t.TempDir()
 	testOne := "TestVcrIsolationOne"
@@ -909,6 +919,9 @@ func TestCachedProviderServer_EndToEndUnitTestCLI(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: ProtoV5ProviderFactories(t),
 		ProtoV6ProviderFactories: ProtoV6ProviderFactories(t),
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_14_0),
+		},
 		Steps: []resource.TestStep{
 			{
 				Config: `

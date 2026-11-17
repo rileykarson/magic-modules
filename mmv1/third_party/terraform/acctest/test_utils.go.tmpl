@@ -196,9 +196,8 @@ func (c *ListScopeCapture) AsConfigVariables() config.Variables {
 // stateful or validation RPC so per-test and per-CLI-call state (p.meta, VCR transports, etc.)
 // remains completely isolated.
 func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
-	srv := defaultProviderSchemaCache.providerServer(testName)
 	return func() tfprotov5.ProviderServer {
-		return srv
+		return defaultProviderSchemaCache.providerServer(testName)
 	}, nil
 }
 
