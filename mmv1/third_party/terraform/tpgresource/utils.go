@@ -222,7 +222,7 @@ When set to "DELETE", deleting the resource is allowed.
 func DeletionPolicyReadDefault(d *schema.ResourceData, config *transport_tpg.Config, resourceDefault string) error {
 	if _, ok := d.GetOkExists("deletion_policy"); !ok {
 		//prioritize config's value if present
-		if config != nil && config.DeletionPolicy != "" {
+		if config.DeletionPolicy != "" {
 			if err := d.Set("deletion_policy", config.DeletionPolicy); err != nil {
 				return fmt.Errorf("Error setting deletion_policy: %s", err)
 			}
@@ -237,24 +237,24 @@ func DeletionPolicyReadDefault(d *schema.ResourceData, config *transport_tpg.Con
 
 func DeletionPolicyPreUpdate(d *schema.ResourceData, resourceSchema func() *schema.Resource) bool {
 	clientSideFields := map[string]bool{"deletion_policy": true}
+	clientSideOnly := true
 	for field := range resourceSchema().Schema {
 		if d.HasChange(field) && !clientSideFields[field] {
 			return false
 		}
 	}
-	log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
-	return true
+	if clientSideOnly {
+		log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
+		return true
+	}
+	return false
 }
 
 func DeletionPolicyPreDelete(d *schema.ResourceData) (bool, error) {
-	policy, ok := d.Get("deletion_policy").(string)
-	if !ok {
-		return false, nil
-	}
-	if policy == "PREVENT" {
+	if d.Get("deletion_policy").(string) == "PREVENT" {
 		return true, fmt.Errorf("cannot destroy %q without setting deletion_policy=\"DELETE\" and running `terraform apply`", d.Id())
 	}
-	if policy == "ABANDON" {
+	if d.Get("deletion_policy").(string) == "ABANDON" {
 		log.Printf("[DEBUG] deletion_policy set to \"ABANDON\", removing %q from Terraform state without deletion", d.Id())
 		return true, nil
 	}

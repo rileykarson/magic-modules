@@ -1,6 +1,7 @@
 package tpgresource_test
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"regexp"
@@ -8,8 +9,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
 	"github.com/hashicorp/terraform-provider-google/google/services/cloudrun"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
@@ -1347,5 +1350,42 @@ func TestRetry_VcrReplaying(t *testing.T) {
 	}
 	if elapsed := time.Since(start); elapsed > 100*time.Millisecond {
 		t.Fatalf("Expected tpgresource.Retry to poll at 1ms in REPLAYING mode, took %v", elapsed)
+	}
+}
+
+func TestDefaultProviderDeletionPolicy(t *testing.T) {
+	res := &schema.Resource{
+		CustomizeDiff: tpgresource.DefaultProviderDeletionPolicy("DELETE"),
+		Schema:        map[string]*schema.Schema{"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE")},
+	}
+	cases := []struct {
+		name     string
+		raw      cty.Value
+		cfgVal   interface{}
+		want     string
+		wantComp bool
+		wantErr  bool
+	}{
+		{"unset falls back to default", cty.NullVal(cty.String), nil, "DELETE", false, false},
+		{"explicit ABANDON", cty.StringVal("ABANDON"), "ABANDON", "ABANDON", false, false},
+		{"explicit empty string returns error", cty.StringVal(""), "", "", false, true},
+		{"unknown marked value sets NewComputed", cty.UnknownVal(cty.String).Mark("sensitive"), nil, "", true, false},
+	}
+	for _, tc := range cases {
+		rawObj := cty.ObjectVal(map[string]cty.Value{"deletion_policy": tc.raw})
+		st := &terraform.InstanceState{ID: "id", Attributes: map[string]string{"deletion_policy": "PREVENT"}, RawConfig: rawObj}
+		cfgMap := map[string]interface{}{}
+		if tc.cfgVal != nil {
+			cfgMap["deletion_policy"] = tc.cfgVal
+		}
+		diff, err := res.SimpleDiff(context.Background(), st, terraform.NewResourceConfigRaw(cfgMap), &transport_tpg.Config{})
+		if (err != nil) != tc.wantErr {
+			t.Fatalf("%s: err = %v, wantErr = %v", tc.name, err, tc.wantErr)
+		}
+		if !tc.wantErr {
+			if attr := diff.Attributes["deletion_policy"]; attr == nil || attr.New != tc.want || attr.NewComputed != tc.wantComp {
+				t.Errorf("%s: got diff %#v, want New=%q NewComputed=%v", tc.name, attr, tc.want, tc.wantComp)
+			}
+		}
 	}
 }
