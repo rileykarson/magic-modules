@@ -12,6 +12,8 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -188,8 +190,19 @@ func (c *ListScopeCapture) AsConfigVariables() config.Variables {
 
 // General test utils
 
-// MuxedProviders returns the correct test provider (between the sdk version or the framework version)
+// MuxedProviders returns the correct test provider (between the sdk version or the framework version).
+// Stateless schema and metadata RPCs are served from a process-wide sync.OnceValues cache, while
+// each returned ProviderServer lazily initializes a fresh underlying muxed server on the first
+// stateful or validation RPC so per-test and per-CLI-call state (p.meta, VCR transports, etc.)
+// remains completely isolated.
 func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
+	srv := defaultProviderSchemaCache.providerServer(testName)
+	return func() tfprotov5.ProviderServer {
+		return srv
+	}, nil
+}
+
+func newUncachedMuxServer(testName string) (tfprotov5.ProviderServer, error) {
 	ctx := context.Background()
 
 	// primary is the SDKv2 implementation of the provider
@@ -202,12 +215,339 @@ func MuxedProviders(testName string) (func() tfprotov5.ProviderServer, error) {
 	}
 
 	muxServer, err := tf5muxserver.NewMuxServer(ctx, providers...)
-
 	if err != nil {
 		return nil, err
 	}
 
-	return muxServer.ProviderServer, nil
+	return muxServer.ProviderServer(), nil
+}
+
+// defaultProviderSchemaCache caches the stateless, immutable protocol v5 schema and metadata
+// responses once per test binary for this repo's muxed provider (GA in terraform-provider-google,
+// Beta in terraform-provider-google-beta, where both ProtoV5ProviderFactories and
+// ProtoV5ProviderBetaFactories serve the same underlying MuxedProviders implementation).
+// If a distinct provider implementation is ever added in the same binary, construct a separate
+// newProviderSchemaCache instance so its schema cache remains isolated.
+var defaultProviderSchemaCache = newProviderSchemaCache(newUncachedMuxServer)
+
+type providerSchemaCache struct {
+	initMu             sync.Mutex
+	schemaServer       func() (tfprotov5.ProviderServer, error)
+	getMetadata        func() (*tfprotov5.GetMetadataResponse, error)
+	getProviderSchema  func() (*tfprotov5.GetProviderSchemaResponse, error)
+	getIdentitySchemas func() (*tfprotov5.GetResourceIdentitySchemasResponse, error)
+	getFunctions       func() (*tfprotov5.GetFunctionsResponse, error)
+	newServer          func(testName string) (tfprotov5.ProviderServer, error)
+}
+
+func newProviderSchemaCache(newServer func(testName string) (tfprotov5.ProviderServer, error)) *providerSchemaCache {
+	c := &providerSchemaCache{
+		newServer: newServer,
+	}
+	c.schemaServer = sync.OnceValues(func() (tfprotov5.ProviderServer, error) {
+		return newServer("")
+	})
+	c.getMetadata = sync.OnceValues(func() (*tfprotov5.GetMetadataResponse, error) {
+		c.initMu.Lock()
+		defer c.initMu.Unlock()
+		srv, err := c.schemaServer()
+		if err != nil {
+			return nil, err
+		}
+		return srv.GetMetadata(context.Background(), &tfprotov5.GetMetadataRequest{})
+	})
+	c.getProviderSchema = sync.OnceValues(func() (*tfprotov5.GetProviderSchemaResponse, error) {
+		c.initMu.Lock()
+		defer c.initMu.Unlock()
+		srv, err := c.schemaServer()
+		if err != nil {
+			return nil, err
+		}
+		return srv.GetProviderSchema(context.Background(), &tfprotov5.GetProviderSchemaRequest{})
+	})
+	c.getIdentitySchemas = sync.OnceValues(func() (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+		c.initMu.Lock()
+		defer c.initMu.Unlock()
+		srv, err := c.schemaServer()
+		if err != nil {
+			return nil, err
+		}
+		return srv.GetResourceIdentitySchemas(context.Background(), &tfprotov5.GetResourceIdentitySchemasRequest{})
+	})
+	c.getFunctions = sync.OnceValues(func() (*tfprotov5.GetFunctionsResponse, error) {
+		c.initMu.Lock()
+		defer c.initMu.Unlock()
+		srv, err := c.schemaServer()
+		if err != nil {
+			return nil, err
+		}
+		return srv.GetFunctions(context.Background(), &tfprotov5.GetFunctionsRequest{})
+	})
+	return c
+}
+
+func (c *providerSchemaCache) providerServer(testName string) *cachedProviderServer {
+	s := &cachedProviderServer{
+		cache: c,
+	}
+	s.serverOnce = sync.OnceValues(func() (tfprotov5.ProviderServer, error) {
+		return c.newServer(testName)
+	})
+	return s
+}
+
+var (
+	_ tfprotov5.ProviderServer                 = (*cachedProviderServer)(nil)
+	_ tfprotov5.ProviderServerWithListResource = (*cachedProviderServer)(nil)
+	_ tfprotov5.ProviderServerWithActions      = (*cachedProviderServer)(nil)
+	_ tfprotov5.ResourceServer                 = (*cachedProviderServer)(nil)
+	_ tfprotov5.DataSourceServer               = (*cachedProviderServer)(nil)
+	_ tfprotov5.FunctionServer                 = (*cachedProviderServer)(nil)
+	_ tfprotov5.EphemeralResourceServer        = (*cachedProviderServer)(nil)
+	_ tfprotov5.ListResourceServer             = (*cachedProviderServer)(nil)
+	_ tfprotov5.ActionServer                   = (*cachedProviderServer)(nil)
+)
+
+type cachedProviderServer struct {
+	cache       *providerSchemaCache
+	serverOnce  func() (tfprotov5.ProviderServer, error)
+	initialized atomic.Bool
+}
+
+func (s *cachedProviderServer) downstream() (tfprotov5.ProviderServer, error) {
+	s.initialized.Store(true)
+	return s.serverOnce()
+}
+
+func (s *cachedProviderServer) GetMetadata(_ context.Context, _ *tfprotov5.GetMetadataRequest) (*tfprotov5.GetMetadataResponse, error) {
+	return s.cache.getMetadata()
+}
+
+func (s *cachedProviderServer) GetProviderSchema(_ context.Context, _ *tfprotov5.GetProviderSchemaRequest) (*tfprotov5.GetProviderSchemaResponse, error) {
+	return s.cache.getProviderSchema()
+}
+
+func (s *cachedProviderServer) GetResourceIdentitySchemas(_ context.Context, _ *tfprotov5.GetResourceIdentitySchemasRequest) (*tfprotov5.GetResourceIdentitySchemasResponse, error) {
+	return s.cache.getIdentitySchemas()
+}
+
+func (s *cachedProviderServer) GetFunctions(_ context.Context, _ *tfprotov5.GetFunctionsRequest) (*tfprotov5.GetFunctionsResponse, error) {
+	return s.cache.getFunctions()
+}
+
+func (s *cachedProviderServer) PrepareProviderConfig(ctx context.Context, req *tfprotov5.PrepareProviderConfigRequest) (*tfprotov5.PrepareProviderConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.PrepareProviderConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) ConfigureProvider(ctx context.Context, req *tfprotov5.ConfigureProviderRequest) (*tfprotov5.ConfigureProviderResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ConfigureProvider(ctx, req)
+}
+
+func (s *cachedProviderServer) StopProvider(ctx context.Context, req *tfprotov5.StopProviderRequest) (*tfprotov5.StopProviderResponse, error) {
+	if !s.initialized.Load() {
+		return &tfprotov5.StopProviderResponse{}, nil
+	}
+	srv, err := s.serverOnce()
+	if err != nil {
+		return nil, err
+	}
+	return srv.StopProvider(ctx, req)
+}
+
+func (s *cachedProviderServer) ValidateResourceTypeConfig(ctx context.Context, req *tfprotov5.ValidateResourceTypeConfigRequest) (*tfprotov5.ValidateResourceTypeConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ValidateResourceTypeConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) UpgradeResourceState(ctx context.Context, req *tfprotov5.UpgradeResourceStateRequest) (*tfprotov5.UpgradeResourceStateResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.UpgradeResourceState(ctx, req)
+}
+
+func (s *cachedProviderServer) ReadResource(ctx context.Context, req *tfprotov5.ReadResourceRequest) (*tfprotov5.ReadResourceResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ReadResource(ctx, req)
+}
+
+func (s *cachedProviderServer) PlanResourceChange(ctx context.Context, req *tfprotov5.PlanResourceChangeRequest) (*tfprotov5.PlanResourceChangeResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.PlanResourceChange(ctx, req)
+}
+
+func (s *cachedProviderServer) ApplyResourceChange(ctx context.Context, req *tfprotov5.ApplyResourceChangeRequest) (*tfprotov5.ApplyResourceChangeResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ApplyResourceChange(ctx, req)
+}
+
+func (s *cachedProviderServer) ImportResourceState(ctx context.Context, req *tfprotov5.ImportResourceStateRequest) (*tfprotov5.ImportResourceStateResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ImportResourceState(ctx, req)
+}
+
+func (s *cachedProviderServer) MoveResourceState(ctx context.Context, req *tfprotov5.MoveResourceStateRequest) (*tfprotov5.MoveResourceStateResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.MoveResourceState(ctx, req)
+}
+
+func (s *cachedProviderServer) UpgradeResourceIdentity(ctx context.Context, req *tfprotov5.UpgradeResourceIdentityRequest) (*tfprotov5.UpgradeResourceIdentityResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.UpgradeResourceIdentity(ctx, req)
+}
+
+func (s *cachedProviderServer) GenerateResourceConfig(ctx context.Context, req *tfprotov5.GenerateResourceConfigRequest) (*tfprotov5.GenerateResourceConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.GenerateResourceConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) ValidateDataSourceConfig(ctx context.Context, req *tfprotov5.ValidateDataSourceConfigRequest) (*tfprotov5.ValidateDataSourceConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ValidateDataSourceConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) ReadDataSource(ctx context.Context, req *tfprotov5.ReadDataSourceRequest) (*tfprotov5.ReadDataSourceResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ReadDataSource(ctx, req)
+}
+
+func (s *cachedProviderServer) CallFunction(ctx context.Context, req *tfprotov5.CallFunctionRequest) (*tfprotov5.CallFunctionResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.CallFunction(ctx, req)
+}
+
+func (s *cachedProviderServer) ValidateEphemeralResourceConfig(ctx context.Context, req *tfprotov5.ValidateEphemeralResourceConfigRequest) (*tfprotov5.ValidateEphemeralResourceConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.ValidateEphemeralResourceConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) OpenEphemeralResource(ctx context.Context, req *tfprotov5.OpenEphemeralResourceRequest) (*tfprotov5.OpenEphemeralResourceResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.OpenEphemeralResource(ctx, req)
+}
+
+func (s *cachedProviderServer) RenewEphemeralResource(ctx context.Context, req *tfprotov5.RenewEphemeralResourceRequest) (*tfprotov5.RenewEphemeralResourceResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.RenewEphemeralResource(ctx, req)
+}
+
+func (s *cachedProviderServer) CloseEphemeralResource(ctx context.Context, req *tfprotov5.CloseEphemeralResourceRequest) (*tfprotov5.CloseEphemeralResourceResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	return srv.CloseEphemeralResource(ctx, req)
+}
+
+func (s *cachedProviderServer) ValidateListResourceConfig(ctx context.Context, req *tfprotov5.ValidateListResourceConfigRequest) (*tfprotov5.ValidateListResourceConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	listSrv, ok := srv.(tfprotov5.ListResourceServer)
+	if !ok {
+		return nil, fmt.Errorf("provider server %T does not implement tfprotov5.ListResourceServer", srv)
+	}
+	return listSrv.ValidateListResourceConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) ListResource(ctx context.Context, req *tfprotov5.ListResourceRequest) (*tfprotov5.ListResourceServerStream, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	listSrv, ok := srv.(tfprotov5.ListResourceServer)
+	if !ok {
+		return nil, fmt.Errorf("provider server %T does not implement tfprotov5.ListResourceServer", srv)
+	}
+	return listSrv.ListResource(ctx, req)
+}
+
+func (s *cachedProviderServer) ValidateActionConfig(ctx context.Context, req *tfprotov5.ValidateActionConfigRequest) (*tfprotov5.ValidateActionConfigResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	actionSrv, ok := srv.(tfprotov5.ActionServer)
+	if !ok {
+		return nil, fmt.Errorf("provider server %T does not implement tfprotov5.ActionServer", srv)
+	}
+	return actionSrv.ValidateActionConfig(ctx, req)
+}
+
+func (s *cachedProviderServer) PlanAction(ctx context.Context, req *tfprotov5.PlanActionRequest) (*tfprotov5.PlanActionResponse, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	actionSrv, ok := srv.(tfprotov5.ActionServer)
+	if !ok {
+		return nil, fmt.Errorf("provider server %T does not implement tfprotov5.ActionServer", srv)
+	}
+	return actionSrv.PlanAction(ctx, req)
+}
+
+func (s *cachedProviderServer) InvokeAction(ctx context.Context, req *tfprotov5.InvokeActionRequest) (*tfprotov5.InvokeActionServerStream, error) {
+	srv, err := s.downstream()
+	if err != nil {
+		return nil, err
+	}
+	actionSrv, ok := srv.(tfprotov5.ActionServer)
+	if !ok {
+		return nil, fmt.Errorf("provider server %T does not implement tfprotov5.ActionServer", srv)
+	}
+	return actionSrv.InvokeAction(ctx, req)
 }
 
 func RandString(t *testing.T, length int) string {
@@ -283,7 +623,10 @@ func ProtoV5ProviderFactories(t *testing.T) map[string]func() (tfprotov5.Provide
 	return map[string]func() (tfprotov5.ProviderServer, error){
 		"google": func() (tfprotov5.ProviderServer, error) {
 			provider, err := MuxedProviders(t.Name())
-			return provider(), err
+			if err != nil {
+				return nil, err
+			}
+			return provider(), nil
 		},
 	}
 }
@@ -297,7 +640,10 @@ func ProtoV5ProviderBetaFactories(t *testing.T) map[string]func() (tfprotov5.Pro
 {{ range $aliasedVersion := $.SupportedProviderVersions -}}
 		"google-{{ $aliasedVersion }}": func() (tfprotov5.ProviderServer, error) {
 			provider, err := MuxedProviders(t.Name())
-			return provider(), err
+			if err != nil {
+				return nil, err
+			}
+			return provider(), nil
 		},
 {{- end }}
 	}
