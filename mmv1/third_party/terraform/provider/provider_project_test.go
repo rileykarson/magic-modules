@@ -36,9 +36,10 @@ func TestAccSdkProvider_project(t *testing.T) {
 }
 
 func testAccSdkProvider_project_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	project := envvar.GetTestProjectFromEnv()
+	project := "my-gce-project"
 
 	// set all possible project env vars to other value; show they aren't used
 	for _, v := range envvar.ProjectEnvVars {
@@ -49,7 +50,7 @@ func testAccSdkProvider_project_configPrecedenceOverEnvironmentVariables(t *test
 		"project": project,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -64,7 +65,8 @@ func testAccSdkProvider_project_configPrecedenceOverEnvironmentVariables(t *test
 }
 
 func testAccSdkProvider_project_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	/*
 		These are all the ENVs for project, and they are in order of precedence.
@@ -74,8 +76,7 @@ func testAccSdkProvider_project_precedenceOrderEnvironmentVariables(t *testing.T
 		CLOUDSDK_CORE_PROJECT
 	*/
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
@@ -155,14 +156,14 @@ func testAccSdkProvider_project_precedenceOrderEnvironmentVariables(t *testing.T
 }
 
 func testAccSdkProvider_project_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{
 		"project": "",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{

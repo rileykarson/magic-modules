@@ -41,9 +41,10 @@ func TestAccSdkProvider_scopes(t *testing.T) {
 }
 
 func testAccSdkProvider_scopes_providerDefault(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -60,14 +61,15 @@ func testAccSdkProvider_scopes_providerDefault(t *testing.T) {
 }
 
 func testAccSdkProvider_scopes_setInConfig(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	scopes := []string{"https://www.googleapis.com/auth/cloud-platform"} // first of the two default scopes
 	context := map[string]interface{}{
 		"scopes": fmt.Sprintf("[\"%s\"]", scopes[0]),
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -83,13 +85,14 @@ func testAccSdkProvider_scopes_setInConfig(t *testing.T) {
 }
 
 func testAccSdkProvider_scopes_emptyArray(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{
 		"scopes": "[]",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

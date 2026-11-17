@@ -35,7 +35,7 @@ func TestAccSdkProvider_credentials(t *testing.T) {
 }
 
 func testAccSdkProvider_credentials_validJsonFilePath(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
 	// unset all credentials env vars
 	for _, v := range envvar.CredsEnvVars {
@@ -48,7 +48,7 @@ func testAccSdkProvider_credentials_validJsonFilePath(t *testing.T) {
 		"credentials": credentials,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -64,7 +64,7 @@ func testAccSdkProvider_credentials_validJsonFilePath(t *testing.T) {
 }
 
 func testAccSdkProvider_credentials_badJsonFilepathCausesError(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
 	// unset all credentials env vars
 	for _, v := range envvar.CredsEnvVars {
@@ -77,7 +77,7 @@ func testAccSdkProvider_credentials_badJsonFilepathCausesError(t *testing.T) {
 		"credentials": pathToMissingFile,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -92,9 +92,9 @@ func testAccSdkProvider_credentials_badJsonFilepathCausesError(t *testing.T) {
 }
 
 func testAccSdkProvider_credentials_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
-	credentials := envvar.GetTestCredsFromEnv()
+	credentials := acctest.GenerateFakeCredentialsJson("test")
 
 	// ensure all possible credentials env vars set; show they aren't used
 	for _, v := range envvar.CredsEnvVars {
@@ -107,7 +107,7 @@ func testAccSdkProvider_credentials_configPrecedenceOverEnvironmentVariables(t *
 		"credentials": pathToMissingFile,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -122,7 +122,7 @@ func testAccSdkProvider_credentials_configPrecedenceOverEnvironmentVariables(t *
 }
 
 func testAccSdkProvider_credentials_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 	/*
 		These are all the ENVs for credentials, and they are in order of precedence.
 		GOOGLE_CREDENTIALS
@@ -139,7 +139,7 @@ func testAccSdkProvider_credentials_precedenceOrderEnvironmentVariables(t *testi
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -212,9 +212,9 @@ func testAccSdkProvider_credentials_precedenceOrderEnvironmentVariables(t *testi
 }
 
 func testAccSdkProvider_credentials_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
-	credentials := envvar.GetTestCredsFromEnv()
+	credentials := acctest.GenerateFakeCredentialsJson("usable-json-for-this-test")
 
 	// ensure all credentials env vars set
 	for _, v := range envvar.CredsEnvVars {
@@ -225,7 +225,7 @@ func testAccSdkProvider_credentials_emptyStringValidation(t *testing.T) {
 		"credentials": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

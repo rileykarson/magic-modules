@@ -137,8 +137,7 @@ func testAccCheckComputeInstanceResetCount(t *testing.T, n string, want int) res
 func TestAccComputeInstanceResetAction_invalidTimeout(t *testing.T) {
 	t.Parallel()
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			tfversion.SkipBelow(tfversion.Version1_14_0),
@@ -146,6 +145,10 @@ func TestAccComputeInstanceResetAction_invalidTimeout(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
+					provider "google" {
+						access_token = "fake-token"
+					}
+
 					action "google_compute_instance_reset" "test" {
 						config {
 							instance = "project/p/zones/us-central1-a/instances/i"

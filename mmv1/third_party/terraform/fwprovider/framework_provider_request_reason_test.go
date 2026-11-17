@@ -38,7 +38,8 @@ func TestAccFwProvider_request_reason(t *testing.T) {
 }
 
 func testAccFwProvider_request_reason_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	envReason := "environment-variables"
 
@@ -51,7 +52,7 @@ func testAccFwProvider_request_reason_configPrecedenceOverEnvironmentVariables(t
 		"request_reason": providerReason,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -66,7 +67,8 @@ func testAccFwProvider_request_reason_configPrecedenceOverEnvironmentVariables(t
 }
 
 func testAccFwProvider_request_reason_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for request_reason
 		CLOUDSDK_CORE_REQUEST_REASON
@@ -76,7 +78,7 @@ func testAccFwProvider_request_reason_precedenceOrderEnvironmentVariables(t *tes
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -95,7 +97,8 @@ func testAccFwProvider_request_reason_precedenceOrderEnvironmentVariables(t *tes
 }
 
 func testAccFwProvider_request_reason_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	envReason := "environment-variables"
 
@@ -107,7 +110,7 @@ func testAccFwProvider_request_reason_emptyStringValidation(t *testing.T) {
 		"request_reason": emptyString,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

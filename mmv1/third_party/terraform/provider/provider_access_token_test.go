@@ -42,7 +42,7 @@ func TestAccSdkProvider_access_token(t *testing.T) {
 }
 
 func testAccSdkProvider_access_token_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
 	accessToken := "my-access-token"
 
@@ -60,7 +60,7 @@ func testAccSdkProvider_access_token_configPrecedenceOverEnvironmentVariables(t 
 		"access_token": providerAccessToken,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -76,7 +76,7 @@ func testAccSdkProvider_access_token_configPrecedenceOverEnvironmentVariables(t 
 }
 
 func testAccSdkProvider_access_token_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 	/*
 		These are all the ENVs for access_token
 		GOOGLE_OAUTH_ACCESS_TOKEN
@@ -86,7 +86,7 @@ func testAccSdkProvider_access_token_precedenceOrderEnvironmentVariables(t *test
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -105,7 +105,7 @@ func testAccSdkProvider_access_token_precedenceOrderEnvironmentVariables(t *test
 }
 
 func testAccSdkProvider_access_token_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
 	accessToken := "my-access-token"
 
@@ -116,7 +116,7 @@ func testAccSdkProvider_access_token_emptyStringValidation(t *testing.T) {
 		"access_token": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -130,9 +130,9 @@ func testAccSdkProvider_access_token_emptyStringValidation(t *testing.T) {
 }
 
 func testAccSdkProvider_access_token_conflictsWithCredentials(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
 
-	goodCredentials := envvar.GetTestCredsFromEnv()
+	goodCredentials := acctest.GenerateFakeCredentialsJson("good-credentials")
 
 	// unset ENVs for both access_token and credentials
 	t.Setenv("GOOGLE_OAUTH_ACCESS_TOKEN", "")
@@ -168,7 +168,7 @@ credentials = "%s"
 		"fields": providerCredentialsOnly,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 	"github.com/hashicorp/terraform-provider-google/google/acctest"
 )
 
@@ -43,11 +44,14 @@ func TestAccEphemeralGoogleClientConfig_omitLocation(t *testing.T) {
 }
 
 func TestAccEphemeralGoogleClientConfig_invalidCredentials(t *testing.T) {
+	acctest.UnsetTestProviderConfigEnvs(t)
 	badCreds := acctest.GenerateFakeCredentialsJson("test")
 	t.Setenv("GOOGLE_CREDENTIALS", badCreds)
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_10_0),
+		},
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{

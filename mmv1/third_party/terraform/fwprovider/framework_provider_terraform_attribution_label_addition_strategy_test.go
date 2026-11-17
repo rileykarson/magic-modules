@@ -30,7 +30,8 @@ func TestAccFwProvider_terraform_attribution_label_addition_strategy(t *testing.
 }
 
 func testAccFwProvider_terraform_attribution_label_addition_strategy_configUsed(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context1 := map[string]interface{}{
 		"terraform_attribution_label_addition_strategy": "CREATION_ONLY",
@@ -39,7 +40,7 @@ func testAccFwProvider_terraform_attribution_label_addition_strategy_configUsed(
 		"terraform_attribution_label_addition_strategy": "PROACTIVE",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -60,11 +61,12 @@ func testAccFwProvider_terraform_attribution_label_addition_strategy_configUsed(
 }
 
 func testAccFwProvider_terraform_attribution_label_addition_strategy_defaultValue(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

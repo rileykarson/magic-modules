@@ -45,7 +45,8 @@ func TestAccSdkProvider_billing_project(t *testing.T) {
 }
 
 func testAccSdkProvider_billing_project_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	billingProject := "my-billing-project-id"
 
@@ -58,7 +59,7 @@ func testAccSdkProvider_billing_project_configPrecedenceOverEnvironmentVariables
 		"billing_project": providerBillingProject,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -73,7 +74,8 @@ func testAccSdkProvider_billing_project_configPrecedenceOverEnvironmentVariables
 }
 
 func testAccSdkProvider_billing_project_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for billing_project
 		GOOGLE_BILLING_PROJECT
@@ -86,7 +88,7 @@ func testAccSdkProvider_billing_project_precedenceOrderEnvironmentVariables(t *t
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -117,7 +119,8 @@ func testAccSdkProvider_billing_project_precedenceOrderEnvironmentVariables(t *t
 }
 
 func testAccSdkProvider_billing_project_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	billingProject := "my-billing-project-id"
 
@@ -128,7 +131,7 @@ func testAccSdkProvider_billing_project_emptyStringValidation(t *testing.T) {
 		"billing_project": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

@@ -58,9 +58,10 @@ func TestAccFwProvider_zone(t *testing.T) {
 }
 
 func testAccFwProvider_region_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	region := envvar.GetTestRegionFromEnv()
+	region := "us-central1"
 
 	// ensure all possible region env vars set; show they aren't used
 	for _, v := range envvar.RegionEnvVars {
@@ -73,7 +74,7 @@ func testAccFwProvider_region_configPrecedenceOverEnvironmentVariables(t *testin
 		"region": providerRegion,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -89,9 +90,10 @@ func testAccFwProvider_region_configPrecedenceOverEnvironmentVariables(t *testin
 }
 
 func testAccFwProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	zone := envvar.GetTestZoneFromEnv()
+	zone := "us-central1-a"
 
 	// ensure all possible zone env vars set; show they aren't used
 	for _, v := range envvar.ZoneEnvVars {
@@ -104,7 +106,7 @@ func testAccFwProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing.
 		"zone": providerZone,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -120,7 +122,8 @@ func testAccFwProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing.
 }
 
 func testAccFwProvider_region_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for region, and they are in order of precedence.
 		GOOGLE_REGION
@@ -134,7 +137,7 @@ func testAccFwProvider_region_precedenceOrderEnvironmentVariables(t *testing.T) 
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -183,7 +186,8 @@ func testAccFwProvider_region_precedenceOrderEnvironmentVariables(t *testing.T) 
 }
 
 func testAccFwProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for zone, and they are in order of precedence.
 		GOOGLE_ZONE
@@ -197,7 +201,7 @@ func testAccFwProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -246,14 +250,14 @@ func testAccFwProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
 }
 
 func testAccFwProvider_region_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{
 		"region": "",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
@@ -266,14 +270,14 @@ func testAccFwProvider_region_emptyStringValidation(t *testing.T) {
 }
 
 func testAccFwProvider_zone_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{
 		"zone": "",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
@@ -286,7 +290,8 @@ func testAccFwProvider_zone_emptyStringValidation(t *testing.T) {
 }
 
 func testAccFwProvider_region_selfLinks(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	selfLink := "https://www.googleapis.com/compute/v1/projects/my-project/regions/us-central1"
 	region := "us-central1"
@@ -295,7 +300,7 @@ func testAccFwProvider_region_selfLinks(t *testing.T) {
 		"region": selfLink,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -311,7 +316,8 @@ func testAccFwProvider_region_selfLinks(t *testing.T) {
 }
 
 func testAccFwProvider_zone_selfLinks(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	selfLink := "https://www.googleapis.com/compute/v1/projects/my-project/zones/us-central1-a"
 
@@ -319,7 +325,7 @@ func testAccFwProvider_zone_selfLinks(t *testing.T) {
 		"zone": selfLink,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

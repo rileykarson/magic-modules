@@ -38,11 +38,12 @@ func TestAccFwProvider_request_timeout(t *testing.T) {
 }
 
 func testAccFwProvider_request_timeout_providerDefault(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	defaultValue := "0s"
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -57,7 +58,8 @@ func testAccFwProvider_request_timeout_providerDefault(t *testing.T) {
 }
 
 func testAccFwProvider_request_timeout_setInConfig(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	providerTimeout1 := "3m0s"
 	providerTimeout2 := "3m"
@@ -72,7 +74,7 @@ func testAccFwProvider_request_timeout_setInConfig(t *testing.T) {
 		"request_timeout": providerTimeout2,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -93,13 +95,14 @@ func testAccFwProvider_request_timeout_setInConfig(t *testing.T) {
 }
 
 func testAccFwProvider_request_timeout_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{
 		"request_timeout": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

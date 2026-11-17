@@ -773,3 +773,109 @@ resource "my_resource" "primary" {
 		t.Errorf("got %#v, expected %#v", got, expected)
 	}
 }
+
+func TestReadTestRunnerCalls(t *testing.T) {
+	testFile := filepath.Join(t.TempDir(), "test_runner_calls_test.go")
+	src := `package service_test
+
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestAccUnitTestCall(t *testing.T) {
+	helper.Test(t)
+	resource.UnitTest(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: ` + "`" + `
+resource "unit_resource" "primary" {
+  field_one = "unit-val"
+}
+` + "`" + `,
+			},
+		},
+	})
+}
+
+func TestAccResourceTestCall(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: ` + "`" + `
+resource "std_resource" "primary" {
+  field_one = "std-val"
+}
+` + "`" + `,
+			},
+		},
+	})
+}
+
+func TestAccParallelTestCall(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: ` + "`" + `
+resource "parallel_resource" "primary" {
+  field_one = "parallel-val"
+}
+` + "`" + `,
+			},
+		},
+	})
+}
+
+func TestAccUnqualifiedUnitTestCall(t *testing.T) {
+	UnitTest(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: ` + "`" + `
+resource "unqualified_unit_resource" "primary" {
+  field_one = "unqualified-val"
+}
+` + "`" + `,
+			},
+		},
+	})
+}
+`
+	if err := os.WriteFile(testFile, []byte(src), 0o600); err != nil {
+		t.Fatalf("error writing temp test file: %v", err)
+	}
+	tests, errs := ReadTestFiles([]string{testFile})
+	if len(errs) > 0 {
+		t.Fatalf("unexpected errors reading test runner calls file: %v", errs)
+	}
+	if len(tests) != 4 {
+		t.Fatalf("expected 4 tests, got %d: %#v", len(tests), tests)
+	}
+	gotByName := make(map[string]Step, len(tests))
+	for _, tc := range tests {
+		if len(tc.Steps) != 1 {
+			t.Fatalf("expected 1 step for %s, got %d", tc.Name, len(tc.Steps))
+		}
+		gotByName[tc.Name] = tc.Steps[0]
+	}
+	for _, want := range []struct {
+		testName string
+		resType  string
+		val      string
+	}{
+		{"TestAccUnitTestCall", "unit_resource", `"unit-val"`},
+		{"TestAccResourceTestCall", "std_resource", `"std-val"`},
+		{"TestAccParallelTestCall", "parallel_resource", `"parallel-val"`},
+		{"TestAccUnqualifiedUnitTestCall", "unqualified_unit_resource", `"unqualified-val"`},
+	} {
+		step, ok := gotByName[want.testName]
+		if !ok {
+			t.Errorf("missing test %s in %#v", want.testName, gotByName)
+			continue
+		}
+		expected := Block{"field_one": want.val}
+		if got := step[ResourceBlock][want.resType]["primary"]; !reflect.DeepEqual(got, expected) {
+			t.Errorf("test %s: got %#v, expected %#v", want.testName, got, expected)
+		}
+	}
+}

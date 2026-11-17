@@ -58,9 +58,10 @@ func TestAccSdkProvider_zone(t *testing.T) {
 }
 
 func testAccSdkProvider_region_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	region := envvar.GetTestRegionFromEnv()
+	region := "us-central1"
 
 	// ensure all possible region env vars set; show they aren't used
 	for _, v := range envvar.RegionEnvVars {
@@ -73,7 +74,7 @@ func testAccSdkProvider_region_configPrecedenceOverEnvironmentVariables(t *testi
 		"region": providerRegion,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -89,9 +90,10 @@ func testAccSdkProvider_region_configPrecedenceOverEnvironmentVariables(t *testi
 }
 
 func testAccSdkProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	zone := envvar.GetTestZoneFromEnv()
+	zone := "us-central1-a"
 
 	// ensure all possible zone env vars set; show they aren't used
 	for _, v := range envvar.ZoneEnvVars {
@@ -104,7 +106,7 @@ func testAccSdkProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing
 		"zone": providerZone,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -120,7 +122,8 @@ func testAccSdkProvider_zone_configPrecedenceOverEnvironmentVariables(t *testing
 }
 
 func testAccSdkProvider_region_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for region, and they are in order of precedence.
 		GOOGLE_REGION
@@ -134,7 +137,7 @@ func testAccSdkProvider_region_precedenceOrderEnvironmentVariables(t *testing.T)
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -183,7 +186,8 @@ func testAccSdkProvider_region_precedenceOrderEnvironmentVariables(t *testing.T)
 }
 
 func testAccSdkProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for zone, and they are in order of precedence.
 		GOOGLE_ZONE
@@ -197,7 +201,7 @@ func testAccSdkProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -246,9 +250,10 @@ func testAccSdkProvider_zone_precedenceOrderEnvironmentVariables(t *testing.T) {
 }
 
 func testAccSdkProvider_region_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	region := envvar.GetTestRegionFromEnv()
+	region := "us-central1"
 
 	// ensure all region env vars set
 	for _, v := range envvar.RegionEnvVars {
@@ -259,7 +264,7 @@ func testAccSdkProvider_region_emptyStringValidation(t *testing.T) {
 		"region": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -272,9 +277,10 @@ func testAccSdkProvider_region_emptyStringValidation(t *testing.T) {
 }
 
 func testAccSdkProvider_zone_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
-	zone := envvar.GetTestZoneFromEnv()
+	zone := "us-central1-a"
 
 	// ensure all zone env vars set
 	for _, v := range envvar.ZoneEnvVars {
@@ -285,7 +291,7 @@ func testAccSdkProvider_zone_emptyStringValidation(t *testing.T) {
 		"zone": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -298,7 +304,8 @@ func testAccSdkProvider_zone_emptyStringValidation(t *testing.T) {
 }
 
 func testAccSdkProvider_region_selfLinks(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	selfLink := "https://www.googleapis.com/compute/v1/projects/my-project/regions/us-central1"
 	region := "us-central1"
@@ -307,7 +314,7 @@ func testAccSdkProvider_region_selfLinks(t *testing.T) {
 		"region": selfLink,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -323,7 +330,8 @@ func testAccSdkProvider_region_selfLinks(t *testing.T) {
 }
 
 func testAccSdkProvider_zone_selfLinks(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	selfLink := "https://www.googleapis.com/compute/v1/projects/my-project/zones/us-central1-a"
 
@@ -331,7 +339,7 @@ func testAccSdkProvider_zone_selfLinks(t *testing.T) {
 		"zone": selfLink,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

@@ -151,13 +151,15 @@ func readTestFunc(testFunc *ast.FuncDecl, funcDecls map[string]*ast.FuncDecl, va
 				// This is a call expression.
 				ident, isIdent := callExpr.Fun.(*ast.Ident)
 				selExpr, isSelExpr := callExpr.Fun.(*ast.SelectorExpr)
-				if isIdent && ident.Name == "VcrTest" || isSelExpr && selExpr.Sel.Name == "VcrTest" {
+				if isIdent && isTestRunnerFuncName(ident.Name) || isSelExpr && isTestRunnerSelector(selExpr) {
 					test, err := readVcrTestCall(callExpr, funcDecls, varDecls, contextVars)
 					if err != nil {
 						errs = append(errs, err)
 					}
-					test.Name = testFunc.Name.Name
-					tests = append(tests, test)
+					if test != nil {
+						test.Name = testFunc.Name.Name
+						tests = append(tests, test)
+					}
 				}
 			}
 		} else if assignStmt, ok := stmt.(*ast.AssignStmt); ok {
@@ -188,6 +190,26 @@ func readTestFunc(testFunc *ast.FuncDecl, funcDecls map[string]*ast.FuncDecl, va
 		return tests, fmt.Errorf("errors reading test func %s: %v", testFunc.Name.Name, errs)
 	}
 	return tests, nil
+}
+
+func isTestRunnerFuncName(name string) bool {
+	switch name {
+	case "VcrTest", "UnitTest", "Test", "ParallelTest":
+		return true
+	default:
+		return false
+	}
+}
+
+func isTestRunnerSelector(selExpr *ast.SelectorExpr) bool {
+	if selExpr.Sel.Name == "VcrTest" {
+		return true
+	}
+	if !isTestRunnerFuncName(selExpr.Sel.Name) {
+		return false
+	}
+	pkgIdent, ok := selExpr.X.(*ast.Ident)
+	return ok && (pkgIdent.Name == "resource" || pkgIdent.Name == "acctest")
 }
 
 // NullValue is the raw expression recorded in a Block when an HCL attribute is

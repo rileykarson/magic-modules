@@ -39,7 +39,8 @@ func TestAccFwProvider_impersonate_service_account_delegates(t *testing.T) {
 }
 
 func testAccFwProvider_impersonate_service_account_delegates_setInConfig(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	delegates := []string{
 		"projects/-/serviceAccounts/my-service-account-1@example.iam.gserviceaccount.com",
@@ -53,7 +54,7 @@ func testAccFwProvider_impersonate_service_account_delegates_setInConfig(t *test
 		"impersonate_service_account_delegates": delegatesString,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{

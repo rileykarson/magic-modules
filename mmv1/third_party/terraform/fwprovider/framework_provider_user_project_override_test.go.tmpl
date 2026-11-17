@@ -3,6 +3,7 @@ package fwprovider_test
 import (
 	"fmt"
 {{ if ne $.TargetVersionName `ga` -}}
+	"os"
 	"regexp"
 {{- end }}
 	"testing"
@@ -52,7 +53,8 @@ func TestAccFwProvider_user_project_override(t *testing.T) {
 }
 
 func testAccFwProvider_user_project_override_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	override := "true"
 	providerOverride := false
@@ -64,7 +66,7 @@ func testAccFwProvider_user_project_override_configPrecedenceOverEnvironmentVari
 		"user_project_override": providerOverride,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -80,7 +82,8 @@ func testAccFwProvider_user_project_override_configPrecedenceOverEnvironmentVari
 }
 
 func testAccFwProvider_user_project_override_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for region, and they are in order of precedence.
 		USER_PROJECT_OVERRIDE
@@ -88,7 +91,7 @@ func testAccFwProvider_user_project_override_precedenceOrderEnvironmentVariables
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -115,7 +118,8 @@ func testAccFwProvider_user_project_override_precedenceOrderEnvironmentVariables
 }
 
 func testAccFwProvider_user_project_override_booleansInConfigOnly(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context_true := map[string]interface{}{
 		"user_project_override": true,
@@ -131,8 +135,7 @@ func testAccFwProvider_user_project_override_booleansInConfigOnly(t *testing.T) 
 		"user_project_override": "0",
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
@@ -164,12 +167,12 @@ func testAccFwProvider_user_project_override_booleansInConfigOnly(t *testing.T) 
 }
 
 func testAccFwProvider_user_project_override_envStringsAccepted(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
-		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
+	resource.UnitTest(t, resource.TestCase{
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
 			{
@@ -215,14 +218,13 @@ func testAccFwProvider_user_project_override_envStringsAccepted(t *testing.T) {
 // testAccFwProvider_user_project_overrideInProviderBlock allows setting the user_project_override argument in a provider block.
 // This function uses data.google_provider_config_plugin_framework because it is implemented with the plugin-framework
 func testAccFwProvider_user_project_overrideInProviderBlock_boolean(context map[string]interface{}) string {
-	v := acctest.Nprintf(`
+	return acctest.Nprintf(`
 provider "google" {
 	user_project_override = %{user_project_override}
 }
 
 data "google_provider_config_plugin_framework" "default" {}
 `, context)
-	return v
 }
 
 func testAccFwProvider_user_project_overrideInProviderBlock_string(context map[string]interface{}) string {
@@ -247,6 +249,9 @@ data "google_provider_config_plugin_framework" "default" {}
 func testAccFwProvider_UserProjectOverride(t *testing.T) {
 	// Parallel fine-grained resource creation
 	acctest.SkipIfVcr(t)
+	if os.Getenv(envvar.TestEnvVar) == "" {
+		t.Skipf("Acceptance tests skipped unless env '%s' set", envvar.TestEnvVar)
+	}
 	t.Parallel()
 
 	org := envvar.GetTestOrgFromEnv(t)

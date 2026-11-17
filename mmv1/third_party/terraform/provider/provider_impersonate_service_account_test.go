@@ -39,7 +39,8 @@ func TestAccSdkProvider_impersonate_service_account(t *testing.T) {
 }
 
 func testAccSdkProvider_impersonate_service_account_configPrecedenceOverEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	impersonateServiceAccountEnvironment := "value-from-envs@example.com"
 	impersonateServiceAccountProviderBlock := "value-from-provider-block@example.com"
@@ -51,7 +52,7 @@ func testAccSdkProvider_impersonate_service_account_configPrecedenceOverEnvironm
 		"impersonate_service_account": impersonateServiceAccountProviderBlock,
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -65,7 +66,8 @@ func testAccSdkProvider_impersonate_service_account_configPrecedenceOverEnvironm
 }
 
 func testAccSdkProvider_impersonate_service_account_precedenceOrderEnvironmentVariables(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 	/*
 		These are all the ENVs for impersonate_service_account, and they are in order of precedence.
 		GOOGLE_IMPERSONATE_SERVICE_ACCOUNT
@@ -75,7 +77,7 @@ func testAccSdkProvider_impersonate_service_account_precedenceOrderEnvironmentVa
 
 	context := map[string]interface{}{}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
@@ -92,7 +94,8 @@ func testAccSdkProvider_impersonate_service_account_precedenceOrderEnvironmentVa
 }
 
 func testAccSdkProvider_impersonate_service_account_emptyStringValidation(t *testing.T) {
-	acctest.SkipIfVcr(t) // Test doesn't interact with API
+	acctest.UnsetTestProviderConfigEnvs(t)
+	t.Setenv("GOOGLE_CREDENTIALS", acctest.GenerateFakeCredentialsJson("test"))
 
 	impersonateServiceAccountEnvironment := "value-from-envs@example.com"
 
@@ -103,7 +106,7 @@ func testAccSdkProvider_impersonate_service_account_emptyStringValidation(t *tes
 		"impersonate_service_account": "", // empty string used
 	}
 
-	acctest.VcrTest(t, resource.TestCase{
+	resource.UnitTest(t, resource.TestCase{
 		// No PreCheck for checking ENVs
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
 		Steps: []resource.TestStep{
