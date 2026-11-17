@@ -241,3 +241,25 @@ func TestRunMake(t *testing.T) {
 		})
 	}
 }
+
+func TestExecGenerateDownstream_RejectsInvalidBaseBranch(t *testing.T) {
+	for _, baseBranch := range []string{
+		"arbitrary-branch",
+		"-oProxyCommand=evil",
+		"FEATURE-BRANCH-",
+		"FEATURE-BRANCH-foo/*",
+		"FEATURE-BRANCH-foo; evil",
+	} {
+		t.Run(baseBranch, func(t *testing.T) {
+			rnr := NewMockRunner()
+			ctlr := source.NewController("/go", "modular-magician", "secret-token", rnr)
+			err := execGenerateDownstream(baseBranch, "head", "terraform", "beta", "12345", &mockGithub{}, rnr, ctlr)
+			if err == nil || !strings.Contains(err.Error(), "unsupported base branch") {
+				t.Fatalf("execGenerateDownstream(%q) error = %v, want unsupported base branch", baseBranch, err)
+			}
+			if calls, ok := rnr.Calls("Run"); ok && len(calls) > 0 {
+				t.Errorf("expected zero command invocations, got %v", calls)
+			}
+		})
+	}
+}

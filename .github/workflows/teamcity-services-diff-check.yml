@@ -23,7 +23,8 @@ jobs:
       - name: "Check for New Services"
         id: services
         run: |
-          newServices=$(($(git diff --name-only --diff-filter=A origin/main HEAD | grep -P "mmv1/products/.*/product.yaml" | wc -l)))
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
+          newServices=$(($(git diff --name-only --diff-filter=A "refs/remotes/origin/${GITHUB_BASE_REF}...HEAD" -- mmv1/products | grep -P "mmv1/products/.*/product.yaml" | wc -l)))
           echo "services=$newServices" >> "${GITHUB_OUTPUT}"
           if [ "$newServices" = "0" ];then
           echo "No new service found."
@@ -34,7 +35,7 @@ jobs:
         uses: ./.github/actions/build-downstream
         with:
           repo: 'terraform-provider-google'
-          token: '$GITHUB_TOKEN'
+          token: ${{ secrets.GITHUB_TOKEN }}
         # The path where GA/Beta providers are generated is grabbed from the OUTPUT_PATH that's set in build_downstream.yaml
         # export OUTPUT_PATH=$GOPATH/src/github.com/$UPSTREAM_OWNER/$GH_REPO
         # OUTPUT_PATH changes after each generate (GA/beta)
@@ -45,7 +46,7 @@ jobs:
         uses: ./.github/actions/build-downstream
         with:
           repo: 'terraform-provider-google-beta'
-          token: '$GITHUB_TOKEN'
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set GOOGLE_BETA_REPO_PATH to path where beta provider was generated
         run: echo "GOOGLE_BETA_REPO_PATH=${OUTPUT_PATH}" >> $GITHUB_ENV
       - name: Checkout Repository

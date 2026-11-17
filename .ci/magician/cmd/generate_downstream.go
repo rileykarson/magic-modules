@@ -31,6 +31,7 @@ import (
 )
 
 var changelogExp = regexp.MustCompile("(?s)```release-note:(?P<noteType>[a-zA-Z]+).*```")
+var featureBranchRegexp = regexp.MustCompile(`^FEATURE-BRANCH-[a-zA-Z0-9._-]+$`)
 
 var gdEnvironmentVariables = [...]string{
 	"BASE_BRANCH",
@@ -111,6 +112,9 @@ func listGDEnvironmentVariables() string {
 func execGenerateDownstream(baseBranch, command, repo, version, ref string, gh GithubClient, rnr ExecRunner, ctlr *source.Controller) error {
 	if baseBranch == "" {
 		baseBranch = "main"
+	}
+	if baseBranch != "main" && !featureBranchRegexp.MatchString(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
 	}
 	if command == "downstream" {
 		var syncBranchPrefix string

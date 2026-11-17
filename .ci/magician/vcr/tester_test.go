@@ -2,6 +2,7 @@ package vcr
 
 import (
 	"magician/provider"
+	"path/filepath"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -100,5 +101,70 @@ func TestAsyncCassetteUploadPath(t *testing.T) {
 	wantPR := "gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/"
 	if got := vt.asyncCassetteUploadPath("auto-pr-123", provider.Beta); got != wantPR {
 		t.Errorf("asyncCassetteUploadPath(\"auto-pr-123\", Beta) = %q; want %q", got, wantPR)
+	}
+}
+
+type fakeExecRunner struct {
+	cwd     string
+	runArgs [][]string
+}
+
+func (f *fakeExecRunner) GetCWD() string                               { return f.cwd }
+func (f *fakeExecRunner) Copy(src, dest string) error                  { return nil }
+func (f *fakeExecRunner) Mkdir(path string) error                      { return nil }
+func (f *fakeExecRunner) RemoveAll(path string) error                  { return nil }
+func (f *fakeExecRunner) PushDir(path string) error                    { return nil }
+func (f *fakeExecRunner) PopDir() error                                { return nil }
+func (f *fakeExecRunner) ReadFile(name string) (string, error)         { return "", nil }
+func (f *fakeExecRunner) WriteFile(name, data string) error            { return nil }
+func (f *fakeExecRunner) Walk(root string, fn filepath.WalkFunc) error { return nil }
+func (f *fakeExecRunner) MustRun(name string, args []string, env map[string]string) string {
+	out, _ := f.Run(name, args, env)
+	return out
+}
+func (f *fakeExecRunner) Run(name string, args []string, env map[string]string) (string, error) {
+	f.runArgs = append(f.runArgs, append([]string{name}, args...))
+	return "", nil
+}
+
+func TestFetchCassettes_BaseBranchValidation(t *testing.T) {
+	for _, tc := range []struct {
+		baseBranch string
+		wantErr    bool
+		wantCalls  [][]string
+	}{
+		{
+			baseBranch: "main",
+			wantCalls: [][]string{
+				{"gcloud", "storage", "cp", "gs://ci-vcr-cassettes/beta/fixtures/*", "/base/cassettes/beta"},
+				{"gcloud", "storage", "cp", "gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/*", "/base/cassettes/beta"},
+			},
+		},
+		{
+			baseBranch: "FEATURE-BRANCH-major-release-8.0.0",
+			wantCalls: [][]string{
+				{"gcloud", "storage", "cp", "gs://ci-vcr-cassettes/beta/fixtures/*", "/base/cassettes/beta"},
+				{"gcloud", "storage", "cp", "gs://ci-vcr-cassettes/beta/refs/branches/FEATURE-BRANCH-major-release-8.0.0/fixtures/*", "/base/cassettes/beta"},
+				{"gcloud", "storage", "cp", "gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/*", "/base/cassettes/beta"},
+			},
+		},
+		{baseBranch: "FEATURE-BRANCH-foo/*", wantErr: true},
+		{baseBranch: "--evil", wantErr: true},
+		{baseBranch: "arbitrary-branch", wantErr: true},
+	} {
+		t.Run(tc.baseBranch, func(t *testing.T) {
+			rnr := &fakeExecRunner{cwd: "/base"}
+			vt, err := NewTester(map[string]string{}, "ci-vcr-cassettes", "ci-vcr-logs", rnr, false)
+			if err != nil {
+				t.Fatalf("NewTester() error: %v", err)
+			}
+			err = vt.FetchCassettes(provider.Beta, tc.baseBranch, "auto-pr-123")
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("FetchCassettes(%q) error = %v, wantErr %v", tc.baseBranch, err, tc.wantErr)
+			}
+			if diff := cmp.Diff(tc.wantCalls, rnr.runArgs); diff != "" {
+				t.Errorf("FetchCassettes(%q) commands diff (-want +got):\n%s", tc.baseBranch, diff)
+			}
+		})
 	}
 }

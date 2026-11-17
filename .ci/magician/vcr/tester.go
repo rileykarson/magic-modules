@@ -85,6 +85,8 @@ var testPanicExpression = regexp.MustCompile(`(?m:^panic: .*)`)
 
 var buildFailedExpression = regexp.MustCompile(`FAIL\s+(\S+)\s+\[build failed\]`)
 
+var featureBranchExpression = regexp.MustCompile(`^FEATURE-BRANCH-[a-zA-Z0-9._-]+$`)
+
 var safeToLog = map[string]bool{
 	"ACCTEST_PARALLELISM":                        true,
 	"COMMIT_SHA":                                 true,
@@ -162,6 +164,9 @@ func (vt *Tester) SetRepoPath(version provider.Version, repoPath string) {
 // Fetch the cassettes for the current version if not already fetched.
 // Should be run from the base dir.
 func (vt *Tester) FetchCassettes(version provider.Version, baseBranch, head string) error {
+	if baseBranch != "main" && !featureBranchExpression.MatchString(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
+	}
 	if _, cassettesAlreadyFetched := vt.cassettePaths[version]; cassettesAlreadyFetched {
 		return nil
 	}
@@ -174,7 +179,7 @@ func (vt *Tester) FetchCassettes(version provider.Version, baseBranch, head stri
 			fmt.Println("Error fetching cassettes: ", err)
 		}
 	}
-	if baseBranch != "main" {
+	if featureBranchExpression.MatchString(baseBranch) {
 		bucketPath := fmt.Sprintf("gs://%s/%srefs/branches/%s/fixtures/*", vt.cassetteBucket, version.BucketPath(), baseBranch)
 		if err := vt.fetchBucketPath(bucketPath, cassettePath); err != nil {
 			fmt.Println("Error fetching cassettes: ", err)

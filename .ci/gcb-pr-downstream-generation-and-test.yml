@@ -28,25 +28,31 @@ steps:
       args:
           - remote
           - add
+          - --
           - head
           - $_HEAD_REPO_URL
 
     - name: 'gcr.io/cloud-builders/git'
       args:
           - fetch
+          - --
           - head
-          - $_HEAD_BRANCH
+          - $COMMIT_SHA
 
     - name: 'gcr.io/cloud-builders/git'
       args:
           - checkout
-          - origin/$_BASE_BRANCH
+          - --detach
+          - refs/remotes/origin/$_BASE_BRANCH
+          - --
     - name: 'gcr.io/cloud-builders/git'
       id: merged
       args:
           - merge
           - --no-ff
-          - head/$_HEAD_BRANCH
+          - --no-edit
+          - --
+          - $COMMIT_SHA
 
     - name: 'gcr.io/graphite-docker-images/go-plus'
       entrypoint: '/workspace/.ci/scripts/go-plus/magician/exec.sh'
