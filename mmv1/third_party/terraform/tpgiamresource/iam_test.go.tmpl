@@ -1678,3 +1678,48 @@ func TestIamPolicyReadModifyWrite_maxBackoffTimeout(t *testing.T) {
 		t.Fatalf("expected custom 50ms backoff timeout to fail quickly, took %v", elapsed)
 	}
 }
+
+type nilPolicyIamUpdater struct {
+	resourceId string
+}
+
+func (u *nilPolicyIamUpdater) GetResourceIamPolicy() (*cloudresourcemanager.Policy, error) {
+	return nil, nil
+}
+
+func (u *nilPolicyIamUpdater) SetResourceIamPolicy(policy *cloudresourcemanager.Policy) error {
+	return nil
+}
+
+func (u *nilPolicyIamUpdater) GetResourceId() string   { return u.resourceId }
+func (u *nilPolicyIamUpdater) GetMutexKey() string     { return "iam-nil-policy-" + u.resourceId }
+func (u *nilPolicyIamUpdater) DescribeResource() string { return "nil policy resource " + u.resourceId }
+
+func TestIamPolicyNilPolicyGuard(t *testing.T) {
+	t.Parallel()
+
+	updater := &nilPolicyIamUpdater{resourceId: "empty-access"}
+
+	readPolicy, err := iamPolicyReadWithRetry(updater)
+	if err != nil {
+		t.Fatalf("iamPolicyReadWithRetry returned unexpected error: %v", err)
+	}
+	if readPolicy == nil {
+		t.Fatal("iamPolicyReadWithRetry returned nil policy, want non-nil empty policy")
+	}
+
+	errStopAfterModify := errors.New("stop after modify")
+	err = iamPolicyReadModifyWrite(updater, nil, func(p *cloudresourcemanager.Policy) error {
+		if p == nil {
+			t.Fatal("iamPolicyReadModifyWrite passed nil policy to modify")
+		}
+		p.Bindings = append(p.Bindings, &cloudresourcemanager.Binding{
+			Role:    "roles/bigquery.dataViewer",
+			Members: []string{"user:test@example.com"},
+		})
+		return errStopAfterModify
+	})
+	if !errors.Is(err, errStopAfterModify) {
+		t.Fatalf("expected %v from modify callback, got: %v", errStopAfterModify, err)
+	}
+}

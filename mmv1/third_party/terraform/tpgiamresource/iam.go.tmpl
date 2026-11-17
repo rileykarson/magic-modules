@@ -85,6 +85,9 @@ func iamPolicyReadWithRetry(updater ResourceIamUpdater) (*cloudresourcemanager.P
 	if err != nil {
 		return nil, err
 	}
+	if policy == nil {
+		policy = &cloudresourcemanager.Policy{}
+	}
 	log.Printf("[DEBUG] Retrieved policy for %s: %#v\n", updater.DescribeResource(), policy)
 	return policy, nil
 }
@@ -112,6 +115,9 @@ func iamPolicyReadModifyWrite(updater ResourceIamUpdater, config *transport_tpg.
 		p, err := updater.GetResourceIamPolicy()
 		if err != nil {
 			return retry.NonRetryableError(err)
+		}
+		if p == nil {
+			p = &cloudresourcemanager.Policy{}
 		}
 		log.Printf("[DEBUG]: Retrieved policy for %s: %+v\n", updater.DescribeResource(), p)
 

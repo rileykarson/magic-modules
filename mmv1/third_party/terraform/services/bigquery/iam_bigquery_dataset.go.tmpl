@@ -160,7 +160,7 @@ func (u *BigqueryDatasetIamUpdater) SetResourceIamPolicy(policy *cloudresourcema
 
 func accessToPolicy(access interface{}) (*cloudresourcemanager.Policy, error) {
 	if access == nil {
-		return nil, nil
+		return &cloudresourcemanager.Policy{}, nil
 	}
 	roleToBinding := make(map[iamBindingKey]*cloudresourcemanager.Binding)
 

@@ -185,7 +185,7 @@ func (u *BigqueryDatasetIamMemberUpdater) SetResourceIamPolicy(policy *cloudreso
 
 func accessToPolicyForIamMember(access interface{}) (*cloudresourcemanager.Policy, error) {
 	if access == nil {
-		return nil, nil
+		return &cloudresourcemanager.Policy{}, nil
 	}
 	roleToBinding := make(map[iamBindingKey]*cloudresourcemanager.Binding)
 
