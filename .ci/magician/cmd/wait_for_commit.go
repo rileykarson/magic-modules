@@ -43,6 +43,15 @@ var waitForCommitCmd = &cobra.Command{
 }
 
 func execWaitForCommit(syncBranchPrefix, baseBranch, sha string, runner source.Runner, waitFunc func()) error {
+	if !isDownstreamTargetBranch(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
+	}
+	if !safeRefRegexp.MatchString(syncBranchPrefix) {
+		return fmt.Errorf("invalid sync branch prefix %q", syncBranchPrefix)
+	}
+	if !commitSHARegexp.MatchString(sha) {
+		return fmt.Errorf("invalid commit sha %q", sha)
+	}
 	syncBranch := getSyncBranch(syncBranchPrefix, baseBranch)
 	fmt.Println("SYNC_BRANCH: ", syncBranch)
 
@@ -69,7 +78,7 @@ func execWaitForCommit(syncBranchPrefix, baseBranch, sha string, runner source.R
 		fmt.Println("sync branch is at: ", syncHead)
 		fmt.Println("current commit is: ", sha)
 
-		if _, err := runner.Run("git", []string{"fetch", "origin", syncBranch}, nil); err != nil {
+		if _, err := runner.Run("git", []string{"fetch", "--", "origin", syncBranch}, nil); err != nil {
 			return err
 		}
 		waitFunc()

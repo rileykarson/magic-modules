@@ -36,8 +36,8 @@ jobs:
           cd repo 
           git config user.name "modular-magician"
           git config user.email "magic-modules@google.com"
-          git fetch origin ${GITHUB_BASE_REF} # Fetch the base branch
-          git merge --no-ff origin/${GITHUB_BASE_REF} # Merge with the base branch
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" # Fetch the base branch
+          git merge --no-ff --no-edit -- "refs/remotes/origin/${GITHUB_BASE_REF}" # Merge with the base branch
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
@@ -45,13 +45,26 @@ jobs:
           cache-dependency-path: |
             repo/tools/template-check/go.sum
       - name: Check for invalid version guards
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
         run: |
           cd repo/tools/template-check
-          tmpls=$(git diff --name-only --diff-filter=d origin/${GITHUB_BASE_REF} ../../*.tmpl | sed 's=^=../../=g')
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            base_ref="refs/remotes/origin/${GITHUB_BASE_REF}"
+          elif [[ "${EVENT_NAME}" == "merge_group" ]]; then
+            base_ref="${MERGE_GROUP_BASE_SHA}"
+          elif [[ -n "${PUSH_BEFORE}" && ! "${PUSH_BEFORE}" =~ ^0+$ ]] && git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+            base_ref="${PUSH_BEFORE}"
+          else
+            base_ref="$(git merge-base refs/remotes/origin/main HEAD)"
+          fi
+          tmpls=$(git diff --name-only --diff-filter=d "${base_ref}" HEAD -- "../../*.tmpl" | sed 's=^=../../=g')
           tmpls=${tmpls//$'\n'/,}
-          echo $tmpls
+          echo "$tmpls"
           if [[ -n "$tmpls" ]]; then
-            go run main.go version-guard --file-list $tmpls
+            go run main.go version-guard --file-list "$tmpls"
           fi
   unused-template-check:
     runs-on: ubuntu-22.04
@@ -69,8 +82,8 @@ jobs:
           cd repo
           git config user.name "modular-magician"
           git config user.email "magic-modules@google.com"
-          git fetch origin ${GITHUB_BASE_REF} # Fetch the base branch
-          git merge --no-ff origin/${GITHUB_BASE_REF} # Merge with the base branch
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" # Fetch the base branch
+          git merge --no-ff --no-edit -- "refs/remotes/origin/${GITHUB_BASE_REF}" # Merge with the base branch
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
@@ -79,13 +92,26 @@ jobs:
             repo/tools/template-check/go.sum
       - name: Check new product templates are linked
         id: new_templates
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
         run: |
           cd repo/tools/template-check
-          newtmplfiles=$(git diff --name-only --diff-filter=A origin/${GITHUB_BASE_REF} HEAD -- ../../mmv1 | grep .tmpl | sed 's=^=../../=g')
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            base_ref="refs/remotes/origin/${GITHUB_BASE_REF}"
+          elif [[ "${EVENT_NAME}" == "merge_group" ]]; then
+            base_ref="${MERGE_GROUP_BASE_SHA}"
+          elif [[ -n "${PUSH_BEFORE}" && ! "${PUSH_BEFORE}" =~ ^0+$ ]] && git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+            base_ref="${PUSH_BEFORE}"
+          else
+            base_ref="$(git merge-base refs/remotes/origin/main HEAD)"
+          fi
+          newtmplfiles=$(git diff --name-only --diff-filter=A "${base_ref}" HEAD -- ../../mmv1 | { grep '\.tmpl$' || test $? = 1; } | sed 's=^=../../=g')
           if [ ! -z "$newtmplfiles" ]; then
             newtmplfiles=${newtmplfiles//$'\n'/,}
-            echo $newtmplfiles
-            go run main.go unused-tmpl --file-list $newtmplfiles
+            echo "$newtmplfiles"
+            go run main.go unused-tmpl --file-list "$newtmplfiles"
           fi
   disallow-legacy-apiary:
     runs-on: ubuntu-22.04
@@ -103,8 +129,8 @@ jobs:
           cd repo
           git config user.name "modular-magician"
           git config user.email "magic-modules@google.com"
-          git fetch origin ${GITHUB_BASE_REF} # Fetch the base branch
-          git merge --no-ff origin/${GITHUB_BASE_REF} # Merge with the base branch
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" # Fetch the base branch
+          git merge --no-ff --no-edit -- "refs/remotes/origin/${GITHUB_BASE_REF}" # Merge with the base branch
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
@@ -112,10 +138,22 @@ jobs:
           cache-dependency-path: |
             repo/tools/template-check/go.sum
       - name: Check for legacy Apiary usage
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
         run: |
           cd repo/tools/template-check
-          base_ref="${GITHUB_BASE_REF:-main}"
-          go run main.go disallow-legacy-apiary --base-ref "origin/${base_ref}"
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            base_ref="refs/remotes/origin/${GITHUB_BASE_REF}"
+          elif [[ "${EVENT_NAME}" == "merge_group" ]]; then
+            base_ref="${MERGE_GROUP_BASE_SHA}"
+          elif [[ -n "${PUSH_BEFORE}" && ! "${PUSH_BEFORE}" =~ ^0+$ ]] && git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+            base_ref="${PUSH_BEFORE}"
+          else
+            base_ref="$(git merge-base refs/remotes/origin/main HEAD)"
+          fi
+          go run main.go disallow-legacy-apiary --base-ref "${base_ref}"
   lint-yaml:
     runs-on: ubuntu-22.04
     steps:
@@ -131,25 +169,33 @@ jobs:
           cd repo
           git config user.name "modular-magician"
           git config user.email "magic-modules@google.com"
-          git fetch origin ${GITHUB_BASE_REF}
-          git merge --no-ff origin/${GITHUB_BASE_REF}
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
+          git merge --no-ff --no-edit -- "refs/remotes/origin/${GITHUB_BASE_REF}"
       - name: Find YAML files to lint
         id: yaml_files
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
         run: |
           cd repo
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
             # For PRs, get only changed files
-            yamlfiles=$(git diff --name-only --diff-filter=d origin/${GITHUB_BASE_REF} -- mmv1/products)
+            yamlfiles=$(git diff --name-only --diff-filter=d "refs/remotes/origin/${GITHUB_BASE_REF}" HEAD -- mmv1/products)
             if [ ! -z "$yamlfiles" ]; then
-              echo "yamlfiles=${yamlfiles//$'\n'/ }" >> $GITHUB_OUTPUT
+              echo "yamlfiles=${yamlfiles//$'\n'/ }" >> "$GITHUB_OUTPUT"
+            fi
+          elif [[ "${EVENT_NAME}" == "merge_group" ]]; then
+            yamlfiles=$(git diff --name-only --diff-filter=d "${MERGE_GROUP_BASE_SHA}" HEAD -- mmv1/products)
+            if [ ! -z "$yamlfiles" ]; then
+              echo "yamlfiles=${yamlfiles//$'\n'/ }" >> "$GITHUB_OUTPUT"
             fi
           else
             # For other events, get all YAML files
             yamlfiles=$(find mmv1/products -name "*.yaml" -o -name "*.yml" | tr '\n' ' ')
             if [ ! -z "$yamlfiles" ]; then
-              echo "yamlfiles=$yamlfiles" >> $GITHUB_OUTPUT
+              echo "yamlfiles=$yamlfiles" >> "$GITHUB_OUTPUT"
             fi
-          fi      
+          fi
       - name: Install yamllint
         if: ${{ !failure() && steps.yaml_files.outputs.yamlfiles != '' }}
         run: pip install yamllint==1.32.0 pyyaml==6.0.1 pathspec==0.12.1 --no-deps
@@ -176,8 +222,8 @@ jobs:
           cd repo
           git config user.name "modular-magician"
           git config user.email "magic-modules@google.com"
-          git fetch origin ${GITHUB_BASE_REF} # Fetch the base branch
-          git merge --no-ff origin/${GITHUB_BASE_REF} # Merge with the base branch
+          git fetch -- origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" # Fetch the base branch
+          git merge --no-ff --no-edit -- "refs/remotes/origin/${GITHUB_BASE_REF}" # Merge with the base branch
       
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0

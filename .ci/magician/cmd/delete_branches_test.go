@@ -90,6 +90,16 @@ func TestDeleteBranchWithRetry(t *testing.T) {
 			t.Errorf("got %d push calls, want 4", rnr.pushCalls)
 		}
 	})
+
+	t.Run("deleteBranches rejects non-numeric prNumber", func(t *testing.T) {
+		rnr := NewMockRunner()
+		if err := deleteBranches("123 --mirror", "tok", rnr); err == nil {
+			t.Fatal("deleteBranches() succeeded on non-numeric prNumber, want error")
+		}
+		if calls, ok := rnr.Calls("Run"); ok && len(calls) > 0 {
+			t.Errorf("expected 0 git calls, got %v", calls)
+		}
+	})
 }
 
 type missingBranchPushRunner struct {

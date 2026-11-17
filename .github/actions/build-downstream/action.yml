@@ -15,6 +15,7 @@ runs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
@@ -27,7 +28,7 @@ runs:
       - name: Build ${{ inputs.repo  }}
         shell: bash
         env:
-          BASE_BRANCH: ${{ github.event.pull_request.base.ref || github.ref_name }}
+          BASE_BRANCH: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_ref || github.event.pull_request.base.ref || github.ref_name }}
           GITHUB_TOKEN: ${{ inputs.token }}
           INPUTS_REPO: ${{ inputs.repo  }}
         run: |
@@ -36,12 +37,23 @@ runs:
           # Set GOPATH to a directory the runner user has access to
           export GOPATH=~/go
 
+          # Clean up branch name if it starts with refs/heads/
+          if [[ "$BASE_BRANCH" == refs/heads/* ]]; then
+            BASE_BRANCH="${BASE_BRANCH#refs/heads/}"
+          fi
+
+          # Validate that BASE_BRANCH is main or a valid FEATURE-BRANCH-* release branch
+          if ! (LC_ALL=C; [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" =~ ^FEATURE-BRANCH-[a-zA-Z0-9._-]+$ ]]); then
+            echo "Unsupported BASE_BRANCH: $BASE_BRANCH" >&2
+            exit 1
+          fi
+
           function clone_repo() {
-            export OUTPUT_PATH=$GOPATH/src/github.com/$UPSTREAM_OWNER/$GH_REPO
-            echo "OUTPUT_PATH=$OUTPUT_PATH" >> $GITHUB_ENV
-            GITHUB_PATH=https://x-access-token:$GITHUB_TOKEN@github.com/$UPSTREAM_OWNER/$GH_REPO
-            mkdir -p "$(dirname $OUTPUT_PATH)"
-            git clone $GITHUB_PATH $OUTPUT_PATH --branch $BASE_BRANCH
+            export OUTPUT_PATH="$GOPATH/src/github.com/$UPSTREAM_OWNER/$GH_REPO"
+            echo "OUTPUT_PATH=$OUTPUT_PATH" >> "$GITHUB_ENV"
+            GITHUB_PATH="https://x-access-token:$GITHUB_TOKEN@github.com/$UPSTREAM_OWNER/$GH_REPO"
+            mkdir -p "$(dirname "$OUTPUT_PATH")"
+            git clone --depth 1 --branch "$BASE_BRANCH" -- "$GITHUB_PATH" "$OUTPUT_PATH"
           }
 
           GH_REPO="${INPUTS_REPO}"
@@ -74,4 +86,4 @@ runs:
             exit 1
           fi
 
-          (current_dir=$(pwd) && cd $OUTPUT_PATH && zip -r "$current_dir/output.zip" .)
+          (current_dir=$(pwd) && cd "$OUTPUT_PATH" && zip -r -q "$current_dir/output.zip" . -x "*.git/*")

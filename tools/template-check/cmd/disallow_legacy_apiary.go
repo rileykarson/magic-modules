@@ -210,6 +210,9 @@ func resolveDefaultBaseRef(repoDir string) (string, error) {
 }
 
 func runGitDiff(repoDir, baseRef string, pathspecs []string) ([]byte, error) {
+	if baseRef == "" || strings.HasPrefix(baseRef, "-") || strings.ContainsAny(baseRef, " \t\r\n\x00") {
+		return nil, fmt.Errorf("invalid base ref %q", baseRef)
+	}
 	args := []string{"diff", "-U0", baseRef, "--"}
 	args = append(args, pathspecs...)
 

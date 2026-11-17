@@ -48,6 +48,9 @@ var vcrMergeCmd = &cobra.Command{
 }
 
 func execVCRMerge(gh GithubClient, sha string, baseBranch string, runner source.Runner) error {
+	if !isDownstreamTargetBranch(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q for vcr-merge", baseBranch)
+	}
 	if message, err := gh.GetCommitMessage("GoogleCloudPlatform", "magic-modules", sha); err == nil {
 		if prNumber := parsePRNumberFromCommitMessage(message); prNumber != "" {
 			if pr, err := gh.GetPullRequest(prNumber); err == nil && pr.MergeCommitSha == sha {
@@ -74,7 +77,7 @@ func execVCRMerge(gh GithubClient, sha string, baseBranch string, runner source.
 
 func mergeCassettes(basePath, baseBranch, prPath string, runner source.Runner) {
 	branchPath := ""
-	if baseBranch != "main" {
+	if featureBranchRegexp.MatchString(baseBranch) {
 		branchPath = "/refs/branches/" + baseBranch
 	}
 

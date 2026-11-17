@@ -31,6 +31,14 @@ import (
 )
 
 var changelogExp = regexp.MustCompile("(?s)```release-note:(?P<noteType>[a-zA-Z]+).*```")
+var featureBranchRegexp = regexp.MustCompile(`^FEATURE-BRANCH-[a-zA-Z0-9._-]+$`)
+var safeRefRegexp = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9._-]*$`)
+var commitSHARegexp = regexp.MustCompile(`^[0-9a-fA-F]{7,40}$`)
+var numericIDRegexp = regexp.MustCompile(`^[0-9]+$`)
+
+func isDownstreamTargetBranch(branch string) bool {
+	return branch == "main" || featureBranchRegexp.MatchString(branch)
+}
 
 var gdEnvironmentVariables = [...]string{
 	"BASE_BRANCH",
@@ -111,6 +119,12 @@ func listGDEnvironmentVariables() string {
 func execGenerateDownstream(baseBranch, command, repo, version, ref string, gh GithubClient, rnr ExecRunner, ctlr *source.Controller) error {
 	if baseBranch == "" {
 		baseBranch = "main"
+	}
+	if !isDownstreamTargetBranch(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
+	}
+	if !safeRefRegexp.MatchString(ref) {
+		return fmt.Errorf("invalid ref %q", ref)
 	}
 	if command == "downstream" {
 		var syncBranchPrefix string
@@ -201,7 +215,7 @@ var pushRetryBackoffs = []time.Duration{10 * time.Second, 30 * time.Second, 60 *
 func pushWithRetry(rnr ExecRunner, remote, branch string) error {
 	var err error
 	for attempt := 0; ; attempt++ {
-		if _, err = rnr.Run("git", []string{"push", remote, branch, "-f"}, nil); err == nil {
+		if _, err = rnr.Run("git", []string{"push", "-f", "--", remote, branch}, nil); err == nil {
 			return nil
 		}
 		if attempt >= len(pushRetryBackoffs) {

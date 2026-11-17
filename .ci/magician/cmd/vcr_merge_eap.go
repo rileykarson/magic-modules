@@ -40,6 +40,12 @@ var vcrMergeEapCmd = &cobra.Command{
 }
 
 func execVCRMergeEAP(clNumber, baseBranch string, runner source.Runner) error {
+	if !isDownstreamTargetBranch(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q for vcr-merge-eap", baseBranch)
+	}
+	if !numericIDRegexp.MatchString(clNumber) {
+		return fmt.Errorf("invalid CL number %q", clNumber)
+	}
 	head := "auto-cl-" + clNumber
 	mergeCassettes("gs://ci-vcr-cassettes/private", baseBranch, fmt.Sprintf("refs/heads/%s", head), runner)
 	return nil

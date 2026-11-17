@@ -5,6 +5,9 @@ permissions: {}
 on:
   # zizmor: ignore[dangerous-triggers] - pull_request_target needed to assign reviewers on fork PRs, checks out trusted ref: main
   pull_request_target:
+    branches:
+      - main
+      - 'FEATURE-BRANCH-*'
     types:
       - opened
       - ready_for_review

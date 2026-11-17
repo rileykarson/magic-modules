@@ -41,15 +41,21 @@ jobs:
           export GOPATH=~/go
 
           # Clean up branch name if it starts with refs/heads/
-          if [[ $BASE_BRANCH == refs/heads/* ]]; then
-            BASE_BRANCH=${BASE_BRANCH#refs/heads/}
+          if [[ "$BASE_BRANCH" == refs/heads/* ]]; then
+            BASE_BRANCH="${BASE_BRANCH#refs/heads/}"
+          fi
+
+          # Validate that BASE_BRANCH is main or a valid FEATURE-BRANCH-* release branch
+          if ! (LC_ALL=C; [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" =~ ^FEATURE-BRANCH-[a-zA-Z0-9._-]+$ ]]); then
+            echo "Unsupported BASE_BRANCH: $BASE_BRANCH" >&2
+            exit 1
           fi
 
           function clone_repo() {
-            export OUTPUT_PATH=$GOPATH/src/github.com/$UPSTREAM_OWNER/$GH_REPO
-            GITHUB_PATH=https://x-access-token:$GITHUB_TOKEN@github.com/$UPSTREAM_OWNER/$GH_REPO
-            mkdir -p "$(dirname $OUTPUT_PATH)"
-            git clone --depth 1 $GITHUB_PATH $OUTPUT_PATH --branch $BASE_BRANCH
+            export OUTPUT_PATH="$GOPATH/src/github.com/$UPSTREAM_OWNER/$GH_REPO"
+            GITHUB_PATH="https://x-access-token:$GITHUB_TOKEN@github.com/$UPSTREAM_OWNER/$GH_REPO"
+            mkdir -p "$(dirname "$OUTPUT_PATH")"
+            git clone --depth 1 --branch "$BASE_BRANCH" -- "$GITHUB_PATH" "$OUTPUT_PATH"
           }
 
           GH_REPO="${INPUTS_REPO}"

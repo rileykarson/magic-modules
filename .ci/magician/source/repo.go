@@ -57,13 +57,23 @@ func (gc Controller) URL(repo *Repo) string {
 	return fmt.Sprintf("https://%s:%s@github.com/%s/%s", gc.username, gc.token, owner, repo.Name)
 }
 
+func validateGitRef(ref string) error {
+	if ref == "" || strings.HasPrefix(ref, "-") || strings.ContainsAny(ref, " \t\r\n\x00") {
+		return fmt.Errorf("invalid git ref %q", ref)
+	}
+	return nil
+}
+
 func (gc Controller) Clone(repo *Repo) error {
 	url := gc.URL(repo)
 	var err error
 	if repo.Branch == "" {
-		_, err = gc.rnr.Run("git", []string{"clone", url, repo.Path}, nil)
+		_, err = gc.rnr.Run("git", []string{"clone", "--", url, repo.Path}, nil)
 	} else {
-		_, err = gc.rnr.Run("git", []string{"clone", "-b", repo.Branch, url, repo.Path}, nil)
+		if err := validateGitRef(repo.Branch); err != nil {
+			return err
+		}
+		_, err = gc.rnr.Run("git", []string{"clone", "-b", repo.Branch, "--", url, repo.Path}, nil)
 	}
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists and is not an empty directory") {
@@ -74,30 +84,42 @@ func (gc Controller) Clone(repo *Repo) error {
 }
 
 func (gc Controller) Checkout(repo *Repo, ref string) error {
+	if err := validateGitRef(ref); err != nil {
+		return err
+	}
 	if err := gc.rnr.PushDir(repo.Path); err != nil {
 		return err
 	}
-	if _, err := gc.rnr.Run("git", []string{"checkout", ref}, nil); err != nil {
+	if _, err := gc.rnr.Run("git", []string{"checkout", ref, "--"}, nil); err != nil {
 		return err
 	}
 	return gc.rnr.PopDir()
 }
 
 func (gc Controller) Fetch(repo *Repo, branch string) error {
+	if err := validateGitRef(branch); err != nil {
+		return err
+	}
 	if err := gc.rnr.PushDir(repo.Path); err != nil {
 		return err
 	}
-	if _, err := gc.rnr.Run("git", []string{"fetch", "origin", branch}, nil); err != nil {
+	if _, err := gc.rnr.Run("git", []string{"fetch", "--", "origin", branch}, nil); err != nil {
 		return fmt.Errorf("error fetching branch %s in repo %s: %v\n", branch, repo.Name, err)
 	}
 	return gc.rnr.PopDir()
 }
 
 func (gc Controller) DiffShortStat(repo *Repo, oldBranch, newBranch string) (string, error) {
+	if err := validateGitRef(oldBranch); err != nil {
+		return "", err
+	}
+	if err := validateGitRef(newBranch); err != nil {
+		return "", err
+	}
 	if err := gc.rnr.PushDir(repo.Path); err != nil {
 		return "", err
 	}
-	shortStat, err := gc.rnr.Run("git", []string{"diff", "origin/" + oldBranch, "origin/" + newBranch, "--shortstat"}, nil)
+	shortStat, err := gc.rnr.Run("git", []string{"diff", "--shortstat", "origin/" + oldBranch, "origin/" + newBranch, "--"}, nil)
 	if err != nil {
 		return "", fmt.Errorf("error diffing %s and %s: %v", oldBranch, newBranch, err)
 	}
@@ -105,10 +127,16 @@ func (gc Controller) DiffShortStat(repo *Repo, oldBranch, newBranch string) (str
 }
 
 func (gc Controller) DiffNameOnly(repo *Repo, oldBranch, newBranch string) ([]string, error) {
+	if err := validateGitRef(oldBranch); err != nil {
+		return nil, err
+	}
+	if err := validateGitRef(newBranch); err != nil {
+		return nil, err
+	}
 	if err := gc.rnr.PushDir(repo.Path); err != nil {
 		return nil, err
 	}
-	nameOnly, err := gc.rnr.Run("git", []string{"diff", "origin/" + oldBranch, "origin/" + newBranch, "--name-only"}, nil)
+	nameOnly, err := gc.rnr.Run("git", []string{"diff", "--name-only", "origin/" + oldBranch, "origin/" + newBranch, "--"}, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error diffing %s and %s: %v", oldBranch, newBranch, err)
 	}
@@ -116,10 +144,16 @@ func (gc Controller) DiffNameOnly(repo *Repo, oldBranch, newBranch string) ([]st
 }
 
 func (gc Controller) DiffUnifiedZero(repo *Repo, oldBranch, newBranch string) (string, error) {
+	if err := validateGitRef(oldBranch); err != nil {
+		return "", err
+	}
+	if err := validateGitRef(newBranch); err != nil {
+		return "", err
+	}
 	if err := gc.rnr.PushDir(repo.Path); err != nil {
 		return "", err
 	}
-	unifiedZero, err := gc.rnr.Run("git", []string{"diff", "origin/" + oldBranch, "origin/" + newBranch, "--unified=0"}, nil)
+	unifiedZero, err := gc.rnr.Run("git", []string{"diff", "--unified=0", "origin/" + oldBranch, "origin/" + newBranch, "--"}, nil)
 	if err != nil {
 		return "", fmt.Errorf("error diffing %s and %s: %v", oldBranch, newBranch, err)
 	}

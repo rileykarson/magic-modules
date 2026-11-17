@@ -22,7 +22,9 @@ steps:
       id: checkout
       args:
           - checkout
+          - --detach
           - $COMMIT_SHA
+          - --
 
     - name: 'gcr.io/graphite-docker-images/go-plus'
       entrypoint: '/workspace/.ci/scripts/go-plus/magician/exec.sh'

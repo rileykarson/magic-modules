@@ -32,14 +32,14 @@ func TestExecVCRMerge(t *testing.T) {
 		},
 		{
 			name:       "base branch is not main",
-			baseBranch: "test-branch",
+			baseBranch: "FEATURE-BRANCH-major-release-8.0.0",
 			commitSha:  "sha",
 			calledMethods: []string{
 				"gcloud storage ls gs://ci-vcr-cassettes/refs/heads/auto-pr-123/fixtures/",
-				"gcloud storage cp gs://ci-vcr-cassettes/refs/heads/auto-pr-123/fixtures/* gs://ci-vcr-cassettes/refs/branches/test-branch/fixtures/",
+				"gcloud storage cp gs://ci-vcr-cassettes/refs/heads/auto-pr-123/fixtures/* gs://ci-vcr-cassettes/refs/branches/FEATURE-BRANCH-major-release-8.0.0/fixtures/",
 				"gcloud storage rm --recursive gs://ci-vcr-cassettes/refs/heads/auto-pr-123/",
 				"gcloud storage ls gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/",
-				"gcloud storage cp gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/* gs://ci-vcr-cassettes/beta/refs/branches/test-branch/fixtures/",
+				"gcloud storage cp gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/fixtures/* gs://ci-vcr-cassettes/beta/refs/branches/FEATURE-BRANCH-major-release-8.0.0/fixtures/",
 				"gcloud storage rm --recursive gs://ci-vcr-cassettes/beta/refs/heads/auto-pr-123/",
 			},
 		},
@@ -125,6 +125,39 @@ func TestExecVCRMerge(t *testing.T) {
 		got, ok := runner.Calls("Run")
 		if !ok || len(got) != 6 {
 			t.Fatalf("execVCRMerge() expected 6 gcloud calls for auto-pr-456, got %v", got)
+		}
+	})
+
+	t.Run("rejects invalid or non-release base branch without running gcloud", func(t *testing.T) {
+		for _, badBranch := range []string{"test-branch", "FEATURE-BRANCH-foo/*", "-option"} {
+			runner := &mockRunner{
+				cwd:           "cwd",
+				calledMethods: make(map[string][]ParameterList),
+				cmdResults:    make(map[string]string),
+			}
+			if err := execVCRMerge(githubClient, "sha", badBranch, runner); err == nil {
+				t.Errorf("execVCRMerge(%q) succeeded, want error", badBranch)
+			}
+			if got, ok := runner.Calls("Run"); ok && len(got) > 0 {
+				t.Errorf("execVCRMerge(%q) invoked commands %v, want none", badBranch, got)
+			}
+		}
+	})
+
+	t.Run("execVCRMergeEAP validates baseBranch and clNumber", func(t *testing.T) {
+		runner := &mockRunner{
+			cwd:           "cwd",
+			calledMethods: make(map[string][]ParameterList),
+			cmdResults:    make(map[string]string),
+		}
+		if err := execVCRMergeEAP("123/*", "main", runner); err == nil {
+			t.Error("execVCRMergeEAP() succeeded on invalid clNumber, want error")
+		}
+		if err := execVCRMergeEAP("123", "test-branch", runner); err == nil {
+			t.Error("execVCRMergeEAP() succeeded on non-release baseBranch, want error")
+		}
+		if got, ok := runner.Calls("Run"); ok && len(got) > 0 {
+			t.Errorf("expected zero gcloud calls on invalid input, got %v", got)
 		}
 	})
 }

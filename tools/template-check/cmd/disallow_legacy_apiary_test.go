@@ -204,3 +204,11 @@ func TestCheckedPathspecs(t *testing.T) {
 		}
 	}
 }
+
+func TestRunGitDiff_RejectsInvalidBaseRef(t *testing.T) {
+	for _, invalidRef := range []string{"", "--output=/tmp/pwn", "-U10", "origin/main extra"} {
+		if _, err := runGitDiff(".", invalidRef, checkedPathspecs); err == nil {
+			t.Errorf("runGitDiff(%q) succeeded, expected error", invalidRef)
+		}
+	}
+}

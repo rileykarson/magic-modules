@@ -85,6 +85,10 @@ var testPanicExpression = regexp.MustCompile(`(?m:^panic: .*)`)
 
 var buildFailedExpression = regexp.MustCompile(`FAIL\s+(\S+)\s+\[build failed\]`)
 
+var featureBranchExpression = regexp.MustCompile(`^FEATURE-BRANCH-[a-zA-Z0-9._-]+$`)
+
+var headRefExpression = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9._-]*$`)
+
 var safeToLog = map[string]bool{
 	"ACCTEST_PARALLELISM":                        true,
 	"COMMIT_SHA":                                 true,
@@ -162,6 +166,12 @@ func (vt *Tester) SetRepoPath(version provider.Version, repoPath string) {
 // Fetch the cassettes for the current version if not already fetched.
 // Should be run from the base dir.
 func (vt *Tester) FetchCassettes(version provider.Version, baseBranch, head string) error {
+	if baseBranch != "main" && !featureBranchExpression.MatchString(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
+	}
+	if head != "" && !headRefExpression.MatchString(head) {
+		return fmt.Errorf("invalid head ref %q", head)
+	}
 	if _, cassettesAlreadyFetched := vt.cassettePaths[version]; cassettesAlreadyFetched {
 		return nil
 	}
@@ -174,7 +184,7 @@ func (vt *Tester) FetchCassettes(version provider.Version, baseBranch, head stri
 			fmt.Println("Error fetching cassettes: ", err)
 		}
 	}
-	if baseBranch != "main" {
+	if featureBranchExpression.MatchString(baseBranch) {
 		bucketPath := fmt.Sprintf("gs://%s/%srefs/branches/%s/fixtures/*", vt.cassetteBucket, version.BucketPath(), baseBranch)
 		if err := vt.fetchBucketPath(bucketPath, cassettePath); err != nil {
 			fmt.Println("Error fetching cassettes: ", err)
@@ -503,6 +513,9 @@ type UploadLogsOptions struct {
 }
 
 func (vt *Tester) UploadLogs(opts UploadLogsOptions) error {
+	if opts.Head != "" && !headRefExpression.MatchString(opts.Head) {
+		return fmt.Errorf("invalid head ref %q", opts.Head)
+	}
 	bucketPath := fmt.Sprintf("gs://%s/%s/", vt.logBucket, opts.Version)
 	if opts.Head != "" {
 		bucketPath += fmt.Sprintf("refs/heads/%s/", opts.Head)
@@ -628,6 +641,9 @@ func (vt *Tester) asyncCassetteUploadPath(head string, version provider.Version)
 }
 
 func (vt *Tester) uploadOneCassetteFile(head string, version provider.Version, fileName string) error {
+	if !headRefExpression.MatchString(head) {
+		return fmt.Errorf("invalid head ref %q", head)
+	}
 	uploadPath := vt.asyncCassetteUploadPath(head, version)
 	args := []string{
 		"storage",
@@ -643,6 +659,9 @@ func (vt *Tester) uploadOneCassetteFile(head string, version provider.Version, f
 }
 
 func (vt *Tester) UploadCassettes(head string, version provider.Version) error {
+	if !headRefExpression.MatchString(head) {
+		return fmt.Errorf("invalid head ref %q", head)
+	}
 	cassettePath, ok := vt.cassettePaths[version]
 	if !ok {
 		return fmt.Errorf("no cassettes found for version %s", version)

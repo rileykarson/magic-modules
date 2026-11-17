@@ -9,6 +9,7 @@ on:
 
 jobs:
   handle-comment-command:
+    if: github.event.issue.pull_request != null
     runs-on: ubuntu-22.04
     permissions:
       pull-requests: write
@@ -54,9 +55,10 @@ jobs:
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
           GITHUB_EVENT_COMMENT_USER_LOGIN: ${{ github.event.comment.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           # Execute the parse-comment subcommand
           # The comment body is passed via the COMMENT_BODY environment variable
           .ci/magician/magician parse-comment \
-            ${{ github.event.issue.number }} \
-            ${GITHUB_EVENT_COMMENT_USER_LOGIN}
+            "${ISSUE_NUMBER}" \
+            "${GITHUB_EVENT_COMMENT_USER_LOGIN}"

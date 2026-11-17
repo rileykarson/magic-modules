@@ -104,6 +104,9 @@ var repoList = []string{
 }
 
 func deleteBranches(prNumber, githubToken string, runner source.Runner) error {
+	if !numericIDRegexp.MatchString(prNumber) {
+		return fmt.Errorf("invalid PR number %q", prNumber)
+	}
 	for _, repo := range repoList {
 		remote := fmt.Sprintf("https://modular-magician:%s@github.com/modular-magician/%s", githubToken, repo)
 		for _, branch := range []string{
@@ -122,7 +125,7 @@ func deleteBranches(prNumber, githubToken string, runner source.Runner) error {
 func deleteBranchWithRetry(runner source.Runner, remote, branch string) error {
 	var err error
 	for attempt := 0; ; attempt++ {
-		_, err = runner.Run("git", []string{"push", remote, branch}, nil)
+		_, err = runner.Run("git", []string{"push", "--", remote, branch}, nil)
 		if err == nil || strings.Contains(err.Error(), "does not exist") {
 			return nil
 		}

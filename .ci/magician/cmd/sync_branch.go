@@ -56,6 +56,15 @@ var syncBranchCmd = &cobra.Command{
 }
 
 func execSyncBranchCmd(syncBranchPrefix, baseBranch, sha, githubToken string, runner source.Runner) error {
+	if !isDownstreamTargetBranch(baseBranch) {
+		return fmt.Errorf("unsupported base branch %q", baseBranch)
+	}
+	if !safeRefRegexp.MatchString(syncBranchPrefix) {
+		return fmt.Errorf("invalid sync branch prefix %q", syncBranchPrefix)
+	}
+	if !commitSHARegexp.MatchString(sha) {
+		return fmt.Errorf("invalid commit sha %q", sha)
+	}
 	syncBranch := getSyncBranch(syncBranchPrefix, baseBranch)
 	fmt.Println("SYNC_BRANCH: ", syncBranch)
 
@@ -72,7 +81,7 @@ func execSyncBranchCmd(syncBranchPrefix, baseBranch, sha, githubToken string, ru
 func syncBranchPushWithRetry(runner source.Runner, remote, refspec string) error {
 	var err error
 	for attempt := 0; ; attempt++ {
-		if _, err = runner.Run("git", []string{"push", remote, refspec}, nil); err == nil {
+		if _, err = runner.Run("git", []string{"push", "--", remote, refspec}, nil); err == nil {
 			return nil
 		}
 		if attempt >= len(pushRetryBackoffs) {

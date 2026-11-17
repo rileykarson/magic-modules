@@ -42,7 +42,7 @@ func TestExecWaitForCommit(t *testing.T) {
 		},
 		{
 			name:       "base branch is not main",
-			baseBranch: "feature-branch",
+			baseBranch: "FEATURE-BRANCH-major-release-8.0.0",
 			syncBranch: "sync-branch",
 			setupRemote: func(sb *sandbox, shas []string, targetBranch string) {
 				sb.Runner.MustRun("git", []string{"push", "origin", shas[1] + ":refs/heads/" + targetBranch}, nil)
@@ -52,6 +52,16 @@ func TestExecWaitForCommit(t *testing.T) {
 			},
 			expectedCalls: 1,
 			expectErr:     false,
+		},
+		{
+			name:       "error case unsupported base branch",
+			baseBranch: "feature-branch",
+			syncBranch: "sync-branch",
+			setupRemote: func(sb *sandbox, shas []string, targetBranch string) {
+			},
+			waitFunc:      func(sb *sandbox, shas []string, targetBranch string, calls int) {},
+			expectedCalls: 0,
+			expectErr:     true,
 		},
 		{
 			name:       "needs update multiple times",

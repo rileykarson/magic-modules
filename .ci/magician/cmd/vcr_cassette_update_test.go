@@ -347,7 +347,7 @@ func TestExecVCRCassetteUpdate(t *testing.T) {
 			// Safely mocks git clone by making the destination directory.
 			fakeGit := `#!/bin/bash
 if [ "$1" = "clone" ]; then
-  mkdir -p "$3"
+  mkdir -p "${@: -1}"
   exit 0
 fi
 exec /usr/bin/git "$@"`
@@ -429,7 +429,7 @@ func TestExecVCRCassetteUpdate_BuildFailure(t *testing.T) {
 
 	fakeGit := `#!/bin/bash
 		if [ "$1" = "clone" ]; then
-			mkdir -p "$3"
+			mkdir -p "${@: -1}"
 			exit 0
 		fi
 		exec /usr/bin/git "$@"`

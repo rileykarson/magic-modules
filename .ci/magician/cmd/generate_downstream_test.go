@@ -241,3 +241,84 @@ func TestRunMake(t *testing.T) {
 		})
 	}
 }
+
+func TestIsDownstreamTargetBranch(t *testing.T) {
+	cases := []struct {
+		branch string
+		want   bool
+	}{
+		{branch: "main", want: true},
+		{branch: "FEATURE-BRANCH-major-release-8.0.0", want: true},
+		{branch: "FEATURE-BRANCH-v1_2-alpha", want: true},
+		{branch: "FEATURE-BRANCH-", want: false},
+		{branch: "FEATURE-BRANCH-foo; evil", want: false},
+		{branch: "FEATURE-BRANCH-foo/*", want: false},
+		{branch: "--upload-pack=evil", want: false},
+		{branch: "-option", want: false},
+		{branch: "arbitrary-branch", want: false},
+		{branch: "", want: false},
+	}
+	for _, tc := range cases {
+		if got := isDownstreamTargetBranch(tc.branch); got != tc.want {
+			t.Errorf("isDownstreamTargetBranch(%q) = %v, want %v", tc.branch, got, tc.want)
+		}
+	}
+}
+
+func TestExecGenerateDownstream_RejectsInvalidBaseBranchOrRef(t *testing.T) {
+	cases := []struct {
+		name       string
+		baseBranch string
+		command    string
+		ref        string
+		wantErr    string
+	}{
+		{
+			name:       "rejects non-release branch on head",
+			baseBranch: "arbitrary-branch",
+			command:    "head",
+			ref:        "12345",
+			wantErr:    "unsupported base branch",
+		},
+		{
+			name:       "rejects option-injected branch on base",
+			baseBranch: "-oProxyCommand=evil",
+			command:    "base",
+			ref:        "12345",
+			wantErr:    "unsupported base branch",
+		},
+		{
+			name:       "rejects unsafe feature branch on downstream",
+			baseBranch: "FEATURE-BRANCH-foo; evil",
+			command:    "downstream",
+			ref:        "abc1234",
+			wantErr:    "unsupported base branch",
+		},
+		{
+			name:       "rejects invalid ref",
+			baseBranch: "main",
+			command:    "head",
+			ref:        "--evil",
+			wantErr:    "invalid ref",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			rnr := NewMockRunner()
+			ctlr := source.NewController("/go", "modular-magician", "secret-token", rnr)
+			gh := &mockGithub{}
+
+			err := execGenerateDownstream(tc.baseBranch, tc.command, "terraform", "beta", tc.ref, gh, rnr, ctlr)
+			if err == nil {
+				t.Fatalf("execGenerateDownstream(%q, %q, %q) succeeded, want error", tc.baseBranch, tc.command, tc.ref)
+			}
+			if !strings.Contains(err.Error(), tc.wantErr) {
+				t.Errorf("execGenerateDownstream() error = %v, want %q", err, tc.wantErr)
+			}
+			if calls, ok := rnr.Calls("Run"); ok && len(calls) > 0 {
+				t.Errorf("expected zero command invocations on invalid input, got %v", calls)
+			}
+		})
+	}
+}
