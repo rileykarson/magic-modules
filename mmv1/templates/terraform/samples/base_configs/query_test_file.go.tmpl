@@ -25,8 +25,10 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/querycheck"
 	"github.com/hashicorp/terraform-plugin-testing/querycheck/queryfilter"
+	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 
 	"{{ $.ImportPath }}/acctest"
@@ -98,13 +100,13 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
 {{- else }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
-	{{- if $sample.ExternalProviders }}
+{{- end }}
+{{- if $sample.ExternalProviders }}
 		ExternalProviders: map[string]resource.ExternalProvider{
 		{{- range $provider := $sample.ExternalProviders }}
 			"{{$provider}}": {},
 		{{- end }}
 		},
-	{{- end }}
 {{- end }}
 {{- if not $.ExcludeDelete }}
 		CheckDestroy: testAccCheck{{ $.ResourceName }}DestroyProducer(t),
@@ -142,6 +144,16 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 						queryfilter.ByDisplayName(listDisplayName.CheckValue()),
 						listDisplayName.CheckValue(),
 					),
+					querycheck.ExpectResourceKnownValues(
+						"{{ $sample.ResourceType $.TerraformName }}.list_query",
+						queryfilter.ByDisplayName(listDisplayName.CheckValue()),
+						[]querycheck.KnownValueCheck{
+							{
+								Path:       tfjsonpath.New("id"),
+								KnownValue: knownvalue.NotNull(),
+							},
+						},
+					),
 				},
 			},
 		},
@@ -158,6 +170,7 @@ variable "{{ $n }}" { type = string }
 {{- end }}
 list "{{ $sample.ResourceType $.TerraformName }}" "list_query" {
     provider = {{ if $.VersionedProvider $sample.MinVersion }}google-beta{{ else }}google{{ end }}
+    include_resource = true
 	limit = 10000
     config {
 {{- range $scope := $.ListScopeProperties }}
