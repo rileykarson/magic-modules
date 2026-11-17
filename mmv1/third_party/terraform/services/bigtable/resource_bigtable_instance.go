@@ -20,7 +20,7 @@ import (
 )
 
 // resourceBigtableInstanceVirtualUpdate identifies if an update to the resource includes only virtual field updates
-func resourceBigtableInstanceVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
+func resourceBigtableInstanceVirtualUpdate(d interface{ HasChange(string) bool }, resourceSchema map[string]*schema.Schema) bool {
 	virtualFields := map[string]bool{
 		"force_destroy":       true,
 		"deletion_protection": true,

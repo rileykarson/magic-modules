@@ -8,7 +8,6 @@ import (
 
 	"cloud.google.com/go/bigtable"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 )
 
@@ -376,85 +375,23 @@ func TestUnitBigtable_resourceBigtableInstanceClusterReorderTypeListFunc(t *test
 }
 
 func TestUnitBigtable_resourceBigtableInstanceVirtualUpdate(t *testing.T) {
-	res := ResourceBigtableInstance()
-	baseState := map[string]string{
-		"project":             "test-proj",
-		"name":                "test-bt-inst",
-		"display_name":        "Test Bigtable",
-		"instance_type":       "PRODUCTION",
-		"edition":             "ENTERPRISE",
-		"force_destroy":       "false",
-		"deletion_protection": "true",
-		"deletion_policy":     "DELETE",
-	}
-
-	cases := []struct {
-		name string
-		diff map[string]*terraform.ResourceAttrDiff
-		want bool
+	resSchema := ResourceBigtableInstance().Schema
+	cases := map[string]struct {
+		changed []string
+		want    bool
 	}{
-		{
-			name: "empty diff",
-			diff: map[string]*terraform.ResourceAttrDiff{},
-			want: false,
-		},
-		{
-			name: "force_destroy only",
-			diff: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy": {Old: "false", New: "true"},
-			},
-			want: true,
-		},
-		{
-			name: "deletion_protection only",
-			diff: map[string]*terraform.ResourceAttrDiff{
-				"deletion_protection": {Old: "true", New: "false"},
-			},
-			want: true,
-		},
-		{
-			name: "deletion_policy only",
-			diff: map[string]*terraform.ResourceAttrDiff{
-				"deletion_policy": {Old: "DELETE", New: "ABANDON"},
-			},
-			want: true,
-		},
-		{
-			name: "all three virtual fields combined",
-			diff: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy":       {Old: "false", New: "true"},
-				"deletion_protection": {Old: "true", New: "false"},
-				"deletion_policy":     {Old: "DELETE", New: "PREVENT"},
-			},
-			want: true,
-		},
-		{
-			name: "virtual field with non-virtual display_name",
-			diff: map[string]*terraform.ResourceAttrDiff{
-				"deletion_protection": {Old: "true", New: "false"},
-				"display_name":        {Old: "Test Bigtable", New: "New Name"},
-			},
-			want: false,
-		},
+		"empty diff":                        {changed: nil, want: false},
+		"force_destroy only":                {changed: []string{"force_destroy"}, want: true},
+		"deletion_protection only":          {changed: []string{"deletion_protection"}, want: true},
+		"deletion_policy only":              {changed: []string{"deletion_policy"}, want: true},
+		"multiple virtual fields combined":  {changed: []string{"force_destroy", "deletion_protection", "deletion_policy"}, want: true},
+		"virtual and non-virtual API field": {changed: []string{"deletion_protection", "display_name"}, want: false},
 	}
 
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			d, err := schema.InternalMap(res.Schema).Data(
-				&terraform.InstanceState{
-					ID:         "projects/test-proj/instances/test-bt-inst",
-					Attributes: baseState,
-				},
-				&terraform.InstanceDiff{
-					Attributes: tc.diff,
-				},
-			)
-			if err != nil {
-				t.Fatalf("schema.InternalMap.Data failed: %v", err)
-			}
-			if got := resourceBigtableInstanceVirtualUpdate(d, res.Schema); got != tc.want {
-				t.Errorf("resourceBigtableInstanceVirtualUpdate() = %v, want %v", got, tc.want)
-			}
-		})
+	for tn, tc := range cases {
+		d := &tpgresource.ResourceDataMock{FieldsWithHasChange: tc.changed}
+		if got := resourceBigtableInstanceVirtualUpdate(d, resSchema); got != tc.want {
+			t.Errorf("%s: got %v, want %v", tn, got, tc.want)
+		}
 	}
 }
