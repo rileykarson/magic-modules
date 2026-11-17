@@ -274,6 +274,26 @@ func TestProviderDefaultFieldsAreSynthesizedAndDeduplicated(t *testing.T) {
 	}
 }
 
+func TestListLeafIdMarker(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		res  api.Resource
+		want string
+	}{
+		{"from import_format", api.Resource{ImportFormat: []string{"projects/{{project}}/secrets/{{secret_id}}"}, IdFormat: "{{name}}"}, "secret_id"},
+		{"from id_format", api.Resource{BaseUrl: "projects/{{project}}/locations/{{location}}/groups", IdFormat: "projects/{{project}}/locations/{{location}}/groups/{{group_id}}"}, "group_id"},
+		{"from base_url default", api.Resource{BaseUrl: "projects/{{project}}/topics"}, "name"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tc.res.ListLeafIdMarker(); got != tc.want {
+				t.Fatalf("ListLeafIdMarker() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 // TestMagicianLocation verifies that the current package is being executed from within
 // the RELATIVE_MAGICIAN_LOCATION ("mmv1/") directory structure. This ensures that references
 // to files relative to this location will remain valid even if the repository structure

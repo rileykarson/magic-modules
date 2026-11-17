@@ -908,6 +908,17 @@ func (r Resource) ListScopeProperties() []*Type {
 	return r.appendSynthesizedProviderDefaultFields(props, scope)
 }
 
+// ListLeafIdMarker returns the trailing placeholder from the resource's
+// primary import or ID format (e.g. "secret_id" for "projects/{{project}}/secrets/{{secret_id}}").
+func (r Resource) ListLeafIdMarker() string {
+	for _, f := range slices.Concat(r.ImportFormat, []string{r.IdFormat}, ImportIdFormats(r.ImportFormat, r.Identity, r.BaseUrl)) {
+		if ids := r.ExtractIdentifiers(f); len(ids) > 0 {
+			return ids[len(ids)-1]
+		}
+	}
+	return ""
+}
+
 func (r Resource) ListResultDisplayNameKeyStrings() []string {
 	var keys []string
 	if slices.ContainsFunc(r.RootProperties(), func(p *Type) bool { return p.Name == "display_name" }) {
