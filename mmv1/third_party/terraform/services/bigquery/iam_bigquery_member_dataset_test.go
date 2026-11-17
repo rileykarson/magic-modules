@@ -112,15 +112,11 @@ func TestAccessToPolicyForIamMemberPreservesValidCondition(t *testing.T) {
 	}
 }
 
-func TestAccessToPolicyForIamMemberReturnsEmptyPolicyForNilAccess(t *testing.T) {
-	policy, err := accessToPolicyForIamMember(nil)
-	if err != nil {
-		t.Fatalf("accessToPolicyForIamMember(nil) returned unexpected error: %v", err)
+func TestAccessToPolicyReturnsEmptyPolicyForNilAccess(t *testing.T) {
+	if policy, err := accessToPolicy(nil); err != nil || policy == nil || len(policy.Bindings) != 0 {
+		t.Fatalf("accessToPolicy(nil) = (%#v, %v), want non-nil empty policy and nil error", policy, err)
 	}
-	if policy == nil {
-		t.Fatal("accessToPolicyForIamMember(nil) returned nil policy, want non-nil empty policy")
-	}
-	if len(policy.Bindings) != 0 {
-		t.Fatalf("accessToPolicyForIamMember(nil) returned %d bindings, want 0", len(policy.Bindings))
+	if policy, err := accessToPolicyForIamMember(nil); err != nil || policy == nil || len(policy.Bindings) != 0 {
+		t.Fatalf("accessToPolicyForIamMember(nil) = (%#v, %v), want non-nil empty policy and nil error", policy, err)
 	}
 }

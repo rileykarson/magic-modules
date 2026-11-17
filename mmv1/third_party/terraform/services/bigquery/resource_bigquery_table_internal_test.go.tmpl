@@ -856,18 +856,3 @@ func TestMergeDataPoliciesIntoMap(t *testing.T) {
 		t.Errorf("dataPolicies were not merged into the map")
 	}
 }
-
-func TestAccessToPolicyReturnsEmptyPolicyForNilAccess(t *testing.T) {
-	t.Parallel()
-
-	policy, err := accessToPolicy(nil)
-	if err != nil {
-		t.Fatalf("accessToPolicy(nil) returned unexpected error: %v", err)
-	}
-	if policy == nil {
-		t.Fatal("accessToPolicy(nil) returned nil policy, want non-nil empty policy")
-	}
-	if len(policy.Bindings) != 0 {
-		t.Fatalf("accessToPolicy(nil) returned %d bindings, want 0", len(policy.Bindings))
-	}
-}
