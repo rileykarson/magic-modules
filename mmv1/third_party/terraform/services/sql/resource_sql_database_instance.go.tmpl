@@ -2860,11 +2860,23 @@ const (
 )
 
 func resourceSqlDatabaseInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
-	
-	if tpgresource.DeletionPolicyPreUpdate(d, ResourceSqlDatabaseInstance) {
-	    return ResourceSqlDatabaseInstance().Read(d, meta)
+	clientSideFields := map[string]bool{
+		"deletion_policy":          true,
+		"deletion_protection":      true,
+		"final_backup_description": true,
 	}
-	
+	clientSideOnly := true
+	for field := range ResourceSqlDatabaseInstance().Schema {
+		if d.HasChange(field) && !clientSideFields[field] {
+			clientSideOnly = false
+			break
+		}
+	}
+	if clientSideOnly {
+		log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
+		return resourceSqlDatabaseInstanceRead(d, meta)
+	}
+
 	config := meta.(*transport_tpg.Config)
 	userAgent, err := tpgresource.GenerateUserAgentString(d, config.UserAgent)
 	if err != nil {
@@ -4561,6 +4573,10 @@ var skipGreenComparisonFields = map[string]bool{
 	// Password management fields that are never returned by the Cloud SQL Admin API:
 	"root_password":            true, // root_password is not returned by Cloud SQL Admin API and cannot be read on Green instance.
 	"root_password_wo_version": true, // Write-only version tracker for root_password is not returned by the API.
+	// Client-side fields managed in Terraform state only and never sent to or returned by instance CRUD:
+	"deletion_policy":          true,
+	"deletion_protection":      true,
+	"final_backup_description": true,
 	// Settings sub-fields expected to differ on the Green replica before switchover:
 	"settings.0.backup_configuration":        true, // Backups are disabled on the Green instance until switchover completes.
 	"settings.0.password_validation_policy":  true, // Password validation policy is not returned on the Green replica before switchover.

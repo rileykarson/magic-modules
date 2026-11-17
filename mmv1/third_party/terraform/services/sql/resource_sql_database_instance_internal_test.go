@@ -2,12 +2,18 @@ package sql
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
+	sqladmin "google.golang.org/api/sqladmin/v1beta4"
 )
 
 func TestMaintenanceVersionDiffSuppress(t *testing.T) {
@@ -499,5 +505,184 @@ func TestBlueGreenDeployment_CompareConfiguredField_SensitiveRedaction(t *testin
 		if strings.Contains(joinedMismatches, secret) {
 			t.Errorf("security violation: plaintext secret %q leaked in mismatches: %s", secret, joinedMismatches)
 		}
+	}
+}
+
+func TestSqlDatabaseInstanceUpdate_ClientSideFields(t *testing.T) {
+	t.Parallel()
+
+	basePrior := func() map[string]string {
+		return map[string]string{
+			"id":                           "my-sql-instance",
+			"project":                      "my-proj",
+			"name":                         "my-sql-instance",
+			"region":                       "us-central1",
+			"database_version":             "POSTGRES_15",
+			"settings.#":                   "1",
+			"settings.0.tier":              "db-f1-micro",
+			"settings.0.activation_policy": "NEVER",
+			"deletion_protection":          "true",
+			"final_backup_description":     "",
+		}
+	}
+
+	cases := []struct {
+		name              string
+		priorOverrides    map[string]string
+		diffAttrs         map[string]*terraform.ResourceAttrDiff
+		wantMutatingCalls int
+		wantState         map[string]string
+	}{
+		{
+			name: "deletion_protection true to false short-circuits without PUT and persists state",
+			diffAttrs: map[string]*terraform.ResourceAttrDiff{
+				"deletion_protection": {Old: "true", New: "false"},
+			},
+			wantMutatingCalls: 0,
+			wantState: map[string]string{
+				"deletion_protection": "false",
+				"deletion_policy":     "DELETE",
+			},
+		},
+		{
+			name: "deletion_protection false to true short-circuits without PUT and persists state",
+			priorOverrides: map[string]string{
+				"deletion_protection": "false",
+				"deletion_policy":     "DELETE",
+			},
+			diffAttrs: map[string]*terraform.ResourceAttrDiff{
+				"deletion_protection": {Old: "false", New: "true"},
+			},
+			wantMutatingCalls: 0,
+			wantState: map[string]string{
+				"deletion_protection": "true",
+				"deletion_policy":     "DELETE",
+			},
+		},
+		{
+			name: "final_backup_description update short-circuits without PUT and persists state",
+			priorOverrides: map[string]string{
+				"deletion_policy": "DELETE",
+			},
+			diffAttrs: map[string]*terraform.ResourceAttrDiff{
+				"final_backup_description": {Old: "", New: "pre-destroy backup"},
+			},
+			wantMutatingCalls: 0,
+			wantState: map[string]string{
+				"final_backup_description": "pre-destroy backup",
+				"deletion_protection":      "true",
+			},
+		},
+		{
+			name: "combined deletion_policy, deletion_protection, and final_backup_description short-circuits without PUT",
+			priorOverrides: map[string]string{
+				"deletion_policy":          "DELETE",
+				"final_backup_description": "old-desc",
+			},
+			diffAttrs: map[string]*terraform.ResourceAttrDiff{
+				"deletion_policy":          {Old: "DELETE", New: "ABANDON"},
+				"deletion_protection":      {Old: "true", New: "false"},
+				"final_backup_description": {Old: "old-desc", New: "new-desc"},
+			},
+			wantMutatingCalls: 0,
+			wantState: map[string]string{
+				"deletion_policy":          "ABANDON",
+				"deletion_protection":      "false",
+				"final_backup_description": "new-desc",
+			},
+		},
+		{
+			name: "deletion_protection plus real settings update sends API update and persists both",
+			priorOverrides: map[string]string{
+				"deletion_policy": "DELETE",
+			},
+			diffAttrs: map[string]*terraform.ResourceAttrDiff{
+				"deletion_protection":          {Old: "true", New: "false"},
+				"settings.0.activation_policy": {Old: "NEVER", New: "ALWAYS"},
+			},
+			wantMutatingCalls: 2, // PATCH activation_policy=ALWAYS + PUT settings update
+			wantState: map[string]string{
+				"deletion_protection":          "false",
+				"settings.0.activation_policy": "ALWAYS",
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var mutatingCalls int
+			activationPolicy := "NEVER"
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				switch {
+				case r.Method == http.MethodPatch || r.Method == http.MethodPut:
+					mutatingCalls++
+					activationPolicy = "ALWAYS"
+					_ = json.NewEncoder(w).Encode(&sqladmin.Operation{
+						Name:   "op-update",
+						Status: "DONE",
+					})
+				case r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/operations/"):
+					_ = json.NewEncoder(w).Encode(&sqladmin.Operation{
+						Name:   "op-update",
+						Status: "DONE",
+					})
+				case r.Method == http.MethodGet && strings.Contains(r.URL.Path, "/instances/my-sql-instance"):
+					_ = json.NewEncoder(w).Encode(&sqladmin.DatabaseInstance{
+						Name:            "my-sql-instance",
+						Project:         "my-proj",
+						Region:          "us-central1",
+						DatabaseVersion: "POSTGRES_15",
+						InstanceType:    "CLOUD_SQL_INSTANCE",
+						Settings: &sqladmin.Settings{
+							Tier:             "db-f1-micro",
+							ActivationPolicy: activationPolicy,
+							SettingsVersion:  1,
+						},
+					})
+				default:
+					t.Errorf("unexpected HTTP request %s %s", r.Method, r.URL.Path)
+					http.Error(w, "unexpected request", http.StatusBadRequest)
+				}
+			}))
+			defer server.Close()
+
+			cfg := &transport_tpg.Config{
+				Context:      context.Background(),
+				Client:       server.Client(),
+				Project:      "my-proj",
+				PollInterval: time.Millisecond,
+				CustomEndpoints: map[string]string{
+					"sql_custom_endpoint": server.URL + "/sql/v1beta4/",
+				},
+			}
+
+			priorAttrs := basePrior()
+			for k, v := range tc.priorOverrides {
+				priorAttrs[k] = v
+			}
+
+			res := ResourceSqlDatabaseInstance()
+			prior := &terraform.InstanceState{
+				ID:         "my-sql-instance",
+				Attributes: priorAttrs,
+			}
+			diff := &terraform.InstanceDiff{
+				Attributes: tc.diffAttrs,
+			}
+
+			newState, diags := res.Apply(context.Background(), prior, diff, cfg)
+			if diags.HasError() {
+				t.Fatalf("Apply returned error diagnostics: %+v", diags)
+			}
+			if mutatingCalls != tc.wantMutatingCalls {
+				t.Fatalf("mutating HTTP calls = %d, want %d", mutatingCalls, tc.wantMutatingCalls)
+			}
+			for k, want := range tc.wantState {
+				if got := newState.Attributes[k]; got != want {
+					t.Errorf("newState.Attributes[%q] = %q, want %q", k, got, want)
+				}
+			}
+		})
 	}
 }
