@@ -15,10 +15,22 @@
 //
 // ----------------------------------------------------------------------------
 
+{{ $hasConfigSteps := false -}}
 {{ $needsPlancheck := false -}}
 {{- range $s := $.Res.TestSamples -}}
+  {{- if gt (len $s.TestSteps) 0 -}}
+    {{- $hasConfigSteps = true -}}
+  {{- end -}}
   {{- if gt (len $s.TestSteps) 1 -}}
     {{- $needsPlancheck = true -}}
+  {{- end -}}
+{{- end -}}
+{{ $needsStatecheck := false -}}
+{{- if and $hasConfigSteps (not $.Res.ExcludeIdentityGeneration) (not $.Res.ExcludeRead) -}}
+  {{- range $p := $.Res.IdentityProperties -}}
+    {{- if and (or $p.Required $p.Output) (not ($p.IsA "ResourceRef")) (eq $p.DiffSuppressFunc "") -}}
+      {{- $needsStatecheck = true -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 
@@ -38,7 +50,13 @@ import (
 {{- if $needsPlancheck }}
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 {{- end }}
+{{- if $needsStatecheck }}
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
+{{- if $needsStatecheck }}
+	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
+{{- end }}
 
 	"{{ $.ImportPath }}/acctest"
 	"{{ $.ImportPath  }}/envvar"
@@ -149,6 +167,15 @@ func TestAcc{{ $s.TestSampleSlug $.Res.ProductMetadata.Name $.Res.Name }}(t *tes
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectResourceAction("{{ $s.ResourceType $.Res.TerraformName }}.{{ $s.PrimaryResourceId }}", plancheck.ResourceActionUpdate),
 					},
+				},
+			{{- end }}
+			{{- if $needsStatecheck }}
+				ConfigStateChecks: []statecheck.StateCheck{
+				{{- range $p := $.Res.IdentityProperties }}
+				{{- if and (or $p.Required $p.Output) (not ($p.IsA "ResourceRef")) (eq $p.DiffSuppressFunc "") }}
+					statecheck.ExpectIdentityValueMatchesState("{{ $s.ResourceType $.Res.TerraformName }}.{{ $s.PrimaryResourceId }}", tfjsonpath.New("{{ underscore $p.Name }}")),
+				{{- end }}
+				{{- end }}
 				},
 			{{- end }}
 			},
