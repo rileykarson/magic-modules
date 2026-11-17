@@ -108,6 +108,38 @@ func TestDetectMissingIdentityCoverage_SkipsUnchangedResources(t *testing.T) {
 	}
 }
 
+func TestDetectMissingIdentityCoverage_NestedMMv1ImmutableResource(t *testing.T) {
+	servicesDir := t.TempDir()
+	pkgDir := filepath.Join(servicesDir, "foo")
+	if err := os.MkdirAll(pkgDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	resourceSrc := `package foo
+func resourceFooItemCreate(d *schema.ResourceData, meta interface{}) error {
+	return identity.Set("name", "bar")
+}
+func resourceFooItemPollRead(d *schema.ResourceData, meta interface{}) interface{} { return nil }
+func resourceFooItemRead(d *schema.ResourceData, meta interface{}) error {
+	return identity.Set("name", "bar")
+}
+func resourceFooItemUpdateEncoder(d *schema.ResourceData, meta interface{}, obj map[string]interface{}) (map[string]interface{}, error) {
+	return obj, nil
+}
+func ResourceFooItem() *schema.Resource {
+	return &schema.Resource{Identity: &schema.ResourceIdentity{}}
+}
+`
+	if err := os.WriteFile(filepath.Join(pkgDir, "resource_foo_item.go"), []byte(resourceSrc), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(pkgDir, "resource_foo_item_generated_test.go"), []byte(fakeTestWithImportIdentity()), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if results, err := DetectMissingIdentityCoverage(servicesDir, []string{"google_foo_item", "google_foo_item_iam_member"}); err != nil || len(results) != 0 {
+		t.Fatalf("got results=%+v, err=%v; want empty", results, err)
+	}
+}
+
 // fakeResourceWithFullCoverage returns a resource file that declares ResourceIdentity
 // and calls SetResourceIdentityAttributes in Create, Read, and Update.
 func fakeResourceWithFullCoverage() string {

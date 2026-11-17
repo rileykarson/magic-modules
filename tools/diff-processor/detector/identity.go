@@ -21,12 +21,11 @@ type MissingIdentityInfo struct {
 }
 
 // DetectMissingIdentityCoverage scans the provided resource files.
-// servicesDir must be the direct parent of the resource_*.go files.
 func DetectMissingIdentityCoverage(servicesDir string, changedResources []string) (map[string]*MissingIdentityInfo, error) {
 	results := make(map[string]*MissingIdentityInfo)
 	for _, resourceName := range changedResources {
-		path := filepath.Join(servicesDir, "resource_"+resourceName+".go")
-		if _, err := os.Stat(path); os.IsNotExist(err) {
+		path := resolveResourcePath(servicesDir, resourceName)
+		if path == "" {
 			continue
 		}
 
@@ -58,6 +57,20 @@ func DetectMissingIdentityCoverage(servicesDir string, changedResources []string
 	return results, nil
 }
 
+func resolveResourcePath(servicesDir, resourceName string) string {
+	direct := filepath.Join(servicesDir, "resource_"+resourceName+".go")
+	if _, err := os.Stat(direct); err == nil {
+		return direct
+	}
+	short := strings.TrimPrefix(resourceName, "google_")
+	for _, name := range []string{short, resourceName} {
+		if matches, _ := filepath.Glob(filepath.Join(servicesDir, "*", "resource_"+name+".go")); len(matches) > 0 {
+			return matches[0]
+		}
+	}
+	return ""
+}
+
 func fileContainsIdentityBlock(path string) (bool, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
@@ -80,8 +93,7 @@ func checkCRUDCoverage(path string) ([]string, error) {
 		hasIdentity bool
 	}
 
-	funcPattern := regexp.MustCompile(`^func\s+\w+(Create|Read|Update)\w*\(`)
-	setIdentityPattern := "SetResourceIdentityAttributes"
+	funcPattern := regexp.MustCompile(`^func\s+resource\w+(Create|Read|Update)\(`)
 
 	var functions []*funcInfo
 	var currentFunc *funcInfo
@@ -95,7 +107,7 @@ func checkCRUDCoverage(path string) ([]string, error) {
 		line := scanner.Text()
 		lineNum++
 
-		if matches := funcPattern.FindStringSubmatch(line); matches != nil {
+		if matches := funcPattern.FindStringSubmatch(line); matches != nil && !strings.HasSuffix(matches[0], "PollRead(") {
 			if currentFunc != nil {
 				functions = append(functions, currentFunc)
 			}
@@ -111,7 +123,7 @@ func checkCRUDCoverage(path string) ([]string, error) {
 		if inFunc && currentFunc != nil {
 			braceDepth += strings.Count(line, "{") - strings.Count(line, "}")
 
-			if strings.Contains(line, setIdentityPattern) {
+			if strings.Contains(line, "SetResourceIdentityAttributes") || strings.Contains(line, "identity.Set(") {
 				currentFunc.hasIdentity = true
 			}
 
