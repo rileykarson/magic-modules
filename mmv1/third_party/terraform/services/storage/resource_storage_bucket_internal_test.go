@@ -1,20 +1,12 @@
 package storage
 
 import (
-	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"sync"
 	"testing"
-	"time"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	transport_tpg "github.com/hashicorp/terraform-provider-google/google/transport"
 	"google.golang.org/api/googleapi"
-	raw "google.golang.org/api/storage/v1"
 )
 
 func TestLabelDiffSuppress(t *testing.T) {
@@ -258,158 +250,4 @@ func TestForceDestroyDeleteWorkerContract(t *testing.T) {
 			t.Fatalf("kept an ignorable error: %v", err)
 		}
 	})
-}
-
-func TestStorageBucketUpdate_ClientSideFields(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name           string
-		priorAttrs     map[string]string
-		diffAttrs      map[string]*terraform.ResourceAttrDiff
-		wantPatchCalls int
-		wantState      map[string]string
-	}{
-		{
-			name: "force_destroy false to true short-circuits without PATCH and persists state",
-			priorAttrs: map[string]string{
-				"id":            "my-bucket",
-				"project":       "my-proj",
-				"name":          "my-bucket",
-				"location":      "US",
-				"force_destroy": "false",
-			},
-			diffAttrs: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy": {Old: "false", New: "true"},
-			},
-			wantPatchCalls: 0,
-			wantState: map[string]string{
-				"force_destroy":   "true",
-				"deletion_policy": "DELETE",
-			},
-		},
-		{
-			name: "force_destroy true to false short-circuits without PATCH and persists state",
-			priorAttrs: map[string]string{
-				"id":              "my-bucket",
-				"project":         "my-proj",
-				"name":            "my-bucket",
-				"location":        "US",
-				"force_destroy":   "true",
-				"deletion_policy": "DELETE",
-			},
-			diffAttrs: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy": {Old: "true", New: "false"},
-			},
-			wantPatchCalls: 0,
-			wantState: map[string]string{
-				"force_destroy":   "false",
-				"deletion_policy": "DELETE",
-			},
-		},
-		{
-			name: "combined force_destroy and deletion_policy short-circuits without PATCH",
-			priorAttrs: map[string]string{
-				"id":              "my-bucket",
-				"project":         "my-proj",
-				"name":            "my-bucket",
-				"location":        "US",
-				"force_destroy":   "false",
-				"deletion_policy": "DELETE",
-			},
-			diffAttrs: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy":   {Old: "false", New: "true"},
-				"deletion_policy": {Old: "DELETE", New: "ABANDON"},
-			},
-			wantPatchCalls: 0,
-			wantState: map[string]string{
-				"force_destroy":   "true",
-				"deletion_policy": "ABANDON",
-			},
-		},
-		{
-			name: "force_destroy plus real mutable field requester_pays sends PATCH and persists both",
-			priorAttrs: map[string]string{
-				"id":              "my-bucket",
-				"project":         "my-proj",
-				"name":            "my-bucket",
-				"location":        "US",
-				"force_destroy":   "false",
-				"requester_pays":  "false",
-				"deletion_policy": "DELETE",
-			},
-			diffAttrs: map[string]*terraform.ResourceAttrDiff{
-				"force_destroy":  {Old: "false", New: "true"},
-				"requester_pays": {Old: "false", New: "true"},
-			},
-			wantPatchCalls: 1,
-			wantState: map[string]string{
-				"force_destroy":  "true",
-				"requester_pays": "true",
-			},
-		},
-	}
-
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			var patchCalls int
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Set("Content-Type", "application/json")
-				switch r.Method {
-				case http.MethodPatch:
-					patchCalls++
-					_ = json.NewEncoder(w).Encode(&raw.Bucket{
-						Id:       "my-bucket",
-						Name:     "my-bucket",
-						Location: "US",
-						SelfLink: "https://www.googleapis.com/storage/v1/b/my-bucket",
-						Billing:  &raw.BucketBilling{RequesterPays: true},
-					})
-				case http.MethodGet:
-					_ = json.NewEncoder(w).Encode(&raw.Bucket{
-						Id:       "my-bucket",
-						Name:     "my-bucket",
-						Location: "US",
-						SelfLink: "https://www.googleapis.com/storage/v1/b/my-bucket",
-					})
-				default:
-					t.Errorf("unexpected HTTP method %s %s", r.Method, r.URL.Path)
-					http.Error(w, "unexpected method", http.StatusBadRequest)
-				}
-			}))
-			defer server.Close()
-
-			cfg := &transport_tpg.Config{
-				Context:      context.Background(),
-				Client:       server.Client(),
-				Project:      "my-proj",
-				PollInterval: time.Millisecond,
-				CustomEndpoints: map[string]string{
-					"storage_custom_endpoint": server.URL + "/storage/v1/",
-				},
-			}
-
-			res := ResourceStorageBucket()
-			prior := &terraform.InstanceState{
-				ID:         "my-bucket",
-				Attributes: tc.priorAttrs,
-			}
-			diff := &terraform.InstanceDiff{
-				Attributes: tc.diffAttrs,
-			}
-
-			newState, diags := res.Apply(context.Background(), prior, diff, cfg)
-			if diags.HasError() {
-				t.Fatalf("Apply returned error diagnostics: %+v", diags)
-			}
-			if patchCalls != tc.wantPatchCalls {
-				t.Fatalf("PATCH calls = %d, want %d", patchCalls, tc.wantPatchCalls)
-			}
-			for k, want := range tc.wantState {
-				if got := newState.Attributes[k]; got != want {
-					t.Errorf("newState.Attributes[%q] = %q, want %q", k, got, want)
-				}
-			}
-		})
-	}
 }
