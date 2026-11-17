@@ -20,6 +20,13 @@
   {{- if gt (len $s.TestSteps) 1 -}}
     {{- $needsPlancheck = true -}}
   {{- end -}}
+  {{- if not $.Res.ExcludeIdentityGeneration -}}
+    {{- range $st := $s.TestSteps -}}
+      {{- if not $st.ExcludeImportTest -}}
+        {{- $needsPlancheck = true -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
 
 package {{ $.Res.PackageName }}_test
@@ -167,6 +174,15 @@ func TestAcc{{ $s.TestSampleSlug $.Res.ProductMetadata.Name $.Res.Name }}(t *tes
 				ImportState:        true,
 				ExpectNonEmptyPlan: true,
 				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+				ImportPlanChecks: resource.ImportPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+					{{- if $.Res.IgnoreReadPropertiesToString $st }}
+						acctest.ExpectImportNoReplaceAndOnlyIgnoredDiffs("{{ $s.ResourceType $.Res.TerraformName }}.{{ $s.PrimaryResourceId }}", {{ $.Res.IgnoreReadPropertiesToString $st }}...),
+					{{- else }}
+						acctest.ExpectImportNoReplaceAndOnlyIgnoredDiffs("{{ $s.ResourceType $.Res.TerraformName }}.{{ $s.PrimaryResourceId }}"),
+					{{- end }}
+					},
+				},
 			},
 			{{- end }}
 			{{- end }}
