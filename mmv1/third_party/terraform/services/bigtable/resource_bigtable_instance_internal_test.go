@@ -8,6 +8,7 @@ import (
 
 	"cloud.google.com/go/bigtable"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 )
 
@@ -369,6 +370,90 @@ func TestUnitBigtable_resourceBigtableInstanceClusterReorderTypeListFunc(t *test
 			}
 			if !reflect.DeepEqual(gotClusterOrder, tc.wantClusterOrder) {
 				t.Errorf("bad: %s, got %q, want %q", tn, gotClusterOrder, tc.wantClusterOrder)
+			}
+		})
+	}
+}
+
+func TestUnitBigtable_resourceBigtableInstanceVirtualUpdate(t *testing.T) {
+	res := ResourceBigtableInstance()
+	baseState := map[string]string{
+		"project":             "test-proj",
+		"name":                "test-bt-inst",
+		"display_name":        "Test Bigtable",
+		"instance_type":       "PRODUCTION",
+		"edition":             "ENTERPRISE",
+		"force_destroy":       "false",
+		"deletion_protection": "true",
+		"deletion_policy":     "DELETE",
+	}
+
+	cases := []struct {
+		name string
+		diff map[string]*terraform.ResourceAttrDiff
+		want bool
+	}{
+		{
+			name: "empty diff",
+			diff: map[string]*terraform.ResourceAttrDiff{},
+			want: false,
+		},
+		{
+			name: "force_destroy only",
+			diff: map[string]*terraform.ResourceAttrDiff{
+				"force_destroy": {Old: "false", New: "true"},
+			},
+			want: true,
+		},
+		{
+			name: "deletion_protection only",
+			diff: map[string]*terraform.ResourceAttrDiff{
+				"deletion_protection": {Old: "true", New: "false"},
+			},
+			want: true,
+		},
+		{
+			name: "deletion_policy only",
+			diff: map[string]*terraform.ResourceAttrDiff{
+				"deletion_policy": {Old: "DELETE", New: "ABANDON"},
+			},
+			want: true,
+		},
+		{
+			name: "all three virtual fields combined",
+			diff: map[string]*terraform.ResourceAttrDiff{
+				"force_destroy":       {Old: "false", New: "true"},
+				"deletion_protection": {Old: "true", New: "false"},
+				"deletion_policy":     {Old: "DELETE", New: "PREVENT"},
+			},
+			want: true,
+		},
+		{
+			name: "virtual field with non-virtual display_name",
+			diff: map[string]*terraform.ResourceAttrDiff{
+				"deletion_protection": {Old: "true", New: "false"},
+				"display_name":        {Old: "Test Bigtable", New: "New Name"},
+			},
+			want: false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			d, err := schema.InternalMap(res.Schema).Data(
+				&terraform.InstanceState{
+					ID:         "projects/test-proj/instances/test-bt-inst",
+					Attributes: baseState,
+				},
+				&terraform.InstanceDiff{
+					Attributes: tc.diff,
+				},
+			)
+			if err != nil {
+				t.Fatalf("schema.InternalMap.Data failed: %v", err)
+			}
+			if got := resourceBigtableInstanceVirtualUpdate(d, res.Schema); got != tc.want {
+				t.Errorf("resourceBigtableInstanceVirtualUpdate() = %v, want %v", got, tc.want)
 			}
 		})
 	}

@@ -21,19 +21,21 @@ import (
 
 // resourceBigtableInstanceVirtualUpdate identifies if an update to the resource includes only virtual field updates
 func resourceBigtableInstanceVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
-	// force_destroy is the only virtual field
-	if d.HasChange("force_destroy") {
-		for field := range resourceSchema {
-			if field == "force_destroy" {
-				continue
-			}
-			if d.HasChange(field) {
+	virtualFields := map[string]bool{
+		"force_destroy":       true,
+		"deletion_protection": true,
+		"deletion_policy":     true,
+	}
+	hasVirtualChange := false
+	for field := range resourceSchema {
+		if d.HasChange(field) {
+			if !virtualFields[field] {
 				return false
 			}
+			hasVirtualChange = true
 		}
-		return true
 	}
-	return false
+	return hasVirtualChange
 }
 
 func ResourceBigtableInstance() *schema.Resource {
@@ -433,6 +435,27 @@ func resourceBigtableInstanceRead(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceBigtableInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
+	// Handle scenario where the update includes only client-side virtual field updates
+	if resourceBigtableInstanceVirtualUpdate(d, ResourceBigtableInstance().Schema) {
+		for _, field := range []string{"force_destroy", "deletion_protection", "deletion_policy"} {
+			if d.HasChange(field) {
+				if err := d.Set(field, d.Get(field)); err != nil {
+					return fmt.Errorf("error setting %s: %s", field, err)
+				}
+			}
+		}
+		if _, ok := d.GetOkExists("force_destroy"); !ok {
+			if err := d.Set("force_destroy", false); err != nil {
+				return fmt.Errorf("error setting force_destroy: %s", err)
+			}
+		}
+		if config, ok := meta.(*transport_tpg.Config); ok && config != nil {
+			if err := tpgresource.DeletionPolicyReadDefault(d, config, "DELETE"); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
 
 	if tpgresource.DeletionPolicyPreUpdate(d, ResourceBigtableInstance) {
 		return ResourceBigtableInstance().Read(d, meta)
@@ -492,16 +515,6 @@ func resourceBigtableInstanceUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	log.Printf("[DEBUG] Updating BigTable instance %q: %#v", d.Id(), conf)
-
-	// Handle scenario where the update includes only updating force_destroy
-	if resourceBigtableInstanceVirtualUpdate(d, ResourceBigtableInstance().Schema) {
-		if d.Get("force_destroy") != nil {
-			if err := d.Set("force_destroy", d.Get("force_destroy")); err != nil {
-				return fmt.Errorf("error reading Instance: %s", err)
-			}
-		}
-		return nil
-	}
 
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, d.Timeout(schema.TimeoutUpdate))
 	defer cancel()
