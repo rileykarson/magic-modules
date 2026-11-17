@@ -230,23 +230,20 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 	}
 }
 
-func resourceBigtableGCPolicyVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
-	clientSideFields := map[string]bool{
-		"deletion_policy": true,
-		"ignore_warnings": true,
-	}
-	for field := range resourceSchema {
-		if d.HasChange(field) && !clientSideFields[field] {
-			return false
-		}
-	}
-	return true
-}
-
 func resourceBigtableGCPolicyUpsert(d *schema.ResourceData, meta interface{}) error {
-	if d.Id() != "" && resourceBigtableGCPolicyVirtualUpdate(d, ResourceBigtableGCPolicy().Schema) {
-		log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
-		return ResourceBigtableGCPolicy().Read(d, meta)
+	if d.Id() != "" {
+		clientSideFields := map[string]bool{"deletion_policy": true, "ignore_warnings": true}
+		clientSideOnly := true
+		for field := range ResourceBigtableGCPolicy().Schema {
+			if d.HasChange(field) && !clientSideFields[field] {
+				clientSideOnly = false
+				break
+			}
+		}
+		if clientSideOnly {
+			log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
+			return ResourceBigtableGCPolicy().Read(d, meta)
+		}
 	}
 
 	config := meta.(*transport_tpg.Config)

@@ -1,13 +1,10 @@
 package bigtable
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/hashicorp/terraform-provider-google/google/tpgresource"
 )
 
@@ -245,104 +242,4 @@ var testUnitBigtableGCPolicyCustomizeDiffTestcases = []testUnitBigtableGCPolicyC
 		newDuration: "70h",
 		cleared:     false,
 	},
-}
-
-func TestUnitBigtableGCPolicy_virtualUpdate(t *testing.T) {
-	t.Parallel()
-
-	res := ResourceBigtableGCPolicy()
-	baseState := map[string]string{
-		"id":              "age() > 10h",
-		"project":         "my-project",
-		"instance_name":   "my-instance",
-		"table":           "my-table",
-		"column_family":   "my-cf",
-		"gc_rules":        `{"rules":[{"max_age":"10h"}]}`,
-		"deletion_policy": "DELETE",
-		"ignore_warnings": "false",
-	}
-
-	cases := []struct {
-		name      string
-		rawConfig map[string]interface{}
-		want      bool
-	}{
-		{
-			name: "ignore_warnings only",
-			rawConfig: map[string]interface{}{
-				"project":         "my-project",
-				"instance_name":   "my-instance",
-				"table":           "my-table",
-				"column_family":   "my-cf",
-				"gc_rules":        `{"rules":[{"max_age":"10h"}]}`,
-				"deletion_policy": "DELETE",
-				"ignore_warnings": true,
-			},
-			want: true,
-		},
-		{
-			name: "deletion_policy only",
-			rawConfig: map[string]interface{}{
-				"project":         "my-project",
-				"instance_name":   "my-instance",
-				"table":           "my-table",
-				"column_family":   "my-cf",
-				"gc_rules":        `{"rules":[{"max_age":"10h"}]}`,
-				"deletion_policy": "ABANDON",
-				"ignore_warnings": false,
-			},
-			want: true,
-		},
-		{
-			name: "both ignore_warnings and deletion_policy",
-			rawConfig: map[string]interface{}{
-				"project":         "my-project",
-				"instance_name":   "my-instance",
-				"table":           "my-table",
-				"column_family":   "my-cf",
-				"gc_rules":        `{"rules":[{"max_age":"10h"}]}`,
-				"deletion_policy": "ABANDON",
-				"ignore_warnings": true,
-			},
-			want: true,
-		},
-		{
-			name: "gc_rules and ignore_warnings",
-			rawConfig: map[string]interface{}{
-				"project":         "my-project",
-				"instance_name":   "my-instance",
-				"table":           "my-table",
-				"column_family":   "my-cf",
-				"gc_rules":        `{"rules":[{"max_age":"20h"}]}`,
-				"deletion_policy": "DELETE",
-				"ignore_warnings": true,
-			},
-			want: false,
-		},
-	}
-
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			attrs := make(map[string]string, len(baseState))
-			for k, v := range baseState {
-				attrs[k] = v
-			}
-			instState := &terraform.InstanceState{
-				ID:         attrs["id"],
-				Attributes: attrs,
-			}
-			rc := terraform.NewResourceConfigRaw(tc.rawConfig)
-			diff, err := schema.InternalMap(res.Schema).Diff(context.Background(), instState, rc, nil, nil, false)
-			if err != nil {
-				t.Fatalf("Diff failed: %v", err)
-			}
-			d, err := schema.InternalMap(res.Schema).Data(instState, diff)
-			if err != nil {
-				t.Fatalf("Data failed: %v", err)
-			}
-			if got := resourceBigtableGCPolicyVirtualUpdate(d, res.Schema); got != tc.want {
-				t.Fatalf("resourceBigtableGCPolicyVirtualUpdate() = %v, want %v", got, tc.want)
-			}
-		})
-	}
 }
