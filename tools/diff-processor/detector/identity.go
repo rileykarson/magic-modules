@@ -414,7 +414,7 @@ func analyzeResourceIdentity(file *ast.File, resourceName string) (hasIdentity b
 		return hasId, supImp, nil
 	}
 	if matchedReg == nil {
-		if hasIAMCall, hasId, supImp := analyzeUnregisteredIAMFile(file, topFuncs); hasIAMCall {
+		if hasIAMCall, hasId, supImp := analyzeUnregisteredIAMFile(file, resourceName, topFuncs); hasIAMCall {
 			return hasId, supImp, nil
 		}
 	}
@@ -454,10 +454,11 @@ func analyzeIAMSchemaExpr(expr ast.Expr, topFuncs map[string]*ast.FuncDecl) (has
 	return inspectIAMResourceCall(call)
 }
 
-func analyzeUnregisteredIAMFile(file *ast.File, topFuncs map[string]*ast.FuncDecl) (isIAM bool, hasIdentity bool, supportsImport bool) {
-	var foundCall *ast.CallExpr
+func analyzeUnregisteredIAMFile(file *ast.File, resourceName string, topFuncs map[string]*ast.FuncDecl) (isIAM bool, hasIdentity bool, supportsImport bool) {
+	expectedConstructor := expectedIAMConstructorForResource(resourceName)
+	var firstCall, matchedCall *ast.CallExpr
 	ast.Inspect(file, func(n ast.Node) bool {
-		if foundCall != nil {
+		if matchedCall != nil {
 			return false
 		}
 		call, ok := n.(*ast.CallExpr)
@@ -465,16 +466,40 @@ func analyzeUnregisteredIAMFile(file *ast.File, topFuncs map[string]*ast.FuncDec
 			return true
 		}
 		if isIAMResourceConstructorCall(call) {
-			foundCall = call
-			return false
+			if firstCall == nil {
+				firstCall = call
+			}
+			if expectedConstructor != "" && callFuncName(call) == expectedConstructor {
+				matchedCall = call
+				return false
+			}
 		}
 		return true
 	})
+	foundCall := matchedCall
+	if foundCall == nil {
+		foundCall = firstCall
+	}
 	if foundCall == nil {
 		return false, false, false
 	}
 	hasId, supImp := inspectIAMResourceCall(foundCall)
 	return true, hasId, supImp
+}
+
+func expectedIAMConstructorForResource(resourceName string) string {
+	switch {
+	case strings.HasSuffix(resourceName, "_iam_member"):
+		return "ResourceIamMember"
+	case strings.HasSuffix(resourceName, "_iam_binding"):
+		return "ResourceIamBinding"
+	case strings.HasSuffix(resourceName, "_iam_policy"):
+		return "ResourceIamPolicy"
+	case strings.HasSuffix(resourceName, "_iam_audit_config"):
+		return "ResourceIamAuditConfig"
+	default:
+		return ""
+	}
 }
 
 func findIAMResourceCall(expr ast.Expr, topFuncs map[string]*ast.FuncDecl) *ast.CallExpr {
@@ -505,18 +530,24 @@ func findIAMResourceCall(expr ast.Expr, topFuncs map[string]*ast.FuncDecl) *ast.
 }
 
 func isIAMResourceConstructorCall(call *ast.CallExpr) bool {
-	var fnName string
-	switch fun := call.Fun.(type) {
-	case *ast.SelectorExpr:
-		fnName = fun.Sel.Name
-	case *ast.Ident:
-		fnName = fun.Name
-	}
-	switch fnName {
+	switch callFuncName(call) {
 	case "ResourceIamMember", "ResourceIamBinding", "ResourceIamPolicy", "ResourceIamAuditConfig":
 		return true
 	}
 	return false
+}
+
+func callFuncName(call *ast.CallExpr) string {
+	if call == nil {
+		return ""
+	}
+	switch fun := call.Fun.(type) {
+	case *ast.SelectorExpr:
+		return fun.Sel.Name
+	case *ast.Ident:
+		return fun.Name
+	}
+	return ""
 }
 
 func inspectIAMResourceCall(call *ast.CallExpr) (hasIdentity bool, supportsImport bool) {
@@ -1209,6 +1240,96 @@ func hasValidIdentityImportStepForResource(content []byte, resourceName string, 
 		return false
 	}
 
+	if astHasValidIdentityImportStepForResource(file, resourceName, isDedicatedFile) {
+		return true
+	}
+
+	// For tpgiamresource IAM _iam_binding and _iam_policy resources, _iam_member,
+	// _iam_binding, and _iam_policy share a single generated iam_<resource>.go file and
+	// parent resource identity parser. Import test coverage is satisfied if this IAM
+	// test file verifies identity state via ConfigStateChecks targeting <resourceName>.<id>
+	// AND exercises ImportBlockWithResourceIdentity (ImportState: true) on the sibling
+	// <base>_iam_member resource.
+	if memberResName, ok := iamSiblingMemberResourceName(resourceName); ok {
+		if fileHasConfigStateIdentityCheckForResource(file, resourceName) &&
+			astHasValidIdentityImportStepForResource(file, memberResName, false) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func iamSiblingMemberResourceName(resourceName string) (string, bool) {
+	for _, suffix := range []string{"_iam_binding", "_iam_policy"} {
+		if base, ok := strings.CutSuffix(resourceName, suffix); ok && base != "" {
+			return base + "_iam_member", true
+		}
+	}
+	return "", false
+}
+
+func fileHasConfigStateIdentityCheckForResource(file *ast.File, resourceName string) bool {
+	found := false
+	ast.Inspect(file, func(n ast.Node) bool {
+		if found {
+			return false
+		}
+		kv, ok := n.(*ast.KeyValueExpr)
+		if !ok {
+			return true
+		}
+		keyIdent, ok := kv.Key.(*ast.Ident)
+		if !ok || keyIdent.Name != "ConfigStateChecks" {
+			return true
+		}
+		ast.Inspect(kv.Value, func(inner ast.Node) bool {
+			if found {
+				return false
+			}
+			call, ok := inner.(*ast.CallExpr)
+			if !ok {
+				return true
+			}
+			if isIdentityStateCheckCallForResource(call, resourceName) {
+				found = true
+				return false
+			}
+			return true
+		})
+		return !found
+	})
+	return found
+}
+
+func isIdentityStateCheckCallForResource(call *ast.CallExpr, resourceName string) bool {
+	switch callFuncName(call) {
+	case "ExpectIamIdentityMatchesState",
+		"ExpectIdentity",
+		"ExpectIdentityValue",
+		"ExpectIdentityValueMatchesState":
+	default:
+		return false
+	}
+	if len(call.Args) == 0 {
+		return false
+	}
+	addr, ok := stringLitValue(call.Args[0])
+	if !ok {
+		return false
+	}
+	return resourceAddressMatches(addr, resourceName)
+}
+
+func resourceAddressMatches(addr, resourceName string) bool {
+	parts := strings.SplitN(addr, ".", 2)
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+		return false
+	}
+	return resourceNamesMatch(parts[0], resourceName)
+}
+
+func astHasValidIdentityImportStepForResource(file *ast.File, resourceName string, isDedicatedFile bool) bool {
 	fileMentionsResAddr := fileContainsResourceAddressLiteral(file, resourceName)
 
 	found := false

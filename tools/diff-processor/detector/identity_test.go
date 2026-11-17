@@ -527,6 +527,145 @@ func TestAccPubsubTopicIamMemberGenerated(t *testing.T) {
 			},
 		},
 		{
+			name: "tpgiamresource IAM _iam_binding and _iam_policy with ExpectIamIdentityMatchesState and sibling _iam_member ImportBlockWithResourceIdentity are covered",
+			files: map[string]string{
+				"pubsub/iam_pubsub_topic.go": `package pubsub
+
+func init() {
+	registry.Schema{
+		Name:        "google_pubsub_topic_iam_binding",
+		ProductName: "Pubsub",
+		Type:        registry.SchemaTypeIAMResource,
+		Schema:      tpgiamresource.ResourceIamBinding(PubsubTopicIamSchema, PubsubTopicIamUpdaterProducer, PubsubTopicIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(PubsubTopicIamParentResourceIdentityParser)),
+	}.Register()
+	registry.Schema{
+		Name:        "google_pubsub_topic_iam_member",
+		ProductName: "Pubsub",
+		Type:        registry.SchemaTypeIAMResource,
+		Schema:      NewPubsubTopicIamMemberResource(),
+	}.Register()
+	registry.Schema{
+		Name:        "google_pubsub_topic_iam_policy",
+		ProductName: "Pubsub",
+		Type:        registry.SchemaTypeIAMResource,
+		Schema:      tpgiamresource.ResourceIamPolicy(PubsubTopicIamSchema, PubsubTopicIamUpdaterProducer, PubsubTopicIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(PubsubTopicIamParentResourceIdentityParser)),
+	}.Register()
+}
+
+func NewPubsubTopicIamMemberResource() *schema.Resource {
+	return tpgiamresource.ResourceIamMember(
+		PubsubTopicIamSchema,
+		PubsubTopicIamUpdaterProducer,
+		PubsubTopicIdParseFunc,
+		tpgiamresource.IamWithParentResourceIdentity(PubsubTopicIamParentResourceIdentityParser),
+	)
+}
+`,
+				"pubsub/iam_pubsub_topic_generated_test.go": `package pubsub_test
+
+func TestAccPubsubTopicIamBindingGenerated(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: "resource \"google_pubsub_topic_iam_binding\" \"foo\" {}",
+				ConfigStateChecks: []statecheck.StateCheck{
+					acctest.ExpectIamIdentityMatchesState("google_pubsub_topic_iam_binding.foo"),
+				},
+			},
+		},
+	})
+}
+
+func TestAccPubsubTopicIamMemberGenerated(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				ResourceName:    "google_pubsub_topic_iam_member.foo",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+			},
+		},
+	})
+}
+
+func TestAccPubsubTopicIamPolicyGenerated(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: "resource \"google_pubsub_topic_iam_policy\" \"foo\" {}",
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectIdentity("google_pubsub_topic_iam_policy.foo", nil),
+					acctest.ExpectIamIdentityMatchesState("google_pubsub_topic_iam_policy.foo"),
+				},
+			},
+		},
+	})
+}
+`,
+			},
+			resources: []string{
+				"google_pubsub_topic_iam_binding",
+				"google_pubsub_topic_iam_member",
+				"google_pubsub_topic_iam_policy",
+			},
+			want: map[string]*MissingIdentityInfo{},
+		},
+		{
+			name: "tpgiamresource IAM _iam_binding without ImportBlockWithResourceIdentity or ConfigStateChecks identity check is flagged",
+			files: map[string]string{
+				"secretmanager/iam_secret_manager_secret.go": `package secretmanager
+
+func init() {
+	registry.Schema{
+		Name:        "google_secret_manager_secret_iam_binding",
+		ProductName: "SecretManager",
+		Type:        registry.SchemaTypeIAMResource,
+		Schema:      tpgiamresource.ResourceIamBinding(SecretManagerSecretIamSchema, SecretManagerSecretIamUpdaterProducer, SecretManagerSecretIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(SecretManagerSecretIamParentResourceIdentityParser)),
+	}.Register()
+	registry.Schema{
+		Name:        "google_secret_manager_secret_iam_member",
+		ProductName: "SecretManager",
+		Type:        registry.SchemaTypeIAMResource,
+		Schema:      tpgiamresource.ResourceIamMember(SecretManagerSecretIamSchema, SecretManagerSecretIamUpdaterProducer, SecretManagerSecretIdParseFunc, tpgiamresource.IamWithParentResourceIdentity(SecretManagerSecretIamParentResourceIdentityParser)),
+	}.Register()
+}
+`,
+				"secretmanager/iam_secret_manager_secret_generated_test.go": `package secretmanager_test
+
+func TestAccSecretManagerSecretIamBindingGenerated(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: "resource \"google_secret_manager_secret_iam_binding\" \"foo\" {}",
+			},
+		},
+	})
+}
+
+func TestAccSecretManagerSecretIamMemberGenerated(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				ResourceName:    "google_secret_manager_secret_iam_member.foo",
+				ImportState:     true,
+				ImportStateKind: resource.ImportBlockWithResourceIdentity,
+			},
+		},
+	})
+}
+`,
+			},
+			resources: []string{
+				"google_secret_manager_secret_iam_binding",
+				"google_secret_manager_secret_iam_member",
+			},
+			want: map[string]*MissingIdentityInfo{
+				"google_secret_manager_secret_iam_binding": {
+					MissingImportTest: true,
+				},
+			},
+		},
+		{
 			name: "Plugin Framework resources: covered immutable stub vs updatable missing Update identity",
 			files: map[string]string{
 				"storage/fw_resource_storage_notification.go": `package storage
