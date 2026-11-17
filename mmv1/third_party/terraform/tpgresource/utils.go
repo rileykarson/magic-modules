@@ -162,15 +162,36 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 // back to the provider's value if not given. If the provider's value is not
 // given, an error is returned.
 func GetDeletionPolicyFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config, resourceDefault string) (string, error) {
+	rawConfig := d.GetRawConfig()
+	if rawConfig != cty.NilVal {
+		rawConfig, _ = rawConfig.Unmark()
+	}
+	if rawConfig == cty.NilVal || rawConfig.IsNull() || !rawConfig.IsKnown() || !rawConfig.Type().IsObjectType() || !rawConfig.Type().HasAttribute("deletion_policy") {
+		if res, ok := d.GetOk("deletion_policy"); ok {
+			return res.(string), nil
+		}
+		if config != nil && config.DeletionPolicy != "" {
+			return config.DeletionPolicy, nil
+		}
+		return resourceDefault, nil
+	}
+
+	rawDeletionPolicy, _ := rawConfig.GetAttr("deletion_policy").Unmark()
 	//if IsNull() value, then the value has not been manually configured
-	if d.GetRawConfig().GetAttr("deletion_policy").IsNull() {
-		if config.DeletionPolicy != "" {
+	if rawDeletionPolicy.IsNull() {
+		if config != nil && config.DeletionPolicy != "" {
 			log.Printf("[DEBUG] `deletion_policy` detected as not set within resource configuration. Falling back to configured provider default, %s", config.DeletionPolicy)
 			return config.DeletionPolicy, nil
 		}
 		//return the provided resource default as the final backup
 		log.Printf("[DEBUG] `deletion_policy` detected as not set within resource or provider configuration. Falling back to resource default, %s", resourceDefault)
 		return resourceDefault, nil
+	}
+	if !rawDeletionPolicy.IsKnown() {
+		return "", nil
+	}
+	if rawDeletionPolicy.Type() == cty.String && rawDeletionPolicy.AsString() == "" {
+		return "", fmt.Errorf("An error has occured during %s configuration. Please report this issue to the provider developers.", "`deletion_policy`")
 	}
 	//if not null, then use/maintain usage of manually configured value
 	//
@@ -201,7 +222,7 @@ When set to "DELETE", deleting the resource is allowed.
 func DeletionPolicyReadDefault(d *schema.ResourceData, config *transport_tpg.Config, resourceDefault string) error {
 	if _, ok := d.GetOkExists("deletion_policy"); !ok {
 		//prioritize config's value if present
-		if config.DeletionPolicy != "" {
+		if config != nil && config.DeletionPolicy != "" {
 			if err := d.Set("deletion_policy", config.DeletionPolicy); err != nil {
 				return fmt.Errorf("Error setting deletion_policy: %s", err)
 			}
@@ -216,24 +237,24 @@ func DeletionPolicyReadDefault(d *schema.ResourceData, config *transport_tpg.Con
 
 func DeletionPolicyPreUpdate(d *schema.ResourceData, resourceSchema func() *schema.Resource) bool {
 	clientSideFields := map[string]bool{"deletion_policy": true}
-	clientSideOnly := true
 	for field := range resourceSchema().Schema {
 		if d.HasChange(field) && !clientSideFields[field] {
 			return false
 		}
 	}
-	if clientSideOnly {
-		log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
-		return true
-	}
-	return false
+	log.Print("[DEBUG] Only client-side changes detected. Cancelling update operation.")
+	return true
 }
 
 func DeletionPolicyPreDelete(d *schema.ResourceData) (bool, error) {
-	if d.Get("deletion_policy").(string) == "PREVENT" {
+	policy, ok := d.Get("deletion_policy").(string)
+	if !ok {
+		return false, nil
+	}
+	if policy == "PREVENT" {
 		return true, fmt.Errorf("cannot destroy %q without setting deletion_policy=\"DELETE\" and running `terraform apply`", d.Id())
 	}
-	if d.Get("deletion_policy").(string) == "ABANDON" {
+	if policy == "ABANDON" {
 		log.Printf("[DEBUG] deletion_policy set to \"ABANDON\", removing %q from Terraform state without deletion", d.Id())
 		return true, nil
 	}
@@ -979,9 +1000,25 @@ func DefaultProviderZone(_ context.Context, diff *schema.ResourceDiff, meta inte
 
 func DefaultProviderDeletionPolicy(resourceDefault string) schema.CustomizeDiffFunc {
 	return func(_ context.Context, diff *schema.ResourceDiff, meta interface{}) error {
-		config := meta.(*transport_tpg.Config)
+		var config *transport_tpg.Config
+		if meta != nil {
+			config, _ = meta.(*transport_tpg.Config)
+		}
 		if dpolicy := diff.Get("deletion_policy"); dpolicy != nil {
+			rawConfig := diff.GetRawConfig()
+			if rawConfig != cty.NilVal {
+				rawConfig, _ = rawConfig.Unmark()
+			}
+			if rawConfig != cty.NilVal && !rawConfig.IsNull() && rawConfig.IsKnown() && rawConfig.Type().IsObjectType() && rawConfig.Type().HasAttribute("deletion_policy") {
+				rawDeletionPolicy, _ := rawConfig.GetAttr("deletion_policy").Unmark()
+				if !rawDeletionPolicy.IsKnown() {
+					return diff.SetNewComputed("deletion_policy")
+				}
+			}
 			dpolicy, err := GetDeletionPolicyFromDiff(diff, config, resourceDefault)
+			if err != nil {
+				return err
+			}
 			err = diff.SetNew("deletion_policy", dpolicy)
 			if err != nil {
 				return err
