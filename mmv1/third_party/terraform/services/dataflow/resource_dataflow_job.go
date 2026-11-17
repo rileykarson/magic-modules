@@ -37,6 +37,13 @@ var DataflowTerminalStatesMap = map[string]struct{}{
 	"JOB_STATE_DRAINED":   {},
 }
 
+var dataflowJobVirtualFields = map[string]bool{
+	"on_delete":                    true,
+	"skip_wait_on_job_termination": true,
+	"create_ignore_already_exists": true,
+	"deletion_policy":              true,
+}
+
 func resourceDataflowJobLabelDiffSuppress(k, old, new string, d *schema.ResourceData) bool {
 	// Example Diff: "labels.goog-dataflow-provided-template-version": "word_count" => ""
 	if strings.HasPrefix(k, resourceDataflowJobGoogleProvidedLabelPrefix) && new == "" {
@@ -292,7 +299,7 @@ func resourceDataflowJobTypeCustomizeDiff(_ context.Context, d *schema.ResourceD
 	if d.Get("type") == "JOB_TYPE_BATCH" {
 		resourceSchema := ResourceDataflowJob().Schema
 		for field := range resourceSchema {
-			if field == "on_delete" {
+			if dataflowJobVirtualFields[field] {
 				continue
 			}
 
@@ -701,41 +708,34 @@ func resourceDataflowJobIterateMapHasChange(mapKey string, d *schema.ResourceDat
 }
 
 func resourceDataflowJobIsVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
-	// on_delete is the only virtual field
-	if d.HasChange("on_delete") {
-		for field := range resourceSchema {
-			if field == "on_delete" {
+	hasVirtualChange := false
+	for field := range resourceSchema {
+		if d.HasChange(field) {
+			if dataflowJobVirtualFields[field] {
+				hasVirtualChange = true
 				continue
 			}
 
-			if d.HasChange(field) {
-				return false
-			}
+			return false
 		}
-		// on_delete is changing, but nothing else
-		return true
+	}
+
+	return hasVirtualChange
+}
+
+// If only virtual fields, labels, or terraform_labels are changing, no update request is needed
+func jobHasUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
+	for field := range resourceSchema {
+		if dataflowJobVirtualFields[field] || field == "labels" || field == "terraform_labels" {
+			continue
+		}
+
+		if d.HasChange(field) {
+			return true
+		}
 	}
 
 	return false
-}
-
-// If only fields on_delete, terraform_labels are changing, no update request is needed
-func jobHasUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
-	if d.HasChange("on_delete") || d.HasChange("labels") || d.HasChange("terraform_labels") {
-		for field := range resourceSchema {
-			if field == "on_delete" || field == "labels" || field == "terraform_labels" {
-				continue
-			}
-
-			if d.HasChange(field) {
-				return true
-			}
-		}
-		// on_delete, or terraform_labels are changing, but nothing else
-		return false
-	}
-
-	return true
 }
 
 func waitForDataflowJobToBeUpdated(d *schema.ResourceData, config *transport_tpg.Config, replacementJobID, userAgent string, timeout time.Duration) error {

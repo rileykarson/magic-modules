@@ -32,6 +32,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 		Update: resourceDataflowFlexTemplateJobUpdate,
 		Delete: resourceDataflowFlexTemplateJobDelete,
 		CustomizeDiff: customdiff.All(
+			tpgresource.DefaultProviderDeletionPolicy("DELETE"),
 			tpgresource.SetLabelsDiff,
 			resourceDataflowFlexJobTypeCustomizeDiff,
 		),
@@ -861,7 +862,7 @@ func resourceDataflowFlexJobTypeCustomizeDiff(_ context.Context, d *schema.Resou
 	if d.Get("type") == "JOB_TYPE_BATCH" {
 		resourceSchema := ResourceDataflowFlexTemplateJob().Schema
 		for field := range resourceSchema {
-			if field == "on_delete" {
+			if dataflowJobVirtualFields[field] {
 				continue
 			}
 
@@ -933,20 +934,17 @@ func findDataflowJobByName(config *transport_tpg.Config, project, region, userAg
 }
 
 func flexTemplateJobHasUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
-	if d.HasChange("on_delete") || d.HasChange("labels") || d.HasChange("terraform_labels") || d.HasChange("create_ignore_already_exists") {
-		for field := range resourceSchema {
-			if field == "on_delete" || field == "labels" || field == "terraform_labels" || field == "create_ignore_already_exists" {
-				continue
-			}
-
-			if d.HasChange(field) {
-				return true
-			}
+	for field := range resourceSchema {
+		if dataflowJobVirtualFields[field] || field == "labels" || field == "terraform_labels" {
+			continue
 		}
-		return false
+
+		if d.HasChange(field) {
+			return true
+		}
 	}
 
-	return true
+	return false
 }
 
 func init() {
