@@ -11,10 +11,11 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
-{{- if not $.IamPolicy.ExcludeImportTest }}
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
-{{- end }}
 
 	"{{ $.ImportPath }}/acctest"
 	"{{ $.ImportPath }}/envvar"
@@ -44,6 +45,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated(t *testing.T) {
 {{ template "IamTestSetupSample" $ }}
 
 	acctest.VcrTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_12_0),
+		},
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -60,6 +64,7 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAcc{{ $.ResourceName }}IamBinding_basicGenerated(context),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "binding" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -72,6 +77,12 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated(t *testing.T) {
 			{
 				// Test Iam Binding update
 				Config: testAcc{{ $.ResourceName }}IamBinding_updateGenerated(context),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("{{ $.IamTerraformName }}_binding.foo", plancheck.ResourceActionUpdate),
+					},
+				},
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "binding" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -90,11 +101,9 @@ func TestAcc{{ $.ResourceName }}IamMemberGenerated(t *testing.T) {
 {{ template "IamTestSetupSample" $ }}
 
 	acctest.VcrTest(t, resource.TestCase{
-{{- if not $.IamPolicy.ExcludeImportTest }}
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
-			tfversion.RequireAbove(tfversion.Version1_12_0), // resource identity min version
+			tfversion.SkipBelow(tfversion.Version1_12_0),
 		},
-{{-  end }}
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -112,6 +121,7 @@ func TestAcc{{ $.ResourceName }}IamMemberGenerated(t *testing.T) {
 			{
 				// Test Iam Member creation (no update for member, no need to test)
 				Config: testAcc{{ $.ResourceName }}IamMember_basicGenerated(context),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "member" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -140,6 +150,9 @@ func TestAcc{{ $.ResourceName }}IamPolicyGenerated(t *testing.T) {
 {{-  end }}
 
 	acctest.VcrTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_12_0),
+		},
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -157,6 +170,7 @@ func TestAcc{{ $.ResourceName }}IamPolicyGenerated(t *testing.T) {
 			{
 				Config: testAcc{{ $.ResourceName }}IamPolicy_basicGenerated(context),
 				Check:  resource.TestCheckResourceAttrSet("data.{{ $.IamTerraformName }}_policy.foo", "policy_data"),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "policy" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -168,6 +182,7 @@ func TestAcc{{ $.ResourceName }}IamPolicyGenerated(t *testing.T) {
 {{-  end }}
 			{
 				Config: testAcc{{ $.ResourceName }}IamPolicy_emptyBinding(context),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "policy" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -186,6 +201,9 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated_withCondition(t *testing.T) 
 {{ template "IamTestSetupSample" $ }}
 
 	acctest.VcrTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_12_0),
+		},
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -202,6 +220,7 @@ func TestAcc{{ $.ResourceName }}IamBindingGenerated_withCondition(t *testing.T) 
 		Steps: []resource.TestStep{
 			{
 				Config: testAcc{{ $.ResourceName }}IamBinding_withConditionGenerated(context),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "binding" "Cond" "expires_after_2019_12_31" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -269,6 +288,9 @@ func TestAcc{{ $.ResourceName }}IamMemberGenerated_withCondition(t *testing.T) {
 {{ template "IamTestSetupSample" $ }}
 
 	acctest.VcrTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_12_0),
+		},
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 	ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -285,6 +307,7 @@ func TestAcc{{ $.ResourceName }}IamMemberGenerated_withCondition(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAcc{{ $.ResourceName }}IamMember_withConditionGenerated(context),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "member" "Cond" "expires_after_2019_12_31" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -366,6 +389,9 @@ func TestAcc{{ $.ResourceName }}IamPolicyGenerated_withCondition(t *testing.T) {
 	expectedPolicyData = strings.Replace(expectedPolicyData, "<", "\\u003c", -1)
 
 	acctest.VcrTest(t, resource.TestCase{
+		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
+			tfversion.SkipBelow(tfversion.Version1_12_0),
+		},
 		PreCheck:                 func() { acctest.AccTestPreCheck(t) },
 {{- if eq $.MinVersionObj.Name "beta" }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
@@ -388,6 +414,7 @@ func TestAcc{{ $.ResourceName }}IamPolicyGenerated_withCondition(t *testing.T) {
 					resource.TestCheckResourceAttr("{{ $.IamTerraformName }}_policy.foo", "policy_data", expectedPolicyData),
 					resource.TestCheckResourceAttrWith("data.google_iam_policy.foo", "policy_data", tpgresource.CheckGoogleIamPolicy),
 				),
+{{- template "IamExpectIdentity" dict "Res" $ "Kind" "policy" }}
 			},
 {{- if not $.IamPolicy.ExcludeImportTest }}
 			{
@@ -739,4 +766,25 @@ func generate{{ $.ResourceName }}IAMMemberStateID(iamResourceAddr string) func (
 		return acctest.BuildIAMImportId(fmt.Sprintf("{{ $.IamImportFormat }}", {{ join $.IamImportParams ", " }}), rawState["role"], rawState["member"], rawState["condition.0.title"]), nil
 	}
 }
+{{- end }}
+
+{{- define "IamExpectIdentity" }}
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectIdentity("{{ .Res.IamTerraformName }}_{{ .Kind }}.foo", map[string]knownvalue.Check{
+{{- range $param := .Res.IamResourceParams }}
+						"{{ underscore $param }}": knownvalue.NotNull(),
+{{- end }}
+{{- if ne .Kind "policy" }}
+						"role": knownvalue.StringExact("{{ .Res.IamPolicy.AllowedIamRole }}"),
+{{- if eq .Kind "member" }}
+						"member": knownvalue.StringExact("user:admin@hashicorptest.com"),
+{{- end }}
+{{- if .Cond }}
+						"condition_title": knownvalue.StringExact("{{ .Cond }}"),
+{{- else }}
+						"condition_title": knownvalue.Null(),
+{{- end }}
+{{- end }}
+					}),
+				},
 {{- end }}
