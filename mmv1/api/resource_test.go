@@ -274,6 +274,100 @@ func TestProviderDefaultFieldsAreSynthesizedAndDeduplicated(t *testing.T) {
 	}
 }
 
+func TestListScopePropertiesCollapsesFlattenObject(t *testing.T) {
+	t.Parallel()
+
+	version := &product.Version{Name: "ga", BaseUrl: "https://example.googleapis.com/v1/"}
+	prod := &api.Product{
+		Name:     "bigquery",
+		Versions: []*product.Version{version},
+		Version:  version,
+	}
+
+	res := &api.Resource{
+		Name:            "RowAccessPolicy",
+		BaseUrl:         "projects/{{project}}/datasets/{{dataset_id}}/tables/{{table_id}}/rowAccessPolicies",
+		ProductMetadata: prod,
+	}
+	nested := &api.Type{
+		Name:             "nestedRef",
+		Type:             "NestedObject",
+		FlattenObject:    true,
+		ResourceMetadata: res,
+		Properties: []*api.Type{
+			{Name: "tableId", Type: "String", Required: true},
+			{Name: "excludedScope", Type: "String", Exclude: true},
+		},
+	}
+	parentRef := &api.Type{
+		Name:             "rowAccessPolicyReference",
+		Type:             "NestedObject",
+		FlattenObject:    true,
+		ResourceMetadata: res,
+		Properties: []*api.Type{
+			{Name: "datasetId", Type: "String", Required: true},
+			{Name: "policyId", Type: "String", Required: true},
+			nested,
+		},
+	}
+	unflattened := &api.Type{
+		Name:             "otherConfig",
+		Type:             "NestedObject",
+		FlattenObject:    false,
+		ResourceMetadata: res,
+		Properties: []*api.Type{
+			{Name: "ignoredId", Type: "String", Required: true},
+		},
+	}
+	res.Properties = []*api.Type{parentRef, unflattened}
+
+	got := res.ListScopeProperties()
+	var gotNames []string
+	for _, p := range got {
+		gotNames = append(gotNames, p.Name)
+	}
+	wantNames := []string{"datasetId", "tableId", "project"}
+	if diff := cmp.Diff(wantNames, gotNames); diff != "" {
+		t.Fatalf("ListScopeProperties() mismatch (-want +got):\n%s", diff)
+	}
+}
+
+func TestListLeafIdMarker(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name string
+		res  api.Resource
+		want string
+	}{
+		{
+			name: "extracts trailing marker from import_format",
+			res: api.Resource{
+				ImportFormat: []string{"projects/{{project}}/secrets/{{secret_id}}"},
+				IdFormat:     "{{name}}",
+			},
+			want: "secret_id",
+		},
+		{
+			name: "falls back to id_format when import_format empty",
+			res: api.Resource{
+				BaseUrl:  "projects/{{project}}/locations/{{location}}/groups",
+				IdFormat: "projects/{{project}}/locations/{{location}}/groups/{{group_id}}",
+			},
+			want: "group_id",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tc.res.ListLeafIdMarker(); got != tc.want {
+				t.Fatalf("ListLeafIdMarker() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 // TestMagicianLocation verifies that the current package is being executed from within
 // the RELATIVE_MAGICIAN_LOCATION ("mmv1/") directory structure. This ensures that references
 // to files relative to this location will remain valid even if the repository structure

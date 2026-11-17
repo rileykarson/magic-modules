@@ -27,6 +27,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/querycheck"
 	"github.com/hashicorp/terraform-plugin-testing/querycheck/queryfilter"
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 
 	"{{ $.ImportPath }}/acctest"
@@ -88,7 +89,10 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 	}
 
 	var listDisplayName acctest.ListDisplayName
+{{- if $.ListScopeProperties }}
 	var listScope acctest.ListScopeCapture
+{{- end }}
+	var listIdentity acctest.ListIdentityCapture
 	acctest.VcrTest(t, resource.TestCase{
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			tfversion.SkipBelow(tfversion.Version1_14_0),
@@ -98,13 +102,13 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderBetaFactories(t),
 {{- else }}
 		ProtoV5ProviderFactories: acctest.ProtoV5ProviderFactories(t),
-	{{- if $sample.ExternalProviders }}
+{{- end }}
+{{- if $sample.ExternalProviders }}
 		ExternalProviders: map[string]resource.ExternalProvider{
 		{{- range $provider := $sample.ExternalProviders }}
 			"{{$provider}}": {},
 		{{- end }}
 		},
-	{{- end }}
 {{- end }}
 {{- if not $.ExcludeDelete }}
 		CheckDestroy: testAccCheck{{ $.ResourceName }}DestroyProducer(t),
@@ -112,8 +116,8 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAcc{{ $step.TestStepSlug $.ProductMetadata.Name $.Name }}(context),
-				Check: resource.ComposeTestCheckFunc(
-					listDisplayName.Capture(
+				ConfigStateChecks: []statecheck.StateCheck{
+					listDisplayName.CaptureState(
 						"{{ $sample.ResourceType $.TerraformName }}.{{ $sample.PrimaryResourceId }}",
 						[]string{
 						{{- range $key := $.ListResultDisplayNameKeyStrings }}
@@ -121,20 +125,25 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 						{{- end }}
 						},
 					),
-					listScope.Capture(map[string]string{
-					{{- range $scope := $.ListScopeProperties }}
-						{{- if $scope.Required }}
-							{{- $n := underscore $scope.Name }}
-						"{{ $n }}": "{{ $sample.ResourceType $.TerraformName }}.{{ $sample.PrimaryResourceId }}",
+{{- if $.ListScopeProperties }}
+					listScope.CaptureScopes(
+						"{{ $sample.ResourceType $.TerraformName }}.{{ $sample.PrimaryResourceId }}",
+						[]acctest.ListScopeField{
+						{{- range $scope := $.ListScopeProperties }}
+							{Name: "{{ underscore $scope.Name }}", Required: {{ if $scope.Required }}true{{ else }}false{{ end }}},
 						{{- end }}
-					{{- end }}
-					}),
-				),
+						},
+					),
+{{- end }}
+					listIdentity.CaptureState("{{ $sample.ResourceType $.TerraformName }}.{{ $sample.PrimaryResourceId }}"),
+				},
 			},
 			{
 				Query:  true,
 				Config: testAcc{{ $step.TestStepSlug $.ProductMetadata.Name $.Name }}ListQuery(context),
+{{- if $.ListScopeProperties }}
 				ConfigVariables: listScope.AsConfigVariables(),
+{{- end }}
 				QueryResultChecks: []querycheck.QueryResultCheck{
 					querycheck.ExpectLengthAtLeast("{{ $sample.ResourceType $.TerraformName }}.list_query", 1),
 					querycheck.ExpectResourceDisplayName(
@@ -142,6 +151,8 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 						queryfilter.ByDisplayName(listDisplayName.CheckValue()),
 						listDisplayName.CheckValue(),
 					),
+					listIdentity.ExpectIdentity("{{ $sample.ResourceType $.TerraformName }}.list_query"),
+					listIdentity.ExpectResourceObject("{{ $sample.ResourceType $.TerraformName }}.list_query"),
 				},
 			},
 		},
@@ -151,22 +162,26 @@ func TestAcc{{ $.ResourceName }}ListQuery_generated(t *testing.T) {
 func testAcc{{ $step.TestStepSlug $.ProductMetadata.Name $.Name }}ListQuery(context map[string]interface{}) string {
 	return acctest.Nprintf(`
 {{- range $scope := $.ListScopeProperties }}
+	{{- $n := underscore $scope.Name }}
 	{{- if $scope.Required }}
-		{{- $n := underscore $scope.Name }}
 variable "{{ $n }}" { type = string }
+	{{- else }}
+variable "{{ $n }}" {
+  type    = string
+  default = null
+}
 	{{- end }}
 {{- end }}
 list "{{ $sample.ResourceType $.TerraformName }}" "list_query" {
-    provider = {{ if $.VersionedProvider $sample.MinVersion }}google-beta{{ else }}google{{ end }}
-	limit = 10000
-    config {
+  provider         = {{ if $.VersionedProvider $sample.MinVersion }}google-beta{{ else }}google{{ end }}
+  include_resource = true
+  limit            = 10000
+  config {
 {{- range $scope := $.ListScopeProperties }}
-        {{- if $scope.Required }}
-            {{- $n := underscore $scope.Name }}
-        {{ $n }} = var.{{ $n }}
-        {{- end }}
+    {{- $n := underscore $scope.Name }}
+    {{ $n }} = var.{{ $n }}
 {{- end }}
-    }
+  }
 }
 `, context)
 }

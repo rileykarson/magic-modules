@@ -23,8 +23,8 @@ Consult `.agents/knowledge/index.md` for the topics this task touches and open t
 A resource is eligible when **the generated list-query test can run unattended**. In practice that means:
 
 1. The resource must not be excluded from identity or read generation (`exclude_identity_generation: true` or `exclude_read: true`) — the generator hard-fails on these.
-2. The first example must not have `exclude_test: true`, since the generated query test reuses its config.
-3. Every scope parameter in the list URL (path params other than `project`/`region`/`zone`/`location` — e.g. `disk`, `instance`, `parent`) needs special handling, because the query test template currently only auto-injects `project`/`region`/`zone` into the test context map. **Resources whose list URL contains other scope params are not eligible until the template is extended.**
+2. At least one sample must be runnable (not marked `exclude_test: true` or `skip_test`), since `FirstRunnableTestConfig` reuses the first runnable sample's config.
+3. Every scope parameter in the list URL (`base_url` placeholders such as `project`, `region`, `zone`, `location`, `disk`, `instance`, `parent`, `dataset_id`, etc.) must map to a top-level resource property/parameter (including fields promoted from `flatten_object: true` nested objects) or a synthesized provider default (`project`, `region`, `zone`). `query_test_file.go.tmpl` automatically captures both required and optional `ListScopeProperties` from Step 1's state into `.tfquery.hcl` variables; only resources whose `base_url` uses a placeholder with no matching schema attribute (e.g. a mismatched name like `{{rules}}` when the property is `rule`) must be skipped.
 
 Required *body* fields (set at create time) do **not** affect list eligibility. Only path scope params on the list/collection URL matter.
 
@@ -35,8 +35,25 @@ PRODUCT=<product>   # e.g. compute
 
 python3 - "$PRODUCT" <<'PY'
 import sys, glob, yaml, os, re
+
 product = sys.argv[1]
-AUTO_SCOPES = {"project", "region", "zone", "location"}
+SYNTHESIZED_DEFAULTS = {"project", "region", "zone"}
+
+def to_snake(name):
+    s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+
+def collect_root_props(items):
+    names = set()
+    for p in items or []:
+        if not isinstance(p, dict) or p.get("exclude"):
+            continue
+        if p.get("flatten_object"):
+            names |= collect_root_props(p.get("properties"))
+        elif p.get("name"):
+            names.add(to_snake(p["name"]))
+    return names
+
 candidates, skipped = [], []
 for f in sorted(glob.glob(f"mmv1/products/{product}/*.yaml")):
     if f.endswith("/product.yaml"):
@@ -54,19 +71,18 @@ for f in sorted(glob.glob(f"mmv1/products/{product}/*.yaml")):
         skipped.append((name, "exclude_identity_generation or exclude_read")); continue
     if d.get("generate_list_resource"):
         skipped.append((name, "already opted in")); continue
-    ex = d.get("examples") or d.get("samples") or []
-    if not ex or not isinstance(ex[0], dict):
-        skipped.append((name, "no examples/samples")); continue
-    first = ex[0]
-    if first.get("exclude_test"):
-        skipped.append((name, "first example has exclude_test")); continue
-    # Inspect list URL scope params. Prefer collection_url_key construction over base_url,
-    # but base_url is a reliable proxy for the list collection URL.
+    samples = [
+        s for s in (d.get("samples") or d.get("examples") or [])
+        if isinstance(s, dict) and not s.get("exclude_test") and not s.get("skip_test")
+    ]
+    if not samples:
+        skipped.append((name, "no runnable samples")); continue
+    root_props = collect_root_props(d.get("properties")) | collect_root_props(d.get("parameters"))
     list_url = d.get("base_url") or ""
-    scope_params = re.findall(r"{{\s*(\w+)\s*}}", list_url)
-    bad_scope = [s for s in scope_params if s not in AUTO_SCOPES]
-    if bad_scope:
-        skipped.append((name, f"list URL has unsupported scope param(s): {bad_scope}")); continue
+    scope_params = [to_snake(s) for s in re.findall(r"{{\s*%?(\w+)\s*}}", list_url)]
+    unmapped = [s for s in scope_params if s not in root_props and s not in SYNTHESIZED_DEFAULTS]
+    if unmapped:
+        skipped.append((name, f"list URL has unmapped scope param(s): {unmapped}")); continue
     candidates.append((name, f))
 
 print("CANDIDATES:")

@@ -902,10 +902,30 @@ func (r Resource) IdentityProperties() []*Type {
 
 func (r Resource) ListScopeProperties() []*Type {
 	scope := r.ExtractIdentifiers(r.CollectionUrl())
-	props := google.Select(r.AllUserProperties(), func(p *Type) bool {
+	props := google.Select(r.RootProperties(), func(p *Type) bool {
 		return slices.Contains(scope, google.Underscore(p.Name))
 	})
 	return r.appendSynthesizedProviderDefaultFields(props, scope)
+}
+
+// ListLeafIdMarker returns the trailing placeholder name from the resource's
+// primary import or ID format (e.g. "secret_id" for "projects/{{project}}/secrets/{{secret_id}}").
+func (r Resource) ListLeafIdMarker() string {
+	if len(r.ImportFormat) > 0 {
+		if markers := fieldMarkerRegexp.FindAllStringSubmatch(r.ImportFormat[0], -1); len(markers) > 0 {
+			return markers[len(markers)-1][1]
+		}
+	}
+	if markers := fieldMarkerRegexp.FindAllStringSubmatch(r.IdFormat, -1); len(markers) > 0 {
+		return markers[len(markers)-1][1]
+	}
+	formats := ImportIdFormats(r.ImportFormat, r.Identity, r.BaseUrl)
+	if len(formats) > 0 {
+		if markers := fieldMarkerRegexp.FindAllStringSubmatch(formats[0], -1); len(markers) > 0 {
+			return markers[len(markers)-1][1]
+		}
+	}
+	return ""
 }
 
 func (r Resource) ListResultDisplayNameKeyStrings() []string {
