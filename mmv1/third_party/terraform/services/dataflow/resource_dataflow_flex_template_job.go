@@ -933,7 +933,7 @@ func findDataflowJobByName(config *transport_tpg.Config, project, region, userAg
 	return nil, nil
 }
 
-func flexTemplateJobHasUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
+func flexTemplateJobHasUpdate(d interface{ HasChange(string) bool }, resourceSchema map[string]*schema.Schema) bool {
 	for field := range resourceSchema {
 		if dataflowJobVirtualFields[field] || field == "labels" || field == "terraform_labels" {
 			continue

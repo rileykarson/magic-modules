@@ -707,7 +707,7 @@ func resourceDataflowJobIterateMapHasChange(mapKey string, d *schema.ResourceDat
 	return false
 }
 
-func resourceDataflowJobIsVirtualUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
+func resourceDataflowJobIsVirtualUpdate(d interface{ HasChange(string) bool }, resourceSchema map[string]*schema.Schema) bool {
 	hasVirtualChange := false
 	for field := range resourceSchema {
 		if d.HasChange(field) {
@@ -724,7 +724,7 @@ func resourceDataflowJobIsVirtualUpdate(d *schema.ResourceData, resourceSchema m
 }
 
 // If only virtual fields, labels, or terraform_labels are changing, no update request is needed
-func jobHasUpdate(d *schema.ResourceData, resourceSchema map[string]*schema.Schema) bool {
+func jobHasUpdate(d interface{ HasChange(string) bool }, resourceSchema map[string]*schema.Schema) bool {
 	for field := range resourceSchema {
 		if dataflowJobVirtualFields[field] || field == "labels" || field == "terraform_labels" {
 			continue
