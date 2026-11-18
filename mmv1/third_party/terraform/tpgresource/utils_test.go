@@ -1369,7 +1369,7 @@ func TestDefaultProviderDeletionPolicy(t *testing.T) {
 		{"unset falls back to default", cty.NullVal(cty.String), nil, "DELETE", false, false},
 		{"explicit ABANDON", cty.StringVal("ABANDON"), "ABANDON", "ABANDON", false, false},
 		{"explicit empty string returns error", cty.StringVal(""), "", "", false, true},
-		{"unknown marked value sets NewComputed", cty.UnknownVal(cty.String).Mark("sensitive"), nil, "", true, false},
+		{"unknown value sets NewComputed", cty.UnknownVal(cty.String), nil, "", true, false},
 	}
 	for _, tc := range cases {
 		rawObj := cty.ObjectVal(map[string]cty.Value{"deletion_policy": tc.raw})

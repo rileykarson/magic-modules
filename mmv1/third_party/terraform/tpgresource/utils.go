@@ -163,9 +163,6 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 // given, an error is returned.
 func GetDeletionPolicyFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config, resourceDefault string) (string, error) {
 	rawConfig := d.GetRawConfig()
-	if rawConfig != cty.NilVal {
-		rawConfig, _ = rawConfig.Unmark()
-	}
 	if rawConfig == cty.NilVal || rawConfig.IsNull() || !rawConfig.IsKnown() || !rawConfig.Type().IsObjectType() || !rawConfig.Type().HasAttribute("deletion_policy") {
 		if res, ok := d.GetOk("deletion_policy"); ok {
 			return res.(string), nil
@@ -176,7 +173,7 @@ func GetDeletionPolicyFromDiff(d *schema.ResourceDiff, config *transport_tpg.Con
 		return resourceDefault, nil
 	}
 
-	rawDeletionPolicy, _ := rawConfig.GetAttr("deletion_policy").Unmark()
+	rawDeletionPolicy := rawConfig.GetAttr("deletion_policy")
 	//if IsNull() value, then the value has not been manually configured
 	if rawDeletionPolicy.IsNull() {
 		if config != nil && config.DeletionPolicy != "" {
@@ -1006,12 +1003,8 @@ func DefaultProviderDeletionPolicy(resourceDefault string) schema.CustomizeDiffF
 		}
 		if dpolicy := diff.Get("deletion_policy"); dpolicy != nil {
 			rawConfig := diff.GetRawConfig()
-			if rawConfig != cty.NilVal {
-				rawConfig, _ = rawConfig.Unmark()
-			}
 			if rawConfig != cty.NilVal && !rawConfig.IsNull() && rawConfig.IsKnown() && rawConfig.Type().IsObjectType() && rawConfig.Type().HasAttribute("deletion_policy") {
-				rawDeletionPolicy, _ := rawConfig.GetAttr("deletion_policy").Unmark()
-				if !rawDeletionPolicy.IsKnown() {
+				if !rawConfig.GetAttr("deletion_policy").IsKnown() {
 					return diff.SetNewComputed("deletion_policy")
 				}
 			}
