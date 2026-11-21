@@ -23,8 +23,8 @@ func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.T
 	configured := func(string) bool { return false }
 {{- if not (contains $.ResourceMetadata.ProductMetadata.Compiler "terraformgoogleconversion") }}
 	configured = func(path string) bool {
-		val, ok := tpgresource.GetRawConfigAtKey(d, path)
-		return ok && !val.IsNull() && val.IsKnown()
+		val, err := tpgresource.GetRawConfigAtKey(d, path)
+		return err == nil && !val.IsNull() && val.IsKnown()
 	}
 {{- end }}
 	return assuredWorkloadsV2ExpandCloudControlConfigs(v, configured)

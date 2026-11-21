@@ -2337,13 +2337,8 @@ func nodePoolAcceleratorNetworkProfileCustomizeDiff(_ context.Context, diff *sch
 
 	// 2. DETECT USER CONFIG
 	userHasAdditionalConfigs := false
-	if rawNetworkConfigs, ok := tpgresource.GetRawConfigSlice(diff, "network_config"); ok {
-		for _, val := range rawNetworkConfigs {
-			if addlConfigs, ok := tpgresource.GetCtyValueSlice(val, "additional_node_network_configs"); ok && len(addlConfigs) > 0 {
-				userHasAdditionalConfigs = true
-				break
-			}
-		}
+	if addlConfigs, err := tpgresource.GetRawConfigSlice(diff, "network_config.0.additional_node_network_configs"); err == nil && len(addlConfigs) > 0 {
+		userHasAdditionalConfigs = true
 	}
 
 	// 3. LOGIC CHECK

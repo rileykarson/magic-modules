@@ -25,10 +25,10 @@ func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.T
 
 	if d != nil {
 {{- if not (contains $.ResourceMetadata.ProductMetadata.Compiler "terraformgoogleconversion") }}
-		if strAttr, ok := tpgresource.GetRawConfigAtKey(d, "value.0.string_value"); ok {
+		if strAttr, err := tpgresource.GetRawConfigAtKey(d, "value.0.string_value"); err == nil {
 			if !strAttr.IsNull() && strAttr.IsKnown() {
 				transformed["stringValue"] = strAttr.AsString()
-			} else if boolAttr, ok := tpgresource.GetRawConfigAtKey(d, "value.0.bool_value"); ok && !boolAttr.IsNull() && boolAttr.IsKnown() {
+			} else if boolAttr, err := tpgresource.GetRawConfigAtKey(d, "value.0.bool_value"); err == nil && !boolAttr.IsNull() && boolAttr.IsKnown() {
 				transformed["boolValue"] = boolAttr.True()
 			}
 			return transformed, nil

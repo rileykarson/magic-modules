@@ -2611,7 +2611,7 @@ func secondaryWorkerFlexibleConfigForceNew(_ context.Context, d *schema.Resource
 		return nil
 	}
 	// The block is Optional+Computed: when it is not in config, nothing changes.
-	if elems, ok := tpgresource.GetRawConfigSlice(d, sec); ok && len(elems) == 0 {
+	if elems, err := tpgresource.GetRawConfigSlice(d, sec); err == nil && len(elems) == 0 {
 		return nil
 	}
 	added := len(oldSec.([]interface{})) == 0

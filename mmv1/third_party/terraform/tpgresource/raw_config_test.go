@@ -1,6 +1,7 @@
 package tpgresource_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-cty/cty"
@@ -74,11 +75,11 @@ func TestGetRawConfigAtKey_UnavailableAndNilReaders(t *testing.T) {
 
 	for name, r := range readers {
 		t.Run(name, func(t *testing.T) {
-			if val, ok := tpgresource.GetRawConfigAtKey(r, "project"); ok || val != cty.NilVal {
-				t.Fatalf("GetRawConfigAtKey(%s) = (%#v, %v), want (cty.NilVal, false)", name, val, ok)
+			if val, err := tpgresource.GetRawConfigAtKey(r, "project"); err == nil || val != cty.NilVal {
+				t.Fatalf("GetRawConfigAtKey(%s) = (%#v, %v), want (cty.NilVal, non-nil err)", name, val, err)
 			}
-			if elems, ok := tpgresource.GetRawConfigSlice(r, "project"); ok || elems != nil {
-				t.Fatalf("GetRawConfigSlice(%s) = (%#v, %v), want (nil, false)", name, elems, ok)
+			if elems, err := tpgresource.GetRawConfigSlice(r, "project"); err == nil || elems != nil {
+				t.Fatalf("GetRawConfigSlice(%s) = (%#v, %v), want (nil, non-nil err)", name, elems, err)
 			}
 			if got := tpgresource.GetRawConfigAttributeAsString(r, "project"); got != "" {
 				t.Fatalf("GetRawConfigAttributeAsString(%s) = %q, want \"\"", name, got)
@@ -95,9 +96,9 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 	}
 
 	t.Run("root empty key returns unmarked root object", func(t *testing.T) {
-		val, ok := tpgresource.GetRawConfigAtKey(mock, "")
-		if !ok || val.IsNull() || !val.IsKnown() {
-			t.Fatalf("expected valid known root object, got (%#v, %v)", val, ok)
+		val, err := tpgresource.GetRawConfigAtKey(mock, "")
+		if err != nil || val.IsNull() || !val.IsKnown() {
+			t.Fatalf("expected valid known root object, got (%#v, %v)", val, err)
 		}
 		if val.ContainsMarked() {
 			t.Fatalf("expected unmarked root object, but ContainsMarked() is true")
@@ -105,38 +106,38 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 	})
 
 	t.Run("known zero values and nested paths", func(t *testing.T) {
-		val, ok := tpgresource.GetRawConfigAtKey(mock, "empty_str")
-		if !ok || val.IsNull() || !val.IsKnown() || val.AsString() != "" {
-			t.Fatalf("empty_str: got (%#v, %v)", val, ok)
+		val, err := tpgresource.GetRawConfigAtKey(mock, "empty_str")
+		if err != nil || val.IsNull() || !val.IsKnown() || val.AsString() != "" {
+			t.Fatalf("empty_str: got (%#v, %v)", val, err)
 		}
 
-		val, ok = tpgresource.GetRawConfigAtKey(mock, "zero_bool")
-		if !ok || val.IsNull() || !val.IsKnown() || !val.False() {
-			t.Fatalf("zero_bool: got (%#v, %v)", val, ok)
+		val, err = tpgresource.GetRawConfigAtKey(mock, "zero_bool")
+		if err != nil || val.IsNull() || !val.IsKnown() || !val.False() {
+			t.Fatalf("zero_bool: got (%#v, %v)", val, err)
 		}
 
-		val, ok = tpgresource.GetRawConfigAtKey(mock, "cdn_policy.0.default_ttl")
-		if !ok || val.IsNull() || !val.IsKnown() || !val.RawEquals(cty.NumberIntVal(0)) {
-			t.Fatalf("cdn_policy.0.default_ttl: got (%#v, %v)", val, ok)
+		val, err = tpgresource.GetRawConfigAtKey(mock, "cdn_policy.0.default_ttl")
+		if err != nil || val.IsNull() || !val.IsKnown() || !val.RawEquals(cty.NumberIntVal(0)) {
+			t.Fatalf("cdn_policy.0.default_ttl: got (%#v, %v)", val, err)
 		}
 
-		val, ok = tpgresource.GetRawConfigAtKey(mock, "cdn_policy.0.enabled")
-		if !ok || val.IsNull() || !val.IsKnown() || val.IsMarked() || !val.False() {
-			t.Fatalf("marked bool cdn_policy.0.enabled: got (%#v, %v)", val, ok)
+		val, err = tpgresource.GetRawConfigAtKey(mock, "cdn_policy.0.enabled")
+		if err != nil || val.IsNull() || !val.IsKnown() || val.IsMarked() || !val.False() {
+			t.Fatalf("marked bool cdn_policy.0.enabled: got (%#v, %v)", val, err)
 		}
 
-		val, ok = tpgresource.GetRawConfigAtKey(mock, "labels.env")
-		if !ok || val.IsNull() || !val.IsKnown() || val.AsString() != "prod" {
-			t.Fatalf("map key labels.env: got (%#v, %v)", val, ok)
+		val, err = tpgresource.GetRawConfigAtKey(mock, "labels.env")
+		if err != nil || val.IsNull() || !val.IsKnown() || val.AsString() != "prod" {
+			t.Fatalf("map key labels.env: got (%#v, %v)", val, err)
 		}
 
-		val, ok = tpgresource.GetRawConfigAtKey(mock, "tuple_block.0.flag")
-		if !ok || val.IsNull() || !val.IsKnown() || !val.True() {
-			t.Fatalf("tuple key tuple_block.0.flag: got (%#v, %v)", val, ok)
+		val, err = tpgresource.GetRawConfigAtKey(mock, "tuple_block.0.flag")
+		if err != nil || val.IsNull() || !val.IsKnown() || !val.True() {
+			t.Fatalf("tuple key tuple_block.0.flag: got (%#v, %v)", val, err)
 		}
 	})
 
-	t.Run("null leaf, omitted parent blocks, and partial objects return null with ok=true", func(t *testing.T) {
+	t.Run("null leaf, omitted parent blocks, and partial objects return null with nil err", func(t *testing.T) {
 		for _, tc := range []struct {
 			key      string
 			wantType cty.Type
@@ -149,9 +150,9 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 			{"tuple_block.0.omitted_nested_block.0.field", cty.DynamicPseudoType},
 			{"tuple_block.1.flag", cty.DynamicPseudoType},
 		} {
-			val, ok := tpgresource.GetRawConfigAtKey(mock, tc.key)
-			if !ok {
-				t.Fatalf("%s: expected ok=true, got false", tc.key)
+			val, err := tpgresource.GetRawConfigAtKey(mock, tc.key)
+			if err != nil {
+				t.Fatalf("%s: expected nil err, got %v", tc.key, err)
 			}
 			if !val.IsNull() || !val.IsKnown() {
 				t.Fatalf("%s: expected known null value, got %#v", tc.key, val)
@@ -162,7 +163,7 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 		}
 	})
 
-	t.Run("unknown leaf and unknown enclosing collections return typed unknown with ok=true", func(t *testing.T) {
+	t.Run("unknown leaf and unknown enclosing collections return typed unknown with nil err", func(t *testing.T) {
 		for _, tc := range []struct {
 			key      string
 			wantType cty.Type
@@ -172,9 +173,9 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 			{"unknown_list.0.default_ttl", cty.Number},
 			{"unknown_map.any_key", cty.String},
 		} {
-			val, ok := tpgresource.GetRawConfigAtKey(mock, tc.key)
-			if !ok {
-				t.Fatalf("%s: expected ok=true, got false", tc.key)
+			val, err := tpgresource.GetRawConfigAtKey(mock, tc.key)
+			if err != nil {
+				t.Fatalf("%s: expected nil err, got %v", tc.key, err)
 			}
 			if val.IsNull() || val.IsKnown() || val.IsMarked() {
 				t.Fatalf("%s: expected unmarked unknown value, got %#v", tc.key, val)
@@ -185,19 +186,27 @@ func TestGetRawConfigAtKey_LookupSemantics(t *testing.T) {
 		}
 	})
 
-	t.Run("structurally invalid paths return ok=false", func(t *testing.T) {
-		invalidKeys := []string{
-			"cdn_policy.-1.default_ttl",
-			"cdn_policy.not_an_int.default_ttl",
-			"tags_set.0",
-			"project.sub",
-			"cdn_policy..0",
-			"cdn_policy.",
-			".project",
+	t.Run("structurally invalid paths return descriptive errors", func(t *testing.T) {
+		invalidCases := []struct {
+			key     string
+			wantSub string
+		}{
+			{"cdn_policy.default_ttl", `cannot index list with "default_ttl"`},
+			{"cdn_policy.-1.default_ttl", `cannot index list with "-1"`},
+			{"tuple_block.flag", `cannot index tuple with "flag"`},
+			{"tags_set.0", `cannot traverse step "0" on type set of string`},
+			{"project.sub", `cannot traverse step "sub" on type string`},
+			{"cdn_policy..0", `invalid empty path segment`},
+			{"cdn_policy.", `invalid empty path segment`},
+			{".project", `invalid empty path segment`},
 		}
-		for _, key := range invalidKeys {
-			if val, ok := tpgresource.GetRawConfigAtKey(mock, key); ok || val != cty.NilVal {
-				t.Fatalf("GetRawConfigAtKey(%q) = (%#v, %v), want (cty.NilVal, false)", key, val, ok)
+		for _, tc := range invalidCases {
+			val, err := tpgresource.GetRawConfigAtKey(mock, tc.key)
+			if err == nil || val != cty.NilVal {
+				t.Fatalf("GetRawConfigAtKey(%q) = (%#v, %v), want (cty.NilVal, error)", tc.key, val, err)
+			}
+			if !strings.Contains(err.Error(), tc.wantSub) {
+				t.Fatalf("GetRawConfigAtKey(%q) error = %q, want substring %q", tc.key, err.Error(), tc.wantSub)
 			}
 		}
 	})
@@ -211,29 +220,29 @@ func TestGetRawConfigSlice(t *testing.T) {
 	}
 
 	t.Run("non-empty list, set, and tuple return unmarked elements", func(t *testing.T) {
-		elems, ok := tpgresource.GetRawConfigSlice(mock, "cdn_policy")
-		if !ok || len(elems) != 1 {
-			t.Fatalf("cdn_policy: got (len=%d, ok=%v), want (1, true)", len(elems), ok)
+		elems, err := tpgresource.GetRawConfigSlice(mock, "cdn_policy")
+		if err != nil || len(elems) != 1 {
+			t.Fatalf("cdn_policy: got (len=%d, err=%v), want (1, nil)", len(elems), err)
 		}
 		if elems[0].ContainsMarked() {
 			t.Fatalf("cdn_policy[0] still contains marks")
 		}
-		if sec, ok := tpgresource.GetCtyValueAtKey(elems[0], "secret_wo"); !ok || sec.AsString() != "nested-secret" {
-			t.Fatalf("GetCtyValueAtKey on slice element failed: (%#v, %v)", sec, ok)
+		if elems[0].GetAttr("secret_wo").AsString() != "nested-secret" {
+			t.Fatalf("unexpected cdn_policy[0].secret_wo value")
 		}
 
-		setElems, ok := tpgresource.GetRawConfigSlice(mock, "tags_set")
-		if !ok || len(setElems) != 2 {
-			t.Fatalf("tags_set: got (len=%d, ok=%v), want (2, true)", len(setElems), ok)
+		setElems, err := tpgresource.GetRawConfigSlice(mock, "tags_set")
+		if err != nil || len(setElems) != 2 {
+			t.Fatalf("tags_set: got (len=%d, err=%v), want (2, nil)", len(setElems), err)
 		}
 
-		tupleElems, ok := tpgresource.GetRawConfigSlice(mock, "tuple_block")
-		if !ok || len(tupleElems) != 1 {
-			t.Fatalf("tuple_block: got (len=%d, ok=%v), want (1, true)", len(tupleElems), ok)
+		tupleElems, err := tpgresource.GetRawConfigSlice(mock, "tuple_block")
+		if err != nil || len(tupleElems) != 1 {
+			t.Fatalf("tuple_block: got (len=%d, err=%v), want (1, nil)", len(tupleElems), err)
 		}
 	})
 
-	t.Run("null, empty, and omitted-parent collections return (nil, true)", func(t *testing.T) {
+	t.Run("null, empty, and omitted-parent collections return (nil, nil)", func(t *testing.T) {
 		for _, key := range []string{
 			"null_list",
 			"empty_set",
@@ -241,14 +250,14 @@ func TestGetRawConfigSlice(t *testing.T) {
 			"empty_cluster_cfg.0.secondary_worker",
 			"tuple_block.0.omitted_collection_in_partial_object",
 		} {
-			elems, ok := tpgresource.GetRawConfigSlice(mock, key)
-			if !ok || len(elems) != 0 {
-				t.Fatalf("GetRawConfigSlice(%q) = (%#v, %v), want (empty, true)", key, elems, ok)
+			elems, err := tpgresource.GetRawConfigSlice(mock, key)
+			if err != nil || len(elems) != 0 {
+				t.Fatalf("GetRawConfigSlice(%q) = (%#v, %v), want (empty, nil)", key, elems, err)
 			}
 		}
 	})
 
-	t.Run("unknown collection, non-collection, and structurally invalid key return (nil, false)", func(t *testing.T) {
+	t.Run("unknown collection, non-collection, and structurally invalid key return error", func(t *testing.T) {
 		for _, key := range []string{
 			"unknown_list",
 			"project",
@@ -256,9 +265,9 @@ func TestGetRawConfigSlice(t *testing.T) {
 			"labels",
 			"project.sub",
 		} {
-			elems, ok := tpgresource.GetRawConfigSlice(mock, key)
-			if ok || elems != nil {
-				t.Fatalf("GetRawConfigSlice(%q) = (%#v, %v), want (nil, false)", key, elems, ok)
+			elems, err := tpgresource.GetRawConfigSlice(mock, key)
+			if err == nil || elems != nil {
+				t.Fatalf("GetRawConfigSlice(%q) = (%#v, %v), want (nil, error)", key, elems, err)
 			}
 		}
 	})

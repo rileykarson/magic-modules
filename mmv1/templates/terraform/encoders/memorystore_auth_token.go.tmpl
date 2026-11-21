@@ -4,7 +4,7 @@
 instance := d.Get("instance").(string)
 if parts := regexp.MustCompile("projects/([^/]+)/locations/([^/]+)/instances/([^/]+)").FindStringSubmatch(instance); parts != nil {
 {{- if not (contains $.ProductMetadata.Compiler "terraformgoogleconversion") }}
-	if projVal, ok := tpgresource.GetRawConfigAtKey(d, "project"); (ok && projVal.IsNull()) || (!ok && d.Get("project") == "") {
+	if projVal, err := tpgresource.GetRawConfigAtKey(d, "project"); (err == nil && projVal.IsNull()) || (err != nil && d.Get("project") == "") {
 {{- else }}
 	if d.Get("project") == "" {
 {{- end }}

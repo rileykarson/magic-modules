@@ -121,7 +121,7 @@ func GetProjectFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (s
 	if ok {
 		return res.(string), nil
 	}
-	if val, rawOk := GetRawConfigAtKey(d, "project"); rawOk && !val.IsKnown() {
+	if val, err := GetRawConfigAtKey(d, "project"); err == nil && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Project != "" {
@@ -138,7 +138,7 @@ func GetRegionFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (st
 	if ok {
 		return res.(string), nil
 	}
-	if val, rawOk := GetRawConfigAtKey(d, "region"); rawOk && !val.IsKnown() {
+	if val, err := GetRawConfigAtKey(d, "region"); err == nil && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Region != "" {
@@ -155,7 +155,7 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 	if ok {
 		return res.(string), nil
 	}
-	if val, rawOk := GetRawConfigAtKey(d, "zone"); rawOk && !val.IsKnown() {
+	if val, err := GetRawConfigAtKey(d, "zone"); err == nil && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Zone != "" {
@@ -169,7 +169,7 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 // given, an error is returned.
 func GetDeletionPolicyFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config, resourceDefault string) (string, error) {
 	//if IsNull() value, then the value has not been manually configured
-	if val, rawOk := GetRawConfigAtKey(d, "deletion_policy"); (rawOk && val.IsNull()) || (!rawOk && d.Get("deletion_policy") == "") {
+	if val, err := GetRawConfigAtKey(d, "deletion_policy"); err != nil || val.IsNull() {
 		if config.DeletionPolicy != "" {
 			log.Printf("[DEBUG] `deletion_policy` detected as not set within resource configuration. Falling back to configured provider default, %s", config.DeletionPolicy)
 			return config.DeletionPolicy, nil
@@ -1036,23 +1036,24 @@ func isNilRawConfigReader(d RawConfigReader) bool {
 // GetRawConfigAtKey traverses d.GetRawConfig() using a dot-separated schema key
 // (for example, "cdn_policy.0.default_ttl" or "default_storage_location").
 //
-// Returns (cty.NilVal, false) if d is nil, RawConfig is unavailable (null or
-// not an object, such as in unit tests without RawConfig, TGC, import, or
-// destroy plans), or key is structurally invalid (for example, stepping through
-// a primitive or indexing a TypeSet numerically).
+// Returns (cty.NilVal, err) if d is nil, RawConfig is unavailable (null or not
+// an object, such as during Read, Import, Delete, TGC, or unit tests without
+// RawConfig), or key is structurally invalid (for example, indexing a TypeList
+// with an attribute name like "cdn_policy.default_ttl", stepping through a
+// primitive, or indexing a TypeSet numerically).
 //
-// When ok is true, the returned cty.Value is guaranteed to be valid and deeply
+// When err is nil, the returned cty.Value is guaranteed to be valid and deeply
 // unmarked:
 //   - A null cty.Value (val.IsNull() == true) if the attribute or an enclosing
 //     list/tuple/map/object step along key was omitted or null in RawConfig.
 //   - An unknown cty.Value (val.IsKnown() == false) if the attribute or an
 //     enclosing step along key is unknown in HCL.
 //   - The known, non-null, unmarked HCL value otherwise.
-func GetRawConfigAtKey(d RawConfigReader, key string) (cty.Value, bool) {
+func GetRawConfigAtKey(d RawConfigReader, key string) (cty.Value, error) {
 	if isNilRawConfigReader(d) {
-		return cty.NilVal, false
+		return cty.NilVal, errors.New("raw config reader is nil")
 	}
-	return GetCtyValueAtKey(d.GetRawConfig(), key)
+	return getCtyValueAtKey(d.GetRawConfig(), key)
 }
 
 // unmarkCtyValueDeep recursively strips marks from val in pre-order.
@@ -1138,24 +1139,22 @@ func unmarkCtyValueDeep(val cty.Value) (cty.Value, bool) {
 	}
 }
 
-// GetCtyValueAtKey traverses root (which must be a non-null cty object) using a
-// dot-separated key, following the same contract as GetRawConfigAtKey.
-func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
+func getCtyValueAtKey(root cty.Value, key string) (cty.Value, error) {
 	if root == cty.NilVal {
-		return cty.NilVal, false
+		return cty.NilVal, errors.New("raw config is nil")
 	}
 	root, _ = root.Unmark()
 	if root.IsNull() || !root.Type().IsObjectType() {
-		return cty.NilVal, false
+		return cty.NilVal, errors.New("raw config is empty or not an object")
 	}
 	if key == "" {
 		if !root.IsKnown() {
-			return cty.UnknownVal(root.Type()), true
+			return cty.UnknownVal(root.Type()), nil
 		}
 		if root.ContainsMarked() {
 			root, _ = unmarkCtyValueDeep(root)
 		}
-		return root, true
+		return root, nil
 	}
 
 	curVal := root
@@ -1165,12 +1164,12 @@ func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
 
 	for _, part := range strings.Split(key, ".") {
 		if part == "" {
-			return cty.NilVal, false
+			return cty.NilVal, fmt.Errorf("invalid empty path segment in %q", key)
 		}
 		switch {
 		case curType == cty.DynamicPseudoType:
 			if !forcedNull && !forcedUnknown {
-				return cty.NilVal, false
+				return cty.NilVal, fmt.Errorf("cannot traverse step %q on dynamic value in %q", part, key)
 			}
 		case curType.IsObjectType():
 			if !curType.HasAttribute(part) {
@@ -1192,7 +1191,7 @@ func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
 		case curType.IsListType():
 			idx, err := strconv.Atoi(part)
 			if err != nil || idx < 0 {
-				return cty.NilVal, false
+				return cty.NilVal, fmt.Errorf("cannot index list with %q in %q", part, key)
 			}
 			curType = curType.ElementType()
 			if !forcedNull && !forcedUnknown {
@@ -1210,7 +1209,7 @@ func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
 		case curType.IsTupleType():
 			idx, err := strconv.Atoi(part)
 			if err != nil || idx < 0 {
-				return cty.NilVal, false
+				return cty.NilVal, fmt.Errorf("cannot index tuple with %q in %q", part, key)
 			}
 			if idx >= curType.Length() {
 				forcedNull = true
@@ -1244,59 +1243,60 @@ func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
 				}
 			}
 		default:
-			return cty.NilVal, false
+			return cty.NilVal, fmt.Errorf("cannot traverse step %q on type %s in %q", part, curType.FriendlyName(), key)
 		}
 	}
 
 	if forcedNull {
-		return cty.NullVal(curType), true
+		return cty.NullVal(curType), nil
 	}
 	if forcedUnknown {
-		return cty.UnknownVal(curType), true
+		return cty.UnknownVal(curType), nil
 	}
 	if curVal.ContainsMarked() {
 		curVal, _ = unmarkCtyValueDeep(curVal)
 	}
-	return curVal, true
+	return curVal, nil
 }
 
 // GetRawConfigSlice resolves a list, set, or tuple at key in d.GetRawConfig()
 // into a deeply unmarked []cty.Value slice.
 //
-// Returns (nil, false) if RawConfig is unavailable, key is invalid or not a
+// Returns (nil, err) if RawConfig is unavailable, key is invalid or not a
 // list/set/tuple, or the collection itself is unknown (!val.IsKnown()).
-// Returns (nil, true) if RawConfig is present and the collection (or an
+// Returns (nil, nil) if RawConfig is present and the collection (or an
 // enclosing step along key) is null or has 0 elements.
-// Returns (elems, true) if RawConfig is present and the collection is known and
+// Returns (elems, nil) if RawConfig is present and the collection is known and
 // non-empty.
-func GetRawConfigSlice(d RawConfigReader, key string) ([]cty.Value, bool) {
+func GetRawConfigSlice(d RawConfigReader, key string) ([]cty.Value, error) {
 	if isNilRawConfigReader(d) {
-		return nil, false
+		return nil, errors.New("raw config reader is nil")
 	}
-	return GetCtyValueSlice(d.GetRawConfig(), key)
+	return getCtyValueSlice(d.GetRawConfig(), key)
 }
 
-// GetCtyValueSlice resolves a list, set, or tuple at key in root into a deeply
-// unmarked []cty.Value slice, following the same contract as GetRawConfigSlice.
-func GetCtyValueSlice(root cty.Value, key string) ([]cty.Value, bool) {
-	val, ok := GetCtyValueAtKey(root, key)
-	if !ok || !val.IsKnown() {
-		return nil, false
+func getCtyValueSlice(root cty.Value, key string) ([]cty.Value, error) {
+	val, err := getCtyValueAtKey(root, key)
+	if err != nil {
+		return nil, err
+	}
+	if !val.IsKnown() {
+		return nil, fmt.Errorf("raw config collection at %q is unknown", key)
 	}
 	ty := val.Type()
 	if val.IsNull() {
 		if ty == cty.DynamicPseudoType || ty.IsListType() || ty.IsSetType() || ty.IsTupleType() {
-			return nil, true
+			return nil, nil
 		}
-		return nil, false
+		return nil, fmt.Errorf("raw config attribute at %q is %s, not a list, set, or tuple", key, ty.FriendlyName())
 	}
 	if !ty.IsListType() && !ty.IsSetType() && !ty.IsTupleType() {
-		return nil, false
+		return nil, fmt.Errorf("raw config attribute at %q is %s, not a list, set, or tuple", key, ty.FriendlyName())
 	}
 	if val.LengthInt() == 0 {
-		return nil, true
+		return nil, nil
 	}
-	return val.AsValueSlice(), true
+	return val.AsValueSlice(), nil
 }
 
 // GetRawConfigAttributeAsString retrieves a known string attribute at key from
@@ -1306,8 +1306,8 @@ func GetCtyValueSlice(root cty.Value, key string) ([]cty.Value, bool) {
 // standard schema.ResourceData.Get method, such as write-only attributes.
 func GetRawConfigAttributeAsString(d RawConfigReader, key string) string {
 	// see https://developer.hashicorp.com/terraform/plugin/sdkv2/resources/write-only-arguments#retrieving-write-only-values
-	val, ok := GetRawConfigAtKey(d, key)
-	if ok && !val.IsNull() && val.IsKnown() && val.Type().Equals(cty.String) {
+	val, err := GetRawConfigAtKey(d, key)
+	if err == nil && !val.IsNull() && val.IsKnown() && val.Type().Equals(cty.String) {
 		return val.AsString()
 	}
 	return ""
