@@ -282,6 +282,7 @@ func (tgc TerraformGoogleConversionNext) CopyCommonFiles(outputFolder string, ge
 		"pkg/tpgresource/hashcode.go":             "third_party/terraform/tpgresource/hashcode.go",
 		"pkg/tpgresource/regional_utils.go":       "third_party/terraform/tpgresource/regional_utils.go",
 		"pkg/tpgresource/field_helpers.go":        "third_party/terraform/tpgresource/field_helpers.go",
+		"pkg/tpgresource/nullable_fields.go":      "third_party/terraform/tpgresource/nullable_fields.go",
 		"pkg/tpgresource/service_scope.go":        "third_party/terraform/tpgresource/service_scope.go",
 		"pkg/verify/validation.go":                "third_party/terraform/verify/validation.go",
 		"pkg/verify/path_or_contents.go":          "third_party/terraform/verify/path_or_contents.go",

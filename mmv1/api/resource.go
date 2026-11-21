@@ -2203,6 +2203,114 @@ func CompareByName(a, b *Type) int {
 	return strings.Compare(a.Name, b.Name)
 }
 
+// NullableSegmentSpec describes one segment along the path to an Optional* primitive property.
+type NullableSegmentSpec struct {
+	TFName           string
+	APIName          string
+	Kind             string
+	KeyName          string
+	AllowEmptyObject bool
+}
+
+// NullableFieldSpec describes a proto3-optional primitive property on a resource.
+type NullableFieldSpec struct {
+	Segments []NullableSegmentSpec
+	ForceNew bool
+}
+
+func collectNullableFieldSpecs(r Resource, props []*Type, prefix []NullableSegmentSpec) []NullableFieldSpec {
+	var specs []NullableFieldSpec
+	for _, prop := range r.OrderProperties(props) {
+		if prop.Exclude || prop.Output || prop.UrlParamOnly || prop.ClientSide {
+			continue
+		}
+		if prop.IsOptionalPrimitive() {
+			segs := make([]NullableSegmentSpec, len(prefix)+1)
+			copy(segs, prefix)
+			segs[len(prefix)] = NullableSegmentSpec{
+				TFName:  google.Underscore(prop.Name),
+				APIName: prop.ApiName,
+				Kind:    "NullableSegmentAttr",
+			}
+			specs = append(specs, NullableFieldSpec{
+				Segments: segs,
+				ForceNew: prop.IsForceNew(),
+			})
+			continue
+		}
+		switch {
+		case prop.FlattenObject:
+			nextPrefix := append(slices.Clone(prefix), NullableSegmentSpec{
+				APIName: prop.ApiName,
+				Kind:    "NullableSegmentFlattenObject",
+			})
+			specs = append(specs, collectNullableFieldSpecs(r, prop.UserProperties(), nextPrefix)...)
+		case prop.IsA("NestedObject"):
+			nextPrefix := append(slices.Clone(prefix), NullableSegmentSpec{
+				TFName:           google.Underscore(prop.Name),
+				APIName:          prop.ApiName,
+				Kind:             "NullableSegmentNestedObject",
+				AllowEmptyObject: prop.AllowEmptyObject,
+			})
+			specs = append(specs, collectNullableFieldSpecs(r, prop.UserProperties(), nextPrefix)...)
+		case prop.IsA("Array") && prop.ItemType != nil && prop.ItemType.IsA("NestedObject") && !prop.IsSet:
+			nextPrefix := append(slices.Clone(prefix), NullableSegmentSpec{
+				TFName:  google.Underscore(prop.Name),
+				APIName: prop.ApiName,
+				Kind:    "NullableSegmentArray",
+			})
+			specs = append(specs, collectNullableFieldSpecs(r, prop.ItemType.UserProperties(), nextPrefix)...)
+		case prop.IsA("Map") && prop.ValueType != nil && prop.ValueType.IsA("NestedObject"):
+			nextPrefix := append(slices.Clone(prefix), NullableSegmentSpec{
+				TFName:  google.Underscore(prop.Name),
+				APIName: prop.ApiName,
+				Kind:    "NullableSegmentMap",
+				KeyName: google.Underscore(prop.KeyName),
+			})
+			specs = append(specs, collectNullableFieldSpecs(r, prop.ValueType.UserProperties(), nextPrefix)...)
+		}
+	}
+	return specs
+}
+
+func (r Resource) NullableFieldSpecs() []NullableFieldSpec {
+	return collectNullableFieldSpecs(r, r.SettableProperties(), nil)
+}
+
+func (r Resource) HasNullableFields() bool {
+	return len(r.NullableFieldSpecs()) > 0
+}
+
+func (r Resource) IsUnmaskedPatch() bool {
+	return strings.EqualFold(r.UpdateVerb, "PATCH") && !r.UpdateMask && !strings.Contains(r.ProductMetadata.Compiler, "terraformgoogleconversion")
+}
+
+func (r Resource) UpdateMaskKeyHasNullableFields(key string) bool {
+	var check func(props []*Type) bool
+	check = func(props []*Type) bool {
+		for _, prop := range props {
+			if prop.FlattenObject {
+				if check(prop.Properties) {
+					return true
+				}
+			} else if google.Underscore(prop.Name) == key {
+				return prop.ContainsNullableFields()
+			}
+		}
+		return false
+	}
+	return check(r.UpdateBodyProperties())
+}
+
+func (r Resource) CustomUpdateGroupHasNullableFields(props []*Type) bool {
+	for _, prop := range props {
+		if prop.ContainsNullableFields() {
+			return true
+		}
+	}
+	return false
+}
+
 func (r Resource) GetPropertyUpdateMasksGroupKeys(properties []*Type) []string {
 	keys := []string{}
 	for _, prop := range properties {
@@ -2897,6 +3005,9 @@ func (r Resource) TGCTestIgnorePropertiesToStrings() []string {
 		"timeouts",
 		"dynamic",
 		"deletion_protection",
+	}
+	if r.HasNullableFields() {
+		props = append(props, "nullable_field_presence")
 	}
 	for _, tp := range r.VirtualFields {
 		props = append(props, strings.Join(tp.Lineage(), "."))

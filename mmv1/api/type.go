@@ -519,9 +519,15 @@ func (t *Type) Validate(rName string) (es []error) {
 	}
 
 	// Check type is valid. Also allow empty as it's currently used in unit tests.
-	if !slices.Contains([]string{"Boolean", "Double", "Integer", "String", "Time", "Enum", "ResourceRef", "NestedObject", "Array", "KeyValuePairs", "KeyValueLabels", "KeyValueTerraformLabels", "KeyValueEffectiveLabels", "KeyValueAnnotations", "Map", "Fingerprint", "JsonValue"}, t.Type) {
+	if !slices.Contains([]string{"Boolean", "Double", "Integer", "String", "OptionalBoolean", "OptionalDouble", "OptionalInteger", "OptionalString", "Time", "Enum", "ResourceRef", "NestedObject", "Array", "KeyValuePairs", "KeyValueLabels", "KeyValueTerraformLabels", "KeyValueEffectiveLabels", "KeyValueAnnotations", "Map", "Fingerprint", "JsonValue"}, t.Type) {
 		es = append(es, fmt.Errorf("property %s unknown type %q in resource %s", fullFieldPath, t.Type, rName))
 	}
+
+	if t.IsA("Array") && t.ItemType != nil && t.ItemType.IsOptionalPrimitive() {
+		es = append(es, fmt.Errorf("property %s cannot use %s as array item_type in resource %s; proto3 optional is only valid on singular fields", fullFieldPath, t.ItemType.Type, rName))
+	}
+
+	es = append(es, t.validateOptionalPrimitive(fullFieldPath, rName)...)
 
 	if t.CustomExpand == "templates/terraform/custom_expand/json_schema.tmpl" ||
 		t.CustomExpand == "templates/terraform/custom_expand/json_value.tmpl" ||
@@ -707,6 +713,57 @@ func (t *Type) hasOutputAncestor() bool {
 		}
 	}
 	return false
+}
+
+// hasSetArrayAncestor reports whether any Array ancestor of t has IsSet set to true.
+func (t *Type) hasSetArrayAncestor() bool {
+	if t == nil {
+		return false
+	}
+	seen := map[*Type]bool{t: true}
+	for p := t.ParentMetadata; p != nil && !seen[p]; p = p.ParentMetadata {
+		seen[p] = true
+		if p.IsA("Array") && p.IsSet {
+			return true
+		}
+	}
+	return false
+}
+
+func (t *Type) validateOptionalPrimitive(fullFieldPath, rName string) (es []error) {
+	if !t.IsOptionalPrimitive() {
+		return nil
+	}
+	baseType := strings.TrimPrefix(t.Type, "Optional")
+
+	if t.Required {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set required in resource %s; use %s instead", fullFieldPath, t.Type, rName, baseType))
+	}
+	if t.Output || t.hasOutputAncestor() {
+		es = append(es, fmt.Errorf("property %s of type %s cannot be output-only in resource %s; use %s instead", fullFieldPath, t.Type, rName, baseType))
+	}
+	if t.DefaultFromApi {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set default_from_api in resource %s", fullFieldPath, t.Type, rName))
+	}
+	if t.SendEmptyValue {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set send_empty_value in resource %s; presence is tracked automatically", fullFieldPath, t.Type, rName))
+	}
+	if t.WriteOnly {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set write_only in resource %s", fullFieldPath, t.Type, rName))
+	}
+	if t.IgnoreRead {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set ignore_read in resource %s", fullFieldPath, t.Type, rName))
+	}
+	if t.ClientSide {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set client_side in resource %s", fullFieldPath, t.Type, rName))
+	}
+	if t.UrlParamOnly {
+		es = append(es, fmt.Errorf("property %s of type %s cannot set url_param_only in resource %s", fullFieldPath, t.Type, rName))
+	}
+	if t.hasSetArrayAncestor() {
+		es = append(es, fmt.Errorf("property %s of type %s cannot be nested inside a set (is_set: true) in resource %s", fullFieldPath, t.Type, rName))
+	}
+	return es
 }
 
 // TODO rewrite: add validations
@@ -1140,15 +1197,45 @@ func (t Type) ItemTypeClass() string {
 	return t.ItemType.Type
 }
 
+func (t Type) IsOptionalPrimitive() bool {
+	return t.IsA("OptionalBoolean") || t.IsA("OptionalDouble") || t.IsA("OptionalInteger") || t.IsA("OptionalString")
+}
+
+func (t Type) ContainsNullableFields() bool {
+	if t.Exclude {
+		return false
+	}
+	if t.IsOptionalPrimitive() {
+		return true
+	}
+	switch {
+	case t.IsA("NestedObject"):
+		for _, p := range t.UserProperties() {
+			if p.ContainsNullableFields() {
+				return true
+			}
+		}
+	case t.IsA("Array"):
+		if t.ItemType != nil && !t.IsSet {
+			return t.ItemType.ContainsNullableFields()
+		}
+	case t.IsA("Map"):
+		if t.ValueType != nil {
+			return t.ValueType.ContainsNullableFields()
+		}
+	}
+	return false
+}
+
 func (t Type) TFType(s string) string {
 	switch s {
-	case "Boolean":
+	case "Boolean", "OptionalBoolean":
 		return "schema.TypeBool"
-	case "Double":
+	case "Double", "OptionalDouble":
 		return "schema.TypeFloat"
-	case "Integer":
+	case "Integer", "OptionalInteger":
 		return "schema.TypeInt"
-	case "String":
+	case "String", "OptionalString":
 		return "schema.TypeString"
 	case "Time":
 		return "schema.TypeString"
@@ -1183,13 +1270,13 @@ func (t Type) TFType(s string) string {
 
 func (t Type) GetFWType() string {
 	switch t.Type {
-	case "Boolean":
+	case "Boolean", "OptionalBoolean":
 		return "Bool"
-	case "Double":
+	case "Double", "OptionalDouble":
 		return "Float64"
-	case "Integer":
+	case "Integer", "OptionalInteger":
 		return "Int64"
-	case "String":
+	case "String", "OptionalString":
 		return "String"
 	case "Time":
 		return "String"
@@ -1791,4 +1878,21 @@ func (t Type) HasRequiredProperty() bool {
 		}
 	}
 	return false
+}
+
+// FlattenedGettableFieldNames returns the snake_case Terraform attribute names of
+// non-write-only properties collapsed into the parent schema by a FlattenObject.
+func (t Type) FlattenedGettableFieldNames() []string {
+	var names []string
+	for _, prop := range t.UserProperties() {
+		if prop.WriteOnly || prop.UrlParamOnly || prop.ClientSide || prop.IgnoreRead {
+			continue
+		}
+		if prop.FlattenObject {
+			names = append(names, prop.FlattenedGettableFieldNames()...)
+		} else {
+			names = append(names, google.Underscore(prop.Name))
+		}
+	}
+	return names
 }

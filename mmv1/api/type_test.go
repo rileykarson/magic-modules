@@ -2368,3 +2368,221 @@ func TestTypeValidateRequiredConstraints(t *testing.T) {
 		})
 	}
 }
+
+func TestTypeOptionalPrimitives(t *testing.T) {
+	t.Parallel()
+
+	p := &Product{Name: "TestProduct"}
+
+	t.Run("TFType and GetFWType mappings", func(t *testing.T) {
+		t.Parallel()
+		cases := []struct {
+			typ    string
+			wantTF string
+			wantFW string
+		}{
+			{"OptionalBoolean", "schema.TypeBool", "Bool"},
+			{"OptionalDouble", "schema.TypeFloat", "Float64"},
+			{"OptionalInteger", "schema.TypeInt", "Int64"},
+			{"OptionalString", "schema.TypeString", "String"},
+		}
+		for _, tc := range cases {
+			prop := Type{Name: "f", Type: tc.typ}
+			if got := prop.TFType(tc.typ); got != tc.wantTF {
+				t.Errorf("TFType(%s) = %q, want %q", tc.typ, got, tc.wantTF)
+			}
+			if got := prop.GetFWType(); got != tc.wantFW {
+				t.Errorf("GetFWType(%s) = %q, want %q", tc.typ, got, tc.wantFW)
+			}
+			if !prop.IsOptionalPrimitive() {
+				t.Errorf("IsOptionalPrimitive(%s) = false, want true", tc.typ)
+			}
+		}
+	})
+
+	t.Run("NullableFieldSpecs collects root, flattened, nested, array, and map specs", func(t *testing.T) {
+		t.Parallel()
+		res := &Resource{
+			Name:       "TestResource",
+			UpdateVerb: "PATCH",
+			UpdateMask: true,
+			Properties: []*Type{
+				{Name: "optBool", Type: "OptionalBoolean", Immutable: true},
+				{Name: "plainStr", Type: "String"},
+				{
+					Name:          "wrapper",
+					Type:          "NestedObject",
+					FlattenObject: true,
+					Properties: []*Type{
+						{Name: "flatInt", Type: "OptionalInteger"},
+					},
+				},
+				{
+					Name: "config",
+					Type: "NestedObject",
+					Properties: []*Type{
+						{Name: "nestedStr", Type: "OptionalString"},
+					},
+				},
+				{
+					Name: "rules",
+					Type: "Array",
+					ItemType: &Type{
+						Type: "NestedObject",
+						Properties: []*Type{
+							{Name: "threshold", Type: "OptionalDouble"},
+						},
+					},
+				},
+				{
+					Name:    "envs",
+					Type:    "Map",
+					KeyName: "env_id",
+					ValueType: &Type{
+						Type: "NestedObject",
+						Properties: []*Type{
+							{Name: "enabled", Type: "OptionalBoolean"},
+						},
+					},
+				},
+			},
+		}
+		res.SetDefault(p)
+		for _, prop := range res.Properties {
+			if errs := prop.Validate(res.Name); len(errs) > 0 {
+				t.Fatalf("unexpected validation errors on %s: %v", prop.Name, errs)
+			}
+		}
+		if !res.HasNullableFields() {
+			t.Fatalf("expected HasNullableFields() == true")
+		}
+		specs := res.NullableFieldSpecs()
+		if len(specs) != 5 {
+			t.Fatalf("expected 5 NullableFieldSpecs, got %d: %+v", len(specs), specs)
+		}
+		if !res.UpdateMaskKeyHasNullableFields("flat_int") {
+			t.Errorf("expected UpdateMaskKeyHasNullableFields(flat_int) == true")
+		}
+		if !res.UpdateMaskKeyHasNullableFields("config") {
+			t.Errorf("expected UpdateMaskKeyHasNullableFields(config) == true")
+		}
+		if res.UpdateMaskKeyHasNullableFields("plain_str") {
+			t.Errorf("expected UpdateMaskKeyHasNullableFields(plain_str) == false")
+		}
+		if res.UpdateMaskKeyHasNullableFields("opt_bool") {
+			// optBool is immutable on a PATCH resource, so excluded from UpdateBodyProperties
+			t.Errorf("expected immutable opt_bool on PATCH resource not to be in UpdateBodyProperties")
+		}
+	})
+
+	validationCases := []struct {
+		description string
+		prop        *Type
+		wantError   string
+	}{
+		{
+			description: "required disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalBoolean", Required: true},
+			wantError:   "property f of type OptionalBoolean cannot set required in resource TestResource; use Boolean instead",
+		},
+		{
+			description: "output disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalString", Output: true},
+			wantError:   "property f of type OptionalString cannot be output-only in resource TestResource; use String instead",
+		},
+		{
+			description: "output ancestor disallowed",
+			prop: &Type{
+				Name:   "parent",
+				Type:   "NestedObject",
+				Output: true,
+				Properties: []*Type{
+					{Name: "f", Type: "OptionalInteger"},
+				},
+			},
+			wantError: "property parent.f of type OptionalInteger cannot be output-only in resource TestResource; use Integer instead",
+		},
+		{
+			description: "default_value disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalBoolean", DefaultValue: false},
+			wantError:   "property f cannot set default_value for type OptionalBoolean in resource TestResource",
+		},
+		{
+			description: "default_from_api disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalInteger", DefaultFromApi: true},
+			wantError:   "property f of type OptionalInteger cannot set default_from_api in resource TestResource",
+		},
+		{
+			description: "send_empty_value disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalDouble", SendEmptyValue: true},
+			wantError:   "property f of type OptionalDouble cannot set send_empty_value in resource TestResource",
+		},
+		{
+			description: "write_only disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalString", WriteOnly: true},
+			wantError:   "property f of type OptionalString cannot set write_only in resource TestResource",
+		},
+		{
+			description: "ignore_read disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalString", IgnoreRead: true},
+			wantError:   "property f of type OptionalString cannot set ignore_read in resource TestResource",
+		},
+		{
+			description: "client_side disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalBoolean", ClientSide: true},
+			wantError:   "property f of type OptionalBoolean cannot set client_side in resource TestResource",
+		},
+		{
+			description: "url_param_only disallowed",
+			prop:        &Type{Name: "f", Type: "OptionalString", UrlParamOnly: true},
+			wantError:   "property f of type OptionalString cannot set url_param_only in resource TestResource",
+		},
+		{
+			description: "array item_type disallowed",
+			prop: &Type{
+				Name:     "items",
+				Type:     "Array",
+				ItemType: &Type{Type: "OptionalString"},
+			},
+			wantError: "property items cannot use OptionalString as array item_type in resource TestResource",
+		},
+		{
+			description: "nested inside is_set array disallowed",
+			prop: &Type{
+				Name:  "items",
+				Type:  "Array",
+				IsSet: true,
+				ItemType: &Type{
+					Type: "NestedObject",
+					Properties: []*Type{
+						{Name: "flag", Type: "OptionalBoolean"},
+					},
+				},
+			},
+			wantError: "property items.flag of type OptionalBoolean cannot be nested inside a set (is_set: true) in resource TestResource",
+		},
+	}
+
+	for _, tc := range validationCases {
+		tc := tc
+		t.Run(tc.description, func(t *testing.T) {
+			t.Parallel()
+			res := &Resource{
+				Name:       "TestResource",
+				Properties: []*Type{tc.prop},
+			}
+			res.SetDefault(p)
+			errs := tc.prop.Validate(res.Name)
+			found := false
+			for _, err := range errs {
+				if strings.Contains(err.Error(), tc.wantError) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Errorf("expected error containing %q, got: %v", tc.wantError, errs)
+			}
+		})
+	}
+}

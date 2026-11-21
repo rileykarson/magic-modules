@@ -529,3 +529,39 @@ Example:
   description: |
     Arbitrary JSON payload passed to the service.
 ```
+
+## `OptionalBoolean`, `OptionalDouble`, `OptionalInteger`, `OptionalString`
+
+Represent `proto3 optional` primitive fields that have true tri-state presence semantics in the REST API (`unset`/`null` is distinct from the explicit zero value `false`, `0.0`, `0`, or `""`), while exposing native primitive types in HCL (`bool`, `number`, `string`).
+
+Only use `Optional*` types when the underlying API distinguishes an omitted field from its zero value and does not materialize a static or server-computed value when omitted:
+- If the API always populates a default when omitted, use the standard primitive type (`Boolean`, `Double`, `Integer`, `String`) with `default_value` or `default_from_api: true` instead.
+- If the API only needs zero values sent unconditionally without distinguishing unset from zero, use the standard primitive type with `send_empty_value: true`.
+
+### Behavior
+
+- **Create**: Omitted from the JSON request body when unset (`null`) in HCL; sent explicitly (including `false`, `0.0`, `0`, or `""`) when configured.
+- **Update**:
+  - When `update_mask: true` or `update_verb: PUT`: clearing a configured value back to unset omits the field from the JSON body and includes the field (or its top-level container) in `updateMask`, including standalone `null` <-> zero transitions.
+  - When `update_verb: PATCH` without `update_mask`: clearing a previously present field sends explicit JSON `null` so unmasked JSON merge-patch / `protojson` endpoints clear field presence.
+- **SDKv2 state tracking**: On SDKv2 resources containing one or more `Optional*` fields, MMv1 automatically adds a top-level computed `nullable_field_presence` map (`map(bool)`) to track explicit presence across configuration, plans (including `ForceNew` when `immutable: true`), and API reads. Plugin Framework resources use native typed nullability directly without `nullable_field_presence`.
+
+### Constraints
+
+`Optional*` fields cannot be combined with:
+- `required: true` or `output: true` (including inside `output: true` parent objects)
+- `default_value`, `default_from_api: true`, or `send_empty_value: true`
+- `write_only: true`, `ignore_read: true`, `client_side: true`, or `url_param_only: true`
+- Direct `Array` `item_type` (proto3 repeated scalars do not have element-level presence) or nesting inside an unordered `Array` with `is_set: true`
+
+Supported locations include top-level properties, `flatten_object: true` containers, `NestedObject` blocks, ordered `Array` (`is_set: false`) of `NestedObject`, and `Map` (`key_name`) of `NestedObject`.
+
+Example:
+
+```yaml
+- name: 'enableFeature'
+  type: OptionalBoolean
+  description: |
+    Controls whether the feature is explicitly enabled or disabled. When unset,
+    inherits the parent policy dynamically.
+```

@@ -155,6 +155,10 @@ In addition to the arguments listed above, the following computed attributes are
 * `self_link` - The URI of the created resource.
 {{ "" }}
 {{- end }}
+{{- if $.HasNullableFields -}}
+* `nullable_field_presence` - Tracks which optional primitive fields are explicitly set on the resource.
+{{ "" }}
+{{- end }}
 {{- if $.Docs.Attributes }}
 {{ $.Docs.Attributes }}
 {{- end }}

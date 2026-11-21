@@ -141,13 +141,16 @@ func Resource{{ $.ResourceName -}}() *schema.Resource {
 {{-       end }}
         },
 {{- end }}
-{{- if or (and (or $.HasProject $.HasRegion $.HasZone) (not $.ExcludeDefaultCdiff)) $.CustomDiff $.UnorderedListProperties }}
+{{- if or (and (or $.HasProject $.HasRegion $.HasZone) (not $.ExcludeDefaultCdiff)) $.CustomDiff $.UnorderedListProperties $.HasNullableFields }}
         CustomizeDiff: customdiff.All(
 {{-   if $.UnorderedListProperties }}
 {{-     range $prop := $.UnorderedListProperties }}
         resource{{ $.ResourceName }}{{ camelize $prop.Name "upper" }}SetStyleDiff,
 {{-     end}}
 {{-   end}}
+{{- if $.HasNullableFields }}
+            tpgresource.SetNullableFieldPresenceDiff(resource{{ $.ResourceName }}NullableFields),
+{{- end }}
 {{- if $.CustomDiff -}}
 {{-          range $cdiff := $.CustomDiff }}
         {{ $cdiff }},
@@ -254,10 +257,19 @@ When set to "DELETE", deleting the resource is allowed.
     {{- end}}
             },
 {{- end}}
+{{- if $.HasNullableFields }}
+            tpgresource.NullableFieldPresenceAttr: {
+                Type:        schema.TypeMap,
+                Computed:    true,
+                Description: `Tracks explicit presence of nullable optional fields in configuration and API state.`,
+                Elem:        &schema.Schema{Type: schema.TypeBool},
+            },
+{{- end}}
         },
         UseJSONNumber: true,
     }
 }
+{{- template "nullableFieldSpecsVar" $ }}
 
 {{- range $prop := $.AllUserProperties }}
 {{template "SchemaSubResource" $prop}}
@@ -288,7 +300,9 @@ func resource{{ $.ResourceName -}}Create(d *schema.ResourceData, meta interface{
     {{ $prop.CamelizeProperty -}}Prop, err := expand{{ if $.NestedQuery -}}Nested{{ end }}{{ $.ResourceName -}}{{ camelize $prop.Name "upper" -}}({{ if $prop.FlattenObject }}nil{{ else if $prop.WriteOnly }}tpgresource.GetRawConfigAttributeAsString(d, "{{ underscore $prop.Name }}"){{ else }}d.Get("{{ underscore $prop.Name }}"){{ end }}, d, config)
     if err != nil {
         return err
-    {{- if $prop.SendEmptyValue -}}
+    {{- if $prop.IsOptionalPrimitive -}}
+    } else if tpgresource.IsNullableFieldPresent(d, "{{ underscore $prop.Name -}}", resource{{ $.ResourceName }}NullableFields) {
+    {{- else if $prop.SendEmptyValue -}}
     } else if v, ok := d.GetOkExists("{{ underscore $prop.Name -}}"); ok || !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop) {
     {{-      else if $prop.FlattenObject -}}
     } else if !tpgresource.IsEmptyValue(reflect.ValueOf({{ $prop.CamelizeProperty -}}Prop)) {
@@ -578,7 +592,7 @@ func resource{{ $.ResourceName -}}Create(d *schema.ResourceData, meta interface{
     identity, err := d.Identity()
     if err == nil && identity != nil {
     {{- range $p := $.IdentityProperties }}
-    {{ if eq $p.Type "Integer" -}}
+    {{ if or (eq $p.Type "Integer") (eq $p.Type "OptionalInteger") -}}
         if _, ok := d.GetOk("{{ underscore $p.Name}}"); ok {
             err = identity.Set("{{ underscore $p.Name}}", d.Get("{{ underscore $p.Name}}").(int))
             if err != nil {
@@ -879,7 +893,7 @@ func resource{{ $.ResourceName -}}Read(d *schema.ResourceData, meta interface{})
     identity, err := d.Identity()
     if err == nil && identity != nil {
     {{- range $p := $.IdentityProperties }}
-    {{ if eq $p.Type "Integer" -}}
+    {{ if or (eq $p.Type "Integer") (eq $p.Type "OptionalInteger") -}}
     if _, ok := identity.GetOk("{{ underscore $p.Name}}");!ok  {
         err = identity.Set("{{ underscore $p.Name}}", d.Get("{{ underscore $p.Name}}").(int))
         if err != nil {
@@ -934,7 +948,7 @@ func resource{{ $.ResourceName -}}Update(d *schema.ResourceData, meta interface{
     identity, err := d.Identity()
     if err == nil && identity != nil {
     {{- range $p := $.IdentityProperties }}
-    {{if eq $p.Type "Integer" -}}
+    {{if or (eq $p.Type "Integer") (eq $p.Type "OptionalInteger") -}}
         if _, ok := d.GetOk("{{ underscore $p.Name}}"); ok {
             err = identity.Set("{{ underscore $p.Name}}", d.Get("{{ underscore $p.Name}}").(int))
             if err != nil {
@@ -975,15 +989,33 @@ func resource{{ $.ResourceName -}}Update(d *schema.ResourceData, meta interface{
     {{- $prop.CamelizeProperty -}}Prop, err := expand{{ if $.NestedQuery -}}Nested{{end}}{{ $.ResourceName -}}{{ camelize $prop.Name "upper"  -}}({{ if $prop.FlattenObject }}nil{{ else if $prop.WriteOnly }}tpgresource.GetRawConfigAttributeAsString(d, "{{ underscore $prop.Name }}"){{else}}d.Get("{{underscore $prop.Name}}"){{ end }}, d, config)
     if err != nil {
         return err
-{{-                 if $prop.SendEmptyValue -}}
-    } else if v, ok := d.GetOkExists("{{ underscore $prop.Name -}}"); ok || !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop) {
-{{-                 else if $prop.FlattenObject -}}
+{{-                 if $prop.IsOptionalPrimitive -}}
+    } else if tpgresource.IsNullableFieldPresent(d, "{{ underscore $prop.Name -}}", resource{{ $.ResourceName }}NullableFields) {
+        obj["{{ $prop.ApiName -}}"] = {{ $prop.CamelizeProperty -}}Prop
+{{-                     if $.IsUnmaskedPatch }}
+    } else if tpgresource.WasNullableFieldPresent(d, "{{ underscore $prop.Name -}}") {
+        obj["{{ $prop.ApiName -}}"] = nil
+{{-                     end }}
+    }
+{{-                 else if and $prop.ContainsNullableFields (not $prop.SendEmptyValue) (not $prop.FlattenObject) -}}
     } else if !tpgresource.IsEmptyValue(reflect.ValueOf({{ $prop.CamelizeProperty -}}Prop)) {
+        obj["{{ $prop.ApiName -}}"] = {{ $prop.CamelizeProperty -}}Prop
+{{-                     if $.IsUnmaskedPatch }}
+    } else if d.HasChange("{{ underscore $prop.Name -}}") || tpgresource.WasNullableFieldPresentUnderPrefix(d, "{{ underscore $prop.Name -}}") {
+        obj["{{ $prop.ApiName -}}"] = nil
+{{-                     end }}
+    }
 {{-                 else -}}
+{{-                     if $prop.SendEmptyValue -}}
+    } else if v, ok := d.GetOkExists("{{ underscore $prop.Name -}}"); ok || !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop) {
+{{-                     else if $prop.FlattenObject -}}
+    } else if !tpgresource.IsEmptyValue(reflect.ValueOf({{ $prop.CamelizeProperty -}}Prop)) {
+{{-                     else -}}
     } else if v, ok := d.GetOkExists("{{ underscore $prop.Name -}}"); !tpgresource.IsEmptyValue(reflect.ValueOf(v)) && (ok || !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop)) {
-{{-                 end}}
+{{-                     end}}
         obj["{{ $prop.ApiName -}}"] = {{ $prop.CamelizeProperty -}}Prop
     }
+{{-                 end}}
 {{-             end}}
 
 {{/*     We need to decide what encoder to use here - if there's an update encoder, use that! -*/}}
@@ -1147,7 +1179,7 @@ if len(updateMask) > 0 {
     d.Partial(true)
 {{             $CustomUpdateProps := $.PropertiesByCustomUpdate $.RootProperties }}
 {{             range $group := $.PropertiesByCustomUpdateGroups }}
-if d.HasChange("{{ join ($.PropertyNamesToStrings (index $CustomUpdateProps $group)) "\") || d.HasChange(\""}}") {
+if d.HasChange("{{ join ($.PropertyNamesToStrings (index $CustomUpdateProps $group)) "\") || d.HasChange(\""}}"){{- if $.CustomUpdateGroupHasNullableFields (index $CustomUpdateProps $group) }}{{- range $pName := $.PropertyNamesToStrings (index $CustomUpdateProps $group) }} || tpgresource.HasNullableFieldPresenceChange(d, "{{ $pName }}", resource{{ $.ResourceName }}NullableFields){{- end }}{{- end }} {
         obj := make(map[string]interface{})
 {{		            if $group.FingerprintName }}
         getUrl, err := tpgresource.ReplaceVars{{if $.LegacyLongFormProject -}}ForId{{ end -}}(d, config, transport_tpg.BaseUrl(Product, config)+"{{$.SelfLinkUri}}")
@@ -1222,15 +1254,33 @@ if d.HasChange("{{ join ($.PropertyNamesToStrings (index $CustomUpdateProps $gro
             `NullFields` is a special case of `send_empty_value` where the empty value
             in question is go's literal nil.
 -*/}}
-{{-                      if $propsByKey.SendEmptyValue -}}
-        } else if v, ok := d.GetOkExists("{{ underscore $propsByKey.Name -}}"); ok || !reflect.DeepEqual(v, {{ $propsByKey.ApiName -}}Prop) {
-{{-                      else if $propsByKey.FlattenObject -}}
+{{-                      if $propsByKey.IsOptionalPrimitive -}}
+        } else if tpgresource.IsNullableFieldPresent(d, "{{ underscore $propsByKey.Name -}}", resource{{ $.ResourceName }}NullableFields) {
+            obj["{{ $propsByKey.ApiName -}}"] = {{ $propsByKey.ApiName -}}Prop
+{{-                          if eq (upper $group.UpdateVerb) "PATCH" }}
+        } else if tpgresource.WasNullableFieldPresent(d, "{{ underscore $propsByKey.Name -}}") {
+            obj["{{ $propsByKey.ApiName -}}"] = nil
+{{-                          end }}
+        }
+{{-                      else if and $propsByKey.ContainsNullableFields (not $propsByKey.SendEmptyValue) (not $propsByKey.FlattenObject) -}}
         } else if !tpgresource.IsEmptyValue(reflect.ValueOf({{ $propsByKey.ApiName -}}Prop)) {
+            obj["{{ $propsByKey.ApiName -}}"] = {{ $propsByKey.ApiName -}}Prop
+{{-                          if eq (upper $group.UpdateVerb) "PATCH" }}
+        } else if d.HasChange("{{ underscore $propsByKey.Name -}}") || tpgresource.WasNullableFieldPresentUnderPrefix(d, "{{ underscore $propsByKey.Name -}}") {
+            obj["{{ $propsByKey.ApiName -}}"] = nil
+{{-                          end }}
+        }
 {{-                      else -}}
+{{-                          if $propsByKey.SendEmptyValue -}}
+        } else if v, ok := d.GetOkExists("{{ underscore $propsByKey.Name -}}"); ok || !reflect.DeepEqual(v, {{ $propsByKey.ApiName -}}Prop) {
+{{-                          else if $propsByKey.FlattenObject -}}
+        } else if !tpgresource.IsEmptyValue(reflect.ValueOf({{ $propsByKey.ApiName -}}Prop)) {
+{{-                          else -}}
         } else if v, ok := d.GetOkExists("{{ underscore $propsByKey.Name -}}"); !tpgresource.IsEmptyValue(reflect.ValueOf(v)) && (ok || !reflect.DeepEqual(v, {{ $propsByKey.ApiName -}}Prop)) {
-{{-                     end}}
+{{-                          end}}
             obj["{{ $propsByKey.ApiName -}}"] = {{ $propsByKey.ApiName -}}Prop
         }
+{{-                      end}}
 {{-                  end -}}{{/*range propsByKey*/}}
 {{/*     We need to decide what encoder to use here - if there's an update encoder, use that! -*/}}
 {{                  if $.CustomCode.UpdateEncoder -}}
@@ -1675,7 +1725,7 @@ func resource{{ $.ResourceName -}}PostCreateSetComputedFields(d *schema.Resource
 
 {{ if not $.ExcludeRead }}
 func Resource{{ $.ResourceName -}}Flatten(d *schema.ResourceData, meta interface{}, res map[string]interface{}, config *transport_tpg.Config,{{if $.HasProject -}}project string, {{end -}}userAgent string, billingProject string, url string, headers http.Header) error {
-{{- if or $.GettableProperties $.HasSelfLink }}
+{{- if or $.GettableProperties $.HasSelfLink $.HasNullableFields }}
 var err error
 {{- end }}
 {{ range $prop := $.GettableProperties }}
@@ -1694,6 +1744,14 @@ if flattenedProp := flatten{{ if $.NestedQuery -}}Nested{{end}}{{ $.ResourceName
             }
         }
     }
+{{- if $prop.ContainsNullableFields }}
+} else {
+{{- range $flatFieldName := $prop.FlattenedGettableFieldNames }}
+    if err := d.Set("{{ $flatFieldName }}", nil); err != nil {
+        return fmt.Errorf("Error setting {{ $flatFieldName }}: %s", err)
+    }
+{{- end }}
+{{- end }}
 }
 {{- else -}}
     if err = d.Set("{{ underscore $prop.Name -}}", flatten{{ if $.NestedQuery -}}Nested{{end}}{{ $.ResourceName -}}{{ camelize $prop.Name "upper" -}}(res["{{ $prop.ApiName -}}"], d, config)); err != nil {
@@ -1701,6 +1759,11 @@ if flattenedProp := flatten{{ if $.NestedQuery -}}Nested{{end}}{{ $.ResourceName
     }
 {{- end}}
 {{- end}}
+{{- if $.HasNullableFields }}
+    if err = d.Set(tpgresource.NullableFieldPresenceAttr, tpgresource.ExtractNullableFieldPresenceFromAPIResponse(res, resource{{ $.ResourceName }}NullableFields)); err != nil {
+        return fmt.Errorf("Error reading {{ $.Name -}}: %s", err)
+    }
+{{- end }}
 {{if $.HasSelfLink -}}
     if selfLink, ok := res["selfLink"].(string); ok && selfLink != "" {
         if err = d.Set("self_link", tpgresource.ConvertSelfLinkToV1(selfLink)); err != nil {

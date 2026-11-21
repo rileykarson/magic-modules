@@ -21,7 +21,7 @@ package {{ lower $.ProductMetadata.Name }}
 
 {{ $hasIntegerIdentity := false -}}
 {{- range $id := $.IdentityProperties -}}
-  {{- if eq $id.Type "Integer" -}}
+  {{- if or (eq $id.Type "Integer") (eq $id.Type "OptionalInteger") -}}
     {{- $hasIntegerIdentity = true -}}
   {{- end -}}
 {{- end -}}

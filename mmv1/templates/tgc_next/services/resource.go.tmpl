@@ -109,10 +109,19 @@ func Resource{{ $.ResourceName -}}() *schema.Resource {
                 Computed: true,
             },
 {{- end}}
+{{- if $.HasNullableFields }}
+            tpgresource.NullableFieldPresenceAttr: {
+                Type:        schema.TypeMap,
+                Computed:    true,
+                Description: `Tracks explicit presence of nullable optional fields in configuration and API state.`,
+                Elem:        &schema.Schema{Type: schema.TypeBool},
+            },
+{{- end}}
         },
         UseJSONNumber: true,
     }
 }
+{{- template "nullableFieldSpecsVar" $ }}
 
 {{- range $prop := $.AllUserProperties }}
 {{template "SchemaSubResource" $prop}}

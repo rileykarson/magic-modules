@@ -128,7 +128,9 @@ func Get{{ $.ResourceName -}}ApiObject(d tpgresource.TerraformResourceData, conf
 {{- end}}
     if err != nil {
         return nil, err
-{{- if not $prop.SendEmptyValue }}
+{{- if $prop.IsOptionalPrimitive }}
+    } else if tpgresource.IsNullableFieldPresent(d, "{{underscore $prop.Name}}", resource{{ $.ResourceName }}NullableFields) {
+{{- else if not $prop.SendEmptyValue }}
     } else if v, ok := d.GetOkExists("{{underscore $prop.Name}}"); !tpgresource.IsEmptyValue(reflect.ValueOf({{ $prop.CamelizeProperty -}}Prop)) && (ok || !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop)) {
 {{- else }}
     } else if v, ok := d.GetOkExists("{{underscore $prop.Name}}"); ok || (v != nil && !reflect.DeepEqual(v, {{ $prop.CamelizeProperty -}}Prop)) {
@@ -149,6 +151,7 @@ func resource{{ $.ResourceName -}}Encoder(d tpgresource.TerraformResourceData, m
 {{ customTemplate $ $.CustomCode.Encoder false -}}
 }
 {{- end}}
+{{- template "nullableFieldSpecsVar" $ }}
 
 {{ range $prop := $.SettableProperties }}
     {{- template "expandPropertyMethod" $prop -}}

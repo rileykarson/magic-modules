@@ -55,6 +55,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"{{ $.ImportPath }}/fwmodels"
@@ -80,6 +82,10 @@ var (
 {{- if or (and (or $.HasProject $.HasRegion $.HasZone) (not $.ExcludeDefaultCdiff)) $.CustomDiff }}
 	_ resource.ResourceWithModifyPlan  = &{{$.ResourceName}}FWResource{}
 {{- end}}
+	_ = boolplanmodifier.RequiresReplace
+	_ = float64planmodifier.RequiresReplace
+	_ = int64planmodifier.RequiresReplace
+	_ = stringplanmodifier.RequiresReplace
 )
 
 func New{{$.ResourceName}}FWResource() resource.Resource {
@@ -264,12 +270,18 @@ func (r *{{$.ResourceName}}FWResource) Create(ctx context.Context, req resource.
     obj := make(map[string]interface{})
 
 {{- range $prop := $.SettableProperties }}
+{{- if $prop.IsOptionalPrimitive }}
+    if !data.{{camelize $prop.Name "upper"}}.IsNull() && !data.{{camelize $prop.Name "upper"}}.IsUnknown() {
+        obj["{{ $prop.ApiName -}}"] = data.{{camelize $prop.Name "upper"}}.Value{{$prop.GetFWType}}()
+    }
+{{- else }}
     {{$prop.ApiName}}Prop, diags := data.{{camelize $prop.Name "upper"}}.To{{$prop.GetFWType}}Value(ctx)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
     obj["{{ $prop.ApiName -}}"] = {{ $prop.ApiName -}}Prop
+{{- end }}
 {{- end }}
 
     createTimeout, diags := data.Timeouts.Create(ctx, {{ $.GetTimeouts.InsertMinutes }}*time.Minute)
@@ -479,6 +491,17 @@ func (r *{{$.ResourceName}}FWResource) Update(ctx context.Context, req resource.
     obj := make(map[string]interface{})
 
 {{- range $prop := $.OrderProperties $.UpdateBodyProperties }}
+{{- if $prop.IsOptionalPrimitive }}
+	if !plan.{{camelize $prop.Name "upper"}}.Equal(state.{{camelize $prop.Name "upper"}}) {
+		if !plan.{{camelize $prop.Name "upper"}}.IsNull() && !plan.{{camelize $prop.Name "upper"}}.IsUnknown() {
+			obj["{{ $prop.ApiName -}}"] = plan.{{camelize $prop.Name "upper"}}.Value{{$prop.GetFWType}}()
+		{{- if $.IsUnmaskedPatch }}
+		} else if !state.{{camelize $prop.Name "upper"}}.IsNull() {
+			obj["{{ $prop.ApiName -}}"] = nil
+		{{- end }}
+		}
+	}
+{{- else }}
 	if !plan.{{camelize $prop.Name "upper"}}.Equal(state.{{camelize $prop.Name "upper"}}) {
 	    {{$prop.ApiName}}Prop, diags := plan.{{camelize $prop.Name "upper"}}.To{{$prop.GetFWType}}Value(ctx)
 		resp.Diagnostics.Append(diags...)
@@ -487,6 +510,7 @@ func (r *{{$.ResourceName}}FWResource) Update(ctx context.Context, req resource.
 		}
 		obj["{{ $prop.ApiName -}}"] = {{ $prop.ApiName -}}Prop
 	}
+{{- end }}
 {{- end }}
 
     updateTimeout, diags := plan.Timeouts.Update(ctx, {{ $.GetTimeouts.UpdateMinutes }}*time.Minute)
@@ -814,12 +838,19 @@ func (r *{{$.ResourceName}}FWResource) {{$.ResourceName}}FWRefresh(ctx context.C
     }
 
 {{ range $prop := $.GettableProperties }}
+{{- if $prop.IsOptionalPrimitive }}
+	data.{{camelize $prop.Name "upper"}} = fwresource.FlattenOptional{{$prop.GetFWType}}(res["{{ $prop.ApiName -}}"], diags)
+	if diags.HasError() {
+		return
+	}
+{{- else }}
 	data.{{camelize $prop.Name "upper"}} = res["{{ $prop.ApiName -}}"]
     {{$prop.ApiName}}Prop, d := data.{{camelize $prop.Name "upper"}}.To{{$prop.GetFWType}}Value(ctx)
 	diags.Append(d...)
 	if diags.HasError() {
 		return
 	}
+{{- end }}
 {{ end }}
 
 	tflog.Trace(ctx, "refreshed {{$.Name}} resource data")

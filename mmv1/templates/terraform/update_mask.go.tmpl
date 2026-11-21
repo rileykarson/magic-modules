@@ -14,7 +14,7 @@ updateMask := []string{}
 {{- $maskGroups := $.GetPropertyUpdateMasksGroups $.UpdateBodyProperties "" }}
 {{- range $key := $.GetPropertyUpdateMasksGroupKeys $.UpdateBodyProperties }}
 
-if d.HasChange("{{ $key }}") {
+if d.HasChange("{{ $key }}"){{ if $.UpdateMaskKeyHasNullableFields $key }} || tpgresource.HasNullableFieldPresenceChange(d, "{{ $key }}", resource{{ $.ResourceName }}NullableFields){{ end }} {
   updateMask = append(updateMask, "{{ join (index $maskGroups $key) "\",\n\""}}")
 }
 {{- end }}

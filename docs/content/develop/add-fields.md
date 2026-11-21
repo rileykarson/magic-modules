@@ -60,6 +60,7 @@ Replace `String` in the field type with one of the following options:
 - `Integer`
 - `Boolean`
 - `Double`
+- `OptionalString`, `OptionalInteger`, `OptionalBoolean`, `OptionalDouble` (for `proto3 optional` primitives with true tri-state `unset` vs zero-value semantics; see [MMv1 field reference]({{< ref "/reference/field#optionalboolean-optionaldouble-optionalinteger-optionalstring" >}}))
 - `JsonValue` (arbitrary JSON value represented as a JSON-encoded string in Terraform)
 - `KeyValuePairs` (string -> string map)
 - `KeyValueLabels` (for standard resource 'labels' field)

@@ -42,6 +42,12 @@ func FromResource(r api.Resource) Metadata {
 			ProviderOnly: true,
 		})
 	}
+	if !r.FrameworkResource && r.HasNullableFields() {
+		m.Fields = append(m.Fields, Field{
+			Field:        "nullable_field_presence",
+			ProviderOnly: true,
+		})
+	}
 	return m
 }
 

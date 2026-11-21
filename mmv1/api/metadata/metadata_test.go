@@ -135,6 +135,41 @@ func TestFromResource(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "optional primitive adds nullable_field_presence provider_only metadata",
+			resource: api.Resource{
+				Name:           "TestOptional",
+				SourceYamlFile: "TestOptional.yaml",
+				Properties: []*api.Type{
+					{
+						Name:    "optFlag",
+						Type:    "OptionalBoolean",
+						ApiName: "optFlag",
+					},
+				},
+			},
+			wantMetadata: Metadata{
+				Resource:            "google_product_test_optional",
+				GenerationType:      "mmv1",
+				SourceFile:          "TestOptional.yaml",
+				ApiServiceName:      "compute.googleapis.com",
+				ApiVersion:          "beta",
+				ApiResourceTypeKind: "TestOptional",
+				Fields: []Field{
+					{
+						ApiField: "optFlag",
+					},
+					{
+						Field:        "deletion_policy",
+						ProviderOnly: true,
+					},
+					{
+						Field:        "nullable_field_presence",
+						ProviderOnly: true,
+					},
+				},
+			},
+		},
 	}
 
 	for _, tc := range cases {

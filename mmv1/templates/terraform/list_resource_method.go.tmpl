@@ -100,7 +100,7 @@ func List{{ $.ResourceName }}s(config *transport_tpg.Config,
 {{- range $id := $.IdentityProperties }}
 {{- if $id.ApiName }}
 			if v, ok := res["{{ $id.ApiName }}"]; ok && v != nil {
-	{{- if eq $id.Type "Integer" }}
+	{{- if or (eq $id.Type "Integer") (eq $id.Type "OptionalInteger") }}
 				if s, ok := v.(string); ok {
 					i, err := strconv.Atoi(s)
 					if err != nil {

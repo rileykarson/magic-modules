@@ -15,6 +15,140 @@
 {{- define "expandPropertyMethod" }}
   {{- if $.CustomExpand }}
     {{ customTemplate $ $.CustomExpand true -}}
+  {{- else if and $.ContainsNullableFields (not $.IsOptionalPrimitive) }}
+func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) ({{ if $.IsA "Map" }}map[string]interface{}{{ else }}interface{}{{ end }}, error) {
+  return expand{{$.GetPrefix}}{{$.TitlelizeProperty}}WithPrefix(v, d, config, "{{ if $.FlattenObject }}{{ else }}{{ join $.Lineage ".0." }}{{ end }}")
+}
+
+func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}WithPrefix(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config, prefix string) ({{ if $.IsA "Map" }}map[string]interface{}{{ else }}interface{}{{ end }}, error) {
+    {{- if $.IsA "Map" }}
+  if v == nil {
+    return map[string]interface{}{}, nil
+  }
+  m := make(map[string]interface{})
+  for _, raw := range v.(*schema.Set).List() {
+    original := raw.(map[string]interface{})
+    transformed := make(map[string]interface{})
+    keyStr, _ := original["{{ underscore $.KeyName }}"].(string)
+    elemPrefix := tpgresource.FormatNullableMapSegment(prefix, keyStr)
+      {{- range $prop := $.NestedProperties }}
+        {{- if not (or (eq $prop.Name $.KeyName) $prop.ClientSide) }}
+          {{- $valExpr := printf "original[%q]" (underscore $prop.Name) }}
+          {{- if $prop.FlattenObject }}
+            {{- $valExpr = "original" }}
+          {{- else if $prop.WriteOnly }}
+            {{- $valExpr = printf "tpgresource.GetRawConfigAttributeAsString(d.(*schema.ResourceData), %q)" (join $prop.Lineage ".0.") }}
+          {{- end }}
+          {{- template "expandNestedNullableChild" (dict "Parent" $ "Prop" $prop "ValExpr" $valExpr) }}
+        {{- end }}
+      {{- end }}
+
+    transformed{{ camelize $.KeyName "upper" }}, err := {{ $.KeyExpander }}(original["{{ underscore $.KeyName }}"], d, config)
+    if err != nil {
+      return nil, err
+    }
+    m[transformed{{ camelize $.KeyName "upper" }}] = transformed
+  }
+  return m, nil
+}
+    {{- else if $.FlattenObject }}
+  elemPrefix := prefix
+  var original map[string]interface{}
+  if v != nil {
+    original, _ = v.(map[string]interface{})
+  }
+  transformed := make(map[string]interface{})
+      {{- range $prop := $.NestedProperties }}
+        {{- if not (or (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) $prop.ClientSide) }}
+          {{- $valExpr := printf "func() interface{} { if original != nil { return original[%q] }; return d.Get(%q) }()" (underscore $prop.Name) (underscore $prop.Name) }}
+          {{- if $prop.FlattenObject }}
+            {{- $valExpr = "original" }}
+          {{- else if $prop.WriteOnly }}
+            {{- $valExpr = printf "tpgresource.GetRawConfigAttributeAsString(d.(*schema.ResourceData), %q)" (join $prop.Lineage ".0.") }}
+          {{- end }}
+          {{- template "expandNestedNullableChild" (dict "Parent" $ "Prop" $prop "ValExpr" $valExpr) }}
+        {{- end }}
+      {{- end }}
+  return transformed, nil
+}
+    {{- else }}
+      {{- if $.IsSet }}
+  v = v.(*schema.Set).List()
+      {{- end }}
+  if v == nil {
+    return nil, nil
+  }
+  l := v.([]interface{})
+      {{- if $.IsA "Array" }}
+  req := make([]interface{}, 0, len(l))
+  for i, raw := range l {
+    var original map[string]interface{}
+    if raw != nil {
+      original = raw.(map[string]interface{})
+    } else {
+      original = make(map[string]interface{})
+    }
+    elemPrefix := fmt.Sprintf("%s.%d", prefix, i)
+    transformed := make(map[string]interface{})
+        {{- range $prop := $.NestedProperties }}
+          {{- if not (or (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) $prop.ClientSide) }}
+            {{- $valExpr := printf "original[%q]" (underscore $prop.Name) }}
+            {{- if $prop.FlattenObject }}
+              {{- $valExpr = "original" }}
+            {{- else if $prop.WriteOnly }}
+              {{- $valExpr = printf "tpgresource.GetRawConfigAttributeAsString(d.(*schema.ResourceData), %q)" (join $prop.Lineage ".0.") }}
+            {{- end }}
+            {{- template "expandNestedNullableChild" (dict "Parent" $ "Prop" $prop "ValExpr" $valExpr) }}
+          {{- end }}
+        {{- end }}
+    if raw == nil && len(transformed) == 0 {
+      continue
+    }
+    req = append(req, transformed)
+  }
+  return req, nil
+}
+      {{- else }}
+  if len(l) == 0 {
+    return nil, nil
+  }
+  var original map[string]interface{}
+  if l[0] != nil {
+    original = l[0].(map[string]interface{})
+  } else {
+    original = make(map[string]interface{})
+  }
+  elemPrefix := tpgresource.JoinNullablePrefix(prefix, "0")
+  transformed := make(map[string]interface{})
+        {{- range $prop := $.NestedProperties }}
+          {{- if not (or (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) $prop.ClientSide) }}
+            {{- $valExpr := printf "original[%q]" (underscore $prop.Name) }}
+            {{- if $prop.FlattenObject }}
+              {{- $valExpr = "original" }}
+            {{- else if $prop.WriteOnly }}
+              {{- $valExpr = printf "tpgresource.GetRawConfigAttributeAsString(d.(*schema.ResourceData), %q)" (join $prop.Lineage ".0.") }}
+            {{- end }}
+            {{- template "expandNestedNullableChild" (dict "Parent" $ "Prop" $prop "ValExpr" $valExpr) }}
+          {{- end }}
+        {{- end }}
+  if l[0] == nil && len(transformed) == 0 && !{{ if $.AllowEmptyObject }}true{{ else }}false{{ end }} {
+    return nil, nil
+  }
+  return transformed, nil
+}
+      {{- end }}
+    {{- end }}
+    {{- if $.NestedProperties }}
+      {{- range $prop := $.NestedProperties }}
+        {{- if not (and (hasPrefix $prop.Type "KeyValue") $prop.IgnoreWrite) }}
+          {{- if $.ResourceMetadata.ProductMetadata.IsTgcCompiler }}
+          {{- template "expandTgcPropertyMethod" $prop -}}
+          {{- else }}
+          {{- template "expandPropertyMethod" $prop -}}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- else }}{{/* if $.CustomExpand */}}
     {{- if $.IsA "Map" }}
 func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (map[string]interface{}, error) {
@@ -203,3 +337,76 @@ func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.T
     {{- end }}{{/* if $.NestedProperties */}}
   {{- end }}{{/* if $.CustomExpand */}}
 {{- end }}{{/* define */}}
+
+{{- define "expandNestedNullableChild" }}
+  {{- $parent := .Parent }}
+  {{- $prop := .Prop }}
+  {{- $valExpr := .ValExpr }}
+  {{- $childSeg := underscore $prop.Name }}
+  {{- if $prop.FlattenObject }}
+    {{- $childSeg = "" }}
+  {{- end }}
+  {{- if and $prop.ContainsNullableFields (not $prop.IsOptionalPrimitive) (not $prop.CustomExpand) }}
+    transformed{{$prop.TitlelizeProperty}}, err := expand{{$parent.GetPrefix}}{{$parent.TitlelizeProperty}}{{$prop.TitlelizeProperty}}WithPrefix({{ $valExpr }}, d, config, tpgresource.JoinNullablePrefix(elemPrefix, "{{ $childSeg }}"))
+  {{- else }}
+    transformed{{$prop.TitlelizeProperty}}, err := expand{{$parent.GetPrefix}}{{$parent.TitlelizeProperty}}{{$prop.TitlelizeProperty}}({{ $valExpr }}, d, config)
+  {{- end }}
+    if err != nil {
+      return nil, err
+  {{- if $prop.IsOptionalPrimitive }}
+    } else if tpgresource.IsNullableFieldPresent(d, tpgresource.JoinNullablePrefix(elemPrefix, "{{ underscore $prop.Name }}"), resource{{ $parent.ResourceMetadata.ResourceName }}NullableFields) {
+      transformed["{{$prop.ApiName}}"] = transformed{{$prop.TitlelizeProperty}}
+    {{- if $parent.ResourceMetadata.IsUnmaskedPatch }}
+    } else if tpgresource.WasNullableFieldPresent(d, tpgresource.JoinNullablePrefix(elemPrefix, "{{ underscore $prop.Name }}")) {
+      transformed["{{$prop.ApiName}}"] = nil
+    {{- end }}
+  {{- else if or ($prop.SendEmptyValue) (and $prop.TGCSendEmptyValue $parent.ResourceMetadata.ProductMetadata.IsTgcCompiler) }}
+    } else {
+      transformed["{{$prop.ApiName}}"] = transformed{{$prop.TitlelizeProperty}}
+  {{- else if $prop.ContainsNullableFields }}
+    } else if val := reflect.ValueOf(transformed{{$prop.TitlelizeProperty}}); val.IsValid() && !tpgresource.IsEmptyValue(val) {
+      transformed["{{$prop.ApiName}}"] = transformed{{$prop.TitlelizeProperty}}
+    {{- if $parent.ResourceMetadata.IsUnmaskedPatch }}
+    } else if tpgresource.WasNullableFieldPresentUnderPrefix(d, tpgresource.JoinNullablePrefix(elemPrefix, "{{ $childSeg }}")) {
+      transformed["{{$prop.ApiName}}"] = nil
+    {{- end }}
+  {{- else }}
+    } else if val := reflect.ValueOf(transformed{{$prop.TitlelizeProperty}}); val.IsValid() && !tpgresource.IsEmptyValue(val) {
+      transformed["{{$prop.ApiName}}"] = transformed{{$prop.TitlelizeProperty}}
+  {{- end }}
+    }
+{{- end }}
+
+{{- define "nullableFieldSpecsVar" }}
+{{- if $.HasNullableFields }}
+
+var resource{{ $.ResourceName }}NullableFields = []tpgresource.NullableFieldSpec{
+{{- range $spec := $.NullableFieldSpecs }}
+	{
+		Segments: []tpgresource.NullablePathSegment{
+{{- range $seg := $spec.Segments }}
+			{
+{{- if $seg.TFName }}
+				TFName: "{{ $seg.TFName }}",
+{{- end }}
+{{- if $seg.APIName }}
+				APIName: "{{ $seg.APIName }}",
+{{- end }}
+				Kind: tpgresource.{{ $seg.Kind }},
+{{- if $seg.KeyName }}
+				KeyName: "{{ $seg.KeyName }}",
+{{- end }}
+{{- if $seg.AllowEmptyObject }}
+				AllowEmptyObject: true,
+{{- end }}
+			},
+{{- end }}
+		},
+{{- if $spec.ForceNew }}
+		ForceNew: true,
+{{- end }}
+	},
+{{- end }}
+}
+{{- end }}
+{{- end }}

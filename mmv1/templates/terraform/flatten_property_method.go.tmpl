@@ -112,7 +112,7 @@ func flatten{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d *schema.Reso
   }
 
   return transformed
-  {{- else if $.IsA "Integer" }}
+  {{- else if or ($.IsA "Integer") ($.IsA "OptionalInteger") }}
 	// Handles the string fixed64 format
 	if strVal, ok := v.(string); ok {
 		if intVal, err := tpgresource.StringToFixed64(strVal); err == nil {
