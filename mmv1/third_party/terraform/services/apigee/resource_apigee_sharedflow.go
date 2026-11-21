@@ -79,12 +79,12 @@ func ResourceApigeeSharedFlow() *schema.Resource {
 						"created_at": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `Time at which the API proxy was created, in milliseconds since epoch.`,
+							Description: `Time at which the shared flow was created, in milliseconds since epoch.`,
 						},
 						"last_modified_at": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `Time at which the API proxy was most recently modified, in milliseconds since epoch.`,
+							Description: `Time at which the shared flow was most recently modified, in milliseconds since epoch.`,
 						},
 						"sub_type": {
 							Type:        schema.TypeString,
@@ -105,18 +105,18 @@ func ResourceApigeeSharedFlow() *schema.Resource {
 			"config_bundle": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `Path to the config zip bundle`,
+				Description: `Path to the config zip bundle.`,
 			},
 			"md5hash": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Base 64 MD5 hash of the uploaded config bundle.`,
+				Description: `Base 64 MD5 hash of the uploaded data. It is speculative as remote does not return hash of the bundle. Remote changes are detected using returned last_modified timestamp.`,
 			},
 			"detect_md5hash": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "Different Hash",
-				Description: `A hash of local config bundle in string, user needs to use a Terraform Hash function of their choice. A change in hash will trigger an update.`,
+				Description: `Detect changes to local config bundle file or changes made outside of Terraform. MD5 hash of the data, encoded using base64. Hash is automatically computed without need for user input.`,
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					localMd5Hash := ""
 					if config_bundle, ok := d.GetOkExists("config_bundle"); ok {

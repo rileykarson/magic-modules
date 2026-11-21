@@ -11,9 +11,10 @@ import (
 
 var OrganizationLoggingExclusionSchema = map[string]*schema.Schema{
 	"org_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The organization to create the exclusion in.`,
 	},
 }
 

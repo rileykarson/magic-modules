@@ -42,6 +42,7 @@ func ResourceSecurityCenterNotificationServiceAccount() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
+				Description:  "The organization ID for which the service account should be generated. Exactly one of `organization` or `project` must be specified.",
 				ExactlyOneOf: []string{"organization", "project"},
 			},
 			"project": {
@@ -49,6 +50,7 @@ func ResourceSecurityCenterNotificationServiceAccount() *schema.Resource {
 				Optional:     true,
 				Computed:     true,
 				ForceNew:     true,
+				Description:  "The project ID or number for which the service account should be generated. Exactly one of `organization` or `project` must be specified. If omitted and `organization` is not specified, it defaults to the provider project.",
 				ExactlyOneOf: []string{"organization", "project"},
 			},
 			"email": {
@@ -59,7 +61,7 @@ func ResourceSecurityCenterNotificationServiceAccount() *schema.Resource {
 			"member": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The Identity of the Cloud Security Command Center Notification service account in the form 'serviceAccount:{email}'. This value is often used to refer to the service account in order to grant IAM permissions.`,
+				Description: "The Identity of the Cloud Security Command Center Notification service account in the form `serviceAccount:{email}`. This value is often used to refer to the service account in order to grant IAM permissions.",
 			},
 		},
 		UseJSONNumber: true,

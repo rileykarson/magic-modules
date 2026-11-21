@@ -135,7 +135,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 			"gc_rules": {
 				Type:          schema.TypeString,
 				Optional:      true,
-				Description:   `Serialized JSON string for garbage collection policy. Conflicts with "mode", "max_age" and "max_version".`,
+				Description:   "Serialized JSON object to represent a more complex GC policy. Conflicts with `mode`, `max_age` and `max_version`. Conflicts with `mode`, `max_age` and `max_version`.",
 				ValidateFunc:  validation.StringIsJSON,
 				ConflictsWith: []string{"mode", "max_age", "max_version"},
 				StateFunc: func(v interface{}) string {
@@ -150,7 +150,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ForceNew:      true,
-				Description:   `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. If multiple policies are set, you should choose between UNION OR INTERSECTION.`,
+				Description:   "If multiple policies are set, you should choose between `UNION` OR `INTERSECTION`.",
 				ValidateFunc:  validation.StringInSlice([]string{GCPolicyModeIntersection, GCPolicyModeUnion}, false),
 				ConflictsWith: []string{"gc_rules"},
 			},
@@ -159,7 +159,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all cells older than the given age.`,
+				Description: `GC policy that applies to all cells older than the given age.`,
 				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -177,7 +177,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 							Optional:     true,
 							Computed:     true,
 							ForceNew:     true,
-							Description:  `Duration before applying GC policy`,
+							Description:  "Duration before applying GC policy (ex. \"8h\"). This is required when `days` isn't set",
 							ValidateFunc: verify.ValidateDuration(),
 							ExactlyOneOf: []string{"max_age.0.days", "max_age.0.duration"},
 						},
@@ -190,7 +190,7 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `NOTE: 'gc_rules' is more flexible, and should be preferred over this field for new resources. This field may be deprecated in the future. GC policy that applies to all versions of a cell except for the most recent.`,
+				Description: `GC policy that applies to all versions of a cell except for the most recent.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"number": {
@@ -217,13 +217,10 @@ func ResourceBigtableGCPolicy() *schema.Resource {
 			//UDP schema end
 
 			"ignore_warnings": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Description: `Allows ignoring warnings when updating the GC policy. This can be used
-				to increase the gc policy on replicated clusters. Doing this may make clusters be
-				inconsistent for a longer period of time, before using this make sure you understand
-				the risks listed at https://cloud.google.com/bigtable/docs/garbage-collection#increasing`,
-				Default: false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Boolean for whether to allow ignoring warnings when updating the gc policy.\nSetting this to `true` allows relaxing the gc policy for replicated clusters by up to 90 days, but keep in mind this may increase how long clusters are inconsistent. Make sure\nyou understand the risks listed at https://cloud.google.com/bigtable/docs/garbage-collection#increasing before setting this option.",
+				Default:     false,
 			},
 		},
 		UseJSONNumber: true,

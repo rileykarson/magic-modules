@@ -24,15 +24,17 @@ func ResourceStorageDefaultObjectAcl() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: `The name of the bucket it applies to.`,
 			},
 
 			"role_entity": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Computed:    true,
+				Description: "List of role/entity pairs in the form `ROLE:entity`.\nSee [GCS Object ACL documentation](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.\nOmitting the field is the same as providing an empty list.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
 					ValidateFunc: validateRoleEntityPair,

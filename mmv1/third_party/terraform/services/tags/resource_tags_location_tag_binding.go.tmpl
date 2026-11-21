@@ -49,19 +49,18 @@ func ResourceTagsLocationTagBinding() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The TagValue of the TagBinding. Must be either in id format 'tagValues/{tag-value-id}', or namespaced format '{parent-id}/{tag-key-short-name}/{tag-value-short-name}'.`,
+				Description: "The TagValue of the TagBinding. Must be either in id format `tagValues/{tag-value-id}`, or namespaced format `{parent-id}/{tag-key-short-name}/{tag-value-short-name}`.",
 			},
 			"location": {
 				Type:     schema.TypeString,
 				ForceNew: true,
 				Optional: true,
-				Description: `The geographic location where the transfer config should reside.
-Examples: US, EU, asia-northeast1. The default value is US.`,
+				Description: `Location of the target resource.`,
 			},
 			"name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The generated id for the TagBinding. This is a string of the form 'tagBindings/{full-resource-name}/{tag-value-name}' or 'tagBindings/{full-resource-name}/{tag-key-name}'`,
+				Description: "The generated id for the TagBinding. This is a string of the form `tagBindings/{full-resource-name}/{tag-value-name}` or `tagBindings/{full-resource-name}/{tag-key-name}`",
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

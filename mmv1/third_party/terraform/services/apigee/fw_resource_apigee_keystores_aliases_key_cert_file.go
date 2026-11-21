@@ -96,42 +96,48 @@ func (r *ApigeeKeystoresAliasesKeyCertFileResource) Configure(ctx context.Contex
 
 func (r *ApigeeKeystoresAliasesKeyCertFileResource) Schema(ctx context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "An alias from a key/cert file.",
+		Description: `An alias from a key/certificate pair.
+
+To get more information about KeystoresAliasesKeyCertFile, see:
+
+* [API documentation](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)
+* How-to Guides
+    * [Keystores Aliases](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.environments.keystores.aliases)`,
 		Attributes: map[string]schema.Attribute{
 			"org_id": schema.StringAttribute{
-				Description: "Organization ID associated with the alias.",
+				Description: `Organization ID associated with the alias, without organization/ prefix`,
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"environment": schema.StringAttribute{
-				Description: "Environment associated with the alias.",
+				Description: `Environment associated with the alias`,
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"keystore": schema.StringAttribute{
-				Description: "Keystore Name.",
+				Description: `Keystore Name`,
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"alias": schema.StringAttribute{
-				Description: "Alias Name.",
+				Description: `Alias Name`,
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"cert": schema.StringAttribute{
-				Description: "Cert content.",
+				Description: `Cert content`,
 				Required:    true,
 			},
 			"key": schema.StringAttribute{
-				Description: "Private Key content, omit if uploading to truststore.",
+				Description: `Private Key content, omit if uploading to truststore`,
 				Optional:    true,
 				Sensitive:   true,
 				PlanModifiers: []planmodifier.String{
@@ -139,16 +145,16 @@ func (r *ApigeeKeystoresAliasesKeyCertFileResource) Schema(ctx context.Context, 
 				},
 			},
 			"password": schema.StringAttribute{
-				Description: "Password for the Private Key if it's encrypted.",
+				Description: `Password for the Private Key if it's encrypted`,
 				Optional:    true,
 				Sensitive:   true,
 			},
 			"type": schema.StringAttribute{
-				Description: "Optional. Type of Alias.",
+				Description: `Optional.Type of Alias`,
 				Computed:    true,
 			},
 			"id": schema.StringAttribute{
-				Description: "Project identifier",
+				Description: "an identifier for the resource with format `organizations/{{org_id}}/environments/{{environment}}/keystores/{{keystore}}/aliases/{{alias}}`",
 				Computed:    true,
 			},
 			"certs_info": schema.ListAttribute{

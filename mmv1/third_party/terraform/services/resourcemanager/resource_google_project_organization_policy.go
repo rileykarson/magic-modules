@@ -42,7 +42,7 @@ func ResourceGoogleProjectOrganizationPolicy() *schema.Resource {
 					Type:        schema.TypeString,
 					Required:    true,
 					ForceNew:    true,
-					Description: `The project ID.`,
+					Description: `The project id of the project to set the policy for.`,
 				},
 				//UDP schema start
 				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

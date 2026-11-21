@@ -16,7 +16,7 @@ var loggingBucketConfigSchema = map[string]*schema.Schema{
 	"name": {
 		Type:        schema.TypeString,
 		Computed:    true,
-		Description: `The resource name of the bucket`,
+		Description: `The resource name of the bucket. For example: "projects/my-project-id/locations/my-location/buckets/my-bucket-id"`,
 	},
 	"location": {
 		Type:        schema.TypeString,
@@ -28,24 +28,24 @@ var loggingBucketConfigSchema = map[string]*schema.Schema{
 		Type:        schema.TypeString,
 		Required:    true,
 		ForceNew:    true,
-		Description: `The name of the logging bucket. Logging automatically creates two log buckets: _Required and _Default.`,
+		Description: "The name of the logging bucket. Logging automatically creates two log buckets: `_Required` and `_Default`.",
 	},
 	"description": {
 		Type:        schema.TypeString,
 		Optional:    true,
 		Computed:    true,
-		Description: `An optional description for this bucket.`,
+		Description: `Describes this bucket.`,
 	},
 	"retention_days": {
 		Type:        schema.TypeInt,
 		Optional:    true,
 		Default:     30,
-		Description: `Logs will be retained by default for this amount of time, after which they will automatically be deleted. The minimum retention period is 1 day. If this value is set to zero at bucket creation time, the default time of 30 days will be used.`,
+		Description: `Logs will be retained by default for this amount of time, after which they will automatically be deleted. The minimum retention period is 1 day. If this value is set to zero at bucket creation time, the default time of 30 days will be used. Bucket retention can not be increased on buckets outside of projects.`,
 	},
 	"lifecycle_state": {
 		Type:        schema.TypeString,
 		Computed:    true,
-		Description: `The bucket's lifecycle such as active or deleted.`,
+		Description: `The bucket's lifecycle such as active or deleted. See [LifecycleState](https://cloud.google.com/logging/docs/reference/v2/rest/v2/billingAccounts.buckets#LogBucket.LifecycleState).`,
 	},
 	"cmek_settings": {
 		Type:        schema.TypeList,
@@ -60,24 +60,14 @@ var loggingBucketConfigSchema = map[string]*schema.Schema{
 					Description: `The resource name of the CMEK settings.`,
 				},
 				"kms_key_name": {
-					Type:     schema.TypeString,
-					Required: true,
-					Description: `The resource name for the configured Cloud KMS key.
-KMS key name format:
-"projects/[PROJECT_ID]/locations/[LOCATION]/keyRings/[KEYRING]/cryptoKeys/[KEY]"
-To enable CMEK for the bucket, set this field to a valid kmsKeyName for which the associated service account has the required cloudkms.cryptoKeyEncrypterDecrypter roles assigned for the key.
-The Cloud KMS key used by the bucket can be updated by changing the kmsKeyName to a new valid key name. Encryption operations that are in progress will be completed with the key that was in use when they started. Decryption operations will be completed using the key that was used at the time of encryption unless access to that key has been revoked.
-See [Enabling CMEK for Logging Buckets](https://cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.`,
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The resource name for the configured Cloud KMS key.\nKMS key name format:\n`'projects/[PROJECT_ID]/locations/[LOCATION]/keyRings/[KEYRING]/cryptoKeys/[KEY]'`\nTo enable CMEK for the bucket, set this field to a valid kmsKeyName for which the associated service account has the required cloudkms.cryptoKeyEncrypterDecrypter roles assigned for the key.\nThe Cloud KMS key used by the bucket can be updated by changing the kmsKeyName to a new valid key name. Encryption operations that are in progress will be completed with the key that was in use when they started. Decryption operations will be completed using the key that was used at the time of encryption unless access to that key has been revoked.\nSee [Enabling CMEK for Logging Buckets](https://cloud.google.com/logging/docs/routing/managed-encryption-storage) for more information.",
 				},
 				"kms_key_version_name": {
-					Type:     schema.TypeString,
-					Computed: true,
-					Description: `The CryptoKeyVersion resource name for the configured Cloud KMS key.
-KMS key name format:
-"projects/[PROJECT_ID]/locations/[LOCATION]/keyRings/[KEYRING]/cryptoKeys/[KEY]/cryptoKeyVersions/[VERSION]"
-For example:
-"projects/my-project/locations/us-central1/keyRings/my-ring/cryptoKeys/my-key/cryptoKeyVersions/1"
-This is a read-only field used to convey the specific configured CryptoKeyVersion of kms_key that has been configured. It will be populated in cases where the CMEK settings are bound to a single key version.`,
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "The CryptoKeyVersion resource name for the configured Cloud KMS key.\nKMS key name format:\n`'projects/[PROJECT_ID]/locations/[LOCATION]/keyRings/[KEYRING]/cryptoKeys/[KEY]/cryptoKeyVersions/[VERSION]'`\nFor example:\n\"projects/my-project/locations/us-central1/keyRings/my-ring/cryptoKeys/my-key/cryptoKeyVersions/1\"\nThis is a read-only field used to convey the specific configured CryptoKeyVersion of kms_key that has been configured. It will be populated in cases where the CMEK settings are bound to a single key version.",
 				},
 				"service_account_id": {
 					Type:     schema.TypeString,
@@ -98,16 +88,15 @@ See [Enabling CMEK for Logging Buckets](https://cloud.google.com/logging/docs/ro
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"field_path": {
-					Type:        schema.TypeString,
-					Required:    true,
-					Description: `The LogEntry field path to index.`,
-				},
-				"type": {
 					Type:     schema.TypeString,
 					Required: true,
-					Description: `The type of data in this index
-Note that some paths are automatically indexed, and other paths are not eligible for indexing. See [indexing documentation]( https://cloud.google.com/logging/docs/view/advanced-queries#indexed-fields) for details.
-For example: jsonPayload.request.status`,
+					Description: `The LogEntry field path to index.
+Note that some paths are automatically indexed, and other paths are not eligible for indexing. See [indexing documentation](https://cloud.google.com/logging/docs/analyze/custom-index) for details.`,
+				},
+				"type": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The type of data in this index. Allowed types include `INDEX_TYPE_UNSPECIFIED`, `INDEX_TYPE_STRING` and `INDEX_TYPE_INTEGER`.",
 				},
 			},
 		},

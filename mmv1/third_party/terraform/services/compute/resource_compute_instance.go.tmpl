@@ -331,7 +331,8 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: bootDiskKeys,
 							Default:      true,
-							Description:  `Whether the disk will be auto-deleted when the instance is deleted.`,
+							Description:  `Whether the disk will be auto-deleted when the instance
+is deleted. Defaults to true.`,
 						},
 
 						"device_name": {
@@ -340,7 +341,7 @@ func ResourceComputeInstance() *schema.Resource {
 							AtLeastOneOf: bootDiskKeys,
 							Computed:     true,
 							ForceNew:     true,
-							Description:  `Name with which attached disk will be accessible under /dev/disk/by-id/`,
+							Description:  "Name with which attached disk will be accessible.\nOn the instance, this device will be `/dev/disk/by-id/google-{{"{{"}}device_name{{"}}"}}`.",
 						},
 
 						"disk_encryption_key_raw": {
@@ -350,7 +351,7 @@ func ResourceComputeInstance() *schema.Resource {
 							ForceNew:      true,
 							ConflictsWith: []string{"boot_disk.0.kms_key_self_link", "boot_disk.0.disk_encryption_key_rsa"},
 							Sensitive:     true,
-							Description:   `A 256-bit customer-supplied encryption key, encoded in RFC 4648 base64 to encrypt this disk. Only one of kms_key_self_link, disk_encryption_key_raw and disk_encryption_key_rsa may be set.`,
+							Description:   "A 256-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),\nencoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)\nto encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`\nmay be set.",
 						},
 
 						"disk_encryption_key_rsa": {
@@ -360,13 +361,15 @@ func ResourceComputeInstance() *schema.Resource {
 							ForceNew:      true,
 							ConflictsWith: []string{"boot_disk.0.kms_key_self_link", "boot_disk.0.disk_encryption_key_raw"},
 							Sensitive:     true,
-							Description:   `Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit customer-supplied encryption key to either encrypt or decrypt this resource. Only one of kms_key_self_link, disk_encryption_key_raw and disk_encryption_key_rsa may be set.`,
+							Description:   "Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`",
 						},
 
 						"disk_encryption_key_sha256": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The RFC 4648 base64 encoded SHA-256 hash of the customer-supplied encryption key that protects this resource.`,
+							Description: `The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
+encoded SHA-256 hash of the [customer-supplied encryption key]
+(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.`,
 						},
 
 						"disk_encryption_service_account": {
@@ -374,7 +377,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: bootDiskKeys,
 							ForceNew:     true,
-							Description:  `The service account being used for the encryption request for the given KMS key. If absent, the Compute Engine default service account is used`,
+							Description:  `The service account being used for the encryption request for the given KMS key. If absent, the Compute Engine default service account is used.`,
 						},
 
 						"interface": {
@@ -392,7 +395,7 @@ func ResourceComputeInstance() *schema.Resource {
 							ConflictsWith:    []string{"boot_disk.0.disk_encryption_key_raw", "boot_disk.0.disk_encryption_key_rsa"},
 							DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
 							Computed:         true,
-							Description:      `The self_link of the encryption key that is stored in Google Cloud KMS to encrypt this disk. Only one of kms_key_self_link, disk_encryption_key_raw and disk_encryption_key_rsa may be set.`,
+							Description:      "The self_link of the encryption key that is\nstored in Google Cloud KMS to encrypt this disk. Only one of `kms_key_self_link`,\n`disk_encryption_key_rsa` and `disk_encryption_key_raw`\nmay be set.",
 						},
 
 						"guest_os_features": {
@@ -401,7 +404,7 @@ func ResourceComputeInstance() *schema.Resource {
 							AtLeastOneOf: bootDiskKeys,
 							ForceNew:     true,
 							Computed:     true,
-							Description:  `A list of features to enable on the guest operating system. Applicable only for bootable images.`,
+							Description:  `A list of features to enable on the guest operating system. Applicable only for bootable images. Read [Enabling guest operating system features](https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features) to see a list of available options.`,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -414,7 +417,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Computed:     true,
 							ForceNew:     true,
 							MaxItems:     1,
-							Description:  `Parameters with which a disk was created alongside the instance.`,
+							Description:  "Parameters for a new disk that will be created\nalongside the new instance. Either `initialize_params` or `source` must be set.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"size": {
@@ -423,7 +426,8 @@ func ResourceComputeInstance() *schema.Resource {
 										AtLeastOneOf: initializeParamsKeys,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(1),
-										Description:  `The size of the image in gigabytes.`,
+										Description:  `The size of the image in gigabytes. If not specified, it
+will inherit the size of its base image.`,
 									},
 
 									"type": {
@@ -432,7 +436,7 @@ func ResourceComputeInstance() *schema.Resource {
 										AtLeastOneOf: initializeParamsKeys,
 										Computed:     true,
 										ForceNew:     true,
-										Description:  `The Google Compute Engine disk type. Such as pd-standard, pd-ssd or pd-balanced.`,
+										Description:  `The GCE disk type. Such as pd-standard, pd-balanced or pd-ssd.`,
 									},
 
 									"image": {
@@ -442,7 +446,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Computed:         true,
 										ForceNew:         true,
 										DiffSuppressFunc: DiskImageDiffSuppress,
-										Description:      `The image from which this disk was initialised.`,
+										Description:      "The image from which to initialize this disk. This can be\none of: the image's `self_link`, `projects/{project}/global/images/{image}`,\n`projects/{project}/global/images/family/{family}`, `global/images/{image}`,\n`global/images/family/{family}`, `family/{family}`, `{project}/{family}`,\n`{project}/{image}`, `{family}`, or `{image}`. If referred by family, the\nimages names must include the family name. If they don't, use the\n[google_compute_image data source](/docs/providers/google/d/compute_image.html).\nFor instance, the image `centos-6-v20180104` includes its family name `centos-6`.\nThese images can be referred by family name here.",
 									},
 
 									"source_image_encryption_key": {
@@ -450,7 +454,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional: true,
 										AtLeastOneOf: initializeParamsKeys,
 										MaxItems: 1,
-										Description: `The encryption key used to decrypt the source image.`,
+										Description: `Encryption key used to decrypt the given image.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"raw_key": {
@@ -458,7 +462,7 @@ func ResourceComputeInstance() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													Sensitive:        true,
-													Description:      `Specifies a 256-bit customer-supplied encryption key, encoded in RFC 4648 base64 to either encrypt or decrypt this resource. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "A 256-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),\nencoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)\nto decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"rsa_encrypted_key": {
@@ -466,7 +470,7 @@ func ResourceComputeInstance() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													Sensitive:        true,
-													Description:      `Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit customer-supplied encryption key to either encrypt or decrypt this resource. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"kms_key_self_link": {
@@ -475,7 +479,7 @@ func ResourceComputeInstance() *schema.Resource {
 													ForceNew:         true,
 													Computed:         true,
 													DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
-													Description:      `The self link of the encryption key that is stored in Google Cloud KMS. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "The self_link of the encryption key that is\nstored in Google Cloud KMS to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"kms_key_service_account": {
@@ -488,7 +492,9 @@ func ResourceComputeInstance() *schema.Resource {
 												"sha256": {
 													Type:             schema.TypeString,
 													Computed:         true,
-													Description:      `The SHA256 hash of the encryption key used to encrypt this disk.`,
+													Description:      `The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
+encoded SHA-256 hash of the [customer-supplied encryption key]
+(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.`,
 												},
 											},
 										},
@@ -501,7 +507,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Computed:         true,
 										ForceNew:         true,
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The snapshot from which this disk was initialised.`,
+										Description:      "The snapshot from which to initialize this disk. To create a disk with a snapshot that you created, specify the snapshot name in the following format: `global/snapshots/my-backup`",
 									},
 
 									"source_snapshot_encryption_key": {
@@ -509,7 +515,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional: true,
 										AtLeastOneOf: initializeParamsKeys,
 										MaxItems: 1,
-										Description: `The encryption key used to decrypt the source snapshot.`,
+										Description: `Encryption key used to decrypt the given snapshot.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"raw_key": {
@@ -517,7 +523,7 @@ func ResourceComputeInstance() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													Sensitive:        true,
-													Description:      `Specifies a 256-bit customer-supplied encryption key, encoded in RFC 4648 base64 to either encrypt or decrypt this resource. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "A 256-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),\nencoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)\nto decrypt the given snapshot. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"rsa_encrypted_key": {
@@ -525,7 +531,7 @@ func ResourceComputeInstance() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													Sensitive:        true,
-													Description:      `Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit customer-supplied encryption key to either encrypt or decrypt this resource. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to decrypt the given snapshot. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"kms_key_self_link": {
@@ -534,7 +540,7 @@ func ResourceComputeInstance() *schema.Resource {
 													ForceNew:         true,
 													Computed:         true,
 													DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
-													Description:      `The self link of the encryption key that is stored in Google Cloud KMS. Only one of kms_key_self_link, rsa_encrypted_key and raw_key may be set.`,
+													Description:      "The self_link of the encryption key that is\nstored in Google Cloud KMS to decrypt the given image. Only one of `kms_key_self_link`, `rsa_encrypted_key` and `raw_key`\nmay be set.",
 												},
 
 												"kms_key_service_account": {
@@ -547,7 +553,9 @@ func ResourceComputeInstance() *schema.Resource {
 												"sha256": {
 													Type:             schema.TypeString,
 													Computed:         true,
-													Description:      `The SHA256 hash of the encryption key used to encrypt this disk.`,
+													Description:      `The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
+encoded SHA-256 hash of the [customer-supplied encryption key]
+(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.`,
 												},
 											},
 										},
@@ -558,7 +566,8 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: initializeParamsKeys,
 										Computed:     true,
-										Description:  `A set of key/value label pairs assigned to the disk.`,
+										Description:  `A set of key/value label pairs assigned to the disk. This
+field is only applicable for persistent disks.`,
 									},
 
 									"resource_manager_tags": {
@@ -566,7 +575,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										ForceNew:     true,
 										AtLeastOneOf: initializeParamsKeys,
-										Description:  `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored (both PUT & PATCH) when empty.`,
+										Description:  `A tag is a key-value pair that can be attached to a Google Cloud resource. You can use tags to conditionally allow or deny policies based on whether a resource has a specific tag. This value is not returned by the API. In Terraform, this value cannot be updated and changing it will recreate the resource.`,
 									},
 
 									"resource_policies": {
@@ -578,7 +587,7 @@ func ResourceComputeInstance() *schema.Resource {
 										AtLeastOneOf:     initializeParamsKeys,
 										DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
 										MaxItems:         1,
-										Description:      `A list of self_links of resource policies to attach to the instance's boot disk. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.`,
+										Description:      `A list of self_links of resource policies to attach to the instance's boot disk. Modifying this list will cause the instance to recreate, so any external values are not set until the user specifies this field. Currently a max of 1 resource policy is supported.`,
 									},
 
 									"provisioned_iops": {
@@ -586,7 +595,13 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: initializeParamsKeys,
 										Computed:     true,
-										Description:  `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+										Description:  `Indicates how many IOPS to provision for the disk.
+This sets the number of I/O operations per second that the disk can handle.
+For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+Note: Updating in place is only supported for hyperdisk skus; changing this
+value on other disk types (e.g. pd-extreme) will force recreation of the instance.
+Hyperdisk allows for an update of IOPS every 4 hours; to update more
+frequently than that, you'll need to manually delete and recreate the disk.`,
 									},
 
 									"provisioned_throughput": {
@@ -594,7 +609,12 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: initializeParamsKeys,
 										Computed:     true,
-										Description:  `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+										Description:  `Indicates how much throughput to provision for the disk.
+This sets the number of throughput mb per second that the disk can handle.
+For more details,see the [Hyperdisk documentation](https://cloud.google.com/compute/docs/disks/hyperdisks).
+Note: This is only supported for hyperdisk skus, and can be updated in place.
+Hyperdisk allows for an update of throughput every 4 hours; to update more
+frequently than that, you'll need to manually delete and recreate the disk.`,
 									},
 
 									"enable_confidential_compute": {
@@ -602,7 +622,8 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: initializeParamsKeys,
 										ForceNew:     true,
-										Description:  `A flag to enable confidential compute mode on boot disk`,
+										Description:  `Whether this disk is using confidential compute mode.
+Note: Only supported on hyperdisk skus, disk_encryption_key is required when setting to true.`,
 									},
 
 									"storage_pool": {
@@ -611,7 +632,12 @@ func ResourceComputeInstance() *schema.Resource {
 										AtLeastOneOf:     initializeParamsKeys,
 										ForceNew:         true,
 										DiffSuppressFunc: tpgresource.CompareResourceNames,
-										Description:      `The URL of the storage pool in which the new disk is created`,
+										Description:      `The URL or the name of the storage pool in which the new disk is created.
+For example:
+* https://www.googleapis.com/compute/v1/projects/{project}/zones/{zone}/storagePools/{storagePool}
+* /projects/{project}/zones/{zone}/storagePools/{storagePool}
+* /zones/{zone}/storagePools/{storagePool}
+* /{storagePool}`,
 									},
 
 									"architecture": {
@@ -621,7 +647,7 @@ func ResourceComputeInstance() *schema.Resource {
 										ForceNew:     true,
 										AtLeastOneOf: initializeParamsKeys,
 										ValidateFunc: validation.StringInSlice([]string{"X86_64", "ARM64"}, false),
-										Description:  `The architecture of the disk. One of "X86_64" or "ARM64".`,
+										Description:  "The architecture of the attached disk. Valid values are `ARM64` or `x86_64`.",
 									},
 
 									"replica_zones": {
@@ -629,7 +655,7 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:     true,
 										ForceNew:     true,
 										AtLeastOneOf: initializeParamsKeys,
-										Description:  `A list of short names or self_links of zones in which to create a regional disk.`,
+										Description:  `A list of short names or self_links of zones in which to create the disk. Setting this field converts the disk to a regional disk. You must provide exactly two replica zones, and one zone must be the same as the instance zone.`,
 										Elem: &schema.Schema{
 											Type:             schema.TypeString,
 											DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
@@ -646,7 +672,7 @@ func ResourceComputeInstance() *schema.Resource {
 							ForceNew:     true,
 							Default:      "READ_WRITE",
 							ValidateFunc: validation.StringInSlice([]string{"READ_WRITE", "READ_ONLY"}, false),
-							Description:  `Read/write mode for the disk. One of "READ_ONLY" or "READ_WRITE".`,
+							Description:  "The mode in which to attach this disk, either `READ_WRITE`\nor `READ_ONLY`. If not specified, the default is to attach the disk in `READ_WRITE` mode.",
 						},
 
 						"source": {
@@ -657,7 +683,7 @@ func ResourceComputeInstance() *schema.Resource {
 							ForceNew:         true,
 							ConflictsWith:    []string{"boot_disk.initialize_params"},
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The name or self_link of the disk attached to this instance.`,
+							Description:      "The name or self_link of the existing disk (such as those managed by\n`google_compute_disk`) or disk image. To create an instance from a snapshot, first create a\n`google_compute_disk` from a snapshot and reference it here.",
 						},
 
 						"force_attach": {
@@ -667,7 +693,9 @@ func ResourceComputeInstance() *schema.Resource {
 							AtLeastOneOf:     bootDiskKeys,
 							ForceNew:         true,
 							DiffSuppressFunc: DisksForceAttachDiffSuppress,
-							Description:      `Whether to force attach the regional disk even if it's currently attached to another instance. If you try to force attach a zonal disk to an instance, you will receive an error. Setting this parameter cause VM recreation.`,
+							Description:      `boolean field that determines whether to force attach the regional
+disk even if it's currently attached to another instance. If you try to force attach a zonal
+disk to an instance, you will receive an error. Setting this parameter cause VM recreation.`,
 						},
 					},
 				},
@@ -676,7 +704,7 @@ func ResourceComputeInstance() *schema.Resource {
 			"machine_type": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `The machine type to create.`,
+				Description: "The machine type to create.\n\n**Note:** If you want to update this value (resize the VM) after initial creation, you must set [`allow_stopping_for_update`](#allow_stopping_for_update) to `true`.\n\n[Custom machine types](https://cloud.google.com/dataproc/docs/concepts/compute/custom-machine-types) can be formatted as `custom-NUMBER_OF_CPUS-AMOUNT_OF_MEMORY_MB`, e.g. `custom-6-20480` for 6 vCPU and 20GB of RAM.\nBecause of current API limitations some custom machine types may get converted to different machine types (such as an equivalent standard type) and cause non-empty plans in your configuration. Use\n`lifecycle.ignore_changes` on `machine_type` in these cases.\n\nThere is a limit of 6.5 GB per CPU unless you add [extended memory](https://cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#extendedmemory). You must do this explicitly by adding the suffix `-ext`, e.g. `custom-2-15360-ext` for 2 vCPU and 15 GB of memory.",
 				DiffSuppressFunc: tpgresource.CompareResourceNames,
 			},
 
@@ -685,14 +713,16 @@ func ResourceComputeInstance() *schema.Resource {
 				Required:    true,
 				ForceNew:    true,
 				ValidateFunc: verify.ValidateRFC1035Name(1, 63),
-				Description: `The name of the instance. One of name or self_link must be provided.`,
+				Description: `A unique name for the resource, required by GCE.
+Changing this forces a new resource to be created.`,
 			},
 
 			"network_interface": {
 				Type:        schema.TypeList,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The networks attached to the instance.`,
+				Description: `Networks to attach to the instance. This can
+be specified multiple times.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"network": {
@@ -700,7 +730,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:         true,
 							Computed:         true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The name or self_link of the network attached to this interface.`,
+							Description:      "The name or self_link of the network to attach this interface to.\nEither `network` or `subnetwork` must be provided. If network isn't provided it will\nbe inferred from the subnetwork.",
 						},
 
 						"subnetwork": {
@@ -708,7 +738,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:         true,
 							Computed:         true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The name or self_link of the subnetwork attached to this interface.`,
+							Description:      "The name or self_link of the subnetwork to attach this\ninterface to. Either `network` or `subnetwork` must be provided. If network isn't provided\nit will be inferred from the subnetwork. The subnetwork must exist in the same region this\ninstance will be created in. If the network resource is in\n[legacy](https://cloud.google.com/vpc/docs/legacy) mode, do not specify this field. If the\nnetwork is in auto subnet mode, specifying the subnetwork is optional. If the network is\nin custom subnet mode, specifying the subnetwork is required.",
 						},
 
 						"network_attachment": {
@@ -717,21 +747,21 @@ func ResourceComputeInstance() *schema.Resource {
 							Computed:         true,
 							ForceNew:     	  true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The URL of the network attachment that this interface should connect to in the following format: projects/{projectNumber}/regions/{region_name}/networkAttachments/{network_attachment_name}.`,
+							Description:      "The URL of the network attachment that this interface should connect to in the following format: `projects/{projectNumber}/regions/{region_name}/networkAttachments/{network_attachment_name}`.",
 						},
 
 						"enable_vpc_scoped_dns": {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							ForceNew:    true,
-							Description: `If true, DNS resolution will be enabled over this interface. Only valid with network_attachment.`,
+							Description: "If true, DNS resolution will be enabled over this interface. Only valid with `network_attachment`.",
 						},
 
 						"service_class_id": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							ForceNew:    true,
-							Description: `Producer Service's Service class Id for the region of this network interface. Can only be used with network_attachment. It is not possible to use on its own; however, network_attachment can be used without service_class_id.`,
+							Description: "Producer Service's Service class Id for the region of this network interface. Can only be used with `network_attachment`. It is not possible to use on its own; however, `network_attachment` can be used without `service_class_id`.",
 						},
 
 						"parent_nic_name": {
@@ -752,20 +782,21 @@ func ResourceComputeInstance() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `The project in which the subnetwork belongs.`,
+							Description: "The project in which the subnetwork belongs.\nIf the `subnetwork` is a self_link, this field is set to the project\ndefined in the subnetwork self_link. If the `subnetwork` is a name and this\nfield is not provided, the provider project is used.",
 						},
 
 						"network_ip": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `The private IP address assigned to the instance.`,
+							Description: `The private IP address to assign to the instance. If
+empty, the address will be automatically assigned.`,
 						},
 
 						"name": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The name of the interface`,
+							Description: `The name of the interface.`,
 						},
 
 						"nic_type": {
@@ -773,39 +804,45 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							ForceNew:     true,
 							ValidateFunc: validation.StringInSlice([]string{"GVNIC", "VIRTIO_NET", "IDPF", "MRDMA", "IRDMA", "IDPF"}, false),
-							Description:  `The type of vNIC to be used on this interface. Possible values:GVNIC, VIRTIO_NET, IDPF, MRDMA, IRDMA and IDPF`,
+							Description:  `The type of vNIC to be used on this interface. Possible values: GVNIC, VIRTIO_NET, IDPF, MRDMA, IRDMA, IDPF`,
 						},
 
 						"access_config": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Description: `Access configurations, i.e. IPs via which this instance can be accessed via the Internet.`,
+							Description: "Access configurations, i.e. IPs via which this\ninstance can be accessed via the Internet. Omit to ensure that the instance\nis not accessible from the Internet. If omitted, ssh provisioners will not\nwork unless Terraform can send traffic to the instance's network (e.g. via\ntunnel or because it is running on another cloud instance on that network).\nThis block can be specified once per `network_interface`.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"nat_ip": {
 										Type:        schema.TypeString,
 										Optional:    true,
 										Computed:    true,
-										Description: `The IP address that is be 1:1 mapped to the instance's network ip.`,
+										Description: `The IP address that will be 1:1 mapped to the instance's
+network ip. If not given, one will be generated.`,
 									},
 
 									"network_tier": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										Computed:     true,
-										Description:  `The networking tier used for configuring this instance. One of PREMIUM or STANDARD.`,
+										Description:  `The [networking tier](https://cloud.google.com/network-tiers/docs/overview) used for configuring this instance.
+This field can take the following values: PREMIUM, FIXED_STANDARD or STANDARD. If this field is
+not specified, it is assumed to be PREMIUM.`,
 									},
 
 									"public_ptr_domain_name": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The DNS domain name for the public PTR record.`,
+										Description: `The DNS domain name for the public PTR record.
+To set this field on an instance, you must be verified as the owner of the domain.
+See [the docs](https://cloud.google.com/compute/docs/instances/create-ptr-record) for how
+to become verified as a domain owner.`,
 									},
 									{{- if ne $.TargetVersionName "ga" }}
 									"security_policy": {
 										Type:        schema.TypeString,
 										Computed:    true,
-										Description: `A full or partial URL to a security policy to add to this instance. If this field is set to an empty string it will remove the associated security policy.`,
+										Description: "The URL of the security policy applied to this access config. To set it, use `network_interface.security_policy`.",
 									},
 									{{- end }}
 								},
@@ -815,19 +852,26 @@ func ResourceComputeInstance() *schema.Resource {
 						"alias_ip_range": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Description: `An array of alias IP ranges for this network interface.`,
+							Description: `An
+array of alias IP ranges for this network interface. Can only be specified for network
+interfaces on subnet-mode networks.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"ip_cidr_range": {
 										Type:             schema.TypeString,
 										Required:         true,
 										DiffSuppressFunc: AliasIpRangeDiffSuppress,
-										Description:      `The IP CIDR range represented by this alias IP range.`,
+										Description:      `The IP CIDR range represented by this alias IP range. This IP CIDR range
+must belong to the specified subnetwork and cannot contain IP addresses reserved by
+system or used by other network interfaces. This range may be a single IP address
+(e.g. 10.2.3.4), a netmask (e.g. /24) or a CIDR format string (e.g. 10.1.2.0/24).`,
 									},
 									"subnetwork_range_name": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The subnetwork secondary range name specifying the secondary range from which to allocate the IP CIDR range for this alias IP range.`,
+										Description: `The subnetwork secondary range name specifying
+the secondary range from which to allocate the IP CIDR range for this alias IP
+range. If left unspecified, the primary range of the subnetwork will be used.`,
 									},
 								},
 							},
@@ -837,19 +881,26 @@ func ResourceComputeInstance() *schema.Resource {
 						"alias_ipv6_range": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Description: `An array of IPv6 alias IP ranges for this network interface.`,
+							Description: `An
+array of alias IPv6 ranges for this network interface. Can only be specified for network
+interfaces on subnet-mode networks.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"ip_cidr_range": {
 										Type:             schema.TypeString,
 										Required:         true,
 										DiffSuppressFunc: IpCidrRangeDiffSuppress,
-										Description:      `The IPv6 CIDR range represented by this alias IP range.`,
+										Description:      `The IP CIDR range represented by this alias IP range. This IP CIDR range
+must belong to the specified subnetwork and cannot contain IP addresses reserved by
+system or used by other network interfaces. This range may be a single IP address
+(e.g. 10.2.3.4), a netmask (e.g. /24) or a CIDR format string (e.g. 10.1.2.0/24).`,
 									},
 									"subnetwork_range_name": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The subnetwork secondary range name specifying the secondary range from which to allocate the IP CIDR range for this alias IP range.`,
+										Description: `The subnetwork secondary range name specifying
+the secondary range from which to allocate the IP CIDR range for this alias IP
+range. If left unspecified, the primary range of the subnetwork will be used.`,
 									},
 								},
 							},
@@ -861,7 +912,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validation.StringInSlice([]string{"IPV4_ONLY", "IPV4_IPV6", "IPV6_ONLY", ""}, false),
-							Description: `The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.`,
+							Description: `The stack type for this network interface to identify whether the IPv6 feature is enabled or not. Values are IPV4_IPV6, IPV6_ONLY or IPV4_ONLY. If not specified, IPV4_ONLY will be used.`,
 						},
 
 						"igmp_query": {
@@ -875,24 +926,29 @@ func ResourceComputeInstance() *schema.Resource {
 						"ipv6_access_type": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet. This field is always inherited from its subnetwork.`,
+							Description: `One of EXTERNAL, INTERNAL to indicate whether the IP can be accessed from the Internet.
+This field is always inherited from its subnetwork.`,
 						},
 
 						"ipv6_access_config": {
 							Type:        schema.TypeList,
                             Optional:    true,
-							Description: `An array of IPv6 access configurations for this interface. Currently, only one IPv6 access config, DIRECT_IPV6, is supported. If there is no ipv6AccessConfig specified, then this instance will have no external IPv6 Internet access.`,
+							Description: `An array of IPv6 access configurations for this interface.
+Currently, only one IPv6 access config, DIRECT_IPV6, is supported. If there is no ipv6AccessConfig
+specified, then this instance will have no external IPv6 Internet access.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"network_tier": {
 										Type:         schema.TypeString,
 										Required:     true,
-										Description:  `The service-level to be provided for IPv6 traffic when the subnet has an external subnet. Only PREMIUM tier is valid for IPv6`,
+										Description:  `The service-level to be provided for IPv6 traffic when the
+subnet has an external subnet. Only PREMIUM or STANDARD tier is valid for IPv6.`,
 									},
 									"public_ptr_domain_name": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The domain name to be used when creating DNSv6 records for the external IPv6 ranges.`,
+										Description: `The domain name to be used when creating DNSv6
+records for the external IPv6 ranges..`,
 									},
 									"external_ipv6": {
 										Type:             schema.TypeString,
@@ -900,7 +956,10 @@ func ResourceComputeInstance() *schema.Resource {
 										Computed:         true,
 										ForceNew:         true,
 										DiffSuppressFunc: ipv6RepresentationDiffSuppress,
-										Description:      `The first IPv6 address of the external IPv6 range associated with this instance, prefix length is stored in externalIpv6PrefixLength in ipv6AccessConfig. To use a static external IP address, it must be unused and in the same region as the instance's zone. If not specified, Google Cloud will automatically assign an external IPv6 address from the instance's subnetwork.`,
+										Description:      `The first IPv6 address of the external IPv6 range associated
+with this instance, prefix length is stored in externalIpv6PrefixLength in ipv6AccessConfig.
+To use a static external IP address, it must be unused and in the same region as the instance's zone.
+If not specified, Google Cloud will automatically assign an external IPv6 address from the instance's subnetwork.`,
 									},
 									"external_ipv6_prefix_length": {
 										Type:        schema.TypeString,
@@ -914,13 +973,14 @@ func ResourceComputeInstance() *schema.Resource {
 										Optional:    true,
 										Computed:    true,
 										ForceNew:    true,
-										Description: `The name of this access configuration. In ipv6AccessConfigs, the recommended name is External IPv6.`,
+										Description: `The name of this access configuration. In ipv6AccessConfigs, the recommended name
+is "External IPv6".`,
 									},
 									{{- if ne $.TargetVersionName "ga" }}
 									"security_policy": {
 										Type:        schema.TypeString,
 										Computed:    true,
-										Description: `A full or partial URL to a security policy to add to this instance. If this field is set to an empty string it will remove the associated security policy.`,
+										Description: "The URL of the security policy applied to this IPv6 access config. To set it, use `network_interface.security_policy`.",
 									},
 									{{- end }}
 								},
@@ -946,7 +1006,7 @@ func ResourceComputeInstance() *schema.Resource {
 						"mac_address": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `MAC address assigned to this network interface.`,
+							Description: `MAC address assigned to this network interface`,
 						},
 						{{- end }}
 
@@ -972,7 +1032,7 @@ func ResourceComputeInstance() *schema.Resource {
 				MaxItems:    1,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Configures network performance settings for the instance. If not specified, the instance will be created with its default network performance configuration.`,
+				Description: "Configures network performance settings for the instance. **Note**: [`machine_type`](#machine_type) must be a [supported type](https://cloud.google.com/compute/docs/networking/configure-vm-with-high-bandwidth-configuration),\nthe [`image`](#image) used must include the [`GVNIC`](https://cloud.google.com/compute/docs/networking/using-gvnic#create-instance-gvnic-image)\nin `guest-os-features`, and `network_interface.0.nic-type` must be `GVNIC`\nin order for this setting to take effect.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"total_egress_bandwidth_tier": {
@@ -980,7 +1040,8 @@ func ResourceComputeInstance() *schema.Resource {
 							Required:     true,
 							ForceNew:     true,
 							ValidateFunc: validation.StringInSlice([]string{"TIER_1", "DEFAULT"}, false),
-							Description:  `The egress bandwidth tier to enable. Possible values:TIER_1, DEFAULT`,
+							Description:  `The egress bandwidth tier to enable.
+Possible values: TIER_1, DEFAULT`,
 						},
 					},
 				},
@@ -988,27 +1049,28 @@ func ResourceComputeInstance() *schema.Resource {
 			"allow_stopping_for_update": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: `If true, allows Terraform to stop the instance to update its properties. If you try to update a property that requires stopping the instance without setting this field, the update will fail.`,
+				Description: `If true, allows Terraform to stop the instance to update its properties.
+If you try to update a property that requires stopping the instance without setting this field, the update will fail.`,
 			},
 
 			"attached_disk": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: `List of disks attached to the instance`,
+				Description: `Additional disks to attach to the instance. Can be repeated multiple times for multiple disks.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"source": {
 							Type:             schema.TypeString,
 							Required:         true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The name or self_link of the disk attached to this instance.`,
+							Description:      `The name or self_link of the disk to attach to this instance.`,
 						},
 
 						"device_name": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `Name with which the attached disk is accessible under /dev/disk/by-id/`,
+							Description: "Name with which the attached disk will be accessible\nunder `/dev/disk/by-id/google-*`",
 						},
 
 						"mode": {
@@ -1016,21 +1078,24 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							Default:      "READ_WRITE",
 							ValidateFunc: validation.StringInSlice([]string{"READ_WRITE", "READ_ONLY"}, false),
-							Description:  `Read/write mode for the disk. One of "READ_ONLY" or "READ_WRITE".`,
+							Description:  `Either "READ_ONLY" or "READ_WRITE", defaults to "READ_WRITE"
+If you have a persistent disk with data that you want to share
+between multiple instances, detach it from any read-write instances and
+attach it to one or more instances in read-only mode.`,
 						},
 
 						"disk_encryption_key_raw": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							Description: `A 256-bit customer-supplied encryption key, encoded in RFC 4648 base64 to encrypt this disk. Only one of kms_key_self_link, disk_encryption_key_rsa and disk_encryption_key_raw may be set.`,
+							Description: "A 256-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption),\nencoded in [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)\nto encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`\nmay be set.",
 						},
 
 						"disk_encryption_key_rsa": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							Description: `Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit customer-supplied encryption key to either encrypt or decrypt this resource. Only one of kms_key_self_link, disk_encryption_key_rsa and disk_encryption_key_raw may be set.`,
+							Description: "Specifies an RFC 4648 base64 encoded, RSA-wrapped 2048-bit [customer-supplied encryption key]\n(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`\nmay be set.",
 						},
 
 						"kms_key_self_link": {
@@ -1038,19 +1103,21 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:         true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
 							Computed:         true,
-							Description:      `The self_link of the encryption key that is stored in Google Cloud KMS to encrypt this disk. Only one of kms_key_self_link, disk_encryption_key_rsa and disk_encryption_key_raw may be set.`,
+							Description:      "The self_link of the encryption key that is\nstored in Google Cloud KMS to encrypt this disk. Only one of `kms_key_self_link`, `disk_encryption_key_rsa` and `disk_encryption_key_raw`\nmay be set.",
 						},
 
 						"disk_encryption_service_account": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: `The service account being used for the encryption request for the given KMS key. If absent, the Compute Engine default service account is used`,
+							Description: `The service account being used for the encryption request for the given KMS key. If absent, the Compute Engine default service account is used.`,
 						},
 
 						"disk_encryption_key_sha256": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The RFC 4648 base64 encoded SHA-256 hash of the customer-supplied encryption key that protects this resource.`,
+							Description: `The [RFC 4648 base64](https://tools.ietf.org/html/rfc4648#section-4)
+encoded SHA-256 hash of the [customer-supplied encryption key]
+(https://cloud.google.com/compute/docs/disks/customer-supplied-encryption) that protects this resource.`,
 						},
 
 						"force_attach": {
@@ -1059,7 +1126,9 @@ func ResourceComputeInstance() *schema.Resource {
 							Default:      false,
 							ForceNew:     true,
 							DiffSuppressFunc: DisksForceAttachDiffSuppress,
-							Description: `Whether to force attach the regional disk even if it's currently attached to another instance. If you try to force attach a zonal disk to an instance, you will receive an error. Setting this parameter cause VM recreation.`,
+							Description: `boolean field that determines whether to force attach the regional
+disk even if it's currently attached to another instance. If you try to force attach a zonal
+disk to an instance, you will receive an error. Setting this parameter cause VM recreation.`,
 						},
 					},
 				},
@@ -1069,26 +1138,28 @@ func ResourceComputeInstance() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether sending and receiving of packets with non-matching source or destination IPs is allowed.`,
+				Description: `Whether to allow sending and receiving of
+packets with non-matching source or destination IPs.
+This defaults to false.`,
 			},
 
 			"description": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `A brief description of the resource.`,
+				Description: `A brief description of this resource.`,
 			},
 
 			"deletion_protection": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether deletion protection is enabled on this instance.`,
+				Description: "Enable deletion protection on this instance. Defaults to false.\n**Note:** you must disable deletion protection before removing the resource (e.g., via `terraform destroy`), or the instance cannot be deleted and the Terraform run will not complete successfully.",
 			},
 
 			"enable_display": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: `Whether the instance has virtual displays enabled.`,
+				Description: "Enable [Virtual Displays](https://cloud.google.com/compute/docs/instances/enable-instance-virtual-display#verify_display_driver) on this instance.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 			},
 
 			"guest_accelerator": {
@@ -1096,7 +1167,7 @@ func ResourceComputeInstance() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `List of the type and count of accelerator cards attached to the instance.`,
+				Description: "List of the type and count of accelerator cards attached to the instance.\n**Note:** GPU accelerators can only be used with [`on_host_maintenance`](#on_host_maintenance) option set to TERMINATE.\n**Note**: As of 6.0.0, [argument syntax](https://developer.hashicorp.com/terraform/language/syntax/configuration#arguments)\nis no longer supported for this field in favor of [block syntax](https://developer.hashicorp.com/terraform/language/syntax/configuration#blocks).\nTo dynamically set a list of guest accelerators, use [dynamic blocks](https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks).\nTo set an empty list, use a single `guest_accelerator` block with `count = 0`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"count": {
@@ -1110,7 +1181,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Required:         true,
 							ForceNew:         true,
 							DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-							Description:      `The accelerator type resource exposed to this instance. E.g. nvidia-tesla-k80.`,
+							Description:      "The accelerator type resource to expose to this instance. E.g. `nvidia-tesla-k80`.",
 						},
 					},
 				},
@@ -1121,13 +1192,13 @@ func ResourceComputeInstance() *schema.Resource {
 				MaxItems:    1,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Stores additional params passed with the request, but not persisted as part of resource payload.`,
+				Description: `Additional instance parameters.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"resource_manager_tags": {
 							Type:         schema.TypeMap,
 							Optional:     true,
-							Description:  `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored (both PUT & PATCH) when empty.`,
+							Description:  `A tag is a key-value pair that can be attached to a Google Cloud resource. You can use tags to conditionally allow or deny policies based on whether a resource has a specific tag. This value is not returned by the API. In Terraform, this value cannot be updated and changing it will recreate the resource.`,
 						},
 					},
 				},
@@ -1137,10 +1208,9 @@ func ResourceComputeInstance() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A set of key/value label pairs assigned to the instance.
-
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Description: `A map of key/value label pairs to assign to the instance.
+**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
+Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
 			},
 
 			"terraform_labels": {
@@ -1161,7 +1231,7 @@ func ResourceComputeInstance() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `Metadata key/value pairs made available within the instance.`,
+				Description: "Metadata key/value pairs to make available from\nwithin the instance. Ssh keys attached in the Cloud Console will be removed.\nAdd them to your config in order to keep them attached to your instance.\nA list of predefined metadata keys (e.g. ssh-keys) can be found [here](https://cloud.google.com/compute/docs/metadata/predefined-metadata-keys)\n\n-> Depending on the OS you choose for your instance, some metadata keys have\n   special functionality.  Most linux-based images will run the content of\n   `metadata.startup-script` in a shell on every boot.  At a minimum,\n   Debian, CentOS, RHEL, SLES, Container-Optimized OS, and Ubuntu images\n   support this key.  Windows instances require other keys depending on the format\n   of the script and the time you would like it to run - see [this table](https://cloud.google.com/compute/docs/startupscript#providing_a_startup_script_for_windows_instances).\n   For the convenience of the users of `metadata.startup-script`,\n   we provide a special attribute, `metadata_startup_script`, which is documented below.",
 				ValidateFunc: ValidateInstanceMetadata,
 			},
 
@@ -1172,21 +1242,21 @@ func ResourceComputeInstance() *schema.Resource {
 				DiffSuppressFunc:      ComparePartnerMetadataDiff,
 				DiffSuppressOnRefresh: true,
 				Elem:                  &schema.Schema{Type: schema.TypeString},
-				Description:           `Partner Metadata Map made available within the instance.`,
+				Description:           `key/value pair represents partner metadata assigned to instance where key represent a defined namespace and value is a json string represent the entries associted with the namespace.`,
 			},
 			{{- end }}
 
 			"metadata_startup_script": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `Metadata startup scripts made available within the instance.`,
+				Description: "An alternative to using the\nstartup-script metadata key, except this one forces the instance to be recreated\n(thus re-running the script) if it is changed. This replaces the startup-script\nmetadata key on the created instance and thus the two mechanisms are not\nallowed to be used simultaneously.  Users are free to use either mechanism - the\nonly distinction is that this separate attribute will cause a recreate on\nmodification.  On import, `metadata_startup_script` will not be set - if you\nchoose to specify it you will see a diff immediately after import causing a\ndestroy/recreate operation. If importing an instance and specifying this value\nis desired, you will need to modify your state file manually using\n`terraform state` commands.",
 			},
 
 			"min_cpu_platform": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Computed:         true,
-				Description:      `The minimum CPU platform specified for the VM instance.`,
+				Description:      "Specifies a minimum CPU platform for the VM instance. Applicable values are the friendly names of CPU platforms, such as\n`Intel Haswell` or `Intel Skylake`. See the complete list [here](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform).\n    **Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 				DiffSuppressFunc: ComputeInstanceMinCpuPlatformEmptyOrAutomaticDiffSuppress,
 			},
 
@@ -1195,7 +1265,8 @@ func ResourceComputeInstance() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If self_link is provided, this value is ignored. If neither self_link nor project are provided, the provider project is used.`,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"scheduling": {
@@ -1203,7 +1274,7 @@ func ResourceComputeInstance() *schema.Resource {
 				MaxItems:    1,
 				Optional:    true,
 				Computed:    true,
-				Description: `The scheduling strategy being used by the instance.`,
+				Description: `The scheduling strategy to use.`,
 				Elem: &schema.Resource{
 					// !!! IMPORTANT !!!
 					// We have a custom diff function for the scheduling block due to issues with Terraform's
@@ -1215,7 +1286,9 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							Computed:     true,
 							AtLeastOneOf: schedulingKeys,
-							Description:  `Describes maintenance behavior for the instance. One of MIGRATE or TERMINATE,`,
+							Description:  `Describes maintenance behavior for the
+instance. Can be MIGRATE or TERMINATE, for more info, read
+[here](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options).`,
 						},
 
 						"automatic_restart": {
@@ -1223,7 +1296,9 @@ func ResourceComputeInstance() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: schedulingKeys,
 							Default:      true,
-							Description:  `Specifies if the instance should be restarted if it was terminated by Compute Engine (not a user).`,
+							Description:  `Specifies if the instance should be
+restarted if it was terminated by Compute Engine (not a user).
+Defaults to true.`,
 						},
 
 						"preemptible": {
@@ -1232,7 +1307,7 @@ func ResourceComputeInstance() *schema.Resource {
 							Default:      false,
 							AtLeastOneOf: schedulingKeys,
 							ForceNew:     true,
-							Description:  `Whether the instance is preemptible.`,
+							Description:  "Specifies if the instance is preemptible.\nIf this field is set to true, then `automatic_restart` must be\nset to false.  Defaults to false.",
 						},
 
 						"node_affinities": {
@@ -1241,12 +1316,16 @@ func ResourceComputeInstance() *schema.Resource {
 							AtLeastOneOf:     schedulingKeys,
 							Elem:             instanceSchedulingNodeAffinitiesElemSchema(),
 							DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress(""),
-							Description:      `Specifies node affinities or anti-affinities to determine which sole-tenant nodes your instances and managed instance groups will use as host systems.`,
+							Description:      `Specifies node affinities or anti-affinities
+to determine which sole-tenant nodes your instances and managed instance
+groups will use as host systems. Read more on sole-tenant node creation
+[here](https://cloud.google.com/compute/docs/nodes/create-nodes).`,
 						},
 
 						"min_node_cpus": {
 							Type:         schema.TypeInt,
 							Optional:     true,
+							Description: `The minimum number of virtual CPUs this instance will consume when running on a sole-tenant node.`,
 							AtLeastOneOf: schedulingKeys,
 						},
 
@@ -1256,34 +1335,32 @@ func ResourceComputeInstance() *schema.Resource {
 							Computed:         true,
 							ForceNew:         true,
 							AtLeastOneOf:     schedulingKeys,
-							Description:      `Describes the desired provisioning model for the instance. Possible values are STANDARD, SPOT, FLEX_START, and RESERVATION_BOUND. For STANDARD, resources are provisioned immediately. For SPOT, resources are offered at a discount compared to standard pricing but may be preempted. For FLEX_START, resources are offered at a discount with flexible start times. For RESERVATION_BOUND, the instance is bound to a specific reservation and will only consume capacity from that reservation.`,
+							Description:      "Describe the type of provisioning model for the instance. This field accepts the value `STANDARD`, `SPOT`, `FLEX_START`, or `RESERVATION_BOUND`. If the value is `STANDARD`, there will be no discount. If this is set to `SPOT`,\n`preemptible` should be `true` and `automatic_restart` should be\n`false`. For more info about\n`SPOT`, read [here](https://cloud.google.com/compute/docs/instances/spot).\nIf this is set to `FLEX_START`, `automatic_restart` should be `false` and `instance_termination_action` should be set to `DELETE`. A `max_run_duration` must also be specified. For more info about\n`FLEX_START`, read [here](https://cloud.google.com/compute/docs/instances/flex-start-vms).\nIf this is set to `RESERVATION_BOUND`, the instance is bound to a specific reservation and will only consume capacity from that reservation. A `reservation_affinity` block with `type` set to `SPECIFIC_RESERVATION` should also be configured.",
 						},
 
 						"instance_termination_action": {
 							Type:          schema.TypeString,
 							Optional:      true,
 							AtLeastOneOf:  schedulingKeys,
-							Description:   `Specifies the action GCE should take when SPOT VM is preempted.`,
+							Description:   "Describe the type of termination action for VM. Can be `STOP` or `DELETE`.  Read more on [here](https://cloud.google.com/compute/docs/instances/create-use-spot)",
 						},
 						"termination_time": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ForceNew:     true,
 							AtLeastOneOf: schedulingKeys,
-							Description: `Specifies the timestamp, when the instance will be terminated,
-in RFC3339 text format. If specified, the instance termination action
-will be performed at the termination time.`,
+							Description: `Specifies the timestamp, when the instance will be terminated, in RFC3339 text format. If specified, the instance termination action will be performed at the termination time.`,
 						},
 						"availability_domain": {
 							Type:          schema.TypeInt,
 							Optional:      true,
 							AtLeastOneOf:  schedulingKeys,
-							Description:   `Specifies the availability domain, which this instance should be scheduled on.`,
+							Description:   `Specifies the availability domain to place the instance in. The value must be a number between 1 and the number of availability domains specified in the spread placement policy attached to the instance.`,
 						},
 						"max_run_duration" : {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Description: `The timeout for new network connections to hosts.`,
+							Description: "The duration of the instance. Instance will run and be terminated after then, the termination action could be defined in `instance_termination_action`.",
 							MaxItems:    1,
 					                ForceNew:    true,
 							Elem: &schema.Resource{
@@ -1292,17 +1369,15 @@ will be performed at the termination time.`,
 										Type:     schema.TypeInt,
 										Required:    true,
 						                                ForceNew:    true,
-										Description: `Span of time at a resolution of a second.
-Must be from 0 to 315,576,000,000 inclusive.`,
+										Description: `Span of time at a resolution of a second. Must be from 0 to
+315,576,000,000 inclusive. Note: these bounds are computed from: 60
+sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years.`,
 									},
 									"nanos": {
 										Type:     schema.TypeInt,
 										Optional:    true,
 								                ForceNew:    true,
-										Description: `Span of time that's a fraction of a second at nanosecond
-resolution. Durations less than one second are represented
-with a 0 seconds field and a positive nanos field. Must
-be from 0 to 999,999,999 inclusive.`,
+										Description: "Span of time that's a fraction of a second at nanosecond\nresolution. Durations less than one second are represented with a 0\n`seconds` field and a positive `nanos` field. Must be from 0 to\n 999,999,999 inclusive.",
 									},
 								},
 							},
@@ -1312,13 +1387,13 @@ be from 0 to 999,999,999 inclusive.`,
 							Optional:    true,
 							MaxItems:    1,
 							ForceNew:    true,
-							Description: `Defines the behaviour for instances with the instance_termination_action.`,
+							Description: "Specifies the action to be performed when the instance is terminated using `max_run_duration` and `STOP` `instance_termination_action`. Only support `true` `discard_local_ssd` at this point.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"discard_local_ssd": {
 										Type:     schema.TypeBool,
 										Optional:    true,
-										Description: `If true, the contents of any attached Local SSD disks will be discarded.`,
+										Description: "Whether to discard local SSDs attached to the VM while terminating using `max_run_duration`. Only supports `true` at this point.",
 										Default:      false,
 										ForceNew:    true,
 									},
@@ -1328,7 +1403,7 @@ be from 0 to 999,999,999 inclusive.`,
 						"host_error_timeout_seconds": {
 							Type:        schema.TypeInt,
 							Optional:    true,
-							Description: `Specify the time in seconds for host error detection, the value must be within the range of [90, 330] with the increment of 30, if unset, the default behavior of host error recovery will be used.`,
+							Description: `Specifies the time in seconds for host error detection, the value must be within the range of [90, 330] with the increment of 30, if unset, the default behavior of host error recovery will be used.`,
 						},
 {{- if ne $.TargetVersionName "ga" }}
 
@@ -1336,16 +1411,13 @@ be from 0 to 999,999,999 inclusive.`,
 							Type:          schema.TypeString,
 							Optional:      true,
 							AtLeastOneOf:  schedulingKeys,
-							Description:   `Specifies the frequency of planned maintenance events. The accepted values are: PERIODIC`,
+							Description:   "Specifies the frequency of planned maintenance events. The accepted values are: `PERIODIC`.",
 						},
 {{- end }}
 						"local_ssd_recovery_timeout" : {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Description: `Specifies the maximum amount of time a Local Ssd Vm should wait while
-  recovery of the Local Ssd state is attempted. Its value should be in
-  between 0 and 168 hours with hour granularity and the default value being 1
-  hour.`,
+							Description: `Specifies the maximum amount of time a Local Ssd Vm should wait while recovery of the Local Ssd state is attempted. Its value should be in between 0 and 168 hours with hour granularity and the default value being 1 hour.`,
 							MaxItems:    1,
 					        ForceNew:    true,
 							Elem: &schema.Resource{
@@ -1354,17 +1426,15 @@ be from 0 to 999,999,999 inclusive.`,
 										Type:     schema.TypeInt,
 										Required:    true,
 						                ForceNew:    true,
-										Description: `Span of time at a resolution of a second.
-Must be from 0 to 315,576,000,000 inclusive.`,
+										Description: `Span of time at a resolution of a second. Must be from 0 to
+315,576,000,000 inclusive. Note: these bounds are computed from: 60
+sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years.`,
 									},
 									"nanos": {
 										Type:     schema.TypeInt,
 										Optional:    true,
 								        ForceNew:    true,
-										Description: `Span of time that's a fraction of a second at nanosecond
-resolution. Durations less than one second are represented
-with a 0 seconds field and a positive nanos field. Must
-be from 0 to 999,999,999 inclusive.`,
+										Description: "Span of time that's a fraction of a second at nanosecond\nresolution. Durations less than one second are represented with a 0\n`seconds` field and a positive `nanos` field. Must be from 0 to\n 999,999,999 inclusive.",
 									},
 								},
 							},
@@ -1386,8 +1456,8 @@ be from 0 to 999,999,999 inclusive.`,
 										Type:     schema.TypeList,
 										Optional: true,
 										Description: `The time allotted for the instance to gracefully shut down.
-										If the graceful shutdown isn't complete after this time, then the instance
-										transitions to the STOPPING state.`,
+If the graceful shutdown isn't complete after this time, then the instance
+transitions to the STOPPING state.`,
 										MaxItems: 1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1395,15 +1465,12 @@ be from 0 to 999,999,999 inclusive.`,
 													Type:     schema.TypeInt,
 													Required: true,
 													Description: `Span of time at a resolution of a second.
-													The value must be between 1 and 3600, which is 3,600 seconds (one hour).`,
+The value must be between 1 and 3600, which is 3,600 seconds (one hour).`,
 												},
 												"nanos": {
 													Type:     schema.TypeInt,
 													Optional: true,
-													Description: `Span of time that's a fraction of a second at nanosecond
-													resolution. Durations less than one second are represented
-													with a 0 seconds field and a positive nanos field. Must
-													be from 0 to 999,999,999 inclusive.`,
+													Description: "Span of time that's a fraction of a second at nanosecond\nresolution. Durations less than one second are represented with a 0\n`seconds` field and a positive `nanos` field. Must be from 0 to\n999,999,999 inclusive.",
 												},
 											},
 										},
@@ -1415,7 +1482,7 @@ be from 0 to 999,999,999 inclusive.`,
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Default:     false,
-							Description: `Default is false and there will be 120 seconds between GCE ACPI G2 Soft Off and ACPI G3 Mechanical Off for Standard VMs and 30 seconds for Spot VMs.`,
+							Description: `Boolean parameter. Default is false and there will be 120 seconds between GCE ACPI G2 Soft Off and ACPI G3 Mechanical Off for Standard VMs and 30 seconds for Spot VMs.`,
 						},
 						{{- end }}
 						"preemption_notice_duration": {
@@ -1423,18 +1490,20 @@ be from 0 to 999,999,999 inclusive.`,
 							Optional:    true,
 							MaxItems:    1,
 							AtLeastOneOf:  schedulingKeys,
-							Description: `The duration of the notice that the instance will receive before it is preempted.`,
+							Description: `Specifies the Metadata Service preemption notice duration before the GCE ACPI G2 Soft Off signal is triggered for Spot VMs only. If not specified, there will be no wait before the G2 Soft Off signal is triggered.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"seconds": {
 										Type:     schema.TypeInt,
 										Required: true,
-										Description: `Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive.`,
+										Description: `Span of time at a resolution of a second. Must be from 0 to
+315,576,000,000 inclusive. Note: these bounds are computed from: 60
+sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years.`,
 									},
 									"nanos": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Description: `Span of time that's a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 seconds field and a positive nanos field. Must be from 0 to 999,999,999 inclusive.`,
+										Description: "Span of time that's a fraction of a second at nanosecond\nresolution. Durations less than one second are represented with a 0\n`seconds` field and a positive `nanos` field. Must be from 0 to\n 999,999,999 inclusive.",
 									},
 								},
 							},
@@ -1447,7 +1516,8 @@ be from 0 to 999,999,999 inclusive.`,
 				Type:        schema.TypeList,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `The scratch disks attached to the instance.`,
+				Description: `Scratch disks to attach to the instance. This can be
+specified multiple times for multiple scratch disks.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"device_name": {
@@ -1460,7 +1530,7 @@ be from 0 to 999,999,999 inclusive.`,
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringInSlice([]string{"SCSI", "NVME"}, false),
-							Description:  `The disk interface used for attaching this disk. One of SCSI or NVME.`,
+							Description:  `The disk interface to use for attaching this disk; either SCSI or NVME.`,
 						},
 						"size": {
 							Type:         schema.TypeInt,
@@ -1468,7 +1538,7 @@ be from 0 to 999,999,999 inclusive.`,
 							ForceNew:     true,
 							ValidateFunc: validation.IntAtLeast(375),
 							Default:      375,
-							Description:  `The size of the disk in gigabytes. One of 375 or 3000.`,
+							Description:  `The size of the disk in gigabytes. One of 375 or 3000. Defaults to 375.`,
 						},
 					},
 				},
@@ -1479,20 +1549,20 @@ be from 0 to 999,999,999 inclusive.`,
 				MaxItems:         1,
 				Optional:         true,
 				DiffSuppressFunc: serviceAccountDiffSuppress,
-				Description:      `The service account to attach to the instance.`,
+				Description:      "Service account to attach to the instance.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"email": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `The service account e-mail address.`,
+							Description: "The service account e-mail address.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 						},
 
 						"scopes": {
 							Type:        schema.TypeSet,
 							Required:    true,
-							Description: `A list of service scopes.`,
+							Description: "A list of service scopes. Both OAuth2 URLs and gcloud\nshort names are supported. To allow full access to all Cloud APIs, use the\n`cloud-platform` scope. See a complete list of scopes [here](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 								StateFunc: func(v interface{}) string {
@@ -1513,7 +1583,7 @@ be from 0 to 999,999,999 inclusive.`,
 				// image being used, the field needs to be marked as Computed.
 				Computed:         true,
 				DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress(""),
-				Description:      `The shielded vm config being used by the instance.`,
+				Description:      "Enable [Shielded VM](https://cloud.google.com/security/shielded-cloud/shielded-vm) on this instance. Shielded VM provides verifiable integrity to prevent against malware and rootkits. Defaults to disabled.\n  **Note**: [`shielded_instance_config`](#shielded_instance_config) can only be used with boot images with shielded vm support. See the complete list [here](https://cloud.google.com/compute/docs/images#shielded-images).\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_secure_boot": {
@@ -1521,7 +1591,7 @@ be from 0 to 999,999,999 inclusive.`,
 							Optional:     true,
 							AtLeastOneOf: shieldedInstanceConfigKeys,
 							Default:      false,
-							Description:  `Whether secure boot is enabled for the instance.`,
+							Description:  "Verify the digital signature of all boot components, and halt the boot process if signature verification fails. Defaults to false.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 						},
 
 						"enable_vtpm": {
@@ -1529,7 +1599,7 @@ be from 0 to 999,999,999 inclusive.`,
 							Optional:     true,
 							AtLeastOneOf: shieldedInstanceConfigKeys,
 							Default:      true,
-							Description:  `Whether the instance uses vTPM.`,
+							Description:  "Use a virtualized trusted platform module, which is a specialized computer chip you can use to encrypt objects like keys and certificates. Defaults to true.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 						},
 
 						"enable_integrity_monitoring": {
@@ -1537,7 +1607,7 @@ be from 0 to 999,999,999 inclusive.`,
 							Optional:     true,
 							AtLeastOneOf: shieldedInstanceConfigKeys,
 							Default:      true,
-							Description:  `Whether integrity monitoring is enabled for the instance.`,
+							Description:  "Compare the most recent boot measurements to the integrity policy baseline and return a pair of pass/fail results depending on whether they match or not. Defaults to true.\n**Note**: [`allow_stopping_for_update`](#allow_stopping_for_update) must be set to true or your instance must have a `desired_status` of `TERMINATED` in order to update this field.",
 						},
 					},
 				},
@@ -1546,33 +1616,33 @@ be from 0 to 999,999,999 inclusive.`,
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
-				Description: `Controls for advanced machine-related behavior features.`,
+				Description: `Configure Nested Virtualisation and Simultaneous Hyper Threading on this VM.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_nested_virtualization": {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
-							Description: `Whether to enable nested virtualization or not.`,
+							Description: `Defines whether the instance should have [nested virtualization](#on_host_maintenance)  enabled. Defaults to false.`,
 						},
 						"threads_per_core": {
 							Type:        schema.TypeInt,
 							Optional:    true,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
-							Description: `The number of threads per physical core. To disable simultaneous multithreading (SMT) set this to 1. If unset, the maximum number of threads supported per core by the underlying processor is assumed.`,
+							Description: `The number of threads per physical core. To disable [simultaneous multithreading (SMT)](https://cloud.google.com/compute/docs/instances/disabling-smt) set this to 1.`,
 						},
 						"turbo_mode": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
-							Description: `Turbo frequency mode to use for the instance. Currently supported modes is "ALL_CORE_MAX".`,
+							Description: "Turbo frequency mode to use for the instance. Supported modes are currently either `ALL_CORE_MAX` or unset (default).",
 							ValidateFunc: validation.StringInSlice([]string{"ALL_CORE_MAX"}, false),
 						},
 						"visible_core_count": {
 							Type:        schema.TypeInt,
 							Optional:    true,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
-							Description: `The number of physical cores to expose to an instance. Multiply by the number of threads per core to compute the total number of virtual CPUs to expose to the instance. If unset, the number of cores is inferred from the instance\'s nominal CPU count and the underlying platform\'s SMT width.`,
+							Description: `The number of physical cores to expose to an instance. [visible cores info (VC)](https://cloud.google.com/compute/docs/instances/customize-visible-cores).`,
 						},
 						"performance_monitoring_unit": {
 							Type:        schema.TypeString,
@@ -1580,14 +1650,14 @@ be from 0 to 999,999,999 inclusive.`,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
 							DiffSuppressFunc: performanceMonitoringUnitDiffSuppress,
 							ValidateFunc: validation.StringInSlice([]string{"STANDARD", "ENHANCED", "ARCHITECTURAL"}, false),
-							Description: `The PMU is a hardware component within the CPU core that monitors how the processor runs code. Valid values for the level of PMU are "STANDARD", "ENHANCED", and "ARCHITECTURAL".`,
+							Description: "[The PMU](https://cloud.google.com/compute/docs/pmu-overview) is a hardware component within the CPU core that monitors how the processor runs code. Valid values for the level of PMU are `STANDARD`, `ENHANCED`, and `ARCHITECTURAL`.\n\n~> **Note:** Early 8.X.0 provider versions dropped an explicitly configured `STANDARD` value when creating the resource. On affected resources the diff stays suppressed, so Terraform reports no changes. For `google_compute_instance`, apply once with another level (`ENHANCED` or `ARCHITECTURAL`) and then again with `STANDARD`; this requires `allow_stopping_for_update`. For instance templates the field is `ForceNew`, so use `terraform apply -replace=...` instead.",
 						},
 						"enable_uefi_networking": {
 							Type:         schema.TypeBool,
 							Optional:     true,
 							ForceNew:     true,
 							AtLeastOneOf: advancedMachineFeaturesKeys,
-							Description:  `Whether to enable UEFI networking for the instance.`,
+							Description:  `Whether to enable UEFI networking for instance creation.`,
 						},
 					},
 				},
@@ -1598,23 +1668,19 @@ be from 0 to 999,999,999 inclusive.`,
 				Optional:    true,
 				ForceNew:    true,
 				Computed:    true,
-				Description: `The Confidential VM config being used by the instance.  on_host_maintenance has to be set to TERMINATE or this will fail to create.`,
+				Description: `Enable [Confidential Mode](https://cloud.google.com/compute/confidential-vm/docs/about-cvm) on this VM.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_confidential_compute": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Description: `Defines whether the instance should have confidential compute enabled. Field will be deprecated in a future release`,
+							Description: "Defines whether the instance should have confidential compute enabled with AMD SEV. If enabled, [`on_host_maintenance`](#on_host_maintenance) can be set to MIGRATE if [`min_cpu_platform`](#min_cpu_platform) is set to `\"AMD Milan\"` or `\"AMD Genoa\"`. Otherwise, [`on_host_maintenance`](#on_host_maintenance) has to be set to TERMINATE or this will fail to create the VM.",
 							AtLeastOneOf: []string{"confidential_instance_config.0.enable_confidential_compute", "confidential_instance_config.0.confidential_instance_type"},
 						},
 						"confidential_instance_type": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: `
-								The confidential computing technology the instance uses.
-								SEV is an AMD feature. TDX is an Intel feature. One of the following
-								values is required: SEV, SEV_SNP, TDX. If SEV_SNP, min_cpu_platform =
-								"AMD Milan" is currently required.`,
+							Description: "Defines the confidential computing technology the instance uses. SEV is an AMD feature. TDX is an Intel feature. One of the following values is required: `SEV`, `SEV_SNP`, `TDX`. [`on_host_maintenance`](#on_host_maintenance) can be set to MIGRATE if [`confidential_instance_type`](#confidential_instance_type) is set to `SEV` and [`min_cpu_platform`](#min_cpu_platform) is set to `\"AMD Milan\"` or `\"AMD Genoa\"`. Otherwise, [`on_host_maintenance`](#on_host_maintenance) has to be set to TERMINATE or this will fail to create the VM. If `SEV_SNP`, currently [`min_cpu_platform`](#min_cpu_platform) has to be set to `\"AMD Milan\"` or this will fail to create the VM.",
 							AtLeastOneOf: []string{"confidential_instance_config.0.enable_confidential_compute", "confidential_instance_config.0.confidential_instance_type"},
 						},
 					},
@@ -1624,22 +1690,19 @@ be from 0 to 999,999,999 inclusive.`,
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice([]string{"RUNNING", "TERMINATED", "SUSPENDED"}, false),
-				Description:  `Desired status of the instance. Either "RUNNING", "SUSPENDED" or "TERMINATED".`,
+				Description:  "Desired status of the instance. Either\n`\"RUNNING\"`, `\"SUSPENDED\"` or `\"TERMINATED\"`.",
 			},
 			"current_status": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `
-					Current status of the instance.
-					This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED.
-					For more information about the status of the instance, see [Instance life cycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle).`,
+				Description: `The current status of the instance. This could be one of the following values: PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED. For more information about the status of the instance, see [Instance life cycle](https://cloud.google.com/compute/docs/instances/instance-life-cycle).`,
 			},
 			"tags": {
 				Type:        schema.TypeSet,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Set:         schema.HashString,
-				Description: `The list of tags attached to the instance.`,
+				Description: `A list of network tags to attach to the instance.`,
 			},
 
 			"zone": {
@@ -1647,7 +1710,7 @@ be from 0 to 999,999,999 inclusive.`,
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The zone of the instance. If self_link is provided, this value is ignored. If neither self_link nor zone are provided, the provider zone is used.`,
+				Description: `The zone that the machine should be created in. If it is not provided, the provider zone is used.`,
 			},
 
 			"cpu_platform": {
@@ -1696,7 +1759,7 @@ be from 0 to 999,999,999 inclusive.`,
 				Type:        schema.TypeString,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `A custom hostname for the instance. Must be a fully qualified DNS name and RFC-1035-valid. Valid format is a series of labels 1-63 characters long matching the regular expression [a-z]([-a-z0-9]*[a-z0-9]), concatenated with periods. The entire hostname must not exceed 253 characters. Changing this forces a new resource to be created.`,
+				Description: "A custom hostname for the instance. Must be a fully qualified DNS name and RFC-1035-valid.\nValid format is a series of labels 1-63 characters long matching the regular expression `[a-z]([-a-z0-9]*[a-z0-9])`, concatenated with periods.\nThe entire hostname must not exceed 253 characters. Changing this forces a new resource to be created.",
 			},
 
 			"resource_policies": {
@@ -1705,7 +1768,7 @@ be from 0 to 999,999,999 inclusive.`,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
 				Optional:         true,
 				MaxItems:         1,
-				Description:      `A list of self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.`,
+				Description:      `A list of self_links of resource policies to attach to the instance. Modifying this list will cause the instance to recreate. Currently a max of 1 resource policy is supported.`,
 			},
 
 			"reservation_affinity": {
@@ -1730,7 +1793,7 @@ be from 0 to 999,999,999 inclusive.`,
 							MaxItems:    1,
 							Optional:    true,
 							ForceNew:    true,
-							Description: `Specifies the label selector for the reservation to use.`,
+							Description: `Specifies the label selector for the reservation to use..`,
 
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1759,7 +1822,7 @@ be from 0 to 999,999,999 inclusive.`,
 				Optional:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.StringInSlice([]string{"STOP", "NONE", ""}, false),
-				Description:  `Action to be taken when a customer's encryption key is revoked. Supports "STOP" and "NONE", with "NONE" being the default.`,
+				Description:  "Action to be taken when a customer's encryption key is revoked. Supports `STOP` and `NONE`, with `NONE` being the default.",
 			},
 
 			"instance_encryption_key": {
@@ -1767,7 +1830,7 @@ be from 0 to 999,999,999 inclusive.`,
 				MaxItems:    1,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Encryption key used to provide data encryption on the given instance.`,
+				Description: `Configuration for data encryption on the instance with encryption keys.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"kms_key_self_link": {
@@ -1776,7 +1839,8 @@ be from 0 to 999,999,999 inclusive.`,
 							ForceNew:    true,
 							DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
 							Computed:    true,
-							Description: `The self link of the encryption key that is stored in Google Cloud KMS.`,
+							Description: `The self_link of the encryption key that is
+stored in Google Cloud KMS to encrypt the data on this instance.`,
 						},
 
 						"kms_key_service_account": {
@@ -1807,7 +1871,7 @@ be from 0 to 999,999,999 inclusive.`,
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
-				Description: `Workload identity config.`,
+				Description: `Workload Identity Config.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"identity": {

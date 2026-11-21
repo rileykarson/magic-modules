@@ -18,9 +18,11 @@ func OptionalPrefixSuppress(prefix string) schema.SchemaDiffSuppressFunc {
 
 var FolderLoggingExclusionSchema = map[string]*schema.Schema{
 	"folder": {
-		Type:             schema.TypeString,
-		Required:         true,
-		ForceNew:         true,
+		Type:     schema.TypeString,
+		Required: true,
+		ForceNew: true,
+		Description: `The folder to be exported to the sink. Note that either [FOLDER_ID] or "folders/[FOLDER_ID]" is
+accepted.`,
 		DiffSuppressFunc: OptionalPrefixSuppress("folders/"),
 	},
 }

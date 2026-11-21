@@ -79,7 +79,7 @@ func ResourceDataLineageOpenLineageJob() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Description of the OpenLineage job. Changes to description do not trigger updates.`,
+				Description: `Description of the OpenLineage job.`,
 			},
 			"input": {
 				Type:        schema.TypeList,
@@ -200,7 +200,7 @@ func ResourceDataLineageOpenLineageJob() *schema.Resource {
 									"dataset_input": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Description: `Input fields affecting whole dataset, e.g. filtering columns.`,
+										Description: `Input fields participating in output dataset lineage.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"field": {
@@ -332,25 +332,24 @@ func ResourceDataLineageOpenLineageJob() *schema.Resource {
 			"process": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Data Lineage process identifier created for this lineage job.`,
+				Description: `Data Lineage process identifier.`,
 			},
 			"run": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Latest Data Lineage run identifier for this lineage job.`,
+				Description: `Latest Data Lineage run identifier.`,
 			},
 
 			"deletion_policy": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
-				Description: `Whether Terraform will be prevented from destroying the instance. Defaults to "DELETE".
-When a 'terraform destroy' or 'terraform apply' would delete the instance,
+				Description: `Whether Terraform will be prevented from destroying the resource. Defaults to DELETE.
+When a 'terraform destroy' or 'terraform apply' would delete the resource,
 the command will fail if this field is set to "PREVENT" in Terraform state.
 When set to "ABANDON", the command will remove the resource from Terraform
 management without updating or deleting the resource in the API.
-When set to "DELETE", deleting the resource is allowed.
-`,
+When set to "DELETE", deleting the resource is allowed.`,
 			},
 		},
 		UseJSONNumber: true,

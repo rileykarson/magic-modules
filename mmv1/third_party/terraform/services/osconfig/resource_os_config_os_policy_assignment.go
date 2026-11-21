@@ -46,38 +46,43 @@ func ResourceOSConfigOSPolicyAssignment() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"all": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `Target all VMs in the project. If true, no other criteria is permitted.`,
+							Type:     schema.TypeBool,
+							Optional: true,
+							Description: `Target all VMs in the project. If true, no other criteria
+is permitted.`,
 						},
 						"exclusion_labels": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Description: `List of label sets used for VM exclusion.
-If the list has more than one label set, the VM is excluded if any of the label sets are applicable for the VM.`,
+							Description: `List of label sets used for VM exclusion. If
+the list has more than one label set, the VM is excluded if any of the label
+sets are applicable for the VM.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"labels": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
-										Elem:        &schema.Schema{Type: schema.TypeString},
+										Type:     schema.TypeMap,
+										Optional: true,
+										Description: `Labels are identified by key/value pairs in this map.
+A VM should contain all the key/value pairs specified in this map to be
+selected.`,
+										Elem: &schema.Schema{Type: schema.TypeString},
 									},
 								},
 							},
 						},
 						"inclusion_labels": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Description: `List of label sets used for VM inclusion.
-If the list has more than one 'LabelSet', the VM is included if any of the label sets are applicable for the VM.`,
+							Type:        schema.TypeList,
+							Optional:    true,
+							Description: "List of label sets used for VM inclusion. If\nthe list has more than one `LabelSet`, the VM is included if any of the\nlabel sets are applicable for the VM.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"labels": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: `Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.`,
-										Elem:        &schema.Schema{Type: schema.TypeString},
+										Type:     schema.TypeMap,
+										Optional: true,
+										Description: `Labels are identified by key/value pairs in this map.
+A VM should contain all the key/value pairs specified in this map to be
+selected.`,
+										Elem: &schema.Schema{Type: schema.TypeString},
 									},
 								},
 							},
@@ -85,8 +90,9 @@ If the list has more than one 'LabelSet', the VM is included if any of the label
 						"inventories": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Description: `List of inventories to select VMs.
-A VM is selected if its inventory data matches at least one of the following inventories.`,
+							Description: `List of inventories to select VMs. A VM is
+selected if its inventory data matches at least one of the following
+inventories.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"os_short_name": {
@@ -97,7 +103,7 @@ A VM is selected if its inventory data matches at least one of the following inv
 									"os_version": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The OS version Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of '7', specify the following value for this field '7.*' An empty string matches all OS versions.`,
+										Description: "The OS version Prefix matches are supported if\nasterisk(*) is provided as the last character. For example, to match all\nversions with a major version of `7`, specify the following value for this\nfield `7.*` An empty string matches all OS versions.",
 									},
 								},
 							},
@@ -127,40 +133,42 @@ A VM is selected if its inventory data matches at least one of the following inv
 							Type:     schema.TypeString,
 							Required: true,
 							Description: `The id of the OS policy with the following restrictions:
-* Must contain only lowercase letters, numbers, and hyphens.
-* Must start with a letter.
-* Must be between 1-63 characters.
-* Must end with a number or a letter.
-* Must be unique within the assignment.`,
+
+*   Must contain only lowercase letters, numbers, and hyphens.
+*   Must start with a letter.
+*   Must be between 1-63 characters.
+*   Must end with a number or a letter.
+*   Must be unique within the assignment.`,
 						},
 						"mode": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: verify.ValidateEnum([]string{"MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"}),
-							Description:  `Policy mode Possible values: ["MODE_UNSPECIFIED", "VALIDATION", "ENFORCEMENT"]`,
+							Description:  "Policy mode Possible values are: `MODE_UNSPECIFIED`,\n`VALIDATION`, `ENFORCEMENT`.",
 						},
 						"resource_groups": {
-							Type:     schema.TypeList,
-							Required: true,
-							Description: `List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored.
-If none of the resource groups are applicable for a VM, the VM is considered to be non-compliant w.r.t this policy. This behavior can be toggled by the flag 'allow_no_resource_group_match'`,
+							Type:        schema.TypeList,
+							Required:    true,
+							Description: "List of resource groups for the policy. For a\nparticular VM, resource groups are evaluated in the order specified and the\nfirst resource group that is applicable is selected and the rest are\nignored. If none of the resource groups are applicable for a VM, the VM is\nconsidered to be non-compliant w.r.t this policy. This behavior can be\ntoggled by the flag `allow_no_resource_group_match`",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"resources": {
-										Type:        schema.TypeList,
-										Required:    true,
-										Description: `List of resources configured for this resource group. The resources are executed in the exact order specified here.`,
+										Type:     schema.TypeList,
+										Required: true,
+										Description: `List of resources configured for this resource
+group. The resources are executed in the exact order specified here.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"id": {
 													Type:     schema.TypeString,
 													Required: true,
 													Description: `The id of the resource with the following restrictions:
-* Must contain only lowercase letters, numbers, and hyphens.
-* Must start with a letter.
-* Must be between 1-63 characters.
-* Must end with a number or a letter.
-* Must be unique within the OS policy.`,
+
+*   Must contain only lowercase letters, numbers, and hyphens.
+*   Must start with a letter.
+*   Must be between 1-63 characters.
+*   Must end with a number or a letter.
+*   Must be unique within the OS policy.`,
 												},
 												"exec": {
 													Type:        schema.TypeList,
@@ -170,22 +178,26 @@ If none of the resource groups are applicable for a VM, the VM is considered to 
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"validate": {
-																Type:        schema.TypeList,
-																Required:    true,
-																Description: `What to run to validate this resource is in the desired state. An exit code of 100 indicates "in desired state", and exit code of 101 indicates "not in desired state". Any other exit code indicates a failure running validate.`,
-																MaxItems:    1,
+																Type:     schema.TypeList,
+																Required: true,
+																Description: `What to run to validate this resource is in the
+desired state. An exit code of 100 indicates "in desired state", and exit
+code of 101 indicates "not in desired state". Any other exit code indicates
+a failure running validate.`,
+																MaxItems: 1,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 																		"interpreter": {
 																			Type:         schema.TypeString,
 																			Required:     true,
 																			ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
-																			Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
+																			Description:  "The script interpreter to use. Possible values\nare: `INTERPRETER_UNSPECIFIED`, `NONE`, `SHELL`, `POWERSHELL`.",
 																		},
 																		"args": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `Optional arguments to pass to the source during execution.`,
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Description: `Optional arguments to pass to the source during
+execution.`,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -200,8 +212,9 @@ If none of the resource groups are applicable for a VM, the VM is considered to 
 																					"allow_insecure": {
 																						Type:     schema.TypeBool,
 																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																					},
 																					"gcs": {
 																						Type:        schema.TypeList,
@@ -243,7 +256,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																								"uri": {
 																									Type:        schema.TypeString,
 																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																								},
 																								"sha256_checksum": {
 																									Type:        schema.TypeString,
@@ -257,35 +270,43 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																			},
 																		},
 																		"output_file_path": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
+																			Type:     schema.TypeString,
+																			Optional: true,
+																			Description: `Only recorded for enforce Exec. Path to an
+output file (that is created by this Exec) whose content will be recorded in
+OSPolicyResourceCompliance after a successful run. Absence or failure to
+read this file will result in this ExecResource being non-compliant. Output
+file size is limited to 100K bytes.`,
 																		},
 																		"script": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			Type:     schema.TypeString,
+																			Optional: true,
+																			Description: `An inline script. The size of the script is limited to
+1024 characters.`,
 																		},
 																	},
 																},
 															},
 															"enforce": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Description: `What to run to bring this resource into the desired state. An exit code of 100 indicates "success", any other exit code indicates a failure running enforce.`,
-																MaxItems:    1,
+																Type:     schema.TypeList,
+																Optional: true,
+																Description: `What to run to bring this resource into the desired
+state. An exit code of 100 indicates "success", any other exit code
+indicates a failure running enforce.`,
+																MaxItems: 1,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 																		"interpreter": {
 																			Type:         schema.TypeString,
 																			Required:     true,
 																			ValidateFunc: verify.ValidateEnum([]string{"INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"}),
-																			Description:  `The script interpreter to use. Possible values: ["INTERPRETER_UNSPECIFIED", "NONE", "SHELL", "POWERSHELL"]`,
+																			Description:  "The script interpreter to use. Possible values\nare: `INTERPRETER_UNSPECIFIED`, `NONE`, `SHELL`, `POWERSHELL`.",
 																		},
 																		"args": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Description: `Optional arguments to pass to the source during execution.`,
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Description: `Optional arguments to pass to the source during
+execution.`,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -298,9 +319,11 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 																					"allow_insecure": {
-																						Type:        schema.TypeBool,
-																						Optional:    true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																						Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																					},
 																					"gcs": {
 																						Type:        schema.TypeList,
@@ -342,7 +365,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																								"uri": {
 																									Type:        schema.TypeString,
 																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																								},
 																								"sha256_checksum": {
 																									Type:        schema.TypeString,
@@ -356,14 +379,19 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																			},
 																		},
 																		"output_file_path": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes.`,
+																			Type:     schema.TypeString,
+																			Optional: true,
+																			Description: `Only recorded for enforce Exec. Path to an
+output file (that is created by this Exec) whose content will be recorded in
+OSPolicyResourceCompliance after a successful run. Absence or failure to
+read this file will result in this ExecResource being non-compliant. Output
+file size is limited to 100K bytes.`,
 																		},
 																		"script": {
-																			Type:        schema.TypeString,
-																			Optional:    true,
-																			Description: `An inline script. The size of the script is limited to 1024 characters.`,
+																			Type:     schema.TypeString,
+																			Optional: true,
+																			Description: `An inline script. The size of the script is limited to
+1024 characters.`,
 																		},
 																	},
 																},
@@ -387,12 +415,13 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																Type:         schema.TypeString,
 																Required:     true,
 																ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"}),
-																Description:  `Desired state of the file. Possible values: ["DESIRED_STATE_UNSPECIFIED", "PRESENT", "ABSENT", "CONTENTS_MATCH"]`,
+																Description:  "Desired state of the file. Possible values are:\n`DESIRED_STATE_UNSPECIFIED`, `PRESENT`, `ABSENT`, `CONTENTS_MATCH`.",
 															},
 															"content": {
-																Type:        schema.TypeString,
-																Optional:    true,
-																Description: `A a file with this content. The size of the content is limited to 1024 characters.`,
+																Type:     schema.TypeString,
+																Optional: true,
+																Description: `A a file with this content. The size of the content
+is limited to 1024 characters.`,
 															},
 															"file": {
 																Type:        schema.TypeList,
@@ -402,9 +431,11 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 																		"allow_insecure": {
-																			Type:        schema.TypeBool,
-																			Optional:    true,
-																			Description: `Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																			Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																		},
 																		"gcs": {
 																			Type:        schema.TypeList,
@@ -446,7 +477,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																					"uri": {
 																						Type:        schema.TypeString,
 																						Required:    true,
-																						Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																						Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																					},
 																					"sha256_checksum": {
 																						Type:        schema.TypeString,
@@ -462,8 +493,14 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 															"permissions": {
 																Type:     schema.TypeString,
 																Computed: true,
-																Description: `Consists of three octal digits which represent, in order, the permissions of the owner, group, and other users for the file (similarly to the numeric mode used in the linux chmod utility). Each digit represents a three bit number with the 4 bit corresponding to the read permissions, the 2 bit corresponds to the write bit, and the one bit corresponds to the execute permission. Default behavior is 755.
-Below are some examples of permissions and their associated values: read, write, and execute: 7 read and execute: 5 read and write: 6 read only: 4`,
+																Description: `Consists of three octal digits which represent, in
+order, the permissions of the owner, group, and other users for the file
+(similarly to the numeric mode used in the linux chmod utility). Each digit
+represents a three bit number with the 4 bit corresponding to the read
+permissions, the 2 bit corresponds to the write bit, and the one bit
+corresponds to the execute permission. Default behavior is 755. Below are
+some examples of permissions and their associated values: read, write, and
+execute: 7 read and execute: 5 read and write: 6 read only: 4`,
 															},
 														},
 													},
@@ -479,7 +516,7 @@ Below are some examples of permissions and their associated values: read, write,
 																Type:         schema.TypeString,
 																Required:     true,
 																ValidateFunc: verify.ValidateEnum([]string{"DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"}),
-																Description:  `The desired state the agent should maintain for this package. Possible values: ["DESIRED_STATE_UNSPECIFIED", "INSTALLED", "REMOVED"]`,
+																Description:  "The desired state the agent should maintain for\nthis package. Possible values are: `DESIRED_STATE_UNSPECIFIED`, `INSTALLED`,\n`REMOVED`.",
 															},
 															"apt": {
 																Type:        schema.TypeList,
@@ -513,8 +550,9 @@ Below are some examples of permissions and their associated values: read, write,
 																					"allow_insecure": {
 																						Type:     schema.TypeBool,
 																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																					},
 																					"gcs": {
 																						Type:        schema.TypeList,
@@ -556,7 +594,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																								"uri": {
 																									Type:        schema.TypeString,
 																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																								},
 																								"sha256_checksum": {
 																									Type:        schema.TypeString,
@@ -572,7 +610,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"pull_deps": {
 																			Type:        schema.TypeBool,
 																			Optional:    true,
-																			Description: `Whether dependencies should also be installed. - install when false: 'dpkg -i package' - install when true: 'apt-get update && apt-get -y install package.deb'`,
+																			Description: "Whether dependencies should also be installed. -\ninstall when false: `dpkg -i package` - install when true: `apt-get update\n&& apt-get -y install package.deb`",
 																		},
 																	},
 																},
@@ -609,8 +647,9 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																					"allow_insecure": {
 																						Type:     schema.TypeBool,
 																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																					},
 																					"gcs": {
 																						Type:        schema.TypeList,
@@ -652,7 +691,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																								"uri": {
 																									Type:        schema.TypeString,
 																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																								},
 																								"sha256_checksum": {
 																									Type:        schema.TypeString,
@@ -668,7 +707,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"properties": {
 																			Type:        schema.TypeList,
 																			Optional:    true,
-																			Description: `Additional properties to use during installation. This should be in the format of Property=Setting. Appended to the defaults of 'ACTION=INSTALL REBOOT=ReallySuppress'.`,
+																			Description: "Additional properties to use during installation.\nThis should be in the format of Property=Setting. Appended to the defaults\nof `ACTION=INSTALL REBOOT=ReallySuppress`.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -693,8 +732,9 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																					"allow_insecure": {
 																						Type:     schema.TypeBool,
 																						Optional: true,
-																						Description: `Defaults to false. When false, files are subject to validations based on the file type:
-Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified.`,
+																						Description: `Defaults to false. When false, files are
+subject to validations based on the file type: Remote: A checksum must be
+specified. Cloud Storage: An object generation number must be specified.`,
 																					},
 																					"gcs": {
 																						Type:        schema.TypeList,
@@ -736,7 +776,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																								"uri": {
 																									Type:        schema.TypeString,
 																									Required:    true,
-																									Description: `URI from which to fetch the object. It should contain both the protocol and path following the format '{protocol}://{location}'.`,
+																									Description: "URI from which to fetch the object. It should contain\nboth the protocol and path following the format `{protocol}://{location}`.",
 																								},
 																								"sha256_checksum": {
 																									Type:        schema.TypeString,
@@ -752,7 +792,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"pull_deps": {
 																			Type:        schema.TypeBool,
 																			Optional:    true,
-																			Description: `Whether dependencies should also be installed. - install when false: 'rpm --upgrade --replacepkgs package.rpm' - install when true: 'yum -y install package.rpm' or 'zypper -y install package.rpm'`,
+																			Description: "Whether dependencies should also be installed. -\ninstall when false: `rpm --upgrade --replacepkgs package.rpm` - install when\ntrue: `yum -y install package.rpm` or `zypper -y install package.rpm`",
 																		},
 																	},
 																},
@@ -808,12 +848,13 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																			Type:         schema.TypeString,
 																			Required:     true,
 																			ValidateFunc: verify.ValidateEnum([]string{"ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"}),
-																			Description:  `Type of archive files in this repository. Possible values: ["ARCHIVE_TYPE_UNSPECIFIED", "DEB", "DEB_SRC"]`,
+																			Description:  "Type of archive files in this repository.\nPossible values are: `ARCHIVE_TYPE_UNSPECIFIED`, `DEB`, `DEB_SRC`.",
 																		},
 																		"components": {
-																			Type:        schema.TypeList,
-																			Required:    true,
-																			Description: `List of components for this repository. Must contain at least one item.`,
+																			Type:     schema.TypeList,
+																			Required: true,
+																			Description: `List of components for this repository. Must
+contain at least one item.`,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -831,7 +872,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"gpg_key": {
 																			Type:        schema.TypeString,
 																			Optional:    true,
-																			Description: `URI of the key file for this repository. The agent maintains a keyring at '/etc/apt/trusted.gpg.d/osconfig_agent_managed.gpg'.`,
+																			Description: "URI of the key file for this repository. The agent\nmaintains a keyring at `/etc/apt/trusted.gpg.d/osconfig_agent_managed.gpg`.",
 																		},
 																	},
 																},
@@ -871,7 +912,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"id": {
 																			Type:        schema.TypeString,
 																			Required:    true,
-																			Description: `A one word, unique name for this repository. This is the 'repo id' in the yum config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for resource conflicts.`,
+																			Description: "A one word, unique name for this repository. This is the\n`repo id` in the yum config file and also the `display_name` if\n`display_name` is omitted. This id is also used as the unique identifier\nwhen checking for resource conflicts.",
 																		},
 																		"display_name": {
 																			Type:        schema.TypeString,
@@ -904,7 +945,7 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 																		"id": {
 																			Type:        schema.TypeString,
 																			Required:    true,
-																			Description: `A one word, unique name for this repository. This is the 'repo id' in the zypper config file and also the 'display_name' if 'display_name' is omitted. This id is also used as the unique identifier when checking for GuestPolicy conflicts.`,
+																			Description: "A one word, unique name for this repository. This is the\n`repo id` in the zypper config file and also the `display_name` if\n`display_name` is omitted. This id is also used as the unique identifier\nwhen checking for GuestPolicy conflicts.",
 																		},
 																		"display_name": {
 																			Type:        schema.TypeString,
@@ -929,12 +970,9 @@ Remote: A checksum must be specified. Cloud Storage: An object generation number
 										},
 									},
 									"inventory_filters": {
-										Type:     schema.TypeList,
-										Optional: true,
-										Description: `List of inventory filters for the resource group.
-The resources in this resource group are applied to the target VM if it satisfies at least one of the following inventory filters.
-For example, to apply this resource group to VMs running either 'RHEL' or 'CentOS' operating systems, specify 2 items for the list with following values: inventory_filters[0].os_short_name='rhel' and inventory_filters[1].os_short_name='centos'
-If the list is empty, this resource group will be applied to the target VM unconditionally.`,
+										Type:        schema.TypeList,
+										Optional:    true,
+										Description: "List of inventory filters for the resource\ngroup. The resources in this resource group are applied to the target VM if\nit satisfies at least one of the following inventory filters. For example,\nto apply this resource group to VMs running either `RHEL` or `CentOS`\noperating systems, specify 2 items for the list with following values:\ninventory_filters[0].os_short_name='rhel' and\ninventory_filters[1].os_short_name='centos' If the list is empty, this\nresource group will be applied to the target VM unconditionally.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"os_short_name": {
@@ -943,11 +981,9 @@ If the list is empty, this resource group will be applied to the target VM uncon
 													Description: `The OS short name`,
 												},
 												"os_version": {
-													Type:     schema.TypeString,
-													Optional: true,
-													Description: `The OS version
-Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of '7', specify the following value for this field '7.*'
-An empty string matches all OS versions.`,
+													Type:        schema.TypeString,
+													Optional:    true,
+													Description: "The OS version Prefix matches are supported if\nasterisk(*) is provided as the last character. For example, to match all\nversions with a major version of `7`, specify the following value for this\nfield `7.*` An empty string matches all OS versions.",
 												},
 											},
 										},
@@ -958,28 +994,34 @@ An empty string matches all OS versions.`,
 						"allow_no_resource_group_match": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Description: `This flag determines the OS policy compliance status when none of the resource groups within the policy are applicable for a VM. Set this value to 'true' if the policy needs to be reported as compliant even if the policy has nothing to validate or enforce.`,
+							Description: "This flag determines the OS\npolicy compliance status when none of the resource groups within the policy\nare applicable for a VM. Set this value to `true` if the policy needs to be\nreported as compliant even if the policy has nothing to validate or enforce.",
 						},
 						"description": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: `Policy description. Length of the description is limited to 1024 characters.`,
+							Type:     schema.TypeString,
+							Optional: true,
+							Description: `Policy description. Length of the description is
+limited to 1024 characters.`,
 						},
 					},
 				},
 			},
 			"rollout": {
-				Type:        schema.TypeList,
-				Required:    true,
-				Description: `Rollout to deploy the OS policy assignment. A rollout is triggered in the following situations: 1) OSPolicyAssignment is created. 2) OSPolicyAssignment is updated and the update contains changes to one of the following fields: - instance_filter - os_policies 3) OSPolicyAssignment is deleted.`,
-				MaxItems:    1,
+				Type:     schema.TypeList,
+				Required: true,
+				Description: `Rollout to deploy the OS policy assignment. A rollout
+is triggered in the following situations: 1) OSPolicyAssignment is created.
+2) OSPolicyAssignment is updated and the update contains changes to one of
+the following fields: - instance_filter - os_policies 3) OSPolicyAssignment
+is deleted.`,
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"disruption_budget": {
-							Type:        schema.TypeList,
-							Required:    true,
-							Description: `The maximum number (or percentage) of VMs per zone to disrupt at any given moment.`,
-							MaxItems:    1,
+							Type:     schema.TypeList,
+							Required: true,
+							Description: `The maximum number (or percentage) of VMs
+per zone to disrupt at any given moment.`,
+							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"fixed": {
@@ -988,9 +1030,10 @@ An empty string matches all OS versions.`,
 										Description: `Specifies a fixed value.`,
 									},
 									"percent": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Description: `Specifies the relative value defined as a percentage, which will be multiplied by a reference value.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										Description: `Specifies the relative value defined as a percentage,
+which will be multiplied by a reference value.`,
 									},
 								},
 							},
@@ -998,49 +1041,51 @@ An empty string matches all OS versions.`,
 						"min_wait_duration": {
 							Type:             schema.TypeString,
 							Required:         true,
-							Description:      `This determines the minimum duration of time to wait after the configuration changes are applied through the current rollout. A VM continues to count towards the 'disruption_budget' at least until this duration of time has passed after configuration changes are applied.`,
+							Description:      "This determines the minimum duration of\ntime to wait after the configuration changes are applied through the current\nrollout. A VM continues to count towards the `disruption_budget` at least\nuntil this duration of time has passed after configuration changes are\napplied.",
 							DiffSuppressFunc: compareDuration,
 						},
 					},
 				},
 			},
 			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `OS policy assignment description. Length of the description is limited to 1024 characters.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: `OS policy assignment description. Length of the
+description is limited to 1024 characters.`,
 			},
 			"baseline": {
-				Type:     schema.TypeBool,
-				Computed: true,
-				Description: `Output only. Indicates that this revision has been successfully rolled out in this zone and new VMs will be assigned OS policies from this revision.
-For a given OS policy assignment, there is only one revision with a value of 'true' for this field.`,
-			},
-			"deleted": {
 				Type:        schema.TypeBool,
 				Computed:    true,
-				Description: `Output only. Indicates that this revision deletes the OS policy assignment.`,
+				Description: "Output only. Indicates that this revision has been successfully\nrolled out in this zone and new VMs will be assigned OS policies from this\nrevision. For a given OS policy assignment, there is only one revision with\na value of `true` for this field.",
 			},
-			"etag": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The etag for this OS policy assignment. If this is provided on update, it must match the server's etag.`,
-			},
-			"reconciling": {
+			"deleted": {
 				Type:     schema.TypeBool,
 				Computed: true,
-				Description: `Output only. Indicates that reconciliation is in progress for the revision. This value is 'true' when the 'rollout_state' is one of:
-* IN_PROGRESS
-* CANCELLING`,
+				Description: `Output only. Indicates that this revision deletes the OS policy
+assignment.`,
+			},
+			"etag": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `The etag for this OS policy assignment. If this is provided on
+update, it must match the server's etag.`,
+			},
+			"reconciling": {
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Output only. Indicates that reconciliation is in progress\nfor the revision. This value is `true` when the `rollout_state` is one of:\n\n*   IN_PROGRESS\n*   CANCELLING",
 			},
 			"revision_create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. The timestamp that the revision was created.`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `Output only. The timestamp that the revision was
+created.`,
 			},
 			"revision_id": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. The assignment revision ID A new revision is committed whenever a rollout is triggered for a OS policy assignment`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `Output only. The assignment revision ID A new revision is
+committed whenever a rollout is triggered for a OS policy assignment`,
 			},
 			"rollout_state": {
 				Type:        schema.TypeString,
@@ -1048,14 +1093,16 @@ For a given OS policy assignment, there is only one revision with a value of 'tr
 				Description: `Output only. OS policy assignment rollout state`,
 			},
 			"uid": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Output only. Server generated unique id for the OS policy assignment resource.`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `Output only. Server generated unique id for the OS policy assignment
+resource.`,
 			},
 			"skip_await_rollout": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: `Set to true to skip awaiting rollout during resource creation and update.`,
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: `Set to true to skip awaiting rollout
+during resource creation and update.`,
 			},
 			"project": {
 				Type:             schema.TypeString,
@@ -1063,7 +1110,8 @@ For a given OS policy assignment, there is only one revision with a value of 'tr
 				Computed:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The project for the resource",
+				Description: `The ID of the project in which the resource belongs.
+If it is not provided, the provider project is used.`,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

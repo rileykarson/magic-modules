@@ -17,18 +17,23 @@ var IamDataprocJobSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 		ForceNew: true,
+		Description: `The name or relative resource id of the job to manage IAM policies for.`,
 	},
 	"project": {
 		Type:     schema.TypeString,
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The project in which the job belongs. If it
+is not provided, Terraform will use the provider default.`,
 	},
 	"region": {
 		Type:     schema.TypeString,
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The region in which the job belongs. If it
+is not provided, Terraform will use the provider default.`,
 	},
 }
 

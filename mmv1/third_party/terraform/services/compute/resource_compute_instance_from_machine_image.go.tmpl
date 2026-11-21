@@ -56,7 +56,8 @@ func computeInstanceFromMachineImageSchema() map[string]*schema.Schema {
 		Type:        schema.TypeString,
 		Required:    true,
 		ForceNew:    true,
-		Description: `Name or self link of a machine image to create the instance from on.`,
+		Description: `Name or self link of a machine
+image to create the instance based on.`,
 	}
 
 	s["source_machine_image_encryption_key"] = &schema.Schema{

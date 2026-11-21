@@ -32,29 +32,34 @@ func ResourceBillingSubaccount() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"display_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: `The display name of the billing account.`,
 			},
 			"master_billing_account": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ForceNew:         true,
+				Description:      "The name of the master billing account that the subaccount\nwill be created under in the form `{billing_account_id}` or `billingAccounts/{billing_account_id}`.",
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry(""),
 			//UDP schema end
 			"billing_account_id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `The billing account id.`,
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The resource name of the billing account in the form `billingAccounts/{billing_account_id}`.",
 			},
 			"open": {
-				Type:     schema.TypeBool,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "`true` if the billing account is open, `false` if the billing account is closed.",
 			},
 		},
 		UseJSONNumber: true,

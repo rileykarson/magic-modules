@@ -115,7 +115,7 @@ var (
 			"value": {
 				Type:     schema.TypeString,
 				Required: true,
-				Description:  `IP address or range, defined using CIDR notation, of requests that this rule applies to. Examples: 192.168.1.1 or 192.168.0.0/16 or 2001:db8::/32 or 2001:0db8:0000:0042:0000:8a2e:0370:7334. IP range prefixes should be properly truncated. For example, 1.2.3.4/24 should be truncated to 1.2.3.0/24. Similarly, for IPv6, 2001:db8::1/32 should be truncated to 2001:db8::/32.`,
+				Description:  "IP address or range, defined using CIDR notation, of requests that this rule\napplies to. Examples: `192.168.1.1` or `192.168.0.0/16` or `2001:db8::/32` or\n`2001:0db8:0000:0042:0000:8a2e:0370:7334`.\nIP range prefixes should be properly truncated. For example,\n`1.2.3.4/24` should be truncated to `1.2.3.0/24`. Similarly, for IPv6,\n`2001:db8::1/32` should be truncated to `2001:db8::/32`.",
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -130,12 +130,12 @@ var (
 			"display_name": {
 				Type:     		schema.TypeString,
 				Optional: 		true,
-				Description:  `display_name is a field for users to identify CIDR blocks.`,
+				Description:  "`display_name` is a field for users to identify CIDR blocks.",
 			},
 			"cidr_block": {
 				Type:     		schema.TypeString,
 				Required: 		true,
-				Description:  `cidr_block must be specified in CIDR notation.`,
+				Description:  "`cidr_block` must be specified in CIDR notation.",
 			},
 		},
 	}
@@ -178,7 +178,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: verify.ValidateGCEName,
-				Description:  `Name of the environment.`,
+				Description:  `Name of the environment`,
 			},
 			"region": {
 				Type:        schema.TypeString,
@@ -192,7 +192,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Description: `The ID of the project in which the resource belongs.
+If it is not provided, the provider project is used.`,
 			},
 			"config": {
 				Type:        schema.TypeList,
@@ -208,7 +209,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: composerConfigKeys,
 							ValidateFunc: validation.IntAtLeast(3),
-							Description:  `The number of nodes in the Kubernetes Engine cluster that will be used to run this environment. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+							Description:  `The number of nodes in the Kubernetes Engine cluster of the environment.`,
 						},
 						"node_config": {
 							Type:         schema.TypeList,
@@ -216,7 +217,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration used for the Kubernetes Engine cluster.`,
+							Description:  `The configuration used for the environment's Google Kubernetes Engine
+cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"zone": {
@@ -225,7 +227,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed:         true,
 										ForceNew:         true,
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The Compute Engine zone in which to deploy the VMs running the Apache Airflow software, specified as the zone name or relative resource name (e.g. "projects/{project}/zones/{zone}"). Must belong to the enclosing environment's project and region. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description:      "The Compute Engine zone in which to deploy the VMs running the\nApache Airflow software, specified as the zone name or\nrelative resource name (e.g. `projects/{project}/zones/{zone}`). Must\nbelong to the enclosing environment's project and region.",
 									},
 									"machine_type": {
 										Type:             schema.TypeString,
@@ -233,7 +235,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Optional:         true,
 										ForceNew:         true,
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The Compute Engine machine type used for cluster instances, specified as a name or relative resource name. For example: "projects/{project}/zones/{zone}/machineTypes/{machineType}". Must belong to the enclosing environment's project and region/zone. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description:      "The Compute Engine machine type used for cluster instances,\nspecified as a name or relative resource name. For example:\n`projects/{project}/zones/{zone}/machineTypes/{machineType}`. Must belong\nto the enclosing environment's project and region/zone.",
 									},
 									"network": {
 										Type:             schema.TypeString,
@@ -241,7 +243,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Optional:         true,
 										ConflictsWith:    []string{"config.0.node_config.0.composer_network_attachment"},
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The Compute Engine machine type used for cluster instances, specified as a name or relative resource name. For example: "projects/{project}/zones/{zone}/machineTypes/{machineType}". Must belong to the enclosing environment's project and region/zone. The network must belong to the environment's project. If unspecified, the "default" network ID in the environment's project is used. If a Custom Subnet Network is provided, subnetwork must also be provided.`,
+										Description:      "The Compute Engine network to be used for machine\ncommunications, specified as a self-link, relative resource name\n(for example `projects/{project}/global/networks/{network}`), by name.\n\nThe network must belong to the environment's project. If unspecified, the\n`default` network ID in the environment's project is used. If a\nCustom Subnet Network is provided, subnetwork must also be provided.",
 									},
 									"subnetwork": {
 										Type:             schema.TypeString,
@@ -249,21 +251,24 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed:         true,
 										ConflictsWith:    []string{"config.0.node_config.0.composer_network_attachment"},
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The Compute Engine subnetwork to be used for machine communications, specified as a self-link, relative resource name (e.g. "projects/{project}/regions/{region}/subnetworks/{subnetwork}"), or by name. If subnetwork is provided, network must also be provided and the subnetwork must belong to the enclosing environment's project and region.`,
+										Description:      "The Compute Engine subnetwork to be used for machine\ncommunications, specified as a self-link, relative resource name (for example,\n`projects/{project}/regions/{region}/subnetworks/{subnetwork}`), or by name.\nIf subnetwork is provided, network must also be provided and the subnetwork\nmust belong to the enclosing environment's project and region.",
 									},
 									"composer_network_attachment": {
 										Type:             schema.TypeString,
 										Computed:         true,
 										Optional:         true,
 										ForceNew:         false,
-										Description:      `PSC (Private Service Connect) Network entry point. Customers can pre-create the Network Attachment and point Cloud Composer environment to use. It is possible to share network attachment among many environments, provided enough IP addresses are available.`,
+										Description:      `PSC (Private Service Connect) Network entry point. Customers can pre-create
+the Network Attachment and point Managed Airflow environment to use. It is possible to share network attachment among many environments,
+provided enough IP addresses are available.`,
 									},
 									"disk_size_gb": {
 										Type:        schema.TypeInt,
 										Computed:    true,
 										Optional:    true,
 										ForceNew:    true,
-										Description: `The disk size in GB used for node VMs. Minimum size is 20GB. If unspecified, defaults to 100GB. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description: `The disk size in GB used for node VMs. Minimum size is 20GB.
+If unspecified, defaults to 100GB. Cannot be updated.`,
 									},
 									"oauth_scopes": {
 										Type:     schema.TypeSet,
@@ -274,7 +279,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 											Type: schema.TypeString,
 										},
 										Set:         schema.HashString,
-										Description: `The set of Google API scopes to be made available on all node VMs. Cannot be updated. If empty, defaults to ["https://www.googleapis.com/auth/cloud-platform"]. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description: "The set of Google API scopes to be made available on all node\nVMs. Cannot be updated. If empty, defaults to\n`[\"https://www.googleapis.com/auth/cloud-platform\"]`.",
 									},
 									"service_account": {
 										Type:             schema.TypeString,
@@ -283,7 +288,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										ForceNew:         true,
 										ValidateFunc:     validateServiceAccountRelativeNameOrEmail,
 										DiffSuppressFunc: compareServiceAccountEmailToLink,
-										Description:      `The Google Cloud Platform Service Account to be used by the node VMs. If a service account is not specified, the "default" Compute Engine service account is used. Cannot be updated. If given, note that the service account must have roles/composer.worker for any GCP resources created under the Cloud Composer Environment.`,
+										Description:      "The Google Cloud Platform Service Account to be used by the\nenvironment to perform operations and run DAGs. Cannot be\nupdated. The service account must have the `roles/composer.worker` role\nto create the environment. To access other resources in your Google Cloud\nproject, grant extra permissions to access those resources to this service\naccount.",
 									},
 {{- if ne $.TargetVersionName "ga" }}
 									"max_pods_per_node": {
@@ -292,7 +297,11 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Optional:         true,
 										ForceNew:         true,
 										ValidateFunc:     validation.IntBetween(8, 110),
-										Description:      `The maximum pods per node in the GKE cluster allocated during environment creation. Lowering this value reduces IP address consumption by the Cloud Composer Kubernetes cluster. This value can only be set during environment creation, and only if the environment is VPC-Native. The range of possible values is 8-110, and the default is 32. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description:      `The maximum pods per node in the GKE cluster allocated during environment
+creation. Lowering this value reduces IP address consumption by the
+environment's GKE cluster. This value can only be set if the environment is
+VPC-Native. The range of possible values is 8-110, and the default is 32.
+Cannot be updated.`,
 									},
 {{- end }}
 									"enable_ip_masq_agent": {
@@ -300,7 +309,10 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed:         true,
 										Optional:         true,
 										ForceNew:         true,
-										Description:      `Deploys 'ip-masq-agent' daemon set in the GKE cluster and defines nonMasqueradeCIDRs equals to pod IP range so IP masquerading is used for all destination addresses, except between pods traffic. See: https://cloud.google.com/kubernetes-engine/docs/how-to/ip-masquerade-agent`,
+										Description:      `IP Masq Agent translates Pod IP addresses to node IP addresses, so that
+destinations and services targeted from Airflow DAGs and tasks only receive
+packets from node IP addresses instead of Pod IP addresses
+See the [documentation](https://docs.cloud.google.com/composer/docs/composer-2/enable-ip-masquerade-agent).`,
 									},
 
 									"tags": {
@@ -311,7 +323,10 @@ func ResourceComposerEnvironment() *schema.Resource {
 											Type: schema.TypeString,
 										},
 										Set:         schema.HashString,
-										Description: `The list of instance tags applied to all node VMs. Tags are used to identify valid sources or targets for network firewalls. Each tag within the list must comply with RFC1035. Cannot be updated.`,
+										Description: `The list of instance tags applied to all node VMs in the environment's
+cluster. Tags are used to identify valid sources or targets for network
+firewalls. Each tag within the list must comply with RFC1035.
+Cannot be updated.`,
 									},
 									"ip_allocation_policy": {
 										Type:        schema.TypeList,
@@ -319,7 +334,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed:    true,
 										ForceNew:    true,
 										MaxItems:    1,
-										Description: `Configuration for controlling how IPs are allocated in the GKE cluster. Cannot be updated.`,
+										Description: `Configuration for controlling how IPs are allocated in the GKE cluster.
+Cannot be updated.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"use_ip_aliases": {
@@ -327,14 +343,14 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:     true,
 													ForceNew:     true,
 													AtLeastOneOf: composerIpAllocationPolicyKeys,
-													Description:  `Whether or not to enable Alias IPs in the GKE cluster. If true, a VPC-native cluster is created. Defaults to true if the ip_allocation_policy block is present in config. This field is only supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*. Environments in newer versions always use VPC-native GKE clusters.`,
+													Description:  "Whether or not to enable Alias IPs in the GKE cluster. If true, a VPC-native\ncluster is created. Defaults to true if the `ip_allocation_policy` block is\npresent in config.",
 												},
 												"cluster_secondary_range_name": {
 													Type:          schema.TypeString,
 													Optional:      true,
 													ForceNew:      true,
 													AtLeastOneOf:  composerIpAllocationPolicyKeys,
-													Description:   `The name of the cluster's secondary range used to allocate IP addresses to pods. Specify either cluster_secondary_range_name or cluster_ipv4_cidr_block but not both. For Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*, this field is applicable only when use_ip_aliases is true.`,
+													Description:   "The name of the cluster's secondary range used to allocate IP addresses to\npods. Specify either `cluster_secondary_range_name` or\n`cluster_ipv4_cidr_block` but not both.",
 													ConflictsWith: []string{"config.0.node_config.0.ip_allocation_policy.0.cluster_ipv4_cidr_block"},
 												},
 												"services_secondary_range_name": {
@@ -342,7 +358,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:      true,
 													ForceNew:      true,
 													AtLeastOneOf:  composerIpAllocationPolicyKeys,
-													Description:   `The name of the services' secondary range used to allocate IP addresses to the cluster. Specify either services_secondary_range_name or services_ipv4_cidr_block but not both. For Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*, this field is applicable only when use_ip_aliases is true.`,
+													Description:   "The name of the services' secondary range used to allocate IP addresses to\nthe cluster. Specify either\n`services_secondary_range_name` or `services_ipv4_cidr_block` but not both.",
 													ConflictsWith: []string{"config.0.node_config.0.ip_allocation_policy.0.services_ipv4_cidr_block"},
 												},
 												"cluster_ipv4_cidr_block": {
@@ -350,7 +366,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													AtLeastOneOf: 		composerIpAllocationPolicyKeys,
-													Description:      `The IP address range used to allocate IP addresses to pods in the cluster. For Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*, this field is applicable only when use_ip_aliases is true. Set to blank to have GKE choose a range with the default size. Set to /netmask (e.g. /14) to have GKE choose a range with a specific netmask. Set to a CIDR notation (e.g. 10.96.0.0/14) from the RFC-1918 private networks (e.g. 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) to pick a specific range to use. Specify either cluster_secondary_range_name or cluster_ipv4_cidr_block but not both.`,
+													Description:      "The IP address range used to allocate IP addresses to pods in the cluster.\nFor Managed Airflow (Legacy Gen 1) environments, this field is applicable\nonly when `use_ip_aliases` is true.\nSet to blank to have GKE choose a range with the default size.\nSet to /netmask (e.g. /14) to have GKE choose a range with a specific netmask.\nSet to a CIDR notation (e.g. 10.96.0.0/14) from the RFC-1918 private networks\n(e.g. 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) to pick a specific range to\nuse.\nSpecify either `cluster_secondary_range_name` or `cluster_ipv4_cidr_block`\nbut not both.",
 													DiffSuppressFunc: tpgresource.CidrOrSizeDiffSuppress,
 													ConflictsWith:    []string{"config.0.node_config.0.ip_allocation_policy.0.cluster_secondary_range_name"},
 												},
@@ -359,7 +375,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:         true,
 													ForceNew:         true,
 													AtLeastOneOf: 		composerIpAllocationPolicyKeys,
-													Description:      `The IP address range used to allocate IP addresses in this cluster. For Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*, this field is applicable only when use_ip_aliases is true. Set to blank to have GKE choose a range with the default size. Set to /netmask (e.g. /14) to have GKE choose a range with a specific netmask. Set to a CIDR notation (e.g. 10.96.0.0/14) from the RFC-1918 private networks (e.g. 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) to pick a specific range to use. Specify either services_secondary_range_name or services_ipv4_cidr_block but not both.`,
+													Description:      "The IP address range used to allocate IP addresses in this cluster.\nFor Managed Airflow (Legacy Gen 1) environments, this field is applicable\nonly when `use_ip_aliases` is true.\nSet to blank to have GKE choose a range with the default size.\nSet to /netmask (e.g. /14) to have GKE choose a range with a specific netmask.\nSet to a CIDR notation (e.g. 10.96.0.0/14) from the RFC-1918 private networks\n(e.g. 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) to pick a specific range to\nuse.\nSpecify either `services_secondary_range_name` or `services_ipv4_cidr_block`\nbut not both.",
 													DiffSuppressFunc: tpgresource.CidrOrSizeDiffSuppress,
 													ConflictsWith:    []string{"config.0.node_config.0.ip_allocation_policy.0.services_secondary_range_name"},
 												},
@@ -372,7 +388,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Optional:         true,
 										ForceNew:         true,
 										ValidateFunc:     validateComposerInternalIpv4CidrBlock,
-										Description:      `IPv4 cidr range that will be used by Composer internal components.`,
+										Description:      `/20 IPv4 cidr range that will be used by the environment's internal
+components. Cannot be updated.`,
 									},
 {{- if ne $.TargetVersionName "ga" }}
 									"traffic_routing_config": {
@@ -388,7 +405,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:     true,
 													Computed:     true,
 													ValidateFunc: validation.StringInSlice([]string{"DIRECT", "VIA_NETWORK_ATTACHMENT"}, false),
-													Description:  `Traffic routing mode for Cloud Run functions. Possible values: ["DIRECT", "VIA_NETWORK_ATTACHMENT"]`,
+													Description:  "Traffic routing mode for Cloud Run functions. Possible values: `DIRECT`, `VIA_NETWORK_ATTACHMENT`.\nIf unspecified, defaults to `DIRECT`.",
 												},
 											},
 										},
@@ -402,36 +419,39 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The recovery configuration settings for the Cloud Composer environment`,
+							Description:  `The configuration settings for recovery.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"scheduled_snapshots_config": {
 										Type:         schema.TypeList,
 										Optional:     true,
 										AtLeastOneOf: recoveryConfigKeys,
-										Description:  `The configuration settings for scheduled snapshots.`,
+										Description:  `The recovery configuration settings for the Managed Airflow environment.`,
 										MaxItems:     1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"enabled": {
 													Type:        schema.TypeBool,
 													Required:    true,
-													Description: `When enabled, Cloud Composer periodically saves snapshots of your environment to a Cloud Storage bucket.`,
+													Description: `When enabled, Managed Airflow periodically saves snapshots of your
+environment to a Cloud Storage bucket.`,
 												},
 												"snapshot_location": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Description: `the URI of a bucket folder where to save the snapshot.`,
+													Description: `The URI of a bucket folder where to save the snapshot.`,
 												},
 												"snapshot_creation_schedule": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Description: `Snapshot schedule, in the unix-cron format.`,
+													Description: `Snapshot schedule, in the Unix-cron format.`,
 												},
 												"time_zone": {
 													Type:        schema.TypeString,
 													Optional:    true,
-													Description: `A time zone for the schedule. This value is a time offset and does not take into account daylight saving time changes. Valid values are from UTC-12 to UTC+12. Examples: UTC, UTC-01, UTC+03.`,
+													Description: `A time zone for the schedule. This value is a time offset and does not take
+into account daylight saving time changes. Valid values are from UTC-12 to
+UTC+12. Examples: UTC, UTC-01, UTC+03.`,
 												},
 											},
 										},
@@ -445,7 +465,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration settings for software inside the environment.`,
+							Description:  `The configuration settings for the Airflow instance that runs inside the
+environment.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"airflow_config_overrides": {
@@ -453,7 +474,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										Elem:         &schema.Schema{Type: schema.TypeString},
-										Description:  `Apache Airflow configuration properties to override. Property keys contain the section and property names, separated by a hyphen, for example "core-dags_are_paused_at_creation". Section names must not contain hyphens ("-"), opening square brackets ("["), or closing square brackets ("]"). The property name must not be empty and cannot contain "=" or ";". Section and property names cannot contain characters: "." Apache Airflow configuration property names must be written in snake_case. Property values can contain any character, and can be written in any lower/upper case format. Certain Apache Airflow configuration property values are blacklisted, and cannot be overridden.`,
+										Description:  "Apache Airflow configuration options to override.\n\nKeys contain section names and Airflow configuration option names,\nseparated by a hyphen, for example: `core-dags_are_paused_at_creation` where\n`core` is the section and `dags_are_paused_at_creation` is the Airflow\nconfiguration option name.\n\nSection names must not contain hyphens (`-`), opening square brackets (`[`),\nor closing square brackets (`]`).\nOption names must not be empty and can't contain `=` or `;` characters.\nSection and onption names cannot contain `.` characters. Option\nnames must be written in snake_case.\n\nValues can\ncontain any character, and can be written in any lower or upper case format.\nCertain Apache Airflow configuration option values are\n[blocked](https://docs.cloud.google.com/composer/docs/airflow-configurations),\nand cannot be overridden.",
 									},
 									"pypi_packages": {
 										Type:         schema.TypeMap,
@@ -461,7 +482,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										Elem:         &schema.Schema{Type: schema.TypeString},
 										ValidateFunc: validateComposerEnvironmentPypiPackages,
-										Description:  `Custom Python Package Index (PyPI) packages to be installed in the environment. Keys refer to the lowercase package name (e.g. "numpy"). Values are the lowercase extras and version specifier (e.g. "==1.12.0", "[devel,gcp_api]", "[devel]>=1.8.2, <1.9.2"). To specify a package without pinning it to a version specifier, use the empty string as the value.`,
+										Description:  "Custom Python Package Index (PyPI) packages to be installed\nin the environment, in addition to\n[preinstalled packages](https://docs.cloud.google.com/composer/docs/versions-packages).\nKeys refer to the lowercase package name (for example: `numpy`). Values are\nthe lowercase extras and version specifier (example: `==1.12.0`,\n`[devel,gcp_api]`, `[devel]>=1.8.2`, `<1.9.2`). To specify a package without\npinning it to a version specifier, use the empty string as the value.",
 									},
 									"env_variables": {
 										Type:         schema.TypeMap,
@@ -469,7 +490,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										Elem:         &schema.Schema{Type: schema.TypeString},
 										ValidateFunc: validateComposerEnvironmentEnvVariables,
-										Description:  `Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.`,
+										Description:  "Additional environment variables to provide to Apache Airflow components of the environment.\nEnvironment variable names must match the regular expression\n`[a-zA-Z_][a-zA-Z0-9_]*`. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression\n`AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+`), and they cannot match any of the\n[reserved variable names](https://docs.cloud.google.com/composer/docs/composer-3/set-environment-variables#reserved).",
 									},
 									"image_version": {
 										Type:             schema.TypeString,
@@ -478,7 +499,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf:     composerSoftwareConfigKeys,
 										ValidateFunc:     verify.ValidateRegexp(composerEnvironmentVersionRegexp),
 										DiffSuppressFunc: composerImageVersionDiffSuppress,
-										Description:      `The version of the software running in the environment. This encapsulates both the version of Cloud Composer functionality and the version of Apache Airflow. It must match the regular expression composer-([0-9]+(\.[0-9]+\.[0-9]+(-preview\.[0-9]+)?)?|latest)-airflow-([0-9]+(\.[0-9]+(\.[0-9]+)?)?). The Cloud Composer portion of the image version is a full semantic version, or an alias in the form of major version number or 'latest'. The Apache Airflow portion of the image version is a full semantic version that points to one of the supported Apache Airflow versions, or an alias in the form of only major or major.minor versions specified. See documentation for more details and version list.`,
+										Description:      "Version of Managed Airflow and Apache Airflow to use.\nIf omitted, the\n[default build of Managed Airflow (Gen 3)](https://docs.cloud.google.com/composer/docs/composer-versions)\nis used.\n\nIn Managed Airflow (Gen 3), you can only specify `3` as the Managed Airflow\nportion of the image version. Example: `composer-3-airflow-x.y.z-build.t`.\n\nThe Apache Airflow portion of the image version is a full semantic version\nthat points to one of the supported Apache Airflow versions, or an alias in\nthe form of only `major`, `major.minor` or `major.minor.patch` versions\nspecified.\nLike in Managed Airflow (Gen 2) and Managed Airflow (Legacy Gen 1), a given\nAirflow version is released multiple times in Managed Airflow, with different\npatches and versions of dependencies. To distinguish between these versions\nin Managed Airflow (Gen 3), you can optionally specify a build number to pin\nto a specific Airflow release.\nExample: `composer-3-airflow-2.6.3-build.4`.\n\nThe image version in Managed Airflow (Gen 3) must match the regular\nexpression:\n`composer-(([0-9]+)(\\.[0-9]+\\.[0-9]+(-preview\\.[0-9]+)?)?|latest)-airflow-(([0-9]+)((\\.[0-9]+)(\\.[0-9]+)?)?(-build\\.[0-9]+)?)`\nExample: `composer-3-airflow-2.6.3-build.4`.\n\n**Important**: In-place upgrade in Managed Airflow (Gen 3) is only available\nbetween minor or patch versions of Apache Airflow. You can also upgrade to a\ndifferent Airflow build within the same version by specifying the build\nnumber. For example, you can upgrade your environment from\n`composer-3-airflow-2.6.x` to `composer-3-airflow-2.9.x`,\nor from `composer-3-airflow-2.9.3-build.4` to\n`composer-3-airflow-2.9.3-build.5`.",
 									},
 									"python_version": {
 										Type:         schema.TypeString,
@@ -486,14 +507,19 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										Computed:     true,
 										ForceNew:     true,
-										Description:  `The major version of Python used to run the Apache Airflow scheduler, worker, and webserver processes. Can be set to '2' or '3'. If not specified, the default is '2'. Cannot be updated. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*. Environments in newer versions always use Python major version 3.`,
+										Description:  `The major version of Python used to run the Apache Airflow scheduler, worker, and webserver processes.
+Can be set to '2' or '3'. If not specified, the default is '3'.`,
 									},
 									"scheduler_count": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										Computed:     true,
-										Description:  `The number of schedulers for Airflow. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-2.*.*.`,
+										Description:  `The number of schedulers for Airflow.
+
+See
+[documentation](https://docs.cloud.google.com/composer/docs/composer-1/configure-private-ip)
+for setting up private environments.`,
 									},
 									"cloud_data_lineage_integration": {
 										Type:        	schema.TypeList,
@@ -501,7 +527,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed:    	true,
 										AtLeastOneOf:	composerSoftwareConfigKeys,
 										MaxItems:    	1,
-										Description: 	`The configuration for Cloud Data Lineage integration. Supported for Cloud Composer environments in versions composer-2.1.2-airflow-*.*.* and newer`,
+										Description: 	`The configuration for Cloud Data Lineage integration.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"enabled": {
@@ -519,7 +545,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										ForceNew:     false,
 										AtLeastOneOf: composerSoftwareConfigKeys,
 										ValidateFunc: validation.StringInSlice([]string{"ENABLED", "DISABLED"}, false),
-										Description:  `Should be either 'ENABLED' or 'DISABLED'. Defaults to 'ENABLED'. Used in Composer 3.`,
+										Description:  "Web server plugins configuration. Can be either `ENABLED` or `DISABLED`.\nDefaults to `ENABLED`.",
 									},
 								},
 							},
@@ -531,7 +557,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
 							ForceNew:     true,
-							Description:  `The configuration used for the Private IP Cloud Composer environment.`,
+							Description:  `The configuration used for the Private IP Managed Airflow environment.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"connection_type": {
@@ -541,7 +567,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew: true,
 										ValidateFunc: validation.StringInSlice([]string{"VPC_PEERING", "PRIVATE_SERVICE_CONNECT"}, false),
-										Description: `Mode of internal communication within the Composer environment. Must be one of "VPC_PEERING" or "PRIVATE_SERVICE_CONNECT".`,
+										Description: "Mode of internal communication within the Managed Airflow environment. Must\nbe one of `VPC_PEERING` or `PRIVATE_SERVICE_CONNECT`.",
 									},
 									"enable_private_endpoint": {
 										Type:     schema.TypeBool,
@@ -549,7 +575,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Default:  true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew:    true,
-										Description: `If true, access to the public endpoint of the GKE cluster is denied. If this field is set to true, ip_allocation_policy.use_ip_aliases must be set to true for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description: `If true, access to the public endpoint of the environment's
+Google Kubernetes Enginge cluster is denied.`,
 									},
 									"master_ipv4_cidr_block": {
 										Type:     schema.TypeString,
@@ -557,7 +584,14 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed: true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew:    true,
-										Description: `The IP range in CIDR notation to use for the hosted master network. This range is used for assigning internal IP addresses to the cluster master or set of masters and to the internal load balancer virtual IP. This range must not overlap with any other ranges in use within the cluster's network. If left blank, the default value of '172.16.0.0/28' is used.`,
+										Description: `The IP range in CIDR notation to use for the hosted control plane network.
+This range is used for assigning internal IP addresses to the cluster control
+plane or a set of control planes and to the internal load balancer
+virtual IP. This range must not overlap with any other ranges in use within
+the cluster's network.
+If left blank, the default value of is used. See
+[documentation](https://docs.cloud.google.com/composer/docs/composer-2/configure-private-ip#defaults)
+for default values per region.`,
 									},
 									"web_server_ipv4_cidr_block": {
 										Type:     schema.TypeString,
@@ -565,7 +599,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed: true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew:    true,
-										Description: `The CIDR block from which IP range for web server will be reserved. Needs to be disjoint from master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+										Description: "The CIDR block from which IP range for web server will be reserved. Needs to\nbe disjoint from `master_ipv4_cidr_block` and `cloud_sql_ipv4_cidr_block`.",
 									},
 									"cloud_sql_ipv4_cidr_block": {
 										Type:     schema.TypeString,
@@ -573,7 +607,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed: true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew:    true,
-										Description: `The CIDR block from which IP range in tenant project will be reserved for Cloud SQL. Needs to be disjoint from web_server_ipv4_cidr_block.`,
+										Description: "The CIDR block from which IP range in the tenant project will be reserved for\nCloud SQL. Needs to be disjoint from `web_server_ipv4_cidr_block`",
 									},
 									"cloud_composer_network_ipv4_cidr_block": {
 										Type:     schema.TypeString,
@@ -581,7 +615,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed: true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew: true,
-										Description: `The CIDR block from which IP range for Cloud Composer Network in tenant project will be reserved. Needs to be disjoint from private_cluster_config.master_ipv4_cidr_block and cloud_sql_ipv4_cidr_block. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.`,
+										Description: "The CIDR block from which IP range for Managed Airflow Network in the tenant\nproject will be reserved. Needs to be disjoint from\n`private_cluster_config.master_ipv4_cidr_block` and\n`cloud_sql_ipv4_cidr_block`.",
 									},
 									"enable_privately_used_public_ips": {
 										Type:     schema.TypeBool,
@@ -589,7 +623,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Computed: true,
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew: true,
-										Description: `When enabled, IPs from public (non-RFC1918) ranges can be used for ip_allocation_policy.cluster_ipv4_cidr_block and ip_allocation_policy.service_ipv4_cidr_block.`,
+										Description: "When enabled, IPs from public (non-RFC 1918) ranges can be used for\n`ip_allocation_policy.cluster_ipv4_cidr_block` and\n`ip_allocation_policy.service_ipv4_cidr_block`.",
 									},
 									"cloud_composer_connection_subnetwork": {
 										Type:     schema.TypeString,
@@ -598,7 +632,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: composerPrivateEnvironmentConfig,
 										ForceNew: true,
 										DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
-										Description: `When specified, the environment will use Private Service Connect instead of VPC peerings to connect to Cloud SQL in the Tenant Project, and the PSC endpoint in the Customer Project will use an IP address from this subnetwork. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.`,
+										Description: "When specified, the environment will use Private Service Connect instead of\nVPC peerings to connect to Cloud SQL in the Tenant Project, and the PSC\nendpoint in the customer project will use an IP address from this subnetwork.\nThis field is supported for Managed Airflow environments in versions\n`composer-2.*.*-airflow-*.*.*` and newer.",
 									},
 								},
 							},
@@ -609,7 +643,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Optional:     true,
 							ForceNew:     false,
 							AtLeastOneOf: composerConfigKeys,
-							Description:  `Optional. If true, a private Composer environment will be created.`,
+							Description:  `If true, a private environment will be created.`,
 						},
 						"enable_private_builds_only": {
 							Type:         schema.TypeBool,
@@ -617,7 +651,9 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Optional:     true,
 							ForceNew:     false,
 							AtLeastOneOf: composerConfigKeys,
-							Description:  `Optional. If true, builds performed during operations that install Python packages have only private connectivity to Google services. If false, the builds also have access to the internet.`,
+							Description:  `If true, builds performed during operations that install Python packages have
+only private connectivity to Google services. If false, the builds also have
+access to the internet.`,
 						},
 						"web_server_network_access_control": {
 							Type:        schema.TypeList,
@@ -625,7 +661,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:    true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:    1,
-							Description: `Network-level access control policy for the Airflow web server.`,
+							Description: `The network-level access control policy for the Airflow web server.
+If unspecified, no network-level access restrictions are applied.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"allowed_ip_range": {
@@ -644,19 +681,21 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration of Cloud SQL instance that is used by the Apache Airflow software. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+							Description:  `The configuration settings for Cloud SQL instance used internally
+by Apache Airflow software.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"machine_type": {
 										Type:         schema.TypeString,
 										Optional:     true,
-										Description: `Optional. Cloud SQL machine type used by Airflow database. It has to be one of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16. If not specified, db-n1-standard-2 will be used.`,
+										Description: `Optional. Cloud SQL machine type used by Airflow database. It has to be one
+of: db-n1-standard-2, db-n1-standard-4, db-n1-standard-8 or db-n1-standard-16.`,
 									},
 									"zone": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										ForceNew:     true,
-										Description: `Optional. Cloud SQL database preferred zone.`,
+										Description: `Preferred Cloud SQL database zone.`,
 									},
 								},
 							},
@@ -667,13 +706,16 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration settings for the Airflow web server App Engine instance. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.`,
+							Description:  `The configuration settings for the Airflow web server App Engine instance.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"machine_type": {
 										Type:         schema.TypeString,
 										Required:     true,
-										Description: `Optional. Machine type on which Airflow web server is running. It has to be one of: composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8. If not specified, composer-n1-webserver-2 will be used. Value custom is returned only in response, if Airflow web server parameters were manually changed to a non-standard values.`,
+										Description: `Machine type on which Airflow web server is running. It has to be one of:
+composer-n1-webserver-2, composer-n1-webserver-4 or composer-n1-webserver-8.
+Value custom is returned only in response, if Airflow web server parameters
+were manually changed to a non-standard values.`,
 									},
 								},
 							},
@@ -684,14 +726,15 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The encryption options for the Composer environment and its dependencies.`,
+							Description:  `The encryption options for the Managed Airflow environment and its
+dependencies.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"kms_key_name": {
 										Type:         schema.TypeString,
 										Required:     true,
 										ForceNew:     true,
-										Description: `Optional. Customer-managed Encryption Key available through Google's Key Management Service. Cannot be updated.`,
+										Description: "Customer-managed Encryption Key available through Google's Key Management\nService. It must be the fully qualified resource name, for example:\n`projects/example-project-id/locations/example-location/keyRings/example-keyring/cryptoKeys/example-key`.\nCannot be updated.",
 									},
 								},
 							},
@@ -702,7 +745,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration for Cloud Composer maintenance window.`,
+							Description:  `The configuration settings for Managed Airflow maintenance windows.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"start_time": {
@@ -715,13 +758,13 @@ func ResourceComposerEnvironment() *schema.Resource {
 										Type:        schema.TypeString,
 										Required:    true,
 										ForceNew:    false,
-										Description: `Maintenance window end time. It is used only to calculate the duration of the maintenance window. The value for end-time must be in the future, relative to 'start_time'.`,
+										Description: "Maintenance window end time. It is used only to calculate the duration of the\nmaintenance window.\nThe value for end-time must be in the future, relative to `start_time`.",
 									},
 									"recurrence": {
 										Type:        schema.TypeString,
 										Required:    true,
 										ForceNew:    false,
-										Description: `Maintenance window recurrence. Format is a subset of RFC-5545 (https://tools.ietf.org/html/rfc5545) 'RRULE'. The only allowed values for 'FREQ' field are 'FREQ=DAILY' and 'FREQ=WEEKLY;BYDAY=...'. Example values: 'FREQ=WEEKLY;BYDAY=TU,WE', 'FREQ=DAILY'.`,
+										Description: "Maintenance window recurrence. Format is a subset of\n[RFC-5545](https://tools.ietf.org/html/rfc5545) `RRULE`.\nThe only allowed values for `FREQ` field are `FREQ=DAILY` and\n`FREQ=WEEKLY;BYDAY=...`.\nExample values: `FREQ=WEEKLY;BYDAY=TU,WE`, `FREQ=DAILY`.",
 									},
 								},
 							},
@@ -733,12 +776,12 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The configuration setting for Airflow data retention mechanism. This field is supported for Cloud Composer environments in versions composer-2.0.32-airflow-2.1.4. or newer`,
+							Description:  `Configuration setting for Airflow database retention mechanism.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"task_logs_retention_config": {
 										Type:         schema.TypeList,
-										Description: `Optional. The configuration setting for Task Logs.`,
+										Description: `The configuration setting for Task Logs.`,
 										Optional:     true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -746,14 +789,14 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Type:         schema.TypeString,
 													Optional:     true,
 													ValidateFunc: validation.StringInSlice([]string{"CLOUD_LOGGING_ONLY", "CLOUD_LOGGING_AND_CLOUD_STORAGE"}, false),
-													Description:  `Whether logs in cloud logging only is enabled or not. This field is supported for Cloud Composer environments in versions composer-2.0.32-airflow-2.1.4 and newer but not in composer-3*`,
+													Description:  "The mode of storage for Airflow workers task logs. Values for storage mode are\n`CLOUD_LOGGING_ONLY` to only store logs in Cloud Logging and\n`CLOUD_LOGGING_AND_CLOUD_STORAGE` to store logs in Cloud Logging and\nCloud Storage.",
 												},
 											},
 										},
 									},
 									"airflow_metadata_retention_config": {
 										Type:         schema.TypeList,
-										Description: `Optional. The policy for airflow metadata database retention.`,
+										Description: `The retention policy for the Airflow metadata database.`,
 										Optional:     true,
 										Computed:     true,
 										Elem: &schema.Resource{
@@ -763,14 +806,14 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Optional:     true,
 													Computed:     true,
 													ValidateFunc: validation.StringInSlice([]string{"RETENTION_MODE_ENABLED", "RETENTION_MODE_DISABLED"}, false),
-													Description:  `Whether database retention is enabled or not. This field is supported for Cloud Composer environments in composer 3 and newer.`,
+													Description:  "Retention can be either enabled or disabled. Values for retention_mode are\n`RETENTION_MODE_ENABLED` to enable retention and `RETENTION_MODE_DISABLED`\nto disable retention.",
 												},
 												"retention_days": {
 													Type:         schema.TypeInt,
 													Optional:     true,
 													Computed:     true,
 													ValidateFunc: validation.IntBetween(30, 730),
-													Description:  `How many days data should be retained for. This field is supported for Cloud Composer environments in composer 3 and newer.`,
+													Description:  `How many days data must be retained for.`,
 												},
 											},
 										},
@@ -784,7 +827,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:     1,
-							Description:  `The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.`,
+							Description:  `Environment resources configuration for the Google Kubernetes engine cluster
+associated with the Managed Airflow environment.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"scheduler": {
@@ -803,7 +847,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `CPU request and limit for a single Airflow scheduler replica`,
+													Description:  `The number of CPUs for a single Airflow scheduler.`,
 												},
 												"memory_gb": {
 													Type:        schema.TypeFloat,
@@ -811,7 +855,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:    false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description: `Memory (GB) request and limit for a single Airflow scheduler replica.`,
+													Description: `The amount of memory (GB) for a single Airflow scheduler.`,
 												},
 												"storage_gb": {
 													Type:         schema.TypeFloat,
@@ -819,7 +863,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Storage (GB) request and limit for a single Airflow scheduler replica.`,
+													Description:  `The amount of storage (GB) for a single Airflow scheduler.`,
 												},
 												"count": {
 													Type:         schema.TypeInt,
@@ -845,19 +889,19 @@ func ResourceComposerEnvironment() *schema.Resource {
 													Type:         schema.TypeFloat,
 													Required:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `CPU request and limit for a single Airflow triggerer replica.`,
+													Description:  `The number of CPUs for a single Airflow triggerer.`,
 												},
 												"memory_gb": {
 													Type:         schema.TypeFloat,
 													Required:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Memory (GB) request and limit for a single Airflow triggerer replica.`,
+													Description:  `The amount of memory (GB) for a single Airflow triggerer.`,
 												},
 												"count": {
 													Type:         schema.TypeInt,
 													Required:     true,
 													ValidateFunc: validation.IntAtLeast(0),
-													Description:  `The number of triggerers.`,
+													Description:  `The number of Airflow triggerers.`,
 												},
 											},
 										},
@@ -868,7 +912,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: workloadsConfigKeys,
 										ForceNew:     false,
 										Computed:     true,
-										Description:  `Configuration for resources used by Airflow web server.`,
+										Description:  `Configuration for resources used by the Airflow web server.`,
 										MaxItems:     1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -878,7 +922,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `CPU request and limit for Airflow web server.`,
+													Description:  `The number of CPUs for the Airflow web server.`,
 												},
 												"memory_gb": {
 													Type:         schema.TypeFloat,
@@ -886,7 +930,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Memory (GB) request and limit for Airflow web server.`,
+													Description:  `The amount of memory (GB) for the Airflow web server.`,
 												},
 												"storage_gb": {
 													Type:         schema.TypeFloat,
@@ -894,7 +938,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Storage (GB) request and limit for Airflow web server.`,
+													Description:  `The amount of storage (GB) for the Airflow web server.`,
 												},
 											},
 										},
@@ -915,7 +959,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `CPU request and limit for a single Airflow worker replica.`,
+													Description:  `The number of CPUs for a single Airflow worker.`,
 												},
 												"memory_gb": {
 													Type:         schema.TypeFloat,
@@ -923,7 +967,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Memory (GB) request and limit for a single Airflow worker replica.`,
+													Description:  `The amount of memory (GB) for a single Airflow worker.`,
 												},
 												"storage_gb": {
 													Type:         schema.TypeFloat,
@@ -931,7 +975,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.FloatAtLeast(0),
-													Description:  `Storage (GB) request and limit for a single Airflow worker replica.`,
+													Description:  `The amount of storage (GB) for a single Airflow worker.`,
 												},
 												"min_count": {
 													Type:         schema.TypeInt,
@@ -939,7 +983,9 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.IntAtLeast(0),
-													Description:  `Minimum number of workers for autoscaling.`,
+													Description:  `The minimum number of Airflow workers that the environment can run. The
+number of workers in the environment does not go below this number, even if a
+lower number of workers can handle the load.`,
 												},
 												"max_count": {
 													Type:         schema.TypeInt,
@@ -947,7 +993,9 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.IntAtLeast(0),
-													Description:  `Maximum number of workers for autoscaling.`,
+													Description:  `The maximum number of Airflow workers that the environment can run. The
+number of workers in the environment does not go above this number, even if a
+higher number of workers is required to handle the load.`,
 												},
 											},
 										},
@@ -958,7 +1006,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 										AtLeastOneOf: workloadsConfigKeys,
 										ForceNew:     false,
 										Computed:     true,
-										Description:  `Configuration for resources used by DAG processor.`,
+										Description:  `Configuration for resources used by Airflow DAG processors.`,
 										MaxItems:     1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -992,7 +1040,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 													ForceNew:     false,
 													Computed:     true,
 													ValidateFunc: validation.IntBetween(0, 3),
-													Description:  `Number of DAG processors.`,
+													Description:  `The number of Airflow DAG processors.`,
 												},
 											},
 										},
@@ -1007,7 +1055,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							ForceNew:     false,
 							AtLeastOneOf: composerConfigKeys,
 							ValidateFunc: validation.StringInSlice([]string{"ENVIRONMENT_SIZE_SMALL", "ENVIRONMENT_SIZE_MEDIUM", "ENVIRONMENT_SIZE_LARGE", "ENVIRONMENT_SIZE_EXTRA_LARGE"}, false),
-							Description:  `The size of the Cloud Composer environment. This field is supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.`,
+							Description:  "The environment size controls the performance parameters of the managed\nManaged Airflow infrastructure that includes the Airflow database. Values for\nenvironment size are `ENVIRONMENT_SIZE_SMALL`, `ENVIRONMENT_SIZE_MEDIUM`,\nand `ENVIRONMENT_SIZE_LARGE`.",
 						},
 						"resilience_mode": {
 							Type:         schema.TypeString,
@@ -1016,26 +1064,29 @@ func ResourceComposerEnvironment() *schema.Resource {
 							ForceNew:     false,
 							AtLeastOneOf: composerConfigKeys,
 							ValidateFunc: validation.StringInSlice([]string{"STANDARD_RESILIENCE", "HIGH_RESILIENCE"}, false),
-							Description:  `Whether high resilience is enabled or not. This field is supported for Cloud Composer environments in versions composer-2.1.15-airflow-*.*.* and newer.`,
+							Description:  "The resilience mode states whether high resilience is enabled for\nthe environment or not. Values for resilience mode are `HIGH_RESILIENCE`\nfor high resilience and `STANDARD_RESILIENCE` for standard\nresilience.",
 						},
 						"master_authorized_networks_config": {
 							Type:        	schema.TypeList,
 							Optional:    	true,
 							AtLeastOneOf: composerConfigKeys,
 							MaxItems:    	1,
-							Description: 	`Configuration options for the master authorized networks feature. Enabled master authorized networks will disallow all external traffic to access Kubernetes master through HTTPS except traffic from the given CIDR blocks, Google Compute Engine Public IPs and Google Prod IPs.`,
+							Description: 	`Configuration options for the authorized networks feature. Enabled
+authorized networks will disallow all external traffic to access
+Kubernetes control plane through HTTPS except traffic from the given CIDR
+blocks, Google Compute Engine Public IPs and Google Prod IPs.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enabled": {
 										Type:        schema.TypeBool,
 										Required:    true,
-										Description: `Whether or not master authorized networks is enabled.`,
+										Description: `Whether or not authorized networks are enabled.`,
 									},
 									"cidr_blocks": {
 										Type:        schema.TypeSet,
 										Optional:    true,
 										Elem:        cidrBlocks,
-										Description: `cidr_blocks define up to 50 external networks that could access Kubernetes master through HTTPS.`,
+										Description: "`cidr_blocks `define up to 50 external networks that could access Kubernetes\ncontrol plane through HTTPS.",
 									},
 								},
 							},
@@ -1043,12 +1094,17 @@ func ResourceComposerEnvironment() *schema.Resource {
 						"airflow_uri": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The URI of the Apache Airflow Web UI hosted within this environment.`,
+							Description: `The URI of the Apache Airflow Web UI hosted within this
+environment.`,
 						},
 						"dag_gcs_prefix": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The Cloud Storage prefix of the DAGs for this environment. Although Cloud Storage objects reside in a flat namespace, a hierarchical file tree can be simulated using '/'-delimited object name prefixes. DAG objects for this environment reside in a simulated directory with this prefix.`,
+							Description: `The Cloud Storage prefix of the DAGs for this environment.
+Although Cloud Storage objects reside in a flat namespace, a
+hierarchical file tree can be simulated using '/'-delimited
+object name prefixes. DAG objects for this environment
+reside in a simulated directory with this prefix.`,
 						},
 						"gke_cluster": {
 							Type:        schema.TypeString,
@@ -1062,10 +1118,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions: Label keys must be between 1 and 63 characters long and must conform to the following regular expression: [a-z]([-a-z0-9]*[a-z0-9])?. Label values must be between 0 and 63 characters long and must conform to the regular expression ([a-z]([-a-z0-9]*[a-z0-9])?)?. No more than 64 labels can be associated with a given environment. Both keys and values must be <= 128 bytes in size.
-
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Description: "User-defined labels for this environment. The labels map can contain\nno more than 64 entries. Entries of the labels map are UTF8 strings\nthat comply with the following restrictions:\nLabel keys must be between 1 and 63 characters long and must conform\nto the following regular expression: `[a-z]([-a-z0-9]*[a-z0-9])?`.\nLabel values must be between 0 and 63 characters long and must\nconform to the regular expression `([a-z]([-a-z0-9]*[a-z0-9])?)?`.\nNo more than 64 labels can be associated with a given environment.\nBoth keys and values must be <= 128 bytes in size.",
 			},
 
 			"terraform_labels": {
@@ -1078,7 +1131,8 @@ func ResourceComposerEnvironment() *schema.Resource {
 			"effective_labels": {
 				Type:        schema.TypeMap,
 				Computed:    true,
-				Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
+				Description: `All of labels (key/value pairs) present on the resource in GCP, including the
+labels configured through Terraform, other clients and services.`,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 
@@ -1087,7 +1141,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 				Optional:     true,
 				Computed:     true,
 				MaxItems:     1,
-				Description:  `Configuration options for storage used by Composer environment.`,
+				Description:  `Configuration options for storage used by the environment.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"bucket": {
@@ -1095,7 +1149,7 @@ func ResourceComposerEnvironment() *schema.Resource {
 							Required:     true,
 							ForceNew:     true,
 							DiffSuppressFunc: gscBucketNameDiffSuppress,
-							Description: `Optional. Name of an existing Cloud Storage bucket to be used by the environment.`,
+							Description: `Name of an existing Cloud Storage bucket to be used by the environment.`,
 						},
 					},
 				},

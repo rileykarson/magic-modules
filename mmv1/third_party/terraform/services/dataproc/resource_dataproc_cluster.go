@@ -225,10 +225,11 @@ func ResourceDataprocCluster() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the cluster, unique within the project and zone.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `The name of the cluster, unique within the project and
+zone.`,
 				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
 					value := v.(string)
 
@@ -257,7 +258,7 @@ func ResourceDataprocCluster() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the cluster will exist. If it is not provided, the provider project is used.`,
+				Description: "The ID of the project in which the `cluster` will exist. If it\nis not provided, the provider project is used.",
 			},
 
 			"region": {
@@ -265,24 +266,28 @@ func ResourceDataprocCluster() *schema.Resource {
 				Optional:    true,
 				Default:     "global",
 				ForceNew:    true,
-				Description: `The region in which the cluster and associated nodes will be created in. Defaults to global.`,
+				Description: "The region in which the cluster and associated nodes will be created in.\nDefaults to `global`.",
 			},
 
 			"graceful_decommission_timeout": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "0s",
-				Description: `The timeout duration which allows graceful decomissioning when you change the number of worker nodes directly through a terraform apply`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "0s",
+				Description: `Allows graceful decomissioning when you change the number of worker nodes directly through a terraform apply.
+Does not affect auto scaling decomissioning from an autoscaling policy.
+Graceful decommissioning allows removing nodes from the cluster without interrupting jobs in progress.
+Timeout specifies how long to wait for jobs in progress to finish before forcefully removing nodes (and potentially interrupting jobs).
+Default timeout is 0 (for forceful decommission), and the maximum allowed timeout is 1 day. (see JSON representation of
+[Duration](https://developers.google.com/protocol-buffers/docs/proto3#json)).
+Only supported on Dataproc image versions 1.2 and higher.
+For more context see the [docs](https://cloud.google.com/dataproc/docs/reference/rest/v1/projects.regions.clusters/patch#query-parameters)`,
 			},
 
 			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Description: `The list of the labels (key/value pairs) configured on the resource and to be applied to instances in the cluster.
-
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "The list of labels (key/value pairs) configured on the resource through Terraform and to be applied to\ninstances in the cluster.\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration. Please refer to the field `effective_labels` for all of the labels present on the resource.",
 			},
 
 			"terraform_labels": {
@@ -296,7 +301,7 @@ func ResourceDataprocCluster() *schema.Resource {
 				Type:        schema.TypeMap,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Computed:    true,
-				Description: `All of labels (key/value pairs) present on the resource in GCP, including the labels configured through Terraform, other clients and services.`,
+				Description: "The list of labels (key/value pairs) to be applied to\ninstances in the cluster. GCP generates some itself including `goog-dataproc-cluster-name`\nwhich is the name of the cluster.",
 			},
 
 			"virtual_cluster_config": {
@@ -304,7 +309,7 @@ func ResourceDataprocCluster() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: `The virtual cluster config is used when creating a Dataproc cluster that does not directly control the underlying compute resources, for example, when creating a Dataproc-on-GKE cluster. Dataproc may set default values, and values may change when clusters are updated. Exactly one of config or virtualClusterConfig must be specified.`,
+				Description: `Allows you to configure a virtual Dataproc on GKE cluster.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -313,7 +318,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: virtualClusterConfigKeys,
 							ForceNew:     true,
-							Description:  `A Cloud Storage bucket used to stage job dependencies, config files, and job driver console output. If you do not specify a staging bucket, Cloud Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket.`,
+							Description:  "The Cloud Storage staging bucket used to stage files,\nsuch as Hadoop jars, between client machines and the cluster.\nNote: If you don't explicitly specify a `staging_bucket`\nthen GCP will auto create / assign one for you. However, you are not guaranteed\nan auto generated bucket which is solely dedicated to your cluster; it may be shared\nwith other clusters in the same region/zone also choosing to use the auto generation\noption.",
 						},
 
 						"auxiliary_services_config": {
@@ -322,7 +327,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Computed:     true,
 							MaxItems:     1,
 							AtLeastOneOf: virtualClusterConfigKeys,
-							Description:  `Auxiliary services configuration for a Cluster.`,
+							Description:  `Configuration of auxiliary services used by this cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -340,7 +345,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Optional:     true,
 													ForceNew:     true,
 													AtLeastOneOf: auxiliaryServicesMetastoreConfigKeys,
-													Description:  `The Hive Metastore configuration for this workload.`,
+													Description:  `Resource name of an existing Dataproc Metastore service.`,
 												},
 											},
 										},
@@ -384,7 +389,10 @@ func ResourceDataprocCluster() *schema.Resource {
 										Optional:     true,
 										ForceNew:     true,
 										AtLeastOneOf: kubernetesClusterConfigKeys,
-										Description:  `A namespace within the Kubernetes cluster to deploy into. If this namespace does not exist, it is created. If it exists, Dataproc verifies that another Dataproc VirtualCluster is not installed into it. If not specified, the name of the Dataproc Cluster is used.`,
+										Description: `A namespace within the Kubernetes cluster to deploy into.
+If this namespace does not exist, it is created.
+If it  exists, Dataproc verifies that another Dataproc VirtualCluster is not installed into it.
+If not specified, the name of the Dataproc Cluster is used.`,
 									},
 
 									"kubernetes_software_config": {
@@ -400,7 +408,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Required:    true,
 													ForceNew:    true,
 													Elem:        &schema.Schema{Type: schema.TypeString},
-													Description: `The components that should be installed in this Dataproc cluster. The key must be a string from the KubernetesComponent enumeration. The value is the version of the software to be installed.`,
+													Description: "The components that should be installed in this Dataproc cluster. The key must be a string from the\n KubernetesComponent enumeration. The value is the version of the software to be installed. At least one entry must be specified.\n* **NOTE** : `component_version[SPARK]` is mandatory to set, or the creation of the cluster will fail.",
 												},
 
 												"properties": {
@@ -410,7 +418,8 @@ func ResourceDataprocCluster() *schema.Resource {
 													DiffSuppressFunc: resourceDataprocPropertyDiffSuppress,
 													Elem:             &schema.Schema{Type: schema.TypeString},
 													Computed:         true,
-													Description:      `The properties to set on daemon config files. Property keys are specified in prefix:property format, for example spark:spark.kubernetes.container.image.`,
+													Description: `The properties to set on daemon config files. Property keys are specified in prefix:property format,
+for example spark:spark.kubernetes.container.image.`,
 												},
 											},
 										},
@@ -429,7 +438,8 @@ func ResourceDataprocCluster() *schema.Resource {
 													ForceNew:     true,
 													Optional:     true,
 													AtLeastOneOf: gkeClusterConfigKeys,
-													Description:  `A target GKE cluster to deploy to. It must be in the same project and region as the Dataproc cluster (the GKE cluster can be zonal or regional). Format: 'projects/{project}/locations/{location}/clusters/{cluster_id}'`,
+													Description: `A target GKE cluster to deploy to. It must be in the same project and region as the Dataproc cluster
+(the GKE cluster can be zonal or regional)`,
 												},
 
 												"node_pool_target": {
@@ -437,7 +447,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Optional:     true,
 													AtLeastOneOf: gkeClusterConfigKeys,
 													MinItems:     1,
-													Description:  `GKE node pools where workloads will be scheduled. At least one node pool must be assigned the DEFAULT GkeNodePoolTarget.Role. If a GkeNodePoolTarget is not specified, Dataproc constructs a DEFAULT GkeNodePoolTarget.`,
+													Description:  "GKE node pools where workloads will be scheduled. At least one node pool must be assigned the `DEFAULT`\nGkeNodePoolTarget.Role. If a GkeNodePoolTarget is not specified, Dataproc constructs a `DEFAULT` GkeNodePoolTarget.\nEach role can be given to only one GkeNodePoolTarget. All node pools must have the same location settings.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -445,7 +455,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Type:        schema.TypeString,
 																ForceNew:    true,
 																Required:    true,
-																Description: `The target GKE node pool. Format: 'projects/{project}/locations/{location}/clusters/{cluster}/nodePools/{nodePool}'`,
+																Description: `The target GKE node pool.`,
 															},
 
 															"roles": {
@@ -453,15 +463,18 @@ func ResourceDataprocCluster() *schema.Resource {
 																Elem:        &schema.Schema{Type: schema.TypeString},
 																ForceNew:    true,
 																Required:    true,
-																Description: `The roles associated with the GKE node pool.`,
+																Description: "The roles associated with the GKE node pool.\nOne of `\"DEFAULT\"`, `\"CONTROLLER\"`, `\"SPARK_DRIVER\"` or `\"SPARK_EXECUTOR\"`.",
 															},
 
 															"node_pool_config": {
-																Type:        schema.TypeList,
-																Optional:    true,
-																Computed:    true,
-																MaxItems:    1,
-																Description: `Input only. The configuration for the GKE node pool.`,
+																Type:     schema.TypeList,
+																Optional: true,
+																Computed: true,
+																MaxItems: 1,
+																Description: `The configuration for the GKE node pool.
+If specified, Dataproc attempts to create a node pool with the specified shape.
+If one with the same name already exists, it is verified against all specified fields.
+If a field differs, the virtual cluster creation will fail.`,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -482,24 +495,29 @@ func ResourceDataprocCluster() *schema.Resource {
 																					},
 
 																					"local_ssd_count": {
-																						Type:        schema.TypeInt,
-																						ForceNew:    true,
-																						Optional:    true,
-																						Description: `The minimum number of nodes in the node pool. Must be >= 0 and <= maxNodeCount.`,
+																						Type:     schema.TypeInt,
+																						ForceNew: true,
+																						Optional: true,
+																						Description: `The number of local SSD disks to attach to the node,
+which is limited by the maximum number of disks allowable per zone.`,
 																					},
 
 																					"preemptible": {
-																						Type:        schema.TypeBool,
-																						ForceNew:    true,
-																						Optional:    true,
-																						Description: `Whether the nodes are created as preemptible VM instances. Preemptible nodes cannot be used in a node pool with the CONTROLLER role or in the DEFAULT node pool if the CONTROLLER role is not assigned (the DEFAULT node pool will assume the CONTROLLER role).`,
+																						Type:     schema.TypeBool,
+																						ForceNew: true,
+																						Optional: true,
+																						Description: `Whether the nodes are created as preemptible VM instances.
+Preemptible nodes cannot be used in a node pool with the CONTROLLER role or in the DEFAULT node pool if the
+CONTROLLER role is not assigned (the DEFAULT node pool will assume the CONTROLLER role).`,
 																					},
 
 																					"min_cpu_platform": {
-																						Type:        schema.TypeString,
-																						ForceNew:    true,
-																						Optional:    true,
-																						Description: `Minimum CPU platform to be used by this instance. The instance may be scheduled on the specified or a newer CPU platform. Specify the friendly names of CPU platforms, such as "Intel Haswell" or "Intel Sandy Bridge".`,
+																						Type:     schema.TypeString,
+																						ForceNew: true,
+																						Optional: true,
+																						Description: `Minimum CPU platform to be used by this instance.
+The instance may be scheduled on the specified or a newer CPU platform.
+Specify the friendly names of CPU platforms, such as "Intel Haswell" or "Intel Sandy Bridge".`,
 																					},
 
 																					"spot": {
@@ -513,19 +531,21 @@ func ResourceDataprocCluster() *schema.Resource {
 																		},
 
 																		"locations": {
-																			Type:        schema.TypeSet,
-																			Elem:        &schema.Schema{Type: schema.TypeString},
-																			ForceNew:    true,
-																			Required:    true,
-																			Description: `The list of Compute Engine zones where node pool nodes associated with a Dataproc on GKE virtual cluster will be located.`,
+																			Type:     schema.TypeSet,
+																			Elem:     &schema.Schema{Type: schema.TypeString},
+																			ForceNew: true,
+																			Required: true,
+																			Description: `The list of Compute Engine zones where node pool nodes associated
+with a Dataproc on GKE virtual cluster will be located.`,
 																		},
 
 																		"autoscaling": {
-																			Type:        schema.TypeList,
-																			Optional:    true,
-																			Computed:    true,
-																			MaxItems:    1,
-																			Description: `The autoscaler configuration for this node pool. The autoscaler is enabled only when a valid configuration is present.`,
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Computed: true,
+																			MaxItems: 1,
+																			Description: `The autoscaler configuration for this node pool.
+The autoscaler is enabled only when a valid configuration is present.`,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -573,7 +593,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
-							Description:  `Specifies the tier of the cluster created.`,
+							Description:  `The tier of the cluster.`,
 							AtLeastOneOf: clusterConfigKeys,
 							ForceNew:     true,
 							ValidateFunc: validation.StringInSlice([]string{"CLUSTER_TIER_UNSPECIFIED", "CLUSTER_TIER_STANDARD", "CLUSTER_TIER_PREMIUM"}, false),
@@ -582,7 +602,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
-							Description:  `Specifies the engine of the cluster created.`,
+							Description:  `The cluster engine.`,
 							AtLeastOneOf: clusterConfigKeys,
 							ForceNew:     true,
 							ValidateFunc: validation.StringInSlice([]string{"ENGINE_UNSPECIFIED", "DEFAULT", "LIGHTNING"}, false),
@@ -601,7 +621,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Optional:     true,
 							AtLeastOneOf: clusterConfigKeys,
 							ForceNew:     true,
-							Description:  `The Cloud Storage staging bucket used to stage files, such as Hadoop jars, between client machines and the cluster. Note: If you don't explicitly specify a staging_bucket then GCP will auto create / assign one for you. However, you are not guaranteed an auto generated bucket which is solely dedicated to your cluster; it may be shared with other clusters in the same region/zone also choosing to use the auto generation option.`,
+							Description:  "The Cloud Storage staging bucket used to stage files,\nsuch as Hadoop jars, between client machines and the cluster.\nNote: If you don't explicitly specify a `staging_bucket`\nthen GCP will auto create / assign one for you. However, you are not guaranteed\nan auto generated bucket which is solely dedicated to your cluster; it may be shared\nwith other clusters in the same region/zone also choosing to use the auto generation\noption.",
 						},
 						// If the user does not specify a staging bucket, GCP will allocate one automatically.
 						// The staging_bucket field provides a way for the user to supply their own
@@ -611,7 +631,7 @@ func ResourceDataprocCluster() *schema.Resource {
 						"bucket": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: ` The name of the cloud storage bucket ultimately used to house the staging data for the cluster. If staging_bucket is specified, it will contain this value, otherwise it will be the auto generated name.`,
+							Description: "The name of the cloud storage bucket ultimately used to house the staging data\nfor the cluster. If `staging_bucket` is specified, it will contain this value, otherwise\nit will be the auto generated name.",
 						},
 
 						"temp_bucket": {
@@ -620,7 +640,7 @@ func ResourceDataprocCluster() *schema.Resource {
 							Computed:     true,
 							AtLeastOneOf: clusterConfigKeys,
 							ForceNew:     true,
-							Description:  `The Cloud Storage temp bucket used to store ephemeral cluster and jobs data, such as Spark and MapReduce history files. Note: If you don't explicitly specify a temp_bucket then GCP will auto create / assign one for you.`,
+							Description:  "The Cloud Storage temp bucket used to store ephemeral cluster\nand jobs data, such as Spark and MapReduce history files.\nNote: If you don't explicitly specify a `temp_bucket` then GCP will auto create / assign one for you.",
 						},
 
 						"gce_cluster_config": {
@@ -629,7 +649,8 @@ func ResourceDataprocCluster() *schema.Resource {
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `Common config settings for resources of Google Compute Engine cluster instances, applicable to all instances in the cluster.`,
+							Description: `Common config settings for resources of Google Compute Engine cluster
+instances, applicable to all instances in the cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -640,7 +661,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf:  gceClusterConfigKeys,
 										ForceNew:      true,
 										ConflictsWith: []string{"cluster_config.0.gce_cluster_config.0.multi_zone_config"},
-										Description:   `The GCP zone where your data is stored and used (i.e. where the master and the worker nodes will be created in). If region is set to 'global' (default) then zone is mandatory, otherwise GCP is able to make use of Auto Zone Placement to determine this automatically for you. Note: This setting additionally determines and restricts which computing resources are available for use with other configs such as cluster_config.master_config.machine_type and cluster_config.worker_config.machine_type.`,
+										Description:   "The GCP zone where your data is stored and used (i.e. where\nthe master and the worker nodes will be created in). If `region` is set to 'global' (default)\nthen `zone` is mandatory, otherwise GCP is able to make use of [Auto Zone Placement](https://cloud.google.com/dataproc/docs/concepts/auto-zone)\nto determine this automatically for you.\nNote: This setting additionally determines and restricts\nwhich computing resources are available for use with other configs such as\n`cluster_config.master_config.machine_type` and `cluster_config.worker_config.machine_type`.",
 									},
 
 									"network": {
@@ -651,7 +672,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										ForceNew:         true,
 										ConflictsWith:    []string{"cluster_config.0.gce_cluster_config.0.subnetwork"},
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The name or self_link of the Google Compute Engine network to the cluster will be part of. Conflicts with subnetwork. If neither is specified, this defaults to the "default" network.`,
+										Description:      "The name or self_link of the Google Compute Engine\nnetwork to the cluster will be part of. Conflicts with `subnetwork`.\nIf neither is specified, this defaults to the \"default\" network.",
 									},
 
 									"subnetwork": {
@@ -661,7 +682,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										ForceNew:         true,
 										ConflictsWith:    []string{"cluster_config.0.gce_cluster_config.0.network"},
 										DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-										Description:      `The name or self_link of the Google Compute Engine subnetwork the cluster will be part of. Conflicts with network.`,
+										Description:      "The name or self_link of the Google Compute Engine\nsubnetwork the cluster will be part of. Conflicts with `network`.",
 									},
 
 									"tags": {
@@ -670,7 +691,8 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										ForceNew:     true,
 										Elem:         &schema.Schema{Type: schema.TypeString},
-										Description:  `The list of instance tags applied to instances in the cluster. Tags are used to identify valid sources or targets for network firewalls.`,
+										Description: `The list of instance tags applied to instances in the cluster.
+Tags are used to identify valid sources or targets for network firewalls.`,
 									},
 
 									"service_account": {
@@ -678,7 +700,8 @@ func ResourceDataprocCluster() *schema.Resource {
 										Optional:     true,
 										AtLeastOneOf: gceClusterConfigKeys,
 										ForceNew:     true,
-										Description:  `The service account to be used by the Node VMs. If not specified, the "default" service account is used.`,
+										Description: `The service account to be used by the Node VMs.
+If not specified, the "default" service account is used.`,
 									},
 
 									"service_account_scopes": {
@@ -687,7 +710,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										Computed:     true,
 										AtLeastOneOf: gceClusterConfigKeys,
 										ForceNew:     true,
-										Description:  `The set of Google API scopes to be made available on all of the node VMs under the service_account specified. These can be either FQDNs, or scope aliases.`,
+										Description:  "The set of Google API scopes\nto be made available on all of the node VMs under the `service_account`\nspecified. Both OAuth2 URLs and gcloud\nshort names are supported. To allow full access to all Cloud APIs, use the\n`cloud-platform` scope. See a complete list of scopes [here](https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes#--scopes).",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 											StateFunc: func(v interface{}) string {
@@ -703,7 +726,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										ForceNew:     true,
 										Default:      false,
-										Description:  `By default, clusters are not restricted to internal IP addresses, and will have ephemeral external IP addresses assigned to each instance. If set to true, all instances in the cluster will only have internal IP addresses. Note: Private Google Access (also known as privateIpGoogleAccess) must be enabled on the subnetwork that the cluster will be launched in.`,
+										Description:  "By default, clusters are not restricted to internal IP addresses,\nand will have ephemeral external IP addresses assigned to each instance. If set to true, all\ninstances in the cluster will only have internal IP addresses. Note: Private Google Access\n(also known as `privateIpGoogleAccess`) must be enabled on the subnetwork that the cluster\nwill be launched in.",
 									},
 
 									"metadata": {
@@ -713,7 +736,8 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										Elem:         &schema.Schema{Type: schema.TypeString},
 										ForceNew:     true,
-										Description:  `A map of the Compute Engine metadata entries to add to all instances`,
+										Description: `A map of the Compute Engine metadata entries to add to all instances
+(see [Project and instance metadata](https://cloud.google.com/compute/docs/storing-retrieving-metadata#project_and_instance_metadata)).`,
 									},
 
 									"resource_manager_tags": {
@@ -723,7 +747,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										Elem:         &schema.Schema{Type: schema.TypeString},
 										ForceNew:     true,
-										Description:  `A map of resource manager tags to add to all instances. Keys must be in the format tagKeys/{tag_key_id} and values in the format tagValues/{tag_value_id}.`,
+										Description:  "A map of resource manager tags to add to all instances.\nKeys must be in the format `tagKeys/{tag_key_id}` and values in the format `tagValues/{tag_value_id}`\n(see [Secure tags](https://cloud.google.com/dataproc/docs/guides/use-secure-tags)).",
 									},
 
 									"shielded_instance_config": {
@@ -732,7 +756,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										Computed:     true,
 										MaxItems:     1,
-										Description:  `Shielded Instance Config for clusters using Compute Engine Shielded VMs.`,
+										Description:  `Shielded Instance Config for clusters using [Compute Engine Shielded VMs](https://cloud.google.com/security/shielded-cloud/shielded-vm).`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"enable_secure_boot": {
@@ -749,7 +773,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Default:      false,
 													AtLeastOneOf: schieldedInstanceConfigKeys,
 													ForceNew:     true,
-													Description:  `Defines whether instances have the vTPM enabled.`,
+													Description:  `Defines whether instances have the [vTPM](https://cloud.google.com/security/shielded-cloud/shielded-vm#vtpm) enabled.`,
 												},
 												"enable_integrity_monitoring": {
 													Type:         schema.TypeBool,
@@ -769,7 +793,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										Computed:     true,
 										MaxItems:     1,
-										Description:  `Reservation Affinity for consuming Zonal reservation.`,
+										Description:  `Reservation Affinity for consuming zonal reservation.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"consume_reservation_type": {
@@ -778,7 +802,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													AtLeastOneOf: reservationAffinityKeys,
 													ForceNew:     true,
 													ValidateFunc: validation.StringInSlice([]string{"NO_RESERVATION", "ANY_RESERVATION", "SPECIFIC_RESERVATION"}, false),
-													Description:  `Type of reservation to consume.`,
+													Description:  `Corresponds to the type of reservation consumption.`,
 												},
 												"key": {
 													Type:         schema.TypeString,
@@ -812,7 +836,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Type:             schema.TypeString,
 													ForceNew:         true,
 													Required:         true,
-													Description:      `The URI of a sole-tenant that the cluster will be created on.`,
+													Description:      `The URI of a sole-tenant node group resource that the cluster will be created on.`,
 													DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 												},
 											},
@@ -824,7 +848,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										AtLeastOneOf: gceClusterConfigKeys,
 										Computed:     true,
 										MaxItems:     1,
-										Description:  `Confidential Instance Config for clusters using Compute Engine Confidential VMs.`,
+										Description:  `Confidential Instance Config for clusters using [Confidential VMs](https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/confidential-compute)`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"enable_confidential_compute": {
@@ -834,7 +858,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													AtLeastOneOf: confidentialInstanceConfigKeys,
 													ForceNew:     true,
 													Deprecated:   `enable_confidential_compute is deprecated and will be removed in a future major release. Use confidential_instance_type instead.`,
-													Description:  `Defines whether the instance should have confidential compute enabled.`,
+													Description:  "Defines whether the instance should have confidential compute enabled. `enable_confidential_compute` is deprecated and will be removed in a future major release. Use `confidential_instance_type` instead.",
 												},
 												"confidential_instance_type": {
 													Type:         schema.TypeString,
@@ -842,7 +866,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													AtLeastOneOf: confidentialInstanceConfigKeys,
 													ValidateFunc: validation.StringInSlice([]string{"SEV", "SEV_SNP", "TDX"}, false),
 													ForceNew:     true,
-													Description:  `Defines the type of Confidential Compute technology to use.`,
+													Description:  "Defines the confidential compute type of the instance. Valid values are `\"CONFIDENTIAL_INSTANCE_TYPE_UNSPECIFIED\"`, `\"SEV\"`, `\"SEV_SNP\"`, `\"TDX\"`.",
 												},
 											},
 										},
@@ -861,7 +885,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													Type:        schema.TypeString,
 													Required:    true,
 													ForceNew:    true,
-													Description: `The distribution shape of the nodes in the multi-zonal cluster. Valid values are "ANY".`,
+													Description: "The distribution shape of the nodes in the multi-zonal cluster. Valid values are `\"ANY\"`.",
 												},
 											},
 										},
@@ -876,15 +900,17 @@ func ResourceDataprocCluster() *schema.Resource {
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The Compute Engine config settings for the cluster's master instance.`,
+							Description: `The Google Compute Engine config settings for the master instances
+in a cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"num_instances": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										ForceNew:    true,
-										Computed:    true,
-										Description: `Specifies the number of master nodes to create. If not specified, GCP will default to a predetermined computed value.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										ForceNew: true,
+										Computed: true,
+										Description: `Specifies the number of master nodes to create.
+If not specified, GCP will default to a predetermined computed value (currently 1).`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.master_config.0.num_instances",
 											"cluster_config.0.master_config.0.image_uri",
@@ -903,8 +929,9 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.master_config.0.machine_type",
 											"cluster_config.0.master_config.0.accelerators",
 										},
-										ForceNew:    true,
-										Description: `The URI for the image to use for this master`,
+										ForceNew: true,
+										Description: `The URI for the image to use for this worker.  See [the guide](https://cloud.google.com/dataproc/docs/guides/dataproc-images)
+for more information.`,
 									},
 
 									"machine_type": {
@@ -918,7 +945,7 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.master_config.0.accelerators",
 										},
 										ForceNew:    true,
-										Description: `The name of a Google Compute Engine machine type to create for the master`,
+										Description: "The name of a Google Compute Engine machine type\nto create for the master. If not specified, GCP will default to a predetermined\ncomputed value (currently `n1-standard-4`).",
 									},
 
 									"min_cpu_platform": {
@@ -931,8 +958,11 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.master_config.0.machine_type",
 											"cluster_config.0.master_config.0.accelerators",
 										},
-										ForceNew:    true,
-										Description: `The name of a minimum generation of CPU family for the master. If not specified, GCP will default to a predetermined computed value for each zone.`,
+										ForceNew: true,
+										Description: `The name of a minimum generation of CPU family
+for the master. If not specified, GCP will default to a predetermined computed value
+for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+for details about which CPU families are available (and defaulted) for each zone.`,
 									},
 									"disk_config": {
 										Type:     schema.TypeList,
@@ -950,19 +980,24 @@ func ResourceDataprocCluster() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"num_local_ssds": {
-													Type:         schema.TypeInt,
-													Optional:     true,
-													Computed:     true,
-													Description:  `The amount of local SSD disks that will be attached to each master cluster node. Defaults to 0.`,
+													Type:     schema.TypeInt,
+													Optional: true,
+													Computed: true,
+													Description: `The amount of local SSD disks that will be
+attached to each master cluster node. Defaults to 0.`,
 													AtLeastOneOf: masterDiskConfigKeys,
 													ForceNew:     true,
 												},
 
 												"boot_disk_size_gb": {
-													Type:         schema.TypeInt,
-													Optional:     true,
-													Computed:     true,
-													Description:  `Size of the primary disk attached to each node, specified in GB. The primary disk contains the boot volume and system libraries, and the smallest allowed disk size is 10GB. GCP will default to a predetermined computed value if not set (currently 500GB). Note: If SSDs are not attached, it also contains the HDFS data blocks and Hadoop working directories.`,
+													Type:     schema.TypeInt,
+													Optional: true,
+													Computed: true,
+													Description: `Size of the primary disk attached to each node, specified
+in GB. The primary disk contains the boot volume and system libraries, and the
+smallest allowed disk size is 10GB. GCP will default to a predetermined
+computed value if not set (currently 500GB). Note: If SSDs are not
+attached, it also contains the HDFS data blocks and Hadoop working directories.`,
 													AtLeastOneOf: masterDiskConfigKeys,
 													ForceNew:     true,
 													ValidateFunc: validation.IntAtLeast(10),
@@ -971,7 +1006,7 @@ func ResourceDataprocCluster() *schema.Resource {
 												"boot_disk_type": {
 													Type:         schema.TypeString,
 													Optional:     true,
-													Description:  `The disk type of the primary disk attached to each node. Such as "pd-ssd" or "pd-standard". Defaults to "pd-standard".`,
+													Description:  "The disk type of the primary disk attached to each node.\nOne of `\"pd-ssd\"` or `\"pd-standard\"`. Defaults to `\"pd-standard\"`.",
 													AtLeastOneOf: masterDiskConfigKeys,
 													ForceNew:     true,
 													Default:      "pd-standard",
@@ -994,16 +1029,19 @@ func ResourceDataprocCluster() *schema.Resource {
 												},
 
 												"local_ssd_interface": {
-													Type:         schema.TypeString,
-													Optional:     true,
-													Description:  `Interface type of local SSDs (default is "scsi"). Valid values: "scsi" (Small Computer System Interface), "nvme" (Non-Volatile Memory Express).`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `Optional. Interface type of local SSDs (default is "scsi").
+Valid values: "scsi" (Small Computer System Interface), "nvme" (Non-Volatile
+Memory Express). See
+[local SSD performance](https://cloud.google.com/compute/docs/disks/local-ssd#performance).`,
 													AtLeastOneOf: masterDiskConfigKeys,
 													ForceNew:     true,
 												},
 												"attached_disk_config": {
 													Type:         schema.TypeList,
 													Optional:     true,
-													Description:  `Optional. Attached disk configuration.`,
+													Description:  `Attached disk configuration.`,
 													AtLeastOneOf: masterDiskConfigKeys,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1017,7 +1055,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Type:        schema.TypeString,
 																Optional:    true,
 																Deprecated:  "`disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
-																Description: `The disk type of the attached disk. Such as "pd-ssd" or "pd-standard".`,
+																Description: "The disk type of the attached disk. Such as \"pd-ssd\" or \"pd-standard\". `disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
 																ForceNew:    true,
 															},
 															"type": {
@@ -1029,13 +1067,13 @@ func ResourceDataprocCluster() *schema.Resource {
 															"provisioned_iops": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																Description: `Indicates how many IOPS to provision for the disk.`,
 																ForceNew:    true,
 															},
 															"provisioned_throughput": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																Description: `Indicates how much throughput to provision for the disk.`,
 																ForceNew:    true,
 															},
 														},
@@ -1059,16 +1097,17 @@ func ResourceDataprocCluster() *schema.Resource {
 									},
 
 									"instance_names": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Elem:        &schema.Schema{Type: schema.TypeString},
-										Description: `List of master instance names which have been assigned to the cluster.`,
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Description: `List of master instance names which
+have been assigned to the cluster.`,
 									},
 									"instance_flexibility_policy": {
 										Type:        schema.TypeList,
 										Optional:    true,
 										Computed:    true,
-										Description: `Instance flexibility Policy allowing a mixture of VM shapes`,
+										Description: `Instance flexibility Policy allowing a mixture of VM shapes.`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.master_config.0.num_instances",
 											"cluster_config.0.master_config.0.image_uri",
@@ -1096,7 +1135,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeString},
-																Description: `Full machine-type names, e.g. "n1-standard-16".`,
+																Description: "Full machine-type names, e.g. `\"n1-standard-16\"`.",
 															},
 															"rank": {
 																Type:        schema.TypeInt,
@@ -1104,13 +1143,13 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeInt},
-																Description: `Preference of this instance selection. Lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
+																Description: `Preference of this instance selection. A lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
 															},
 															"disk_config": {
 																Type:        schema.TypeList,
 																Optional:    true,
 																ForceNew:    true,
-																Description: `Optional. Disk configuration to apply to the instances in this instance selection.`,
+																Description: `Disk configuration to apply to the instances in this instance selection.`,
 																MaxItems:    1,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1129,19 +1168,19 @@ func ResourceDataprocCluster() *schema.Resource {
 																		"boot_disk_provisioned_iops": {
 																			Type:        schema.TypeInt,
 																			Optional:    true,
-																			Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																			Description: `Indicates how many IOPS to provision for the disk.`,
 																			ForceNew:    true,
 																		},
 																		"boot_disk_provisioned_throughput": {
 																			Type:        schema.TypeInt,
 																			Optional:    true,
-																			Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																			Description: `Indicates how much throughput to provision for the disk.`,
 																			ForceNew:    true,
 																		},
 																		"local_ssd_interface": {
 																			Type:        schema.TypeString,
 																			Optional:    true,
-																			Description: `Interface type of local SSDs (no Local SSDs or NVMe). Valid values: "scsi" (Small Computer System Interface), "nvme" (Non-Volatile Memory Express).`,
+																			Description: `Interface type of local SSDs (no Local SSDs or NVMe).`,
 																			ForceNew:    true,
 																		},
 																		"num_local_ssds": {
@@ -1153,7 +1192,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																		"attached_disk_config": {
 																			Type:        schema.TypeList,
 																			Optional:    true,
-																			Description: `Optional. Attached disk configuration.`,
+																			Description: `Attached disk configuration.`,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 																					"disk_size_gb": {
@@ -1166,7 +1205,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																						Type:        schema.TypeString,
 																						Optional:    true,
 																						Deprecated:  "`disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
-																						Description: `The disk type of the attached disk. Such as "pd-ssd" or "pd-standard".`,
+																						Description: "The disk type of the attached disk. Such as \"pd-ssd\" or \"pd-standard\". `disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
 																						ForceNew:    true,
 																					},
 																					"type": {
@@ -1178,13 +1217,13 @@ func ResourceDataprocCluster() *schema.Resource {
 																					"provisioned_iops": {
 																						Type:        schema.TypeInt,
 																						Optional:    true,
-																						Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																						Description: `Indicates how many IOPS to provision for the disk.`,
 																						ForceNew:    true,
 																					},
 																					"provisioned_throughput": {
 																						Type:        schema.TypeInt,
 																						Optional:    true,
-																						Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																						Description: `Indicates how much throughput to provision for the disk.`,
 																						ForceNew:    true,
 																					},
 																				},
@@ -1229,7 +1268,8 @@ func ResourceDataprocCluster() *schema.Resource {
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The Compute Engine config settings for the cluster's worker instances.`,
+							Description: `The Google Compute Engine config settings for the worker instances
+in a cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"num_instances": {
@@ -1237,7 +1277,7 @@ func ResourceDataprocCluster() *schema.Resource {
 										Optional:    true,
 										ForceNew:    false,
 										Computed:    true,
-										Description: `Specifies the number of worker nodes to create. If not specified, GCP will default to a predetermined computed value.`,
+										Description: "Specifies the number of worker nodes to create.\nIf not specified, GCP will default to a predetermined computed value (currently 2).\nThere is currently a beta feature which allows you to run a\n[Single Node Cluster](https://cloud.google.com/dataproc/docs/concepts/single-node-clusters).\nIn order to take advantage of this you need to set\n`\"dataproc:dataproc.allow.zero.workers\" = \"true\"` in\n`cluster_config.software_config.properties`",
 										AtLeastOneOf: []string{
 											"cluster_config.0.worker_config.0.num_instances",
 											"cluster_config.0.worker_config.0.image_uri",
@@ -1258,8 +1298,9 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.worker_config.0.accelerators",
 											"cluster_config.0.worker_config.0.min_num_instances",
 										},
-										ForceNew:    true,
-										Description: `The URI for the image to use for this master/worker`,
+										ForceNew: true,
+										Description: `The URI for the image to use for this worker.  See [the guide](https://cloud.google.com/dataproc/docs/guides/dataproc-images)
+for more information.`,
 									},
 
 									"machine_type": {
@@ -1274,7 +1315,7 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.worker_config.0.min_num_instances",
 										},
 										ForceNew:    true,
-										Description: `The name of a Google Compute Engine machine type to create for the master/worker`,
+										Description: "The name of a Google Compute Engine machine type\nto create for the worker nodes. If not specified, GCP will default to a predetermined\ncomputed value (currently `n1-standard-4`).",
 									},
 
 									"min_cpu_platform": {
@@ -1288,8 +1329,11 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.worker_config.0.accelerators",
 											"cluster_config.0.worker_config.0.min_num_instances",
 										},
-										ForceNew:    true,
-										Description: `The name of a minimum generation of CPU family for the master/worker. If not specified, GCP will default to a predetermined computed value for each zone.`,
+										ForceNew: true,
+										Description: `The name of a minimum generation of CPU family
+for the master. If not specified, GCP will default to a predetermined computed value
+for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+for details about which CPU families are available (and defaulted) for each zone.`,
 									},
 									"disk_config": {
 										Type:     schema.TypeList,
@@ -1308,19 +1352,23 @@ func ResourceDataprocCluster() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"num_local_ssds": {
-													Type:         schema.TypeInt,
-													Optional:     true,
-													Computed:     true,
-													Description:  `The amount of local SSD disks that will be attached to each master cluster node. Defaults to 0.`,
+													Type:     schema.TypeInt,
+													Optional: true,
+													Computed: true,
+													Description: `The amount of local SSD disks that will be
+attached to each worker cluster node. Defaults to 0.`,
 													AtLeastOneOf: workerDiskConfigKeys,
 													ForceNew:     true,
 												},
 
 												"boot_disk_size_gb": {
-													Type:         schema.TypeInt,
-													Optional:     true,
-													Computed:     true,
-													Description:  `Size of the primary disk attached to each node, specified in GB. The primary disk contains the boot volume and system libraries, and the smallest allowed disk size is 10GB. GCP will default to a predetermined computed value if not set (currently 500GB). Note: If SSDs are not attached, it also contains the HDFS data blocks and Hadoop working directories.`,
+													Type:     schema.TypeInt,
+													Optional: true,
+													Computed: true,
+													Description: `Size of the primary disk attached to each worker node, specified
+in GB. The smallest allowed disk size is 10GB. GCP will default to a predetermined
+computed value if not set (currently 500GB). Note: If SSDs are not
+attached, it also contains the HDFS data blocks and Hadoop working directories.`,
 													AtLeastOneOf: workerDiskConfigKeys,
 													ForceNew:     true,
 													ValidateFunc: validation.IntAtLeast(10),
@@ -1329,7 +1377,7 @@ func ResourceDataprocCluster() *schema.Resource {
 												"boot_disk_type": {
 													Type:         schema.TypeString,
 													Optional:     true,
-													Description:  `The disk type of the primary disk attached to each node. Such as "pd-ssd" or "pd-standard". Defaults to "pd-standard".`,
+													Description:  "The disk type of the primary disk attached to each node.\nOne of `\"pd-ssd\"` or `\"pd-standard\"`. Defaults to `\"pd-standard\"`.",
 													AtLeastOneOf: workerDiskConfigKeys,
 													ForceNew:     true,
 													Default:      "pd-standard",
@@ -1361,7 +1409,7 @@ func ResourceDataprocCluster() *schema.Resource {
 												"attached_disk_config": {
 													Type:         schema.TypeList,
 													Optional:     true,
-													Description:  `Optional. Attached disk configuration.`,
+													Description:  `Attached disk configuration.`,
 													AtLeastOneOf: workerDiskConfigKeys,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1375,7 +1423,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Type:        schema.TypeString,
 																Optional:    true,
 																Deprecated:  "`disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
-																Description: `The disk type of the attached disk. Such as "pd-ssd" or "pd-standard".`,
+																Description: "The disk type of the attached disk. Such as \"pd-ssd\" or \"pd-standard\". `disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
 																ForceNew:    true,
 															},
 															"type": {
@@ -1387,13 +1435,13 @@ func ResourceDataprocCluster() *schema.Resource {
 															"provisioned_iops": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																Description: `Indicates how many IOPS to provision for the disk.`,
 																ForceNew:    true,
 															},
 															"provisioned_throughput": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																Description: `Indicates how much throughput to provision for the disk.`,
 																ForceNew:    true,
 															},
 														},
@@ -1416,14 +1464,15 @@ func ResourceDataprocCluster() *schema.Resource {
 										},
 										ForceNew:    true,
 										Elem:        acceleratorsSchema(),
-										Description: `The Compute Engine accelerator (GPU) configuration for these instances. Can be specified multiple times.`,
+										Description: `The Compute Engine accelerator configuration for these instances. Can be specified multiple times.`,
 									},
 
 									"instance_names": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Elem:        &schema.Schema{Type: schema.TypeString},
-										Description: `List of master/worker instance names which have been assigned to the cluster.`,
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Description: `List of worker instance names which have been assigned
+to the cluster.`,
 									},
 									"min_num_instances": {
 										Type:     schema.TypeInt,
@@ -1437,14 +1486,14 @@ func ResourceDataprocCluster() *schema.Resource {
 											"cluster_config.0.worker_config.0.accelerators",
 											"cluster_config.0.worker_config.0.min_num_instances",
 										},
-										Description: `The minimum number of primary worker instances to create.`,
+										Description: "The minimum number of primary worker instances to create.  If `min_num_instances` is set, cluster creation will succeed if the number of primary workers created is at least equal to the `min_num_instances` number.",
 									},
 
 									"instance_flexibility_policy": {
 										Type:        schema.TypeList,
 										Optional:    true,
 										Computed:    true,
-										Description: `Instance flexibility Policy allowing a mixture of VM shapes`,
+										Description: `Instance flexibility Policy allowing a mixture of VM shapes.`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.worker_config.0.num_instances",
 											"cluster_config.0.worker_config.0.image_uri",
@@ -1473,7 +1522,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeString},
-																Description: `Full machine-type names, e.g. "n1-standard-16".`,
+																Description: "Full machine-type names, e.g. `\"n1-standard-16\"`.",
 															},
 															"rank": {
 																Type:        schema.TypeInt,
@@ -1481,13 +1530,13 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeInt},
-																Description: `Preference of this instance selection. Lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
+																Description: `Preference of this instance selection. A lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
 															},
 															"disk_config": {
 																Type:        schema.TypeList,
 																Optional:    true,
 																ForceNew:    true,
-																Description: `Optional. Disk configuration to apply to the instances in this instance selection.`,
+																Description: `Disk configuration to apply to the instances in this instance selection.`,
 																MaxItems:    1,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1506,19 +1555,19 @@ func ResourceDataprocCluster() *schema.Resource {
 																		"boot_disk_provisioned_iops": {
 																			Type:        schema.TypeInt,
 																			Optional:    true,
-																			Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																			Description: `Indicates how many IOPS to provision for the disk.`,
 																			ForceNew:    true,
 																		},
 																		"boot_disk_provisioned_throughput": {
 																			Type:        schema.TypeInt,
 																			Optional:    true,
-																			Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																			Description: `Indicates how much throughput to provision for the disk.`,
 																			ForceNew:    true,
 																		},
 																		"local_ssd_interface": {
 																			Type:        schema.TypeString,
 																			Optional:    true,
-																			Description: `Interface type of local SSDs (no Local SSDs or NVMe). Valid values: "scsi" (Small Computer System Interface), "nvme" (Non-Volatile Memory Express).`,
+																			Description: `Interface type of local SSDs (no Local SSDs or NVMe).`,
 																			ForceNew:    true,
 																		},
 																		"num_local_ssds": {
@@ -1530,7 +1579,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																		"attached_disk_config": {
 																			Type:        schema.TypeList,
 																			Optional:    true,
-																			Description: `Optional. Attached disk configuration.`,
+																			Description: `Attached disk configuration.`,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 																					"disk_size_gb": {
@@ -1543,7 +1592,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																						Type:        schema.TypeString,
 																						Optional:    true,
 																						Deprecated:  "`disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
-																						Description: `The disk type of the attached disk. Such as "pd-ssd" or "pd-standard".`,
+																						Description: "The disk type of the attached disk. Such as \"pd-ssd\" or \"pd-standard\". `disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
 																						ForceNew:    true,
 																					},
 																					"type": {
@@ -1555,13 +1604,13 @@ func ResourceDataprocCluster() *schema.Resource {
 																					"provisioned_iops": {
 																						Type:        schema.TypeInt,
 																						Optional:    true,
-																						Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																						Description: `Indicates how many IOPS to provision for the disk.`,
 																						ForceNew:    true,
 																					},
 																					"provisioned_throughput": {
 																						Type:        schema.TypeInt,
 																						Optional:    true,
-																						Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																						Description: `Indicates how much throughput to provision for the disk.`,
 																						ForceNew:    true,
 																					},
 																				},
@@ -1607,14 +1656,15 @@ func ResourceDataprocCluster() *schema.Resource {
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The Google Compute Engine config settings for the additional (aka preemptible) instances in a cluster.`,
+							Description:  "The Google Compute Engine config settings for the additional\n instances in a cluster.\n* **NOTE** : `preemptible_worker_config` is\n an alias for the api's [secondaryWorkerConfig](https://cloud.google.com/dataproc/docs/reference/rest/v1/ClusterConfig#InstanceGroupConfig). The name doesn't necessarily mean it is preemptible and is named as\n such for legacy/compatibility reasons.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"num_instances": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Computed:    true,
-										Description: `Specifies the number of preemptible nodes to create. Defaults to 0.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										Computed: true,
+										Description: `Specifies the number of preemptible nodes to create.
+Defaults to 0.`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.preemptible_worker_config.0.num_instances",
 											"cluster_config.0.preemptible_worker_config.0.preemptibility",
@@ -1629,7 +1679,7 @@ func ResourceDataprocCluster() *schema.Resource {
 									"preemptibility": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `Specifies the preemptibility of the secondary nodes. Defaults to PREEMPTIBLE.`,
+										Description: "Specifies the preemptibility of the secondary workers. The default value is `PREEMPTIBLE`\nAccepted values are:\n* PREEMPTIBILITY_UNSPECIFIED\n* NON_PREEMPTIBLE\n* PREEMPTIBLE\n* SPOT",
 										AtLeastOneOf: []string{
 											"cluster_config.0.preemptible_worker_config.0.num_instances",
 											"cluster_config.0.preemptible_worker_config.0.preemptibility",
@@ -1660,7 +1710,8 @@ func ResourceDataprocCluster() *schema.Resource {
 													Computed:     true,
 													AtLeastOneOf: preemptibleWorkerDiskConfigKeys,
 													ForceNew:     true,
-													Description:  `The amount of local SSD disks that will be attached to each preemptible worker node. Defaults to 0.`,
+													Description: `The amount of local SSD disks that will be
+attached to each preemptible worker node. Defaults to 0.`,
 												},
 
 												"boot_disk_size_gb": {
@@ -1670,7 +1721,10 @@ func ResourceDataprocCluster() *schema.Resource {
 													AtLeastOneOf: preemptibleWorkerDiskConfigKeys,
 													ForceNew:     true,
 													ValidateFunc: validation.IntAtLeast(10),
-													Description:  `Size of the primary disk attached to each preemptible worker node, specified in GB. The smallest allowed disk size is 10GB. GCP will default to a predetermined computed value if not set (currently 500GB). Note: If SSDs are not attached, it also contains the HDFS data blocks and Hadoop working directories.`,
+													Description: `Size of the primary disk attached to each preemptible worker node, specified
+in GB. The smallest allowed disk size is 10GB. GCP will default to a predetermined
+computed value if not set (currently 500GB). Note: If SSDs are not
+attached, it also contains the HDFS data blocks and Hadoop working directories.`,
 												},
 
 												"boot_disk_type": {
@@ -1679,7 +1733,7 @@ func ResourceDataprocCluster() *schema.Resource {
 													AtLeastOneOf: preemptibleWorkerDiskConfigKeys,
 													ForceNew:     true,
 													Default:      "pd-standard",
-													Description:  `The disk type of the primary disk attached to each preemptible worker node. Such as "pd-ssd" or "pd-standard". Defaults to "pd-standard".`,
+													Description:  "The disk type of the primary disk attached to each preemptible worker node.\nOne of `\"pd-ssd\"` or `\"pd-standard\"`. Defaults to `\"pd-standard\"`.",
 												},
 
 												"boot_disk_provisioned_iops": {
@@ -1709,7 +1763,7 @@ func ResourceDataprocCluster() *schema.Resource {
 												"attached_disk_config": {
 													Type:         schema.TypeList,
 													Optional:     true,
-													Description:  `Optional. Attached disk configuration.`,
+													Description:  `Attached disk configuration.`,
 													AtLeastOneOf: preemptibleWorkerDiskConfigKeys,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1723,7 +1777,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Type:        schema.TypeString,
 																Optional:    true,
 																Deprecated:  "`disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
-																Description: `The disk type of the attached disk. Such as "pd-ssd" or "pd-standard".`,
+																Description: "The disk type of the attached disk. Such as \"pd-ssd\" or \"pd-standard\". `disk_type` is deprecated and will be removed in a future major release. Use `type` instead.",
 																ForceNew:    true,
 															},
 															"type": {
@@ -1735,13 +1789,13 @@ func ResourceDataprocCluster() *schema.Resource {
 															"provisioned_iops": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how many IOPS to provision for the disk. This sets the number of I/O operations per second that the disk can handle.`,
+																Description: `Indicates how many IOPS to provision for the disk.`,
 																ForceNew:    true,
 															},
 															"provisioned_throughput": {
 																Type:        schema.TypeInt,
 																Optional:    true,
-																Description: `Indicates how much throughput to provision for the disk. This sets the number of throughput mb per second that the disk can handle.`,
+																Description: `Indicates how much throughput to provision for the disk.`,
 																ForceNew:    true,
 															},
 														},
@@ -1752,10 +1806,11 @@ func ResourceDataprocCluster() *schema.Resource {
 									},
 
 									"instance_names": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Elem:        &schema.Schema{Type: schema.TypeString},
-										Description: `List of preemptible instance names which have been assigned to the cluster.`,
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Description: `List of preemptible instance names which have been assigned
+to the cluster.`,
 									},
 									"instance_flexibility_policy": {
 										Type:        schema.TypeList,
@@ -1789,7 +1844,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeString},
-																Description: `Full machine-type names, e.g. "n1-standard-16".`,
+																Description: "Full machine-type names, e.g. `\"n1-standard-16\"`.",
 															},
 															"rank": {
 																Type:        schema.TypeInt,
@@ -1797,7 +1852,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Optional:    true,
 																ForceNew:    true,
 																Elem:        &schema.Schema{Type: schema.TypeInt},
-																Description: `Preference of this instance selection. Lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
+																Description: `Preference of this instance selection. A lower number means higher preference. Dataproc will first try to create a VM based on the machine-type with priority rank and fallback to next rank based on availability. Machine types and instance selections with the same priority have the same preference.`,
 															},
 															"disk_config": {
 																Type:        schema.TypeList,
@@ -1919,14 +1974,14 @@ func ResourceDataprocCluster() *schema.Resource {
 														"cluster_config.0.preemptible_worker_config.0.instance_flexibility_policy.0.provisioning_model_mix",
 													},
 													MaxItems:    1,
-													Description: `Defines how Dataproc should create VMs with a mixture of provisioning models.`,
+													Description: `Defines how the Group selects the provisioning model to ensure required reliability.`,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"standard_capacity_base": {
 																Type:         schema.TypeInt,
 																Optional:     true,
 																ForceNew:     true,
-																Description:  `The base capacity that will always use Standard VMs to avoid risk of more preemption than the minimum capacity you need.`,
+																Description:  `The base capacity that will always use Standard VMs to avoid risk of more preemption than the minimum capacity you need. Dataproc will create only standard VMs until it reaches standardCapacityBase, then it will start using standardCapacityPercentAboveBase to mix Spot with Standard VMs. eg. If 15 instances are requested and standardCapacityBase is 5, Dataproc will create 5 standard VMs and then start mixing spot and standard VMs for remaining 10 instances.`,
 																ValidateFunc: validation.IntAtLeast(0),
 															},
 
@@ -1934,7 +1989,7 @@ func ResourceDataprocCluster() *schema.Resource {
 																Type:         schema.TypeInt,
 																Optional:     true,
 																ForceNew:     true,
-																Description:  `The percentage of target capacity that should use Standard VM. The remaining percentage will use Spot VMs.`,
+																Description:  `The percentage of target capacity that should use Standard VM. The remaining percentage will use Spot VMs. The percentage applies only to the capacity above standardCapacityBase. eg. If 15 instances are requested and standardCapacityBase is 5 and standardCapacityPercentAboveBase is 30, Dataproc will create 5 standard VMs and then start mixing spot and standard VMs for remaining 10 instances. The mix will be 30% standard and 70% spot.`,
 																ValidateFunc: validation.IntBetween(0, 100),
 															},
 														},
@@ -1956,7 +2011,7 @@ func ResourceDataprocCluster() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 									"kerberos_config": {
 										Type:        schema.TypeList,
-										Description: "Kerberos related configuration",
+										Description: "Kerberos Configuration. At least one of `identity_config`\nor `kerberos_config` is required.",
 										Optional:    true,
 										ExactlyOneOf: []string{
 											"cluster_config.0.security_config.0.kerberos_config",
@@ -1966,25 +2021,29 @@ func ResourceDataprocCluster() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"cross_realm_trust_admin_server": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The admin server (IP or hostname) for the remote trusted realm in a cross realm trust relationship.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The admin server (IP or hostname) for the
+remote trusted realm in a cross realm trust relationship.`,
 												},
 												"cross_realm_trust_kdc": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The KDC (IP or hostname) for the remote trusted realm in a cross realm trust relationship.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The KDC (IP or hostname) for the
+remote trusted realm in a cross realm trust relationship.`,
 												},
 												"cross_realm_trust_realm": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The remote realm the Dataproc on-cluster KDC will trust, should the user enable cross realm trust.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The remote realm the Dataproc on-cluster KDC will
+trust, should the user enable cross realm trust.`,
 												},
 												"cross_realm_trust_shared_password_uri": {
 													Type:     schema.TypeString,
 													Optional: true,
-													Description: `The Cloud Storage URI of a KMS encrypted file containing the shared password between the on-cluster
-Kerberos realm and the remote trusted realm, in a cross realm trust relationship.`,
+													Description: `The Cloud Storage URI of a KMS
+encrypted file containing the shared password between the on-cluster Kerberos realm
+and the remote trusted realm, in a cross realm trust relationship.`,
 												},
 												"enable_kerberos": {
 													Type:        schema.TypeBool,
@@ -1992,41 +2051,47 @@ Kerberos realm and the remote trusted realm, in a cross realm trust relationship
 													Description: `Flag to indicate whether to Kerberize the cluster.`,
 												},
 												"kdc_db_key_uri": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The Cloud Storage URI of a KMS encrypted file containing the master key of the KDC database.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The Cloud Storage URI of a KMS encrypted file containing
+the master key of the KDC database.`,
 												},
 												"key_password_uri": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The Cloud Storage URI of a KMS encrypted file containing the password to the user provided key. For the self-signed certificate, this password is generated by Dataproc.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The Cloud Storage URI of a KMS encrypted file containing
+the password to the user provided key. For the self-signed certificate, this password
+is generated by Dataproc.`,
 												},
 												"keystore_uri": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The Cloud Storage URI of the keystore file used for SSL encryption. If not provided, Dataproc will provide a self-signed certificate.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The Cloud Storage URI of the keystore file used for SSL encryption.
+If not provided, Dataproc will provide a self-signed certificate.`,
 												},
 												"keystore_password_uri": {
 													Type:     schema.TypeString,
 													Optional: true,
 													Description: `The Cloud Storage URI of a KMS encrypted file containing
-the password to the user provided keystore. For the self-signed certificate, this password is generated
-by Dataproc`,
+the password to the user provided keystore. For the self-signed certificated, the password
+is generated by Dataproc.`,
 												},
 												"kms_key_uri": {
 													Type:        schema.TypeString,
 													Required:    true,
-													Description: `The uri of the KMS key used to encrypt various sensitive files.`,
+													Description: `The URI of the KMS key used to encrypt various sensitive files.`,
 												},
 												"realm": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The name of the on-cluster Kerberos realm. If not specified, the uppercased domain of hostnames will be the realm.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The name of the on-cluster Kerberos realm. If not specified, the
+uppercased domain of hostnames will be the realm.`,
 												},
 												"root_principal_password_uri": {
-													Type:        schema.TypeString,
-													Required:    true,
-													Description: `The cloud Storage URI of a KMS encrypted file containing the root principal password.`,
+													Type:     schema.TypeString,
+													Required: true,
+													Description: `The Cloud Storage URI of a KMS encrypted file
+containing the root principal password.`,
 												},
 												"tgt_lifetime_hours": {
 													Type:        schema.TypeInt,
@@ -2034,21 +2099,24 @@ by Dataproc`,
 													Description: `The lifetime of the ticket granting ticket, in hours.`,
 												},
 												"truststore_password_uri": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The Cloud Storage URI of a KMS encrypted file containing the password to the user provided truststore. For the self-signed certificate, this password is generated by Dataproc.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The Cloud Storage URI of a KMS encrypted file
+containing the password to the user provided truststore. For the self-signed
+certificate, this password is generated by Dataproc.`,
 												},
 												"truststore_uri": {
-													Type:        schema.TypeString,
-													Optional:    true,
-													Description: `The Cloud Storage URI of the truststore file used for SSL encryption. If not provided, Dataproc will provide a self-signed certificate.`,
+													Type:     schema.TypeString,
+													Optional: true,
+													Description: `The Cloud Storage URI of the truststore file used for
+SSL encryption. If not provided, Dataproc will provide a self-signed certificate.`,
 												},
 											},
 										},
 									},
 									"identity_config": {
 										Type:        schema.TypeList,
-										Description: "Identity related configuration",
+										Description: "Identity Configuration. At least one of `identity_config`\nor `kerberos_config` is required.",
 										Optional:    true,
 										ExactlyOneOf: []string{
 											"cluster_config.0.security_config.0.kerberos_config",
@@ -2058,10 +2126,11 @@ by Dataproc`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"user_service_account_mapping": {
-													Type:        schema.TypeMap,
-													Required:    true,
-													Elem:        &schema.Schema{Type: schema.TypeString},
-													Description: `User to service account mappings for multi-tenancy.`,
+													Type:     schema.TypeMap,
+													Required: true,
+													Elem:     &schema.Schema{Type: schema.TypeString},
+													Description: `The end user to service account mappings
+in a service account based multi-tenant cluster`,
 												},
 											},
 										},
@@ -2086,7 +2155,11 @@ by Dataproc`,
 										AtLeastOneOf:     clusterSoftwareConfigKeys,
 										ForceNew:         true,
 										DiffSuppressFunc: DataprocImageVersionDiffSuppress,
-										Description:      `The Cloud Dataproc image version to use for the cluster - this controls the sets of software versions installed onto the nodes when you create clusters. If not specified, defaults to the latest version.`,
+										Description: `The Cloud Dataproc image version to use
+for the cluster - this controls the sets of software versions
+installed onto the nodes when you create clusters. If not specified, defaults to the
+latest version. For a list of valid versions see
+[Cloud Dataproc versions](https://cloud.google.com/dataproc/docs/concepts/dataproc-versions)`,
 									},
 									"override_properties": {
 										Type:         schema.TypeMap,
@@ -2094,13 +2167,16 @@ by Dataproc`,
 										AtLeastOneOf: clusterSoftwareConfigKeys,
 										ForceNew:     true,
 										Elem:         &schema.Schema{Type: schema.TypeString},
-										Description:  `A list of override and additional properties (key/value pairs) used to modify various aspects of the common configuration files used when creating a cluster.`,
+										Description: `A list of override and additional properties (key/value pairs)
+ used to modify various aspects of the common configuration files used when creating
+ a cluster. For a list of valid properties please see
+[Cluster properties](https://cloud.google.com/dataproc/docs/concepts/cluster-properties)`,
 									},
 
 									"properties": {
 										Type:        schema.TypeMap,
 										Computed:    true,
-										Description: `A list of the properties used to set the daemon config files. This will include any values supplied by the user via cluster_config.software_config.override_properties`,
+										Description: "A list of the properties used to set the daemon config files.\nThis will include any values supplied by the user via `cluster_config.software_config.override_properties`",
 									},
 
 									// We have two versions of the properties field here because by default
@@ -2116,7 +2192,7 @@ by Dataproc`,
 										Type:         schema.TypeSet,
 										Optional:     true,
 										AtLeastOneOf: clusterSoftwareConfigKeys,
-										Description:  `The set of optional components to activate on the cluster.`,
+										Description:  `The set of optional components to activate on the cluster. See [Available Optional Components](https://cloud.google.com/dataproc/docs/concepts/components/overview#available_optional_components).`,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -2130,14 +2206,16 @@ by Dataproc`,
 							Optional:     true,
 							AtLeastOneOf: clusterConfigKeys,
 							ForceNew:     true,
-							Description:  `Commands to execute on each node after config is completed. You can specify multiple versions of these.`,
+							Description: `Commands to execute on each node after config is completed.
+You can specify multiple versions of these.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"script": {
-										Type:        schema.TypeString,
-										Required:    true,
-										ForceNew:    true,
-										Description: `The script to be executed during initialization of the cluster. The script must be a GCS file with a gs:// prefix.`,
+										Type:     schema.TypeString,
+										Required: true,
+										ForceNew: true,
+										Description: `The script to be executed during initialization of the cluster.
+The script must be a GCS file with a gs:// prefix.`,
 									},
 
 									"timeout_sec": {
@@ -2145,7 +2223,7 @@ by Dataproc`,
 										Optional:    true,
 										Default:     300,
 										ForceNew:    true,
-										Description: `The maximum duration (in seconds) which script is allowed to take to execute its action. GCP will default to a predetermined computed value if not set (currently 300).`,
+										Description: "The maximum duration (in seconds) which `script` is\nallowed to take to execute its action. GCP will default to a predetermined\ncomputed value if not set (currently 300).",
 									},
 								},
 							},
@@ -2159,9 +2237,10 @@ by Dataproc`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"kms_key_name": {
-										Type:        schema.TypeString,
-										Required:    true,
-										Description: `The Cloud KMS key name to use for PD disk encryption for all instances in the cluster.`,
+										Type:     schema.TypeString,
+										Required: true,
+										Description: `The Cloud KMS key name to use for PD disk encryption for
+all instances in the cluster.`,
 									},
 								},
 							},
@@ -2171,14 +2250,14 @@ by Dataproc`,
 							Optional:         true,
 							AtLeastOneOf:     clusterConfigKeys,
 							MaxItems:         1,
-							Description:      `The autoscaling policy config associated with the cluster.`,
+							Description:      "The autoscaling policy config associated with the cluster.\nNote that once set, if `autoscaling_config` is the only field set in `cluster_config`, it can\nonly be removed by setting `policy_uri = \"\"`, rather than removing the whole block.",
 							DiffSuppressFunc: tpgresource.EmptyOrUnsetBlockDiffSuppress,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"policy_uri": {
 										Type:             schema.TypeString,
 										Required:         true,
-										Description:      `The autoscaling policy used by the cluster.`,
+										Description:      "The autoscaling policy used by the cluster.\n\nOnly resource names including projectid and location (region) are valid. Examples:\n\n`https://www.googleapis.com/compute/v1/projects/[projectId]/locations/[dataproc_region]/autoscalingPolicies/[policy_id]`\n`projects/[projectId]/locations/[dataproc_region]/autoscalingPolicies/[policy_id]`\nNote that the policy must be in the same project and Cloud Dataproc region.",
 										DiffSuppressFunc: LocationDiffSuppress,
 									},
 								},
@@ -2189,14 +2268,14 @@ by Dataproc`,
 							Optional:     true,
 							AtLeastOneOf: clusterConfigKeys,
 							MaxItems:     1,
-							Description:  `Specifies a Metastore configuration.`,
+							Description:  `The config setting for metastore service with the cluster.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"dataproc_metastore_service": {
 										Type:        schema.TypeString,
 										Required:    true,
 										ForceNew:    true,
-										Description: `Resource name of an existing Dataproc Metastore service.`,
+										Description: "Resource name of an existing Dataproc Metastore service.\n\nOnly resource names including projectid and location (region) are valid. Examples:\n\n`projects/[projectId]/locations/[dataproc_region]/services/[service-name]`",
 									},
 								},
 							},
@@ -2206,13 +2285,14 @@ by Dataproc`,
 							Optional:     true,
 							MaxItems:     1,
 							AtLeastOneOf: clusterConfigKeys,
-							Description:  `The settings for auto stop and deletion cluster schedule.`,
+							Description:  `The settings for auto deletion cluster schedule.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"idle_delete_ttl": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `The duration to keep the cluster alive while idling (no jobs running). After this TTL, the cluster will be deleted. Valid range: [300s, 1209600s].`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `The duration to keep the cluster alive while idling
+(no jobs running). After this TTL, the cluster will be deleted. Valid range: [300s, 1209600s].`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.lifecycle_config.0.idle_delete_ttl",
 											"cluster_config.0.lifecycle_config.0.auto_delete_time",
@@ -2221,18 +2301,21 @@ by Dataproc`,
 										},
 									},
 									"idle_start_time": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: `Time when the cluster became idle (most recent job finished) and became eligible for deletion due to idleness.`,
+										Type:     schema.TypeString,
+										Computed: true,
+										Description: `Time when the cluster became idle
+(most recent job finished) and became eligible for deletion due to idleness.`,
 									},
 									// the API also has the auto_delete_ttl option in its request, however,
 									// the value is not returned in the response, rather the auto_delete_time
 									// after calculating ttl with the update time is returned, thus, for now
 									// we will only allow auto_delete_time to updated.
 									"auto_delete_time": {
-										Type:             schema.TypeString,
-										Optional:         true,
-										Description:      `The time when cluster will be auto-deleted. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `The time when cluster will be auto-deleted.
+A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds.
+Example: "2014-10-02T15:01:23.045123456Z".`,
 										DiffSuppressFunc: tpgresource.TimestampDiffSuppress(time.RFC3339Nano),
 										AtLeastOneOf: []string{
 											"cluster_config.0.lifecycle_config.0.idle_delete_ttl",
@@ -2242,9 +2325,10 @@ by Dataproc`,
 										},
 									},
 									"idle_stop_ttl": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `The duration to keep the cluster started while idling (no jobs running). After this TTL, the cluster will be stopped. Valid range: [10m, 14d].`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `The duration to keep the cluster alive while idling
+(no jobs running). After this TTL, the cluster will be stopped. Valid range: [10m, 14d].`,
 										AtLeastOneOf: []string{
 											"cluster_config.0.lifecycle_config.0.idle_delete_ttl",
 											"cluster_config.0.lifecycle_config.0.auto_delete_time",
@@ -2257,9 +2341,11 @@ by Dataproc`,
 									// after calculating ttl with the update time is returned, thus, for now
 									// we will only allow auto_stop_time to updated.
 									"auto_stop_time": {
-										Type:             schema.TypeString,
-										Optional:         true,
-										Description:      `The time when cluster will be auto-stopped. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `The time when cluster will be auto-stopped.
+A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds.
+Example: "2014-10-02T15:01:23.045123456Z".`,
 										DiffSuppressFunc: tpgresource.TimestampDiffSuppress(time.RFC3339Nano),
 										AtLeastOneOf: []string{
 											"cluster_config.0.lifecycle_config.0.idle_delete_ttl",
@@ -2276,20 +2362,21 @@ by Dataproc`,
 							Optional:     true,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The config settings for port access on the cluster. Structure defined below.`,
+							Description:  `The config settings for port access on the cluster.`,
 							AtLeastOneOf: clusterConfigKeys,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enable_http_port_access": {
-										Type:        schema.TypeBool,
-										Required:    true,
-										ForceNew:    true,
-										Description: `The flag to enable http access to specific ports on the cluster from external sources (aka Component Gateway). Defaults to false.`,
+										Type:     schema.TypeBool,
+										Required: true,
+										ForceNew: true,
+										Description: `The flag to enable http access to specific ports
+on the cluster from external sources (aka Component Gateway). Defaults to false.`,
 									},
 									"http_ports": {
 										Type:        schema.TypeMap,
 										Computed:    true,
-										Description: `The map of port descriptions to URLs. Will only be populated if enable_http_port_access is true.`,
+										Description: "The map of port descriptions to URLs. Will only be populated if\n`enable_http_port_access` is true.",
 									},
 								},
 							},
@@ -2300,7 +2387,7 @@ by Dataproc`,
 							Optional:     true,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The config for Dataproc metrics.`,
+							Description:  `The Compute Engine accelerator (GPU) configuration for these instances. Can be specified multiple times.`,
 							AtLeastOneOf: clusterConfigKeys,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -2317,7 +2404,7 @@ by Dataproc`,
 							Type:         schema.TypeList,
 							Optional:     true,
 							Computed:     true,
-							Description:  `The node group settings.`,
+							Description:  `A Dataproc NodeGroup resource is a group of Dataproc cluster nodes that execute an assigned role.`,
 							AtLeastOneOf: clusterConfigKeys,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -2334,7 +2421,7 @@ by Dataproc`,
 												},
 												"roles": {
 													Type:        schema.TypeList,
-													Description: `Node group roles.`,
+													Description: "Node group roles.\nOne of `\"DRIVER\"`.",
 													Required:    true,
 													ForceNew:    true,
 													Elem: &schema.Schema{
@@ -2351,25 +2438,29 @@ by Dataproc`,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"num_instances": {
-																Type:        schema.TypeInt,
-																Optional:    true,
-																ForceNew:    true,
-																Computed:    true,
-																Description: `Specifies the number of auxiliary nodes to create. If not specified, GCP will default to a predetermined computed value.`,
+																Type:     schema.TypeInt,
+																Optional: true,
+																ForceNew: true,
+																Computed: true,
+																Description: `Specifies the number of master nodes to create.
+Please set a number greater than 0. Node Group must have at least 1 instance.`,
 															},
 															"machine_type": {
 																Type:        schema.TypeString,
 																Optional:    true,
 																Computed:    true,
 																ForceNew:    true,
-																Description: `The name of a Google Compute Engine machine type to create for the master`,
+																Description: "The name of a Google Compute Engine machine type\nto create for the node group. If not specified, GCP will default to a predetermined\ncomputed value (currently `n1-standard-4`).",
 															},
 															"min_cpu_platform": {
-																Type:        schema.TypeString,
-																Optional:    true,
-																Computed:    true,
-																ForceNew:    true,
-																Description: `The name of a minimum generation of CPU family for the auxiliary node group. If not specified, GCP will default to a predetermined computed value for each zone.`,
+																Type:     schema.TypeString,
+																Optional: true,
+																Computed: true,
+																ForceNew: true,
+																Description: `The name of a minimum generation of CPU family
+for the node group. If not specified, GCP will default to a predetermined computed value
+for each zone. See [the guide](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+for details about which CPU families are available (and defaulted) for each zone.`,
 															},
 															"disk_config": {
 
@@ -2381,18 +2472,23 @@ by Dataproc`,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 																		"num_local_ssds": {
-																			Type:        schema.TypeInt,
-																			Optional:    true,
-																			Computed:    true,
-																			Description: `The amount of local SSD disks that will be attached to each master cluster node. Defaults to 0.`,
-																			ForceNew:    true,
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																			Computed: true,
+																			Description: `The amount of local SSD disks that will be attached to each master cluster node.
+Defaults to 0.`,
+																			ForceNew: true,
 																		},
 
 																		"boot_disk_size_gb": {
-																			Type:         schema.TypeInt,
-																			Optional:     true,
-																			Computed:     true,
-																			Description:  `Size of the primary disk attached to each node, specified in GB. The primary disk contains the boot volume and system libraries, and the smallest allowed disk size is 10GB. GCP will default to a predetermined computed value if not set (currently 500GB). Note: If SSDs are not attached, it also contains the HDFS data blocks and Hadoop working directories.`,
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																			Computed: true,
+																			Description: `Size of the primary disk attached to each node, specified
+in GB. The primary disk contains the boot volume and system libraries, and the
+smallest allowed disk size is 10GB. GCP will default to a predetermined
+computed value if not set (currently 500GB). Note: If SSDs are not
+attached, it also contains the HDFS data blocks and Hadoop working directories.`,
 																			ForceNew:     true,
 																			ValidateFunc: validation.IntAtLeast(10),
 																		},
@@ -2400,7 +2496,7 @@ by Dataproc`,
 																		"boot_disk_type": {
 																			Type:        schema.TypeString,
 																			Optional:    true,
-																			Description: `The disk type of the primary disk attached to each node. Such as "pd-ssd" or "pd-standard". Defaults to "pd-standard".`,
+																			Description: "The disk type of the primary disk attached to each node.\nOne of `\"pd-ssd\"` or `\"pd-standard\"`. Defaults to `\"pd-standard\"`.",
 																			ForceNew:    true,
 																			Default:     "pd-standard",
 																		},
@@ -2429,11 +2525,12 @@ by Dataproc`,
 																},
 															},
 															"accelerators": {
-																Type:        schema.TypeSet,
-																Optional:    true,
-																ForceNew:    true,
-																Elem:        acceleratorsSchema(),
-																Description: `The Compute Engine accelerator (GPU) configuration for these instances. Can be specified multiple times.`,
+																Type:     schema.TypeSet,
+																Optional: true,
+																ForceNew: true,
+																Elem:     acceleratorsSchema(),
+																Description: `The Compute Engine accelerator (GPU) configuration for these instances. Can be specified
+multiple times.`,
 															},
 															"instance_names": {
 																Type:        schema.TypeList,
@@ -2463,7 +2560,7 @@ by Dataproc`,
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The configuration for the master flexible instance group in High Obtainability (HO) mode.`,
+							Description:  "The configuration for the master flexible instance group\nin High Obtainability (HO) mode. Mutually exclusive with `master_config` and `gce_cluster_config.zone`.\nRequired whenever `worker_flexible_config` or `secondary_worker_flexible_config` is specified.",
 							ConflictsWith: []string{
 								"cluster_config.0.master_config",
 								"cluster_config.0.gce_cluster_config.0.zone",
@@ -2476,14 +2573,15 @@ by Dataproc`,
 										Default:      1,
 										ForceNew:     true,
 										ValidateFunc: validation.IntInSlice([]int{1}),
-										Description:  `Specifies the number of master instances to create. In High Obtainability (HO) mode, this must be 1. Defaults to 1. Changing this forces a new resource to be created.`,
+										Description:  "Must be `1`. Defaults to `1`. Changing this forces a new resource to be created.",
 									},
 									"core_count": {
 										Type:         schema.TypeInt,
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.IntInSlice([]int{2, 4, 8, 16, 32}),
-										Description:  `The number of vCPUs per instance. Must be a power of 2: 2, 4, 8, 16, or 32. Changing this forces a new resource to be created.`,
+										Description: `The number of vCPUs per instance. Must be a power of 2
+(2, 4, 8, 16, or 32). Changing this forces a new resource to be created.`,
 									},
 									"hardware_class": {
 										Type:         schema.TypeString,
@@ -2491,13 +2589,14 @@ by Dataproc`,
 										ForceNew:     true,
 										Default:      "STANDARD",
 										ValidateFunc: validation.StringInSlice([]string{"STANDARD", "PERFORMANCE"}, false),
-										Description:  `The hardware class of instances. Allowed values are "STANDARD" and "PERFORMANCE". Defaults to "STANDARD". Changing this forces a new resource to be created.`,
+										Description:  "Controls the hardware class for the flexible instance group.\nAllowed values are `\"STANDARD\"` and `\"PERFORMANCE\"`. Defaults to `\"STANDARD\"`.\nChanging this forces a new resource to be created.",
 									},
 									"boot_disk_size_gb": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										ForceNew:    true,
-										Description: `The boot disk size in GB. Changing this forces a new resource to be created.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										ForceNew: true,
+										Description: `The boot disk size in GB.
+Changing this forces a new resource to be created.`,
 									},
 								},
 							},
@@ -2508,7 +2607,7 @@ by Dataproc`,
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The configuration for the worker flexible instance group in High Obtainability (HO) mode.`,
+							Description:  "The configuration for the worker flexible instance group\nin High Obtainability (HO) mode. Mutually exclusive with `worker_config` and `gce_cluster_config.zone`.\nRequires `master_flexible_config`.",
 							ConflictsWith: []string{
 								"cluster_config.0.worker_config",
 								"cluster_config.0.gce_cluster_config.0.zone",
@@ -2520,14 +2619,16 @@ by Dataproc`,
 										Type:         schema.TypeInt,
 										Required:     true,
 										ValidateFunc: validation.IntAtLeast(2),
-										Description:  `Specifies the number of worker instances to create. Represents the desired capacity of the group and is updatable in place.`,
+										Description: `Specifies the number of worker instances to create.
+Represents the desired capacity of the group and is updatable in place.`,
 									},
 									"core_count": {
 										Type:         schema.TypeInt,
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.IntInSlice([]int{2, 4, 8, 16, 32}),
-										Description:  `The number of vCPUs per instance. Must be a power of 2: 2, 4, 8, 16, or 32. Changing this forces a new resource to be created.`,
+										Description: `The number of vCPUs per instance. Must be a power of 2
+(2, 4, 8, 16, or 32). Changing this forces a new resource to be created.`,
 									},
 									"hardware_class": {
 										Type:         schema.TypeString,
@@ -2535,13 +2636,14 @@ by Dataproc`,
 										ForceNew:     true,
 										Default:      "STANDARD",
 										ValidateFunc: validation.StringInSlice([]string{"STANDARD", "PERFORMANCE"}, false),
-										Description:  `The hardware class of instances. Allowed values are "STANDARD" and "PERFORMANCE". Defaults to "STANDARD". Changing this forces a new resource to be created.`,
+										Description:  "Controls the hardware class for the flexible instance group.\nAllowed values are `\"STANDARD\"` and `\"PERFORMANCE\"`. Defaults to `\"STANDARD\"`.\nChanging this forces a new resource to be created.",
 									},
 									"boot_disk_size_gb": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										ForceNew:    true,
-										Description: `The boot disk size in GB. Changing this forces a new resource to be created.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										ForceNew: true,
+										Description: `The boot disk size in GB.
+Changing this forces a new resource to be created.`,
 									},
 								},
 							},
@@ -2552,7 +2654,7 @@ by Dataproc`,
 							AtLeastOneOf: clusterConfigKeys,
 							Computed:     true,
 							MaxItems:     1,
-							Description:  `The configuration for the secondary worker flexible instance group in High Obtainability (HO) mode.`,
+							Description:  "The configuration for the secondary worker flexible\ninstance group in High Obtainability (HO) mode. Mutually exclusive with `preemptible_worker_config` and\n`gce_cluster_config.zone`. Requires `master_flexible_config`.",
 							ConflictsWith: []string{
 								"cluster_config.0.preemptible_worker_config",
 								"cluster_config.0.gce_cluster_config.0.zone",
@@ -2565,26 +2667,28 @@ by Dataproc`,
 										Optional:     true,
 										Default:      0,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description:  `Specifies the number of secondary worker instances to create. Represents the desired capacity of the group and is updatable in place. Defaults to 0; can be scaled down to 0.`,
+										Description:  "Specifies the number of secondary worker instances to create.\nDefaults to `0`; can be scaled down to `0`; updatable in place.",
 									},
 									"core_count": {
 										Type:         schema.TypeInt,
 										Required:     true,
 										ValidateFunc: validation.IntInSlice([]int{2, 4, 8, 16, 32}),
-										Description:  `The number of vCPUs per instance. Must be a power of 2: 2, 4, 8, 16, or 32. Changing this on an existing secondary worker group forces a new resource to be created.`,
+										Description: `The number of vCPUs per instance. Must be a power of 2
+(2, 4, 8, 16, or 32). Changing this on an existing secondary worker group forces a new resource to be created.`,
 									},
 									"hardware_class": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										Default:      "STANDARD",
 										ValidateFunc: validation.StringInSlice([]string{"STANDARD", "PERFORMANCE"}, false),
-										Description:  `The hardware class of instances. Allowed values are "STANDARD" and "PERFORMANCE". Defaults to "STANDARD". Changing this on an existing secondary worker group forces a new resource to be created.`,
+										Description:  "Controls the hardware class for the flexible instance group.\nAllowed values are `\"STANDARD\"` and `\"PERFORMANCE\"`. Defaults to `\"STANDARD\"`.\nChanging this on an existing secondary worker group forces a new resource to be created.",
 									},
 									"boot_disk_size_gb": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Computed:    true,
-										Description: `The boot disk size in GB. Changing this on an existing secondary worker group forces a new resource to be created.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										Computed: true,
+										Description: `The boot disk size in GB. Changing this on an existing
+secondary worker group forces a new resource to be created.`,
 									},
 								},
 							},
@@ -2659,14 +2763,14 @@ func metricsSchema() *schema.Resource {
 				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"MONITORING_AGENT_DEFAULTS", "HDFS", "SPARK", "YARN", "SPARK_HISTORY_SERVER", "HIVESERVER2"}, false),
-				Description:  `A source for the collection of Dataproc OSS metrics (see [available OSS metrics] (https://cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).`,
+				Description:  `A source for the collection of Dataproc OSS metrics (see [available OSS metrics](https://cloud.google.com//dataproc/docs/guides/monitoring#available_oss_metrics)).`,
 			},
 			"metric_overrides": {
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Specify one or more [available OSS metrics] (https://cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect.`,
+				Description: `One or more [available OSS metrics] (https://cloud.google.com/dataproc/docs/guides/monitoring#available_oss_metrics) to collect for the metric course.`,
 			},
 		},
 	}
@@ -2680,14 +2784,14 @@ func acceleratorsSchema() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The short name of the accelerator type to expose to this instance. For example, nvidia-tesla-k80.`,
+				Description: "The short name of the accelerator type to expose to this instance. For example, `nvidia-tesla-k80`.",
 			},
 
 			"accelerator_count": {
 				Type:        schema.TypeInt,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The number of the accelerator cards of this type exposed to this instance. Often restricted to one of 1, 2, 4, or 8.`,
+				Description: "The number of the accelerator cards of this type exposed to this instance. Often restricted to one of `1`, `2`, `4`, or `8`.",
 			},
 		},
 	}

@@ -15,15 +15,18 @@ import (
 
 var IamBigtableInstanceSchema = map[string]*schema.Schema{
 	"instance": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The name or relative resource id of the instance to manage IAM policies for.`,
 	},
 	"project": {
 		Type:     schema.TypeString,
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The project in which the instance belongs. If it
+is not provided, Terraform will use the provider default.`,
 	},
 }
 

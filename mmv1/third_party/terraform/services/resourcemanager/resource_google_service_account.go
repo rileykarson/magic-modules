@@ -59,7 +59,7 @@ func ResourceGoogleServiceAccount() *schema.Resource {
 			"email": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The e-mail address of the service account. This value should be referenced from any google_iam_policy data sources that would grant the service account privileges.`,
+				Description: "The e-mail address of the service account. This value\nshould be referenced from any `google_iam_policy` data sources\nthat would grant the service account privileges.",
 			},
 			"unique_id": {
 				Type:        schema.TypeString,
@@ -76,36 +76,39 @@ func ResourceGoogleServiceAccount() *schema.Resource {
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: verify.ValidateRFC1035Name(6, 30),
-				Description:  `The account id that is used to generate the service account email address and a stable unique id. It is unique within a project, must be 6-30 characters long, and match the regular expression [a-z]([-a-z0-9]*[a-z0-9]) to comply with RFC1035. Changing this forces a new service account to be created.`,
+				Description:  "The account id that is used to generate the service\naccount email address and a stable unique id. It is unique within a project,\nmust be 6-30 characters long, and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])`\nto comply with RFC1035. Changing this forces a new service account to be created.",
 			},
 			"display_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: `The display name for the service account. Can be updated without creating a new resource.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: `The display name for the service account.
+Can be updated without creating a new resource.`,
 			},
 			"disabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether the service account is disabled. Defaults to false`,
+				Description: "Whether a service account is disabled or not. Defaults to `false`. This field has no effect during creation.\nMust be set after creation to disable a service account.",
 			},
 			"description": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringLenBetween(0, 256),
-				Description:  `A text description of the service account. Must be less than or equal to 256 UTF-8 bytes.`,
+				Description: `A text description of the service account.
+Must be less than or equal to 256 UTF-8 bytes.`,
 			},
 			"project": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Optional:    true,
-				ForceNew:    true,
-				Description: `The ID of the project that the service account will be created in. Defaults to the provider project configuration.`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Optional: true,
+				ForceNew: true,
+				Description: `The ID of the project that the service account will be created in.
+Defaults to the provider project configuration.`,
 			},
 			"member": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The Identity of the service account in the form 'serviceAccount:{email}'. This value is often used to refer to the service account in order to grant IAM permissions.`,
+				Description: "The Identity of the service account in the form `serviceAccount:{email}`. This value is often used to refer to the service account in order to grant IAM permissions.",
 			},
 			"create_ignore_already_exists": {
 				Type:        schema.TypeBool,

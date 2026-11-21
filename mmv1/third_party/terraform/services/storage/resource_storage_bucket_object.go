@@ -55,35 +55,36 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the object. If you're interpolating the name of this object, see output_name instead.`,
+				Description: "The name of the object. If you're interpolating the name of this object, see `output_name` instead.",
 			},
 
 			"cache_control": {
-				Type:        schema.TypeString,
-				ForceNew:    true,
-				Optional:    true,
-				Description: `Cache-Control directive to specify caching behavior of object data. If omitted and object is accessible to all anonymous users, the default will be public, max-age=3600`,
+				Type:     schema.TypeString,
+				ForceNew: true,
+				Optional: true,
+				Description: `[Cache-Control](https://tools.ietf.org/html/rfc7234#section-5.2)
+directive to specify caching behavior of object data. If omitted and object is accessible to all anonymous users, the default will be public, max-age=3600`,
 			},
 
 			"content_disposition": {
 				Type:        schema.TypeString,
 				ForceNew:    true,
 				Optional:    true,
-				Description: `Content-Disposition of the object data.`,
+				Description: `[Content-Disposition](https://tools.ietf.org/html/rfc6266) of the object data.`,
 			},
 
 			"content_encoding": {
 				Type:        schema.TypeString,
 				ForceNew:    true,
 				Optional:    true,
-				Description: `Content-Encoding of the object data.`,
+				Description: `[Content-Encoding](https://tools.ietf.org/html/rfc7231#section-3.1.2.2) of the object data.`,
 			},
 
 			"content_language": {
 				Type:        schema.TypeString,
 				ForceNew:    true,
 				Optional:    true,
-				Description: `Content-Language of the object data.`,
+				Description: `[Content-Language](https://tools.ietf.org/html/rfc7231#section-3.1.3.2) of the object data.`,
 			},
 
 			"content_type": {
@@ -92,7 +93,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				ForceNew:      true,
 				Computed:      true,
 				ConflictsWith: []string{"force_empty_content_type"},
-				Description:   `Content-Type of the object data. Defaults to "application/octet-stream" or "text/plain; charset=utf-8".`,
+				Description:   `[Content-Type](https://tools.ietf.org/html/rfc7231#section-3.1.1.5) of the object data. Defaults to "application/octet-stream" or "text/plain; charset=utf-8".`,
 			},
 
 			"force_empty_content_type": {
@@ -100,7 +101,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Optional:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"content_type"},
-				Description:   `Flag to set empty Content-Type.`,
+				Description:   `When set to true, it ensure the object's Content-Type is empty.`,
 			},
 
 			"content": {
@@ -109,20 +110,20 @@ func ResourceStorageBucketObject() *schema.Resource {
 				ExactlyOneOf: []string{"source"},
 				Sensitive:    true,
 				Computed:     true,
-				Description:  `Data as string to be uploaded. Must be defined if source is not. Note: The content field is marked as sensitive. To view the raw contents of the object, please define an output.`,
+				Description:  "Data as `string` to be uploaded. Must be defined if `source` is not. **Note**: The `content` field is marked as sensitive. To view the raw contents of the object, please define an [output](/docs/configuration/outputs.html).",
 			},
 
 			"contexts": {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
-				Description: "Contexts attached to an object, in key-value pairs.",
+				Description: `Contexts attached to an object, in key-value pairs. For more information about object contexts, see [Object contexts overview](https://cloud.google.com/storage/docs/object-contexts).`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"custom": {
 							Type:        schema.TypeList,
 							Required:    true,
-							Description: "A list of custom context key-value pairs.",
+							Description: `User-provided object contexts.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"key": {
@@ -138,12 +139,12 @@ func ResourceStorageBucketObject() *schema.Resource {
 									"create_time": {
 										Type:        schema.TypeString,
 										Computed:    true,
-										Description: "The time when context was first added to the storage#object in RFC 3339 format.",
+										Description: `The time when context was first added to the storage object in RFC 3399 format.`,
 									},
 									"update_time": {
 										Type:        schema.TypeString,
 										Computed:    true,
-										Description: "The time when context was last updated in RFC 3339 format.",
+										Description: `The time when context was last updated in RFC 3399 format.`,
 									},
 								},
 							},
@@ -155,7 +156,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 			"generation": {
 				Type:        schema.TypeInt,
 				Computed:    true,
-				Description: `The content generation of this object. Used for object versioning and soft delete.`,
+				Description: `The content generation of this object. Used for object [versioning](https://cloud.google.com/storage/docs/object-versioning) and [soft delete](https://cloud.google.com/storage/docs/soft-delete).`,
 			},
 
 			"crc32c": {
@@ -175,7 +176,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Computed:    true,
 				Optional:    false,
 				Required:    false,
-				Description: `Hex value of md5hash`,
+				Description: "Hex value of md5hash`",
 			},
 
 			"source": {
@@ -183,13 +184,13 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Optional:     true,
 				ForceNew:     true,
 				ExactlyOneOf: []string{"content"},
-				Description:  `A path to the data you want to upload. Must be defined if content is not.`,
+				Description:  "A path to the data you want to upload. Must be defined\nif `content` is not.",
 			},
 
 			"source_md5hash": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `User-provided md5hash, Base 64 MD5 hash of the object data.`,
+				Description: `User-provided md5hash to trigger replacement of object in storage bucket, Must be Base 64 MD5 hash of the object data. The usual way to set this is filemd5("file.zip"), where "file.zip" is the local filename`,
 			},
 
 			// Detect changes to local file or changes made outside of Terraform to the file stored on the server.
@@ -201,7 +202,8 @@ func ResourceStorageBucketObject() *schema.Resource {
 				// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "different hash" (forces new resource)
 				// Instead of the more confusing:
 				// detect_md5hash:       "1XcnP/iFw/hNrbhXi7QTmQ==" => "" (forces new resource)
-				Default: "different hash",
+				Default:     "different hash",
+				Description: "Detect changes to local file or changes made outside of Terraform to the file stored on the server. MD5 hash of the data, encoded using [base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4). This field is not present for [composite objects](https://cloud.google.com/storage/docs/composite-objects). For more information about using the MD5 hash, see [Hashes and ETags: Best Practices](https://cloud.google.com/storage/docs/hashes-etags#json-api).\n\n~> **Warning:** For dynamically populated files or objects, `detect_md5hash` cannot track or detect changes and will not trigger updates to the objects in the bucket. Please use `source_md5hash` instead.",
 				// 1. Compute the md5 hash of the local file
 				// 2. Compare the computed md5 hash with the hash stored in Cloud Storage
 				// 3. Don't suppress the diff iff they don't match
@@ -247,7 +249,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Computed:    true,
-				Description: `The StorageClass of the new bucket object. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE. If not provided, this defaults to the bucket's default storage class or to a standard class.`,
+				Description: "The [StorageClass](https://cloud.google.com/storage/docs/storage-classes) of the new bucket object.\nSupported values include: `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`. If not provided, this defaults to the bucket's default\nstorage class or to a [standard](https://cloud.google.com/storage/docs/storage-classes#standard) class.",
 			},
 
 			"kms_key_name": {
@@ -257,7 +259,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Computed:         true,
 				ConflictsWith:    []string{"customer_encryption"},
 				DiffSuppressFunc: tpgresource.CompareCryptoKeyVersions,
-				Description:      `Resource name of the Cloud KMS key that will be used to encrypt the object. Overrides the object metadata's kmsKeyName value, if any.`,
+				Description:      `The resource name of the Cloud KMS key that will be used to [encrypt](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) the object.`,
 			},
 
 			"customer_encryption": {
@@ -266,7 +268,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Optional:      true,
 				Sensitive:     true,
 				ConflictsWith: []string{"kms_key_name"},
-				Description:   `Encryption key; encoded using base64.`,
+				Description:   `Enables object encryption with Customer-Supplied Encryption Key (CSEK). [Google [documentation about](#nested_customer_encryption) CSEK.](https://cloud.google.com/storage/docs/encryption/customer-supplied-keys)`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"encryption_algorithm": {
@@ -274,14 +276,14 @@ func ResourceStorageBucketObject() *schema.Resource {
 							Optional:    true,
 							Default:     "AES256",
 							ForceNew:    true,
-							Description: `The encryption algorithm. Default: AES256`,
+							Description: `Encryption algorithm. Default: AES256`,
 						},
 						"encryption_key": {
 							Type:        schema.TypeString,
 							Required:    true,
 							ForceNew:    true,
 							Sensitive:   true,
-							Description: `Base64 encoded customer supplied encryption key.`,
+							Description: `Base64 encoded Customer-Supplied Encryption Key.`,
 							ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 								_, err := base64.StdEncoding.DecodeString(val.(string))
 								if err != nil {
@@ -299,18 +301,18 @@ func ResourceStorageBucketObject() *schema.Resource {
 				MaxItems:      1,
 				Optional:      true,
 				ConflictsWith: []string{"event_based_hold"},
-				Description:   `Object level retention configuration.`,
+				Description:   `The [object retention](http://cloud.google.com/storage/docs/object-lock) settings for the object. The retention settings allow an object to be retained until a provided date.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"retain_until_time": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `Time in RFC 3339 (e.g. 2030-01-01T02:03:04Z) until which object retention protects this object.`,
+							Description: `The time to retain the object until in RFC 3339 format, for example 2012-11-15T16:19:00.094Z.`,
 						},
 						"mode": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `The object retention mode. Supported values include: "Unlocked", "Locked".`,
+							Description: "The retention policy mode. Either `Locked` or `Unlocked`.",
 						},
 					},
 				},
@@ -320,13 +322,13 @@ func ResourceStorageBucketObject() *schema.Resource {
 				Type:          schema.TypeBool,
 				Optional:      true,
 				ConflictsWith: []string{"retention"},
-				Description:   `Whether an object is under event-based hold. Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).`,
+				Description:   `Whether an object is under [event-based hold](https://cloud.google.com/storage/docs/object-holds#hold-types). Event-based hold is a way to retain objects until an event occurs, which is signified by the hold's release (i.e. this value is set to false). After being released (set to false), such objects will be subject to bucket-level retention (if any).`,
 			},
 
 			"temporary_hold": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: `Whether an object is under temporary hold. While this flag is set to true, the object is protected against deletion and overwrites.`,
+				Description: `Whether an object is under [temporary hold](https://cloud.google.com/storage/docs/object-holds#hold-types). While this flag is set to true, the object is protected against deletion and overwrites.`,
 			},
 
 			"metadata": {
@@ -347,7 +349,7 @@ func ResourceStorageBucketObject() *schema.Resource {
 			"output_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The name of the object. Use this field in interpolations with google_storage_object_acl to recreate google_storage_object_acl resources when your google_storage_bucket_object is recreated.`,
+				Description: "The name of the object. Use this field in interpolations with `google_storage_object_acl` to recreate\n`google_storage_object_acl` resources when your `google_storage_bucket_object` is recreated.",
 			},
 
 			"media_link": {

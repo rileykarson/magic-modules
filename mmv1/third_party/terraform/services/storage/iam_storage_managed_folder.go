@@ -16,14 +16,16 @@ import (
 
 var StorageManagedFolderIamSchema = map[string]*schema.Schema{
 	"bucket": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The name of the bucket that contains the managed folder. Used to find the parent resource to bind the IAM policy to`,
 	},
 	"managed_folder": {
 		Type:             schema.TypeString,
 		Required:         true,
 		ForceNew:         true,
+		Description:      `Used to find the parent resource to bind the IAM policy to`,
 		DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 		ValidateFunc:     verify.ValidateRegexp(`/$`),
 	},

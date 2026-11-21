@@ -62,7 +62,7 @@ func ResourceApigeeApi() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `Name of the API proxy. This field only accepts the following characters: A-Za-z0-9._-.`,
+				Description: `The ID of the API proxy.`,
 			},
 			"org_id": {
 				Type:        schema.TypeString,
@@ -110,12 +110,12 @@ func ResourceApigeeApi() *schema.Resource {
 			"config_bundle": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `Path to the config zip bundle`,
+				Description: `Path to the config zip bundle.`,
 			},
 			"md5hash": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Base 64 MD5 hash of the uploaded config bundle.`,
+				Description: `Base 64 MD5 hash of the uploaded data. It is speculative as remote does not return hash of the bundle. Remote changes are detected using returned last_modified timestamp.`,
 			},
 			"detect_md5hash": {
 				Type:     schema.TypeString,
@@ -127,7 +127,7 @@ func ResourceApigeeApi() *schema.Resource {
 				// while still triggering an update when the bundle changes -- and,
 				// unlike adding a schema Default, it is not a breaking change.
 				Computed:    true,
-				Description: `A hash of local config bundle in string, user needs to use a Terraform Hash function of their choice. A change in hash will trigger an update.`,
+				Description: `Detect changes to local config bundle file or changes made outside of Terraform. MD5 hash of the data, encoded using base64. Hash is automatically computed without need for user input.`,
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					localMd5Hash := ""
 					if config_bundle, ok := d.GetOkExists("config_bundle"); ok {
@@ -147,19 +147,17 @@ func ResourceApigeeApi() *schema.Resource {
 				},
 			},
 			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Description: `User labels applied to this API proxy.
-
-**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
-				Elem: &schema.Schema{Type: schema.TypeString},
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "User labels applied to this API proxy. Changing only the labels does not create a new revision.\n\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.\nPlease refer to the field `effective_labels` for all of the labels present on the resource.",
+				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"terraform_labels": {
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+				Type:     schema.TypeMap,
+				Computed: true,
+				Description: `The combination of labels configured directly on the resource
+and default labels configured on the provider.`,
+				Elem: &schema.Schema{Type: schema.TypeString},
 			},
 			"effective_labels": {
 				Type:        schema.TypeMap,

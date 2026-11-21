@@ -15,9 +15,10 @@ import (
 
 var IamHealthcareHl7V2StoreSchema = map[string]*schema.Schema{
 	"hl7_v2_store_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: "The HL7v2 store ID, in the form\n`{project_id}/{location_name}/{dataset_name}/{hl7_v2_store_name}` or\n`{location_name}/{dataset_name}/{hl7_v2_store_name}`. In the second form, the provider's\nproject setting will be used as a fallback.",
 	},
 }
 

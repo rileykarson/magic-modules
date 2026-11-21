@@ -51,12 +51,15 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 			"container_spec_gcs_path": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: `The GCS path to the Dataflow job Flex
+Template.`,
 			},
 
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: `Immutable. A unique name for the resource, required by Dataflow.`,
 			},
 
 			"region": {
@@ -64,13 +67,13 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Computed:    true,
-				Description: `The region in which the created job should run.`,
+				Description: `Immutable. The region in which the created job should run.`,
 			},
 
 			"transform_name_mapping": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.`,
+				Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.`,
 			},
 
 			"on_delete": {
@@ -78,13 +81,13 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{"cancel", "drain"}, false),
 				Optional:     true,
 				Default:      "cancel",
+				Description:  "One of \"drain\" or \"cancel\". Specifies behavior of\ndeletion during `terraform destroy`.  See above note.",
 			},
 
 			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Description: `User labels to be specified for the job. Keys and values should follow the restrictions specified in the labeling restrictions page. NOTE: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "User labels to be specified for the job. Keys and values\nshould follow the restrictions specified in the [labeling restrictions](https://cloud.google.com/compute/docs/labeling-resources#restrictions)\npage.\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration. Please refer to the field `effective_labels` for all of the labels present on the resource.",
 			},
 
 			"terraform_labels": {
@@ -104,6 +107,9 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 			"parameters": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Description: `**Template specific** Key/Value pairs to be forwarded to the pipeline's options; keys are
+case-sensitive based on the language on which the pipeline is coded, mostly Java.
+**Note**: do not configure Dataflow options here in parameters.`,
 			},
 
 			"project": {
@@ -111,22 +117,26 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
+				Description: `The project in which the resource belongs. If it is not
+provided, the provider project is used.`,
 			},
 
 			"job_id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `The unique ID of this job.`,
 			},
 
 			"state": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `The current state of the resource, selected from the [JobState enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)`,
 			},
 
 			"type": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The type of this job, selected from the JobType enum.`,
+				Description: `The type of this job, selected from the [JobType enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobType).`,
 			},
 
 			"num_workers": {
@@ -135,7 +145,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				// ForceNew applies to both stream and batch jobs
 				ForceNew:    true,
 				Computed:    true,
-				Description: `The initial number of Google Compute Engine instances for the job.`,
+				Description: `Immutable. The initial number of Google Compute Engine instances for the job.`,
 			},
 
 			"max_workers": {
@@ -144,14 +154,14 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				// ForceNew applies to both stream and batch jobs
 				ForceNew:    true,
 				Computed:    true,
-				Description: `The maximum number of Google Compute Engine instances to be made available to your pipeline during execution, from 1 to 1000.`,
+				Description: `Immutable. The maximum number of Google Compute Engine instances to be made available to your pipeline during execution, from 1 to 1000.`,
 			},
 
 			"service_account_email": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The Service Account email used to create the job.`,
+				Description: "Service account email to run the workers as. This should be just an email e.g. `myserviceaccount@myproject.iam.gserviceaccount.com`. Do not include any `serviceAccount:` or other prefix.",
 			},
 
 			"temp_location": {
@@ -202,13 +212,13 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The name for the Cloud KMS key for the job. Key format is: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`,
+				Description: "The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`",
 			},
 
 			"ip_configuration": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Description:  `The configuration for VM IPs. Options are "WORKER_IP_PUBLIC" or "WORKER_IP_PRIVATE".`,
+				Description:  "The configuration for VM IPs.  Options are `\"WORKER_IP_PUBLIC\"` or `\"WORKER_IP_PRIVATE\"`.",
 				ValidateFunc: validation.StringInSlice([]string{"WORKER_IP_PUBLIC", "WORKER_IP_PRIVATE"}, false),
 			},
 
@@ -216,7 +226,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Type:        schema.TypeSet,
 				Optional:    true,
 				Computed:    true,
-				Description: `List of experiments that should be used by the job. An example value is ["enable_stackdriver_agent_metrics"].`,
+				Description: "List of experiments that should be used by the job. An example value is `[\"enable_stackdriver_agent_metrics\"]`.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -225,7 +235,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 			"additional_pipeline_options": {
 				Type:        schema.TypeSet,
 				Optional:    true,
-				Description: `List of pipeline options that should be used by the job. An example value is ["numberOfWorkerHarnessThreads=20"].`,
+				Description: "List of pipeline options that should be used by the job. An example value is `[\"numberOfWorkerHarnessThreads=20\"]`.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -235,14 +245,14 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Indicates if the job should use the streaming engine feature.`,
+				Description: `Immutable. Indicates if the job should use the streaming engine feature.`,
 			},
 
 			"autoscaling_algorithm": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The algorithm to use for autoscaling`,
+				Description: `The algorithm to use for autoscaling.`,
 			},
 
 			"launcher_machine_type": {
@@ -256,7 +266,7 @@ func ResourceDataflowFlexTemplateJob() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `If true, treat DRAINING and CANCELLING as terminal job states and do not wait for further changes before removing from terraform state and moving on. WARNING: this will lead to job name conflicts if you do not ensure that the job names are different, e.g. by embedding a release ID or by using a random_id.`,
+				Description: "If set to `true`, terraform will\ntreat `DRAINING` and `CANCELLING` as terminal states when deleting the resource,\nand will remove the resource from terraform state and move on.  See above note.",
 			},
 			"create_ignore_already_exists": {
 				Type:        schema.TypeBool,

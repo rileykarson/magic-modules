@@ -22,19 +22,20 @@ var familySubsetSchemaElem *schema.Resource = &schema.Resource{
 		"family_name": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: `Name of the column family to be included in the authorized view.`,
+			Description: `Name of the column family to be included in the authorized view. The specified column family must exist in the parent table of this authorized view.`,
 		},
 		"qualifiers": {
 			Type:        schema.TypeSet,
 			Optional:    true,
 			Elem:        &schema.Schema{Type: schema.TypeString},
-			Description: `Base64-encoded individual exact column qualifiers of the column family to be included in the authorized view.`,
+			Description: `A list of Base64-encoded individual exact column qualifiers of the column family to be included in the authorized view.`,
 		},
 		"qualifier_prefixes": {
-			Type:        schema.TypeSet,
-			Optional:    true,
-			Elem:        &schema.Schema{Type: schema.TypeString},
-			Description: `Base64-encoded prefixes for qualifiers of the column family to be included in the authorized view. Every qualifier starting with one of these prefixes is included in the authorized view. To provide access to all qualifiers, include the empty string as a prefix ("").`,
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+			Description: `A list of Base64-encoded prefixes for qualifiers of the column family to be included in the authorized view.
+Every qualifier starting with one of these prefixes is included in the authorized view. To provide access to all qualifiers, include the empty string as a prefix ("").`,
 		},
 	},
 }
@@ -69,11 +70,12 @@ func ResourceBigtableAuthorizedView() *schema.Resource {
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"instance_name": {
@@ -97,7 +99,7 @@ func ResourceBigtableAuthorizedView() *schema.Resource {
 				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
-				Description: `A field to make the authorized view protected against data loss i.e. when set to PROTECTED, deleting the authorized view, the table containing the authorized view, and the instance containing the authorized view would be prohibited.
+				Description: `A field to make the table protected against data loss i.e. when set to PROTECTED, deleting the table, the column families in the table, and the instance containing the table would be prohibited.
 If not provided, currently deletion protection will be set to UNPROTECTED as it is the API default value. Note this field configs the deletion protection provided by the API in the backend, and should not be confused with Terraform-side deletion protection.`,
 			},
 
@@ -112,12 +114,12 @@ If not provided, currently deletion protection will be set to UNPROTECTED as it 
 							Type:        schema.TypeSet,
 							Optional:    true,
 							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: `Base64-encoded row prefixes to be included in the authorized view. To provide access to all rows, include the empty string as a prefix ("").`,
+							Description: `A list of Base64-encoded row prefixes to be included in the authorized view. To provide access to all rows, include the empty string as a prefix ("").`,
 						},
 						"family_subsets": {
 							Type:        schema.TypeSet,
 							Optional:    true,
-							Description: `Subsets of column families to be included in the authorized view.`,
+							Description: `A group of column family subsets to be included in the authorized view. This can be specified multiple times.`,
 							Elem:        familySubsetSchemaElem,
 						},
 					},

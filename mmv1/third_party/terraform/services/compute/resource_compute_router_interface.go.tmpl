@@ -43,13 +43,14 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `A unique name for the interface, required by GCE. Changing this forces a new interface to be created.`,
+				Description: `A unique name for the interface, required by GCE. Changing
+this forces a new interface to be created.`,
 			},
 			"router": {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the router this interface will be attached to. Changing this forces a new interface to be created.`,
+				Description: "The name of the router this interface will be attached to.\nChanging this forces a new interface to be created.\n\nIn addition to the above required fields, a router interface must have specified either `ip_range` or exactly one of `vpn_tunnel`, `interconnect_attachment` or `subnetwork`, or both.",
 			},
 			"vpn_tunnel": {
 				Type:             schema.TypeString,
@@ -58,7 +59,7 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 				AtLeastOneOf:     []string{"ip_range", "interconnect_attachment", "subnetwork", "vpn_tunnel"},
 				ConflictsWith:    []string{"interconnect_attachment", "subnetwork"},
-				Description:      `The name or resource link to the VPN tunnel this interface will be linked to. Changing this forces a new interface to be created. Only one of vpn_tunnel, interconnect_attachment or subnetwork can be specified.`,
+				Description:      "The name or resource link to the VPN tunnel this\ninterface will be linked to. Changing this forces a new interface to be created. Only\none of `vpn_tunnel`, `interconnect_attachment` or `subnetwork` can be specified.",
 			},
 			"interconnect_attachment": {
 				Type:             schema.TypeString,
@@ -67,7 +68,7 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 				AtLeastOneOf:     []string{"ip_range", "interconnect_attachment", "subnetwork", "vpn_tunnel"},
 				ConflictsWith:    []string{"subnetwork", "vpn_tunnel"},
-				Description:      `The name or resource link to the VLAN interconnect for this interface. Changing this forces a new interface to be created. Only one of interconnect_attachment, subnetwork or vpn_tunnel can be specified.`,
+				Description:      "The name or resource link to the\nVLAN interconnect for this interface. Changing this forces a new interface to\nbe created. Only one of `vpn_tunnel`, `interconnect_attachment` or `subnetwork` can be specified.",
 			},
 			"ip_range": {
 				Type:           schema.TypeString,
@@ -75,7 +76,8 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				ForceNew:       true,
 				Computed:       true,
 				AtLeastOneOf:   []string{"ip_range", "interconnect_attachment", "subnetwork", "vpn_tunnel"},
-				Description:    `The IP address and range of the interface. The IP range must be in the RFC3927 link-local IP space. Changing this forces a new interface to be created.`,
+				Description:    `IP address and range of the interface. The IP range must be
+in the RFC3927 link-local IP space. Changing this forces a new interface to be created.`,
 			},	
 			"ip_version": {
 				Type:         schema.TypeString,
@@ -83,13 +85,14 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				ForceNew:     true,
 				Computed:     true,
 				ValidateFunc: verify.ValidateEnum([]string{"IPV4", "IPV6"}),
-				Description:  `IP version of this interface.`,
+				Description:  `IP version of this interface. Can be either IPV4 or IPV6.`,
 			},
 			"private_ip_address": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				Description:  `The regional private internal IP address that is used to establish BGP sessions to a VM instance acting as a third-party Router Appliance. Changing this forces a new interface to be created.`,
+				Description:  `The regional private internal IP address that is used
+to establish BGP sessions to a VM instance acting as a third-party Router Appliance. Changing this forces a new interface to be created.`,
 			},
 			"subnetwork": {
 				Type:             schema.TypeString,
@@ -98,21 +101,23 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 				AtLeastOneOf:     []string{"ip_range", "interconnect_attachment", "subnetwork", "vpn_tunnel"},
 				ConflictsWith:    []string{"interconnect_attachment", "vpn_tunnel"},
-				Description:      `The URI of the subnetwork resource that this interface belongs to, which must be in the same region as the Cloud Router. Changing this forces a new interface to be created. Only one of subnetwork, interconnect_attachment or vpn_tunnel can be specified.`,
+				Description:      "The URI of the subnetwork resource that this interface\nbelongs to, which must be in the same region as the Cloud Router. When you establish a BGP session to a VM instance using this interface, the VM instance must belong to the same subnetwork as the subnetwork specified here. Changing this forces a new interface to be created. Only one of `vpn_tunnel`, `interconnect_attachment` or `subnetwork` can be specified.",
 			},
 			"project": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which this interface's router belongs. If it is not provided, the provider project is used. Changing this forces a new interface to be created.`,
+				Description: `The ID of the project in which this interface's router belongs.
+If it is not provided, the provider project is used. Changing this forces a new interface to be created.`,
 			},
 			"region": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The region this interface's router sits in. If not specified, the project region will be used. Changing this forces a new interface to be created.`,
+				Description: `The region this interface's router sits in.
+If not specified, the project region will be used. Changing this forces a new interface to be created.`,
 			},
 
 			"redundant_interface": {
@@ -120,7 +125,8 @@ func ResourceComputeRouterInterface() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The name of the interface that is redundant to this interface. Changing this forces a new interface to be created.`,
+				Description: `The name of the interface that is redundant to
+this interface. Changing this forces a new interface to be created.`,
 			},
 			//UDP schema start
             "deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

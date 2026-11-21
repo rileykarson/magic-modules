@@ -26,14 +26,16 @@ func resourceLoggingSinkSchema() map[string]*schema.Schema {
 		"destination": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: `The destination of the sink (or, in other words, where logs are written to). Can be a Cloud Storage bucket, a PubSub topic, or a BigQuery dataset. Examples: "storage.googleapis.com/[GCS_BUCKET]" "bigquery.googleapis.com/projects/[PROJECT_ID]/datasets/[DATASET]" "pubsub.googleapis.com/projects/[PROJECT_ID]/topics/[TOPIC_ID]" The writer associated with the sink must have access to write to the above resource.`,
+			Description: "The destination of the sink (or, in other words, where logs are written to). Can be a\nCloud Storage bucket, a PubSub topic, a BigQuery dataset or a Cloud Logging bucket. Examples:\n\n- `storage.googleapis.com/[GCS_BUCKET]`\n- `bigquery.googleapis.com/projects/[PROJECT_ID]/datasets/[DATASET]`\n- `pubsub.googleapis.com/projects/[PROJECT_ID]/topics/[TOPIC_ID]`\n- `logging.googleapis.com/projects/[PROJECT_ID]]/locations/global/buckets/[BUCKET_ID]`\n\nThe writer associated with the sink must have access to write to the above resource.",
 		},
 
 		"filter": {
 			Type:             schema.TypeString,
 			Optional:         true,
 			DiffSuppressFunc: OptionalSurroundingSpacesSuppress,
-			Description:      `The filter to apply when exporting logs. Only log entries that match the filter are exported.`,
+			Description: `The filter to apply when exporting logs. Only log entries that match the filter are exported.
+See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced_filters) for information on how to
+write a filter.`,
 		},
 
 		"description": {
@@ -51,13 +53,13 @@ func resourceLoggingSinkSchema() map[string]*schema.Schema {
 		"exclusions": {
 			Type:        schema.TypeList,
 			Optional:    true,
-			Description: `Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion's filters, it will not be exported.`,
+			Description: "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both `filter` and one of `exclusions.filter`, it will not be exported. Can be repeated multiple times for multiple exclusions.",
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"name": {
 						Type:        schema.TypeString,
 						Required:    true,
-						Description: `A client-assigned identifier, such as "load-balancer-exclusion". Identifiers are limited to 100 characters and can include only letters, digits, underscores, hyphens, and periods. First character has to be alphanumeric.`,
+						Description: "A client-assigned identifier, such as `load-balancer-exclusion`. Identifiers are limited to 100 characters and can include only letters, digits, underscores, hyphens, and periods. First character has to be alphanumeric.",
 					},
 					"description": {
 						Type:        schema.TypeString,
@@ -68,13 +70,14 @@ func resourceLoggingSinkSchema() map[string]*schema.Schema {
 						Type:             schema.TypeString,
 						Required:         true,
 						DiffSuppressFunc: OptionalSurroundingSpacesSuppress,
-						Description:      `An advanced logs filter that matches the log entries to be excluded. By using the sample function, you can exclude less than 100% of the matching log entries`,
+						Description: `An advanced logs filter that matches the log entries to be excluded. By using the sample function, you can exclude less than 100% of the matching log entries. See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced_filters) for information on how to
+write a filter.`,
 					},
 					"disabled": {
 						Type:        schema.TypeBool,
 						Optional:    true,
 						Default:     false,
-						Description: `If set to True, then this exclusion is disabled and it does not exclude any log entries`,
+						Description: `If set to True, then this exclusion is disabled and it does not exclude any log entries.`,
 					},
 				},
 			},
@@ -83,7 +86,7 @@ func resourceLoggingSinkSchema() map[string]*schema.Schema {
 		"writer_identity": {
 			Type:        schema.TypeString,
 			Computed:    true,
-			Description: `The identity associated with this sink. This identity must be granted write access to the configured destination.`,
+			Description: "The identity associated with this sink. This identity must be granted write access to the\nconfigured `destination`.",
 		},
 
 		"bigquery_options": {
@@ -95,9 +98,12 @@ func resourceLoggingSinkSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"use_partitioned_tables": {
-						Type:        schema.TypeBool,
-						Required:    true,
-						Description: `Whether to use BigQuery's partition tables. By default, Logging creates dated tables based on the log entries' timestamps, e.g. syslog_20170523. With partitioned tables the date suffix is no longer present and special query syntax has to be used instead. In both cases, tables are sharded based on UTC timezone.`,
+						Type:     schema.TypeBool,
+						Required: true,
+						Description: `Whether to use [BigQuery's partition tables](https://cloud.google.com/bigquery/docs/partitioned-tables).
+By default, Logging creates dated tables based on the log entries' timestamps, e.g. syslog_20170523. With partitioned
+tables, the date suffix is no longer present and [special query syntax](https://cloud.google.com/bigquery/docs/querying-partitioned-tables)
+has to be used instead. In both cases, tables are sharded based on UTC timezone.`,
 					},
 				},
 			},

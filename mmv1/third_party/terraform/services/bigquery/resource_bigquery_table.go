@@ -682,27 +682,30 @@ func ResourceBigQueryTable() *schema.Resource {
 			// letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum
 			// length is 1,024 characters.
 			"table_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `A unique ID for the resource. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `A unique ID for the resource.
+Changing this forces a new resource to be created.`,
 			},
 
 			// DatasetId: [Required] The ID of the dataset containing this table.
 			"dataset_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The dataset ID to create the table in. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `The dataset ID to create the table in.
+Changing this forces a new resource to be created.`,
 			},
 
 			// ProjectId: [Required] The ID of the project containing this table.
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			// Description: [Optional] A user-friendly description of this table.
@@ -717,10 +720,13 @@ func ResourceBigQueryTable() *schema.Resource {
 			// indefinitely. Expired tables will be deleted and their storage
 			// reclaimed.
 			"expiration_time": {
-				Type:        schema.TypeInt,
-				Optional:    true,
-				Computed:    true,
-				Description: `The time when this table expires, in milliseconds since the epoch. If not present, the table will persist indefinitely. Expired tables will be deleted and their storage reclaimed.`,
+				Type:     schema.TypeInt,
+				Optional: true,
+				Computed: true,
+				Description: `The time when this table expires, in
+milliseconds since the epoch. If not present, the table will persist
+indefinitely. Expired tables will be deleted and their storage
+reclaimed.`,
 			},
 
 			// ExternalDataConfiguration [Optional] Describes the data format,
@@ -728,40 +734,47 @@ func ResourceBigQueryTable() *schema.Resource {
 			// By defining these properties, the data source can then be queried as
 			// if it were a standard BigQuery table.
 			"external_data_configuration": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: `Describes the data format, location, and other properties of a table stored outside of BigQuery. By defining these properties, the data source can then be queried as if it were a standard BigQuery table.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: `Describes the data format,
+location, and other properties of a table stored outside of BigQuery.
+By defining these properties, the data source can then be queried as
+if it were a standard BigQuery table.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						// Autodetect : [Required] If true, let BigQuery try to autodetect the
 						// schema and format of the table.
 						"autodetect": {
-							Type:        schema.TypeBool,
-							Required:    true,
-							Description: `Let BigQuery try to autodetect the schema and format of the table.`,
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: `Let BigQuery try to autodetect the schema
+and format of the table.`,
 						},
 						// SourceFormat [Required] The data format.
 						"source_format": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: `Please see sourceFormat under ExternalDataConfiguration in Bigquery's public API documentation (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#externaldataconfiguration) for supported formats. To use "GOOGLE_SHEETS" the scopes must include "googleapis.com/auth/drive.readonly".`,
+							Description: "The data format. Please see sourceFormat under\n[ExternalDataConfiguration](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#externaldataconfiguration)\nin Bigquery's public API documentation for supported formats. To use \"GOOGLE_SHEETS\"\nthe `scopes` must include \"https://www.googleapis.com/auth/drive.readonly\".",
 							ValidateFunc: validation.StringInSlice([]string{
 								"CSV", "GOOGLE_SHEETS", "NEWLINE_DELIMITED_JSON", "AVRO", "ICEBERG", "DATASTORE_BACKUP", "PARQUET", "ORC", "BIGTABLE", "DELTA_LAKE",
 							}, false),
 						},
 						// SourceURIs [Required] The fully-qualified URIs that point to your data in Google Cloud.
 						"source_uris": {
-							Type:        schema.TypeList,
-							Required:    true,
-							Description: `A list of the fully-qualified URIs that point to your data in Google Cloud.`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
+							Type:     schema.TypeList,
+							Required: true,
+							Description: `A list of the fully-qualified URIs that point to
+your data in Google Cloud.`,
+							Elem: &schema.Schema{Type: schema.TypeString},
 						},
 						// FileSetSpecType: [Optional] Specifies how source URIs are interpreted for constructing the file set to load.  By default source URIs are expanded against the underlying storage.  Other options include specifying manifest files. Only applicable to object storage systems.
 						"file_set_spec_type": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: `Specifies how source URIs are interpreted for constructing the file set to load.  By default source URIs are expanded against the underlying storage.  Other options include specifying manifest files. Only applicable to object storage systems.`,
+							Type:     schema.TypeString,
+							Optional: true,
+							Description: `Specifies how source URIs are interpreted for constructing the file set to load.
+By default source URIs are expanded against the underlying storage.
+Other options include specifying manifest files. Only applicable to object storage systems. [Docs](cloud/bigquery/docs/reference/rest/v2/tables#filesetspectype)`,
 						},
 						// Compression: [Optional] The compression type of the data source.
 						"compression": {
@@ -769,7 +782,8 @@ func ResourceBigQueryTable() *schema.Resource {
 							Optional:     true,
 							ValidateFunc: validation.StringInSlice([]string{"NONE", "GZIP"}, false),
 							Default:      "NONE",
-							Description:  `The compression type of the data source. Valid values are "NONE" or "GZIP".`,
+							Description: `The compression type of the data source.
+Valid values are "NONE" or "GZIP".`,
 						},
 						// Schema: [Optional] The schema for the data.
 						// Schema is required for CSV and JSON formats if autodetect is not on.
@@ -785,7 +799,7 @@ func ResourceBigQueryTable() *schema.Resource {
 								return json
 							},
 							DiffSuppressFunc: bigQueryTableSchemaDiffSuppress,
-							Description:      `A JSON schema for the external table. Schema is required for CSV and JSON formats and is disallowed for Google Cloud Bigtable, Cloud Datastore backups, and Avro formats when using external tables.`,
+							Description:      "A JSON schema for the external table. Schema is required\nfor CSV and JSON formats if autodetect is not on. Schema is disallowed\nfor Google Cloud Bigtable, Cloud Datastore backups, Avro, Iceberg, ORC and Parquet formats.\n~>**NOTE:** Because this field expects a JSON string, any changes to the\nstring will create a diff, even if the JSON itself hasn't changed.\nFurthermore drift for this field cannot not be detected because BigQuery\nonly uses this schema to compute the effective schema for the table, therefore\nany changes on the configured value will force the table to be recreated.\nThis schema is effectively only applied when creating a table from an external\ndatasource, after creation the computed schema will be stored in\n`google_bigquery_table.schema`\n\n~>**NOTE:** If you set `external_data_configuration.connection_id`, the\ntable schema must be specified using the top-level `schema` field.",
 						},
 						// CsvOptions: [Optional] Additional properties to set if
 						// sourceFormat is set to CSV.
@@ -793,7 +807,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional properties to set if source_format is set to "CSV".`,
+							Description: "Additional properties to set if\n`source_format` is set to \"CSV\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// Quote: [Required] The value that is used to quote data
@@ -801,24 +815,27 @@ func ResourceBigQueryTable() *schema.Resource {
 									"quote": {
 										Type:        schema.TypeString,
 										Required:    true,
-										Description: `The value that is used to quote data sections in a CSV file. If your data does not contain quoted sections, set the property value to an empty string. If your data contains quoted newline characters, you must also set the allow_quoted_newlines property to true. The API-side default is ", specified in Terraform escaped as \". Due to limitations with Terraform default values, this value is required to be explicitly set.`,
+										Description: "The value that is used to quote data sections in a\nCSV file. If your data does not contain quoted sections, set the\nproperty value to an empty string. If your data contains quoted newline\ncharacters, you must also set the `allow_quoted_newlines` property to true.\nThe API-side default is `\"`, specified in Terraform escaped as `\\\"`. Due to\nlimitations with Terraform default values, this value is required to be\nexplicitly set.",
 									},
 									// AllowJaggedRows: [Optional] Indicates if BigQuery should
 									// accept rows that are missing trailing optional columns.
 									"allow_jagged_rows": {
-										Type:        schema.TypeBool,
-										Optional:    true,
-										Default:     false,
-										Description: `Indicates if BigQuery should accept rows that are missing trailing optional columns.`,
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  false,
+										Description: `Indicates if BigQuery should accept rows
+that are missing trailing optional columns.`,
 									},
 									// AllowQuotedNewlines: [Optional] Indicates if BigQuery
 									// should allow quoted data sections that contain newline
 									// characters in a CSV file. The default value is false.
 									"allow_quoted_newlines": {
-										Type:        schema.TypeBool,
-										Optional:    true,
-										Default:     false,
-										Description: `Indicates if BigQuery should allow quoted data sections that contain newline characters in a CSV file. The default value is false.`,
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  false,
+										Description: `Indicates if BigQuery should allow
+quoted data sections that contain newline characters in a CSV file.
+The default value is false.`,
 									},
 									// Encoding: [Optional] The character encoding of the data.
 									// The supported values are UTF-8 or ISO-8859-1.
@@ -827,7 +844,8 @@ func ResourceBigQueryTable() *schema.Resource {
 										Optional:     true,
 										ValidateFunc: validation.StringInSlice([]string{"ISO-8859-1", "UTF-8"}, false),
 										Default:      "UTF-8",
-										Description:  `The character encoding of the data. The supported values are UTF-8 or ISO-8859-1.`,
+										Description: `The character encoding of the data. The supported
+values are UTF-8 or ISO-8859-1.`,
 									},
 									// FieldDelimiter: [Optional] The separator for fields in a CSV file.
 									"field_delimiter": {
@@ -839,16 +857,17 @@ func ResourceBigQueryTable() *schema.Resource {
 									// SkipLeadingRows: [Optional] The number of rows at the top
 									// of a CSV file that BigQuery will skip when reading the data.
 									"skip_leading_rows": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Default:     0,
-										Description: `The number of rows at the top of a CSV file that BigQuery will skip when reading the data.`,
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  0,
+										Description: `The number of rows at the top of a CSV
+file that BigQuery will skip when reading the data.`,
 									},
 									"source_column_match": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										ValidateFunc: validation.StringInSlice([]string{"POSITION", "NAME"}, false),
-										Description:  `Specifies how source columns are matched to the table schema. Valid values are POSITION (columns matched by position, assuming same ordering) or NAME (columns matched by name, reads header row and reorders columns to align with schema field names).`,
+										Description:  "Specifies how source columns are matched\nto the table schema. Valid values are `POSITION` (columns matched by position,\nassuming same ordering as the schema) or `NAME` (columns matched by name,\nreads the header row and reorders columns to align with schema field names).\nIf not set, a default is chosen based on how the schema is provided: when\nautodetect is used, columns are matched by name; otherwise, by position.",
 									},
 								},
 							},
@@ -858,7 +877,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional properties to set if sourceFormat is set to JSON.`,
+							Description: "Additional properties to set if\n`source_format` is set to \"JSON\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"encoding": {
@@ -876,14 +895,14 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.StringInSlice([]string{"GEOJSON"}, false),
-							Description:  `Load option to be used together with sourceFormat newline-delimited JSON to indicate that a variant of JSON is being loaded. To load newline-delimited GeoJSON, specify GEOJSON (and sourceFormat must be set to NEWLINE_DELIMITED_JSON).`,
+							Description:  "Used to indicate that a JSON variant, rather than normal JSON, is being used as the sourceFormat. This should only be used in combination with the `JSON` source format. Valid values are: `GEOJSON`.",
 						},
 
 						"bigtable_options": {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional options if sourceFormat is set to BIGTABLE.`,
+							Description: "Additional properties to set if\n`source_format` is set to \"BIGTABLE\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"column_family": {
@@ -895,7 +914,7 @@ func ResourceBigQueryTable() *schema.Resource {
 												"column": {
 													Type:        schema.TypeList,
 													Optional:    true,
-													Description: `A List of columns that should be exposed as individual fields as opposed to a list of (column name, value) pairs. All columns whose qualifier matches a qualifier in this list can be accessed as Other columns can be accessed as a list through column field`,
+													Description: `A List of columns that should be exposed as individual fields as opposed to a list of (column name, value) pairs. All columns whose qualifier matches a qualifier in this list can be accessed as Other columns can be accessed as a list through column field.`,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"qualifier_encoded": {
@@ -977,7 +996,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional properties to set if sourceFormat is set to PARQUET.`,
+							Description: "Additional properties to set if\n`source_format` is set to \"PARQUET\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enum_as_string": {
@@ -998,7 +1017,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional options if source_format is set to "GOOGLE_SHEETS".`,
+							Description: "Additional options if\n`source_format` is set to \"GOOGLE_SHEETS\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// Range: [Optional] Range of a sheet to query from. Only used when non-empty.
@@ -1006,7 +1025,7 @@ func ResourceBigQueryTable() *schema.Resource {
 									"range": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `Range of a sheet to query from. Only used when non-empty. At least one of range or skip_leading_rows must be set. Typical format: "sheet_name!top_left_cell_id:bottom_right_cell_id" For example: "sheet1!A1:B20`,
+										Description: "Range of a sheet to query from. Only used when\nnon-empty. At least one of `range` or `skip_leading_rows` must be set.\nTypical format: \"sheet_name!top_left_cell_id:bottom_right_cell_id\"\nFor example: \"sheet1!A1:B20\"",
 										AtLeastOneOf: []string{
 											"external_data_configuration.0.google_sheets_options.0.skip_leading_rows",
 											"external_data_configuration.0.google_sheets_options.0.range",
@@ -1017,7 +1036,7 @@ func ResourceBigQueryTable() *schema.Resource {
 									"skip_leading_rows": {
 										Type:        schema.TypeInt,
 										Optional:    true,
-										Description: `The number of rows at the top of the sheet that BigQuery will skip when reading the data. At least one of range or skip_leading_rows must be set.`,
+										Description: "The number of rows at the top of the sheet\nthat BigQuery will skip when reading the data. At least one of `range` or\n`skip_leading_rows` must be set.",
 										AtLeastOneOf: []string{
 											"external_data_configuration.0.google_sheets_options.0.skip_leading_rows",
 											"external_data_configuration.0.google_sheets_options.0.range",
@@ -1029,10 +1048,13 @@ func ResourceBigQueryTable() *schema.Resource {
 
 						// HivePartitioningOptions:: [Optional] Options for configuring hive partitioning detect.
 						"hive_partitioning_options": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: `When set, configures hive partitioning support. Not all storage formats support hive partitioning -- requesting hive partitioning on an unsupported format will lead to an error, as will providing an invalid specification.`,
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 1,
+							Description: `When set, configures hive partitioning
+support. Not all storage formats support hive partitioning -- requesting hive
+partitioning on an unsupported format will lead to an error, as will providing
+an invalid specification.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// Mode: [Optional] [Experimental] When set, what mode of hive partitioning to use when reading data.
@@ -1042,22 +1064,24 @@ func ResourceBigQueryTable() *schema.Resource {
 									"mode": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `When set, what mode of hive partitioning to use when reading data.`,
+										Description: "When set, what mode of hive partitioning to use when\nreading data. The following modes are supported.\n* AUTO: automatically infer partition key name(s) and type(s).\n* STRINGS: automatically infer partition key name(s). All types are\n  Not all storage formats support hive partitioning. Requesting hive\n  partitioning on an unsupported format will lead to an error.\n  Currently supported formats are: JSON, CSV, ORC, Avro and Parquet.\n* CUSTOM: when set to `CUSTOM`, you must encode the partition key schema within the `source_uri_prefix` by setting `source_uri_prefix` to `gs://bucket/path_to_table/{key1:TYPE1}/{key2:TYPE2}/{key3:TYPE3}`.",
 									},
 									// RequirePartitionFilter: [Optional] If set to true, queries over this table
 									// require a partition filter that can be used for partition elimination to be
 									// specified.
 									"require_partition_filter": {
-										Type:        schema.TypeBool,
-										Optional:    true,
-										Description: `If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified.`,
+										Type:     schema.TypeBool,
+										Optional: true,
+										Description: `If set to true, queries over this table
+require a partition filter that can be used for partition elimination to be
+specified.`,
 									},
 									// SourceUriPrefix: [Optional] [Experimental] When hive partition detection is requested, a common for all source uris must be required.
 									// The prefix must end immediately before the partition key encoding begins.
 									"source_uri_prefix": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `When hive partition detection is requested, a common for all source uris must be required. The prefix must end immediately before the partition key encoding begins.`,
+										Description: "When hive partition detection is requested,\na common for all source uris must be required. The prefix must end immediately\nbefore the partition key encoding begins. For example, consider files following\nthis data layout. `gs://bucket/path_to_table/dt=2019-06-01/country=USA/id=7/file.avro`\n`gs://bucket/path_to_table/dt=2019-05-31/country=CA/id=3/file.avro` When hive\npartitioning is requested with either AUTO or STRINGS detection, the common prefix\ncan be either of `gs://bucket/path_to_table` or `gs://bucket/path_to_table/`.\nNote that when `mode` is set to `CUSTOM`, you must encode the partition key schema within the `source_uri_prefix` by setting `source_uri_prefix` to `gs://bucket/path_to_table/{key1:TYPE1}/{key2:TYPE2}/{key3:TYPE3}`.",
 									},
 								},
 							},
@@ -1067,13 +1091,15 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: `Additional options if source_format is set to "AVRO"`,
+							Description: "Additional options if `source_format` is set to\n\"AVRO\".",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"use_avro_logical_types": {
-										Type:        schema.TypeBool,
-										Required:    true,
-										Description: `If sourceFormat is set to "AVRO", indicates whether to interpret logical types as the corresponding BigQuery data type (for example, TIMESTAMP), instead of using the raw type (for example, INTEGER).`,
+										Type:     schema.TypeBool,
+										Required: true,
+										Description: `If is set to true, indicates whether
+to interpret logical types as the corresponding BigQuery data type
+(for example, TIMESTAMP), instead of using the raw type (for example, INTEGER).`,
 									},
 								},
 							},
@@ -1086,16 +1112,22 @@ func ResourceBigQueryTable() *schema.Resource {
 						// many bad records, an invalid error is returned in the job result.
 						// The default value is false.
 						"ignore_unknown_values": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Description: `Indicates if BigQuery should allow extra values that are not represented in the table schema. If true, the extra values are ignored. If false, records with extra columns are treated as bad records, and if there are too many bad records, an invalid error is returned in the job result. The default value is false.`,
+							Type:     schema.TypeBool,
+							Optional: true,
+							Description: `Indicates if BigQuery should
+allow extra values that are not represented in the table schema.
+If true, the extra values are ignored. If false, records with
+extra columns are treated as bad records, and if there are too
+many bad records, an invalid error is returned in the job result.
+The default value is false.`,
 						},
 						// MaxBadRecords: [Optional] The maximum number of bad records that
 						// BigQuery can ignore when reading data.
 						"max_bad_records": {
-							Type:        schema.TypeInt,
-							Optional:    true,
-							Description: `The maximum number of bad records that BigQuery can ignore when reading data.`,
+							Type:     schema.TypeInt,
+							Optional: true,
+							Description: `The maximum number of bad records that
+BigQuery can ignore when reading data.`,
 						},
 						// ConnectionId: [Optional] The connection specifying the credentials
 						// to be used to read external storage, such as Azure Blob,
@@ -1106,7 +1138,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:             schema.TypeString,
 							Optional:         true,
 							DiffSuppressFunc: bigQueryTableConnectionIdSuppress,
-							Description:      `The connection specifying the credentials to be used to read external storage, such as Azure Blob, Cloud Storage, or S3. The connectionId can have the form "<project>.<location>.<connection_id>" or "projects/<project>/locations/<location>/connections/<connection_id>".`,
+							Description:      "The connection specifying the credentials to be used to read\nexternal storage, such as Azure Blob, Cloud Storage, or S3. The `connection_id` can have\nthe form `{{project}}.{{location}}.{{connection_id}}`\nor `projects/{{project}}/locations/{{location}}/connections/{{connection_id}}`.\n\n~>**NOTE:** If you set `external_data_configuration.connection_id`, the\ntable schema must be specified using the top-level `schema` field.",
 						},
 						"reference_file_schema_uri": {
 							Type:        schema.TypeString,
@@ -1116,20 +1148,32 @@ func ResourceBigQueryTable() *schema.Resource {
 						"metadata_cache_mode": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Description:  `Metadata Cache Mode for the table. Set this to enable caching of metadata from external data source.`,
+							Description:  "Metadata Cache Mode for the table. Set this to enable caching of metadata from external data source. Valid values are `AUTOMATIC` and `MANUAL`.",
 							ValidateFunc: validation.StringInSlice([]string{"AUTOMATIC", "MANUAL"}, false),
 						},
 						"object_metadata": {
 							Type:          schema.TypeString,
 							Optional:      true,
-							Description:   `Object Metadata is used to create Object Tables. Object Tables contain a listing of objects (with their metadata) found at the sourceUris. If ObjectMetadata is set, sourceFormat should be omitted.`,
+							Description:   "Object Metadata is used to create Object Tables. Object Tables contain a listing of objects (with their metadata) found at the sourceUris. If `object_metadata` is set, `source_format` should be omitted.",
 							ConflictsWith: []string{"external_data_configuration.0.source_format"},
 						},
 						"decimal_target_types": {
-							Type:        schema.TypeSet,
-							Optional:    true,
-							Description: `The data types that could be used as a target type when converting decimal values.`,
-							Elem:        &schema.Schema{Type: schema.TypeString},
+							Type:     schema.TypeSet,
+							Optional: true,
+							Description: `Defines the list of possible SQL data types to which the source decimal values are converted. This list and the precision and the scale parameters of the decimal field determine the target type. In the order of NUMERIC, BIGNUMERIC, and STRING, a type is picked if it is in the specified list and if it supports the precision and the scale. STRING supports all precision and scale values. If none of the listed types supports the precision and the scale, the type supporting the widest range in the specified list is picked, and if a value exceeds the supported range when reading the data, an error will be thrown.
+
+Example: Suppose the value of this field is ["NUMERIC", "BIGNUMERIC"]. If (precision,scale) is:
+
+(38,9) -> NUMERIC;
+(39,9) -> BIGNUMERIC (NUMERIC cannot hold 30 integer digits);
+(38,10) -> BIGNUMERIC (NUMERIC cannot hold 10 fractional digits);
+(76,38) -> BIGNUMERIC;
+(77,38) -> BIGNUMERIC (error if value exceeds supported range).
+
+This field cannot contain duplicate types. The order of the types in this field is ignored. For example, ["BIGNUMERIC", "NUMERIC"] is the same as ["NUMERIC", "BIGNUMERIC"] and NUMERIC always takes precedence over BIGNUMERIC.
+
+Defaults to ["NUMERIC", "STRING"] for ORC and ["NUMERIC"] for the other file formats.`,
+							Elem: &schema.Schema{Type: schema.TypeString},
 						},
 					},
 				},
@@ -1153,23 +1197,27 @@ func ResourceBigQueryTable() *schema.Resource {
 							Required:         true,
 							DiffSuppressFunc: bigQueryTableConnectionIdSuppress,
 							ForceNew:         true,
-							Description:      `The connection specifying the credentials to be used to read and write to external storage, such as Cloud Storage. The connection_id can have the form "&lt;project\_id&gt;.&lt;location\_id&gt;.&lt;connection\_id&gt;" or "projects/&lt;project\_id&gt;/locations/&lt;location\_id&gt;/connections/&lt;connection\_id&gt;".`,
+							Description: `The connection specifying the credentials to be used to
+read and write to external storage, such as Cloud Storage. The connection_id can
+have the form "&lt;project\_id&gt;.&lt;location\_id&gt;.&lt;connection\_id&gt;" or
+projects/&lt;project\_id&gt;/locations/&lt;location\_id&gt;/connections/&lt;connection\_id&gt;".`,
 						},
 						// StorageUri: [Required] The fully qualified location prefix of the external folder where
 						// table data is stored. The '*' wildcard character is not allowed.
 						// The URI should be in the format "gs://bucket/path_to_table/"
 						"storage_uri": {
-							Type:        schema.TypeString,
-							Required:    true,
-							ForceNew:    true,
-							Description: `The fully qualified location prefix of the external folder where table data is stored. The '*' wildcard character is not allowed. The URI should be in the format "gs://bucket/path_to_table/"`,
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+							Description: `The fully qualified location prefix of the external folder where table data
+is stored. The '*' wildcard character is not allowed. The URI should be in the format "gs://bucket/path_to_table/"`,
 						},
 						// FileFormat: [Required] The file format the data is stored in.
 						"file_format": {
 							Type:        schema.TypeString,
 							Required:    true,
 							ForceNew:    true,
-							Description: "The file format the data is stored in.",
+							Description: `The file format the table data is stored in.`,
 						},
 						// TableFormat: [Required]
 						"table_format": {
@@ -1191,10 +1239,13 @@ func ResourceBigQueryTable() *schema.Resource {
 
 			// max_staleness: [Optional] The maximum staleness of data that could be returned when the table (or stale MV) is queried. Staleness encoded as a string encoding of sql IntervalValue type.
 			"max_staleness": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: `The maximum staleness of data that could be returned when the table (or stale MV) is queried. Staleness encoded as a string encoding of [SQL IntervalValue type](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#interval_type).`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				Description: `The maximum staleness of data that could be
+returned when the table (or stale MV) is queried. Staleness encoded as a
+string encoding of [SQL IntervalValue
+type](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#interval_type).`,
 			},
 
 			// Labels: [Experimental] The labels associated with this table. You can
@@ -1210,8 +1261,8 @@ func ResourceBigQueryTable() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Description: `A mapping of labels to assign to the resource.
 
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
+Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
 			},
 			"terraform_labels": {
 				Type:        schema.TypeMap,
@@ -1236,22 +1287,24 @@ func ResourceBigQueryTable() *schema.Resource {
 					return json
 				},
 				DiffSuppressFunc: bigQueryTableSchemaDiffSuppress,
-				Description:      `A JSON schema for the table.`,
+				Description:      "A JSON schema for the table.\n\n~>**NOTE:** Because this field expects a JSON string, any changes to the\nstring will create a diff, even if the JSON itself hasn't changed.\nIf the API returns a different value for the same schema, e.g. it\nswitched the order of values or replaced a field data type (`STRUCT` with\n`RECORD`, `DECIMAL` with `NUMERIC`, etc.), we currently cannot suppress\nthe recurring diff this causes. As a workaround, we recommend using the\nschema as returned by the API.\n\n~>**NOTE:**  If you use `external_data_configuration`\n[documented below](#nested_external_data_configuration) and do **not** set\n`external_data_configuration.connection_id`, schemas must be specified\nwith `external_data_configuration.schema`. Otherwise, schemas must be\nspecified with this top-level field.",
 			},
 			// SchemaForeignTypeInfo: [Optional] Specifies metadata of the foreign data type definition in field schema.
 			"schema_foreign_type_info": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				MaxItems:    1,
-				Description: "Specifies metadata of the foreign data type definition in field schema.",
+				Type:     schema.TypeList,
+				Optional: true,
+				ForceNew: true,
+				MaxItems: 1,
+				Description: `Specifies metadata of the foreign data
+type definition in field schema.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						// TypeSystem: [Required] Specifies the system which defines the foreign data type.
 						"type_system": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: `Specifies the system which defines the foreign data type.`,
+							Type:     schema.TypeString,
+							Required: true,
+							Description: `Specifies the system which defines the foreign data
+type.`,
 						},
 					},
 				},
@@ -1279,7 +1332,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: `Specifies whether to use BigQuery's legacy SQL for this view. If set to false, the view will use BigQuery's standard SQL`,
+							Description: "Specifies whether to use BigQuery's legacy SQL for this view.\nIf set to `false`, the view will use BigQuery's standard SQL. If set to\n`true`, the view will use BigQuery's legacy SQL. If unset, the API will\ninterpret it as a `true` and assumes the legacy SQL dialect for its query\naccording to the [API documentation](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#ViewDefinition).\n-> **Note**: Starting in provider version `7.0.0`, no default value is\nprovided for this field unless explicitly set in the configuration.",
 						},
 					},
 				},
@@ -1297,28 +1350,31 @@ func ResourceBigQueryTable() *schema.Resource {
 						// the materialized view when the base table is updated. The default
 						// value is "true".
 						"enable_refresh": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     true,
-							Description: `Specifies if BigQuery should automatically refresh materialized view when the base table is updated. The default is true.`,
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  true,
+							Description: `Specifies whether to use BigQuery's automatic refresh for this materialized view when the base table is updated.
+The default value is true.`,
 						},
 
 						// RefreshIntervalMs: [Optional] The maximum frequency
 						// at which this materialized view will be refreshed. The default value
 						// is 1800000 (30 minutes).
 						"refresh_interval_ms": {
-							Type:        schema.TypeInt,
-							Default:     1800000,
-							Optional:    true,
-							Description: `Specifies maximum frequency at which this materialized view will be refreshed. The default is 1800000.`,
+							Type:     schema.TypeInt,
+							Default:  1800000,
+							Optional: true,
+							Description: `The maximum frequency at which this materialized view will be refreshed.
+The default value is 1800000`,
 						},
 
 						"allow_non_incremental_definition": {
-							Type:        schema.TypeBool,
-							Default:     false,
-							Optional:    true,
-							ForceNew:    true,
-							Description: `Allow non incremental materialized view definition. The default value is false.`,
+							Type:     schema.TypeBool,
+							Default:  false,
+							Optional: true,
+							ForceNew: true,
+							Description: `Allow non incremental materialized view definition.
+The default value is false.`,
 						},
 
 						// Query: [Required] A query whose result is persisted
@@ -1335,10 +1391,11 @@ func ResourceBigQueryTable() *schema.Resource {
 			// TimePartitioning: [Experimental] If specified, configures time-based
 			// partitioning for this table.
 			"time_partitioning": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: `If specified, configures time-based partitioning for this table.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: `If specified, configures time-based
+partitioning for this table.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						// ExpirationMs: [Optional] Number of milliseconds for which to keep the storage for a
@@ -1347,18 +1404,20 @@ func ResourceBigQueryTable() *schema.Resource {
 						// `defaultPartitionExpirationMs` from the dataset.
 						// To specify a unlimited expiration, set the value to 0.
 						"expiration_ms": {
-							Type:        schema.TypeInt,
-							Optional:    true,
-							Computed:    true,
-							Description: `Number of milliseconds for which to keep the storage for a partition.`,
+							Type:     schema.TypeInt,
+							Optional: true,
+							Computed: true,
+							Description: `Number of milliseconds for which to keep the
+storage for a partition.`,
 						},
 
 						// Type: [Required] The supported types are DAY, HOUR, MONTH, and YEAR, which will generate
 						// one partition per day, hour, month, and year, respectively.
 						"type": {
-							Type:         schema.TypeString,
-							Required:     true,
-							Description:  `The supported types are DAY, HOUR, MONTH, and YEAR, which will generate one partition per day, hour, month, and year, respectively.`,
+							Type:     schema.TypeString,
+							Required: true,
+							Description: `The supported types are DAY, HOUR, MONTH, and YEAR,
+which will generate one partition per day, hour, month, and year, respectively.`,
 							ValidateFunc: validation.StringInSlice([]string{"DAY", "HOUR", "MONTH", "YEAR"}, false),
 						},
 
@@ -1366,10 +1425,12 @@ func ResourceBigQueryTable() *schema.Resource {
 						// partition. If time-based partitioning is enabled without this value, the
 						// table is partitioned based on the load time.
 						"field": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							ForceNew:    true,
-							Description: `The field used to determine how to create a time-based partition. If time-based partitioning is enabled without this value, the table is partitioned based on the load time.`,
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+							Description: `The field used to determine how to create a time-based
+partition. If time-based partitioning is enabled without this value, the
+table is partitioned based on the load time.`,
 						},
 
 						// RequirePartitionFilter: [Optional] If set to true, queries over this table
@@ -1378,7 +1439,7 @@ func ResourceBigQueryTable() *schema.Resource {
 						"require_partition_filter": {
 							Type:          schema.TypeBool,
 							Optional:      true,
-							Description:   `If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified.`,
+							Description:   "If set to true, queries over this table\nrequire a partition filter that can be used for partition elimination to be\nspecified. `require_partition_filter` is deprecated and will be removed in\na future major release. Use the top level field with the same name instead.",
 							Deprecated:    `This field is deprecated and will be removed in a future major release; please use the top level field with the same name instead.`,
 							ConflictsWith: []string{"require_partition_filter"},
 						},
@@ -1389,19 +1450,21 @@ func ResourceBigQueryTable() *schema.Resource {
 			// RangePartitioning: [Optional] If specified, configures range-based
 			// partitioning for this table.
 			"range_partitioning": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: `If specified, configures range-based partitioning for this table.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: `If specified, configures range-based
+partitioning for this table.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						// Field: [Required] The field used to determine how to create a range-based
 						// partition.
 						"field": {
-							Type:        schema.TypeString,
-							Required:    true,
-							ForceNew:    true,
-							Description: `The field used to determine how to create a range-based partition.`,
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+							Description: `The field used to determine how to create a range-based
+partition.`,
 						},
 
 						// Range: [Required] Information required to partition based on ranges.
@@ -1409,7 +1472,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:        schema.TypeList,
 							Required:    true,
 							MaxItems:    1,
-							Description: `Information required to partition based on ranges. Structure is documented below.`,
+							Description: `Information required to partition based on ranges.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// Start: [Required] Start of the range partitioning, inclusive.
@@ -1443,33 +1506,39 @@ func ResourceBigQueryTable() *schema.Resource {
 			// require a partition filter that can be used for partition elimination to be
 			// specified.
 			"require_partition_filter": {
-				Type:          schema.TypeBool,
-				Optional:      true,
-				Description:   `If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified.`,
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: `If set to true, queries over this table
+require a partition filter that can be used for partition elimination to be
+specified.`,
 				ConflictsWith: []string{"time_partitioning.0.require_partition_filter"},
 			},
 
 			// Clustering: [Optional] Specifies column names to use for data clustering.  Up to four
 			// top-level columns are allowed, and should be specified in descending priority order.
 			"clustering": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    4,
-				Description: `Specifies column names to use for data clustering. Up to four top-level columns are allowed, and should be specified in descending priority order.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 4,
+				Description: `Specifies column names to use for data clustering.
+Up to four top-level columns are allowed, and should be specified in
+descending priority order.`,
+				Elem: &schema.Schema{Type: schema.TypeString},
 			},
 			"encryption_configuration": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				ForceNew:    true,
-				MaxItems:    1,
-				Description: `Specifies how the table should be encrypted. If left blank, the table will be encrypted with a Google-managed key; that process is transparent to the user.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				ForceNew: true,
+				MaxItems: 1,
+				Description: `Specifies how the table should be encrypted.
+If left blank, the table will be encrypted with a Google-managed key; that process
+is transparent to the user.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"kms_key_name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `The self link or full name of a key which should be used to encrypt this table. Note that the default bigquery service account will need to have encrypt/decrypt permissions on this key - you may want to see the google_bigquery_default_service_account datasource and the google_kms_crypto_key_iam_binding resource.`,
+							Description: "The self link or full name of a key which should be used to\nencrypt this table.  Note that the default bigquery service account will need to have\nencrypt/decrypt permissions on this key - you may want to see the\n`google_bigquery_default_service_account` datasource and the\n`google_kms_crypto_key_iam_binding` resource.",
 						},
 						"kms_key_version": {
 							Type:        schema.TypeString,
@@ -1498,7 +1567,7 @@ func ResourceBigQueryTable() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    10,
-				Description: `Mention which fields in schema are to be ignored`,
+				Description: "A list of fields which would act non-authoritative for each column in schema.\n**NOTE:** Right now only `dataPolicies` field is supported(others might be supported in the future). It means that any `dataPolicies` updated outside terraform will be ignored if this option is used.\nIf there is no policy in config for a column but there are in live state, the policy will persist.\nIf the policy in config is updated, it will override the policy in the live state. Other fields\nlike `description` for a column will keep behaving as they are(authoritatively).",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			// LastModifiedTime: [Output-only] The time when this table was last
@@ -1522,7 +1591,7 @@ func ResourceBigQueryTable() *schema.Resource {
 			"num_bytes": {
 				Type:        schema.TypeInt,
 				Computed:    true,
-				Description: `The geographic location where the table resides. This value is inherited from the dataset.`,
+				Description: `The size of this table in bytes, excluding any data in the streaming buffer.`,
 			},
 
 			// NumLongTermBytes: [Output-only] The number of bytes in the table that
@@ -1564,14 +1633,14 @@ func ResourceBigQueryTable() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
-				Description: `Whether Terraform will be prevented from destroying the instance. When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the table will fail. When the field is set to false, deleting the table is allowed.`,
+				Description: "Whether Terraform will be prevented from destroying the table.\nWhen the field is set to true or unset in Terraform state, a `terraform apply`\nor `terraform destroy` that would delete the table will fail.\nWhen the field is set to false, deleting the table is allowed..",
 			},
 
 			"ignore_auto_generated_schema": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether Terraform will prevent implicitly added columns in schema from showing diff.`,
+				Description: `If true, Terraform will prevent columns added by the server(e.g. hive partitioned columns) in schema from showing diff.`,
 			},
 
 			"generated_schema_columns": {
@@ -1592,10 +1661,12 @@ func ResourceBigQueryTable() *schema.Resource {
 						// on a table's columns. Present only if the table has a primary key.
 						// The primary key is not enforced.
 						"primary_key": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: `Represents a primary key constraint on a table's columns. Present only if the table has a primary key. The primary key is not enforced.`,
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 1,
+							Description: `Represents the primary key constraint
+on a table's columns. Present only if the table has a primary key.
+The primary key is not enforced.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									//Columns: [Required] The columns that are composed of the primary key constraint.
@@ -1612,9 +1683,10 @@ func ResourceBigQueryTable() *schema.Resource {
 						// ForeignKeys: [Optional] Present only if the table has a foreign key.
 						// The foreign key is not enforced.
 						"foreign_keys": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Description: `Present only if the table has a foreign key. The foreign key is not enforced.`,
+							Type:     schema.TypeList,
+							Optional: true,
+							Description: `Present only if the table has a foreign key.
+The foreign key is not enforced.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// Name: [Optional] Set only if the foreign key constraint is named.
@@ -1627,10 +1699,11 @@ func ResourceBigQueryTable() *schema.Resource {
 									// ReferencedTable: [Required] The table that holds the primary key
 									// and is referenced by this foreign key.
 									"referenced_table": {
-										Type:        schema.TypeList,
-										Required:    true,
-										MaxItems:    1,
-										Description: `The table that holds the primary key and is referenced by this foreign key.`,
+										Type:     schema.TypeList,
+										Required: true,
+										MaxItems: 1,
+										Description: `The table that holds the primary key
+and is referenced by this foreign key.`,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												// ProjectId: [Required] The ID of the project containing this table.
@@ -1653,9 +1726,13 @@ func ResourceBigQueryTable() *schema.Resource {
 												// the table ID with a partition decorator, such as
 												// sample_table$20190123.
 												"table_id": {
-													Type:        schema.TypeString,
-													Required:    true,
-													Description: `The ID of the table. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters. Certain operations allow suffixing of the table ID with a partition decorator, such as sample_table$20190123.`,
+													Type:     schema.TypeString,
+													Required: true,
+													Description: `The ID of the table. The ID must contain only
+letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum
+length is 1,024 characters. Certain operations allow suffixing of
+the table ID with a partition decorator, such as
+sample_table$20190123.`,
 												},
 											},
 										},
@@ -1679,9 +1756,10 @@ func ResourceBigQueryTable() *schema.Resource {
 												// ReferencedColumn: [Required] The column in the primary key that are
 												// referenced by the referencingColumn
 												"referenced_column": {
-													Type:        schema.TypeString,
-													Required:    true,
-													Description: `The column in the primary key that are referenced by the referencingColumn.`,
+													Type:     schema.TypeString,
+													Required: true,
+													Description: `The column in the primary key that are
+referenced by the referencingColumn`,
 												},
 											},
 										},
@@ -1695,7 +1773,7 @@ func ResourceBigQueryTable() *schema.Resource {
 			"table_metadata_view": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `View sets the optional parameter "view": Specifies the view that determines which table information is returned. By default, basic table information and storage statistics (STORAGE_STATS) are returned. Possible values: TABLE_METADATA_VIEW_UNSPECIFIED, BASIC, STORAGE_STATS, FULL`,
+				Description: "Specifies the view that determines which\ntable information is returned. By default, basic table information and\nstorage statistics (`STORAGE_STATS`) are returned. Possible values are\n`TABLE_METADATA_VIEW_UNSPECIFIED`, `BASIC`, `STORAGE_STATS`, and `FULL`.",
 			},
 			// TableReplicationInfo: [Optional] Replication info of a table created using `AS REPLICA` DDL like: `CREATE MATERIALIZED VIEW mv1 AS REPLICA OF src_mv`.
 			"table_replication_info": {
@@ -1703,7 +1781,7 @@ func ResourceBigQueryTable() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				MaxItems:    1,
-				Description: `Replication info of a table created using "AS REPLICA" DDL like: "CREATE MATERIALIZED VIEW mv1 AS REPLICA OF src_mv".`,
+				Description: "Replication info of a table created\nusing \"AS REPLICA\" DDL like:\n`CREATE MATERIALIZED VIEW mv1 AS REPLICA OF src_mv`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"source_project_id": {
@@ -1725,61 +1803,77 @@ func ResourceBigQueryTable() *schema.Resource {
 							Description: `The ID of the source materialized view.`,
 						},
 						"replication_interval_ms": {
-							Type:        schema.TypeInt,
-							Default:     300000,
-							Optional:    true,
-							ForceNew:    true,
-							Description: `The interval at which the source materialized view is polled for updates. The default is 300000.`,
+							Type:     schema.TypeInt,
+							Default:  300000,
+							Optional: true,
+							ForceNew: true,
+							Description: `The interval at which the source
+materialized view is polled for updates. The default is 300000.`,
 						},
 					},
 				},
 			},
 			"resource_tags": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `The tags attached to this table. Tag keys are globally unique. Tag key is expected to be in the namespaced format, for example "123456789012/environment" where 123456789012 is the ID of the parent organization or project resource for this tag key. Tag value is expected to be the short name, for example "Production".`,
+				Type:     schema.TypeMap,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+				Description: `The tags attached to this table. Tag keys are
+globally unique. Tag key is expected to be in the namespaced format, for
+example "123456789012/environment" where 123456789012 is the ID of the
+parent organization or project resource for this tag key. Tag value is
+expected to be the short name, for example "Production". See [Tag definitions](https://cloud.google.com/iam/docs/tags-access-control#definitions)
+for more details.`,
 			},
 			// ExternalCatalogTableOptions: [Optional] Options defining open source compatible table.
 			"external_catalog_table_options": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: `Options defining open source compatible table.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: `Options defining open source
+compatible table.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						// Parameters: [Optional] The parameters of the table.
 						"parameters": {
-							Type:        schema.TypeMap,
-							Optional:    true,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Description: `A map of key value pairs defining the parameters and properties of the open source table. Corresponds with hive meta store table parameters. Maximum size of 4Mib.`,
+							Type:     schema.TypeMap,
+							Optional: true,
+							Elem:     &schema.Schema{Type: schema.TypeString},
+							Description: `A map of key value pairs defining the parameters and
+properties of the open source table. Corresponds with hive meta store table
+parameters. Maximum size of 4Mib.`,
 						},
 						// StorageDescriptor: [Optional] A storage descriptor containing information about the physical storage of this table.
 						"storage_descriptor": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: `A storage descriptor containing information about the physical storage of this table.`,
+							Type:     schema.TypeList,
+							Optional: true,
+							MaxItems: 1,
+							Description: `A storage descriptor containing information
+about the physical storage of this table.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									// LocationUri: [Optional] The physical location of the table (e.g. 'gs://spark-dataproc-data/pangea-data/case_sensitive/' or 'gs://spark-dataproc-data/pangea-data/*'). The maximum length is 2056 bytes.
 									"location_uri": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `The physical location of the table (e.g. 'gs://spark-dataproc-data/pangea-data/case_sensitive/' or 'gs://spark-dataproc-data/pangea-data/*'). The maximum length is 2056 bytes.`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `The physical location of the table (e.g.
+'gs://spark-dataproc-data/pangea-data/case_sensitive/' or
+'gs://spark-dataproc-data/pangea-data/*'). The maximum length is 2056 bytes.`,
 									},
 									// InputFormat: [Optional] Specifies the fully qualified class name of the InputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat"). The maximum length is 128 characters.
 									"input_format": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `Specifies the fully qualified class name of the InputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat"). The maximum length is 128 characters.`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `Specifies the fully qualified class name of the
+InputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat"). The
+maximum length is 128 characters.`,
 									},
 									// OutputFormat: [Optional] Specifies the fully qualified class name of the OutputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat"). The maximum length is 128 characters.
 									"output_format": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: `Specifies the fully qualified class name of the OutputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat"). The maximum length is 128 characters.`,
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: `Specifies the fully qualified class name of the
+OutputFormat (e.g. "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat"). The
+maximum length is 128 characters.`,
 									},
 									// SerdeInfo: [Optional] Serializer and deserializer information.
 									"serde_info": {
@@ -1797,16 +1891,20 @@ func ResourceBigQueryTable() *schema.Resource {
 												},
 												// SerializationLibrary: [Required] Specifies a fully-qualified class name of the serialization library that is responsible for the translation of data between table representation and the underlying low-level input and output format structures. The maximum length is 256 characters.
 												"serialization_library": {
-													Type:        schema.TypeString,
-													Required:    true,
-													Description: `Specifies a fully-qualified class name of the serialization library that is responsible for the translation of data between table representation and the underlying low-level input and output format structures. The maximum length is 256 characters.`,
+													Type:     schema.TypeString,
+													Required: true,
+													Description: `Specifies a fully-qualified class name of
+the serialization library that is responsible for the translation of data
+between table representation and the underlying low-level input and output
+format structures. The maximum length is 256 characters.`,
 												},
 												// Parameters: [Optional] Key-value pairs that define the initialization parameters for the serialization library. Maximum size 10 Kib.
 												"parameters": {
-													Type:        schema.TypeMap,
-													Optional:    true,
-													Elem:        &schema.Schema{Type: schema.TypeString},
-													Description: `Key-value pairs that define the initialization parameters for the serialization library. Maximum size 10 Kib.`,
+													Type:     schema.TypeMap,
+													Optional: true,
+													Elem:     &schema.Schema{Type: schema.TypeString},
+													Description: `Key-value pairs that define the initialization
+parameters for the serialization library. Maximum size 10 Kib.`,
 												},
 											},
 										},
@@ -1819,7 +1917,7 @@ func ResourceBigQueryTable() *schema.Resource {
 							Type:             schema.TypeString,
 							Optional:         true,
 							DiffSuppressFunc: bigQueryTableConnectionIdSuppress,
-							Description:      `The connection specifying the credentials to be used to read external storage, such as Azure Blob, Cloud Storage, or S3. The connection is needed to read the open source table from BigQuery Engine. The connection_id can have the form <project_id>.<location_id>.<connection_id> or projects/<project_id>/locations/<location_id>/connections/<connection_id>.`,
+							Description:      "The connection specifying the credentials to be\nused to read external storage, such as Azure Blob, Cloud Storage, or S3. The\nconnection is needed to read the open source table from BigQuery Engine. The\nconnection_id can have the form `<project_id>.<location_id>.<connection_id>`\nor `projects/<project_id>/locations/<location_id>/connections/<connection_id>`.",
 						},
 					},
 				},

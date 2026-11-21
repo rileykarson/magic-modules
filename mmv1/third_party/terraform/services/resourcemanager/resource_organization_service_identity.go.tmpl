@@ -36,15 +36,18 @@ func ResourceOrganizationServiceIdentity() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+				Description: `The service to generate identity for.`,
 			},
 			"organization": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+				Description: `The organization in which the resource belongs.`,
 			},
 			"email": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: `The email address of the Google managed service account.`,
 			},
 			"member": {
 				Type:        schema.TypeString,

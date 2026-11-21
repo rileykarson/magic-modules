@@ -119,13 +119,13 @@ func ResourceDataflowJob() *schema.Resource {
 				Type:             schema.TypeString,
 				Required:         true,
 				DiffSuppressFunc: ResourceDataflowJobTemplateGcsPathDiffSuppress,
-				Description:      `The Google Cloud Storage path to the Dataflow job template.`,
+				Description:      `The GCS path to the Dataflow job template.`,
 			},
 
 			"temp_gcs_location": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `A writeable location on Google Cloud Storage for the Dataflow job to dump its temporary data.`,
+				Description: `A writeable location on GCS for the Dataflow job to dump its temporary data.`,
 			},
 
 			"zone": {
@@ -149,20 +149,21 @@ func ResourceDataflowJob() *schema.Resource {
 				Optional: true,
 				// ForceNew applies to both stream and batch jobs
 				ForceNew:    true,
-				Description: `The number of workers permitted to work on the job. More workers may improve processing speed at additional cost.`,
+				Description: `The number of workers permitted to work on the job.  More workers may improve processing speed at additional cost.`,
 			},
 
 			"parameters": {
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Description: `Key/Value pairs to be passed to the Dataflow job (as used in the template).`,
+				Type:     schema.TypeMap,
+				Optional: true,
+				Description: `**Template specific** Key/Value pairs to be forwarded to the pipeline's options; keys are
+case-sensitive based on the language on which the pipeline is coded, mostly Java.
+**Note**: do not configure Dataflow options here in parameters.`,
 			},
 
 			"labels": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Description: `User labels to be specified for the job. Keys and values should follow the restrictions specified in the labeling restrictions page. NOTE: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "User labels to be specified for the job. Keys and values should follow the restrictions\nspecified in the [labeling restrictions](https://cloud.google.com/compute/docs/labeling-resources#restrictions) page.\n**Note**: This field is non-authoritative, and will only manage the labels present in your configuration. Please refer to the field `effective_labels` for all of the labels present on the resource.",
 			},
 
 			"terraform_labels": {
@@ -182,7 +183,7 @@ func ResourceDataflowJob() *schema.Resource {
 			"transform_name_mapping": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job.`,
+				Description: `Only applicable when updating a pipeline. Map of transform name prefixes of the job to be replaced with the corresponding name prefixes of the new job. This field is not used outside of update.`,
 			},
 
 			"on_delete": {
@@ -190,7 +191,7 @@ func ResourceDataflowJob() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{"cancel", "drain"}, false),
 				Optional:     true,
 				Default:      "drain",
-				Description:  `One of "drain" or "cancel". Specifies behavior of deletion during terraform destroy.`,
+				Description:  "One of \"drain\" or \"cancel\".  Specifies behavior of deletion during `terraform destroy`.  See above note.",
 			},
 
 			"project": {
@@ -199,23 +200,23 @@ func ResourceDataflowJob() *schema.Resource {
 				Computed: true,
 				// ForceNew applies to both stream and batch jobs
 				ForceNew:    true,
-				Description: `The project in which the resource belongs.`,
+				Description: `The project in which the resource belongs. If it is not provided, the provider project is used.`,
 			},
 
 			"state": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The current state of the resource, selected from the JobState enum.`,
+				Description: `The current state of the resource, selected from the [JobState enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobState)`,
 			},
 			"type": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The type of this job, selected from the JobType enum.`,
+				Description: `The type of this job, selected from the [JobType enum](https://cloud.google.com/dataflow/docs/reference/rest/v1b3/projects.jobs#Job.JobType)`,
 			},
 			"service_account_email": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `The Service Account email used to create the job.`,
+				Description: "The Service Account email used to create the job. This should be just an email e.g. `myserviceaccount@myproject.iam.gserviceaccount.com`. Do not include any `serviceAccount:` or other prefix.",
 			},
 
 			"network": {
@@ -229,7 +230,7 @@ func ResourceDataflowJob() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The subnetwork to which VMs will be assigned. Should be of the form "regions/REGION/subnetworks/SUBNETWORK".`,
+				Description:      "The subnetwork to which VMs will be assigned. Should be of the form \"regions/REGION/subnetworks/SUBNETWORK\". If the [subnetwork is located in a Shared VPC network](https://cloud.google.com/dataflow/docs/guides/specifying-networks#shared), you must use the complete URL. For example `\"googleapis.com/compute/v1/projects/PROJECT_ID/regions/REGION/subnetworks/SUBNET_NAME\"`",
 			},
 
 			"machine_type": {
@@ -241,13 +242,13 @@ func ResourceDataflowJob() *schema.Resource {
 			"kms_key_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `The name for the Cloud KMS key for the job. Key format is: projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`,
+				Description: "The name for the Cloud KMS key for the job. Key format is: `projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY`",
 			},
 
 			"ip_configuration": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Description:  `The configuration for VM IPs. Options are "WORKER_IP_PUBLIC" or "WORKER_IP_PRIVATE".`,
+				Description:  "The configuration for VM IPs.  Options are `\"WORKER_IP_PUBLIC\"` or `\"WORKER_IP_PRIVATE\"`.",
 				ValidateFunc: validation.StringInSlice([]string{"WORKER_IP_PUBLIC", "WORKER_IP_PRIVATE", ""}, false),
 			},
 
@@ -255,7 +256,7 @@ func ResourceDataflowJob() *schema.Resource {
 				Type:        schema.TypeSet,
 				Optional:    true,
 				Computed:    true,
-				Description: `List of experiments that should be used by the job. An example value is ["enable_stackdriver_agent_metrics"].`,
+				Description: "List of experiments that should be used by the job. An example value is `[\"enable_stackdriver_agent_metrics\"]`.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -270,14 +271,14 @@ func ResourceDataflowJob() *schema.Resource {
 			"enable_streaming_engine": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: `Indicates if the job should use the streaming engine feature.`,
+				Description: `Enable/disable the use of [Streaming Engine](https://cloud.google.com/dataflow/docs/guides/deploying-a-pipeline#streaming-engine) for the job. Note that Streaming Engine is enabled by default for pipelines developed against the Beam SDK for Python v2.21.0 or later when using Python 3.`,
 			},
 
 			"skip_wait_on_job_termination": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `If true, treat DRAINING and CANCELLING as terminal job states and do not wait for further changes before removing from terraform state and moving on. WARNING: this will lead to job name conflicts if you do not ensure that the job names are different, e.g. by embedding a release ID or by using a random_id.`,
+				Description: "If set to `true`, terraform will treat `DRAINING` and `CANCELLING` as terminal states when deleting the resource, and will remove the resource from terraform state and move on.  See above note.",
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

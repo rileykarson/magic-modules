@@ -73,13 +73,13 @@ func ResourceGkeHubFeatureMembership() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				ForceNew:    true,
-				Description: "The location of the membership",
+				Description: `The location of the membership, for example, "us-central1". Default is "global".`,
 			},
 
 			"mesh": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Manage Mesh Features",
+				Description: `Service mesh specific spec.`,
 				MaxItems:    1,
 				Elem:        GkeHubFeatureMembershipMeshSchema(),
 			},
@@ -121,7 +121,11 @@ func GkeHubFeatureMembershipConfigmanagementSchema() *schema.Resource {
 			"hierarchy_controller": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Hierarchy Controller configuration for the cluster.",
+				Description: `Hierarchy Controller configuration for the cluster.
+Configuring Hierarchy Controller through the configmanagement feature is no longer recommended.
+Use open source Kubernetes [Hierarchical Namespace Controller (HNC)](https://github.com/kubernetes-sigs/hierarchical-namespaces) instead.
+Follow the [instructions](https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/how-to/migrate-hierarchy-controller)
+to migrate from Hierarchy Controller to HNC.`,
 				MaxItems:    1,
 				Elem:        GkeHubFeatureMembershipConfigmanagementHierarchyControllerSchema(),
 			},
@@ -130,13 +134,17 @@ func GkeHubFeatureMembershipConfigmanagementSchema() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Optional:    true,
-				Description: "Set this field to MANAGEMENT_AUTOMATIC to enable Config Sync auto-upgrades, and set this field to MANAGEMENT_MANUAL or MANAGEMENT_UNSPECIFIED to disable Config Sync auto-upgrades.",
+				Description: `Enables automatic Feature management. Set this field to MANAGEMENT_AUTOMATIC to enable Config Sync auto-upgrades,
+and set this field to MANAGEMENT_MANUAL or MANAGEMENT_UNSPECIFIED to disable Config Sync auto-upgrades.
+This field was introduced in Terraform version [5.41.0](https://github.com/hashicorp/terraform-provider-google/releases/tag/v5.41.0).`,
 			},
 
 			"policy_controller": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "**DEPRECATED** Configuring Policy Controller through the configmanagement feature is no longer recommended. Use the policycontroller feature instead.",
+				Description: `Policy Controller configuration for the cluster.
+Configuring Policy Controller through the configmanagement feature is no longer recommended.
+Use the policycontroller feature instead.`,
 				MaxItems:    1,
 				Elem:        GkeHubFeatureMembershipConfigmanagementPolicyControllerSchema(),
 			},
@@ -145,7 +153,7 @@ func GkeHubFeatureMembershipConfigmanagementSchema() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Optional:    true,
-				Description: "Optional. Version of ACM to install. Defaults to the latest version.",
+				Description: `Version of Config Sync installed.`,
 			},
 		},
 	}
@@ -157,14 +165,14 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncSchema() *schema.Resource 
 			"deployment_overrides": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "The override configurations for the Config Sync Deployments.",
+				Description: `The override configurations for the Config Sync Deployments. The field is only available on Config Sync version 1.20.1 or later.`,
 				Elem:        GkeHubFeatureMembershipConfigmanagementConfigSyncDeploymentOverridesSchema(),
 			},
 
 			"enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.",
+				Description: "Whether Config Sync is enabled in the cluster. This field was introduced in Terraform version\n[5.41.0](https://github.com/hashicorp/terraform-provider-google/releases/tag/v5.41.0), and\nneeds to be set to `true` explicitly to install Config Sync.",
 			},
 
 			"git": {
@@ -185,7 +193,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncSchema() *schema.Resource 
 			"oci": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "",
+				Description: "Supported from Config Sync versions 1.12.0 onwards.\n\nUse either `git` or `oci` config option.",
 				MaxItems:    1,
 				Elem:        GkeHubFeatureMembershipConfigmanagementConfigSyncOciSchema(),
 			},
@@ -194,7 +202,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncSchema() *schema.Resource 
 				Type:        schema.TypeBool,
 				Computed:    true,
 				Optional:    true,
-				Description: "Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.",
+				Description: "Supported from Config Sync versions 1.10.0 onwards. Set to `true` to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.",
 			},
 
 			"source_format": {
@@ -206,7 +214,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncSchema() *schema.Resource 
 			"stop_syncing": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "Set to true to stop syncing configs for a single cluster. Default: false.",
+				Description: `Set to true to stop syncing configs for a single cluster. Default to false.`,
 			},
 		},
 	}
@@ -298,7 +306,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncGitSchema() *schema.Resour
 			"secret_type": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive.",
+				Description: `Type of secret configured for access to the Git repo.`,
 			},
 
 			"sync_branch": {
@@ -335,7 +343,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncOciSchema() *schema.Resour
 				Type:             schema.TypeString,
 				Optional:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      "The GCP Service Account Email used for auth when secret_type is gcpserviceaccount. ",
+				Description:      `The GCP Service Account Email used for auth when secret_type is gcpserviceaccount.`,
 			},
 
 			"policy_dir": {
@@ -347,7 +355,7 @@ func GkeHubFeatureMembershipConfigmanagementConfigSyncOciSchema() *schema.Resour
 			"secret_type": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Type of secret configured for access to the OCI Image. Must be one of gcenode, gcpserviceaccount or none. The validation of this is case-sensitive.",
+				Description: `Type of secret configured for access to the OCI Image. Must be one of gcenode, gcpserviceaccount or none.`,
 			},
 
 			"sync_repo": {
@@ -383,7 +391,7 @@ func GkeHubFeatureMembershipConfigmanagementHierarchyControllerSchema() *schema.
 			"enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "**DEPRECATED** Configuring Hierarchy Controller through the configmanagement feature is no longer recommended. Use https://github.com/kubernetes-sigs/hierarchical-namespaces instead.",
+				Description: `Whether Hierarchy Controller is enabled in this cluster.`,
 			},
 		},
 	}
@@ -395,7 +403,7 @@ func GkeHubFeatureMembershipConfigmanagementPolicyControllerSchema() *schema.Res
 			"audit_interval_seconds": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.",
+				Description: `Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether. Defaults to 60`,
 			},
 
 			"enabled": {
@@ -429,7 +437,7 @@ func GkeHubFeatureMembershipConfigmanagementPolicyControllerSchema() *schema.Res
 			"mutation_enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.",
+				Description: `Enables mutation in policy controller. If true, mutation CRDs, webhook, and controller deployment will be deployed to the cluster.`,
 			},
 
 			"referential_rules_enabled": {
@@ -474,7 +482,7 @@ func GkeHubFeatureMembershipMeshSchema() *schema.Resource {
 			"management": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Whether to automatically manage Service Mesh. Possible values: MANAGEMENT_UNSPECIFIED, MANAGEMENT_AUTOMATIC, MANAGEMENT_MANUAL",
+				Description: "Whether to automatically manage Service Mesh. Can either be `MANAGEMENT_AUTOMATIC` or `MANAGEMENT_MANUAL`.",
 			},
 		},
 	}
@@ -495,7 +503,7 @@ func GkeHubFeatureMembershipPolicycontrollerSchema() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Optional:    true,
-				Description: "Optional. Version of Policy Controller to install. Defaults to the latest version.",
+				Description: `Version of Policy Controller to install. Defaults to the latest version.`,
 			},
 		},
 	}
@@ -514,7 +522,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigSchema() *s
 			"constraint_violation_limit": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Description: "The maximum number of audit violations to be stored in a constraint. If not set, the internal default of 20 will be used.",
+				Description: `The maximum number of audit violations to be stored in a constraint. If not set, the  default of 20 will be used.`,
 			},
 
 			"deployment_configs": {
@@ -536,7 +544,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigSchema() *s
 			"install_spec": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Configures the mode of the Policy Controller installation. Possible values: INSTALL_SPEC_UNSPECIFIED, INSTALL_SPEC_NOT_INSTALLED, INSTALL_SPEC_ENABLED, INSTALL_SPEC_SUSPENDED, INSTALL_SPEC_DETACHED",
+				Description: "Configures the mode of the Policy Controller installation. Must be one of `INSTALL_SPEC_NOT_INSTALLED`, `INSTALL_SPEC_ENABLED`, `INSTALL_SPEC_SUSPENDED` or `INSTALL_SPEC_DETACHED`.",
 			},
 
 			"log_denies_enabled": {
@@ -549,7 +557,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigSchema() *s
 				Type:        schema.TypeList,
 				Computed:    true,
 				Optional:    true,
-				Description: "Specifies the backends Policy Controller should export metrics to. For example, to specify metrics should be exported to Cloud Monitoring and Prometheus, specify backends: [\"cloudmonitoring\", \"prometheus\"]. Default: [\"cloudmonitoring\", \"prometheus\"]",
+				Description: `Specifies the backends Policy Controller should export metrics to.`,
 				MaxItems:    1,
 				Elem:        GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringSchema(),
 			},
@@ -557,7 +565,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigSchema() *s
 			"mutation_enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "Enables the ability to mutate resources using Policy Controller.",
+				Description: `Enables mutation in policy controller. If true, mutation CRDs, webhook, and controller deployment will be deployed to the cluster.`,
 			},
 
 			"policy_content": {
@@ -584,7 +592,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigDeploymentC
 			"component_name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name for the key in the map for which this object is mapped to in the API",
+				Description: "The name of the component. One of `admission` `audit` or `mutation`",
 			},
 
 			"container_resources": {
@@ -712,7 +720,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigMonitoringS
 				Type:        schema.TypeList,
 				Computed:    true,
 				Optional:    true,
-				Description: " Specifies the list of backends Policy Controller will export to. Specifying an empty value `[]` disables metrics export.",
+				Description: "Specifies the list of backends Policy Controller will export to. Must be one of `CLOUD_MONITORING` or `PROMETHEUS`. Defaults to [`CLOUD_MONITORING`, `PROMETHEUS`]. Specifying an empty value `[]` disables metrics export.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 		},
@@ -748,7 +756,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyConte
 			"bundle_name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name for the key in the map for which this object is mapped to in the API",
+				Description: `The name of the bundle.`,
 			},
 
 			"exempted_namespaces": {
@@ -767,7 +775,7 @@ func GkeHubFeatureMembershipPolicycontrollerPolicyControllerHubConfigPolicyConte
 			"installation": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Configures the manner in which the template library is installed on the cluster. Possible values: INSTALLATION_UNSPECIFIED, NOT_INSTALLED, ALL",
+				Description: "Configures the manner in which the template library is installed on the cluster. Must be one of `ALL`, `NOT_INSTALLED` or `INSTALLATION_UNSPECIFIED`. Defaults to `ALL`.",
 			},
 		},
 	}

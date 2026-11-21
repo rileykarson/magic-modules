@@ -31,22 +31,24 @@ func ResourceLoggingFolderSink() *schema.Resource {
 		Type:        schema.TypeString,
 		Required:    true,
 		ForceNew:    true,
-		Description: `The folder to be exported to the sink. Note that either [FOLDER_ID] or "folders/[FOLDER_ID]" is accepted.`,
+		Description: "The folder to be exported to the sink. Note that either `[FOLDER_ID]` or `folders/[FOLDER_ID]` is\naccepted.",
 		StateFunc: func(v interface{}) string {
 			return strings.Replace(v.(string), "folders/", "", 1)
 		},
 	}
 	schm.Schema["include_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to include children folders in the sink export. If true, logs associated with child projects are also exported; otherwise only logs relating to the provided folder are included.`,
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: `Whether or not to include children folders in the sink export. If true, logs
+associated with child projects are also exported; otherwise only logs relating to the provided folder are included.`,
 	}
 	schm.Schema["intercept_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to intercept logs from child projects. If true, matching logs will not match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: `Whether or not to intercept logs from child projects. If true, matching logs will not
+match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
 	}
 
 	return schm

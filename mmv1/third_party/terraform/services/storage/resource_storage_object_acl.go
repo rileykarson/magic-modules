@@ -28,28 +28,32 @@ func ResourceStorageObjectAcl() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"bucket": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: `The name of the bucket the object is stored in.`,
 			},
 
 			"object": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: `The name of the object to apply the acl to.`,
 			},
 
 			"predefined_acl": {
 				Type:          schema.TypeString,
 				Optional:      true,
+				Description:   "The \"canned\" [predefined ACL](https://cloud.google.com/storage/docs/access-control#predefined-acl) to apply. Must be set if `role_entity` is not.",
 				ConflictsWith: []string{"role_entity"},
 				ValidateFunc:  validation.StringInSlice([]string{"private", "bucketOwnerRead", "bucketOwnerFullControl", "projectPrivate", "authenticatedRead", "publicRead", ""}, false),
 			},
 
 			"role_entity": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Computed:    true,
+				Description: "List of role/entity pairs in the form `ROLE:entity`. See [GCS Object ACL documentation](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls) for more details.\nMust be set if `predefined_acl` is not.\n\n-> The object's creator will always have `OWNER` permissions for their object, and any attempt to modify that permission would return an error. Instead, Terraform automatically\nadds that role/entity pair to your `terraform plan` results when it is omitted in your config; `terraform plan` will show the correct final state at every point except for at\n`Create` time, where the object role/entity pair is omitted if not explicitly set.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
 					ValidateFunc: validateRoleEntityPair,

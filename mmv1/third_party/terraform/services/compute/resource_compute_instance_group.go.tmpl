@@ -46,7 +46,10 @@ func ResourceComputeInstanceGroup() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the instance group. Must be 1-63 characters long and comply with RFC1035. Supported characters include lowercase letters, numbers, and hyphens.`,
+				Description: `The name of the instance group. Must be 1-63
+characters long and comply with
+[RFC1035](https://www.ietf.org/rfc/rfc1035.txt). Supported characters
+include lowercase letters, numbers, and hyphens.`,
 			},
 
 			"zone": {
@@ -61,7 +64,8 @@ func ResourceComputeInstanceGroup() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `An optional textual description of the instance group.`,
+				Description: `An optional textual description of the instance
+group.`,
 			},
 
 			"instances": {
@@ -70,13 +74,14 @@ func ResourceComputeInstanceGroup() *schema.Resource {
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Set:         tpgresource.SelfLinkRelativePathHash,
-				Description: `The list of instances in the group, in self_link format. When adding instances they must all be in the same network and zone as the instance group.`,
+				Description: "The list of instances in the group, in `self_link` format.\nWhen adding instances they must all be in the same network and zone as the instance group.",
 			},
 
 			"named_port": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: `The named port configuration.`,
+				Description: `The named port configuration. See the section below
+for details on configuration.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -100,7 +105,7 @@ func ResourceComputeInstanceGroup() *schema.Resource {
 				Computed:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
 				ForceNew:         true,
-				Description:      `The URL of the network the instance group is in. If this is different from the network where the instances are in, the creation fails. Defaults to the network where the instances are in (if neither network nor instances is specified, this field will be blank).`,
+				Description:      "The URL of the network the instance group is in. If\nthis is different from the network where the instances are in, the creation\nfails. Defaults to the network where the instances are in (if neither\n`network` nor `instances` is specified, this field will be blank).",
 			},
 
 			"project": {
@@ -108,7 +113,8 @@ func ResourceComputeInstanceGroup() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"self_link": {

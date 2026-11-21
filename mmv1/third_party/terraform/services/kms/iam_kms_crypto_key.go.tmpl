@@ -19,6 +19,7 @@ var IamKmsCryptoKeySchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 		ForceNew: true,
+		Description: "The crypto key ID, in the form\n`{project_id}/{location_name}/{key_ring_name}/{crypto_key_name}` or\n`{location_name}/{key_ring_name}/{crypto_key_name}`. In the second form,\nthe provider's project setting will be used as a fallback.",
 	},
 }
 

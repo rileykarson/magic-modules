@@ -19,15 +19,18 @@ func instanceSchedulingNodeAffinitiesElemSchema() *schema.Resource {
 			"key": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: `The key for the node affinity label.`,
 			},
 			"operator": {
 				Type:         schema.TypeString,
 				Required:     true,
+				Description: "The operator. Can be `IN` for node-affinities\nor `NOT_IN` for anti-affinities.",
 				ValidateFunc: validation.StringInSlice([]string{"IN", "NOT_IN"}, false),
 			},
 			"values": {
 				Type:     schema.TypeSet,
 				Required: true,
+				Description: `The values for the node affinity label.`,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Set:      schema.HashString,
 			},

@@ -40,16 +40,17 @@ func ResourceComputeProjectDefaultNetworkTier() *schema.Resource {
 			"network_tier": {
 				Type:         schema.TypeString,
 				Required:     true,
-				Description:  `The default network tier to be configured for the project. This field can take the following values: PREMIUM or STANDARD.`,
+				Description:  "The default network tier to be configured for the project.\nThis field can take the following values: `PREMIUM` or `STANDARD`.",
 				ValidateFunc: validation.StringInSlice([]string{"PREMIUM", "STANDARD"}, false),
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 		},
 		UseJSONNumber: true,

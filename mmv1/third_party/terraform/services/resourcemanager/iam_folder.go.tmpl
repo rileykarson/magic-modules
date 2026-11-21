@@ -23,6 +23,7 @@ var IamFolderSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 		ForceNew: true,
+		Description: `The resource name of the folder the policy is attached to. Its format is folders/{folder_id}.`,
 	},
 }
 

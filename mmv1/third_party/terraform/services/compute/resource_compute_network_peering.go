@@ -64,40 +64,43 @@ func ResourceComputeNetworkPeering() *schema.Resource {
 				ForceNew:         true,
 				ValidateFunc:     verify.ValidateRegexp(peerNetworkLinkRegex),
 				DiffSuppressFunc: tpgresource.CompareSelfLinkRelativePaths,
-				Description:      `The peer network in the peering. The peer network may belong to a different project.`,
+				Description: `The peer network in the peering. The peer network
+may belong to a different project.`,
 			},
 
 			"export_custom_routes": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether to export the custom routes to the peer network. Defaults to false.`,
+				Description: "Whether to export the custom routes to the peer network. Defaults to `false`.",
 			},
 
 			"import_custom_routes": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Whether to export the custom routes from the peer network. Defaults to false.`,
+				Description: "Whether to import the custom routes from the peer network. Defaults to `false`.",
 			},
 
 			"export_subnet_routes_with_public_ip": {
-				Type:     schema.TypeBool,
-				ForceNew: true,
-				Optional: true,
-				Default:  true,
+				Type:        schema.TypeBool,
+				ForceNew:    true,
+				Optional:    true,
+				Default:     true,
+				Description: `Whether subnet routes with public IP range are exported. The default value is true, all subnet routes are exported. The IPv4 special-use ranges (https://en.wikipedia.org/wiki/IPv4#Special_addresses) are always exported to peers and are not controlled by this field.`,
 			},
 
 			"import_subnet_routes_with_public_ip": {
-				Type:     schema.TypeBool,
-				ForceNew: true,
-				Optional: true,
+				Type:        schema.TypeBool,
+				ForceNew:    true,
+				Optional:    true,
+				Description: `Whether subnet routes with public IP range are imported. The default value is false. The IPv4 special-use ranges (https://en.wikipedia.org/wiki/IPv4#Special_addresses) are always imported from peers and are not controlled by this field.`,
 			},
 
 			"state": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `State for the peering, either ACTIVE or INACTIVE. The peering is ACTIVE when there's a matching configuration in the peer network.`,
+				Description: "State for the peering, either `ACTIVE` or `INACTIVE`. The peering is\n`ACTIVE` when there's a matching configuration in the peer network.",
 			},
 
 			"state_details": {
@@ -110,7 +113,7 @@ func ResourceComputeNetworkPeering() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: verify.ValidateEnum([]string{"IPV4_ONLY", "IPV4_IPV6"}),
-				Description:  `Which IP version(s) of traffic and routes are allowed to be imported or exported between peer networks. The default value is IPV4_ONLY. Possible values: ["IPV4_ONLY", "IPV4_IPV6"]`,
+				Description:  `Which IP version(s) of traffic and routes are allowed to be imported or exported between peer networks. The default value is IPV4_ONLY. Possible values: ["IPV4_ONLY", "IPV4_IPV6"].`,
 				Default:      "IPV4_ONLY",
 			},
 

@@ -16,9 +16,11 @@ import (
 
 var LoggingExclusionBaseSchema = map[string]*schema.Schema{
 	"filter": {
-		Type:        schema.TypeString,
-		Required:    true,
-		Description: `The filter to apply when excluding logs. Only log entries that match the filter are excluded.`,
+		Type:     schema.TypeString,
+		Required: true,
+		Description: `The filter to apply when excluding logs. Only log entries that match the filter are excluded.
+See [Advanced Log Filters](https://cloud.google.com/logging/docs/view/advanced-filters) for information on how to
+write a filter.`,
 	},
 	"name": {
 		Type:        schema.TypeString,
@@ -32,9 +34,10 @@ var LoggingExclusionBaseSchema = map[string]*schema.Schema{
 		Description: `A human-readable description.`,
 	},
 	"disabled": {
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Description: `Whether this exclusion rule should be disabled or not. This defaults to false.`,
+		Type:     schema.TypeBool,
+		Optional: true,
+		Description: `Whether this exclusion rule should be disabled or not. This defaults to
+false.`,
 	},
 }
 

@@ -11,9 +11,10 @@ import (
 
 var BillingAccountLoggingExclusionSchema = map[string]*schema.Schema{
 	"billing_account": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The billing account to create the exclusion for.`,
 	},
 }
 

@@ -25,7 +25,7 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 		Required:         true,
 		ForceNew:         true,
 		DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-		Description:      `The name of the Constraint the Policy is configuring, for example, serviceuser.services.`,
+		Description:      "The name of the Constraint the Policy is configuring, for example, `serviceuser.services`. Check out the [complete list of available constraints](https://docs.cloud.google.com/resource-manager/docs/organization-policy/understanding-constraints#available_constraints).",
 	},
 	"boolean_policy": {
 		Type:        schema.TypeList,
@@ -43,17 +43,18 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 		},
 	},
 	"list_policy": {
-		Type:        schema.TypeList,
-		Optional:    true,
-		MaxItems:    1,
-		Description: `A policy that can define specific values that are allowed or denied for the given constraint. It can also be used to allow or deny all values. `,
+		Type:     schema.TypeList,
+		Optional: true,
+		MaxItems: 1,
+		Description: `A policy that can define specific values that are allowed or denied for the given constraint. It
+can also be used to allow or deny all values.`,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"allow": {
 					Type:         schema.TypeList,
 					Optional:     true,
 					MaxItems:     1,
-					Description:  `One or the other must be set.`,
+					Description:  "Exactly one of `allow` or `deny` must be set.",
 					ExactlyOneOf: []string{"list_policy.0.allow", "list_policy.0.deny"},
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -79,7 +80,7 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 					Type:         schema.TypeList,
 					Optional:     true,
 					MaxItems:     1,
-					Description:  `One or the other must be set.`,
+					Description:  "Exactly one of `allow` or `deny` must be set.",
 					ExactlyOneOf: []string{"list_policy.0.allow", "list_policy.0.deny"},
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -108,9 +109,10 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 					Description: `The Google Cloud Console will try to default to a configuration that matches the value specified in this field.`,
 				},
 				"inherit_from_parent": {
-					Type:        schema.TypeBool,
-					Optional:    true,
-					Description: `If set to true, the values from the effective Policy of the parent resource are inherited, meaning the values set in this Policy are added to the values inherited up the hierarchy.`,
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: `If set to true, the values from the effective Policy of the parent resource
+are inherited, meaning the values set in this Policy are added to the values inherited up the hierarchy.`,
 				},
 			},
 		},
@@ -124,7 +126,7 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 	"etag": {
 		Type:        schema.TypeString,
 		Computed:    true,
-		Description: `The etag of the organization policy. etag is used for optimistic concurrency control as a way to help prevent simultaneous updates of a policy from overwriting each other.`,
+		Description: "The etag of the organization policy. `etag` is used for optimistic concurrency control as a way to help prevent simultaneous updates of a policy from overwriting each other.",
 	},
 	"update_time": {
 		Type:        schema.TypeString,
@@ -135,7 +137,7 @@ var schemaOrganizationPolicy = map[string]*schema.Schema{
 		Type:        schema.TypeList,
 		Optional:    true,
 		MaxItems:    1,
-		Description: `A restore policy is a constraint to restore the default policy.`,
+		Description: "A restore policy is a constraint to restore the default policy.\n\n~> **Note:** If none of [`boolean_policy`, `list_policy`, `restore_policy`] are defined the policy for a given constraint will\neffectively be unset. This is represented in the UI as the constraint being 'Inherited'.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"default": {
@@ -174,9 +176,10 @@ func ResourceGoogleOrganizationPolicy() *schema.Resource {
 			schemaOrganizationPolicy,
 			map[string]*schema.Schema{
 				"org_id": {
-					Type:     schema.TypeString,
-					Required: true,
-					ForceNew: true,
+					Type:        schema.TypeString,
+					Required:    true,
+					ForceNew:    true,
+					Description: `The numeric ID of the organization to set the policy for.`,
 				},
 				//UDP schema start
 				"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

@@ -15,9 +15,10 @@ import (
 
 var IamHealthcareDatasetSchema = map[string]*schema.Schema{
 	"dataset_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: "The dataset ID, in the form\n`{project_id}/{location_name}/{dataset_name}` or\n`{location_name}/{dataset_name}`. In the second form, the provider's\nproject setting will be used as a fallback.",
 	},
 }
 

@@ -83,18 +83,17 @@ func ResourceGoogleProject() *schema.Resource {
 				Description:  `The project ID. Changing this forces a new project to be created.`,
 			},
 			"deletion_policy": {
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-				Description: `The deletion policy for the Project. Setting PREVENT will protect the project against any destroy actions caused by a terraform apply or terraform destroy. Setting ABANDON allows the resource
-				to be abandoned rather than deleted. Possible values are: "PREVENT", "ABANDON", "DELETE"`,
+				Type:         schema.TypeString,
+				Computed:     true,
+				Optional:     true,
+				Description:  "The deletion policy for the Project. Setting PREVENT will protect the project\nagainst any destroy actions caused by a terraform apply or terraform destroy. Setting ABANDON allows the resource\nto be abandoned rather than deleted, i.e., the Terraform resource can be deleted without deleting the Project via\nthe Google API. Possible values are: \"PREVENT\", \"ABANDON\", \"DELETE\". Default value is `PREVENT`.",
 				ValidateFunc: validation.StringInSlice([]string{"PREVENT", "ABANDON", "DELETE"}, false),
 			},
 			"auto_create_network": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
-				Description: `Create the 'default' network automatically.  Default true. If set to false, the default network will be deleted.  Note that, for quota purposes, you will still need to have 1 network slot available to create the project successfully, even if you set auto_create_network to false, since the network will exist momentarily.`,
+				Description: "Controls whether the 'default' network exists on the project. Defaults\nto `true`, where it is created. If set to `false`, the default network will still be created by GCP but\nwill be deleted immediately by Terraform. Therefore, for quota purposes, you will still need to have 1\nnetwork slot available to create the project successfully, even if you set `auto_create_network` to\n`false`. Note that when `false`, Terraform enables `compute.googleapis.com` on the project to interact\nwith the GCE API and currently leaves it enabled.",
 			},
 			"name": {
 				Type:         schema.TypeString,
@@ -106,14 +105,14 @@ func ResourceGoogleProject() *schema.Resource {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"folder_id"},
-				Description:   `The numeric ID of the organization this project belongs to. Changing this forces a new project to be created.  Only one of org_id or folder_id may be specified. If the org_id is specified then the project is created at the top level. Changing this forces the project to be migrated to the newly specified organization.`,
+				Description:   "The numeric ID of the organization this project belongs to.\nChanging this forces a new project to be created.  Only one of\n`org_id` or `folder_id` may be specified. If the `org_id` is\nspecified then the project is created at the top level. Changing\nthis forces the project to be migrated to the newly specified\norganization.",
 			},
 			"folder_id": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				StateFunc:     ParseFolderId,
 				ConflictsWith: []string{"org_id"},
-				Description:   `The numeric ID of the folder this project should be created under. Only one of org_id or folder_id may be specified. If the folder_id is specified, then the project is created under the specified folder. Changing this forces the project to be migrated to the newly specified folder.`,
+				Description:   "The numeric ID of the folder this project should be\ncreated under. Only one of `org_id` or `folder_id` may be\nspecified. If the `folder_id` is specified, then the project is\ncreated under the specified folder. Changing this forces the\nproject to be migrated to the newly specified folder.",
 			},
 			"number": {
 				Type:        schema.TypeString,
@@ -123,22 +122,21 @@ func ResourceGoogleProject() *schema.Resource {
 			"billing_account": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `The alphanumeric ID of the billing account this project belongs to. The user or service account performing this operation with Terraform must have Billing Account Administrator privileges (roles/billing.admin) in the organization. See Google Cloud Billing API Access Control for more details.`,
+				Description: "The alphanumeric ID of the billing account this project\nbelongs to. The user or service account performing this operation with Terraform\nmust have at minimum Billing Account User privileges (`roles/billing.user`) on the billing account.\nSee [Google Cloud Billing API Access Control](https://cloud.google.com/billing/docs/how-to/billing-access)\nfor more details.",
 			},
 			"labels": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Description: `A set of key/value label pairs to assign to the project.
-				
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
+  Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
 			},
 
 			"terraform_labels": {
 				Type:        schema.TypeMap,
 				Computed:    true,
-				Description: `(ReadOnly) The combination of labels configured directly on the resource and default labels configured on the provider.`,
+				Description: `The combination of labels configured directly on the resource and default labels configured on the provider.`,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 
@@ -154,7 +152,7 @@ func ResourceGoogleProject() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the google_tags_tag_value resource.`,
+				Description: "A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. The field is immutable and causes resource replacement when mutated. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the `google_tags_tag_value` resource.",
 			},
 		},
 		UseJSONNumber: true,

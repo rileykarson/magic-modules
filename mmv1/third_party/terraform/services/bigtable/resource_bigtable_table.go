@@ -105,15 +105,16 @@ func ResourceBigtableTable() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A list of predefined keys to split the table on. !> Warning: Modifying the split_keys of an existing table will cause Terraform to delete/recreate the entire google_bigtable_table resource.`,
+				Description: "A list of predefined keys to split the table on.\n!> **Warning:** Modifying the `split_keys` of an existing table will cause Terraform\nto delete/recreate the entire `google_bigtable_table` resource.",
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"deletion_protection": {
@@ -122,7 +123,7 @@ func ResourceBigtableTable() *schema.Resource {
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice([]string{"PROTECTED", "UNPROTECTED"}, false),
 				Elem:         &schema.Schema{Type: schema.TypeString},
-				Description:  `A field to make the table protected against data loss i.e. when set to PROTECTED, deleting the table, the column families in the table, and the instance containing the table would be prohibited. If not provided, currently deletion protection will be set to UNPROTECTED as it is the API default value.`,
+				Description:  `A field to make the table protected against data loss i.e. when set to PROTECTED, deleting the table, the column families in the table, and the instance containing the table would be prohibited. If not provided, deletion protection will be set to UNPROTECTED.`,
 			},
 
 			"change_stream_retention": {
@@ -165,7 +166,7 @@ func ResourceBigtableTable() *schema.Resource {
 						},
 					},
 				},
-				Description: `Defines an automated backup policy for a table, specified by Retention Period and Frequency. To _create_ a table with automated backup disabled, either omit the automated_backup_policy argument, or set both Retention Period and Frequency properties to "0". To disable automated backup on an _existing_ table that has automated backup enabled, set _both_ Retention Period and Frequency properties to "0". When updating an existing table, to modify the Retention Period or Frequency properties of the resource's automated backup policy, set the respective property to a non-zero value. If the automated_backup_policy argument is not provided in the configuration on update, the resource's automated backup policy will _not_ be modified.`,
+				Description: "Defines an automated backup policy for a table, specified by `retention_period` and `frequency`. To create a table with automated backup disabled, either omit the `automated_backup_policy` argument or set both `retention_period` and `frequency` to \"0\". To disable automated backup on an existing table that has automated backup enabled, set both `retention_period` and `frequency` to \"0\". When updating an existing table, change the `retention_period` or `frequency` by setting the respective property to a non-zero value. The policy also accepts an optional `locations` list to specify backup storage locations; if `locations` is omitted, the policy defaults to all clusters in the instance. If the `automated_backup_policy` argument is not provided on update, the resource's automated backup policy will not be modified.",
 			},
 			"row_key_schema": {
 				Type:             schema.TypeString,

@@ -106,18 +106,21 @@ func ResourceSqlUser() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"host": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The host the user can connect from. This is only supported for MySQL instances. Don't set this field for PostgreSQL instances. Can be an IP address. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The host the user can connect from. This is only supported
+for BUILT_IN users in MySQL instances. Don't set this field for PostgreSQL and SQL Server instances.
+Can be an IP address. Changing this forces a new resource to be created.`,
 			},
 
 			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the Cloud SQL instance. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `The name of the Cloud SQL instance. Changing this
+forces a new resource to be created.`,
 			},
 
 			"name": {
@@ -125,7 +128,8 @@ func ResourceSqlUser() *schema.Resource {
 				Required:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: diffSuppressIamUserName,
-				Description:      `The name of the user. Changing this forces a new resource to be created.`,
+				Description: `The name of the user. Changing this forces a new resource
+to be created.`,
 			},
 
 			"password": {
@@ -133,8 +137,10 @@ func ResourceSqlUser() *schema.Resource {
 				Optional:      true,
 				Sensitive:     true,
 				ConflictsWith: []string{"password_wo"},
-				Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
-				either CLOUD_IAM_USER or CLOUD_IAM_SERVICE_ACCOUNT.`,
+				Description: `The password for the user. Can be updated. For Postgres
+instances this is a Required field, unless type is set to either CLOUD_IAM_USER
+or CLOUD_IAM_SERVICE_ACCOUNT. Don't set this field for CLOUD_IAM_USER
+and CLOUD_IAM_SERVICE_ACCOUNT user types for any Cloud SQL instance.`,
 			},
 
 			"password_wo": {
@@ -143,15 +149,14 @@ func ResourceSqlUser() *schema.Resource {
 				WriteOnly:     true,
 				ConflictsWith: []string{"password"},
 				RequiredWith:  []string{"password_wo_version"},
-				Description: `The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to
-				either CLOUD_IAM_USER or CLOUD_IAM_SERVICE_ACCOUNT.`,
+				Description:   "The password for the user. Can be updated. For Postgres\ninstances this is a Required field, unless type is set to either CLOUD_IAM_USER\nor CLOUD_IAM_SERVICE_ACCOUNT. Don't set this field for CLOUD_IAM_USER\nand CLOUD_IAM_SERVICE_ACCOUNT user types for any Cloud SQL instance.\n\n* ~> **Note:** One of `value` or `value_wo` can only be set.",
 			},
 
 			"password_wo_version": {
 				Type:         schema.TypeInt,
 				Optional:     true,
 				RequiredWith: []string{"password_wo"},
-				Description:  `The version of the password_wo.`,
+				Description:  "An integer value used to trigger an update for `password_wo`. This property should be incremented when updating `password_wo`. For more info see [updating write-only arguments](/docs/providers/google/guides/using_write_only_attributes.html#updating-write-only-attributes).",
 			},
 
 			"type": {
@@ -159,12 +164,18 @@ func ResourceSqlUser() *schema.Resource {
 				Optional:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("BUILT_IN"),
-				Description: `The user type. It determines the method to authenticate the user during login.
-				The default is the database's built-in user type.`,
+				Description: `The user type. It determines the method to authenticate the
+user during login. The default is the database's built-in user type. Flags
+include "BUILT_IN", "CLOUD_IAM_USER", "CLOUD_IAM_SERVICE_ACCOUNT", "CLOUD_IAM_GROUP",
+"CLOUD_IAM_GROUP_USER" and "CLOUD_IAM_GROUP_SERVICE_ACCOUNT" for
+[Postgres](https://cloud.google.com/sql/docs/postgres/admin-api/rest/v1beta4/users#sqlusertype)
+and [MySQL](https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/users#sqlusertype),
+and "BUILT_IN" and "ENTRAID_USER" for [SQL Server](https://cloud.google.com/sql/docs/sqlserver/admin-api/rest/v1beta4/users#sqlusertype).`,
 			},
 			"sql_server_user_details": {
-				Type:     schema.TypeList,
-				Computed: true,
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: `SQL Server specific user details.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"disabled": {
@@ -183,9 +194,10 @@ func ResourceSqlUser() *schema.Resource {
 			},
 
 			"password_policy": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: `The password policy for the user. Only supported for creating MySQL and Postgres users.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"allowed_failed_attempts": {
@@ -209,8 +221,9 @@ func ResourceSqlUser() *schema.Resource {
 							Description: `If true, the user must specify the current password before changing the password. This flag is supported only for MySQL.`,
 						},
 						"status": {
-							Type:     schema.TypeList,
-							Computed: true,
+							Type:        schema.TypeList,
+							Computed:    true,
+							Description: `The password status of the user.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"locked": {
@@ -231,27 +244,35 @@ func ResourceSqlUser() *schema.Resource {
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
 			//UDP schema end
 			"database_roles": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: `A list of database roles to be assigned to the user. This option is only available for MySQL and PostgreSQL instances.`,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+				Type:     schema.TypeList,
+				Optional: true,
+				Description: `A list of database roles to be assigned to the user.
+  This option is only available for MySQL 8+ and PostgreSQL instances. You
+  can include predefined Cloud SQL roles, like cloudsqlsuperuser, or your
+  own custom roles. Custom roles must be created in the database before
+  you can assign them. You can create roles using the CREATE ROLE
+  statement for both MySQL and PostgreSQL.
+**Note**: This property is write-only and will not be read from the API.
+**Caution**: Existing database roles will be overwriten with new values from this field.`,
+				Elem: &schema.Schema{Type: schema.TypeString},
 			},
 			"iam_email": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The email address for MySQL IAM database users.`,
+				Description: `IAM email address for MySQL IAM database users.`,
 			},
 		},
 		UseJSONNumber: true,

@@ -33,22 +33,23 @@ func ResourceLoggingProjectSink() *schema.Resource {
 		UseJSONNumber: true,
 	}
 	schm.Schema["project"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Optional:    true,
-		Computed:    true,
-		ForceNew:    true,
-		Description: `The ID of the project to create the sink in. If omitted, the project associated with the provider is used.`,
+		Type:     schema.TypeString,
+		Optional: true,
+		Computed: true,
+		ForceNew: true,
+		Description: `The ID of the project to create the sink in. If omitted, the project associated with the provider is
+used.`,
 	}
 	schm.Schema["unique_writer_identity"] = &schema.Schema{
 		Type:        schema.TypeBool,
 		Optional:    true,
 		Default:     true,
-		Description: `Whether to use a service agent as the writer_identity for this sink. If false (the legacy behavior), writer_identity is serviceAccount:cloud-logs@system.gserviceaccount.com and the sink's destination must be in the same project as the sink. If true (the default), writer_identity is a service agent shared by sinks with the same parent. You must set unique_writer_identity to true to publish logs across projects or use bigquery_options.`,
+		Description: "Whether to use a service agent as the `writer_identity` for this sink. If `false`,\n`writer_identity` is `serviceAccount:cloud-logs@system.gserviceaccount.com` and the sink's destination must be in the\nsame project as the sink. If `true` (the default), `writer_identity` is a service agent shared by sinks with the same\nparent. You must set `unique_writer_identity` to `true` to publish logs across projects or use `bigquery_options`.\nSee the [`projects.sinks.create` API documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/projects.sinks/create#query-parameters)\nfor more information.",
 	}
 	schm.Schema["custom_writer_identity"] = &schema.Schema{
 		Type:        schema.TypeString,
 		Optional:    true,
-		Description: `A service account provided by the caller that will be used to write the log entries. The format must be serviceAccount:some@email. This field can only be specified if you are routing logs to a destination outside this sink's project. If not specified, a Logging service account will automatically be generated.`,
+		Description: "A user managed service account that will be used to write\nthe log entries. The format must be `serviceAccount:some@email`. This field can only be specified if you are\nrouting logs to a destination outside this sink's project. If not specified, a Logging service account\nwill automatically be generated.",
 	}
 	return schm
 }

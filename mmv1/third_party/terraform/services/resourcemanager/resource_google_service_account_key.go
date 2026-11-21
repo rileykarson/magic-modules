@@ -45,7 +45,7 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The ID of the parent service account of the key. This can be a string in the format {ACCOUNT} or projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}, where {ACCOUNT} is the email address or unique id of the service account. If the {ACCOUNT} syntax is used, the project will be inferred from the provider's configuration.`,
+				Description: "The Service account id of the Key. This can be a string in the format\n`{ACCOUNT}` or `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. If the `{ACCOUNT}`-only syntax is used, either\nthe **full** email address of the service account or its name can be specified as a value, in which case the project will\nautomatically be inferred from the account. Otherwise, if the `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`\nsyntax is used, the `{ACCOUNT}` specified can be the full email address of the service account or the service account's\nunique id. Substituting `-` as a wildcard for the `{PROJECT_ID}` will infer the project from the account.",
 			},
 			// Optional
 			"key_algorithm": {
@@ -54,13 +54,17 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Optional:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.StringInSlice([]string{"KEY_ALG_UNSPECIFIED", "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048"}, false),
-				Description:  `The algorithm used to generate the key, used only on create. KEY_ALG_RSA_2048 is the default algorithm. Valid values are: "KEY_ALG_RSA_1024", "KEY_ALG_RSA_2048".`,
+				Description: `The algorithm used to generate the key. KEY_ALG_RSA_2048 is the default algorithm.
+Valid values are listed at
+[ServiceAccountPrivateKeyType](https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountKeyAlgorithm)
+(only used on create)`,
 			},
 			"private_key_type": {
 				Type:         schema.TypeString,
 				Default:      "TYPE_GOOGLE_CREDENTIALS_FILE",
 				Optional:     true,
 				ForceNew:     true,
+				Description:  `The output format of the private key. TYPE_GOOGLE_CREDENTIALS_FILE is the default output format.`,
 				ValidateFunc: validation.StringInSlice([]string{"TYPE_UNSPECIFIED", "TYPE_PKCS12_FILE", "TYPE_GOOGLE_CREDENTIALS_FILE"}, false),
 			},
 			"public_key_type": {
@@ -68,6 +72,7 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Default:      "TYPE_X509_PEM_FILE",
 				Optional:     true,
 				ForceNew:     true,
+				Description:  `The output format of the public key requested. TYPE_X509_PEM_FILE is the default output format.`,
 				ValidateFunc: validation.StringInSlice([]string{"TYPE_NONE", "TYPE_X509_PEM_FILE", "TYPE_RAW_PUBLIC_KEY"}, false),
 			},
 			"public_key_data": {
@@ -75,10 +80,10 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Optional:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"key_algorithm", "private_key_type"},
-				Description:   `A field that allows clients to upload their own public key. If set, use this public key data to create a service account key for given service account. Please note, the expected format for this field is a base64 encoded X509_PEM.`,
+				Description:   "Public key data to create a service account key for given service account. The expected format for this field is a base64 encoded X509_PEM and it conflicts with `public_key_type` and `private_key_type`.",
 			},
 			"keepers": {
-				Description: "Arbitrary map of values that, when changed, will trigger recreation of resource.",
+				Description: `Arbitrary map of values that, when changed, will trigger a new key to be generated.`,
 				Type:        schema.TypeMap,
 				Optional:    true,
 				ForceNew:    true,
@@ -97,10 +102,11 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Description: `The public key, base64 encoded`,
 			},
 			"private_key": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Sensitive:   true,
-				Description: `The private key in JSON format, base64 encoded. This is what you normally get as a file when creating service account keys through the CLI or web console. This is only populated when creating a new key.`,
+				Type:      schema.TypeString,
+				Computed:  true,
+				Sensitive: true,
+				Description: `The private key in JSON format, base64 encoded. This is what you normally get as a file when creating
+service account keys through the CLI or web console. This is only populated when creating a new key.`,
 			},
 			"valid_after": {
 				Type:        schema.TypeString,
@@ -108,9 +114,10 @@ func ResourceGoogleServiceAccountKey() *schema.Resource {
 				Description: `The key can be used after this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
 			},
 			"valid_before": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The key can be used before this timestamp. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `The key can be used before this timestamp.
+A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

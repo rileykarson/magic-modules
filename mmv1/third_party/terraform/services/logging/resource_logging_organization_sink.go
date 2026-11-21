@@ -35,16 +35,18 @@ func ResourceLoggingOrganizationSink() *schema.Resource {
 		},
 	}
 	schm.Schema["include_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to include child folders or projects in the sink export. If true, logs associated with child projects are also exported; otherwise only logs relating to the provided organization are included.`,
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: `Whether or not to include child folders or projects in the sink export. If true, logs
+associated with child projects are also exported; otherwise only logs relating to the provided organization are included.`,
 	}
 	schm.Schema["intercept_children"] = &schema.Schema{
-		Type:        schema.TypeBool,
-		Optional:    true,
-		Default:     false,
-		Description: `Whether or not to intercept logs from child projects. If true, matching logs will not match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
+		Type:     schema.TypeBool,
+		Optional: true,
+		Default:  false,
+		Description: `Whether or not to intercept logs from child projects. If true, matching logs will not
+match with sinks in child resources, except _Required sinks. This sink will be visible to child resources when listing sinks.`,
 	}
 
 	return schm

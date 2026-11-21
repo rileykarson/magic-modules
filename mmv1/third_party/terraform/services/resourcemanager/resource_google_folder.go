@@ -44,13 +44,14 @@ func ResourceGoogleFolder() *schema.Resource {
 			"parent": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `The resource name of the parent Folder or Organization. Must be of the form folders/{folder_id} or organizations/{org_id}.`,
+				Description: "The resource name of the parent Folder or Organization.\nMust be of the form `folders/{folder_id}` or `organizations/{org_id}`.",
 			},
 			// Must be unique amongst its siblings.
 			"display_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The folder's display name. A folder's display name must be unique amongst its siblings, e.g. no two folders with the same parent can share the same display name. The display name must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be no longer than 30 characters.`,
+				Type:     schema.TypeString,
+				Required: true,
+				Description: `The folder’s display name.
+A folder’s display name must be unique amongst its siblings, e.g. no two folders with the same parent can share the same display name. The display name must start and end with a letter or digit, may contain letters, digits, spaces, hyphens and underscores and can be no longer than 30 characters.`,
 			},
 			"folder_id": {
 				Type:        schema.TypeString,
@@ -67,36 +68,37 @@ func ResourceGoogleFolder() *schema.Resource {
 			"lifecycle_state": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The lifecycle state of the folder such as ACTIVE or DELETE_REQUESTED.`,
+				Description: "The lifecycle state of the folder such as `ACTIVE` or `DELETE_REQUESTED`.",
 			},
 			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `Timestamp when the Folder was created. Assigned by the server. A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `Timestamp when the Folder was created. Assigned by the server.
+A timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds. Example: "2014-10-02T15:01:23.045123456Z".`,
 			},
 			"deletion_protection": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
-				Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
+				Description: "Whether Terraform will be prevented from destroying or recreating the Folder. When the field is set to `true` or unset in Terraform state, a `terraform apply` or `terraform destroy` that would delete the folder will fail. When the field is set to `false`, deleting the folder is allowed. Default value is `true`.",
 			},
 			"tags": {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				ForceNew:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the google_tags_tag_value resource.`,
+				Description: "A map of resource manager tags. Resource manager tag keys and values have the same definition as resource manager tags. Keys must be in the format tagKeys/{tag_key_id}, and values are in the format tagValues/456. The field is ignored when empty. The field is immutable and causes resource replacement when  mutated. This field is only set at create time and modifying this field after creation will trigger recreation. To apply tags to an existing resource, see the `google_tags_tag_value` resource.",
 			},
 			"configured_capabilities": {
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A list of capabilities that are configured for this folder.`,
+				Description: `Optional capabilities configured for this folder.`,
 			},
 			"management_project": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The Management Project associated with the folder's configured capabilities.`,
+				Description: `Management Project associated with this folder (if capability is enabled).`,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

@@ -20,6 +20,7 @@ var IamPubsubSubscriptionSchema = map[string]*schema.Schema{
         Type:             schema.TypeString,
         Required:         true,
         ForceNew:         true,
+        Description: `The subscription name or id to bind to attach IAM policy to.`,
         DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
     },
     "project": {
@@ -27,6 +28,8 @@ var IamPubsubSubscriptionSchema = map[string]*schema.Schema{
         Optional: true,
         Computed: true,
         ForceNew: true,
+        Description: `The project in which the resource belongs. If it
+is not provided, the provider project is used.`,
     },
 }
 

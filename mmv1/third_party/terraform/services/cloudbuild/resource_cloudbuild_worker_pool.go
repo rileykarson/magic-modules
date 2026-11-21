@@ -126,7 +126,7 @@ func ResourceCloudbuildWorkerPool() *schema.Resource {
 			"state": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Output only. `WorkerPool` state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED",
+				Description: `Output only. WorkerPool state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED`,
 			},
 
 			"uid": {
@@ -155,14 +155,14 @@ func CloudbuildWorkerPoolNetworkConfigSchema() *schema.Resource {
 				Required:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.CompareResourceNames,
-				Description:      "Required. Immutable. The network definition that the workers are peered to. If this section is left empty, the workers will be peered to `WorkerPool.project_id` on the service producer network. Must be in the format `projects/{project}/global/networks/{network}`, where `{project}` is a project number, such as `12345`, and `{network}` is the name of a VPC network in the project. See [Understanding network configuration options](https://cloud.google.com/cloud-build/docs/custom-workers/set-up-custom-worker-pool-environment#understanding_the_network_configuration_options)",
+				Description:      "Immutable. The network definition that the workers are peered to. If this section is left empty, the workers will be peered to `WorkerPool.project_id` on the service producer network. Must be in the format `projects/{project}/global/networks/{network}`, where `{project}` is a project number, such as `12345`, and `{network}` is the name of a VPC network in the project. See (https://cloud.google.com/cloud-build/docs/custom-workers/set-up-custom-worker-pool-environment#understanding_the_network_configuration_options)",
 			},
 
 			"peered_network_ip_range": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				ForceNew:    true,
-				Description: "Optional. Immutable. Subnet IP range within the peered network. This is specified in CIDR notation with a slash and the subnet prefix size. You can optionally specify an IP address before the subnet prefix value. e.g. `192.168.0.0/29` would specify an IP range starting at 192.168.0.0 with a prefix size of 29 bits. `/16` would specify a prefix size of 16 bits, with an automatically determined IP within the peered VPC. If unspecified, a value of `/24` will be used.",
+				Description: "Immutable. Subnet IP range within the peered network. This is specified in CIDR notation with a slash and the subnet prefix size. You can optionally specify an IP address before the subnet prefix value. e.g. `192.168.0.0/29` would specify an IP range starting at 192.168.0.0 with a prefix size of 29 bits. `/16` would specify a prefix size of 16 bits, with an automatically determined IP within the peered VPC. If unspecified, a value of `/24` will be used.",
 			},
 		},
 	}
@@ -195,7 +195,7 @@ func CloudbuildWorkerPoolWorkerConfigSchema() *schema.Resource {
 			"disk_size_gb": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Description: "Size of the disk attached to the worker, in GB. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). Specify a value of up to 1000. If `0` is specified, Cloud Build will use a standard disk size.",
+				Description: "Size of the disk attached to the worker, in GB. See [diskSizeGb](https://cloud.google.com/build/docs/private-pools/private-pool-config-file-schema#disksizegb). Specify a value of up to 1000. If `0` is specified, Cloud Build will use a standard disk size.",
 			},
 
 			"enable_nested_virtualization": {
@@ -207,7 +207,7 @@ func CloudbuildWorkerPoolWorkerConfigSchema() *schema.Resource {
 			"machine_type": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Machine type of a worker, such as `n1-standard-1`. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). If left blank, Cloud Build will use `n1-standard-1`.",
+				Description: "Machine type of a worker, such as `n1-standard-1`. See [machineType](https://cloud.google.com/build/docs/private-pools/private-pool-config-file-schema#machinetype). If left blank, Cloud Build will use `n1-standard-1`.",
 			},
 
 			"no_external_ip": {

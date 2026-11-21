@@ -35,14 +35,16 @@ func ResourceRuntimeconfigVariable() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the variable to manage. Note that variable names can be hierarchical using slashes (e.g. "prod-variables/hostname").`,
+				Description: `The name of the variable to manage. Note that variable
+names can be hierarchical using slashes (e.g. "prod-variables/hostname").`,
 			},
 
 			"parent": {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the RuntimeConfig resource containing this variable.`,
+				Description: `The name of the RuntimeConfig resource containing this
+variable.`,
 			},
 
 			"project": {
@@ -50,13 +52,15 @@ func ResourceRuntimeconfigVariable() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"value": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Sensitive:    true,
+				Description: "The base64-encoded binary content to associate with the variable. Exactly one of `text` or `value` must be specified. Must be base64 encoded and less than 4096 bytes in length.",
 				ExactlyOneOf: []string{"text", "value"},
 			},
 
@@ -64,13 +68,16 @@ func ResourceRuntimeconfigVariable() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Sensitive:    true,
+				Description: "The string content to associate with the variable. Exactly one of `text` or `value` must be specified. Must be a valid UTF-8 string and less than 4096 bytes in length.",
 				ExactlyOneOf: []string{"text", "value"},
 			},
 
 			"update_time": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The timestamp in RFC3339 UTC "Zulu" format, accurate to nanoseconds, representing when the variable was last updated. Example: "2016-10-09T12:33:37.578138407Z".`,
+				Description: `The timestamp in RFC3339 UTC "Zulu" format,
+accurate to nanoseconds, representing when the variable was last updated.
+Example: "2016-10-09T12:33:37.578138407Z".`,
 			},
 
 			//UDP schema start

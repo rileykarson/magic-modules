@@ -21,6 +21,8 @@ var IamProjectSchema = map[string]*schema.Schema{
 		Type:             schema.TypeString,
 		Required:         true,
 		ForceNew:         true,
+		Description: `The project id of the target project. This is not
+inferred from the provider.`,
 		DiffSuppressFunc: CompareProjectName,
 	},
 }

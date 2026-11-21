@@ -36,16 +36,20 @@ func ResourceProjectServiceIdentity() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+				Description: `The service to generate identity for.`,
 			},
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs.
+If it is not provided, the provider project is used.`,
 			},
 			"email": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: `The email address of the Google managed service account.`,
 			},
 			"member": {
 				Type:        schema.TypeString,

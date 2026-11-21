@@ -15,9 +15,10 @@ import (
 
 var IamHealthcareFhirStoreSchema = map[string]*schema.Schema{
 	"fhir_store_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: "The FHIR store ID, in the form\n`{project_id}/{location_name}/{dataset_name}/{fhir_store_name}` or\n`{location_name}/{dataset_name}/{fhir_store_name}`. In the second form, the provider's\nproject setting will be used as a fallback.",
 	},
 }
 

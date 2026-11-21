@@ -18,6 +18,7 @@ var StorageBucketIamSchema = map[string]*schema.Schema{
 		Type:             schema.TypeString,
 		Required:         true,
 		ForceNew:         true,
+		Description:      `Used to find the parent resource to bind the IAM policy to`,
 		DiffSuppressFunc: StorageBucketDiffSuppress,
 	},
 }

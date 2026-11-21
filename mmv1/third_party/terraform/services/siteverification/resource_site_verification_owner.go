@@ -33,14 +33,14 @@ func ResourceSiteVerificationOwner() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The email address of the owner.`,
+				Description: `The email of the user to be added as an owner.`,
 			},
 			"web_resource_id": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The id of the Web Resource to add this owner to, in the form "webResource/<web-resource-id>".`,
+				Description:      "The id of of the web resource to which the owner will be added, in the form `webResource/<resource_id>`,\nsuch as `webResource/https://www.example.com/`",
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

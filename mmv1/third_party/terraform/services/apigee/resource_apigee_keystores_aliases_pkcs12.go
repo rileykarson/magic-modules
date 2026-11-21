@@ -48,7 +48,7 @@ func ResourceApigeeKeystoresAliasesPkcs12() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `Cert content`,
+				Description: `PKCS12 file content`,
 			},
 			"environment": {
 				Type:        schema.TypeString,
@@ -66,7 +66,7 @@ func ResourceApigeeKeystoresAliasesPkcs12() *schema.Resource {
 				Type:        schema.TypeString,
 				ForceNew:    true,
 				Required:    true,
-				Description: `Organization ID associated with the alias`,
+				Description: `Organization ID associated with the alias, without organization/ prefix`,
 			},
 			"filehash": {
 				Type:        schema.TypeString,
@@ -99,7 +99,7 @@ func ResourceApigeeKeystoresAliasesPkcs12() *schema.Resource {
 									"is_valid": {
 										Type:     schema.TypeString,
 										Computed: true,
-										Description: `Flag that specifies whether the certificate is valid. 
+										Description: `Flag that specifies whether the certificate is valid.
 Flag is set to Yes if the certificate is valid, No if expired, or Not yet if not yet valid.`,
 									},
 									"issuer": {
@@ -155,7 +155,7 @@ Flag is set to Yes if the certificate is valid, No if expired, or Not yet if not
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `Password for the Private Key if it's encrypted`,
+				Description: `Password for the PKCS12 file if it's encrypted`,
 			},
 			"type": {
 				Type:        schema.TypeString,

@@ -45,7 +45,7 @@ func ResourceApigeeSharedFlowDeployment() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The Apigee Organization associated with the Apigee instance`,
+				Description: `The Apigee Organization associated with the Sharedflow`,
 			},
 			"revision": {
 				Type:        schema.TypeString,

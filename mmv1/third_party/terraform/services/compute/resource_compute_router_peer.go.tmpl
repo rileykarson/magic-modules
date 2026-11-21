@@ -66,12 +66,7 @@ func ResourceComputeRouterBgpPeer() *schema.Resource {
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: verify.ValidateRFC1035Name(2, 63),
-				Description: `Name of this BGP peer. The name must be 1-63 characters long,
-and comply with RFC1035. Specifically, the name must be 1-63 characters
-long and match the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which
-means the first character must be a lowercase letter, and all
-following characters must be a dash, lowercase letter, or digit,
-except the last character, which cannot be a dash.`,
+				Description: "Name of this BGP peer. The name must be 1-63 characters long,\nand comply with RFC1035. Specifically, the name must be 1-63 characters\nlong and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which\nmeans the first character must be a lowercase letter, and all\nfollowing characters must be a dash, lowercase letter, or digit,\nexcept the last character, which cannot be a dash.",
 			},
 			"peer_asn": {
 				Type:     schema.TypeInt,
@@ -90,25 +85,13 @@ Each BGP interface may use a different value.`,
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: verify.ValidateEnum([]string{"DEFAULT", "CUSTOM", ""}),
-				Description: `User-specified flag to indicate which mode to use for advertisement.
-Valid values of this enum field are: 'DEFAULT', 'CUSTOM' Default value: "DEFAULT" Possible values: ["DEFAULT", "CUSTOM"]`,
+				Description: "User-specified flag to indicate which mode to use for advertisement.\nValid values of this enum field are: `DEFAULT`, `CUSTOM`\nDefault value is `DEFAULT`.\nPossible values are: `DEFAULT`, `CUSTOM`.",
 				Default: "DEFAULT",
 			},
 			"advertised_groups": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Description: `User-specified list of prefix groups to advertise in custom
-mode, which currently supports the following option:
-
-* 'ALL_SUBNETS': Advertises all of the router's own VPC subnets.
-This excludes any routes learned for subnets that use VPC Network
-Peering.
-
-
-Note that this field can only be populated if advertiseMode is 'CUSTOM'
-and overrides the list defined for the router (in the "bgp" message).
-These groups are advertised in addition to any specified prefixes.
-Leave this field blank to advertise no custom groups.`,
+				Description: "User-specified list of prefix groups to advertise in custom\nmode, which currently supports the following option:\n* `ALL_SUBNETS`: Advertises all of the router's own VPC subnets.\nThis excludes any routes learned for subnets that use VPC Network\nPeering.\n\nNote that this field can only be populated if advertiseMode is `CUSTOM`\nand overrides the list defined for the router (in the \"bgp\" message).\nThese groups are advertised in addition to any specified prefixes.\nLeave this field blank to advertise no custom groups.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -116,11 +99,7 @@ Leave this field blank to advertise no custom groups.`,
 			"advertised_ip_ranges": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				Description: `User-specified list of individual IP ranges to advertise in
-custom mode. This field can only be populated if advertiseMode
-is 'CUSTOM' and is advertised to all peers of the router. These IP
-ranges will be advertised in addition to any specified groups.
-Leave this field blank to advertise no custom IP ranges.`,
+				Description: "User-specified list of individual IP ranges to advertise in\ncustom mode. This field can only be populated if advertiseMode\nis `CUSTOM` and is advertised to all peers of the router. These IP\nranges will be advertised in addition to any specified groups.\nLeave this field blank to advertise no custom IP ranges.",
 				Elem: computeRouterBgpPeerAdvertisedIpRangesSchema(),
 			},
 			"advertised_route_priority": {
@@ -133,7 +112,8 @@ length, the routes with the lowest priority value win.`,
 			"zero_advertised_route_priority": {
 				Type:        schema.TypeBool,
 				Optional: true,
-				Description: `Force the advertised_route_priority to be 0.`,
+				Description: `The user-defined zero-advertised-route-priority for a advertised-route-priority in BGP session.
+This value has to be set true to force the advertised_route_priority to be 0.`,
 			},
 			"is_advertised_route_priority_set": {
 				Type:        schema.TypeBool,
@@ -143,8 +123,9 @@ length, the routes with the lowest priority value win.`,
 			"custom_learned_ip_ranges": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Description: `The custom learned route IP address range. Must be a valid CIDR-formatted prefix. If an 
-IP address is provided without a subnet mask, it is interpreted as, for IPv4, a /32 singular IP address range, and, for IPv6, /128.`,
+				Description: `The custom learned route IP address range. Must be a valid CIDR-formatted prefix.
+If an IP address is provided without a subnet mask, it is interpreted as, for IPv4,
+a /32 singular IP address range, and, for IPv6, /128.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"range": {
@@ -160,14 +141,16 @@ CIDR-formatted string.`,
 				Type:     schema.TypeInt,
 				Optional: true,
 				Description: `The user-defined custom learned route priority for a BGP session.
-This value is applied to all custom learned route ranges for the session. You can choose a value
-from 0 to 65335. If you don't provide a value, Google Cloud assigns a priority of 100 to the ranges.`,
+This value is applied to all custom learned route ranges for the session.
+You can choose a value from 0 to 65335. If you don't provide a value,
+Google Cloud assigns a priority of 100 to the ranges.`,
                         },
 			"zero_custom_learned_route_priority": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `Force the custom_learned_route_priority to be 0.`,
+				Description: `The user-defined zero-custom-learned-route-priority for a custom-learned-route-priority in BGP session.
+This value has to be set true to force the custom_learned_route_priority to be 0.`,
 			},
 			"is_custom_learned_priority_set": {
 				Type:        schema.TypeBool,
@@ -186,11 +169,7 @@ from 0 to 65335. If you don't provide a value, Google Cloud assigns a priority o
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: verify.ValidateEnum([]string{"ACTIVE", "DISABLED", "PASSIVE"}),
-							Description: `The BFD session initialization mode for this BGP peer.
-If set to 'ACTIVE', the Cloud Router will initiate the BFD session
-for this BGP peer. If set to 'PASSIVE', the Cloud Router will wait
-for the peer router to initiate the BFD session for this BGP peer.
-If set to 'DISABLED', BFD is disabled for this BGP peer. Possible values: ["ACTIVE", "DISABLED", "PASSIVE"]`,
+							Description: "The BFD session initialization mode for this BGP peer.\nIf set to `ACTIVE`, the Cloud Router will initiate the BFD session\nfor this BGP peer. If set to `PASSIVE`, the Cloud Router will wait\nfor the peer router to initiate the BFD session for this BGP peer.\nIf set to `DISABLED`, BFD is disabled for this BGP peer.\nPossible values are: `ACTIVE`, `DISABLED`, `PASSIVE`.",
 						},
 						"min_receive_interval": {
 							Type:     schema.TypeInt,
@@ -273,8 +252,7 @@ assigns unused addresses from the 2600:2d00:0:2::/64 or 2600:2d00:0:3::/64 range
 				Type:     schema.TypeString,
 				Computed: true,
 				Optional: true,
-				Description: `IP address of the BGP interface outside Google Cloud Platform.
-Only IPv4 is supported. Required if 'ip_address' is set.`,
+				Description: "IP address of the BGP interface outside Google Cloud Platform.\nOnly IPv4 is supported. Required if `ip_address` is set.",
 			},
 			"peer_ipv6_nexthop_address": {
 				Type:             schema.TypeString,
@@ -297,7 +275,7 @@ assigns unused addresses from the 2600:2d00:0:2::/64 or 2600:2d00:0:3::/64 range
 			"export_policies": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Description: `routers.list of export policies applied to this peer, in the order they must be evaluated. 
+				Description: `routers.list of export policies applied to this peer, in the order they must be evaluated.
 The name must correspond to an existing policy that has ROUTE_POLICY_TYPE_EXPORT type.`,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -306,7 +284,7 @@ The name must correspond to an existing policy that has ROUTE_POLICY_TYPE_EXPORT
 			"import_policies": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Description: `routers.list of import policies applied to this peer, in the order they must be evaluated. 
+				Description: `routers.list of import policies applied to this peer, in the order they must be evaluated.
 The name must correspond to an existing policy that has ROUTE_POLICY_TYPE_IMPORT type.`,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -333,41 +311,32 @@ this Cloud Router. The VM instance is the peer side of the BGP session.`,
 			"management_type": {
 				Type:     schema.TypeString,
 				Computed: true,
-				Description: `The resource that configures and manages this BGP peer.
-
-* 'MANAGED_BY_USER' is the default value and can be managed by
-you or other users
-* 'MANAGED_BY_ATTACHMENT' is a BGP peer that is configured and
-managed by Cloud Interconnect, specifically by an
-InterconnectAttachment of type PARTNER. Google automatically
-creates, updates, and deletes this type of BGP peer when the
-PARTNER InterconnectAttachment is created, updated,
-or deleted.`,
+				Description: "The resource that configures and manages this BGP peer.\n* `MANAGED_BY_USER` is the default value and can be managed by\nyou or other users\n* `MANAGED_BY_ATTACHMENT` is a BGP peer that is configured and\nmanaged by Cloud Interconnect, specifically by an\nInterconnectAttachment of type PARTNER. Google automatically\ncreates, updates, and deletes this type of BGP peer when the\nPARTNER InterconnectAttachment is created, updated,\nor deleted.",
 			},
 			"project": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs.
+If it is not provided, the provider project is used.`,
 			},
 			"md5_authentication_key": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Description: `Present if MD5 authentication is enabled for the peering. Must be the name
-of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.`,
+				Description: `Configuration for MD5 authentication on the BGP session.`,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:     schema.TypeString,
 							Required: true,
-							Description: `[REQUIRED] Name used to identify the key.
-Must be unique within a router. Must be referenced by exactly one bgpPeer. Must comply with RFC1035.`,
+							Description: `Name used to identify the key. Must be unique within a router. Must comply with RFC1035.`,
 						},
 						"key": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `Value of the key.`,
+							Description: `The MD5 authentication key for this BGP peer. Maximum length is 80 characters. Can only contain printable ASCII characters`,
 							Sensitive:   true,
 						},
 					},

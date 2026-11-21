@@ -42,37 +42,32 @@ func ResourceTagsTagBindingCollection() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Default:     "global",
-				Description: `The location of the TagBindingCollection.`,
+				Description: "The location of the target resource. E.g. `\"global\"`, `\"us-central1\"`, `\"us-east2-c\"`. Defaults to `\"global\"`.",
 			},
 			"full_resource_name": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.ProjectNumberDiffSuppress,
-				Description:      `The full resource name of the resource to which the tags are bound. E.g. //cloudresourcemanager.googleapis.com/projects/123`,
+				Description:      "The full resource name of the resource to which the tags are bound. E.g. `//cloudresourcemanager.googleapis.com/projects/123`",
 			},
 			"tags": {
 				Type:     schema.TypeMap,
 				Required: true,
-				Description: `A map of tag keys to values directly bound to this resource, specified in namespaced format.
-For example:
-  "123/environment": "production"
-Keys must be namespaced names of TagKeys, and values must be short names of TagValues.
-This field is non-authoritative. Terraform will only manage the precise tags present in this map.`,
+				Description: "A map of tag keys to values directly bound to this resource, specified in namespaced name format. E.g. `\"123/environment\": \"production\"`. Keys must be namespaced names of TagKeys, and values must be short names of TagValues. This field is non-authoritative. Terraform will only manage the precise tags present in this map.",
 				Elem: &schema.Schema{Type: schema.TypeString},
 			},
 			"active_tags": {
 				Type:     schema.TypeMap,
 				Computed: true,
-				Description: `(Output) The most recent state of all direct tags on the resource, as reported by the API.
+				Description: `The most recent state of all direct tags on the resource, as reported by the API.
 This includes the tags configured through Terraform, Google system tags, and tags attached by other clients.`,
 				Elem: &schema.Schema{Type: schema.TypeString},
 			},
 			"name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The name of the TagBindingCollection, in the format:
-locations/{location}/tagBindingCollections/{encoded_full_resource_name}`,
+				Description: "The name of the TagBindingCollection, in the format: `locations/{location}/tagBindingCollections/{encoded_full_resource_name}`",
 			},
 		},
 

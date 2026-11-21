@@ -79,10 +79,12 @@ func ResourceBigtableInstance() *schema.Resource {
 			},
 
 			"cluster": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				Description: `A block of cluster configuration options. This can be specified at least once.`,
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				Description: `A block of cluster configuration options. This can be specified at least once, and up
+to as many as possible within 8 cloud regions. Removing the field entirely from the config will cause the provider
+to default to the backend value.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"cluster_id": {
@@ -91,10 +93,12 @@ func ResourceBigtableInstance() *schema.Resource {
 							Description: `The ID of the Cloud Bigtable cluster. Must be 6-30 characters and must only contain hyphens, lowercase letters and numbers.`,
 						},
 						"zone": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Optional:    true,
-							Description: `The zone to create the Cloud Bigtable cluster in. Each cluster must have a different zone in the same region. Zones that support Bigtable instances are noted on the Cloud Bigtable locations page.`,
+							Type:     schema.TypeString,
+							Computed: true,
+							Optional: true,
+							Description: `The zone to create the Cloud Bigtable cluster in. If it not
+specified, the provider zone is used. Each cluster must have a different zone in the same region. Zones that support
+Bigtable instances are noted on the [Cloud Bigtable locations page](https://cloud.google.com/bigtable/docs/locations).`,
 						},
 						"num_nodes": {
 							Type:     schema.TypeInt,
@@ -103,26 +107,27 @@ func ResourceBigtableInstance() *schema.Resource {
 							// so mark as computed.
 							Computed:     true,
 							ValidateFunc: validation.IntAtLeast(1),
-							Description:  `The number of nodes in the cluster. If no value is set, Cloud Bigtable automatically allocates nodes based on your data footprint and optimized for 50% storage utilization.`,
+							Description: `The number of nodes in the cluster.
+If no value is set, Cloud Bigtable automatically allocates nodes based on your data footprint and optimized for 50% storage utilization.`,
 						},
 						"storage_type": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Default:      "SSD",
 							ValidateFunc: validation.StringInSlice([]string{"SSD", "HDD"}, false),
-							Description:  `The storage type to use. One of "SSD" or "HDD". Defaults to "SSD".`,
+							Description:  "The storage type to use. One of `\"SSD\"` or\n`\"HDD\"`. Defaults to `\"SSD\"`.",
 						},
 						"kms_key_name": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `Describes the Cloud KMS encryption key that will be used to protect the destination Bigtable cluster. The requirements for this key are: 1) The Cloud Bigtable service account associated with the project that contains this cluster must be granted the cloudkms.cryptoKeyEncrypterDecrypter role on the CMEK key. 2) Only regional keys can be used and the region of the CMEK key must match the region of the cluster. 3) All clusters within an instance must use the same CMEK key. Values are of the form projects/{project}/locations/{location}/keyRings/{keyring}/cryptoKeys/{key}`,
+							Description: "Describes the Cloud KMS encryption key that will be used to protect the destination Bigtable cluster. The requirements for this key are: 1) The Cloud Bigtable service account associated with the project that contains this cluster must be granted the `cloudkms.cryptoKeyEncrypterDecrypter` role on the CMEK key. 2) Only regional keys can be used and the region of the CMEK key must match the region of the cluster.",
 						},
 						"autoscaling_config": {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							Description: "A list of Autoscaling configurations. Only one element is used and allowed.",
+							Description: "[Autoscaling](https://cloud.google.com/bigtable/docs/autoscaling#parameters) config for the cluster.\n\n!> **Warning**: Only one of `autoscaling_config` or `num_nodes` should be set for a cluster. If both are set, `num_nodes` is ignored. If none is set, autoscaling will be disabled and sized to the current node count.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"min_nodes": {
@@ -138,7 +143,7 @@ func ResourceBigtableInstance() *schema.Resource {
 									"cpu_target": {
 										Type:        schema.TypeInt,
 										Required:    true,
-										Description: `The target CPU utilization for autoscaling. Value must be between 10 and 80.`,
+										Description: `The target CPU utilization for autoscaling, in percentage. Must be between 10 and 80.`,
 									},
 									"storage_target": {
 										Type:        schema.TypeInt,
@@ -152,14 +157,14 @@ func ResourceBigtableInstance() *schema.Resource {
 						"state": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: `The state of the cluster`,
+							Description: `describes the current state of the cluster.`,
 						},
 						"node_scaling_factor": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Default:      "NodeScalingFactor1X",
 							ValidateFunc: validation.StringInSlice([]string{"NodeScalingFactor1X", "NodeScalingFactor2X"}, false),
-							Description:  `The node scaling factor of this cluster. One of "NodeScalingFactor1X" or "NodeScalingFactor2X". Defaults to "NodeScalingFactor1X".`,
+							Description:  "The node scaling factor for this cluster. One of `\"NodeScalingFactor1X\"` or `\"NodeScalingFactor2X\"`. Defaults to `\"NodeScalingFactor1X\"`. If `\"NodeScalingFactor2X\"` is specified, then `num_nodes`, `min_nodes`, and `max_nodes` would need to be specified in increments of 2. This value cannot be updated after the cluster is created.\n\n-> **Note**: Removing the field entirely from the config will cause the provider to default to the backend value.\n\n!> **Warning:** Modifying the `storage_type`, `zone` or `kms_key_name` of an existing cluster (by\n`cluster_id`) will cause Terraform to delete/recreate the entire\n`google_bigtable_instance` resource. If these values are changing, use a new\n`cluster_id`.",
 						},
 					},
 				},
@@ -168,7 +173,7 @@ func ResourceBigtableInstance() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The human-readable display name of the Bigtable instance. Defaults to the instance name.`,
+				Description: "The human-readable display name of the Bigtable instance. Defaults to the instance `name`.",
 			},
 
 			"instance_type": {
@@ -176,7 +181,7 @@ func ResourceBigtableInstance() *schema.Resource {
 				Optional:     true,
 				Default:      "PRODUCTION",
 				ValidateFunc: validation.StringInSlice([]string{"DEVELOPMENT", "PRODUCTION"}, false),
-				Description:  `The instance type to create. One of "DEVELOPMENT" or "PRODUCTION". Defaults to "PRODUCTION".`,
+				Description:  "The instance type to create. One of `\"DEVELOPMENT\"` or `\"PRODUCTION\"`. Defaults to `\"PRODUCTION\"`.\nIt is recommended to leave this field unspecified since the distinction between `\"DEVELOPMENT\"` and `\"PRODUCTION\"` instances is going away,\nand all instances will become `\"PRODUCTION\"` instances. This means that new and existing `\"DEVELOPMENT\"` instances will be converted to\n`\"PRODUCTION\"` instances. It is recommended for users to use `\"PRODUCTION\"` instances in any case, since a 1-node `\"PRODUCTION\"` instance\nis functionally identical to a `\"DEVELOPMENT\"` instance, but without the accompanying restrictions.",
 				Deprecated:   `It is recommended to leave this field unspecified since the distinction between "DEVELOPMENT" and "PRODUCTION" instances is going away, and all instances will become "PRODUCTION" instances. This means that new and existing "DEVELOPMENT" instances will be converted to "PRODUCTION" instances. It is recommended for users to use "PRODUCTION" instances in any case, since a 1-node "PRODUCTION" instance is functionally identical to a "DEVELOPMENT" instance, but without the accompanying restrictions.`,
 			},
 
@@ -184,24 +189,24 @@ func ResourceBigtableInstance() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `When deleting a BigTable instance, this boolean option will delete all backups within the instance.`,
+				Description: "Deleting a BigTable instance can be blocked if any backups are present in the instance. When `force_destroy` is set to true, Terraform will delete all backups found in the BigTable instance before attempting to delete the instance itself. Defaults to false.",
 			},
 
 			"deletion_protection": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
-				Description: `When the field is set to true or unset in Terraform state, a terraform apply or terraform destroy that would delete the instance will fail. When the field is set to false, deleting the instance is allowed.`,
+				Description: "Whether Terraform will be prevented from destroying the instance.\nWhen the field is set to true or unset in Terraform state, a `terraform apply` or `terraform destroy` that would delete\nthe instance will fail. When the field is set to false, deleting the instance is allowed.",
 			},
 
 			"labels": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
-				Description: `A mapping of labels to assign to the resource.
-				
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+				Description: `A set of key/value label pairs to assign to the resource. Label keys must follow the requirements at https://docs.cloud.google.com/resource-manager/docs/creating-managing-labels#requirements.
+
+**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
+Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
 			},
 
 			"terraform_labels": {
@@ -219,11 +224,12 @@ func ResourceBigtableInstance() *schema.Resource {
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
@@ -233,14 +239,14 @@ func ResourceBigtableInstance() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A map of Resource Manager Tags. Keys can be either the numeric tag key ID (tagKeys/123) or the namespaced name (project/tag-key). Values can be the numeric tag value ID (tagValues/456) or the namespaced value (project/tag-key/tag-value). The field is ignored when empty.`,
+				Description: `A set of key/value label pairs to assign to the resource. Tags must follow the requirements at [create and manage tags](https://docs.cloud.google.com/resource-manager/docs/tags/tags-creating-and-managing).`,
 			},
 			"edition": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "ENTERPRISE",
 				ValidateFunc: validation.StringInSlice([]string{"ENTERPRISE", "ENTERPRISE_PLUS"}, false),
-				Description:  `The edition of the instance. One of "ENTERPRISE" or "ENTERPRISE_PLUS". Defaults to "ENTERPRISE".`,
+				Description:  `The edition of the Bigtable instance. One of "ENTERPRISE" or "ENTERPRISE_PLUS". Defaults to "ENTERPRISE". Details can be found at the [Cloud Bigtable editions page](https://docs.cloud.google.com/bigtable/docs/editions-overview).`,
 			},
 		},
 		UseJSONNumber: true,

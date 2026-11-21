@@ -135,7 +135,8 @@ func ResourceDnsRecordSet() *schema.Resource {
 				Required:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The name of the zone in which this record set will reside.`,
+				Description: `The name of the zone in which this record set will
+reside.`,
 			},
 
 			"name": {
@@ -153,15 +154,16 @@ func ResourceDnsRecordSet() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				DiffSuppressFunc: rrdatasDnsDiffSuppress,
-				Description:      `The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \"\" inside the Terraform configuration string (e.g. "first255characters\"\"morecharacters").`,
+				Description:      "The string data for the records in this record set\nwhose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding `\\\"` if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add `\\\" \\\"` inside the Terraform configuration string (e.g. `\"first255characters\\\" \\\"morecharacters\"`).",
 				ExactlyOneOf:     []string{"rrdatas", "routing_policy"},
 			},
 
 			"routing_policy": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Description: "The configuration for steering traffic based on query. You can specify either Weighted Round Robin(WRR) type or Geolocation(GEO) type.",
-				MaxItems:    1,
+				Type:     schema.TypeList,
+				Optional: true,
+				Description: `The configuration for steering traffic based on query.
+Now you can specify either Weighted Round Robin(WRR) type or Geolocation(GEO) type.`,
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"wrr": {
@@ -176,8 +178,9 @@ func ResourceDnsRecordSet() *schema.Resource {
 										Description: `The ratio of traffic routed to the target.`,
 									},
 									"rrdatas": {
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:        schema.TypeList,
+										Optional:    true,
+										Description: "Same as `rrdatas` above.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -197,7 +200,7 @@ func ResourceDnsRecordSet() *schema.Resource {
 						"geo": {
 							Type:         schema.TypeList,
 							Optional:     true,
-							Description:  `The configuration for Geo location based routing policy.`,
+							Description:  `The configuration for Geolocation based routing policy.`,
 							Elem:         geoPolicySchema,
 							ExactlyOneOf: []string{"routing_policy.0.wrr", "routing_policy.0.geo", "routing_policy.0.primary_backup"},
 						},
@@ -246,7 +249,7 @@ func ResourceDnsRecordSet() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							ForceNew:    true,
-							Description: "Specifies the health check.",
+							Description: `Specifies the health check (used with external endpoints).`,
 						},
 					},
 				},
@@ -266,11 +269,12 @@ func ResourceDnsRecordSet() *schema.Resource {
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),
@@ -288,8 +292,9 @@ var geoPolicySchema *schema.Resource = &schema.Resource{
 			Description: `The location name defined in Google Cloud.`,
 		},
 		"rrdatas": {
-			Type:     schema.TypeList,
-			Optional: true,
+			Type:        schema.TypeList,
+			Optional:    true,
+			Description: "Same as `rrdatas` above.",
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -339,7 +344,7 @@ var healthCheckedTargetSchema *schema.Resource = &schema.Resource{
 						Type:             schema.TypeString,
 						Required:         true,
 						DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-						Description:      "The fully qualified url of the network in which the load balancer belongs. This should be formatted like `https://www.googleapis.com/compute/v1/projects/{project}/global/networks/{network}`.",
+						Description:      "The fully qualified url of the network in which the load balancer belongs. This should be formatted like `projects/{project}/global/networks/{network}` or `https://www.googleapis.com/compute/v1/projects/{project}/global/networks/{network}`.",
 					},
 					"project": {
 						Type:        schema.TypeString,
@@ -356,7 +361,7 @@ var healthCheckedTargetSchema *schema.Resource = &schema.Resource{
 		},
 		"external_endpoints": {
 			Type:        schema.TypeList,
-			Description: "The Internet IP addresses to be health checked.",
+			Description: `The list of external endpoint addresses to health check.`,
 			Optional:    true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,

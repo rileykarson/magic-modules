@@ -762,7 +762,7 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardVerifyConfig
 			"tasks": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Optional. The tasks that will run as a part of the verify job.",
+				Description: `Optional. The tasks that will run as a part of the verify job. The tasks are executed sequentially in the order specified.`,
 				Elem:        ClouddeployDeliveryPipelineTaskSchema(),
 			},
 		},
@@ -775,13 +775,13 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisSche
 			"duration": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Required. Duration of the analysis.",
+				Description: `Required. The amount of time in minutes the analysis on the target will last. If all analysis checks have successfully completed before the specified duration, the analysis is successful. If a check is still running while the specified duration passes, it will wait for that check to complete to determine if the analysis is successful. The maximum duration is 48 hours.`,
 			},
 
 			"google_cloud": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Optional. Google Cloud specific analysis configuration.",
+				Description: `Optional. Google Cloud - based analysis checks.`,
 				MaxItems:    1,
 				Elem:        ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisGoogleCloudSchema(),
 			},
@@ -789,7 +789,7 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisSche
 			"custom_checks": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Optional. Custom checks to perform during analysis.",
+				Description: `Optional. Custom analysis checks from 3P metric providers.`,
 				Elem:        ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisCustomChecksSchema(),
 			},
 		},
@@ -802,7 +802,7 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisGoog
 			"alert_policy_checks": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Optional. Alert policy checks to perform.",
+				Description: `Optional. A list of Cloud Monitoring Alert Policy checks to perform as part of the analysis.`,
 				Elem:        ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisAlertPolicyCheckSchema(),
 			},
 		},
@@ -815,20 +815,20 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisAler
 			"id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Required. Unique identifier for the alert policy check.",
+				Description: `Required. The ID of the analysis check.`,
 			},
 
 			"alert_policies": {
 				Type:        schema.TypeList,
 				Required:    true,
-				Description: "Required. The list of alert policy names to check. Format: `projects/{project}/alertPolicies/{alert_policy}`.",
+				Description: "Required. The Cloud Monitoring Alert Policies to check for active alerts. Format is `projects/{project}/alertPolicies/{alert_policy}`.",
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 
 			"labels": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: "Optional. Labels to filter the alert policies.",
+				Description: `Optional. A set of labels to filter active alerts. If set, only alerts having all of the specified labels will be considered. Otherwise, all active alerts will be considered.`,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 		},
@@ -841,19 +841,19 @@ func ClouddeployDeliveryPipelineSerialPipelineStagesStrategyStandardAnalysisCust
 			"id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Required. Unique identifier for the custom check.",
+				Description: `Required. The ID of the custom Analysis check.`,
 			},
 
 			"frequency": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Optional. Frequency of the custom check.",
+				Description: `Optional. The frequency at which the custom check will be run, with a minimum and default of 5 minutes.`,
 			},
 
 			"task": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "Optional. The task to run for the custom check.",
+				Description: `Required. The Task to be run for this custom check.`,
 				MaxItems:    1,
 				Elem:        ClouddeployDeliveryPipelineTaskSchema(),
 			},

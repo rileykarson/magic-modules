@@ -14,9 +14,10 @@ import (
 
 var IamBillingAccountSchema = map[string]*schema.Schema{
 	"billing_account_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The billing account id.`,
 	},
 }
 

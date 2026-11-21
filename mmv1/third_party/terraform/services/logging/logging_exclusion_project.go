@@ -15,6 +15,8 @@ var ProjectLoggingExclusionSchema = map[string]*schema.Schema{
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The project to create the exclusion in. If omitted, the project associated with the provider is
+used.`,
 	},
 }
 

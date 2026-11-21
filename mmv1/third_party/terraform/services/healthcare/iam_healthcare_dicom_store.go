@@ -15,9 +15,10 @@ import (
 
 var IamHealthcareDicomStoreSchema = map[string]*schema.Schema{
 	"dicom_store_id": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: "The DICOM store ID, in the form\n`{project_id}/{location_name}/{dataset_name}/{dicom_store_name}` or\n`{location_name}/{dataset_name}/{dicom_store_name}`. In the second form, the provider's\nproject setting will be used as a fallback.",
 	},
 }
 

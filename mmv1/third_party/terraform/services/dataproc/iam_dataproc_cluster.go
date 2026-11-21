@@ -14,21 +14,26 @@ import (
 
 var IamDataprocClusterSchema = map[string]*schema.Schema{
 	"cluster": {
-		Type:     schema.TypeString,
-		Required: true,
-		ForceNew: true,
+		Type:        schema.TypeString,
+		Required:    true,
+		ForceNew:    true,
+		Description: `The name or relative resource id of the cluster to manage IAM policies for.`,
 	},
 	"project": {
 		Type:     schema.TypeString,
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The project in which the cluster belongs. If it
+is not provided, Terraform will use the provider default.`,
 	},
 	"region": {
 		Type:     schema.TypeString,
 		Optional: true,
 		Computed: true,
 		ForceNew: true,
+		Description: `The region in which the cluster belongs. If it
+is not provided, Terraform will use the provider default.`,
 	},
 }
 

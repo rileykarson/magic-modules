@@ -107,24 +107,29 @@ func ResourceServiceNetworkingConnection() *schema.Resource {
 			// delimiter.
 			// See: https://cloud.google.com/vpc/docs/configure-private-services-access#creating-connection
 			"service": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `Provider peering service that is managing peering connectivity for a service provider organization. For Google services that support this functionality it is 'servicenetworking.googleapis.com'.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `Provider peering service that is managing peering connectivity for a
+service provider organization. For Google services that support this functionality it is
+'servicenetworking.googleapis.com'.`,
 			},
 			"reserved_peering_ranges": {
 				Type:             schema.TypeList,
 				Required:         true,
 				Elem:             &schema.Schema{Type: schema.TypeString},
 				DiffSuppressFunc: stringListDiffSuppress,
-				Description:      `Named IP address range(s) of PEERING type reserved for this service provider. Note that invoking this method with a different range when connection is already established will not reallocate already provisioned service producer subnetworks.`,
+				Description: `Named IP address range(s) of PEERING type reserved for
+this service provider. Note that invoking this method with a different range when connection
+is already established will not reallocate already provisioned service producer subnetworks.`,
 			},
 			//UDP schema start
 			"deletion_policy": deletionPolicySchema(),
 			//UDP schema end
 			"peering": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `The name of the VPC Network Peering connection that was created by the service producer.`,
 			},
 			"update_on_creation_fail": {
 				Type:        schema.TypeBool,

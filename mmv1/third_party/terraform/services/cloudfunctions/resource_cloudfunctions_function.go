@@ -181,14 +181,14 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Type:          schema.TypeList,
 				Optional:      true,
 				MaxItems:      1,
-				Description:   `Represents parameters related to source repository where a function is hosted. Cannot be set alongside source_archive_bucket or source_archive_object.`,
+				Description:   "Represents parameters related to source repository where a function is hosted.\nCannot be set alongside `source_archive_bucket` or `source_archive_object`. It must match the pattern `projects/{project}/locations/{location}/repositories/{repository}`.*",
 				ConflictsWith: []string{"source_archive_bucket", "source_archive_object"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"url": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `The URL pointing to the hosted repository where the function is defined.`,
+							Description: "The URL pointing to the hosted repository where the function is defined. There are supported Cloud Source Repository URLs in the following formats:\n\n* To refer to a specific commit: `https://source.developers.google.com/projects/*/repos/*/revisions/*/paths/*`\n* To refer to a moveable alias (branch): `https://source.developers.google.com/projects/*/repos/*/moveable-aliases/*/paths/*`. To refer to HEAD, use the `master` moveable alias.\n* To refer to a specific fixed alias (tag): `https://source.developers.google.com/projects/*/repos/*/fixed-aliases/*/paths/*`",
 						},
 						"deployed_url": {
 							Type:        schema.TypeString,
@@ -209,13 +209,13 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 			"docker_repository": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `User managed repository created in Artifact Registry optionally with a customer managed encryption key. If specified, deployments will use Artifact Registry for storing images built with Cloud Build.`,
+				Description: "User-managed repository created in Artifact Registry to which the function's Docker image will be pushed after it is built by Cloud Build. May optionally be encrypted with a customer-managed encryption key (CMEK). If unspecified and `docker_registry` is not explicitly set to `CONTAINER_REGISTRY`, GCF will create and use a default Artifact Registry repository named 'gcf-artifacts' in the region.",
 			},
 
 			"kms_key_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.`,
+				Description: "Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources. It must match the pattern `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.\nIf specified, you must also provide an artifact registry repository using the `docker_repository` field that was created with the same KMS crypto key. Before deploying, please complete all pre-requisites described in https://cloud.google.com/functions/docs/securing/cmek#granting_service_accounts_access_to_the_key",
 			},
 
 			"description": {
@@ -228,7 +228,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Default:     256,
-				Description: `Memory (in MB), available to the function. Default value is 256. Possible values include 128, 256, 512, 1024, etc.`,
+				Description: "Memory (in MB), available to the function. Default value is `256`. Possible values include `128`, `256`, `512`, `1024`, etc.",
 			},
 
 			"timeout": {
@@ -251,7 +251,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Optional:     true,
 				Default:      "ALLOW_ALL",
 				ValidateFunc: validation.StringInSlice(allowedIngressSettings, true),
-				Description:  `String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.`,
+				Description:  "String value that controls what traffic can reach the function. Allowed values are `ALLOW_ALL`, `ALLOW_INTERNAL_AND_GCLB` and `ALLOW_INTERNAL_ONLY`. Check [ingress documentation](https://cloud.google.com/functions/docs/networking/network-settings#ingress_settings) to see the impact of each settings value. Changes to this field will recreate the cloud function.",
 			},
 
 			"vpc_connector_egress_settings": {
@@ -259,7 +259,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Optional:     true,
 				Computed:     true,
 				ValidateFunc: validation.StringInSlice(allowedVpcConnectorEgressSettings, true),
-				Description:  `The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are ALL_TRAFFIC and PRIVATE_RANGES_ONLY. Defaults to PRIVATE_RANGES_ONLY. If unset, this field preserves the previously set value.`,
+				Description:  "The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are `ALL_TRAFFIC` and `PRIVATE_RANGES_ONLY`. Defaults to `PRIVATE_RANGES_ONLY`. If unset, this field preserves the previously set value.",
 			},
 
 			"labels": {
@@ -268,8 +268,8 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Optional:     true,
 				Description: `A set of key/value label pairs to assign to the function. Label keys must follow the requirements at https://docs.cloud.google.com/resource-manager/docs/creating-managing-labels#requirements.
 
-				**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
-				Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
+**Note**: This field is non-authoritative, and will only manage the labels present in your configuration.
+Please refer to the field 'effective_labels' for all of the labels present on the resource.`,
 			},
 
 			"terraform_labels": {
@@ -289,7 +289,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 			"runtime": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `The runtime in which the function is going to run. Eg. "nodejs22", "python37", "go111".`,
+				Description: "The runtime in which the function is going to run.\nEg. `\"nodejs22\"`, `\"python39\"`, `\"dotnet3\"`, `\"go116\"`, `\"java11\"`, `\"ruby30\"`, `\"php74\"`, etc. Check the [official doc](https://cloud.google.com/functions/docs/concepts/exec#runtimes) for the up-to-date list.",
 			},
 
 			"service_account_email": {
@@ -297,21 +297,21 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: ` If provided, the self-provided service account to run the function with.`,
+				Description: `If provided, the self-provided service account to run the function with.`,
 			},
 
 			"build_service_account": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The fully-qualified name of the service account to be used for the build step of deploying this function`,
+				Description: "If provided, the self-provided service account to use to build the function. The format of this field is `projects/{project}/serviceAccounts/{serviceAccountEmail}`",
 			},
 
 			"vpc_connector": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				DiffSuppressFunc: tpgresource.CompareSelfLinkOrResourceName,
-				Description:      `The VPC Network Connector that this cloud function can connect to. It can be either the fully-qualified URI, or the short name of the network connector resource. The format of this field is projects/*/locations/*/connectors/*.`,
+				Description:      "The VPC Network Connector that this cloud function can connect to. It should be set up as fully-qualified URI. The format of this field is `projects/*/locations/*/connectors/*`.",
 			},
 
 			"environment_variables": {
@@ -323,14 +323,14 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 			"build_environment_variables": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: ` A set of key/value environment variable pairs available during build time.`,
+				Description: `A set of key/value environment variable pairs available during build time.`,
 			},
 
 			"trigger_http": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Boolean variable. Any HTTP request (of a supported type) to the endpoint will trigger function execution. Supported HTTP request types are: POST, PUT, GET, DELETE, and OPTIONS. Endpoint is returned as https_trigger_url. Cannot be used with trigger_bucket and trigger_topic.`,
+				Description: "Boolean variable. Any HTTP request (of a supported type) to the endpoint will trigger function execution. Supported HTTP request types are: POST, PUT, GET, DELETE, and OPTIONS. Endpoint is returned as `https_trigger_url`. Cannot be used with `event_trigger`.",
 			},
 
 			"event_trigger": {
@@ -339,34 +339,34 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Computed:      true,
 				ConflictsWith: []string{"trigger_http"},
 				MaxItems:      1,
-				Description:   `A source that fires events in response to a condition in another service. Cannot be used with trigger_http.`,
+				Description:   "A source that fires events in response to a condition in another service. Cannot be used with `trigger_http`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"event_type": {
 							Type:        schema.TypeString,
 							ForceNew:    true,
 							Required:    true,
-							Description: `The type of event to observe. For example: "google.storage.object.finalize". See the documentation on calling Cloud Functions for a full reference of accepted triggers.`,
+							Description: "The type of event to observe. For example: `\"google.storage.object.finalize\"`.\nSee the documentation on [calling Cloud Functions](https://cloud.google.com/functions/docs/calling/) for a\nfull reference of accepted triggers.",
 						},
 						"resource": {
 							Type:             schema.TypeString,
 							Required:         true,
 							DiffSuppressFunc: compareSelfLinkOrResourceNameWithMultipleParts,
-							Description:      `The name or partial URI of the resource from which to observe events. For example, "myBucket" or "projects/my-project/topics/my-topic"`,
+							Description:      "Required. The name or partial URI of the resource from\nwhich to observe events. For example, `\"myBucket\"` or `\"projects/my-project/topics/my-topic\"`",
 						},
 						"failure_policy": {
 							Type:        schema.TypeList,
 							Optional:    true,
 							Computed:    true,
 							MaxItems:    1,
-							Description: `Specifies policy for failed executions`,
+							Description: `Specifies policy for failed executions.`,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"retry": {
 										Type: schema.TypeBool,
 										// not strictly required, but this way an empty block can't be specified
 										Required:    true,
-										Description: `Whether the function should be retried on failure. Defaults to false.`,
+										Description: "Whether the function should be retried on failure. Defaults to `false`.",
 									},
 								}},
 						},
@@ -378,14 +378,14 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `URL which triggers function execution. Returned only if trigger_http is used.`,
+				Description: "URL which triggers function execution. Returned only if `trigger_http` is used.",
 			},
 
 			"https_trigger_security_level": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The security level for the function. Defaults to SECURE_OPTIONAL. Valid only if trigger_http is used.`,
+				Description: "The security level for the function. The following options are available:\n\n* `SECURE_ALWAYS` Requests for a URL that match this handler that do not use HTTPS are automatically redirected to the HTTPS URL with the same path. Query parameters are reserved for the redirect.\n* `SECURE_OPTIONAL` Both HTTP and HTTPS requests with URLs that match the handler succeed without redirects. The application can examine the request to determine which protocol was used and respond accordingly.",
 			},
 
 			"max_instances": {
@@ -422,7 +422,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 			"secret_environment_variables": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: `Secret environment variables configuration`,
+				Description: `Secret environment variables configuration.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"key": {
@@ -501,7 +501,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Computed:      true,
 				ConflictsWith: []string{"on_deploy_update_policy"},
 				MaxItems:      1,
-				Description:   `Security patches are applied automatically to the runtime without requiring the function to be redeployed.`,
+				Description:   "Security patches are applied automatically to the runtime without requiring the function to be redeployed. This should be specified as an empty block and cannot be set alongside `on_deploy_update_policy`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{},
 				},
@@ -512,7 +512,7 @@ func ResourceCloudFunctionsFunction() *schema.Resource {
 				Optional:      true,
 				ConflictsWith: []string{"automatic_update_policy"},
 				MaxItems:      1,
-				Description:   `Security patches are only applied when a function is redeployed.`,
+				Description:   "Security patches are only applied when a function is redeployed. This should be specified as an empty block and cannot be set alongside `automatic_update_policy`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"runtime_version": {

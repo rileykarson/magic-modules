@@ -87,7 +87,7 @@ func (r *storageNotificationResource) Configure(_ context.Context, req resource.
 
 func (r *storageNotificationResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Creates a new notification configuration on a specified bucket, establishing a flow of event notifications from GCS to a Cloud Pub/Sub topic.",
+		Description: "Creates a new notification configuration on a specified bucket, establishing a flow of event notifications from GCS to a Cloud Pub/Sub topic.\n For more information see\n[the official documentation](https://cloud.google.com/storage/docs/pubsub-notifications)\nand\n[API](https://cloud.google.com/storage/docs/json_api/v1/notifications).\n\nIn order to enable notifications, a special Google Cloud Storage service account unique to the project\nmust exist and have the IAM permission \"projects.topics.publish\" for a Cloud Pub/Sub topic in the project.\nThis service account is not created automatically when a project is created.\nTo ensure the service account exists and obtain its email address for use in granting the correct IAM permission, use the\n[`google_storage_project_service_account`](/docs/providers/google/d/storage_project_service_account.html)\ndatasource's `email_address` value, and see below for an example of enabling notifications by granting the correct IAM permission.\nSee [the notifications documentation](https://cloud.google.com/storage/docs/gsutil/commands/notification) for more details.\n\n>**NOTE**: This resource can affect your storage IAM policy. If you are using this in the same config as your storage IAM policy resources, consider\nmaking this resource dependent on those IAM resources via `depends_on`. This will safeguard against errors due to IAM race conditions.",
 		Version:     1,
 		Attributes: map[string]schema.Attribute{
 			"bucket": schema.StringAttribute{
@@ -99,7 +99,7 @@ func (r *storageNotificationResource) Schema(_ context.Context, _ resource.Schem
 			},
 			"payload_format": schema.StringAttribute{
 				Required:    true,
-				Description: `The desired content of the Payload. One of "JSON_API_V1" or "NONE".`,
+				Description: "The desired content of the Payload. One of `\"JSON_API_V1\"` or `\"NONE\"`.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -109,7 +109,7 @@ func (r *storageNotificationResource) Schema(_ context.Context, _ resource.Schem
 			},
 			"topic": schema.StringAttribute{
 				Required:    true,
-				Description: "The Cloud Pub/Sub topic to which this subscription publishes.",
+				Description: "The Cloud PubSub topic to which this subscription publishes. Expects either the\ntopic name, assumed to belong to the default GCP provider project, or the project-level name,\ni.e. `projects/my-gcp-project/topics/my-topic` or `my-topic`. If the project is not set in the provider,\nyou will need to use the project-level name.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -120,7 +120,7 @@ func (r *storageNotificationResource) Schema(_ context.Context, _ resource.Schem
 			"custom_attributes": schema.MapAttribute{
 				ElementType: types.StringType,
 				Optional:    true,
-				Description: "A set of key/value attribute pairs to attach to each Cloud Pub/Sub message published for this notification subscription.",
+				Description: `A set of key/value attribute pairs to attach to each Cloud PubSub message published for this notification subscription`,
 				PlanModifiers: []planmodifier.Map{
 					mapplanmodifier.RequiresReplace(),
 				},
@@ -128,7 +128,7 @@ func (r *storageNotificationResource) Schema(_ context.Context, _ resource.Schem
 			"event_types": schema.SetAttribute{
 				ElementType: types.StringType,
 				Optional:    true,
-				Description: `List of event type filters for this notification config. If not specified, Cloud Storage will send notifications for all event types. The valid types are: "OBJECT_FINALIZE", "OBJECT_METADATA_UPDATE", "OBJECT_DELETE", "OBJECT_ARCHIVE"`,
+				Description: "List of event type filters for this notification config. If not specified, Cloud Storage will send notifications for all event types. The valid types are: `\"OBJECT_FINALIZE\"`, `\"OBJECT_METADATA_UPDATE\"`, `\"OBJECT_DELETE\"`, `\"OBJECT_ARCHIVE\"`",
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.RequiresReplace(),
 				},

@@ -19,6 +19,7 @@ var IamKmsKeyRingSchema = map[string]*schema.Schema{
 		Type:     schema.TypeString,
 		Required: true,
 		ForceNew: true,
+		Description: "The key ring ID, in the form\n`{project_id}/{location_name}/{key_ring_name}` or\n`{location_name}/{key_ring_name}`. In the second form, the provider's\nproject setting will be used as a fallback.",
 	},
 }
 

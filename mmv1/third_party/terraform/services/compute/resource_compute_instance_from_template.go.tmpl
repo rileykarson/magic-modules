@@ -68,7 +68,7 @@ func computeInstanceFromTemplateSchema() map[string]*schema.Schema {
 		Type:        schema.TypeString,
 		Required:    true,
 		ForceNew:    true,
-		Description: `Name or self link of an instance template to create the instance based on.`,
+		Description: "Name or self link of an instance\ntemplate to create the instance based on. It is recommended to reference\ninstance templates through their unique id (`self_link_unique` attribute).",
 	}
 
 	return s

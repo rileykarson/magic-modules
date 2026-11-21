@@ -68,7 +68,7 @@ func ResourceGoogleOrganizationIamCustomRole() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Default:          "GA",
-				Description:      `The current launch stage of the role. Defaults to GA.`,
+				Description:      "The current launch stage of the role.\nDefaults to `GA`.\nList of possible stages is [here](https://cloud.google.com/iam/reference/rest/v1/organizations.roles#Role.RoleLaunchStage).",
 				ValidateFunc:     validation.StringInSlice([]string{"ALPHA", "BETA", "GA", "DEPRECATED", "DISABLED", "EAP"}, false),
 				DiffSuppressFunc: tpgresource.EmptyOrDefaultStringSuppress("ALPHA"),
 			},
@@ -85,7 +85,7 @@ func ResourceGoogleOrganizationIamCustomRole() *schema.Resource {
 			"name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The name of the role in the format organizations/{{org_id}}/roles/{{role_id}}. Like id, this field can be used as a reference in other resources such as IAM role bindings.`,
+				Description: "The name of the role in the format `organizations/{{org_id}}/roles/{{role_id}}`. Like `id`, this field can be used as a reference in other resources such as IAM role bindings.",
 			},
 			//UDP schema start
 			"deletion_policy": tpgresource.DeletionPolicySchemaEntry("DELETE"),

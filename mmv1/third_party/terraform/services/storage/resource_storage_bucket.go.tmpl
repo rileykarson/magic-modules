@@ -43,7 +43,7 @@ func buckeEncryptionEnforcementConfigSchema(encryptionType string) *schema.Schem
 				"effective_time": {
 					Type:        schema.TypeString,
 					Computed:    true,
-					Description: `Time from which the config was effective. This is service-provided.`,
+					Description: `Time from which the config was effective.`,
 				},
 			},
 		},
@@ -117,7 +117,7 @@ func ResourceStorageBucket() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: `The name of the bucket.`,
+				Description: `The name of the bucket. Bucket names must be in lowercase and no more than 63 characters long. You can find the complete list of bucket naming rules [here](https://cloud.google.com/storage/docs/buckets#naming).`,
 			},
 
 			"encryption": {
@@ -129,7 +129,7 @@ func ResourceStorageBucket() *schema.Resource {
 						"default_kms_key_name": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Description: `A Cloud KMS key that will be used to encrypt objects inserted into this bucket, if no encryption method is specified. You must pay attention to whether the crypto key is available in the location that this bucket is created in. See the docs for more details.`,
+							Description: "The `id` of a Cloud KMS key that will be used to encrypt objects inserted into this bucket, if no encryption method is specified.\nYou must pay attention to whether the crypto key is available in the location that this bucket is created in.\nSee [the docs](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for more details.\n\n-> As per [the docs](https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys) for customer-managed encryption keys, the IAM policy for the\nspecified key must permit the [automatic Google Cloud Storage service account](https://cloud.google.com/storage/docs/projects#service-accounts) for the bucket's\nproject to use the specified key for encryption and decryption operations.\nAlthough the service account email address follows a well-known format, the service account is created on-demand and may not necessarily exist for your project\nuntil a relevant action has occurred which triggers its creation.\nYou should use the [`google_storage_project_service_account`](/docs/providers/google/d/storage_project_service_account.html) data source to obtain the email\naddress for the service account when configuring IAM policy on the Cloud KMS key.\nThis data source calls an API which creates the account if required, ensuring your Terraform applies cleanly and repeatedly irrespective of the\nstate of the project.\nYou should take care for race conditions when the same Terraform manages IAM policy on the Cloud KMS crypto key. See the data source page for more details.",
 						},
 						"google_managed_encryption_enforcement_config":    buckeEncryptionEnforcementConfigSchema("GMEK"),
 						"customer_managed_encryption_enforcement_config":  buckeEncryptionEnforcementConfigSchema("CMEK"),
@@ -142,14 +142,14 @@ func ResourceStorageBucket() *schema.Resource {
 			"requester_pays": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: `Enables Requester Pays on a storage bucket.`,
+				Description: `Enables [Requester Pays](https://cloud.google.com/storage/docs/requester-pays) on a storage bucket.`,
 			},
 
 			"force_destroy": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: `When true, before deleting a bucket, delete all objects within the bucket, or Anywhere Caches caching data for that bucket. Otherwise, buckets with objects/caches will fail. Anywhere Cache requires additional permissions to interact with and will be ignored when those are not present, attempting to delete anyways. This may result in the objects in the bucket getting destroyed but not the bucket itself if there is a cache in use with the bucket. Force deletion may take a long time to delete buckets with lots of objects or with any Anywhere Caches (80m+).`,
+				Description: `When true, before deleting a bucket, delete all objects within the bucket, or Anywhere Caches caching data for that bucket. Otherwise, buckets with objects/caches will fail. Anywhere Cache requires additional permissions to interact with and will be assumed not present when Terraform is not permissioned, attempting to delete the bucket anyways. This may result in the objects in the bucket getting destroyed but not the bucket itself if there is a cache in use with the bucket. Force deletion may take a long time to delete buckets with lots of objects or with any Anywhere Caches (80m+).`,
 			},
 
 			"labels": {
@@ -157,7 +157,7 @@ func ResourceStorageBucket() *schema.Resource {
 				ValidateFunc: labelKeyValidator,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: `A set of key/value label pairs to assign to the bucket.`,
+				Description: `A map of key/value label pairs to assign to the bucket.`,
 			},
 
 			"terraform_labels": {
@@ -181,7 +181,7 @@ func ResourceStorageBucket() *schema.Resource {
 				StateFunc: func(s interface{}) string {
 					return strings.ToUpper(s.(string))
 				},
-				Description: `The Google Cloud Storage location or region.`,
+				Description: `The [GCS location](https://cloud.google.com/storage/docs/bucket-locations).`,
 			},
 
 			"project": {
@@ -189,7 +189,8 @@ func ResourceStorageBucket() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"project_number": {
@@ -207,14 +208,14 @@ func ResourceStorageBucket() *schema.Resource {
 			"url": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `The base URL of the bucket, in the format gs://<bucket-name>.`,
+				Description: "The base URL of the bucket, in the format `gs://<bucket-name>`.",
 			},
 
 			"storage_class": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "STANDARD",
-				Description: `The Storage Class of the new bucket. Supported values include: STANDARD, MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE.`,
+				Description: "The [Storage Class](https://cloud.google.com/storage/docs/storage-classes) of the new bucket. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.",
 			},
 
 			"lifecycle_rule": {
@@ -234,12 +235,12 @@ func ResourceStorageBucket() *schema.Resource {
 									"type": {
 										Type:        schema.TypeString,
 										Required:    true,
-										Description: `The type of the action of this Lifecycle Rule. Supported values include: Delete, SetStorageClass and AbortIncompleteMultipartUpload.`,
+										Description: "The type of the action of this Lifecycle Rule. Supported values include: `Delete`, `SetStorageClass` and `AbortIncompleteMultipartUpload`.",
 									},
 									"storage_class": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `The target Storage Class of objects affected by this Lifecycle Rule. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE.`,
+										Description: "The target [Storage Class](https://cloud.google.com/storage/docs/storage-classes) of objects affected by this Lifecycle Rule. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.",
 									},
 								},
 							},
@@ -256,51 +257,50 @@ func ResourceStorageBucket() *schema.Resource {
 									"age": {
 										Type:        schema.TypeInt,
 										Optional:    true,
-										Description: `Minimum age of an object in days to satisfy this condition.`,
+										Description: "Minimum age of an object in days to satisfy this condition. **Note** To set `0` value of `age`, `send_age_if_zero` should be set `true` otherwise `0` value of `age` field will be ignored.",
 									},
 									"created_before": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.`,
+										Description: `A date in the RFC 3339 format YYYY-MM-DD. This condition is satisfied when an object is created before midnight of the specified date in UTC.`,
 									},
 									"custom_time_before": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.`,
+										Description: `A date in the RFC 3339 format YYYY-MM-DD. This condition is satisfied when the customTime metadata for the object is set to an earlier date than the date used in this lifecycle condition.`,
 									},
 									"days_since_custom_time": {
 										Type:        schema.TypeInt,
 										Optional:    true,
-										Description: `Number of days elapsed since the user-specified timestamp set on an object.`,
+										Description: "Days since the date set in the `customTime` metadata for the object. This condition is satisfied when the current date and time is at least the specified number of days after the `customTime`. Due to a current bug you are unable to set this value to `0` within Terraform. When set to `0` it will be ignored, and your state will treat it as though you supplied no `days_since_custom_time` condition.",
 									},
 									"days_since_noncurrent_time": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Description: `Number of days elapsed since the noncurrent timestamp of an object. This
-										condition is relevant only for versioned objects.`,
+										Description: "Relevant only for versioned objects. Number of days elapsed since the noncurrent timestamp of an object. Due to a current bug you are unable to set this value to `0` within Terraform. When set to `0` it will be ignored, and your state will treat it as though you supplied no `days_since_noncurrent_time` condition.",
 									},
 									"noncurrent_time_before": {
 										Type:        schema.TypeString,
 										Optional:    true,
-										Description: `Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.`,
+										Description: "Relevant only for versioned objects. The date in RFC 3339 (e.g. `2017-06-13`) when the object became nonconcurrent. Due to a current bug you are unable to set this value to `0` within Terraform. When set to `0` it will be ignored, and your state will treat it as though you supplied no `noncurrent_time_before` condition.",
 									},
 									"with_state": {
 										Type:         schema.TypeString,
 										Computed:     true,
 										Optional:     true,
 										ValidateFunc: validation.StringInSlice([]string{"LIVE", "ARCHIVED", "ANY", ""}, false),
-										Description:  `Match to live and/or archived objects. Unversioned buckets have only live objects. Supported values include: "LIVE", "ARCHIVED", "ANY".`,
+										Description:  "Match to live and/or archived objects. Unversioned buckets have only live objects. Supported values include: `\"LIVE\"`, `\"ARCHIVED\"`, `\"ANY\"`.",
 									},
 									"matches_storage_class": {
 										Type:        schema.TypeList,
 										Optional:    true,
 										Elem:        &schema.Schema{Type: schema.TypeString},
-										Description: `Storage Class of objects to satisfy this condition. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE, STANDARD, DURABLE_REDUCED_AVAILABILITY.`,
+										Description: "[Storage Class](https://cloud.google.com/storage/docs/storage-classes) of objects to satisfy this condition. Supported values include: `STANDARD`, `MULTI_REGIONAL`, `REGIONAL`, `NEARLINE`, `COLDLINE`, `ARCHIVE`, `DURABLE_REDUCED_AVAILABILITY`.",
 									},
 									"num_newer_versions": {
 										Type:        schema.TypeInt,
 										Optional:    true,
-										Description: `Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition.`,
+										Description: "Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition. Due to a current bug you are unable to set this value to `0` within Terraform. When set to `0` it will be ignored and your state will treat it as though you supplied no `num_newer_versions` condition.",
 									},
 									"matches_prefix": {
 										Type:        schema.TypeList,
@@ -317,22 +317,22 @@ func ResourceStorageBucket() *schema.Resource {
 									"send_age_if_zero": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Description: `While set true, age value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the age field. It can be used alone or together with age.`,
+										Description: "While set true, `age` value will be sent in the request even for zero value of the field. This field is only useful and required for setting 0 value to the `age` field. It can be used alone or together with `age` attribute. **NOTE** `age` attibute with `0` value will be ommitted from the API request if `send_age_if_zero` field is having `false` value.",
 									},
 									"send_days_since_noncurrent_time_if_zero": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Description: `While set true, days_since_noncurrent_time value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the days_since_noncurrent_time field. It can be used alone or together with days_since_noncurrent_time.`,
+										Description: "While set true, `days_since_noncurrent_time` value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the `days_since_noncurrent_time` field. It can be used alone or together with `days_since_noncurrent_time`.",
 									},
 									"send_days_since_custom_time_if_zero": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Description: `While set true, days_since_custom_time value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the days_since_custom_time field. It can be used alone or together with days_since_custom_time.`,
+										Description: "While set true, `days_since_custom_time` value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the `days_since_custom_time` field. It can be used alone or together with `days_since_custom_time`.",
 									},
 									"send_num_newer_versions_if_zero": {
 										Type:        schema.TypeBool,
 										Optional:    true,
-										Description: `While set true, num_newer_versions value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the num_newer_versions field. It can be used alone or together with num_newer_versions.`,
+										Description: "While set true, `num_newer_versions` value will be sent in the request even for zero value of the field. This field is only useful for setting 0 value to the `num_newer_versions` field. It can be used alone or together with `num_newer_versions`.",
 									},
 									"size_above_bytes": {
 										Type:        schema.TypeInt,
@@ -342,22 +342,22 @@ func ResourceStorageBucket() *schema.Resource {
 									"size_below_bytes": {
 										Type:        schema.TypeInt,
 										Optional:    true,
-										Description: `Objects having a size less than this value in bytes will be matched.`,
+										Description: `Objects having a size smaller than this value in bytes will be matched.`,
 									},
 								},
 							},
-							Description: `The Lifecycle Rule's condition configuration.`,
+							Description: `The Lifecycle Rule's condition configuration. A single block of this type is supported.`,
 						},
 					},
 				},
-				Description: `The bucket's Lifecycle Rules configuration.`,
+				Description: `The bucket's [Lifecycle Rules](https://cloud.google.com/storage/docs/lifecycle#configuration) configuration. Multiple blocks of this type are permitted.`,
 			},
 
 			"enable_object_retention": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				ForceNew:    true,
-				Description: `Enables each object in the bucket to have its own retention policy, which prevents deletion until stored for a specific length of time.`,
+				Description: `Enables [object retention](https://cloud.google.com/storage/docs/object-lock) on a storage bucket.`,
 			},
 
 			"versioning": {
@@ -370,11 +370,11 @@ func ResourceStorageBucket() *schema.Resource {
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: `While set to true, versioning is fully enabled for this bucket.`,
+							Description: "While set to `true`, versioning is fully enabled for this bucket.",
 						},
 					},
 				},
-				Description: `The bucket's Versioning configuration.`,
+				Description: `The bucket's [Versioning](https://cloud.google.com/storage/docs/object-versioning) configuration.`,
 			},
 
 			"autoclass": {
@@ -386,17 +386,17 @@ func ResourceStorageBucket() *schema.Resource {
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: `While set to true, autoclass automatically transitions objects in your bucket to appropriate storage classes based on each object's access pattern.`,
+							Description: "While set to `true`, autoclass automatically transitions objects in your bucket to appropriate storage classes based on each object's access pattern.",
 						},
 						"terminal_storage_class": {
 								Type:        schema.TypeString,
 								Optional:    true,
 								Computed:    true,
-								Description: `The storage class that objects in the bucket eventually transition to if they are not read for a certain length of time. Supported values include: NEARLINE, ARCHIVE.`,
+								Description: "The storage class that objects in the bucket eventually transition to if they are not read for a certain length of time. Supported values include: `NEARLINE`, `ARCHIVE`.",
 						},
 					},
 				},
-				Description: `The bucket's autoclass configuration.`,
+				Description: `The bucket's [Autoclass](https://cloud.google.com/storage/docs/autoclass) configuration.`,
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					_, n := d.GetChange(strings.TrimSuffix(k, ".#"))
 					if !strings.HasSuffix(k, ".#") {
@@ -435,7 +435,8 @@ func ResourceStorageBucket() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							AtLeastOneOf: []string{"website.0.not_found_page", "website.0.main_page_suffix"},
-							Description:  `Behaves as the bucket's directory index where missing objects are treated as potential directories.`,
+							Description:  `Behaves as the bucket's directory index where
+missing objects are treated as potential directories.`,
 							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 								return old != "" && new == ""
 							},
@@ -444,7 +445,8 @@ func ResourceStorageBucket() *schema.Resource {
 							Type:         schema.TypeString,
 							Optional:     true,
 							AtLeastOneOf: []string{"website.0.main_page_suffix", "website.0.not_found_page"},
-							Description:  `The custom object to return when a requested resource is not found.`,
+							Description:  `The custom object to return when a requested
+resource is not found.`,
 							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 								return  old != "" && new == ""
 							},
@@ -464,7 +466,7 @@ func ResourceStorageBucket() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Default:     false,
-							Description: `If set to true, the bucket will be locked and permanently restrict edits to the bucket's retention policy.  Caution: Locking a bucket is an irreversible action.`,
+							Description: "If set to `true`, the bucket will be [locked](https://cloud.google.com/storage/docs/using-bucket-lock#lock-bucket) and permanently restrict edits to the bucket's retention policy.  Caution: Locking a bucket is an irreversible action.",
 						},
 						"retention_period": {
 							Type:         schema.TypeString,
@@ -487,7 +489,7 @@ func ResourceStorageBucket() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: `The list of Origins eligible to receive CORS response headers. Note: "*" is permitted in the list of origins, and means "any Origin".`,
+							Description: `The list of [Origins](https://tools.ietf.org/html/rfc6454) eligible to receive CORS response headers. Note: "*" is permitted in the list of origins, and means "any Origin".`,
 						},
 						"method": {
 							Type:     schema.TypeList,
@@ -503,16 +505,16 @@ func ResourceStorageBucket() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: `The list of HTTP headers other than the simple response headers to give permission for the user-agent to share across domains.`,
+							Description: `The list of HTTP headers other than the [simple response headers](https://www.w3.org/TR/cors/#simple-response-header) to give permission for the user-agent to share across domains.`,
 						},
 						"max_age_seconds": {
 							Type:        schema.TypeInt,
 							Optional:    true,
-							Description: `The value, in seconds, to return in the Access-Control-Max-Age header used in preflight responses.`,
+							Description: `The value, in seconds, to return in the [Access-Control-Max-Age header](https://www.w3.org/TR/cors/#access-control-max-age-response-header) used in preflight responses.`,
 						},
 					},
 				},
-				Description: `The bucket's Cross-Origin Resource Sharing (CORS) configuration.`,
+				Description: `The bucket's [Cross-Origin Resource Sharing (CORS)](https://www.w3.org/TR/cors/) configuration. Multiple blocks of this type are permitted.`,
 			},
 
 			"default_event_based_hold": {
@@ -536,17 +538,18 @@ func ResourceStorageBucket() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Computed:    true,
-							Description: `The object prefix for log objects. If it's not provided, by default Google Cloud Storage sets this to this bucket's name.`,
+							Description: `The object prefix for log objects. If it's not provided,
+by default GCS sets this to this bucket's name.`,
 						},
 					},
 				},
-				Description: `The bucket's Access & Storage Logs configuration.`,
+				Description: `The bucket's [Access & Storage Logs](https://cloud.google.com/storage/docs/access-logs) configuration.`,
 			},
 			"uniform_bucket_level_access": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Computed:    true,
-				Description: `Enables uniform bucket-level access on a bucket.`,
+				Description: `Enables [Uniform bucket-level access](https://cloud.google.com/storage/docs/uniform-bucket-level-access) access to a bucket.`,
 			},
 			"custom_placement_config": {
 				Type:     schema.TypeList,
@@ -565,7 +568,7 @@ func ResourceStorageBucket() *schema.Resource {
 									return strings.ToUpper(s.(string))
 								},
 							},
-							Description: `The list of individual regions that comprise a dual-region bucket. See the docs for a list of acceptable regions. Note: If any of the data_locations changes, it will recreate the bucket.`,
+							Description: `The list of individual regions that comprise a dual-region bucket. See [Cloud Storage bucket locations](https://cloud.google.com/storage/docs/dual-regions#availability) for a list of acceptable regions. **Note**: If any of the data_locations changes, it will [recreate the bucket](https://cloud.google.com/storage/docs/locations#key-concepts).`,
 						},
 					},
 				},
@@ -575,27 +578,27 @@ func ResourceStorageBucket() *schema.Resource {
 				Type: schema.TypeString,
 				Optional: true,
 				Computed: true,
-				Description: `Specifies the RPO setting of bucket. If set 'ASYNC_TURBO', The Turbo Replication will be enabled for the dual-region bucket. Value 'DEFAULT' will set RPO setting to default. Turbo Replication is only for buckets in dual-regions.See the docs for more details.`,
+				Description: "The recovery point objective for cross-region replication of the bucket. Applicable only for dual and multi-region buckets. `\"DEFAULT\"` sets default replication. `\"ASYNC_TURBO\"` value enables turbo replication, valid for dual-region buckets only. See [Turbo Replication](https://cloud.google.com/storage/docs/managing-turbo-replication) for more information. If rpo is not specified at bucket creation, it defaults to `\"DEFAULT\"` for dual and multi-region buckets. **NOTE** If used with single-region bucket, It will throw an error.",
 			},
 			"public_access_prevention": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `Prevents public access to a bucket.`,
+				Description: `Prevents public access to a bucket. Acceptable values are "inherited" or "enforced". If "inherited", the bucket uses [public access prevention](https://cloud.google.com/storage/docs/public-access-prevention) only if the bucket is subject to the public access prevention organization policy constraint. Defaults to "inherited".`,
 			},
 			"soft_delete_policy": {
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
 				Computed:    true,
-				Description: `The bucket's soft delete policy, which defines the period of time that soft-deleted objects will be retained, and cannot be permanently deleted. If it is not provided, by default Google Cloud Storage sets this to default soft delete policy`,
+				Description: `The bucket's soft delete policy, which defines the period of time that soft-deleted objects will be retained, and cannot be permanently deleted. If the block is not provided, Server side value will be kept which means removal of block won't generate any terraform change.`,
 				Elem : &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"retention_duration_seconds": {
 							Type:        schema.TypeInt,
 							Default:     604800,
 							Optional:    true,
-							Description: `The duration in seconds that soft-deleted objects in the bucket will be retained and cannot be permanently deleted. Default value is 604800.`,
+							Description: `The duration in seconds that soft-deleted objects in the bucket will be retained and cannot be permanently deleted. Default value is 604800. The value must be in between 604800(7 days) and 7776000(90 days). **Note**: To disable the soft delete policy on a bucket, This field must be set to 0.`,
 						},
 						"effective_time": {
 							Type:        schema.TypeString,
@@ -611,14 +614,14 @@ func ResourceStorageBucket() *schema.Resource {
 				Optional:         true,
 				ForceNew:         true,
 				DiffSuppressFunc: hierachicalNamespaceDiffSuppress,
-				Description:      `The bucket's HNS configuration, which defines bucket can organize folders in logical file system structure.`,
+				Description:      "The bucket's hierarchical namespace policy, which defines the bucket capability to handle folders in logical structure. To use this configuration, `uniform_bucket_level_access` must be enabled on bucket.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
 							ForceNew:    true,
-							Description: `Set this field true to organize bucket with logical file system structure.`,
+							Description: `Enables hierarchical namespace for the bucket.`,
 						},
 					},
 				},
@@ -637,13 +640,13 @@ func ResourceStorageBucket() *schema.Resource {
 				Type:             schema.TypeList,
 				MaxItems:         1,
 				Optional:         true,
-				Description:      `The bucket IP filtering configuration.`,
+				Description:      `The bucket IP filtering configuration. Specifies the network sources that can access the bucket, as well as its underlying objects.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"mode": {
 							Type: schema.TypeString,
 							Required: true,
-							Description: `The mode of the IP filter. Valid values are 'Enabled' and 'Disabled'.`,
+							Description: "The state of the IP filter configuration. Valid values are `Enabled` and `Disabled`. When set to `Enabled`, IP filtering rules are applied to a bucket and all incoming requests to the bucket are evaluated against these rules. When set to `Disabled`, IP filtering rules are not applied to a bucket.\n\n**Note**: Once ip_filter is setup, it can either be `Enabled` or `Disabled` and cannot be removed from config.\n\n**Note**: `allow_all_service_agent_access` must be supplied when `mode` is set to `Enabled`, it can be ommited for other values.",
 							ValidateFunc: validation.StringInSlice([]string{"Enabled", "Disabled"}, false),
 						},
 						"public_network_source": {
@@ -656,7 +659,7 @@ func ResourceStorageBucket() *schema.Resource {
 									"allowed_ip_cidr_ranges": {
 										Type:        schema.TypeList,
 										Required:    true,
-										Description: "The list of public IPv4, IPv6 cidr ranges that are allowed to access the bucket.",
+										Description: `The list of public IPv4 and IPv6 CIDR ranges that can access the bucket and its data.`,
 										Elem:        &schema.Schema{
 											Type: schema.TypeString,
 											ValidateFunc: validation.IsCIDR,
@@ -683,7 +686,7 @@ func ResourceStorageBucket() *schema.Resource {
 									"network": {
 										Type:        schema.TypeString,
 										Required:    true,
-										Description: "Name of the network. Format: projects/{PROJECT_ID}/global/networks/{NETWORK_NAME}",
+										Description: "Name of the network. Format: `projects/PROJECT_ID/global/networks/NETWORK_NAME`",
 									},
 								},
 							},
@@ -691,13 +694,13 @@ func ResourceStorageBucket() *schema.Resource {
 						"allow_cross_org_vpcs" : {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Description: `Whether to allow cross-org VPCs in the bucket's IP filter configuration.`,
+							Description: "While set `true`, allows cross-org VPCs in the bucket's IP filter configuration.",
 							RequiredWith: []string{"ip_filter.0.vpc_network_sources"},
 						},
 						"allow_all_service_agent_access" : {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Description: `Whether to allow all service agents to access the bucket regardless of the IP filter configuration.`,
+							Description: "While set `true`, allows all service agents to access the bucket regardless of the IP filter configuration.",
 						},
 					},
 				},

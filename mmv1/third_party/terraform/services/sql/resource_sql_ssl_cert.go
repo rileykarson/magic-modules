@@ -35,25 +35,28 @@ func ResourceSqlSslCert() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"common_name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The common name to be used in the certificate to identify the client. Constrained to [a-zA-Z.-_ ]+. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `The common name to be used in the certificate to identify the
+client. Constrained to [a-zA-Z.-_ ]+. Changing this forces a new resource to be created.`,
 			},
 
 			"instance": {
-				Type:        schema.TypeString,
-				Required:    true,
-				ForceNew:    true,
-				Description: `The name of the Cloud SQL instance. Changing this forces a new resource to be created.`,
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+				Description: `The name of the Cloud SQL instance. Changing this
+forces a new resource to be created.`,
 			},
 
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The ID of the project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The ID of the project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 
 			"cert": {
@@ -70,15 +73,17 @@ func ResourceSqlSslCert() *schema.Resource {
 			},
 
 			"create_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time when the certificate was created in RFC 3339 format, for example 2012-11-15T16:19:00.094Z.`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `The time when the certificate was created in RFC 3339 format,
+for example 2012-11-15T16:19:00.094Z.`,
 			},
 
 			"expiration_time": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: `The time when the certificate expires in RFC 3339 format, for example 2012-11-15T16:19:00.094Z.`,
+				Type:     schema.TypeString,
+				Computed: true,
+				Description: `The time when the certificate expires in RFC 3339 format,
+for example 2012-11-15T16:19:00.094Z.`,
 			},
 
 			"private_key": {

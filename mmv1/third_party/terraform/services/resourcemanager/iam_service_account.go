@@ -24,6 +24,7 @@ var IamServiceAccountSchema = map[string]*schema.Schema{
 		Type:         schema.TypeString,
 		Required:     true,
 		ForceNew:     true,
+		Description:  "The fully-qualified name of the service account to apply policy to,\nin the form `projects/{project}/serviceAccounts/{email}` or `projects/{project}/serviceAccounts/{unique_id}`.\nUnlike an email, a unique ID never refers to a later account recreated with the same email.",
 		ValidateFunc: verify.ValidateRegexp(serviceAccountResourceNameRegex),
 	},
 }

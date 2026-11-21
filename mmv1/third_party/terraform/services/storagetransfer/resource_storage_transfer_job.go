@@ -130,7 +130,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: `The name of the Transfer Job.`,
+				Description: "The name of the Transfer Job. This name must start with \"transferJobs/\" prefix and end with a letter or a number, and should be no more than 128 characters ( `transferJobs/^(?!OPI)[A-Za-z0-9-._~]*[A-Za-z0-9]$` ). For transfers involving PosixFilesystem, this name must start with transferJobs/OPI specifically ( `transferJobs/OPI^[A-Za-z0-9-._~]*[A-Za-z0-9]$` ). For all other transfer types, this name must not start with transferJobs/OPI. Default the provider will assign a random unique name with `transferJobs/{{name}}` format, where `name` is a numeric value.",
 			},
 			"description": {
 				Type:         schema.TypeString,
@@ -139,11 +139,12 @@ func ResourceStorageTransferJob() *schema.Resource {
 				Description:  `Unique description to identify the Transfer Job.`,
 			},
 			"project": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				ForceNew:    true,
-				Description: `The project in which the resource belongs. If it is not provided, the provider project is used.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Description: `The project in which the resource belongs. If it
+is not provided, the provider project is used.`,
 			},
 			"service_account": {
 				Type:        schema.TypeString,
@@ -154,6 +155,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 				Type:             schema.TypeList,
 				Optional:         true,
 				MaxItems:         1,
+				Description:      "Specifies the Event-driven transfer options. Event-driven transfers listen to an event stream to transfer updated files. Either `event_stream` or `schedule` must be set.",
 				ConflictsWith:    []string{"schedule"},
 				DiffSuppressFunc: diffSuppressEventStream,
 				Elem: &schema.Resource{
@@ -161,18 +163,18 @@ func ResourceStorageTransferJob() *schema.Resource {
 						"name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Specifies a unique name of the resource such as AWS SQS ARN in the form 'arn:aws:sqs:region:account_id:queue_name', or Pub/Sub subscription resource name in the form 'projects/{project}/subscriptions/{sub}'",
+							Description: `Specifies a unique name of the resource such as AWS SQS ARN in the form 'arn:aws:sqs:region:account_id:queue_name', or Pub/Sub subscription resource name in the form 'projects/{project}/subscriptions/{sub}'.`,
 						},
 						"event_stream_start_time": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Description:  "Specifies the date and time that Storage Transfer Service starts listening for events from this stream. If no start time is specified or start time is in the past, Storage Transfer Service starts listening immediately",
+							Description:  `Specifies the date and time that Storage Transfer Service starts listening for events from this stream. If no start time is specified or start time is in the past, Storage Transfer Service starts listening immediately. A timestamp in RFC3339 UTC "Zulu" format, with nanosecond resolution and up to nine fractional digits. Examples: "2014-10-02T15:01:23Z" and "2014-10-02T15:01:23.045123456Z".`,
 							ValidateFunc: validation.IsRFC3339Time,
 						},
 						"event_stream_expiration_time": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							Description:  "Specifies the data and time at which Storage Transfer Service stops listening for events from this stream. After this time, any transfers in progress will complete, but no new transfers are initiated",
+							Description:  `Specifies the data and time at which Storage Transfer Service stops listening for events from this stream. After this time, any transfers in progress will complete, but no new transfers are initiated.A timestamp in RFC3339 UTC "Zulu" format, with nanosecond resolution and up to nine fractional digits. Examples: "2014-10-02T15:01:23Z" and "2014-10-02T15:01:23.045123456Z".`,
 							ValidateFunc: validation.IsRFC3339Time,
 						},
 					},
@@ -206,7 +208,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 						},
 					},
 				},
-				Description: `Replication specification.`,
+				Description: "Replication specification. User should not configure `schedule`, `event_stream` with this argument. One of `transfer_spec`, or `replication_spec` must be specified.",
 			},
 			"transfer_spec": {
 				Type:          schema.TypeList,
@@ -230,7 +232,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							ForceNew:    true,
-							Description: `Specifies the agent pool name associated with the posix data source. When unspecified, the default name is used.`,
+							Description: `Specifies the agent pool name associated with the posix data sink. When unspecified, the default name is used.`,
 						},
 						"gcs_data_sink": {
 							Type:         schema.TypeList,
@@ -246,7 +248,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 							MaxItems:     1,
 							Elem:         posixDataSchema(),
 							ExactlyOneOf: transferSpecDataSinkKeys,
-							Description:  `A POSIX filesystem data sink.`,
+							Description:  `A POSIX data sink.`,
 						},
 						"gcs_data_source": {
 							Type:         schema.TypeList,
@@ -294,7 +296,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 							MaxItems:     1,
 							Elem:         hdfsDataSchema(),
 							ExactlyOneOf: transferSpecDataSourceKeys,
-							Description:  `An HDFS Storage data source.`,
+							Description:  `An HDFS data source.`,
 						},
 						"aws_s3_compatible_data_source": {
 							Type:         schema.TypeList,
@@ -309,11 +311,11 @@ func ResourceStorageTransferJob() *schema.Resource {
 							Optional:    true,
 							MaxItems:    1,
 							Elem:        transferManifest(),
-							Description: `A manifest file listing specific objects to transfer.`,
+							Description: `Use a manifest file to limit which object are transferred. See [Storage Transfer Service manifest file format](https://cloud.google.com/storage-transfer/docs/manifest).`,
 						},
 					},
 				},
-				Description: `Transfer specification.`,
+				Description: "Transfer specification. One of `transfer_spec`, or `replication_spec` can be specified.",
 			},
 			"notification_config": {
 				Type:     schema.TypeList,
@@ -324,7 +326,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 						"pubsub_topic": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: `The Topic.name of the Pub/Sub topic to which to publish notifications.`,
+							Description: `The Topic.name of the Pub/Sub topic to which to publish notifications. Must be of the format: projects/{project}/topics/{topic}. Not matching this format results in an INVALID_ARGUMENT error.`,
 						},
 						"event_types": {
 							Type:     schema.TypeSet,
@@ -343,7 +345,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 						},
 					},
 				},
-				Description: `Notification configuration.`,
+				Description: `Notification configuration. This is not supported for transfers involving PosixFilesystem.`,
 			},
 			"logging_config": {
 				Type:     schema.TypeList,
@@ -359,7 +361,7 @@ func ResourceStorageTransferJob() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validation.StringInSlice([]string{"FIND", "DELETE", "COPY"}, false),
 							},
-							Description: `Specifies the actions to be logged. Not supported for transfers with PosifxFilesystem data sources; use enable_on_prem_gcs_transfer_logs instead.`,
+							Description: "A list of actions to be logged. If empty, no logs are generated. Not supported for transfers with PosixFilesystem data sources; use enableOnpremGcsTransferLogs instead.\nEach action may be one of `FIND`, `DELETE`, and `COPY`.",
 						},
 						"log_action_states": {
 							Type:         schema.TypeList,
@@ -369,13 +371,14 @@ func ResourceStorageTransferJob() *schema.Resource {
 								Type:         schema.TypeString,
 								ValidateFunc: validation.StringInSlice([]string{"SUCCEEDED", "FAILED"}, false),
 							},
-							Description: `States in which logActions are logged. Not supported for transfers with PosifxFilesystem data sources; use enable_on_prem_gcs_transfer_logs instead.`,
+							Description: "A list of loggable action states. If empty, no logs are generated. Not supported for transfers with PosixFilesystem data sources; use enableOnpremGcsTransferLogs instead.\nEach action state may be one of `SUCCEEDED`, and `FAILED`.",
 						},
 						"enable_on_prem_gcs_transfer_logs": {
 							Type:         schema.TypeBool,
 							Optional:     true,
 							AtLeastOneOf: []string{"logging_config.0.enable_on_prem_gcs_transfer_logs", "logging_config.0.log_actions", "logging_config.0.log_action_states"},
-							Description:  `For transfers with a PosixFilesystem source, this option enables the Cloud Storage transfer logs for this transfer.`,
+							Description: `For transfers with a PosixFilesystem source, this option enables the Cloud Storage transfer logs for this transfer.
+Defaults to false.`,
 						},
 					},
 				},
@@ -393,14 +396,14 @@ func ResourceStorageTransferJob() *schema.Resource {
 							Required:    true,
 							MaxItems:    1,
 							Elem:        dateObjectSchema(),
-							Description: `The first day the recurring transfer is scheduled to run. If schedule_start_date is in the past, the transfer will run for the first time on the following day.`,
+							Description: "The first day the recurring transfer is scheduled to run. If `schedule_start_date` is in the past, the transfer will run for the first time on the following day.",
 						},
 						"schedule_end_date": {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
 							Elem:        dateObjectSchema(),
-							Description: `The last day the recurring transfer will be run. If schedule_end_date is the same as schedule_start_date, the transfer will be executed only once.`,
+							Description: "The last day the recurring transfer will be run. If `schedule_end_date` is the same as `schedule_start_date`, the transfer will be executed only once.",
 						},
 						"start_time_of_day": {
 							Type:             schema.TypeList,
@@ -419,14 +422,14 @@ func ResourceStorageTransferJob() *schema.Resource {
 						},
 					},
 				},
-				Description: `Schedule specification defining when the Transfer Job should be scheduled to start, end and what time to run.`,
+				Description: "Schedule specification defining when the Transfer Job should be scheduled to start, end and what time to run. Either `schedule` or `event_stream` must be set.",
 			},
 			"status": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "ENABLED",
 				ValidateFunc: validation.StringInSlice([]string{"ENABLED", "DISABLED", "DELETED"}, false),
-				Description:  `Status of the job. Default: ENABLED. NOTE: The effect of the new job status takes place during a subsequent job run. For example, if you change the job status from ENABLED to DISABLED, and an operation spawned by the transfer is running, the status change would not affect the current operation.`,
+				Description:  "Status of the job. Default: `ENABLED`. **NOTE: The effect of the new job status takes place during a subsequent job run. For example, if you change the job status from ENABLED to DISABLED, and an operation spawned by the transfer is running, the status change would not affect the current operation.**",
 			},
 			"creation_time": {
 				Type:        schema.TypeString,
@@ -480,7 +483,7 @@ func objectConditionsSchema(objectConditionsKeys []string) *schema.Schema {
 						MaxItems: 1000,
 						Type:     schema.TypeString,
 					},
-					Description: `If include_refixes is specified, objects that satisfy the object conditions must have names that start with one of the include_prefixes and that do not start with any of the exclude_prefixes. If include_prefixes is not specified, all objects except those that have names starting with one of the exclude_prefixes must satisfy the object conditions.`,
+					Description: "If `include_prefixes` is specified, objects that satisfy the object conditions must have names that start with one of the `include_prefixes` and that do not start with any of the `exclude_prefixes`. If `include_prefixes` is not specified, all objects except those that have names starting with one of the `exclude_prefixes` must satisfy the object conditions. See [Requirements](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).",
 				},
 				"exclude_prefixes": {
 					Type:         schema.TypeList,
@@ -490,7 +493,7 @@ func objectConditionsSchema(objectConditionsKeys []string) *schema.Schema {
 						MaxItems: 1000,
 						Type:     schema.TypeString,
 					},
-					Description: `exclude_prefixes must follow the requirements described for include_prefixes.`,
+					Description: "`exclude_prefixes` must follow the requirements described for `include_prefixes`. See [Requirements](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#ObjectConditions).",
 				},
 				"last_modified_since": {
 					Type:         schema.TypeString,
@@ -508,7 +511,7 @@ func objectConditionsSchema(objectConditionsKeys []string) *schema.Schema {
 				},
 			},
 		},
-		Description: `Only objects that satisfy these object conditions are included in the set of data source and data sink objects. Object conditions based on objects' last_modification_time do not exclude objects in a data sink.`,
+		Description: "Only objects that satisfy these object conditions are included in the set of data source and data sink objects. Object conditions based on objects' `last_modification_time` do not exclude objects in a data sink.",
 	}
 }
 
@@ -530,21 +533,21 @@ func transferOptionsSchema(transferOptionsKeys []string, metadataOptionsKeys []s
 					Optional:      true,
 					AtLeastOneOf:  transferOptionsKeys,
 					ConflictsWith: []string{"transfer_spec.transfer_options.delete_objects_from_source_after_transfer"},
-					Description:   `Whether objects that exist only in the sink should be deleted. Note that this option and delete_objects_from_source_after_transfer are mutually exclusive.`,
+					Description:   "Whether objects that exist only in the sink should be deleted. Note that this option and\n`delete_objects_from_source_after_transfer` are mutually exclusive.",
 				},
 				"delete_objects_from_source_after_transfer": {
 					Type:          schema.TypeBool,
 					Optional:      true,
 					AtLeastOneOf:  transferOptionsKeys,
 					ConflictsWith: []string{"transfer_spec.transfer_options.delete_objects_unique_in_sink"},
-					Description:   `Whether objects should be deleted from the source after they are transferred to the sink. Note that this option and delete_objects_unique_in_sink are mutually exclusive.`,
+					Description:   "Whether objects should be deleted from the source after they are transferred to the sink. Note that this option and `delete_objects_unique_in_sink` are mutually exclusive.",
 				},
 				"overwrite_when": {
 					Type:         schema.TypeString,
 					Optional:     true,
 					AtLeastOneOf: transferOptionsKeys,
 					ValidateFunc: validation.StringInSlice([]string{"DIFFERENT", "NEVER", "ALWAYS"}, false),
-					Description:  `When to overwrite objects that already exist in the sink. If not set, overwrite behavior is determined by overwriteObjectsAlreadyExistingInSink.`,
+					Description:  "When to overwrite objects that already exist in the sink. If not set, overwrite behavior is determined by `overwrite_objects_already_existing_in_sink`. Possible values: ALWAYS, DIFFERENT, NEVER.",
 				},
 				"metadata_options": {
 					Type:         schema.TypeList,
@@ -552,11 +555,11 @@ func transferOptionsSchema(transferOptionsKeys []string, metadataOptionsKeys []s
 					MaxItems:     1,
 					AtLeastOneOf: transferOptionsKeys,
 					Elem:         metadataOptionsSchema(metadataOptionsKeys),
-					Description:  `Specifies the metadata options for running a transfer`,
+					Description:  `Specifies the metadata options for running a transfer.`,
 				},
 			},
 		},
-		Description: `Characteristics of how to treat files from datasource and sink during job. If the option delete_objects_unique_in_sink is true, object conditions based on objects' last_modification_time are ignored and do not exclude objects in a data source or a data sink.`,
+		Description: "Characteristics of how to treat files from datasource and sink during job. If the option `delete_objects_unique_in_sink` is true, object conditions based on objects' `last_modification_time` are ignored and do not exclude objects in a data source or a data sink.",
 	}
 }
 
@@ -602,7 +605,7 @@ func metadataOptionsSchema(metadataOptionsKeys []string) *schema.Resource {
 			"acl": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Specifies how each object's ACLs should be preserved for transfers between Google Cloud Storage buckets",
+				Description: `Specifies how each object's ACLs should be preserved for transfers between Google Cloud Storage buckets.`,
 				ValidateFunc: validation.StringInSlice([]string{
 					"ACL_UNSPECIFIED", "ACL_DESTINATION_BUCKET_DEFAULT", "ACL_PRESERVE",
 				}, false),
@@ -611,7 +614,7 @@ func metadataOptionsSchema(metadataOptionsKeys []string) *schema.Resource {
 			"storage_class": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Specifies the storage class to set on objects being transferred to Google Cloud Storage buckets",
+				Description: `Specifies the storage class to set on objects being transferred to Google Cloud Storage buckets.`,
 				ValidateFunc: validation.StringInSlice([]string{
 					"STORAGE_CLASS_UNSPECIFIED",
 					"STORAGE_CLASS_DESTINATION_BUCKET_DEFAULT",
@@ -626,7 +629,7 @@ func metadataOptionsSchema(metadataOptionsKeys []string) *schema.Resource {
 			"temporary_hold": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "SSpecifies how each object's temporary hold status should be preserved for transfers between Google Cloud Storage buckets",
+				Description: `Specifies how each object's temporary hold status should be preserved for transfers between Google Cloud Storage buckets.`,
 				ValidateFunc: validation.StringInSlice([]string{
 					"TEMPORARY_HOLD_UNSPECIFIED", "TEMPORARY_HOLD_SKIP", "TEMPORARY_HOLD_PRESERVE",
 				}, false),
@@ -635,7 +638,7 @@ func metadataOptionsSchema(metadataOptionsKeys []string) *schema.Resource {
 			"kms_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Specifies how each object's Cloud KMS customer-managed encryption key (CMEK) is preserved for transfers between Google Cloud Storage buckets",
+				Description: `Specifies how each object's Cloud KMS customer-managed encryption key (CMEK) is preserved for transfers between Google Cloud Storage buckets.`,
 				ValidateFunc: validation.StringInSlice([]string{
 					"KMS_KEY_UNSPECIFIED", "KMS_KEY_DESTINATION_BUCKET_DEFAULT", "KMS_KEY_PRESERVE",
 				}, false),
@@ -661,7 +664,7 @@ func timeObjectSchema() *schema.Resource {
 				Type:         schema.TypeInt,
 				Required:     true,
 				ValidateFunc: validation.IntBetween(0, 24),
-				Description:  `Hours of day in 24 hour format. Should be from 0 to 23.`,
+				Description:  `Hours of day in 24 hour format. Should be from 0 to 23`,
 			},
 			"minutes": {
 				Type:         schema.TypeInt,
@@ -723,7 +726,7 @@ func gcsDataSchema() *schema.Resource {
 			"path": {
 				Optional:     true,
 				Type:         schema.TypeString,
-				Description:  `Google Cloud Storage path in bucket to transfer. Must be an empty string or full path name that ends with a '/'. This field is treated as an object prefix. As such, it should not begin with a '/'.`,
+				Description:  `Root path to transfer objects. Must be an empty string or full path name that ends with a '/'. This field is treated as an object prefix. As such, it should generally not begin with a '/'.`,
 				ValidateFunc: validateGCSDataPath,
 			},
 		},
@@ -752,7 +755,7 @@ func awsS3DataSchema() *schema.Resource {
 			"path": {
 				Optional:    true,
 				Type:        schema.TypeString,
-				Description: `S3 Bucket path in bucket to transfer.`,
+				Description: `Root path to transfer objects. Must be an empty string or full path name that ends with a '/'. This field is treated as an object prefix. As such, it should generally not begin with a '/'.`,
 			},
 			"aws_access_key": {
 				Type:     schema.TypeList,
@@ -791,13 +794,13 @@ func awsS3DataSchema() *schema.Resource {
 			"cloudfront_domain": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `The CloudFront distribution domain name pointing to this bucket, to use when fetching. See [Transfer from S3 via CloudFront](https://cloud.google.com/storage-transfer/docs/s3-cloudfront) for more information. Format: https://{id}.cloudfront.net or any valid custom domain. Must begin with https://.`,
+				Description: "The CloudFront distribution domain name pointing to this bucket, to use when fetching. See [Transfer from S3 via CloudFront](https://cloud.google.com/storage-transfer/docs/s3-cloudfront) for more information. Format: `https://{id}.cloudfront.net` or any valid custom domain. Must begin with `https://`.",
 			},
 			"credentials_secret": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ExactlyOneOf: awsS3AuthKeys,
-				Description:  `The Resource name of a secret in Secret Manager. AWS credentials must be stored in Secret Manager in JSON format. If credentials_secret is specified, do not specify role_arn or aws_access_key. Format: projects/{projectNumber}/secrets/{secret_name}.`,
+				Description:  "The Resource name of a secret in Secret Manager. AWS credentials must be stored in Secret Manager in JSON format. If credentials_secret is specified, do not specify role_arn or aws_access_key. Format: `projects/{projectNumber}/secrets/{secret_name}`.",
 			},
 		},
 	}
@@ -833,7 +836,7 @@ func hdfsDataSchema() *schema.Resource {
 			"path": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: `Directory path to the filesystem.`,
+				Description: `Root directory path to the filesystem.`,
 			},
 		},
 	}
@@ -845,7 +848,7 @@ func transferManifest() *schema.Resource {
 			"location": {
 				Type:         schema.TypeString,
 				Required:     true,
-				Description:  `Cloud Storage path to the manifest CSV.`,
+				Description:  "The **GCS URI** to the manifest file (CSV or line-delimited). Example: `gs://my-bucket/manifest.csv`",
 				ValidateFunc: validation.StringMatch(regexp.MustCompile(`^gs://[^/]+/.+`), "must be a Cloud path like gs://BUCKET/path/manifest.csv"),
 			},
 		},
@@ -863,7 +866,7 @@ func azureBlobStorageDataSchema() *schema.Resource {
 			"container": {
 				Required:    true,
 				Type:        schema.TypeString,
-				Description: `The container to transfer from the Azure Storage account.`,
+				Description: "The container to transfer from the Azure Storage account.`",
 			},
 			"path": {
 				Optional:    true,
@@ -882,17 +885,17 @@ func azureBlobStorageDataSchema() *schema.Resource {
 							Type:        schema.TypeString,
 							Required:    true,
 							Sensitive:   true,
-							Description: `Azure shared access signature.`,
+							Description: `Azure shared access signature. See [Grant limited access to Azure Storage resources using shared access signatures (SAS)](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview).`,
 						},
 					},
 				},
-				Description: ` Credentials used to authenticate API requests to Azure.`,
+				Description: `Credentials used to authenticate API requests to Azure block.`,
 			},
 			"credentials_secret": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ExactlyOneOf: azureOptionCredentials,
-				Description:  `The Resource name of a secret in Secret Manager containing SAS Credentials in JSON form. Service Agent must have permissions to access secret. If credentials_secret is specified, do not specify azure_credentials.`,
+				Description:  "Full Resource name of a secret in Secret Manager containing [SAS Credentials in JSON form](https://cloud.google.com/storage-transfer/docs/reference/rest/v1/TransferSpec#azureblobstoragedata:~:text=begin%20with%20a%20%27/%27.-,credentialsSecret,-string). Service Agent for Storage Transfer must have permissions to access secret. If credentials_secret is specified, do not specify azure_credentials.`,",
 			},
 			"federated_identity_config": {
 				Type:         schema.TypeList,
@@ -911,16 +914,16 @@ func azureBlobStorageDataSchema() *schema.Resource {
 							Type:        schema.TypeString,
 							Required:    true,
 							Sensitive:   true,
-							Description: `The tenant (directory) ID of the application with federated credentials.`,
+							Description: `The client (directory) ID of the application with federated credentials.`,
 						},
 					},
 				},
-				Description: ` Workload Identity Details used to authenticate API requests to Azure.`,
+				Description: `Federated identity config of a user registered Azure application.`,
 			},
 			"private_network_service": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: `Service Directory Service used as the endpoint for transfers from a customer-managed VPC. Format: projects/{projectId}/locations/{location}/namespaces/{namespace}/services/{service}`,
+				Description: "Service Directory Service to be used as the endpoint for transfers from a customer-managed VPC. Format: `projects/{projectId}/locations/{location}/namespaces/{namespace}/services/{service}`.",
 			},
 		},
 	}
