@@ -44,7 +44,9 @@ func ResourceAppEngineApplication() *schema.Resource {
 				Computed:     true,
 				ForceNew:     true,
 				ValidateFunc: verify.ValidateProjectID(),
-				Description:  `The project ID to create the application under.`,
+				Description: `The project ID to create the application under.
+~>**NOTE:** GCP only accepts project ID, not project number. If you are using number,
+you may get a "Permission denied" error.`,
 			},
 			"auth_domain": {
 				Type:        schema.TypeString,
@@ -53,9 +55,10 @@ func ResourceAppEngineApplication() *schema.Resource {
 				Description: `The domain to authenticate users with when using App Engine's User API.`,
 			},
 			"location_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: `The location to serve the app from.`,
+				Type:     schema.TypeString,
+				Required: true,
+				Description: `The [location](https://cloud.google.com/appengine/docs/locations)
+to serve the app from.`,
 			},
 			"serving_status": {
 				Type:     schema.TypeString,
@@ -78,7 +81,7 @@ func ResourceAppEngineApplication() *schema.Resource {
 					"MODERN",
 				}, false),
 				Computed:    true,
-				Description: `The SSL policy that will be applied to the application. If set to Modern it will restrict traffic with TLS \u003c 1.2 and allow only Modern Ciphers suite`,
+				Description: "A list of the SSL policy that will be applied. Each block has a `SSL_POLICY_UNSPECIFIED`, `DEFAULT`, and `MODERN` field.",
 			},
 			"database_type": {
 				Type:     schema.TypeString,
@@ -91,30 +94,31 @@ func ResourceAppEngineApplication() *schema.Resource {
 					// for new instances.
 					"CLOUD_DATASTORE",
 				}, false),
-				Computed: true,
+				Computed:    true,
+				Description: "The type of the Cloud Firestore or Cloud Datastore database associated with this application.\nCan be `CLOUD_FIRESTORE` or `CLOUD_DATASTORE_COMPATIBILITY` for new\ninstances.  To support old instances, the value `CLOUD_DATASTORE` is accepted by the provider, but will be rejected by the API.\nTo create a Cloud Firestore database without creating an App Engine application, use the\n[`google_firestore_database`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firestore_database)\nresource instead.",
 			},
 			"feature_settings": {
 				Type:        schema.TypeList,
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: `A block of optional settings to configure specific App Engine features:`,
+				Description: `A block of optional settings to configure specific App Engine features.`,
 				Elem:        appEngineApplicationFeatureSettingsResource(),
 			},
 			"name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Unique name of the app.`,
+				Description: "Unique name of the app, usually `apps/{PROJECT_ID}`",
 			},
 			"app_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: `Identifier of the app.`,
+				Description: "Identifier of the app, usually `{PROJECT_ID}`",
 			},
 			"url_dispatch_rule": {
 				Type:        schema.TypeList,
 				Computed:    true,
-				Description: `A list of dispatch rule blocks. Each block has a domain, path, and service field.`,
+				Description: `A list of dispatch rule blocks.`,
 				Elem:        appEngineApplicationURLDispatchRuleResource(),
 			},
 			"code_bucket": {
@@ -142,14 +146,15 @@ func ResourceAppEngineApplication() *schema.Resource {
 				Optional:         true,
 				MaxItems:         1,
 				DiffSuppressFunc: suppressAppEngineApplicationIapDiffWhenUnset,
-				Description:      `Settings for enabling Cloud Identity Aware Proxy`,
+				Description:      `Settings for enabling Cloud Identity Aware Proxy.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     false,
-							Description: `Adapted for use with the app`,
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+							Description: `Whether the serving infrastructure will authenticate and authorize all incoming requests.
+(default is false)`,
 						},
 						"oauth2_client_id": {
 							Type:        schema.TypeString,
@@ -161,7 +166,7 @@ func ResourceAppEngineApplication() *schema.Resource {
 							Optional:     true,
 							Sensitive:    true,
 							ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
-							Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
+							Description:  "OAuth2 client secret to use for the authentication flow.\nThe SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.\nExactly one of `oauth2_client_secret` or `oauth2_client_secret_wo` can be set.",
 						},
 						"oauth2_client_secret_wo": {
 							Type:         schema.TypeString,
@@ -169,7 +174,7 @@ func ResourceAppEngineApplication() *schema.Resource {
 							WriteOnly:    true,
 							ExactlyOneOf: []string{"iap.0.oauth2_client_secret", "iap.0.oauth2_client_secret_wo"},
 							RequiredWith: []string{"iap.0.oauth2_client_secret_wo_version"},
-							Description:  `OAuth2 client secret to use for the authentication flow. The SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.`,
+							Description:  "OAuth2 client secret to use for the authentication flow.\nThe SHA-256 hash of the value is returned in the oauth2ClientSecretSha256 field.\n**Note**: This property is write-only and will not be read from the API.\n\n~> **Note:** Exactly one of `oauth2_client_secret` or `oauth2_client_secret_wo` can be set.",
 						},
 						"oauth2_client_secret_wo_version": {
 							Type:         schema.TypeString,
@@ -195,16 +200,19 @@ func appEngineApplicationURLDispatchRuleResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"domain": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `Domain name to match against.`,
 			},
 			"path": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `Pathname within the host.`,
 			},
 			"service": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: `Resource ID of a service in this application that should serve the matched request.`,
 			},
 		},
 	}
@@ -216,6 +224,8 @@ func appEngineApplicationFeatureSettingsResource() *schema.Resource {
 			"split_health_checks": {
 				Type:     schema.TypeBool,
 				Required: true,
+				Description: `Set to false to use the legacy health check instead of the readiness
+and liveness checks.`,
 			},
 		},
 	}
