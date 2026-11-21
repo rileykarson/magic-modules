@@ -14,6 +14,9 @@
 
 set -e
 
+# Ignore any parent-directory go.work outside magic-modules so independent modules under tools/, mmv1/, and .ci/ build cleanly in worktrees.
+export GOWORK=off
+
 # Color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -233,6 +236,11 @@ MMV1_PID=$!
 # Check 6: Tool & CI Unit Tests (diff-scoped unless --all or RUN_ALL=1)
 (
   ran_any=0
+  if [ "$RUN_ALL" -eq 1 ] || echo "$CHANGED_FILES" | grep -q '^tools/doc-backfill/'; then
+    echo "Testing tools/doc-backfill..."
+    (cd tools/doc-backfill && go test ./...)
+    ran_any=1
+  fi
   if [ "$RUN_ALL" -eq 1 ] || echo "$CHANGED_FILES" | grep -q '^tools/go-changelog/'; then
     echo "Testing tools/go-changelog..."
     (cd tools/go-changelog && go test ./...)
