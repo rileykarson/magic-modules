@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -2612,11 +2611,8 @@ func secondaryWorkerFlexibleConfigForceNew(_ context.Context, d *schema.Resource
 		return nil
 	}
 	// The block is Optional+Computed: when it is not in config, nothing changes.
-	if raw := d.GetRawConfig(); !raw.IsNull() && raw.IsKnown() {
-		block, err := cty.GetAttrPath("cluster_config").IndexInt(0).GetAttr("secondary_worker_flexible_config").Apply(raw)
-		if err != nil || block.IsNull() || (block.IsKnown() && block.LengthInt() == 0) {
-			return nil
-		}
+	if elems, ok := tpgresource.GetRawConfigSlice(d, sec); ok && len(elems) == 0 {
+		return nil
 	}
 	added := len(oldSec.([]interface{})) == 0
 	for _, field := range []string{"core_count", "hardware_class", "boot_disk_size_gb"} {

@@ -231,11 +231,8 @@ func appEngineApplicationLocationIDCustomizeDiff(_ context.Context, d *schema.Re
 
 // Suppress API-returned IAP values when the iap block is omitted from configuration.
 func suppressAppEngineApplicationIapDiffWhenUnset(_ string, _, _ string, d *schema.ResourceData) bool {
-	iap := d.GetRawConfig().GetAttr("iap")
-	if iap.IsNull() {
-		return true
-	}
-	return iap.IsKnown() && iap.LengthInt() == 0
+	iap, ok := tpgresource.GetRawConfigSlice(d, "iap")
+	return ok && len(iap) == 0
 }
 
 func resourceAppEngineApplicationCreate(d *schema.ResourceData, meta interface{}) error {

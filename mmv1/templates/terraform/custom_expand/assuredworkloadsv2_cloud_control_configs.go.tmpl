@@ -22,21 +22,9 @@
 func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.TerraformResourceData, config *transport_tpg.Config) (interface{}, error) {
 	configured := func(string) bool { return false }
 {{- if not (contains $.ResourceMetadata.ProductMetadata.Compiler "terraformgoogleconversion") }}
-	if rd, ok := d.(interface {
-		GetRawConfigAt(cty.Path) (cty.Value, diag.Diagnostics)
-	}); ok {
-		configured = func(path string) bool {
-			var p cty.Path
-			for _, step := range strings.Split(path, ".") {
-				if i, err := strconv.Atoi(step); err == nil {
-					p = p.IndexInt(i)
-				} else {
-					p = p.GetAttr(step)
-				}
-			}
-			val, diags := rd.GetRawConfigAt(p)
-			return !diags.HasError() && !val.IsNull()
-		}
+	configured = func(path string) bool {
+		val, ok := tpgresource.GetRawConfigAtKey(d, path)
+		return ok && !val.IsNull() && val.IsKnown()
 	}
 {{- end }}
 	return assuredWorkloadsV2ExpandCloudControlConfigs(v, configured)

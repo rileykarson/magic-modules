@@ -2337,19 +2337,11 @@ func nodePoolAcceleratorNetworkProfileCustomizeDiff(_ context.Context, diff *sch
 
 	// 2. DETECT USER CONFIG
 	userHasAdditionalConfigs := false
-	rawConfig := diff.GetRawConfig()
-	rawNetworkConfig := rawConfig.GetAttr("network_config")
-
-	if !rawNetworkConfig.IsNull() {
-		if rawNetworkConfig.Type().IsCollectionType() {
-			it := rawNetworkConfig.ElementIterator()
-			for it.Next() {
-				_, val := it.Element()
-				userConfig := val.GetAttr("additional_node_network_configs")
-				if !userConfig.IsNull() && userConfig.LengthInt() > 0 {
-					userHasAdditionalConfigs = true
-					break
-				}
+	if rawNetworkConfigs, ok := tpgresource.GetRawConfigSlice(diff, "network_config"); ok {
+		for _, val := range rawNetworkConfigs {
+			if addlConfigs, ok := tpgresource.GetCtyValueSlice(val, "additional_node_network_configs"); ok && len(addlConfigs) > 0 {
+				userHasAdditionalConfigs = true
+				break
 			}
 		}
 	}

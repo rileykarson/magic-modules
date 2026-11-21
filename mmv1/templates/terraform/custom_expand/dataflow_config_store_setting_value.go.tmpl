@@ -25,30 +25,13 @@ func expand{{$.GetPrefix}}{{$.TitlelizeProperty}}(v interface{}, d tpgresource.T
 
 	if d != nil {
 {{- if not (contains $.ResourceMetadata.ProductMetadata.Compiler "terraformgoogleconversion") }}
-		if rd, ok := d.(interface{ GetRawConfig() cty.Value }); ok {
-			rawConfig := rd.GetRawConfig()
-			if rawConfig.IsKnown() && !rawConfig.IsNull() && rawConfig.Type().IsObjectType() && rawConfig.Type().HasAttribute("value") {
-				valueVal := rawConfig.GetAttr("value")
-				if valueVal.IsKnown() && !valueVal.IsNull() && valueVal.LengthInt() > 0 {
-					elem := valueVal.Index(cty.NumberIntVal(0))
-					if elem.IsKnown() && !elem.IsNull() && elem.Type().IsObjectType() {
-						if elem.Type().HasAttribute("string_value") {
-							strAttr := elem.GetAttr("string_value")
-							if strAttr.IsKnown() && !strAttr.IsNull() {
-								transformed["stringValue"] = strAttr.AsString()
-								return transformed, nil
-							}
-						}
-						if elem.Type().HasAttribute("bool_value") {
-							boolAttr := elem.GetAttr("bool_value")
-							if boolAttr.IsKnown() && !boolAttr.IsNull() {
-								transformed["boolValue"] = boolAttr.True()
-								return transformed, nil
-							}
-						}
-					}
-				}
+		if strAttr, ok := tpgresource.GetRawConfigAtKey(d, "value.0.string_value"); ok {
+			if !strAttr.IsNull() && strAttr.IsKnown() {
+				transformed["stringValue"] = strAttr.AsString()
+			} else if boolAttr, ok := tpgresource.GetRawConfigAtKey(d, "value.0.bool_value"); ok && !boolAttr.IsNull() && boolAttr.IsKnown() {
+				transformed["boolValue"] = boolAttr.True()
 			}
+			return transformed, nil
 		}
 {{- end }}
 

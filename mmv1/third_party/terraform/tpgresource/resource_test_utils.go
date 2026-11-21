@@ -18,6 +18,7 @@ import (
 type ResourceDataMock struct {
 	FieldsInSchema      map[string]interface{}
 	FieldsWithHasChange []string
+	RawConfig           cty.Value
 	id                  string
 	identity            *schema.IdentityData
 }
@@ -204,7 +205,12 @@ func ReplaceVarsForTest(config *transport_tpg.Config, rs *terraform.ResourceStat
 
 // These methods are required by some mappers but we don't actually have (or need)
 // implementations for them.
-func (d *ResourceDataMock) GetRawConfig() cty.Value { return cty.NullVal(cty.String) }
+func (d *ResourceDataMock) GetRawConfig() cty.Value {
+	if d.RawConfig != cty.NilVal {
+		return d.RawConfig
+	}
+	return cty.NullVal(cty.String)
+}
 
 // Used to create populated schema.ResourceData structs in tests.
 // Pass in a schema and a config map containing the fields and values you wish to set

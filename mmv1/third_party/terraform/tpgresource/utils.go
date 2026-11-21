@@ -35,6 +35,12 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// RawConfigReader is satisfied by *schema.ResourceData, *schema.ResourceDiff,
+// TerraformResourceData, TerraformResourceDiff, and test/TGC mocks.
+type RawConfigReader interface {
+	GetRawConfig() cty.Value
+}
+
 type TerraformResourceDataChange interface {
 	GetChange(string) (interface{}, interface{})
 }
@@ -115,7 +121,7 @@ func GetProjectFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (s
 	if ok {
 		return res.(string), nil
 	}
-	if d.GetRawConfig().GetAttr("project") == cty.UnknownVal(cty.String) {
+	if val, rawOk := GetRawConfigAtKey(d, "project"); rawOk && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Project != "" {
@@ -132,7 +138,7 @@ func GetRegionFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (st
 	if ok {
 		return res.(string), nil
 	}
-	if d.GetRawConfig().GetAttr("region") == cty.UnknownVal(cty.String) {
+	if val, rawOk := GetRawConfigAtKey(d, "region"); rawOk && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Region != "" {
@@ -149,7 +155,7 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 	if ok {
 		return res.(string), nil
 	}
-	if d.GetRawConfig().GetAttr("zone") == cty.UnknownVal(cty.String) {
+	if val, rawOk := GetRawConfigAtKey(d, "zone"); rawOk && !val.IsKnown() {
 		return res.(string), nil
 	}
 	if config.Zone != "" {
@@ -163,7 +169,7 @@ func GetZoneFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config) (stri
 // given, an error is returned.
 func GetDeletionPolicyFromDiff(d *schema.ResourceDiff, config *transport_tpg.Config, resourceDefault string) (string, error) {
 	//if IsNull() value, then the value has not been manually configured
-	if d.GetRawConfig().GetAttr("deletion_policy").IsNull() {
+	if val, rawOk := GetRawConfigAtKey(d, "deletion_policy"); (rawOk && val.IsNull()) || (!rawOk && d.Get("deletion_policy") == "") {
 		if config.DeletionPolicy != "" {
 			log.Printf("[DEBUG] `deletion_policy` detected as not set within resource configuration. Falling back to configured provider default, %s", config.DeletionPolicy)
 			return config.DeletionPolicy, nil
@@ -1014,33 +1020,296 @@ func ReducedPrefixedUniqueId(prefix string) string {
 	return prefix + string(b)
 }
 
-// GetRawConfigAttributeAsString retrieves an attribute directly from the raw config
-// This is useful for retrieving values that are not directly accessible via the
-// standard schema.ResourceData.Get method, such as write-only attributes.
-func GetRawConfigAttributeAsString(d *schema.ResourceData, key string) string {
-	// see https://developer.hashicorp.com/terraform/plugin/sdkv2/resources/write-only-arguments#retrieving-write-only-values
-	parts := strings.Split(key, ".")
+func isNilRawConfigReader(d RawConfigReader) bool {
+	if d == nil {
+		return true
+	}
+	rv := reflect.ValueOf(d)
+	switch rv.Kind() {
+	case reflect.Ptr, reflect.Interface, reflect.Chan, reflect.Func, reflect.Map, reflect.Slice:
+		return rv.IsNil()
+	default:
+		return false
+	}
+}
 
-	var path cty.Path
-	if len(parts) > 0 {
-		path = cty.GetAttrPath(parts[0])
+// GetRawConfigAtKey traverses d.GetRawConfig() using a dot-separated schema key
+// (for example, "cdn_policy.0.default_ttl" or "default_storage_location").
+//
+// Returns (cty.NilVal, false) if d is nil, RawConfig is unavailable (null or
+// not an object, such as in unit tests without RawConfig, TGC, import, or
+// destroy plans), or key is structurally invalid (for example, stepping through
+// a primitive or indexing a TypeSet numerically).
+//
+// When ok is true, the returned cty.Value is guaranteed to be valid and deeply
+// unmarked:
+//   - A null cty.Value (val.IsNull() == true) if the attribute or an enclosing
+//     list/tuple/map/object step along key was omitted or null in RawConfig.
+//   - An unknown cty.Value (val.IsKnown() == false) if the attribute or an
+//     enclosing step along key is unknown in HCL.
+//   - The known, non-null, unmarked HCL value otherwise.
+func GetRawConfigAtKey(d RawConfigReader, key string) (cty.Value, bool) {
+	if isNilRawConfigReader(d) {
+		return cty.NilVal, false
+	}
+	return GetCtyValueAtKey(d.GetRawConfig(), key)
+}
+
+// unmarkCtyValueDeep recursively strips marks from val in pre-order.
+// Note: hashicorp/go-cty's Value.UnmarkDeep uses post-order Transform, which
+// panics on LengthInt/ElementIterator when a nested collection is marked.
+func unmarkCtyValueDeep(val cty.Value) (cty.Value, bool) {
+	if val == cty.NilVal {
+		return val, false
+	}
+	changed := val.IsMarked()
+	val, _ = val.Unmark()
+	if val.IsNull() || !val.IsKnown() {
+		return val, changed
+	}
+	ty := val.Type()
+	switch {
+	case ty.IsObjectType():
+		atys := ty.AttributeTypes()
+		if len(atys) == 0 {
+			return val, changed
+		}
+		var newAttrs map[string]cty.Value
+		for name := range atys {
+			uav, subChanged := unmarkCtyValueDeep(val.GetAttr(name))
+			if subChanged {
+				if newAttrs == nil {
+					newAttrs = make(map[string]cty.Value, len(atys))
+					for k := range atys {
+						newAttrs[k] = val.GetAttr(k)
+					}
+				}
+				newAttrs[name] = uav
+				changed = true
+			}
+		}
+		if newAttrs != nil {
+			return cty.ObjectVal(newAttrs), true
+		}
+		return val, changed
+	case ty.IsListType(), ty.IsSetType(), ty.IsTupleType():
+		if val.LengthInt() == 0 {
+			return val, changed
+		}
+		elems := val.AsValueSlice()
+		elemChanged := false
+		for i, ev := range elems {
+			uev, subChanged := unmarkCtyValueDeep(ev)
+			if subChanged {
+				elems[i] = uev
+				elemChanged = true
+			}
+		}
+		if !elemChanged {
+			return val, changed
+		}
+		switch {
+		case ty.IsListType():
+			return cty.ListVal(elems), true
+		case ty.IsSetType():
+			return cty.SetVal(elems), true
+		default:
+			return cty.TupleVal(elems), true
+		}
+	case ty.IsMapType():
+		if val.LengthInt() == 0 {
+			return val, changed
+		}
+		m := val.AsValueMap()
+		elemChanged := false
+		for k, ev := range m {
+			uev, subChanged := unmarkCtyValueDeep(ev)
+			if subChanged {
+				m[k] = uev
+				elemChanged = true
+			}
+		}
+		if !elemChanged {
+			return val, changed
+		}
+		return cty.MapVal(m), true
+	default:
+		return val, changed
+	}
+}
+
+// GetCtyValueAtKey traverses root (which must be a non-null cty object) using a
+// dot-separated key, following the same contract as GetRawConfigAtKey.
+func GetCtyValueAtKey(root cty.Value, key string) (cty.Value, bool) {
+	if root == cty.NilVal {
+		return cty.NilVal, false
+	}
+	root, _ = root.Unmark()
+	if root.IsNull() || !root.Type().IsObjectType() {
+		return cty.NilVal, false
+	}
+	if key == "" {
+		if !root.IsKnown() {
+			return cty.UnknownVal(root.Type()), true
+		}
+		if root.ContainsMarked() {
+			root, _ = unmarkCtyValueDeep(root)
+		}
+		return root, true
 	}
 
-	for i := 1; i < len(parts); i++ {
-		part := parts[i]
+	curVal := root
+	curType := root.Type()
+	forcedNull := false
+	forcedUnknown := !curVal.IsKnown()
 
-		if index, err := strconv.Atoi(part); err == nil {
-			path = path.IndexInt(index)
-		} else {
-			path = path.GetAttr(part)
+	for _, part := range strings.Split(key, ".") {
+		if part == "" {
+			return cty.NilVal, false
+		}
+		switch {
+		case curType == cty.DynamicPseudoType:
+			if !forcedNull && !forcedUnknown {
+				return cty.NilVal, false
+			}
+		case curType.IsObjectType():
+			if !curType.HasAttribute(part) {
+				// Partial cty.ObjectVal maps in unit tests omit unconfigured keys
+				// rather than populating NullVal entries for the full schema.
+				forcedNull = true
+				curType = cty.DynamicPseudoType
+				continue
+			}
+			curType = curType.AttributeType(part)
+			if !forcedNull && !forcedUnknown {
+				curVal, _ = curVal.GetAttr(part).Unmark()
+				if curVal.IsNull() {
+					forcedNull = true
+				} else if !curVal.IsKnown() {
+					forcedUnknown = true
+				}
+			}
+		case curType.IsListType():
+			idx, err := strconv.Atoi(part)
+			if err != nil || idx < 0 {
+				return cty.NilVal, false
+			}
+			curType = curType.ElementType()
+			if !forcedNull && !forcedUnknown {
+				if idx >= curVal.LengthInt() {
+					forcedNull = true
+				} else {
+					curVal, _ = curVal.Index(cty.NumberIntVal(int64(idx))).Unmark()
+					if curVal.IsNull() {
+						forcedNull = true
+					} else if !curVal.IsKnown() {
+						forcedUnknown = true
+					}
+				}
+			}
+		case curType.IsTupleType():
+			idx, err := strconv.Atoi(part)
+			if err != nil || idx < 0 {
+				return cty.NilVal, false
+			}
+			if idx >= curType.Length() {
+				forcedNull = true
+				curType = cty.DynamicPseudoType
+				continue
+			}
+			curType = curType.TupleElementTypes()[idx]
+			if !forcedNull && !forcedUnknown {
+				curVal, _ = curVal.Index(cty.NumberIntVal(int64(idx))).Unmark()
+				if curVal.IsNull() {
+					forcedNull = true
+				} else if !curVal.IsKnown() {
+					forcedUnknown = true
+				}
+			}
+		case curType.IsMapType():
+			curType = curType.ElementType()
+			if !forcedNull && !forcedUnknown {
+				has, _ := curVal.HasIndex(cty.StringVal(part)).Unmark()
+				if !has.IsKnown() {
+					forcedUnknown = true
+				} else if !has.True() {
+					forcedNull = true
+				} else {
+					curVal, _ = curVal.Index(cty.StringVal(part)).Unmark()
+					if curVal.IsNull() {
+						forcedNull = true
+					} else if !curVal.IsKnown() {
+						forcedUnknown = true
+					}
+				}
+			}
+		default:
+			return cty.NilVal, false
 		}
 	}
 
-	woCty, diags := d.GetRawConfigAt(path)
-	if len(diags) == 0 && !woCty.IsNull() && woCty.Type().Equals(cty.String) {
-		return woCty.AsString()
+	if forcedNull {
+		return cty.NullVal(curType), true
 	}
+	if forcedUnknown {
+		return cty.UnknownVal(curType), true
+	}
+	if curVal.ContainsMarked() {
+		curVal, _ = unmarkCtyValueDeep(curVal)
+	}
+	return curVal, true
+}
 
+// GetRawConfigSlice resolves a list, set, or tuple at key in d.GetRawConfig()
+// into a deeply unmarked []cty.Value slice.
+//
+// Returns (nil, false) if RawConfig is unavailable, key is invalid or not a
+// list/set/tuple, or the collection itself is unknown (!val.IsKnown()).
+// Returns (nil, true) if RawConfig is present and the collection (or an
+// enclosing step along key) is null or has 0 elements.
+// Returns (elems, true) if RawConfig is present and the collection is known and
+// non-empty.
+func GetRawConfigSlice(d RawConfigReader, key string) ([]cty.Value, bool) {
+	if isNilRawConfigReader(d) {
+		return nil, false
+	}
+	return GetCtyValueSlice(d.GetRawConfig(), key)
+}
+
+// GetCtyValueSlice resolves a list, set, or tuple at key in root into a deeply
+// unmarked []cty.Value slice, following the same contract as GetRawConfigSlice.
+func GetCtyValueSlice(root cty.Value, key string) ([]cty.Value, bool) {
+	val, ok := GetCtyValueAtKey(root, key)
+	if !ok || !val.IsKnown() {
+		return nil, false
+	}
+	ty := val.Type()
+	if val.IsNull() {
+		if ty == cty.DynamicPseudoType || ty.IsListType() || ty.IsSetType() || ty.IsTupleType() {
+			return nil, true
+		}
+		return nil, false
+	}
+	if !ty.IsListType() && !ty.IsSetType() && !ty.IsTupleType() {
+		return nil, false
+	}
+	if val.LengthInt() == 0 {
+		return nil, true
+	}
+	return val.AsValueSlice(), true
+}
+
+// GetRawConfigAttributeAsString retrieves a known string attribute at key from
+// the raw config, returning "" if RawConfig is unavailable, or if the attribute
+// is unset, null, unknown, or not a string.
+// This is useful for retrieving values that are not directly accessible via the
+// standard schema.ResourceData.Get method, such as write-only attributes.
+func GetRawConfigAttributeAsString(d RawConfigReader, key string) string {
+	// see https://developer.hashicorp.com/terraform/plugin/sdkv2/resources/write-only-arguments#retrieving-write-only-values
+	val, ok := GetRawConfigAtKey(d, key)
+	if ok && !val.IsNull() && val.IsKnown() && val.Type().Equals(cty.String) {
+		return val.AsString()
+	}
 	return ""
 }
 

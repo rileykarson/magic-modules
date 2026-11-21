@@ -4,19 +4,15 @@
 // diff, leaving a previously-paused job paused. Forcing the planned value to false
 // when the config is null generates the diff that fires the :resume RPC.
 func resumeJobWhenPausedUnset(_ context.Context, diff *schema.ResourceDiff, v interface{}) error {
-    rawConfig := diff.GetRawConfig()
-    if rawConfig.IsNull() {
-        return nil
-    }
-
-    pausedConfig := rawConfig.GetAttr("paused")
-    if pausedConfig.IsNull() {
+{{- if not (contains $.ProductMetadata.Compiler "terraformgoogleconversion") }}
+    if pausedConfig, ok := tpgresource.GetRawConfigAtKey(diff, "paused"); ok && pausedConfig.IsNull() {
         if paused, ok := diff.Get("paused").(bool); ok && paused {
             if err := diff.SetNew("paused", false); err != nil {
                 return err
             }
         }
     }
+{{- end }}
 
     return nil
 }

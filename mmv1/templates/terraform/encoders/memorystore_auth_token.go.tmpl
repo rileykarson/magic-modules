@@ -3,9 +3,11 @@
 // before mutex and URL templates are evaluated.
 instance := d.Get("instance").(string)
 if parts := regexp.MustCompile("projects/([^/]+)/locations/([^/]+)/instances/([^/]+)").FindStringSubmatch(instance); parts != nil {
-	rawCfg := d.GetRawConfig()
-	useDefaults := rawCfg.IsNull() || !rawCfg.Type().IsObjectType()
-	if (useDefaults && d.Get("project") == "") || (!useDefaults && rawCfg.Type().HasAttribute("project") && rawCfg.GetAttr("project").IsNull()) {
+{{- if not (contains $.ProductMetadata.Compiler "terraformgoogleconversion") }}
+	if projVal, ok := tpgresource.GetRawConfigAtKey(d, "project"); (ok && projVal.IsNull()) || (!ok && d.Get("project") == "") {
+{{- else }}
+	if d.Get("project") == "" {
+{{- end }}
 		if err := d.Set("project", parts[1]); err != nil {
 			return nil, fmt.Errorf("Error setting project: %s", err)
 		}
